@@ -8,7 +8,7 @@
                     <div style="cursor:pointer;background-color: #8ca3f3" class="card border card-hover text-white">
                         <div class="card-front">
                             <div class="card-body">
-                                <h4 class="card-title text-white text-center"><img src="/img/{{$d['img']}}" width="128"
+                                <h4 class="card-title text-white text-center"><img src="{{asset('img/' . $d['img'])}}" width="128"
                                         alt=""><br><br> {{ ucwords($d['judul']) }}
                                 </h4>
                             </div>
