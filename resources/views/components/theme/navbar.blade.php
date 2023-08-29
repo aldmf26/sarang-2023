@@ -13,7 +13,6 @@
                     $navbar = DB::table('navbar')
                         ->orderBy('urutan', 'ASC')
                         ->get();
-                    
                 @endphp
                 @foreach ($navbar as $d)
                     @php
