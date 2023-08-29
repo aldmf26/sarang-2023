@@ -1,5 +1,0 @@
-function controller {
-    param([string]$name)
-    php artisan make:controller $name
-}
-function migrate { php artisan migrate }
