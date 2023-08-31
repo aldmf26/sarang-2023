@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BkController;
+use App\Http\Controllers\DataPengawasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,10 +11,32 @@ Route::middleware('auth')->group(function () {
     })->name('403');
 
     Route::controller(UserController::class)
-        ->prefix('user')
+        ->prefix('data_master/user')
         ->name('user.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/edit', 'update')->name('update');
+            Route::get('/delete', 'delete')->name('delete');
+        });
+    Route::controller(BkController::class)
+        ->prefix('home/bk')
+        ->name('bk.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/edit', 'update')->name('update');
+            Route::get('/delete', 'delete')->name('delete');
+        });
+    Route::controller(DataPengawasController::class)
+        ->prefix('data_master/data_pengawas')
+        ->name('data_pengawas.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');

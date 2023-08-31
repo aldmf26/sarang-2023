@@ -405,7 +405,8 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         })
     }
 
-    function edit(kelas, attr, link, load) {
+    function detail(kelas, attr, link, load) {
+        
         $(document).on('click', `.${kelas}`, function() {
             var id = $(this).attr(`${attr}`)
             $.ajax({

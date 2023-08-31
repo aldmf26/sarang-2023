@@ -23,9 +23,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     // 
     Route::controller(NavbarController::class)->group(function () {
         Route::get('/data_master', 'data_master')->name('data_master');
+        Route::get('/home', 'home')->name('home');
     });
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/profile', 'edit')->name('profile.edit');
@@ -38,6 +40,7 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/detail/{nobox}', 'detail')->name('detail');
         });
 });
 

@@ -14,6 +14,21 @@
 
 <div class="content-wrapper  {{ $cont }}">
     <div class="page-content">
+     
+        @if (count(request()->segments()) != 1)
+            <nav aria-label="breadcrumb " style="margin-top: -25px; font-size: 15px;">
+                <ol class="breadcrumb">
+                    @foreach (request()->segments() as $i => $d)
+                        @php
+                            $urlSegments = array_slice(request()->segments(), 0, $i + 1);
+                            $url = implode('/', $urlSegments);
+                        @endphp
+                        <li class="breadcrumb-item"><a
+                                href="/{{ $url }}">{{ ucwords(str_replace('_', ' ', $d)) }}</a></li>
+                    @endforeach
+                </ol>
+            </nav>
+        @endif
         @if ($table == 'T')
             {{ $slot }}
         @else
