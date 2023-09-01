@@ -28,6 +28,10 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/anak', 'anak')->name('anak');
+            Route::get('/anak/{id}', 'anak_detail')->name('anak_detail');
+            // Route::get('/anak/destroy/{id}', 'destroy_anak')->name('destroy_anak');
+            Route::post('/anak', 'create_anak')->name('create_anak');
+            Route::post('/anak/update', 'update_anak')->name('update_anak');
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
