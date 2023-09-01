@@ -78,7 +78,6 @@
                             <div class="card-footer">
                                 {{ $cardFooter }}
                             </div>
-                        @else
                         @endif
 
                     </div>

@@ -52,7 +52,6 @@
                         </li>
                     </ul>
                 @endif
-
             </div>
 
             <!-- Burger button responsive -->

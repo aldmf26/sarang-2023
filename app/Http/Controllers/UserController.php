@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $data = [
             'title' => 'Data User',
-            'user' => User::with('posisi')->where('nonaktif', 'T')->get(),
+            'user' => User::with('posisi')->where('posisi_id', 1)->get(),
             'posisi' => Posisi::all()
         ];
         return view('user.user', $data);

@@ -202,6 +202,12 @@
             background-color: #25387e !important;
             color: rgb(255, 255, 255);
         }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #000000;
+                line-height: 36px;
+                /* font-size: 12px; */
+                width: 170px;
+            }
     </style>
     @yield('styles')
 

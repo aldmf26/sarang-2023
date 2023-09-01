@@ -17,8 +17,14 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Data Pengawas',
-                'route' => 'user.index',
+                'route' => 'pengawas.index',
                 'img' => 'pengawascabut.png',
+                'deskripsi' => 'ini adalah data user',
+            ],
+            [
+                'judul' => 'Data Anak',
+                'route' => 'pengawas.anak',
+                'img' => 'anak.png',
                 'deskripsi' => 'ini adalah data user',
             ],
         ];
@@ -37,26 +43,26 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'CABUT',
-                'route' => 'user.index',
-                'img' => 'team.png',
+                'route' => 'cabut.index',
+                'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],
             [
                 'judul' => 'CETAK',
                 'route' => 'user.index',
-                'img' => 'team.png',
+                'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],
             [
                 'judul' => 'SORTIR',
                 'route' => 'user.index',
-                'img' => 'team.png',
+                'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],
             [
                 'judul' => 'GRADE',
                 'route' => 'user.index',
-                'img' => 'team.png',
+                'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],
         ];

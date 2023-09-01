@@ -9,7 +9,10 @@
 
 
     <x-slot name="cardBody">
-        <form action="{{ route('bk.create') }}" method="post">
+        <style>
+            
+        </style>
+        <form action="{{ route('cabut.create') }}" method="post">
             @csrf
             <section class="row">
                 <div class="col-lg-8">
@@ -80,7 +83,7 @@
                                 </td>
                                 <td>
                                     <select name="nama" id="" class="select3">
-                                        @foreach ($pengawas as $d)
+                                        @foreach ($anak as $d)
                                         <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
                                         @endforeach
                                     </select>
@@ -115,7 +118,7 @@
             <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
             Loading...
         </button>
-        <a href="{{ route('bk.index') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
+        <a href="{{ route('cabut.index') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
         </form>
     </x-slot>
     @section('scripts')
@@ -124,3 +127,4 @@
     </script>
     @endsection
 </x-theme.app>
+
