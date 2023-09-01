@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
@@ -53,7 +53,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                 </div>
                 <div class="col-lg-12">
                     <table class="table table-striped">
@@ -64,10 +64,14 @@
                                 <th class="dhead">Nama</th>
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
+                                <th class="dhead text-end">Gr Awal</th>
                                 <th class="dhead text-end">Pcs Hcr</th>
+                                <th class="dhead text-end">Gr Hcr</th>
                                 <th class="dhead text-end">Pcs Flex</th>
+                                <th class="dhead text-end">Gr Flex</th>
                                 <th class="dhead text-end">Pcs Ttl</th>
-                                <th class="dhead text-end">Ttl Rp</th>
+                                <th class="dhead text-end">Gr Ttl</th>
+                                {{-- <th class="dhead text-end">Ttl Rp</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -76,33 +80,51 @@
                                     <input type="text" class="form-control" value="BK" readonly name="tipe">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}" name="pgws">
+                                    <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}"
+                                        name="pgws">
                                 </td>
                                 <td>
                                     <select name="nama" id="" class="select3">
-                                        @foreach ($pengawas as $d)
+                                        {{-- @foreach ($pengawas as $d)
                                         <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
-                                        @endforeach
+                                        @endforeach --}}
+                                        <option value="">Pilih Pengawas</option>
+                                        <option value="1">Jenah</option>
+                                        <option value="2">Nurul</option>
+                                        <option value="3">Erna</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima">
+                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
+                                        name="tgl_terima">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_awal">
+                                    <input type="text" class="form-control text-end pcs_awal" name="pcs_awal" value="0">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_hcr">
+                                    <input type="text" class="form-control text-end gr_awal" name="gr_awal" value="0">
+                                </td>
+                                {{-- <td>
+                                    <input type="text" class="form-control text-end pcs_hcr" name="pcs_hcr" value="0">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_flex">
+                                    <input type="text" class="form-control text-end gr_hcr" name="gr_hcr" value="0">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_ttl">
+                                    <input type="text" class="form-control text-end pcs_flex" name="pcs_flex" value="0">
                                 </td>
                                 <td>
+                                    <input type="text" class="form-control text-end gr_flex" name="gr_flex" value="0">
+                                </td> --}}
+                                <td>
+                                    <input type="text" class="form-control text-end pcs_ttl" name="pcs_ttl" readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control text-end gr_ttl" name="gr_ttl" readonly>
+                                </td>
+                                {{-- <td>
                                     <input type="text" class="form-control text-end" value="0" name="ttl_rp">
-                                </td>
+                                </td> --}}
                             </tr>
                         </tbody>
                     </table>
@@ -121,6 +143,67 @@
     @section('scripts')
     <script>
         $(".select3").select2()
+
+        $(document).ready(function () {
+            $(document).on("keyup", ".pcs_awal", function () {
+                var pcs_awal = $(this).val();
+                var pcs_hcr = $('.pcs_hcr').val();
+                var pcs_flex = $('.pcs_flex').val();
+
+                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+
+                $('.pcs_ttl').val(total_pcs);
+            });
+            $(document).on("keyup", ".pcs_hcr", function () {
+                var pcs_hcr = $(this).val();
+                var pcs_awal = $('.pcs_awal').val();
+                var pcs_flex = $('.pcs_flex').val();
+
+                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+
+                $('.pcs_ttl').val(total_pcs);
+            });
+            $(document).on("keyup", ".pcs_flex", function () {
+                var pcs_hcr = $('.pcs_hcr').val();
+                var pcs_awal = $('.pcs_awal').val();
+                var pcs_flex = $(this).val();
+
+                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+
+                $('.pcs_ttl').val(total_pcs);
+            });
+
+
+            // Gram
+
+            $(document).on("keyup", ".gr_awal", function () {
+                var gr_awal = $(this).val();
+                var gr_hcr = $('.gr_hcr').val();
+                var gr_flex = $('.gr_flex').val();
+
+                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                $('.gr_ttl').val(total_gr);
+            });
+            $(document).on("keyup", ".gr_hcr", function () {
+                var gr_hcr = $(this).val();
+                var gr_awal = $('.gr_awal').val();
+                var gr_flex = $('.gr_flex').val();
+
+                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                $('.gr_ttl').val(total_gr);
+            });
+            $(document).on("keyup", ".gr_flex", function () {
+                var gr_hcr = $('.gr_hcr').val();
+                var gr_awal = $('.gr_awal').val();
+                var gr_flex = $(this).val();
+
+                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                $('.gr_ttl').val(total_gr);
+            });
+        });
     </script>
     @endsection
 </x-theme.app>
