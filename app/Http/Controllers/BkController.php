@@ -12,7 +12,7 @@ class BkController extends Controller
         $data = [
             'title' => 'Divisi BK'
         ];
-        return view('home.bk.index',$data);
+        return view('home.bk.index', $data);
     }
 
     public function add()
@@ -21,6 +21,10 @@ class BkController extends Controller
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get()
         ];
-        return view('home.bk.create',$data);
+        return view('home.bk.create', $data);
+    }
+
+    public function create(Request $r)
+    {
     }
 }
