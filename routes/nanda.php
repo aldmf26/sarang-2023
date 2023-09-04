@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
@@ -41,6 +42,18 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail/{nobox}', 'detail')->name('detail');
+        });
+
+    Route::controller(CetakController::class)
+        ->prefix('home/cetak')
+        ->name('cetak.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/edit', 'update')->name('update');
+            Route::get('/delete', 'delete')->name('delete');
         });
 });
 

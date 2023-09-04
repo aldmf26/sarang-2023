@@ -16,15 +16,16 @@
                         <th>Ket</th>
                         <th>Warna</th>
                         @php
-                            $t = ['tipe', 'pgws', 'nama', 'tgl terima', 'pcs awal', 'pcs hcr', 'pcs flx', 'pcs ttl', 'ttl rp'];
+                        $t = ['tipe', 'pgws', 'nama', 'tgl terima', 'pcs awal', 'pcs hcr', 'pcs flx', 'pcs ttl', 'ttl
+                        rp'];
                         @endphp
                         @foreach ($t as $d)
-                            <th>{{ ucwords($d) }}</th>
+                        <th>{{ ucwords($d) }}</th>
                         @endforeach
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                
+
             </table>
         </section>
 

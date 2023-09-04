@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
@@ -12,7 +12,8 @@
         <form action="{{ route('bk.create') }}" method="post">
             @csrf
             <section class="row">
-                <div class="col-lg-8">
+                @for ($i = 0; $i < 10; $i++) <div class="col-lg-8">
+                    <p>Kolom {{$i + 1}}</p>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -26,109 +27,117 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <input name="no_lot" type="text" class="form-control">
+                                    <input name="no_lot[]" type="text" class="form-control">
                                 </td>
                                 <td>
-                                    <input name="no_box" type="text" class="form-control">
+                                    <input name="no_box[]" type="text" class="form-control">
                                 </td>
                                 <td>
-                                    <input name="tipe" type="text" class="form-control">
+                                    <input name="tipe[]" type="text" class="form-control">
                                 </td>
                                 <td>
-                                    <select name="ket" id="" class="select3">
-                                        <option value="k">K</option>
-                                        <option value="kl">Kl</option>
-                                        <option value="ks">Ks</option>
-                                        <option value="nil">Nil</option>
-                                        <option value="flx">flx</option>
+                                    <select name="id_ket[]" id="" class="select3">
+                                        @foreach ($ket_bk as $k)
+                                        <option value="{{$k->id_ket_bk}}">{{$k->ket_bk}}</option>
+                                        @endforeach
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="warna" id="" class="select3">
-                                        <option value="s">S</option>
-                                        <option value="a">A</option>
-                                        <option value="y">Y</option>
+                                    <select name="id_warna[]" id="" class="select3">
+                                        @foreach ($warna as $w)
+                                        <option value="{{$w->id_warna}}">{{$w->nm_warna}}</option>
+                                        @endforeach
                                     </select>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                </div>
-                <div class="col-lg-12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th class="dhead" width="70">Tipe</th>
-                                <th class="dhead">Pgws</th>
-                                <th class="dhead">Nama</th>
-                                <th class="dhead">Tgl Terima</th>
-                                <th class="dhead text-end">Pcs Awal</th>
-                                <th class="dhead text-end">Gr Awal</th>
-                                <th class="dhead text-end">Pcs Hcr</th>
-                                <th class="dhead text-end">Gr Hcr</th>
-                                <th class="dhead text-end">Pcs Flex</th>
-                                <th class="dhead text-end">Gr Flex</th>
-                                <th class="dhead text-end">Pcs Ttl</th>
-                                <th class="dhead text-end">Gr Ttl</th>
-                                {{-- <th class="dhead text-end">Ttl Rp</th> --}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input type="text" class="form-control" value="BK" readonly name="tipe">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}"
-                                        name="pgws">
-                                </td>
-                                <td>
-                                    <select name="nama" id="" class="select3">
-                                        {{-- @foreach ($pengawas as $d)
-                                        <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
-                                        @endforeach --}}
-                                        <option value="">Pilih Pengawas</option>
-                                        <option value="1">Jenah</option>
-                                        <option value="2">Nurul</option>
-                                        <option value="3">Erna</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
-                                        name="tgl_terima">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end pcs_awal" name="pcs_awal" value="0">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end gr_awal" name="gr_awal" value="0">
-                                </td>
-                                {{-- <td>
-                                    <input type="text" class="form-control text-end pcs_hcr" name="pcs_hcr" value="0">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end gr_hcr" name="gr_hcr" value="0">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end pcs_flex" name="pcs_flex" value="0">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end gr_flex" name="gr_flex" value="0">
-                                </td> --}}
-                                <td>
-                                    <input type="text" class="form-control text-end pcs_ttl" name="pcs_ttl" readonly>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control text-end gr_ttl" name="gr_ttl" readonly>
-                                </td>
-                                {{-- <td>
-                                    <input type="text" class="form-control text-end" value="0" name="ttl_rp">
-                                </td> --}}
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    {{-- <th class="dhead" width="70">Tipe</th> --}}
+                                    <th class="dhead">Pgws</th>
+                                    <th class="dhead">Nama</th>
+                                    <th class="dhead">Tgl Terima</th>
+                                    <th class="dhead text-end">Pcs Awal</th>
+                                    <th class="dhead text-end">Gr Awal</th>
+                                    {{-- <th class="dhead text-end">Pcs Hcr</th>
+                                    <th class="dhead text-end">Gr Hcr</th>
+                                    <th class="dhead text-end">Pcs Flex</th>
+                                    <th class="dhead text-end">Gr Flex</th>
+                                    <th class="dhead text-end">Pcs Ttl</th>
+                                    <th class="dhead text-end">Gr Ttl</th> --}}
+                                    {{-- <th class="dhead text-end">Ttl Rp</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {{-- <td>
+                                        <input type="text" class="form-control" value="BK" readonly name="tipe[]">
+                                    </td> --}}
+                                    <td>
+                                        <input type="text" class="form-control" readonly
+                                            value="{{ auth()->user()->name }}" name="pgws[]">
+                                    </td>
+                                    <td>
+                                        <select name="nama[]" id="" class="select3">
+                                            {{-- @foreach ($pengawas as $d)
+                                            <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
+                                            @endforeach --}}
+                                            <option value="">Pilih Pengawas</option>
+                                            <option value="1">Jenah</option>
+                                            <option value="2">Nurul</option>
+                                            <option value="3">Erna</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
+                                            name="tgl_terima[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end pcs_awal" name="pcs_awal[]"
+                                            value="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end gr_awal" name="gr_awal[]"
+                                            value="0">
+                                    </td>
+                                    {{-- <td>
+                                        <input type="text" class="form-control text-end pcs_hcr" name="pcs_hcr"
+                                            value="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end gr_hcr" name="gr_hcr" value="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end pcs_flex" name="pcs_flex"
+                                            value="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end gr_flex" name="gr_flex"
+                                            value="0">
+                                    </td> --}}
+                                    {{-- <td>
+                                        <input type="text" class="form-control text-end pcs_ttl" name="pcs_ttl"
+                                            readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-end gr_ttl" name="gr_ttl" readonly>
+                                    </td> --}}
+                                    {{-- <td>
+                                        <input type="text" class="form-control text-end" value="0" name="ttl_rp">
+                                    </td> --}}
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <hr style="border: 1px solid #435EBE">
+                        <br>
+                    </div>
+                    @endfor
             </section>
     </x-slot>
     <x-slot name="cardFooter">
