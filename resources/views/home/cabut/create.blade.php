@@ -1,8 +1,10 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
 
     <x-slot name="cardHeader">
-        <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }}</h6>
+        <h6 class="float-start mt-1">{{ $title }}</h6>
+
+        <div class="row">
+
         </div>
 
     </x-slot>
@@ -10,104 +12,82 @@
 
     <x-slot name="cardBody">
         <style>
-            
+
         </style>
-        <form action="{{ route('cabut.create') }}" method="post">
+        <form action="{{ route('cabut.create') }}" method="post" id="rupiahForm">
             @csrf
             <section class="row">
-                <div class="col-lg-8">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th class="dhead">No Lot</th>
-                                <th class="dhead">No Box</th>
-                                <th class="dhead">Tipe</th>
-                                <th class="dhead">Ket</th>
-                                <th class="dhead">Warna</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input name="no_lot" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <input name="no_box" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <input name="tipe" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <select name="ket" id="" class="select3">
-                                        <option value="k">K</option>
-                                        <option value="kl">Kl</option>
-                                        <option value="ks">Ks</option>
-                                        <option value="nil">Nil</option>
-                                        <option value="flx">flx</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="warna" id="" class="select3">
-                                        <option value="s">S</option>
-                                        <option value="a">A</option>
-                                        <option value="y">Y</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                </div>
                 <div class="col-lg-12">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead" width="70">Tipe</th>
+                                <th class="dhead">No Box</th>
                                 <th class="dhead">Pgws</th>
-                                <th class="dhead">Nama</th>
+                                <th class="dhead">Nama Anak</th>
                                 <th class="dhead">Tgl Terima</th>
-                                <th class="dhead text-end">Pcs Awal</th>
-                                <th class="dhead text-end">Pcs Hcr</th>
-                                <th class="dhead text-end">Pcs Flex</th>
-                                <th class="dhead text-end">Pcs Ttl</th>
-                                <th class="dhead text-end">Ttl Rp</th>
+                                <th class="dhead text-end" width="110">Pcs Awal</th>
+                                <th class="dhead text-end" width="110">Gr Awal</th>
+                                <th class="dhead text-end" width="130">Ttl Rp</th>
+                                <th class="dhead">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+
                                 <td>
-                                    <input type="text" class="form-control" value="BK" readonly name="tipe">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}" name="pgws">
-                                </td>
-                                <td>
-                                    <select name="nama" id="" class="select3">
-                                        @foreach ($anak as $d)
-                                        <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
+                                    <select name="no_box[]" id="" class="select3 pilihBox" count="1">
+                                        <option value="">Pilih Box</option>
+                                        @foreach ($boxBk as $d)
+                                            <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
                                         @endforeach
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima">
+                                    <input type="text" class="form-control" readonly
+                                        value="{{ auth()->user()->name }}">
+                                    <input type="hidden" class="form-control" name="id_pengawas[]" readonly
+                                        value="{{ auth()->user()->id }}">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_awal">
+                                    <select name="id_anak[]" id="" class="select3 pilihAnak" count="1">
+                                        <option value="">Pilih Anak</option>
+                                        @foreach ($anak as $d)
+                                            <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
+                                                ({{ $d->kelas }}) {{ ucwords($d->nama) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" class="setHargaSatuan1">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_hcr">
+                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
+                                        name="tgl_terima[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_flex">
+                                    <input type="text" class="form-control text-end" value="0" id="pcsInput"
+                                        name="pcs_awal[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" name="pcs_ttl">
+                                    <input type="text" class="form-control text-end setGr setGr1" count="1"
+                                        value="0" id="grInput" name="gr_awal[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" value="0" name="ttl_rp">
+                                    <input readonly type="text" class="form-control text-end setRupiah1"
+                                        value="0" name="rupiah[]" id="rupiahInput">
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody id="tbh_baris">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="9">
+                                    <button type="button" class="btn btn-block btn-lg tbh_baris"
+                                        style="background-color: #F4F7F9; color: #435EBE; font-size: 14px; padding: 13px;">
+                                        <i class="fas fa-plus"></i> Tambah Baris Baru
+                                    </button>
+                                </th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </section>
@@ -122,9 +102,67 @@
         </form>
     </x-slot>
     @section('scripts')
-    <script>
-        $(".select3").select2()
-    </script>
+        <script>
+            $(".select3").select2()
+            plusRow(1, 'tbh_baris', "tbh_baris")
+            formatRibuan('rupiah')
+
+            $(document).on('change', '.pilihBox', function() {
+                var no_box = $(this).val()
+                var count = $(this).attr('count')
+                $.ajax({
+                    type: "GET",
+                    url: "get_box_sinta",
+                    data: {
+                        no_box: no_box
+                    },
+                    dataType: "json",
+                    success: function(r) {
+                        console.log(r)
+                        $(".setGr" + count).val(r.gr_awal)
+                    }
+                });
+            })
+
+            $(document).on('change', '.pilihAnak', function() {
+                var id_anak = $(this).val()
+                var count = $(this).attr('count')
+                var nilaiGr = $(".setGr" + count).val()
+
+                var id_kelas = $('option:selected', this).data('kelas');
+                $.ajax({
+                    type: "GET",
+                    url: "get_kelas_anak",
+                    data: {
+                        id_anak: id_anak,
+                        id_kelas: id_kelas,
+                    },
+                    dataType: "json",
+                    success: function(r) {
+                        console.log(r)
+                        var hrga_satuan = (r.rupiah / r.gr)
+                        var rupiah = hrga_satuan * parseFloat(nilaiGr)
+                        $(".setHargaSatuan" + count).val(hrga_satuan)
+                        rupiah = rupiah.toLocaleString('id-ID', {
+                            maximumFractionDigits: 0
+                        })
+                        $(".setRupiah" + count).val(rupiah)
+                    }
+                });
+            })
+
+            $(document).on('keyup', '.setGr', function() {
+                var isi = $(this).val()
+                var count = $(this).attr('count')
+                var hrga_satuan = $('.setHargaSatuan' +count).val()
+                var rupiah = hrga_satuan * isi
+                rupiah = rupiah.toLocaleString('id-ID', {
+                            maximumFractionDigits: 0
+                        })
+                $(".setRupiah" + count).val(rupiah)
+
+
+            })
+        </script>
     @endsection
 </x-theme.app>
-

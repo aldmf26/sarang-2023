@@ -36,6 +36,12 @@ class NavbarController extends Controller
     {
         $data = [
             [
+                'judul' => 'Gudang Awal',
+                'route' => 'gudang.index',
+                'img' => 'warehouse.png',
+                'deskripsi' => 'Gudang Herry',
+            ],
+            [
                 'judul' => 'BK',
                 'route' => 'bk.index',
                 'img' => 'warehouse.png',

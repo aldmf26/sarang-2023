@@ -33,10 +33,10 @@
 
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
-})
-            
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
     $(document).on('click', '.akses_h', function() {
         var id_user = $(this).attr('id_user');
         if ($('.akses_h' + id_user).prop("checked") == true) {
@@ -70,19 +70,6 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     $('.select2-tambah2').select2({
         dropdownParent: $('#tambah2 .modal-content')
     });
-    $('#selectView').select2({
-        dropdownParent: $('#view .modal-content')
-    });
-    $('.selectView').select2({
-        dropdownParent: $('#view .modal-content')
-    });
-    $('.select_ayam').select2({
-        dropdownParent: $('#penjualan_ayam .modal-content')
-    });
-
-    $('.select_tambah_aktiva').select2({
-        dropdownParent: $('.tambah .modal-content')
-    });
 
     $('.costume_muncul').hide();
     $('.bulan_muncul').hide();
@@ -108,174 +95,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         disabled: true
     });
 
-    function convertRpSelisih(classNoHide, classHide, classTotal, classTotalhide) {
-        $(document).on("keyup", "." + classNoHide, function() {
-            var count = $(this).attr("count");
-            var rupiah = $(this)
-                .val()
-                .replace(/[^,\d]/g, "")
-                .toString(),
-                split = rupiah.split(","),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ? "." : "";
-                rupiah += separator + ribuan.join(".");
-            }
-
-            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-            var debit = 0;
-            $("." + classNoHide).each(function() {
-                debit += parseFloat($(this).val());
-            });
-
-            if (rupiah === "") {
-                $(this).val("Rp 0");
-                $("." + classHide + count).val("0");
-            } else {
-                $(this).val("Rp " + rupiah);
-                var rupiah_biasa = parseFloat(rupiah.replace(/[^\d]/g, ""));
-                $("." + classHide + count).val(rupiah_biasa);
-            }
-
-
-            var total_debit = 0;
-            $("." + classHide).each(function() {
-                total_debit += parseFloat($(this).val());
-            });
-
-
-            $("." + classTotalhide).val(total_debit);
-
-            var totalRupiah = total_debit.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-            var debit = $("." + classTotal).text(totalRupiah);
-            $(".total_kredit").text(totalRupiah);
-
-            var ttlHutang = $(".total_hutangTetap").val()
-            var selisih = parseFloat(ttlHutang) - parseFloat(total_debit)
-            teksSelisih = selisih.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-
-            if (selisih === 0) {
-                $(".cselisih").css("color", "green");
-
-            } else {
-                $(".cselisih").css("color", "red");
-
-            }
-
-            $(".selisih").text(teksSelisih);
-
-        });
-    }
-
-    function convertRp(classNoHide, classHide, classTotal, classTotalhide) {
-        $(document).on("keyup", "." + classNoHide, function() {
-            var count = $(this).attr("count");
-            var rupiah = $(this)
-                .val()
-                .replace(/[^,\d]/g, "")
-                .toString(),
-                split = rupiah.split(","),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ? "." : "";
-                rupiah += separator + ribuan.join(".");
-            }
-
-            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-            var debit = 0;
-            $("." + classNoHide).each(function() {
-                debit += parseFloat($(this).val());
-            });
-
-            if (rupiah === "") {
-                $(this).val("Rp 0");
-                $("." + classHide + count).val("0");
-            } else {
-                $(this).val("Rp " + rupiah);
-                var rupiah_biasa = parseFloat(rupiah.replace(/[^\d]/g, ""));
-                $("." + classHide + count).val(rupiah_biasa);
-            }
-
-
-            var total_debit = 0;
-            $("." + classHide).each(function() {
-                total_debit += parseFloat($(this).val());
-            });
-
-
-            $("." + classTotalhide).val(total_debit);
-
-            var totalRupiah = total_debit.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-            var debit = $("." + classTotal).text(totalRupiah);
-
-
-        });
-    }
-
-    function convertRpKoma(classNoHide, classHide, kreditHide, total) {
-        $(document).on("keyup", "." + classNoHide, function() {
-            var count = $(this).attr("count");
-            var input = $(this).val();
-            input = input.replace(/[^\d\,]/g, "");
-            input = input.replace(".", ",");
-            input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-
-            if (input === "") {
-                $(this).val("");
-                $('.' + classHide + count).val(0)
-            } else {
-                $(this).val("Rp " + input);
-                input = input.replaceAll(".", "");
-                input2 = input.replace(",", ".");
-                $('.' + classHide + count).val(input2)
-
-            }
-
-            var total_debit = 0;
-            $("." + classHide).each(function() {
-                total_debit += parseFloat($(this).val());
-            });
-
-            var totalRupiah = total_debit.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-
-            $("." + total).text(totalRupiah);
-            $(".total_kredit").text(totalRupiah);
-
-            var ttlHutang = $(".total_hutangTetap").val()
-            var selisih = parseFloat(ttlHutang) - parseFloat(total_debit)
-            teksSelisih = selisih.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-
-            if (selisih === 0) {
-                $(".cselisih").css("color", "green");
-            } else {
-                $(".cselisih").css("color", "red");
-            }
-            $(".selisih").text(teksSelisih);
-        });
-    }
-
-    function plusRowProduk(count, classPlus, url) {
+    function plusRow(count, classPlus, url) {
         $(document).on("click", "." + classPlus, function() {
             count = count + 1;
             $.ajax({
@@ -294,119 +114,9 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
         })
     }
-    function plusRow(count, classPlus, url) {
-        $(document).on("click", "." + classPlus, function() {
-            count = count + 1;
-            $.ajax({
-                url: `${url}?count=` + count,
-                type: "GET",
-                success: function(data) {
-                    $("#" + classPlus).append(data);
-                    $(".select2").select2();
-                    
-                },
-            });
-        });
-
-        $(document).on('click', '.remove_baris', function() {
-            var delete_row = $(this).attr("count");
-            $(".baris" + delete_row).remove();
-
-            // menghapus mengurang
-            var total_rpAtas = 0;
-            $(".ttlrp-hide").each(function() {
-                total_rpAtas += parseFloat($(this).val());
-            });
-
-            var total_debit = 0;
-            $(".debit").each(function() {
-                total_debit += parseFloat($(this).val());
-            });
-            var total_kredit = 0;
-            $(".kredit").each(function() {
-                total_kredit += parseFloat($(this).val());
-            });
-
-            var selisih = total_rpAtas - total_debit - total_kredit;
-            var selisih_total = selisih.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-            var total_rpAtas = total_rpAtas.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-            $(".total_kredit").text(total_rpAtas);
-            $(".total").text(selisih_total);
-
-            if (selisih === 0) {
-                $(".cselisih").css("color", "green");
-                $(".button-save").removeAttr("hidden");
-            } else {
-                $(".cselisih").css("color", "red");
-                $(".button-save").attr("hidden", true);
-            }
-            $(".selisih").text(selisih_total);
-        })
-    }
-
-    function plusRow2(count, classPlus, url) {
-        $(document).on("click", "." + classPlus, function() {
-            count = count + 1;
-            $.ajax({
-                url: `${url}?count=` + count,
-                type: "GET",
-                success: function(data) {
-                    $("#" + classPlus).append(data);
-                    $(".select2").select2();
-                },
-            });
-        });
-
-        $(document).on('click', '.remove_baris2', function() {
-            var delete_row = $(this).attr("count");
-            $(".baris2" + delete_row).remove();
-
-            var total_rpAtas = 0;
-            $(".ttlrp-hide").each(function() {
-                total_rpAtas += parseFloat($(this).val());
-            });
-
-            var total_debit = 0;
-            $(".debit").each(function() {
-                total_debit += parseFloat($(this).val());
-            });
-            var total_kredit = 0;
-            $(".kredit").each(function() {
-                total_kredit += parseFloat($(this).val());
-            });
-
-            var selisih = total_debit - total_kredit;
-            var selisih_total = selisih.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-            $(".total").text(selisih_total);
-
-            var selisih = total_debit - total_kredit;
-            var selisih_total = selisih.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-            });
-
-            if (selisih === 0) {
-                $(".cselisih").css("color", "green");
-                $(".button-save").removeAttr("hidden");
-            } else {
-                $(".cselisih").css("color", "red");
-                $(".button-save").attr("hidden", true);
-            }
-            $(".selisih").text(selisih_total);
-        })
-    }
 
     function detail(kelas, attr, link, load) {
-        
+
         $(document).on('click', `.${kelas}`, function() {
             var id = $(this).attr(`${attr}`)
             $.ajax({
@@ -421,7 +131,26 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             });
         })
     }
-    
+
+    function formatRibuan(id) {
+        // Fungsi untuk memformat nilai input saat pengguna mengetik
+        $(`#${id}Input`).on('input', function() {
+            var inputValue = $(this).val().replace(/,/g, ''); // Hapus tanda koma
+            var formattedValue = formatRupiah(inputValue);
+            $(this).val(formattedValue);
+        });
+        $(`form`).submit(function() {
+            var inputValue = $(`#${id}Input`).val().replace(/[,\.]/g, ''); // Hapus tanda koma
+            $(`#${id}Input`).val(inputValue); // Setel nilai tanpa tanda koma kembali ke input
+        });
+    }
+    // Function untuk mengubah format angka menjadi format Rupiah
+    function formatRupiah(angka) {
+        var reverse = angka.toString().split('').reverse().join('');
+        var ribuan = reverse.match(/\d{1,3}/g);
+        var formatted = ribuan.join(',').split('').reverse().join('');
+        return formatted;
+    }
 
     function inputChecked(allId, itemClass) {
         $(document).on('click', '#' + allId, function() {
@@ -437,8 +166,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             });
         })
     }
-
-
+        
     function aksiBtn(idForm) {
         $(document).on('submit', idForm, function() {
             $(".button-save").hide();
@@ -482,8 +210,8 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     });
 </script>
 @if (session()->has('sukses'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('sukses') }}",
                 duration: 3000,
@@ -495,11 +223,11 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
             }).showToast();
         });
-</script>
+    </script>
 @endif
 @if (session()->has('error'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('error') }}",
                 duration: 3000,
@@ -513,7 +241,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
 
         });
-</script>
+    </script>
 @endif
 @yield('scripts')
 @yield('js')

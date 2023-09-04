@@ -19,25 +19,27 @@
                 </thead>
                 <tbody>
                     @foreach ($user as $no => $d)
-                    <tr>
-                        <td>{{ $no + 1 }}</td>
-                        <td>{{ ucwords($d->name) }}</td>
-                        <td>{{ ucwords($d->posisi->nm_posisi) }}</td>
-                        <td>
-                            <x-theme.button hapus="Y" href="{{ route('pengawas.delete', ['id_user' => $d->id]) }}"
-                                icon="fa-trash" addClass="float-end" teks="" variant="danger" />
-                            <x-theme.button modal="Y" idModal="edit-modal" icon="fa-pen"
-                                addClass="me-1 float-end edit-btn" teks=""
-                                data="url={{ route('pengawas.edit', $d->id) }}" />
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ ucwords($d->nama) }}</td>
+                            <td>{{ tanggal($d->tgl_masuk) }}</td>
+                            <td>{{ ucwords($d->kelas) }}</td>
+                            <td>{{ ucwords($d->name) }}</td>
+                            <td>
+                                <x-theme.button modal="Y" idModal="delete" href="#" icon="fa-trash" variant="danger" addClass="float-end delete_nota" teks=""
+                                    data="id={{ $d->id_anak }}" />
+
+                                <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen" addClass="float-end edit" teks=""
+                                    data="id={{ $d->id_anak }}" />
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         </section>
 
         {{-- ALL MODAL --}}
-        <form action="{{ route('pengawas.create') }}" method="post">
+        <form action="{{ route('pengawas.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah user" btnSave="Y">
                 <div class="row">
@@ -53,52 +55,49 @@
                             <input required type="text" name="kelas" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Tgl Masuk</label>
-                            <input required type="date" value="{{ date('Y-m-d') }}" name="tgl_masuk" class="form-control">
+                            <input required type="date" value="{{ date('Y-m-d') }}" name="tgl_masuk"
+                                class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Pengawas</label>
                             <select name="id_pengawas" id="" class="select2">
+                                <option value="">- Pilih Pengawas -</option>
                                 @foreach ($pengawas as $p)
                                     <option value="{{ $p->id }}">{{ ucwords($p->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                
+
                 </div>
             </x-theme.modal>
         </form>
 
-        <form action="{{ route('pengawas.update') }}" method="post">
+        {{-- update --}}
+        <form action="{{ route('pengawas.update_anak') }}" method="post">
             @csrf
-            <x-theme.modal idModal="edit-modal" title="tambah user" btnSave="Y" size="modal-lg">
-                <div id="editBody"></div>
+            <x-theme.modal title="Edit Anak" idModal="edit">
+                <div id="get_edit">
+                </div>
             </x-theme.modal>
         </form>
+
+        {{-- delete --}}
+        {{-- <x-theme.btn_alert_delete route="pengawas.destroy_anak" name="id_anak" tgl1="2022" tgl2="2022" id_proyek="1" /> --}}
 
     </x-slot>
 
     @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $(".select3").select2()
-                $(document).on('click', '.edit-btn', function() {
-                    var url = $(this).attr('url')
-                    $.ajax({
-                        type: "GET",
-                        url: url,
-                        success: function(response) {
-                            $('#editBody').html(response);
-                        }
-                    });
-
-                })
+        <script>
+            $(document).ready(function() {
+                $(".select3").select2()
+                detail('edit', 'id', 'anak', 'get_edit')
             });
-    </script>
+        </script>
     @endsection
 </x-theme.app>
