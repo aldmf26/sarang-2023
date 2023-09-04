@@ -52,7 +52,15 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Kelas</label>
-                            <input required type="text" name="kelas" class="form-control">
+                            <select name="kelas" class="select2" id="">
+                                <option value="">Kelas</option>
+                                @php
+                                    $kelas = DB::table('tb_kelas')->get();
+                                @endphp
+                                @foreach ($kelas as $k)
+                                    <option value="{{ $k->id_kelas }}">{{ $k->kelas }} - {{ $k->lokasi }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
