@@ -22,7 +22,11 @@ class PengawasController extends Controller
     {
         $data = [
             'title' => 'Data Anak',
-            'user' => DB::table('tb_anak as a')->join('users as b', 'a.id_pengawas', 'b.id')->where('b.posisi_id', 13)->get(),
+            'user' => DB::table('tb_anak as a')
+                        ->join('users as b', 'a.id_pengawas', 'b.id')
+                        ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+                        ->where('b.posisi_id', 13)
+                        ->get(),
             'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
 
         ];

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BkController;
 use App\Http\Controllers\CabutController;
 use App\Http\Controllers\DataPengawasController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
         });
+    Route::controller(GudangController::class)
+        ->prefix('home/gudang')
+        ->name('gudang.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+        });
     Route::controller(BkController::class)
         ->prefix('home/bk')
         ->name('bk.')
@@ -65,10 +72,10 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
+            Route::get('/get_kelas_anak', 'get_kelas_anak')->name('get_kelas_anak');
             Route::post('/', 'create')->name('create');
-            Route::get('/edit', 'edit')->name('edit');
-            Route::post('/edit', 'update')->name('update');
-            Route::get('/delete', 'delete')->name('delete');
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')

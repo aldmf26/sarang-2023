@@ -11,7 +11,7 @@
     'hapus' => 'T',
     'data' => '',
 ])
-
+    
 <a href="{{ $href }}" {{ $data }}
     @if ($hapus == 'Y') onclick="return confirm('Yakin ingin dihapus ?')" @endif id="{{ $id }}"
     @if ($modal == 'Y') data-bs-toggle="modal" data-bs-target="#{{ $idModal }}" @endif
