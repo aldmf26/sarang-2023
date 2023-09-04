@@ -22,16 +22,16 @@
                 </thead>
                 <tbody>
                     @foreach ($cabut as $no => $d)
-                        <tr>
-                            <td>{{ $no + 1 }}</td>
-                            <td>{{ $d->no_box }}</td>
-                            <td>{{ ucwords(auth()->user()->name) }}</td>
-                            <td>{{ $d->nama }}</td>
-                            <td>{{ $d->tgl_terima }}</td>
-                            <td align="right">{{ $d->pcs_awal }}</td>
-                            <td align="right">{{ $d->gr_awal }}</td>
-                            <td></td>
-                        </tr>
+                    <tr>
+                        <td>{{ $no+1 }}</td>
+                        <td>{{ $d->no_box }}</td>
+                        <td>{{ ucwords(auth()->user()->name) }}</td>
+                        <td>{{ $d->nama }}</td>
+                        <td>{{ $d->tgl_terima }}</td>
+                        <td align="right">{{ $d->pcs_awal }}</td>
+                        <td align="right">{{ $d->gr_awal }}</td>
+                        <td></td>
+                    </tr>
                     @endforeach
                 </tbody>
 
@@ -69,12 +69,13 @@
                                 <th>Aksi</th>
                             </tr>
                             @foreach ($anak as $d)
-                                <tr>
-                                    <td>{{ ucwords($d->nama) }}</td>
-                                    <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
-                                    <td><input type="date" class="form-control"></td>
-                                    <td><button class="btn btn-sm btn-danger"><i class="fas fa-window-close"></i></button></td>
-                                </tr>
+                            <tr>
+                                <td>{{ ucwords($d->nama) }}</td>
+                                <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><button class="btn btn-sm btn-danger"><i class="fas fa-window-close"></i></button>
+                                </td>
+                            </tr>
                             @endforeach
                         </table>
                     </div>

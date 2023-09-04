@@ -47,11 +47,11 @@
                 </tr>
                 <tr>
                     <th class="warna_head">Ket</th>
-                    <td>{{ $detail->ket }}</td>
+                    <td>{{ $detail->ket_bk }}</td>
                 </tr>
                 <tr>
                     <th class="warna_head">Warna</th>
-                    <td>{{ $detail->warna }}</td>
+                    <td>{{ $detail->nm_warna }}</td>
                 </tr>
 
             </table>
@@ -76,14 +76,16 @@
                 <tbody>
                     <tr>
                         <td><b>BK</b></td>
-                        <td>sinta</td>
-                        <td>Jenah</td>
-                        <td>{{date('d M y')}}</td>
-                        <td align="right">180</td>
+                        <td>{{$detail->pengawas}}</td>
+                        <td>{{$detail->penerima == '1' ? 'Jenah' : ($detail->penerima == '2' ? 'Nurul' :
+                            'Erna')}}
+                        </td>
+                        <td>{{date('d M y',strtotime($detail->tgl))}}</td>
+                        <td align="right">{{$detail->pcs_awal}}</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
-                        <td align="right">180</td>
-                        <td align="right"></td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
 
 
                     </tr>
@@ -136,7 +138,7 @@
                         <td align="right"></td>
                         <td align="right">0</td>
                         <td align="right">0</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
                     </tr>
                     <tr>
@@ -173,7 +175,7 @@
                         <td align="right"></td>
                         <td align="right">0</td>
                         <td align="right">0</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
                     </tr>
                     <tr>
@@ -209,7 +211,7 @@
                         <td align="right"></td>
                         <td align="right">0</td>
                         <td align="right">0</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
                     </tr>
 
@@ -222,23 +224,23 @@
                 <thead>
                     {{-- tipe bk --}}
                     <tr>
-                        <th class="dhead">GR AWAL</th>
-                        <th class="dhead">GR HCR</th>
-                        <th class="dhead">GR FLX</th>
-                        <th class="dhead">GR TTL</th>
-                        <th class="dhead">TTD PGWS</th>
-                        <th class="dhead">SUSUT</th>
+                        <th class="dhead text-end">GR AWAL</th>
+                        <th class="dhead text-end">GR HCR</th>
+                        <th class="dhead text-end">GR FLX</th>
+                        <th class="dhead text-end">GR TTL</th>
+                        <th class="dhead text-end">TTD PGWS</th>
+                        <th class="dhead text-end">SUSUT</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         {{-- gr --}}
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">{{number_format($detail->gr_awal,0)}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
 
                     </tr>
                     <tr>
@@ -246,21 +248,21 @@
                     </tr>
 
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
                     <tr>
                         {{-- gr cabut --}}
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
 
 
@@ -276,20 +278,20 @@
                         <th class="text-end dhead">SUSUT</th>
                     </tr>
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
 
                     <tr>
@@ -304,20 +306,20 @@
                         <th class="text-end dhead">SUSUT</th>
                     </tr>
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
                     <tr>
                         <td colspan="6" class="border-hilang">&nbsp;</td>
@@ -331,12 +333,12 @@
                         <th class="text-end dhead">SST GLOBAL</th>
                     </tr>
                     <tr>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
                         <td align="right"></td>
-                        <td align="right">180</td>
+                        <td align="right">0</td>
                     </tr>
 
 

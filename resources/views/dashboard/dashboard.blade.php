@@ -19,21 +19,22 @@
 
                 <tbody>
                     @foreach ($datas as $d)
-                        <tr>
-                            <td align="right">
-                                <a class="detail" target="_blank" href="{{ route('dashboard.detail', $d->nobox) }}">{{ number_format($d->nobox, 0) }} <i
-                                        class="me-2 fas fa-eye"></i></a>
-                            </td>
-                            <td align="right">{{ number_format($d->pcs_awal_bk, 0) }}</td>
-                            <td align="right">{{ number_format($d->gr_awal_bk, 0) }}</td>
-                            <td>{{ $d->bulan }}</td>
-                            <td>{{ strtoupper($d->pengawas) }}</td>
-                            <td align="right">{{ number_format($d->pcs_awal_kerja, 0) }}</td>
-                            <td align="right">{{ number_format($d->gr_awal_kerja, 0) }}</td>
-                            <td align="right">Rp. {{ number_format($d->rupiah, 0) }}</td>
-                            <td align="right">{{ number_format($d->pcs_awal_bk - $d->pcs_awal_kerja, 0) }}</td>
-                            <td align="right">{{ number_format($d->gr_awal_bk - $d->gr_awal_kerja, 0) }}</td>
-                        </tr>
+                    <tr>
+                        <td align="right">
+                            <a class="detail" target="_blank" href="{{ route('dashboard.detail', $d->no_box) }}">{{
+                                number_format($d->no_box, 0) }} <i class="me-2 fas fa-eye"></i></a>
+                        </td>
+                        <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                        <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                        <td>{{ date('M Y', strtotime($d->tgl)) }}</td>
+                        <td>{{ strtoupper($d->penerima == '1' ? 'Jenah' : ($d->penerima == '2' ? 'Nurul' : 'Erna')) }}
+                        </td>
+                        <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                        <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                        <td align="right">Rp. 0</td>
+                        <td align="right">{{ number_format($d->pcs_awal , 0) }}</td>
+                        <td align="right">{{ number_format($d->gr_awal , 0) }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -46,8 +47,8 @@
     </x-theme.modal> --}}
 
     @section('scripts')
-        <script>
-            // detail('detail', 'nobox', 'dashboard/detail', 'get_detail')
-        </script>
+    <script>
+        // detail('detail', 'nobox', 'dashboard/detail', 'get_detail')
+    </script>
     @endsection
 </x-theme.app>
