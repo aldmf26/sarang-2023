@@ -9,8 +9,8 @@ class CetakController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Divisi Cabut'
+            'title' => 'Divisi Cetak'
         ];
-        return view('home.cabut.index', $data);
+        return view('home.cetak.index', $data);
     }
 }
