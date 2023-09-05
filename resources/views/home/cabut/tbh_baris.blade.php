@@ -29,7 +29,7 @@
             name="tgl_terima[]">
     </td>
     <td>
-        <input type="text" class="form-control text-end" value="0" id="pcsInput"
+        <input type="text" class="form-control text-end setPcs{{$count}}" value="0" id="pcsInput"
             name="pcs_awal[]">
     </td>
     <td>
@@ -37,8 +37,8 @@
             name="gr_awal[]">
     </td>
     <td>
-        <input readonly type="text" class="form-control text-end setRupiah{{$count}}" value="0" name="rupiah[]"
-            id="rupiahInput">
+        <input readonly type="text" class="form-control text-end rupiahInput setRupiah{{$count}}" value="0" name="rupiah[]"
+            >
     </td>
     <td align="center">
         <button type="button" class="btn rounded-pill remove_baris" count="{{$count}}"><i

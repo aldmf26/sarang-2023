@@ -208,6 +208,21 @@
         "autoWidth": true,
         "paging": false,
     });
+
+    function alertToast(pesan) {
+        $(document).ready(function() {
+            Toastify({
+                text: pesan,
+                duration: 3000,
+                style: {
+                    background: "#EAF7EE",
+                    color: "#7F8B8B"
+                },
+                close: true,
+                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+            }).showToast();
+        });
+    }
 </script>
 @if (session()->has('sukses'))
     <script>

@@ -18,6 +18,7 @@
             @csrf
             <section class="row">
                 <div class="col-lg-12">
+                    <x-theme.alert pesan="{{ session()->get('error') }}" />
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -38,7 +39,9 @@
                                     <select name="no_box[]" id="" class="select3 pilihBox" count="1">
                                         <option value="">Pilih Box</option>
                                         @foreach ($boxBk as $d)
+                                            @if ($d->pcs_awal - $d->pcs_cabut > 1)
                                             <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </td>
@@ -63,7 +66,7 @@
                                         name="tgl_terima[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end" value="0" id="pcsInput"
+                                    <input type="text" class="form-control text-end setPcs1" value="0" id="pcsInput"
                                         name="pcs_awal[]">
                                 </td>
                                 <td>
@@ -71,8 +74,8 @@
                                         value="0" id="grInput" name="gr_awal[]">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control text-end setRupiah1"
-                                        value="0" name="rupiah[]" id="rupiahInput">
+                                    <input readonly type="text" class="form-control rupiahInput text-end setRupiah1"
+                                        value="0" name="rupiah[]">
                                 </td>
                             </tr>
                         </tbody>
@@ -105,7 +108,7 @@
         <script>
             $(".select3").select2()
             plusRow(1, 'tbh_baris', "tbh_baris")
-            formatRibuan('rupiah')
+            // formatRibuan('rupiah')
 
             $(document).on('change', '.pilihBox', function() {
                 var no_box = $(this).val()
@@ -119,7 +122,8 @@
                     dataType: "json",
                     success: function(r) {
                         console.log(r)
-                        $(".setGr" + count).val(r.gr_awal)
+                        $(".setGr" + count).val(r.gr_awal - r.gr_cabut)
+                        $(".setPcs" + count).val(r.pcs_awal - r.pcs_cabut)
                     }
                 });
             })

@@ -76,6 +76,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/get_kelas_anak', 'get_kelas_anak')->name('get_kelas_anak');
+            Route::get('/load_anak', 'load_anak')->name('load_anak');
+            Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
+            Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::post('/', 'create')->name('create');
         });
     Route::controller(DataPengawasController::class)
