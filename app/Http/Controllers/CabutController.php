@@ -22,6 +22,7 @@ class CabutController extends Controller
             'cabut' => DB::table('cabut as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
+                ->orderBy('id_cabut', 'DESC')
                 ->get()
         ];
         return view('home.cabut.index', $data);
@@ -148,7 +149,7 @@ class CabutController extends Controller
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND (a.pcs_awal - b.pcs_awal) <> 0");
+        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user'");
     }
 
     public function create(Request $r)
@@ -173,5 +174,29 @@ class CabutController extends Controller
             }
         }
         return redirect()->route('cabut.index')->with('sukses', 'Berhasil tambah Data');
+    }
+
+    public function load_modal_akhir(Request $r)
+    {
+        $detail = DB::table('cabut as a')
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
+            ->first();
+        $data = [
+            'detail' => $detail
+        ];
+        return view('home.cabut.load_modal_akhir', $data);
+    }
+
+    public function input_akhir(Request $r)
+    {
+        DB::table('cabut')->where([['id_anak', $r->id_anak],['no_box', $r->no_box]])->update([
+            'pcs_akhir' => $r->pcs_akhir,
+            'gr_akhir' => $r->gr_akhir,
+            'pcs_hcr' => $r->pcs_hcr,
+            'eot' => $r->eot,
+        ]);
+
+        return redirect()->route('cabut.index')->with('sukses', 'Data Berhasil Ditambahkan');
     }
 }

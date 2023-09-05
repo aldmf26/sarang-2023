@@ -30,13 +30,46 @@
                         <td>{{ $d->tgl_terima }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
-                        <td></td>
+                        <td align="center">
+                            <div class="btn-group" role="group">
+                                <span class="btn btn-sm" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-v text-primary"></i>
+                                </span>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                    <li><a class="dropdown-item text-info inputAkhir" href="#"
+                                            no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#inputAkhir"><i class="me-2 fas fa-pen"></i>Akhir</a>
+                                    </li>
+
+                                    {{-- <li>
+                                        <a class="dropdown-item text-info edit_akun"
+                                            href="{{ route('cabut.edit', ['no_box' => $d->no_box]) }}"><i
+                                                class="me-2 fas fa-pen"></i>Edit</a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item text-danger delete_nota" no_nota="{{ $d->no_box }}"
+                                            href="#" data-bs-toggle="modal" data-bs-target="#delete"><i
+                                                class="me-2 fas fa-trash"></i>Delete
+                                        </a>
+                                    </li> --}}
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
 
             </table>
         </section>
+
+        <form action="{{ route('cabut.input_akhir') }}" method="post">
+            @csrf
+            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="Y" size="modal-lg">
+                <div id="load_modal_akhir"></div>
+            </x-theme.modal>
+        </form>
 
         <form action="{{ route('cabut.create_anak') }}" method="post">
             @csrf
@@ -45,11 +78,6 @@
                     <div class="col-lg-8">
                         <div class="form-group">
                             <label for="">Tambah Anak</label>
-                            {{-- <select class="select3 anakNoPengawas" name="" multiple id="">
-                                @foreach ($anakNoPengawas as $d)
-                                <option value="{{ $d->id_anak }}">{{ ucwords($d->nama) }}</option>
-                                @endforeach
-                            </select> --}}
                             <div id="load_anak_nopengawas"></div>
                         </div>
                     </div>
@@ -59,27 +87,6 @@
                     </div>
                 </div>
                 <div id="load_anak"></div>
-                {{-- <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-striped">
-                            <tr>
-                                <th width="180">Nama</th>
-                                <th width="80">Kelas</th>
-                                <th>Tgl Masuk</th>
-                                <th>Aksi</th>
-                            </tr>
-                            @foreach ($anak as $d)
-                            <tr>
-                                <td>{{ ucwords($d->nama) }}</td>
-                                <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><button class="btn btn-sm btn-danger"><i class="fas fa-window-close"></i></button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div> --}}
             </x-theme.modal>
         </form>
         @section('scripts')
@@ -136,6 +143,22 @@
                             alertToast('Berhasil tambah anak')
                             load_anak()
                             load_anak_nopengawas()
+                        }
+                    });
+                })
+
+                $(document).on('click', '.inputAkhir', function(){
+                    var no_box = $(this).attr('no_box')
+                    var id_anak = $(this).attr('id_anak')
+                    $.ajax({
+                        type: "GET",
+                        url: "cabut/load_modal_akhir",
+                        data: {
+                            no_box:no_box,
+                            id_anak:id_anak,
+                        },
+                        success: function (r) {
+                            $("#load_modal_akhir").html(r);
                         }
                     });
                 })
