@@ -50,7 +50,10 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
-            Route::post('/', 'create')->name('create');
+            Route::get('/akhir', 'akhir')->name('akhir');
+            Route::post('/add_akhir', 'add_akhir')->name('add_akhir');
+            Route::post('/selesai', 'selesai')->name('selesai');
+            Route::post('/', 'add_target')->name('add_target');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
