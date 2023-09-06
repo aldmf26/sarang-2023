@@ -55,7 +55,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'CETAK',
-                'route' => 'user.index',
+                'route' => 'cetak.index',
                 'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],

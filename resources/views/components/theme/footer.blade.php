@@ -70,6 +70,9 @@
     $('.select2-tambah2').select2({
         dropdownParent: $('#tambah2 .modal-content')
     });
+    $('.selectView').select2({
+        dropdownParent: $('#view .modal-content')
+    });
 
     $('.costume_muncul').hide();
     $('.bulan_muncul').hide();
@@ -225,8 +228,8 @@
     }
 </script>
 @if (session()->has('sukses'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('sukses') }}",
                 duration: 3000,
@@ -238,11 +241,11 @@
                 avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
             }).showToast();
         });
-    </script>
+</script>
 @endif
 @if (session()->has('error'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('error') }}",
                 duration: 3000,
@@ -256,7 +259,7 @@
 
 
         });
-    </script>
+</script>
 @endif
 @yield('scripts')
 @yield('js')

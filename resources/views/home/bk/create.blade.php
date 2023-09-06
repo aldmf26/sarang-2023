@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
@@ -12,9 +12,8 @@
         <form action="{{ route('bk.create') }}" method="post">
             @csrf
             <section class="row">
-                @for ($i = 0; $i < 10; $i++) <div class="col-lg-8">
-                    <p>Kolom {{$i + 1}}</p>
-                    <table class="table table-striped">
+                @for ($i = 0; $i < 10; $i++) <p>Kolom {{$i + 1}}</p>
+                    {{-- <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead">No Lot</th>
@@ -26,39 +25,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>
-                                    <input name="no_lot[]" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <input name="no_box[]" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <input name="tipe[]" type="text" class="form-control">
-                                </td>
-                                <td>
-                                    <select name="id_ket[]" id="" class="select3">
-                                        @foreach ($ket_bk as $k)
-                                        <option value="{{$k->id_ket_bk}}">{{$k->ket_bk}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="id_warna[]" id="" class="select3">
-                                        @foreach ($warna as $w)
-                                        <option value="{{$w->id_warna}}">{{$w->nm_warna}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
+
                             </tr>
                         </tbody>
-                    </table>
+                    </table> --}}
 
-                    </div>
+                    {{-- </div> --}}
                     <div class="col-lg-12">
-                        <table class="table table-striped">
+                        <table class="table table-striped" width="100%">
                             <thead>
                                 <tr>
                                     {{-- <th class="dhead" width="70">Tipe</th> --}}
+                                    <th class="dhead">No Lot</th>
+                                    <th class="dhead">No Box</th>
+                                    <th class="dhead">Tipe</th>
+                                    <th class="dhead">Ket</th>
+                                    <th class="dhead">Warna</th>
                                     <th class="dhead">Pgws</th>
                                     <th class="dhead">Nama</th>
                                     <th class="dhead">Tgl Terima</th>
@@ -79,6 +61,29 @@
                                         <input type="text" class="form-control" value="BK" readonly name="tipe[]">
                                     </td> --}}
                                     <td>
+                                        <input name="no_lot[]" type="text" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input name="no_box[]" type="text" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input name="tipe[]" type="text" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="id_ket[]" id="" class="select3">
+                                            @foreach ($ket_bk as $k)
+                                            <option value="{{$k->id_ket_bk}}">{{$k->ket_bk}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="id_warna[]" id="" class="select3">
+                                            @foreach ($warna as $w)
+                                            <option value="{{$w->id_warna}}">{{$w->nm_warna}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
                                         <input type="text" class="form-control" readonly
                                             value="{{ auth()->user()->name }}" name="pgws[]">
                                     </td>
@@ -88,9 +93,9 @@
                                             <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
                                             @endforeach --}}
                                             <option value="">Pilih Pengawas</option>
-                                            <option value="1">Jenah</option>
-                                            <option value="2">Nurul</option>
-                                            <option value="3">Erna</option>
+                                            @foreach ($pengawas as $p)
+                                            <option value="{{$p->id}}">{{$p->name}}</option>
+                                            @endforeach
                                         </select>
                                     </td>
                                     <td>

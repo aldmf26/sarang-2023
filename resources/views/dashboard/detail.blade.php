@@ -92,28 +92,32 @@
                     <tr>
                         <td colspan="9" class="border-hilang">&nbsp;</td>
                     </tr>
+                    @foreach ($cabut as $c)
                     <tr>
                         <td><b>CBT</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
+                        <td>{{$c->name}}</td>
+                        <td>{{$c->nama}}</td>
+                        <td>{{date('d M y',strtotime($c->tgl_terima))}}</td>
+                        <td align="right">{{$c->pcs_awal}}</td>
+                        <td align="right">{{$c->pcs_hcr}}</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$c->pcs_awal + $c->pcs_hcr}}</td>
+                        <td align="right">{{number_format($c->rupiah,0)}}</td>
                     </tr>
                     <tr>
                         <td><b>TERIMA</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
+                        <td>{{$c->name}}</td>
+                        <td>{{$c->nama}}</td>
+                        <td>{{date('d M y',strtotime($c->tgl_terima))}}</td>
+                        <td align="right">{{$c->pcs_akhir}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$c->pcs_akhir}}</td>
+                        <td align="right">{{number_format($c->rupiah,0)}}</td>
                     </tr>
+                    @endforeach
+
+
 
 
                     <tr>
@@ -130,28 +134,31 @@
                         <th class="text-end dhead">PCS TTL</th>
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
+                    @foreach ($cetak as $c)
                     <tr>
                         <td><b>CTK</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
+                        <td>{{$c->name}}</td>
+                        <td>{{$c->nama}}</td>
+                        <td>{{date('d M y',strtotime($c->tgl))}}</td>
+                        <td align="right">{{$c->pcs_awal}}</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
+                        <td align="right">{{$c->pcs_awal}}</td>
+                        <td align="right">{{$c->pcs_awal * $c->rp_pcs}}</td>
                     </tr>
                     <tr>
                         <td><b>TERIMA</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
+                        <td>{{$c->name}}</td>
+                        <td>{{$c->nama}}</td>
+                        <td>{{date('d M y',strtotime($c->tgl))}}</td>
+                        <td align="right">{{$c->pcs_akhir}}</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$c->pcs_tidak_ctk}}</td>
+                        <td align="right">{{$c->pcs_akhir + $c->pcs_tidak_ctk}}</td>
+                        <td align="right">{{$c->pcs_akhir * $c->rp_pcs}}</td>
                     </tr>
+                    @endforeach
+
 
                     <tr>
                         <td colspan="9" class="border-hilang">&nbsp;</td>
