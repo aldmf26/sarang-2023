@@ -27,13 +27,13 @@
                         <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
                         <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
                         <td>{{ date('M Y', strtotime($d->tgl)) }}</td>
-                        <td>{{ strtoupper($d->penerima == '1' ? 'Jenah' : ($d->penerima == '2' ? 'Nurul' : 'Erna')) }}
+                        <td>{{ strtoupper($d->name) }}
                         </td>
-                        <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
-                        <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
-                        <td align="right">Rp. 0</td>
-                        <td align="right">{{ number_format($d->pcs_awal , 0) }}</td>
-                        <td align="right">{{ number_format($d->gr_awal , 0) }}</td>
+                        <td align="right">{{ number_format($d->pcs_cabut, 0) }}</td>
+                        <td align="right">{{ number_format($d->gr_cabut, 0) }}</td>
+                        <td align="right">Rp. {{number_format($d->rupiah,0)}}</td>
+                        <td align="right">{{ number_format($d->pcs_awal - $d->pcs_cabut , 0) }}</td>
+                        <td align="right">{{ number_format($d->gr_awal - $d->gr_cabut , 0) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
