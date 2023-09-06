@@ -61,7 +61,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'SORTIR',
-                'route' => 'user.index',
+                'route' => 'sortir.index',
                 'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],

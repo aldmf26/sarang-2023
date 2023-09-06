@@ -11,8 +11,6 @@
                     <th class="dhead text-end">Gr Awal</th>
                     <th class="dhead text-end">Pcs Akhir</th>
                     <th class="dhead text-end">Gr Akhir</th>
-                    <th class="dhead text-end">Pcs Hcr</th>
-                    <th class="dhead text-end">EOT</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,12 +32,7 @@
                     <td>
                         <input value="{{ $detail->gr_akhir ?? 0}}" required name="gr_akhir" type="text" class="form-control text-end">
                     </td>
-                    <td>
-                        <input value="{{ $detail->pcs_hcr ?? 0}}" name="pcs_hcr" type="text" class="form-control text-end">
-                    </td>
-                    <td>
-                        <input value="{{ $detail->eot ?? 0}}" name="eot" type="text" class="form-control text-end">
-                    </td>
+               
                 </tr>
             </tbody>
         </table>

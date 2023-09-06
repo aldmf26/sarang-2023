@@ -5,6 +5,8 @@ use App\Http\Controllers\CabutController;
 use App\Http\Controllers\DataPengawasController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
+use App\Http\Controllers\SortirController;
+use App\Http\Controllers\AksesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +40,20 @@ Route::middleware('auth')->group(function () {
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
         });
+    Route::controller(AksesController::class)
+        ->prefix('akses')
+        ->name('akses.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/navbar', 'detail_edit')->name('navbar');
+            Route::get('/{id}', 'detail')->name('detail');
+            Route::get('/{id}', 'navbar_delete')->name('navbar_delete');
+            Route::get('/detail/{id}', 'detail_get')->name('detail_get');
+            Route::post('/', 'save')->name('save');
+            Route::post('/add_menu', 'addMenu')->name('add_menu');
+            Route::post('/edit_menu', 'editMenu')->name('edit_menu');
+        });
+
     Route::controller(UserController::class)
         ->prefix('data_master/user')
         ->name('user.')
@@ -84,6 +100,23 @@ Route::middleware('auth')->group(function () {
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::post('/', 'create')->name('create');
+        });
+    Route::controller(SortirController::class)
+        ->prefix('home/sortir')
+        ->name('sortir.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/create', 'create')->name('create');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
+            Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::post('/create_anak', 'create_anak')->name('create_anak');
+            Route::get('/load_anak', 'load_anak')->name('load_anak');
+            Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
+            Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
+
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')

@@ -1,13 +1,13 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="{{ route('cabut.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <x-theme.button href="{{ route('sortir.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
-            <table class="table" id="table1">
+            <table class="table table-bordered" id="table1">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -19,53 +19,48 @@
                         <th class="text-end">Gr Awal</th>
                         <th class="text-end">Pcs Akhir</th>
                         <th class="text-end">Gr Akhir</th>
-                        <th class="text-end">Pcs Hcr</th>
-                        <th class="text-end">EOT</th>
                         <th class="text-end">Susut</th>
-                        <th class="text-end">Ttl Gaji</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($cabut as $no => $d)
-                    <tr>
-                        <td>{{ $no+1 }}</td>
-                        <td>{{ $d->no_box }}</td>
-                        <td>{{ ucwords(auth()->user()->name) }}</td>
-                        <td>{{ $d->nama }}</td>
-                        <td>{{ $d->tgl_terima }}</td>
-                        <td align="right">{{ $d->pcs_awal }}</td>
-                        <td align="right">{{ $d->gr_awal }}</td>
-                        <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
-                        <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
-                        <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
-                        <td align="right">{{ $d->eot ?? 0 }}</td>
-                        @php
-                            $susut = empty($d->gr_akhir) ? 0 : ((1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100)
-                        @endphp
-                        <td align="right">{{ $susut }}%</td>
-                        <td align="right">{{ 0}}</td>
-                        <td align="center">
-                            <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                            no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#inputAkhir"></i>Akhir</a>
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $d->no_box }}</td>
+                            <td>{{ ucwords(auth()->user()->name) }}</td>
+                            <td>{{ $d->nama }}</td>
+                            <td>{{ $d->tgl }}</td>
+                            <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
+                            <td align="right">{{ $d->gr_awal ?? 0 }}</td>
+                            <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
+                            <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
+                            @php
+                                $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                            @endphp
+                            <td align="right">{{ number_format($susut, 0) }}%</td>
                             
-                        </td>
-                    </tr>
+                            <td align="center">
+                                <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                    no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
+                                    data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
 
             </table>
         </section>
 
-        <form action="{{ route('cabut.input_akhir') }}" method="post">
+        <form action="{{ route('sortir.input_akhir') }}" method="post">
             @csrf
             <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="Y" size="modal-lg">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
 
-        <form action="{{ route('cabut.create_anak') }}" method="post">
+        <form action="{{ route('sortir.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah Anak" btnSave="Y">
                 <div class="row">
@@ -93,7 +88,7 @@
                 function load_anak() {
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cabut.load_anak') }}",
+                        url: "{{ route('sortir.load_anak') }}",
                         success: function(r) {
                             $("#load_anak").html(r);
                         }
@@ -103,7 +98,7 @@
                 function load_anak_nopengawas() {
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cabut.load_anak_nopengawas') }}",
+                        url: "{{ route('sortir.load_anak_nopengawas') }}",
                         success: function(r) {
                             $("#load_anak_nopengawas").html(r)
                             $(".select3-load").select2()
@@ -115,7 +110,7 @@
                     var id_anak = $(".anakNoPengawas").val()
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cabut.add_delete_anak') }}?id_anak=" + id_anak,
+                        url: "{{ route('sortir.add_delete_anak') }}?id_anak=" + id_anak,
                         success: function(r) {
                             alertToast('Berhasil tambah anak')
                             load_anak()
@@ -128,7 +123,7 @@
                     var id_anak = $(this).attr('id_anak')
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cabut.add_delete_anak') }}",
+                        url: "{{ route('sortir.add_delete_anak') }}",
                         data: {
                             id_anak: id_anak,
                             delete: 1,
@@ -141,17 +136,17 @@
                     });
                 })
 
-                $(document).on('click', '.inputAkhir', function(){
+                $(document).on('click', '.inputAkhir', function() {
                     var no_box = $(this).attr('no_box')
                     var id_anak = $(this).attr('id_anak')
                     $.ajax({
                         type: "GET",
-                        url: "cabut/load_modal_akhir",
+                        url: "sortir/load_modal_akhir",
                         data: {
-                            no_box:no_box,
-                            id_anak:id_anak,
+                            no_box: no_box,
+                            id_anak: id_anak,
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_modal_akhir").html(r);
                         }
                     });

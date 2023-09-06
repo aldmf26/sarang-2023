@@ -20,6 +20,10 @@ class CabutController extends Controller
         $data = [
             'title' => 'Divisi Cabut',
             'cabut' => DB::table('cabut as a')
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where('a.id_pengawas', auth()->user()->id)
+            ->get(),
+            'cabuasdt' => DB::table('cabut as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->orderBy('id_cabut', 'DESC')
