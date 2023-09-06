@@ -3,6 +3,7 @@
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah_target" addClass="float-end" teks="Target" />
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.btn_filter />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -56,11 +57,14 @@
                         <td align="right">Rp.{{ number_format($denda,0)}}</td>
                         <td align="right">Rp. {{number_format( ($c->rp_pcs * $c->pcs_awal) - $denda,0)}}</td>
                         <td>
+                            @if ($c->selesai == 'T')
                             <a href="#" data-bs-toggle="modal" data-bs-target="#akhir"
                                 class="btn btn-sm btn-warning akhir" id_cetak="{{$c->id_cetak}}">Akhir</a>
 
                             <a href="#" data-bs-toggle="modal" data-bs-target="#selesai"
                                 class="btn btn-sm btn-primary selesai" id_cetak="{{$c->id_cetak}}">Selesai</a>
+                            @endif
+
                         </td>
                     </tr>
                     @endforeach
@@ -138,7 +142,9 @@
                                     <td>
                                         <select name="no_box[]" id="" class="select3 pilihBox" count="1">
                                             <option value="">Pilih Box</option>
-                                            <option value="1009.1">1009.1</option>
+                                            @foreach ($cabut as $c)
+                                            <option value="{{$c->no_box}}">{{$c->no_box}}</option>
+                                            @endforeach
                                         </select>
                                     </td>
                                     <td>
@@ -216,7 +222,7 @@
         @section('scripts')
         <script>
             $(".select3").select2()
-
+            plusRow(1, 'tbh_baris', "cetak/tbh_baris")
             $(document).on('change', '.pilihTarget', function() {
                 var target = $(this).val()
                 if (target == '1') {

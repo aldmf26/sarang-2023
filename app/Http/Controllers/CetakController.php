@@ -4,9 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class CetakController extends Controller
 {
+    protected $tgl1, $tgl2, $id_akun;
+    public function __construct(Request $r)
+    {
+        if (empty($r->period)) {
+            $this->tgl1 = date('Y-m-01');
+            $this->tgl2 = date('Y-m-t');
+        } elseif ($r->period == 'daily') {
+            $this->tgl1 = date('Y-m-d');
+            $this->tgl2 = date('Y-m-d');
+        } elseif ($r->period == 'weekly') {
+            $this->tgl1 = date('Y-m-d', strtotime("-6 days"));
+            $this->tgl2 = date('Y-m-d');
+        } elseif ($r->period == 'mounthly') {
+            $bulan = $r->bulan;
+            $tahun = $r->tahun;
+            $tglawal = "$tahun" . "-" . "$bulan" . "-" . "01";
+            $tglakhir = "$tahun" . "-" . "$bulan" . "-" . "01";
+
+            $this->tgl1 = date('Y-m-01', strtotime($tglawal));
+            $this->tgl2 = date('Y-m-t', strtotime($tglakhir));
+        } elseif ($r->period == 'costume') {
+            $this->tgl1 = $r->tgl1;
+            $this->tgl2 = $r->tgl2;
+        } elseif ($r->period == 'years') {
+            $tahun = $r->tahunfilter;
+            $tgl_awal = "$tahun" . "-" . "01" . "-" . "01";
+            $tgl_akhir = "$tahun" . "-" . "12" . "-" . "01";
+
+            $this->tgl1 = date('Y-m-01', strtotime($tgl_awal));
+            $this->tgl2 = date('Y-m-t', strtotime($tgl_akhir));
+        }
+
+        $this->id_proyek = $r->id_proyek ?? 0;
+        $this->id_buku = $r->id_buku ?? 2;
+
+        $this->id_akun = $r->id_akun;
+    }
     public function getAnak($id = null)
     {
         return DB::table('tb_anak as a')
@@ -14,16 +52,29 @@ class CetakController extends Controller
             ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
             ->get();
     }
-    public function index()
+    public function index(Request $r)
     {
+        $id = auth()->user()->id;
+        $tgl1 =  $this->tgl1;
+        $tgl2 =  $this->tgl2;
+
         $data = [
             'title' => 'Divisi Cetak',
-            'cetak' => DB::table('cetak as a')
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->get(),
+            'cetak' => DB::select("SELECT *
+            FROM cetak as a
+            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+            where a.id_pengawas = '$id' and a.tgl between '$tgl1' and '$tgl2'
+            "),
             'anakNoPengawas' => $this->getAnak(1),
             'anak' => $this->getAnak(),
+            'cabut' => DB::select("SELECT a.no_box, (a.pcs_awal - IFNULL(b.pcs_awal_ctk, 0)) as pcs, (a.gr_awal - IFNULL(b.gr_awal_ctk, 0)) as gr
+            FROM cabut as a 
+            LEFT JOIN (
+                SELECT b.no_box, SUM(b.pcs_awal) as pcs_awal_ctk, SUM(b.gr_awal) as gr_awal_ctk
+                FROM cetak as b
+                GROUP BY b.no_box
+            ) as b ON b.no_box = a.no_box
+            WHERE a.selesai = 'Y' AND (a.pcs_awal - IFNULL(b.pcs_awal_ctk, 0)) != 0")
         ];
         return view('home.cetak.index', $data);
     }
@@ -75,5 +126,23 @@ class CetakController extends Controller
     {
         DB::table('cetak')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'Y']);
         return redirect()->route('cetak.index')->with('sukses', 'Data telah diselesaikan');
+    }
+
+    public function tbh_baris(Request $r)
+    {
+        $data = [
+            'count' => $r->count,
+            'anakNoPengawas' => $this->getAnak(1),
+            'anak' => $this->getAnak(),
+            'cabut' => DB::select("SELECT a.no_box, (a.pcs_awal - IFNULL(b.pcs_awal_ctk, 0)) as pcs, (a.gr_awal - IFNULL(b.gr_awal_ctk, 0)) as gr
+            FROM cabut as a 
+            LEFT JOIN (
+                SELECT b.no_box, SUM(b.pcs_awal) as pcs_awal_ctk, SUM(b.gr_awal) as gr_awal_ctk
+                FROM cetak as b
+                GROUP BY b.no_box
+            ) as b ON b.no_box = a.no_box
+            WHERE a.selesai = 'Y' AND (a.pcs_awal - IFNULL(b.pcs_awal_ctk, 0)) != 0")
+        ];
+        return view('home.cetak.tbh_baris', $data);
     }
 }

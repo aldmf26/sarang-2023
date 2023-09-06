@@ -73,7 +73,15 @@ class DashboardController extends Controller
 
         $data = [
             'title' => 'Detail Gaji Box',
-            'detail' => $detailNobox
+            'detail' => $detailNobox,
+            'cabut' => DB::select("SELECT * FROM cabut as a 
+            left join tb_anak as b on b.id_anak = a.id_anak 
+            left join users as c on c.id = a.id_pengawas
+            where a.no_box = $nobox"),
+            'cetak' => DB::select("SELECT * FROM cetak as a 
+            left join tb_anak as b on b.id_anak = a.id_anak 
+            left join users as c on c.id = a.id_pengawas
+            where a.no_box = $nobox")
         ];
         return view('dashboard.detail', $data);
     }

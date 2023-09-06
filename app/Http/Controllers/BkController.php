@@ -44,7 +44,6 @@ class BkController extends Controller
                 'pcs_awal' => $r->pcs_awal[$x],
                 'gr_awal' => $r->gr_awal[$x],
                 'tgl' => $r->tgl_terima[$x],
-                'created'
             ];
             DB::table('bk')->insert($data);
         }

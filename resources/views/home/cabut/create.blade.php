@@ -39,15 +39,14 @@
                                     <select name="no_box[]" id="" class="select3 pilihBox" count="1">
                                         <option value="">Pilih Box</option>
                                         @foreach ($boxBk as $d)
-                                            @if ($d->pcs_awal - $d->pcs_cabut > 1)
-                                            <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
-                                            @endif
+                                        @if ($d->pcs_awal - $d->pcs_cabut > 1)
+                                        <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" readonly
-                                        value="{{ auth()->user()->name }}">
+                                    <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">
                                     <input type="hidden" class="form-control" name="id_pengawas[]" readonly
                                         value="{{ auth()->user()->id }}">
                                 </td>
@@ -55,8 +54,8 @@
                                     <select name="id_anak[]" id="" class="select3 pilihAnak" count="1">
                                         <option value="">Pilih Anak</option>
                                         @foreach ($anak as $d)
-                                            <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
-                                                ({{ $d->kelas }}) {{ ucwords($d->nama) }}</option>
+                                        <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
+                                            ({{ $d->kelas }}) {{ ucwords($d->nama) }}</option>
                                         @endforeach
                                     </select>
                                     <input type="hidden" class="setHargaSatuan1">
@@ -70,8 +69,8 @@
                                         name="pcs_awal[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control text-end setGr setGr1" count="1"
-                                        value="0" id="grInput" name="gr_awal[]">
+                                    <input type="text" class="form-control text-end setGr setGr1" count="1" value="0"
+                                        id="grInput" name="gr_awal[]">
                                 </td>
                                 <td>
                                     <input readonly type="text" class="form-control rupiahInput text-end setRupiah1"
@@ -105,8 +104,8 @@
         </form>
     </x-slot>
     @section('scripts')
-        <script>
-            $(".select3").select2()
+    <script>
+        $(".select3").select2()
             plusRow(1, 'tbh_baris', "tbh_baris")
             // formatRibuan('rupiah')
 
@@ -167,6 +166,6 @@
 
 
             })
-        </script>
+    </script>
     @endsection
 </x-theme.app>

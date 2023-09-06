@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/add_akhir', 'add_akhir')->name('add_akhir');
             Route::post('/selesai', 'selesai')->name('selesai');
             Route::post('/', 'add_target')->name('add_target');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
