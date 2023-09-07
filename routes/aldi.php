@@ -97,8 +97,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/edit', 'edit')->name('edit');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::get('/load_detail_cabut', 'load_detail_cabut')->name('load_detail_cabut');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
+            Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/', 'create')->name('create');
         });
     Route::controller(SortirController::class)
@@ -116,7 +118,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_anak', 'load_anak')->name('load_anak');
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
-
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')

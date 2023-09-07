@@ -5,7 +5,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="dhead"  width="100">Nama Anak</th>
+                    <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead">No Box</th>
                     <th class="dhead text-end">Pcs Awal</th>
                     <th class="dhead text-end">Gr Awal</th>
@@ -18,7 +18,7 @@
             <tbody>
                 <tr>
                     <td class="fs-bold">{{ strtoupper($detail->nama) }}</td>
-                
+
                     <td>
                         <input type="text" readonly value="{{ $detail->no_box }}" class="form-control">
                     </td>
@@ -29,13 +29,16 @@
                         <input readonly value="{{ $detail->gr_awal }}" type="text" class="form-control text-end">
                     </td>
                     <td>
-                        <input value="{{ $detail->pcs_akhir ?? 0}}" required name="pcs_akhir" type="text" class="form-control text-end">
+                        <input value="{{ $detail->pcs_akhir ?? 0}}" required name="pcs_akhir" type="text"
+                            class="form-control text-end">
                     </td>
                     <td>
-                        <input value="{{ $detail->gr_akhir ?? 0}}" required name="gr_akhir" type="text" class="form-control text-end">
+                        <input value="{{ $detail->gr_akhir ?? 0}}" required name="gr_akhir" type="text"
+                            class="form-control text-end">
                     </td>
                     <td>
-                        <input value="{{ $detail->pcs_hcr ?? 0}}" name="pcs_hcr" type="text" class="form-control text-end">
+                        <input value="{{ $detail->pcs_hcr ?? 0}}" name="pcs_hcr" type="text"
+                            class="form-control text-end">
                     </td>
                     <td>
                         <input value="{{ $detail->eot ?? 0}}" name="eot" type="text" class="form-control text-end">

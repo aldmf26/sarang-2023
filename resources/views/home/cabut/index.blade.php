@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="{{ route('cabut.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
@@ -12,7 +12,7 @@
                     <tr>
                         <th>#</th>
                         <th>No Box</th>
-                        <th>Pengawas</th>
+                        {{-- <th>Pengawas</th> --}}
                         <th>Anak</th>
                         <th>Tgl Terima</th>
                         <th class="text-end">Pcs Awal</th>
@@ -22,6 +22,7 @@
                         <th class="text-end">Pcs Hcr</th>
                         <th class="text-end">EOT</th>
                         <th class="text-end">Susut</th>
+                        {{-- <th class="text-end">Denda</th> --}}
                         <th class="text-end">Ttl Gaji</th>
                         <th>Aksi</th>
                     </tr>
@@ -31,9 +32,9 @@
                     <tr>
                         <td>{{ $no+1 }}</td>
                         <td>{{ $d->no_box }}</td>
-                        <td>{{ ucwords(auth()->user()->name) }}</td>
+                        {{-- <td>{{ ucwords(auth()->user()->name) }}</td> --}}
                         <td>{{ $d->nama }}</td>
-                        <td>{{ $d->tgl_terima }}</td>
+                        <td>{{ date('d M y',strtotime($d->tgl_terima)) }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
                         <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
@@ -41,15 +42,35 @@
                         <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
                         <td align="right">{{ $d->eot ?? 0 }}</td>
                         @php
-                            $susut = empty($d->gr_akhir) ? 0 : ((1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100)
+                        $susut = empty($d->gr_akhir) ? 0 : ((1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100);
+
+                        $denda = empty($d->gr_akhir) ? 0 : ( $susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
+                        $denda_hcr = $d->pcs_hcr * 5000;
+
+                        $eot_bonus = empty($d->eot) ? 0 : ($d->eot - ($d->gr_awal * 0.02)) * 750;
                         @endphp
-                        <td align="right">{{ $susut }}%</td>
-                        <td align="right">{{ 0}}</td>
+                        <td align="right">{{ number_format($susut,0) }}%</td>
+                        {{-- <td align="right">{{ number_format($denda,0)}}</td> --}}
+                        <td align="right">{{number_format($d->rupiah - $denda + $eot_bonus,0)}}</td>
                         <td align="center">
-                            <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                            no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#inputAkhir"></i>Akhir</a>
-                            
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
+                                class="btn btn-sm btn-primary detail" id_cabut="{{$d->id_cabut}}"><i
+                                    class="fas fa-eye"></i></a>
+                            @if ($d->selesai == 'T')
+
+
+                            <a class="btn btn-warning btn-sm inputAkhir" href="#" no_box="{{ $d->no_box }}"
+                                id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
+                                data-bs-target="#inputAkhir"></i>Akhir</a>
+
+                            @if (!empty($d->eot))
+                            <a class="btn btn-primary btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}" href="#"
+                                data-bs-toggle="modal" data-bs-target="#selesai"></i>Selesai</a>
+                            @endif
+                            @endif
+
+
+
                         </td>
                     </tr>
                     @endforeach
@@ -83,9 +104,32 @@
                 <div id="load_anak"></div>
             </x-theme.modal>
         </form>
+
+        <x-theme.modal idModal="detail" title="Detail Cabut" size="modal-lg-max" btnSave="T">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="load_detail_cabut"></div>
+                </div>
+            </div>
+        </x-theme.modal>
+        <form action="{{ route('cabut.selesai_cabut') }}" method="post">
+            @csrf
+            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
+                        <p class="text-center fw-bold">Note : </p>
+                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
+                            maupun dihapus
+                        </p>
+                        <input type="hidden" name="id_cabut" class="cetak">
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
         @section('scripts')
-            <script>
-                $(".select3").select2()
+        <script>
+            $(".select3").select2()
 
                 load_anak()
                 load_anak_nopengawas()
@@ -156,7 +200,25 @@
                         }
                     });
                 })
-            </script>
+                $(document).on('click', '.detail', function(){
+                    var id_cabut = $(this).attr('id_cabut')
+                    $.ajax({
+                        type: "GET",
+                        url: "cabut/load_detail_cabut",
+                        data: {
+                            id_cabut:id_cabut,
+                        },
+                        success: function (r) {
+                            $("#load_detail_cabut").html(r);
+                        }
+                    });
+                })
+                $(document).on('click', '.selesai', function() {
+                var id_cabut = $(this).attr('id_cabut');
+                
+                $('.cetak').val(id_cabut);
+            });
+        </script>
         @endsection
     </x-slot>
 </x-theme.app>

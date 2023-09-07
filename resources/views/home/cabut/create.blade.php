@@ -74,6 +74,8 @@
                                 </td>
                                 <td>
                                     <input readonly type="text" class="form-control rupiahInput text-end setRupiah1"
+                                        value="0">
+                                    <input readonly type="hidden" class="form-control rupiahInput text-end rupiahBiasa1"
                                         value="0" name="rupiah[]">
                                 </td>
                             </tr>
@@ -144,7 +146,8 @@
                     success: function(r) {
                         console.log(r)
                         var hrga_satuan = (r.rupiah / r.gr)
-                        var rupiah = hrga_satuan * parseFloat(nilaiGr)
+                        var rupiah = hrga_satuan * parseFloat(nilaiGr);
+                        $('.rupiahBiasa'+ count).val(rupiah);
                         $(".setHargaSatuan" + count).val(hrga_satuan)
                         rupiah = rupiah.toLocaleString('id-ID', {
                             maximumFractionDigits: 0
@@ -159,6 +162,7 @@
                 var count = $(this).attr('count')
                 var hrga_satuan = $('.setHargaSatuan' +count).val()
                 var rupiah = hrga_satuan * isi
+                $('.rupiahBiasa'+ count).val(parseFloat(rupiah));
                 rupiah = rupiah.toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         })

@@ -20,9 +20,10 @@ class CabutController extends Controller
         $data = [
             'title' => 'Divisi Cabut',
             'cabut' => DB::table('cabut as a')
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where('a.id_pengawas', auth()->user()->id)
-            ->get(),
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->orderBY('a.id_cabut', 'DESC')
+                ->get(),
             'cabuasdt' => DB::table('cabut as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
@@ -194,7 +195,7 @@ class CabutController extends Controller
 
     public function input_akhir(Request $r)
     {
-        DB::table('cabut')->where([['id_anak', $r->id_anak],['no_box', $r->no_box]])->update([
+        DB::table('cabut')->where([['id_anak', $r->id_anak], ['no_box', $r->no_box]])->update([
             'pcs_akhir' => $r->pcs_akhir,
             'gr_akhir' => $r->gr_akhir,
             'pcs_hcr' => $r->pcs_hcr,
@@ -202,5 +203,23 @@ class CabutController extends Controller
         ]);
 
         return redirect()->route('cabut.index')->with('sukses', 'Data Berhasil Ditambahkan');
+    }
+
+    public function load_detail_cabut(Request $r)
+    {
+        $detail = DB::table('cabut as a')
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where([['a.id_cabut', $r->id_cabut]])
+            ->first();
+        $data = [
+            'detail' => $detail
+        ];
+        return view('home.cabut.load_modal_detail', $data);
+    }
+
+    public function selesai_cabut(Request $r)
+    {
+        DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
+        return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
     }
 }
