@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="{{ route('sortir.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
@@ -12,6 +12,7 @@
                     <tr>
                         <th>#</th>
                         <th>No Box</th>
+                        <th>Tipe</th>
                         <th>Pengawas</th>
                         <th>Anak</th>
                         <th>Tgl Terima</th>
@@ -20,6 +21,7 @@
                         <th class="text-end">Pcs Akhir</th>
                         <th class="text-end">Gr Akhir</th>
                         <th class="text-end">Susut</th>
+                        <th class="text-end">Ttl Gaji</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -28,6 +30,7 @@
                         <tr>
                             <td>{{ $no + 1 }}</td>
                             <td>{{ $d->no_box }}</td>
+                            <td>{{ $d->kelas }}</td>
                             <td>{{ ucwords(auth()->user()->name) }}</td>
                             <td>{{ $d->nama }}</td>
                             <td>{{ $d->tgl }}</td>
@@ -39,12 +42,12 @@
                                 $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
                             @endphp
                             <td align="right">{{ number_format($susut, 0) }}%</td>
-                            
+                            <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
+
                             <td align="center">
                                 <a class="btn btn-warning btn-sm inputAkhir" href="#"
                                     no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
                                     data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
-
                             </td>
                         </tr>
                     @endforeach
@@ -81,7 +84,6 @@
         @section('scripts')
             <script>
                 $(".select3").select2()
-
                 load_anak()
                 load_anak_nopengawas()
 
@@ -135,7 +137,6 @@
                         }
                     });
                 })
-
                 $(document).on('click', '.inputAkhir', function() {
                     var no_box = $(this).attr('no_box')
                     var id_anak = $(this).attr('id_anak')

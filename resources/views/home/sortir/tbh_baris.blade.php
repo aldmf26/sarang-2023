@@ -4,7 +4,7 @@
             <option value="">Pilih Anak</option>
 
             @foreach ($anak as $d)
-                <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">({{ $d->kelas }})
+                <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
                     {{ ucwords($d->nama) }}</option>
             @endforeach
         </select>
@@ -17,12 +17,12 @@
             ->get();
     @endphp
     <td>
-        @foreach ($kelas as $d)
-            <input type="radio" class="btn-check" name="tipe[]" id="{{ $d->kelas }}" value="{{ $d->id_kelas }}"
-                {{ $d->kelas == 'brg' ? 'checked' : '' }} autocomplete="off">
-            <label class="btn btn-outline-success btn-sm"
-                for="{{ $d->kelas }}">{{ strtoupper($d->kelas) }}</label>
-        @endforeach
+        <select name="tipe[]" id="" class="form-control">
+            @foreach ($kelas as $i => $d)
+                <option value="{{ $d->id_kelas }}"
+                    {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}</option>
+            @endforeach
+        </select>
     </td>
     <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
