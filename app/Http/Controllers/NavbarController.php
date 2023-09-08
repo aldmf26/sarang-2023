@@ -67,7 +67,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'GRADE',
-                'route' => 'user.index',
+                'route' => 'grading.index',
                 'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],

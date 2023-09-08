@@ -222,6 +222,7 @@
         @section('scripts')
         <script>
             $(".select3").select2()
+            
             plusRow(1, 'tbh_baris', "cetak/tbh_baris")
             $(document).on('change', '.pilihTarget', function() {
                 var target = $(this).val()

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GradingController;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\ProfileController;
@@ -59,6 +60,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
+        });
+    Route::controller(GradingController::class)
+        ->prefix('grading')
+        ->name('grading.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'add_target')->name('add_target');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
         });
 });
 
