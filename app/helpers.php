@@ -39,7 +39,7 @@ if (!function_exists('tanggalFilter')) {
                 $result = ['tgl1' => date('Y-m-01', strtotime($tgl_awal)), 'tgl2' => date('Y-m-t', strtotime($tgl_akhir))];
                 break;
             default:
-                $result = ['tgl1' => date('Y-m-01'), 'tgl2' => date('Y-m-t')];
+                $result = ['tgl1' => $firstDayOfMonth, 'tgl2' => date('Y-m-t')];
                 break;
         }
 
