@@ -1,8 +1,10 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="{{ route('sortir.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.btn_filter />
+
     </x-slot>
 
     <x-slot name="cardBody">
@@ -45,14 +47,42 @@
                             <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
 
                             <td align="center">
-                                <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                    no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
-                                    data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                                    @if ($d->selesai == 'T')
+                                        <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                            no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
+                                            data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+
+                                        @if (!empty($d->gr_akhir))
+                                            <a class="btn btn-primary btn-sm selesai" href="#"
+                                                id_cabut="{{ $d->id_sortir }}" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#selesai"></i>Selesai</a>
+                                        @endif
+                                    @endif
+
+
+                                {{-- @if (!empty($d->pcs_akhir))
+                                    @php
+                                        $isSelesai = $d->selesai === 'Y';
+                                        $nama = $isSelesai ? 'Batalkan' : 'Selesai';
+                                        $variant = $isSelesai ? 'danger' : 'primary';
+                                        $rot = $isSelesai ? route('sortir.selesai_cabut', ['id_cabut' => $d->id_sortir, 'batal' => 'T']) : '#';
+                                        
+                                        $additionalAttributes = $isSelesai ? '' : 'id_cabut="' . $d->id_sortir . '" data-bs-toggle="modal" data-bs-target="#selesai"';
+                                    @endphp
+
+                                    <a class="btn btn-{{ $variant }} btn-sm selesai" href="{{ $rot }}"
+                                        {!! $additionalAttributes !!}>{{ $nama }}</a>
+                                @endif
+                                @if ($d->selesai == 'T')
+                                    <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                        no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
+                                        data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                                @endif --}}
+
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
-
             </table>
         </section>
 
@@ -81,6 +111,23 @@
                 <div id="load_anak"></div>
             </x-theme.modal>
         </form>
+
+        <form action="{{ route('sortir.selesai_cabut') }}" method="get">
+            @csrf
+            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
+                        <p class="text-center fw-bold">Note : </p>
+                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
+                            maupun dihapus
+                        </p>
+                        <input type="hidden" name="id_cabut" class="cetak">
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
+
         @section('scripts')
             <script>
                 $(".select3").select2()
@@ -152,6 +199,12 @@
                         }
                     });
                 })
+
+                $(document).on('click', '.selesai', function() {
+                    var id_cabut = $(this).attr('id_cabut');
+
+                    $('.cetak').val(id_cabut);
+                });
             </script>
         @endsection
     </x-slot>

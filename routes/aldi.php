@@ -7,6 +7,7 @@ use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\DendaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -118,6 +119,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_anak', 'load_anak')->name('load_anak');
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
+            Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
@@ -129,5 +131,18 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
+        });
+    Route::controller(DendaController::class)
+        ->prefix('data_master/denda')
+        ->name('denda.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/detail/{id_denda}', 'detail')->name('detail');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/edit', 'update')->name('update');
+            Route::get('/delete', 'delete')->name('delete');
+            Route::get('/print', 'print')->name('print');
         });
 });

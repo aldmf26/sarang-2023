@@ -8,43 +8,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class CetakController extends Controller
 {
-    protected $tgl1, $tgl2, $id_akun;
-    public function __construct(Request $r)
-    {
-        if (empty($r->period)) {
-            $this->tgl1 = date('Y-m-01');
-            $this->tgl2 = date('Y-m-t');
-        } elseif ($r->period == 'daily') {
-            $this->tgl1 = date('Y-m-d');
-            $this->tgl2 = date('Y-m-d');
-        } elseif ($r->period == 'weekly') {
-            $this->tgl1 = date('Y-m-d', strtotime("-6 days"));
-            $this->tgl2 = date('Y-m-d');
-        } elseif ($r->period == 'mounthly') {
-            $bulan = $r->bulan;
-            $tahun = $r->tahun;
-            $tglawal = "$tahun" . "-" . "$bulan" . "-" . "01";
-            $tglakhir = "$tahun" . "-" . "$bulan" . "-" . "01";
-
-            $this->tgl1 = date('Y-m-01', strtotime($tglawal));
-            $this->tgl2 = date('Y-m-t', strtotime($tglakhir));
-        } elseif ($r->period == 'costume') {
-            $this->tgl1 = $r->tgl1;
-            $this->tgl2 = $r->tgl2;
-        } elseif ($r->period == 'years') {
-            $tahun = $r->tahunfilter;
-            $tgl_awal = "$tahun" . "-" . "01" . "-" . "01";
-            $tgl_akhir = "$tahun" . "-" . "12" . "-" . "01";
-
-            $this->tgl1 = date('Y-m-01', strtotime($tgl_awal));
-            $this->tgl2 = date('Y-m-t', strtotime($tgl_akhir));
-        }
-
-        $this->id_proyek = $r->id_proyek ?? 0;
-        $this->id_buku = $r->id_buku ?? 2;
-
-        $this->id_akun = $r->id_akun;
-    }
+    
     public function getAnak($id = null)
     {
         return DB::table('tb_anak as a')
@@ -54,9 +18,12 @@ class CetakController extends Controller
     }
     public function index(Request $r)
     {
+
         $id = auth()->user()->id;
-        $tgl1 =  $this->tgl1;
-        $tgl2 =  $this->tgl2;
+
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];
 
         $data = [
             'title' => 'Divisi Cetak',
