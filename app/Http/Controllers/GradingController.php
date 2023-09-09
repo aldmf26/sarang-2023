@@ -16,11 +16,16 @@ class GradingController extends Controller
     }
     public function index(Request $r)
     {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
         $id = auth()->user()->id;
 
         $data = [
             'title' => 'Divisi Grade',
             'anak' => $this->getAnak(),
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
             'tipe' => DB::table('tipe_grade')->where('status', 'bentuk')->get(),
             'tipe2' => DB::table('tipe_grade')->where('status', 'turun')->get(),
             'no_box' => DB::select("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.selesai = 'Y' and a.no_box not in(SELECT b.no_box FROM grade as b )
