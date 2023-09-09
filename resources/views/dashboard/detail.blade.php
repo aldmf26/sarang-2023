@@ -151,11 +151,6 @@
                     </tr>
                     @endforeach
                     @endif
-
-
-
-
-
                     <tr>
                         <td colspan="9" class="border-hilang">&nbsp;</td>
                     </tr>
@@ -170,6 +165,30 @@
                         <th class="text-end dhead">PCS TTL</th>
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
+                    @if (empty($cetak))
+                    <tr>
+                        <td><b>CTK</b></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                    </tr>
+                    <tr>
+                        <td><b>TERIMA</b></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                    </tr>
+                    @else
                     @foreach ($cetak as $c)
                     <tr>
                         <td><b>CTK</b></td>
@@ -194,6 +213,8 @@
                         <td align="right">{{$c->pcs_akhir * $c->rp_pcs}}</td>
                     </tr>
                     @endforeach
+                    @endif
+
 
 
                     <tr>
