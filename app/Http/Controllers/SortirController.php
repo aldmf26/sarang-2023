@@ -34,6 +34,7 @@ class SortirController extends Controller
             'title' => 'Sortir Divisi',
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->orderBy('id_sortir', 'DESC')
                 ->get()
@@ -77,8 +78,8 @@ class SortirController extends Controller
 
     public function create(Request $r)
     {
-        for ($i=0; $i < count($r->rupiah); $i++) { 
-            $rupiah = str()->remove('.',$r->rupiah[$i]);
+        for ($i = 0; $i < count($r->rupiah); $i++) {
+            $rupiah = str()->remove('.', $r->rupiah[$i]);
 
             DB::table('sortir')->insert([
                 'no_box' => $r->no_box,
@@ -109,15 +110,15 @@ class SortirController extends Controller
 
     public function input_akhir(Request $r)
     {
-        $getSortir = DB::table('sortir')->where([['id_anak', $r->id_anak],['no_box', $r->no_box]]);
+        $getSortir = DB::table('sortir')->where([['id_anak', $r->id_anak], ['no_box', $r->no_box]]);
         $get = $getSortir->first();
         $susut = $r->gr_akhir == 0  ? 0 : (1 - $r->gr_akhir / $get->gr_awal) * 100;
-        
+
         $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $get->id_kelas)->first();
 
         $rupiah = $get->rp_target;
-        $denda = 0; 
-        if($susut > $kelas->denda_susut){
+        $denda = 0;
+        if ($susut > $kelas->denda_susut) {
             $denda = (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
             $rupiah = $rupiah - $denda;
         }
@@ -130,5 +131,71 @@ class SortirController extends Controller
         ]);
 
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil Ditambahkan');
+    }
+
+    public function load_anak()
+    {
+        $anak = $this->getAnak();
+        echo "
+        <div class='row'>
+                    <div class='col-lg-12'>
+                        <table class='table table-striped'>
+                            <tr>
+                                <th width='180'>Nama</th>
+                                <th width='80'>Kelas</th>
+                                <th>Tgl Masuk</th>
+                                <th>Aksi</th>
+                            </tr>";
+        foreach ($anak as $d) {
+            echo "
+                                <tr>
+                                    <td>" . ucwords($d->nama) . "</td>
+                                    <input type='hidden' value='" . $d->id_anak . "' name='id_anak[]' class='form-control'>
+                                    <td><input type='text' value='" . $d->kelas . "' name='id_kelas[]' class='form-control'></td>
+                                    <td><input type='date' value='" . $d->tgl_masuk . "' class='form-control' name='tgl_masuk[]'></td>
+                                    <td><button type='button' class='btn btn-sm btn-danger' id_anak='" . $d->id_anak . "' id='delete_anak'><i class='fas fa-window-close'></i></button></td>
+                                </tr>
+                                ";
+        }
+        echo "
+                        </table>
+                    </div>
+                </div>
+        ";
+    }
+
+    public function load_anak_nopengawas()
+    {
+        $anakNoPengawas = $this->getAnak(1);
+
+        echo "
+        <select class='select3-load anakNoPengawas' name='' multiple id=''>
+        ";
+        foreach ($anakNoPengawas as $d) {
+            echo "<option value='" . $d->id_anak . "'>" . ucwords($d->nama) . "</option>";
+        }
+        echo "
+                            </select>
+        ";
+    }
+
+    public function add_delete_anak(Request $r)
+    {
+        DB::table('tb_anak')->where('id_anak', $r->id_anak)->update(
+            ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
+        );  
+    }
+
+    public function create_anak(Request $r)
+    {
+        for ($i = 0; $i < count($r->id_anak); $i++) {
+            DB::table('tb_anak')->where('id_anak', $r->id_anak[$i])->update(
+                [
+                    'id_kelas' => $r->id_kelas[$i],
+                    'tgl_masuk' => $r->tgl_masuk[$i],
+                ]
+            );
+        }
+        return redirect()->route('cabut.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
