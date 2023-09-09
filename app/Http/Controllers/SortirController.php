@@ -28,14 +28,21 @@ class SortirController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $r)
     {
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];
+
         $data = [
             'title' => 'Sortir Divisi',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
+                ->whereBetween('a.tgl', [$tgl1,$tgl2])
                 ->orderBy('id_sortir', 'DESC')
                 ->get()
         ];
@@ -197,5 +204,10 @@ class SortirController extends Controller
             );
         }
         return redirect()->route('cabut.index')->with('sukses', 'Data Berhasil ditambahkan');
+    }
+    public function selesai_cabut(Request $r)
+    {
+        DB::table('sortir')->where('id_sortir', $r->id_cabut)->update(['selesai' => empty($r->batal) ? 'Y' : 'T']);
+        return redirect()->route('sortir.index')->with('sukses', 'Data telah diselesaikan');
     }
 }

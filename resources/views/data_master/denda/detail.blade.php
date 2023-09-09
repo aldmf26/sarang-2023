@@ -1,0 +1,32 @@
+<div class="row">
+    <input type="hidden" name="id" value="{{ $detail->id_denda }}">
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label for="">Nama Anak</label>
+            <select required name="id_anak" class="select2-edit" id="">
+                @foreach ($anak as $k)
+                    <option {{$k->id_anak == $detail->id_anak ? 'selected' : ''}} value="{{ $k->id_anak }}">{{ strtoupper($k->nama) }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="">Tanggal</label>
+            <input type="date" name="tgl" value="{{ $detail->tgl }}" class="form-control">
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="">Nominal</label>
+            <input required type="number" value="{{ $detail->nominal }}" min="0" name="nominal" class="form-control">
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label for="">Keterangan</label>
+            <input type="text" name="ket" value="{{ $detail->ket }}" class="form-control">
+        </div>
+    </div>
+
+</div>
