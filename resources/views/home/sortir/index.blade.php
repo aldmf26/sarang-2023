@@ -47,17 +47,17 @@
                             <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
 
                             <td align="center">
-                                    @if ($d->selesai == 'T')
-                                        <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                            no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
-                                            data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                                @if ($d->selesai == 'T')
+                                    <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                        no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
+                                        data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
 
-                                        @if (!empty($d->gr_akhir))
-                                            <a class="btn btn-primary btn-sm selesai" href="#"
-                                                id_cabut="{{ $d->id_sortir }}" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#selesai"></i>Selesai</a>
-                                        @endif
+                                    @if (!empty($d->gr_akhir))
+                                        <a class="btn btn-primary btn-sm selesai" href="#"
+                                            id_cabut="{{ $d->id_sortir }}" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#selesai"></i>Selesai</a>
                                     @endif
+                                @endif
 
 
                                 {{-- @if (!empty($d->pcs_akhir))
@@ -199,7 +199,6 @@
                         }
                     });
                 })
-
                 $(document).on('click', '.selesai', function() {
                     var id_cabut = $(this).attr('id_cabut');
 

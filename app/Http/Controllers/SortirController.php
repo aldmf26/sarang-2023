@@ -27,13 +27,12 @@ class SortirController extends Controller
             ->get();
     }
 
-
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
-
+        
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
@@ -42,7 +41,7 @@ class SortirController extends Controller
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
-                ->whereBetween('a.tgl', [$tgl1,$tgl2])
+                ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->orderBy('id_sortir', 'DESC')
                 ->get()
         ];
@@ -65,7 +64,6 @@ class SortirController extends Controller
             'boxBk' => $this->getStokBk(),
             'anak' => $this->getAnak(),
             'count' => $r->count,
-
         ];
         return view('home.sortir.tbh_baris', $data);
     }
@@ -190,7 +188,7 @@ class SortirController extends Controller
     {
         DB::table('tb_anak')->where('id_anak', $r->id_anak)->update(
             ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
-        );  
+        );
     }
 
     public function create_anak(Request $r)
