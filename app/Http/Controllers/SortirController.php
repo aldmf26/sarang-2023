@@ -16,7 +16,7 @@ class SortirController extends Controller
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `cetak` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.id_pengawas = '$id_user'");
+        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.selesai = 'Y'");
     }
 
     public function getAnak($id = null)
@@ -30,9 +30,8 @@ class SortirController extends Controller
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
-        $tgl1 =  $tgl['tgl1'];
-        $tgl2 =  $tgl['tgl2'];
-        
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
