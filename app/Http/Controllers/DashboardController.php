@@ -85,10 +85,24 @@ class DashboardController extends Controller
             left join tb_anak as b on b.id_anak = a.id_anak 
             left join users as c on c.id = a.id_pengawas
             where a.no_box = $nobox"),
+
             'cetak' => DB::select("SELECT * FROM cetak as a 
             left join tb_anak as b on b.id_anak = a.id_anak 
             left join users as c on c.id = a.id_pengawas
-            where a.no_box = $nobox")
+            where a.no_box = $nobox"),
+
+            'grading_bentuk' => DB::select("SELECT *
+            FROM grading_serah as a
+            LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
+            where  b.status = 'bentuk' and a.no_box = '$nobox'
+            "),
+
+            'grading_turun' => DB::select("SELECT *
+            FROM grading_serah as a
+            LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
+            where  b.status = 'turun' and a.no_box = '$nobox'
+            ")
+
         ];
         return view('dashboard.detail', $data);
     }

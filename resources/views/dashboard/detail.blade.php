@@ -389,52 +389,45 @@
 
     <div class="row">
         <div class="col-lg-2">
-            {{-- <table class="table small table-borderless">
+            <table class="table small table-borderless">
                 <tr>
                     <th>&nbsp;</th>
                 </tr>
                 <tr>
                     <td align="right"><b>Bentuk</b></td>
                 </tr>
-            </table> --}}
+            </table>
         </div>
         <div class="col-lg-2">
-            <table class="table-cutome">
+            <table class="table small table-bordered">
 
                 <tbody>
                     <tr>
-                        <td align="right" class="border-hilang" rowspan="7"><b>Bentuk</b></td>
+
                         <th class="dhead">GRADE</th>
                         <th class="dhead text-end">PCS</th>
                         <th class="dhead text-end">GR</th>
                     </tr>
+                    @php
+                    $total_pcs_bentuk = 0;
+                    $total_gram_bentuk = 0;
+                    @endphp
+                    @foreach ($grading_bentuk as $g)
+                    @php
+                    $total_pcs_bentuk += $g->pcs;
+                    $total_gram_bentuk = $g->gram;
+                    @endphp
+                    <tr>
+                        <td>{{$g->tipe}}</td>
+                        <td align="right">{{$g->pcs}}</td>
+                        <td align="right">{{$g->gram}}</td>
+                    </tr>
+                    @endforeach
                     <tr>
 
-                        <td>s6</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-
-                    </tr>
-                    <tr>
-                        <td>s5</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                    </tr>
-                    <tr>
-
-                        <td class="text-center">Total</td>
-                        <td class="text-end">0</td>
-                        <td class="text-end">0</td>
+                        <th class="text-center">Total</th>
+                        <th class="text-end">{{$total_pcs_bentuk}}</th>
+                        <th class="text-end">{{$total_gram_bentuk}}</th>
                     </tr>
                 </tbody>
 
@@ -465,31 +458,26 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $total_pcs_turun = 0;
+                    $total_gram_turun = 0;
+                    @endphp
+                    @foreach ($grading_turun as $g)
+                    @php
+                    $total_pcs_turun += $g->pcs;
+                    $total_gram_turun = $g->gram;
+                    @endphp
                     <tr>
-                        <td>s6</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
+                        <td>{{$g->tipe}}</td>
+                        <td align="right">{{$g->pcs}}</td>
+                        <td align="right">{{$g->gram}}</td>
+                    </tr>
+                    @endforeach
+                    <tr>
 
-                    </tr>
-                    <tr>
-                        <td>s5</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                        <td align="right">&nbsp;</td>
-                    </tr>
-                    <tr>
                         <th class="text-center">Total</th>
-                        <th class="text-end">0</th>
-                        <th class="text-end">0</th>
+                        <th class="text-end">{{$total_pcs_turun}}</th>
+                        <th class="text-end">{{$total_gram_turun}}</th>
                     </tr>
 
                 </tbody>

@@ -62,12 +62,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/delete', 'delete')->name('delete');
         });
     Route::controller(GradingController::class)
-        ->prefix('grading')
+        ->prefix('home/grading')
         ->name('grading.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'add_target')->name('add_target');
+            Route::post('/add_grading', 'add_grading')->name('add_grading');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/tbh_baris_turun', 'tbh_baris_turun')->name('tbh_baris_turun');
+            Route::get('/load_grade', 'load_grade')->name('load_grade');
+            Route::get('/load_detail_grading', 'load_detail_grading')->name('load_detail_grading');
         });
 });
 
