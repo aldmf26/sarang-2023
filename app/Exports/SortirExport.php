@@ -33,8 +33,8 @@ class SortirExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:L1';
-                $cellRangeLoop = 'A1:L' . $this->totalrow;
+                $cellRange = 'A1:N1';
+                $cellRangeLoop = 'A1:N' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([

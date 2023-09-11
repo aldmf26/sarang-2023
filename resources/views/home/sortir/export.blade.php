@@ -12,6 +12,8 @@
             <th>Pcs Akhir</th>
             <th>Gr Akhir</th>
             <th>Susut</th>
+            <th>Rp Target</th>
+            <th>Denda SP</th>
             <th>Ttl Gaji</th>
         </tr>
     </thead>
@@ -32,6 +34,8 @@
                     $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
                 @endphp
                 <td>{{ $susut }}%</td>
+                <td>{{ $d->rp_target ?? 0 }}</td>
+                <td>{{ $d->denda_sp ?? 0 }}</td>
                 <td>{{ $d->ttl_rp ?? 0 }}</td>
             </tr>
         @endforeach
