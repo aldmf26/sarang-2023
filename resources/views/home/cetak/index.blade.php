@@ -2,7 +2,7 @@
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah_target" addClass="float-end" teks="Target" />
-        <a href="{{ route('cetak.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="btn btn-sm icon icon-left btn-primary me-2">
+        <a href="{{ route('cetak.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />

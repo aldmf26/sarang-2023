@@ -2,11 +2,10 @@
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
-        <a href="{{ route('bk.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="btn btn-sm icon icon-left btn-primary me-2">
+        <a href="{{ route('bk.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
 
-        <x-theme.button href="#" icon="fa-file-excel" addClass="float-end btn_excel" teks="Export" />
         <x-theme.button href="{{ route('bk.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
         <x-theme.btn_filter />
 
@@ -74,10 +73,7 @@
     @section('scripts')
         <script>
             $(document).ready(function() {
-                $('.btn_excel').click(function(e) {
-                    e.preventDefault();
-                    window.location.href = "bk/export?tgl1={{ $tgl1 }}&tgl2={{ $tgl2 }}"
-                });
+               
                 pencarian('pencarian', 'tablealdi')
                 // $(document).on("click", ".detail_nota", function() {
                 //     var no_nota = $(this).attr('no_nota');

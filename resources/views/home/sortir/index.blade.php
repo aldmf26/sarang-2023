@@ -2,7 +2,12 @@
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="{{ route('sortir.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <a href="{{ route('sortir.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+            class="float-end btn btn-sm icon icon-left btn-primary me-2">
+            <i class="fas fa-file-excel"></i> Export
+        </a>
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+            teks="Krywn" />
         <x-theme.btn_filter />
 
     </x-slot>

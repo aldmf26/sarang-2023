@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CabutExport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CabutController extends Controller
 {
@@ -15,20 +17,22 @@ class CabutController extends Controller
             ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
             ->get();
     }
-    public function index()
+    public function index(Request $r)
     {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+
         $data = [
             'title' => 'Divisi Cabut',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
             'cabut' => DB::table('cabut as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
+                ->whereBetween('a.tgl_terima', [$tgl1, $tgl2])
                 ->orderBY('a.id_cabut', 'DESC')
                 ->get(),
-            'cabuasdt' => DB::table('cabut as a')
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->orderBy('id_cabut', 'DESC')
-                ->get()
         ];
         return view('home.cabut.index', $data);
     }
@@ -221,5 +225,20 @@ class CabutController extends Controller
     {
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
         return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
+    }
+
+    public function export(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.cabut.export';
+        $tbl = DB::table('cabut as a')
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where('a.id_pengawas', auth()->user()->id)
+            ->whereBetween('a.tgl_terima', [$tgl1, $tgl2])
+            ->orderBY('a.id_cabut', 'DESC')
+            ->get();
+
+        return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 }

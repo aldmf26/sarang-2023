@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SortirExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SortirController extends Controller
 {
@@ -203,5 +205,21 @@ class SortirController extends Controller
     {
         DB::table('sortir')->where('id_sortir', $r->id_cabut)->update(['selesai' => empty($r->batal) ? 'Y' : 'T']);
         return redirect()->route('sortir.index')->with('sukses', 'Data telah diselesaikan');
+    }
+
+    public function export(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.sortir.export';
+        $tbl = DB::table('sortir as a')
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+            ->where('a.id_pengawas', auth()->user()->id)
+            ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            ->orderBy('id_sortir', 'DESC')
+            ->get();
+
+        return Excel::download(new SortirExport($tbl, $view), 'Export SORTIR.xlsx');
     }
 }

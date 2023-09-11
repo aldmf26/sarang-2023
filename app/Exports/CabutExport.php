@@ -8,17 +8,17 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
 
-class CetakExport  implements FromView, WithEvents
+class CabutExport  implements FromView, WithEvents
 {
     protected $tbl;
     protected $view;
     protected $totalrow;
 
-    public function __construct($tbl, $totalrow,$view)
+    public function __construct($tbl, $view)
     {
         $this->tbl = $tbl;
         $this->view = $view;
-        $this->totalrow = $totalrow;
+        $this->totalrow = count($tbl) + 1;
     }
 
     public function view(): View
@@ -32,9 +32,9 @@ class CetakExport  implements FromView, WithEvents
     {
         return [
             AfterSheet::class    => function (AfterSheet $event) {
-                $sheet = $event->sheet; 
-                $cellRange = 'A1:O1';
-                $cellRangeLoop = 'A1:O' . $this->totalrow;
+                $sheet = $event->sheet;
+                $cellRange = 'A1:L1';
+                $cellRangeLoop = 'A1:L' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
