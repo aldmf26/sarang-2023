@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BkExport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BkController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
         $data = [
             'title' => 'Divisi BK',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
             'bk' => DB::select("SELECT * FROM bk as a 
             left join ket_bk as b on b.id_ket_bk = a.id_ket 
-            left join warna as c on c.id_warna = a.id_warna")
+            left join warna as c on c.id_warna = a.id_warna WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'")
         ];
         return view('home.bk.index', $data);
     }
@@ -57,5 +64,19 @@ class BkController extends Controller
             'title' => 'Print Bk'
         ];
         return view('home.bk.print', $data);
+    }
+
+    public function export(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.bk.export';
+        $tbl = DB::select("SELECT * FROM bk as a 
+        left join ket_bk as b on b.id_ket_bk = a.id_ket 
+        left join warna as c on c.id_warna = a.id_warna WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'");
+        $totalrow = count($tbl) + 1;
+
+        return Excel::download(new BkExport($tbl, $totalrow, $view), 'Export BK.xlsx');
+       
     }
 }

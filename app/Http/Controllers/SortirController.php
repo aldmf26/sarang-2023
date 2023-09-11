@@ -146,7 +146,6 @@ class SortirController extends Controller
                         <table class='table table-striped'>
                             <tr>
                                 <th width='180'>Nama</th>
-                                <th width='80'>Kelas</th>
                                 <th>Tgl Masuk</th>
                                 <th>Aksi</th>
                             </tr>";
@@ -155,7 +154,6 @@ class SortirController extends Controller
                                 <tr>
                                     <td>" . ucwords($d->nama) . "</td>
                                     <input type='hidden' value='" . $d->id_anak . "' name='id_anak[]' class='form-control'>
-                                    <td><input type='text' value='" . $d->kelas . "' name='id_kelas[]' class='form-control'></td>
                                     <td><input type='date' value='" . $d->tgl_masuk . "' class='form-control' name='tgl_masuk[]'></td>
                                     <td><button type='button' class='btn btn-sm btn-danger' id_anak='" . $d->id_anak . "' id='delete_anak'><i class='fas fa-window-close'></i></button></td>
                                 </tr>
@@ -195,7 +193,6 @@ class SortirController extends Controller
         for ($i = 0; $i < count($r->id_anak); $i++) {
             DB::table('tb_anak')->where('id_anak', $r->id_anak[$i])->update(
                 [
-                    'id_kelas' => $r->id_kelas[$i],
                     'tgl_masuk' => $r->tgl_masuk[$i],
                 ]
             );

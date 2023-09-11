@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CetakExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class CetakController extends Controller
@@ -27,6 +29,8 @@ class CetakController extends Controller
 
         $data = [
             'title' => 'Divisi Cetak',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
             'cetak' => DB::select("SELECT *
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
@@ -111,5 +115,23 @@ class CetakController extends Controller
             WHERE a.selesai = 'Y' AND (a.pcs_awal - IFNULL(b.pcs_awal_ctk, 0)) != 0")
         ];
         return view('home.cetak.tbh_baris', $data);
+    }
+
+    public function export(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.cetak.export';
+
+        $tbl = DB::select("SELECT *
+            FROM cetak as a
+            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+            where a.tgl between '$tgl1' and '$tgl2'
+            ");
+
+        $totalrow = count($tbl) + 1;
+
+        return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
+       
     }
 }
