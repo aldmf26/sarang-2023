@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
@@ -73,6 +74,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/tbh_baris_turun', 'tbh_baris_turun')->name('tbh_baris_turun');
             Route::get('/load_grade', 'load_grade')->name('load_grade');
             Route::get('/load_detail_grading', 'load_detail_grading')->name('load_detail_grading');
+        });
+    Route::controller(CabutSpecialController::class)
+        ->prefix('home/cabutSpesial')
+        ->name('cabutSpesial.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });
 

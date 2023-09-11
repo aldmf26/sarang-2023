@@ -60,6 +60,12 @@ class NavbarController extends Controller
                 'deskripsi' => 'ini adalah data user',
             ],
             [
+                'judul' => 'CABUT SPESIAL',
+                'route' => 'cabutSpesial.index',
+                'img' => 'warehouse.png',
+                'deskripsi' => 'ini adalah data user',
+            ],
+            [
                 'judul' => 'CETAK',
                 'route' => 'cetak.index',
                 'img' => 'warehouse.png',
