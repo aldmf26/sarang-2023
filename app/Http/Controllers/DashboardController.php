@@ -76,6 +76,7 @@ class DashboardController extends Controller
         $detailNobox = DB::selectOne("SELECT * FROM bk as a
         left join ket_bk as b on b.id_ket_bk = a.id_ket
         left join warna as c on c.id_warna = a.id_warna
+        left join users as d on d.id = a.penerima
         where a.no_box = $nobox ");
 
         $data = [
