@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/print', 'print')->name('print');
+            Route::get('/export', 'export')->name('export');
         });
     Route::controller(CabutController::class)
         ->prefix('home/cabut')

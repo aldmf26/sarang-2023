@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
+            Route::get('/export', 'export')->name('export');
         });
     Route::controller(GradingController::class)
         ->prefix('home/grading')
