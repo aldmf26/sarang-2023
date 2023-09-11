@@ -242,6 +242,7 @@
                         <th class="text-end dhead">PCS TTL</th>
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
+                    @if (empty($sortir))
                     <tr>
                         <td><b>SORTIR</b></td>
                         <td></td>
@@ -264,6 +265,33 @@
                         <td align="right"></td>
                         <td align="right"></td>
                     </tr>
+                    @else
+                    @foreach ($sortir as $s)
+                    <tr>
+                        <td><b>SORTIR</b></td>
+                        <td>{{$s->name}}</td>
+                        <td>{{$s->nama}}</td>
+                        <td>{{date('d M y',strtotime($s->tgl))}}</td>
+                        <td align="right">{{$s->pcs_awal}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$s->pcs_awal}}</td>
+                        <td align="right">{{number_format($s->rp_target,0)}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>TERIMA</b></td>
+                        <td>{{$s->name}}</td>
+                        <td>{{$s->nama}}</td>
+                        <td>{{date('d M y',strtotime($s->tgl))}}</td>
+                        <td align="right">{{$s->pcs_akhir}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$s->pcs_akhir}}</td>
+                        <td align="right">{{number_format($s->ttl_rp,0)}}</td>
+                    </tr>
+                    @endforeach
+                    @endif
+
                     <tr>
                         <td colspan="9" class="border-hilang">&nbsp;</td>
                     </tr>
@@ -278,9 +306,10 @@
                         <th class="text-end dhead">PCS TTL</th>
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
+                    @if (empty($grade))
                     <tr>
                         <td><b>GRADE</b></td>
-                        <td>Siti Fatimah</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td align="right"></td>
@@ -289,6 +318,22 @@
                         <td align="right">0</td>
                         <td align="right"></td>
                     </tr>
+                    @else
+                    @foreach ($grade as $g)
+                    <tr>
+                        <td><b>GRADE</b></td>
+                        <td>{{$g->name}}</td>
+                        <td>{{$g->nama}}</td>
+                        <td>{{date('d M y',strtotime($g->tgl))}}</td>
+                        <td align="right">{{$g->pcs_awal}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$g->pcs_awal}}</td>
+                        <td align="right"></td>
+                    </tr>
+                    @endforeach
+                    @endif
+
 
                 </tbody>
             </table>
@@ -417,13 +462,14 @@
                         <td colspan="6" class="border-hilang">&nbsp;</td>
                     </tr>
                     <tr>
-                        <th class="dhead text-end">GR DICTK</th>
+                        <th class="dhead text-end">GR SORTIR</th>
                         <th class="text-end dhead">GR HCR</th>
                         <th class="text-end dhead">GR TDK SORTIR</th>
                         <th class="text-end dhead">GR TTL</th>
                         <th class="text-end dhead">TTD PGWS</th>
                         <th class="text-end dhead">SUSUT</th>
                     </tr>
+                    @if (empty($sortir))
                     <tr>
                         <td align="right">0</td>
                         <td align="right">0</td>
@@ -440,9 +486,33 @@
                         <td align="right"></td>
                         <td align="right">0</td>
                     </tr>
+                    @else
+                    @foreach ($sortir as $s)
+                    <tr>
+                        <td align="right">{{$s->gr_awal}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$s->gr_awal}}</td>
+                        <td align="right"></td>
+                        <td align="right">0</td>
+                    </tr>
+                    <tr>
+                        <td align="right">{{$s->gr_akhir}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$s->gr_akhir}}</td>
+                        <td align="right"></td>
+                        <td align="right">{{ number_format((1- ($s->gr_akhir/$s->gr_awal)) * 100,0)}}%</td>
+                    </tr>
+                    @endforeach
+
+                    @endif
+
                     <tr>
                         <td colspan="6" class="border-hilang">&nbsp;</td>
                     </tr>
+
+
                     <tr>
                         <th class="dhead text-end">GR AWAL</th>
                         <th class="text-end dhead">GR HCR</th>
@@ -451,6 +521,7 @@
                         <th class="text-end dhead">TTD PGWS</th>
                         <th class="text-end dhead">SST GLOBAL</th>
                     </tr>
+                    @if (empty($grade))
                     <tr>
                         <td align="right">0</td>
                         <td align="right">0</td>
@@ -459,6 +530,19 @@
                         <td align="right"></td>
                         <td align="right">0</td>
                     </tr>
+                    @else
+                    @foreach ($grade as $g)
+                    <tr>
+                        <td align="right">{{$g->gr_awal}}</td>
+                        <td align="right">0</td>
+                        <td align="right">0</td>
+                        <td align="right">{{$g->gr_awal}}</td>
+                        <td align="right"></td>
+                        <td align="right">0</td>
+                    </tr>
+                    @endforeach
+                    @endif
+
 
 
                 </tbody>
@@ -527,7 +611,7 @@
                     @foreach ($grading_bentuk as $g)
                     @php
                     $total_pcs_bentuk += $g->pcs;
-                    $total_gram_bentuk = $g->gram;
+                    $total_gram_bentuk += $g->gram;
                     @endphp
                     <tr>
                         <td>{{$g->tipe}}</td>
@@ -536,7 +620,6 @@
                     </tr>
                     @endforeach
                     <tr>
-
                         <th class="text-center">Total</th>
                         <th class="text-end">{{$total_pcs_bentuk}}</th>
                         <th class="text-end">{{$total_gram_bentuk}}</th>

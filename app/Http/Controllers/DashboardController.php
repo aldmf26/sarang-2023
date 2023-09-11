@@ -92,6 +92,14 @@ class DashboardController extends Controller
             left join users as c on c.id = a.id_pengawas
             where a.no_box = $nobox"),
 
+            'sortir' => DB::table('sortir as a')
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->join('users as d', 'a.id_pengawas', 'd.id')
+                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.no_box', $nobox)
+                ->orderBy('id_sortir', 'DESC')
+                ->get(),
+
             'grading_bentuk' => DB::select("SELECT *
             FROM grading_serah as a
             LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
@@ -102,7 +110,15 @@ class DashboardController extends Controller
             FROM grading_serah as a
             LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
             where  b.status = 'turun' and a.no_box = '$nobox'
-            ")
+            "),
+            'grade' => DB::select("SELECT * FROM grade as a 
+            left join tb_anak as b on b.id_anak = a.id_penerima
+            left join users as d on d.id = a.id_pengawas
+            left join (
+                SELECT c.no_box as box_grading, sum(c.pcs) as pcs_akhir, sum(c.gram) as gr_akhir
+                FROM grading_serah as c 
+                group by c.no_box
+            ) as c on c.box_grading = a.no_box")
 
         ];
         return view('dashboard.detail', $data);
