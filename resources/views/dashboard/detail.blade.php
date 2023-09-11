@@ -620,7 +620,6 @@
                     </tr>
                     @endforeach
                     <tr>
-
                         <th class="text-center">Total</th>
                         <th class="text-end">{{$total_pcs_bentuk}}</th>
                         <th class="text-end">{{$total_gram_bentuk}}</th>
