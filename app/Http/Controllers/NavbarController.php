@@ -66,6 +66,12 @@ class NavbarController extends Controller
                 'deskripsi' => 'ini adalah data user',
             ],
             [
+                'judul' => 'EO',
+                'route' => 'eo.index',
+                'img' => 'warehouse.png',
+                'deskripsi' => 'ini adalah data user',
+            ],
+            [
                 'judul' => 'CETAK',
                 'route' => 'cetak.index',
                 'img' => 'warehouse.png',

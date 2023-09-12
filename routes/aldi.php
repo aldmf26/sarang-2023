@@ -8,6 +8,7 @@ use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DendaController;
+use App\Http\Controllers\EoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -123,6 +124,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::get('/export', 'export')->name('export');
+        });
+    Route::controller(EoController::class)
+        ->prefix('home/eo')
+        ->name('eo.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::post('/create', 'create')->name('create');
+            Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
