@@ -9,6 +9,7 @@ use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
+use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -132,9 +133,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/export', 'export')->name('export');
             Route::post('/create', 'create')->name('create');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::get('/selesai', 'selesai')->name('selesai');
+            Route::get('/load_anak', 'load_anak')->name('load_anak');
+            Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
+            Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
@@ -159,5 +165,18 @@ Route::middleware('auth')->group(function () {
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(HariandllController::class)
+        ->prefix('home/hariandll')
+        ->name('hariandll.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/create', 'create')->name('create');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::get('/delete', 'delete')->name('delete');
+            Route::get('/export', 'export')->name('export');
+            Route::post('/update', 'update')->name('update');
+            Route::get('/edit_load/{id}', 'edit_load')->name('edit_load');
         });
 });

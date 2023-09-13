@@ -41,12 +41,12 @@ class NavbarController extends Controller
     public function home()
     {
         $data = [
-            [
-                'judul' => 'Gudang Awal',
-                'route' => 'gudang.index',
-                'img' => 'warehouse.png',
-                'deskripsi' => 'Gudang Herry',
-            ],
+            // [
+            //     'judul' => 'Gudang Awal',
+            //     'route' => 'gudang.index',
+            //     'img' => 'warehouse.png',
+            //     'deskripsi' => 'Gudang Herry',
+            // ],
             [
                 'judul' => 'BK',
                 'route' => 'bk.index',
@@ -87,6 +87,12 @@ class NavbarController extends Controller
                 'judul' => 'GRADE',
                 'route' => 'grading.index',
                 'img' => 'warehouse.png',
+                'deskripsi' => 'ini adalah data user',
+            ],
+            [
+                'judul' => 'HARIAN DLL',
+                'route' => 'hariandll.index',
+                'img' => 'denda.png',
                 'deskripsi' => 'ini adalah data user',
             ],
         ];

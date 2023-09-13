@@ -2,6 +2,13 @@
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button idModal="tambah" modal="Y" href="#" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <a href="{{ route('eo.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+            class="float-end btn btn-sm icon icon-left btn-primary me-2">
+            <i class="fas fa-file-excel"></i> Export
+        </a>
+        <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
+            teks="Krywn" />
+        <x-theme.btn_filter/>
     </x-slot>
 
     <x-slot name="cardBody">
@@ -40,7 +47,7 @@
                                         no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
                                         data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
 
-                                    @if (!empty($d->gr_akhir))
+                                    @if (!empty($d->gr_eo_akhir))
                                         <a class="btn btn-primary btn-sm selesai" href="#"
                                             id_cabut="{{ $d->id_eo }}" href="#" data-bs-toggle="modal"
                                             data-bs-target="#selesai"></i>Selesai</a>
@@ -143,7 +150,40 @@
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
+        <form action="{{ route('eo.selesai') }}" method="get">
+            @csrf
+            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
+                        <p class="text-center fw-bold">Note : </p>
+                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
+                            maupun dihapus
+                        </p>
+                        <input type="hidden" name="id_cabut" class="cetak">
+                    </div>
+                </div>
+            </x-theme.modal>
 
+            <form action="{{ route('sortir.create_anak') }}" method="post">
+                @csrf
+                <x-theme.modal idModal="anak" title="tambah Anak" btnSave="Y">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label for="">Tambah Anak</label>
+                                <div id="load_anak_nopengawas"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="">Aksi</label><br>
+                            <button class="btn btn-sm btn-primary" type="button" id="add_anak">Edit/Save</button>
+                        </div>
+                    </div>
+                    <div id="load_anak"></div>
+                </x-theme.modal>
+            </form>
+        </form>
     </x-slot>
     @section('scripts')
     <script>
@@ -163,6 +203,67 @@
                         }
                     });
                 })
+
+                $(document).on('click', '.selesai', function() {
+                    var id_cabut = $(this).attr('id_cabut');
+
+                    $('.cetak').val(id_cabut);
+                });
+
+                load_anak()
+                load_anak_nopengawas()
+
+                function load_anak() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.load_anak') }}",
+                        success: function(r) {
+                            $("#load_anak").html(r);
+                        }
+                    });
+                }
+
+                function load_anak_nopengawas() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.load_anak_nopengawas') }}",
+                        success: function(r) {
+                            $("#load_anak_nopengawas").html(r)
+                            $(".select3-load").select2()
+
+                        }
+                    });
+                }
+                $(document).on('click', '#add_anak', function() {
+                    var id_anak = $(".anakNoPengawas").val()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.add_delete_anak') }}?id_anak=" + id_anak,
+                        success: function(r) {
+                            alertToast('Berhasil tambah anak')
+                            load_anak()
+                            load_anak_nopengawas()
+                        }
+                    });
+                })
+                $(document).on('click', '#delete_anak', function(e) {
+
+                    var id_anak = $(this).attr('id_anak')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.add_delete_anak') }}",
+                        data: {
+                            id_anak: id_anak,
+                            delete: 1,
+                        },
+                        success: function(r) {
+                            alertToast('Berhasil tambah anak')
+                            load_anak()
+                            load_anak_nopengawas()
+                        }
+                    });
+                })
+
     </script>
     @endsection
 </x-theme.app>

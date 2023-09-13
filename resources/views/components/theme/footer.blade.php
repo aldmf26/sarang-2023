@@ -106,7 +106,9 @@
                 type: "GET",
                 success: function(data) {
                     $("#" + classPlus).append(data);
-                    $(".select2-add").select2();
+                    $(".select2-add").select2({
+                        dropdownParent: $('#tambah .modal-content')
+                    });
                 },
             });
         });
@@ -119,7 +121,6 @@
     }
 
     function detail(kelas, attr, link, load) {
-
         $(document).on('click', `.${kelas}`, function() {
             var id = $(this).attr(`${attr}`)
             $.ajax({
