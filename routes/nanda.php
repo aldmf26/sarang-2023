@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/add_grading', 'add_grading')->name('add_grading');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/tbh_baris_turun', 'tbh_baris_turun')->name('tbh_baris_turun');
+            Route::get('/tbh_baris_target', 'tbh_baris_target')->name('tbh_baris_target');
             Route::get('/load_grade', 'load_grade')->name('load_grade');
             Route::get('/load_detail_grading', 'load_detail_grading')->name('load_detail_grading');
         });
