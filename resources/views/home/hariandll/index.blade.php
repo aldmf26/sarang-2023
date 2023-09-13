@@ -132,13 +132,11 @@
             </x-theme.modal>
         </form>
         <x-theme.btn_alert_delete route="hariandll.delete" name="urutan" :tgl1="$tgl1" :tgl2="$tgl2" />
-
-
+        @section('js')
+            <script>
+                plusRow(1, 'tbh_baris', "hariandll/tbh_baris")
+                detail('edit-btn', 'id_hariandll', 'hariandll/edit_load', 'editBody')
+            </script>
+        @endsection
     </x-slot>
-    @section('scripts')
-        <script>
-            plusRow(1, 'tbh_baris', "hariandll/tbh_baris")
-            detail('edit-btn', 'id_hariandll', 'hariandll/edit_load', 'editBody')
-        </script>
-    @endsection
 </x-theme.app>

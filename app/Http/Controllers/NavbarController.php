@@ -33,6 +33,12 @@ class NavbarController extends Controller
                 'img' => 'denda.png',
                 'deskripsi' => 'ini adalah data user',
             ],
+            [
+                'judul' => 'Data Paket',
+                'route' => 'kelas.index',
+                'img' => 'kelas.png',
+                'deskripsi' => 'ini adalah data user',
+            ],
         ];
         $title = 'Data Master';
         return view('navbar.data_master', compact(['data', 'title']));

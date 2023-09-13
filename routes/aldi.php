@@ -10,6 +10,7 @@ use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
 use App\Http\Controllers\HariandllController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -178,5 +179,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/export', 'export')->name('export');
             Route::post('/update', 'update')->name('update');
             Route::get('/edit_load/{id}', 'edit_load')->name('edit_load');
+        });
+    Route::controller(KelasController::class)
+        ->prefix('data_master/kelas')
+        ->name('kelas.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/eo', 'index')->name('eo');
+            Route::get('/sortir', 'index')->name('sortir');
+            Route::get('/delete', 'delete')->name('delete');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/create', 'create')->name('create');
         });
 });

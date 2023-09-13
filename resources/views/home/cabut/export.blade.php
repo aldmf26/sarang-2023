@@ -1,16 +1,17 @@
 <table class="table" id="table1">
     <thead>
         <tr>
-            <th>#</th>
+            <th>Pengawas</th>
+            <th>Tgl Terima</th>
             <th>No Box</th>
             <th>Anak</th>
-            <th>Tgl Terima</th>
             <th >Pcs Awal</th>
             <th >Gr Awal</th>
+            <th >Gr Flx</th>
             <th >Pcs Akhir</th>
             <th >Gr Akhir</th>
-            <th >Pcs Hcr</th>
             <th >EOT</th>
+            <th >Pcs Hcr</th>
             <th >Susut</th>
             <th >Ttl Gaji</th>
         </tr>
@@ -18,16 +19,17 @@
     <tbody>
         @foreach ($datas as $no => $d)
             <tr>
-                <td>{{ $no + 1 }}</td>
+                <td>{{ auth()->user()->name }}</td>
+                <td>{{ $d->tgl_terima }}</td>
                 <td>{{ $d->no_box }}</td>
                 <td>{{ $d->nama }}</td>
-                <td>{{ $d->tgl_terima }}</td>
                 <td>{{ $d->pcs_awal }}</td>
                 <td>{{ $d->gr_awal }}</td>
+                <td>{{ $d->gr_flx }}</td>
                 <td>{{ $d->pcs_akhir ?? 0 }}</td>
                 <td>{{ $d->gr_akhir ?? 0 }}</td>
-                <td>{{ $d->pcs_hcr ?? 0 }}</td>
                 <td>{{ $d->eot ?? 0 }}</td>
+                <td>{{ $d->pcs_hcr ?? 0 }}</td>
                 @php
                     $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
                     
