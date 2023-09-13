@@ -1,7 +1,7 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah_target" addClass="float-end" teks="Target" />
+        <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah" addClass="float-end" teks="Target" />
         <x-theme.btn_filter />
     </x-slot>
 
@@ -51,7 +51,7 @@
 
         <form action="{{ route('grading.add_target') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah_target" size="modal-lg-max" title="tambah Target" btnSave="Y">
+            <x-theme.modal idModal="tambah" size="modal-lg-max" title="tambah Target" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-striped">
@@ -94,7 +94,7 @@
                                     <td></td>
                                 </tr>
                             </tbody>
-                            {{-- <tbody id="tbh_baris"> --}}
+                            <tbody id="tbh_baris">
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -250,10 +250,10 @@
                 dropdownParent: $('#akhir .modal-content')
             })
 
-            plusRow(1, 'tbh_baris', "grading/tbh_baris")
+            plusRow(1, 'tbh_baris', "grading/tbh_baris_target")
 
-            plusRow(1, 'tbh_baris_bentuk', "grading/tbh_baris")
-            plusRow(1, 'tbh_baris_turun', "grading/tbh_baris_turun")
+            plusRow2(1, 'tbh_baris_bentuk', "grading/tbh_baris")
+            plusRow2(1, 'tbh_baris_turun', "grading/tbh_baris_turun")
 
             $(document).on('click', '.akhir', function() {
               var no_box = $(this).attr('no_box');

@@ -23,11 +23,11 @@ class GradingController extends Controller
 
         $data = [
             'title' => 'Divisi Grade',
-            'anak' => $this->getAnak(),
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'tipe' => DB::table('tipe_grade')->where('status', 'bentuk')->get(),
             'tipe2' => DB::table('tipe_grade')->where('status', 'turun')->get(),
+            'anak' => $this->getAnak(),
             'no_box' => DB::select("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.selesai = 'Y' and a.no_box not in(SELECT b.no_box FROM grade as b )
             group by a.no_box"),
             'grade' => DB::select("SELECT * FROM grade as a 
@@ -72,6 +72,17 @@ class GradingController extends Controller
             'tipe' => DB::table('tipe_grade')->where('status', 'turun')->get(),
         ];
         return view('home.grade.tbh_baris', $data);
+    }
+    public function tbh_baris_target(Request $r)
+    {
+        $data = [
+            'count' => $r->count,
+            'tipe' => DB::table('tipe_grade')->where('status', 'turun')->get(),
+            'anak' => $this->getAnak(),
+            'no_box' => DB::select("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.selesai = 'Y' and a.no_box not in(SELECT b.no_box FROM grade as b )
+            group by a.no_box"),
+        ];
+        return view('home.grade.tbh_baris_grade', $data);
     }
 
     public function load_grade(Request $r)

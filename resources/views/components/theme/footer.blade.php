@@ -119,6 +119,27 @@
 
         })
     }
+    function plusRow2(count, classPlus, url) {
+        $(document).on("click", "." + classPlus, function() {
+            count = count + 1;
+            $.ajax({
+                url: `${url}?count=` + count,
+                type: "GET",
+                success: function(data) {
+                    $("#" + classPlus).append(data);
+                    $(".select2-add").select2({
+                        dropdownParent: $('#akhir .modal-content')
+                    });
+                },
+            });
+        });
+
+        $(document).on('click', '.remove_baris', function() {
+            var delete_row = $(this).attr("count");
+            $(".baris" + delete_row).remove();
+
+        })
+    }
 
     function detail(kelas, attr, link, load) {
         $(document).on('click', `.${kelas}`, function() {

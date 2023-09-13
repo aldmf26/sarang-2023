@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/add_grading', 'add_grading')->name('add_grading');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/tbh_baris_turun', 'tbh_baris_turun')->name('tbh_baris_turun');
+            Route::get('/tbh_baris_target', 'tbh_baris_target')->name('tbh_baris_target');
             Route::get('/load_grade', 'load_grade')->name('load_grade');
             Route::get('/load_detail_grading', 'load_detail_grading')->name('load_detail_grading');
         });
@@ -80,6 +81,13 @@ Route::middleware('auth')->group(function () {
         ->name('cabutSpesial.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::get('/getrp_target', 'getrp_target')->name('getrp_target');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::post('/', 'create')->name('create');
+            Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
         });
 });
 
