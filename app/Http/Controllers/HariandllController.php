@@ -20,10 +20,10 @@ class HariandllController extends Controller
             'tgl2' => $tgl2,
             'anak' => DB::table('tb_anak')->get(),
             'datas' => DB::table('tb_hariandll  as a')
-                        ->join('tb_anak as b','a.id_anak', 'b.id_anak')
-                        ->whereBetween('a.tgl', [$tgl1,$tgl2])
-                        ->orderBy('a.id_hariandll', 'DESC')
-                        ->get()
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                ->orderBy('a.id_hariandll', 'DESC')
+                ->get()
         ];
         return view('home.hariandll.index', $data);
     }
@@ -38,7 +38,7 @@ class HariandllController extends Controller
 
     public function create(Request $r)
     {
-        for ($i=0; $i < count($r->id_anak); $i++) { 
+        for ($i = 0; $i < count($r->id_anak); $i++) {
             DB::table('tb_hariandll')->insert([
                 'tgl' => $r->tgl,
                 'id_anak' => $r->id_anak[$i],
@@ -83,10 +83,10 @@ class HariandllController extends Controller
         $tgl2 =  $r->tgl2;
         $view = 'home.hariandll.export';
         $tbl = DB::table('tb_hariandll  as a')
-        ->join('tb_anak as b','a.id_anak', 'b.id_anak')
-        ->whereBetween('a.tgl', [$tgl1,$tgl2])
-        ->orderBy('a.id_hariandll', 'DESC')
-        ->get();
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            ->orderBy('a.id_hariandll', 'DESC')
+            ->get();
 
         return Excel::download(new HariandllExport($tbl, $view), 'Export HARIAN DLL.xlsx');
     }
