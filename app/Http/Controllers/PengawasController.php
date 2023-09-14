@@ -72,22 +72,22 @@ class PengawasController extends Controller
             array('kd_user' => '445','nm_user' => 'Masitah','username' => 'Sitah','password' => '$2y$10$Tj.kmETdmX5HoARmRpB1vOuqI6mu9NpufDYBK.z8Gy5bQ7YC76tB6'),
             array('kd_user' => '457','nm_user' => 'Pengawasxx','username' => 'pengawasxx','password' => '$2y$10$/R/EAiTRSAS/Krxf2qR4AebGQleTCV3I9RiFzRmOVICtgBhZedsom')
           );
-          foreach($tb_user_tugas as $n => $d){
-            DB::table('users')->insert([
-                'posisi_id' => 13,
-                'id' => $d['kd_user'],
-                'name' => $d['nm_user'],
-                'email' => $d['username'] . "@gmail.com",
-                'password' => $d['password']
-            ]);
+        //   foreach($tb_user_tugas as $n => $d){
+        //     DB::table('users')->insert([
+        //         'posisi_id' => 13,
+        //         'id' => $d['kd_user'],
+        //         'name' => $d['nm_user'],
+        //         'email' => $d['username'] . "@gmail.com",
+        //         'password' => $d['password']
+        //     ]);
 
-          }
-        // DB::table('tb_anak')->insert([
-        //     'tgl_masuk' => $r->tgl_masuk,
-        //     'nama' => $r->nama,
-        //     'id_kelas' => $r->kelas,
-        //     'id_pengawas' => $r->id_pengawas,
-        // ]);
+        //   }
+        DB::table('tb_anak')->insert([
+            'tgl_masuk' => $r->tgl_masuk,
+            'nama' => $r->nama,
+            'id_kelas' => $r->kelas,
+            'id_pengawas' => $r->id_pengawas,
+        ]);
 
         return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
     }
