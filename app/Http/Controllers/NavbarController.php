@@ -54,6 +54,12 @@ class NavbarController extends Controller
                 'deskripsi' => 'Divisi BK',
             ],
             [
+                'judul' => 'ABSEN',
+                'route' => 'absen.index',
+                'img' => 'absence.png',
+                'deskripsi' => 'Divisi BK',
+            ],
+            [
                 'judul' => 'CABUT',
                 'route' => 'cabut.index',
                 'img' => 'warehouse.png',
