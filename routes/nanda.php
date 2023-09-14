@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DashboardController;
@@ -88,6 +89,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
+        });
+    Route::controller(AbsenController::class)
+        ->prefix('home/absen')
+        ->name('absen.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/tabelAbsen', 'tabelAbsen')->name('tabelAbsen');
+            Route::get('/SaveAbsen', 'SaveAbsen')->name('SaveAbsen');
+            Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
         });
 });
 
