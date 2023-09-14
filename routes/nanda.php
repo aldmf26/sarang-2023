@@ -8,6 +8,7 @@ use App\Http\Controllers\GradingController;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekapanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -98,6 +99,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/tabelAbsen', 'tabelAbsen')->name('tabelAbsen');
             Route::get('/SaveAbsen', 'SaveAbsen')->name('SaveAbsen');
             Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
+        });
+    Route::controller(RekapanController::class)
+        ->prefix('home/rekapan')
+        ->name('rekap.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });
 

@@ -6,9 +6,8 @@
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
-            teks="Krywn" />
-        <x-theme.btn_filter/>
+        <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.btn_filter />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -29,32 +28,31 @@
                 </thead>
                 <tbody>
                     @foreach ($eo as $no => $d)
-                        <tr>
-                            <td>{{ $no+1 }}</td>
-                            <td>{{ $d->no_box }}</td>
-                            <td>{{ $d->kelas }}</td>
-                            <td>{{ $d->nama }}</td>
-                            <td>{{ $d->tgl_ambil }} ~ {{ $d->tgl_serah }}</td>
-                            <td align="right">{{ $d->gr_eo_awal }} ~ {{ $d->gr_eo_akhir }}</td>
-                            @php
-                                $susut = empty($d->gr_eo_akhir) ? 0 : (1 - $d->gr_eo_akhir / $d->gr_eo_awal) * 100;
-                            @endphp
-                            <td align="right">{{ number_format($susut,0) }}%</td>
-                            <td align="right">{{ number_format($d->ttl_rp,0)}} </td>
-                            <td align="center">
-                                @if ($d->selesai == 'T')
-                                    <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                        no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
-                                        data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                    <tr>
+                        <td>{{ $no+1 }}</td>
+                        <td>{{ $d->no_box }}</td>
+                        <td>{{ $d->kelas }}</td>
+                        <td>{{ $d->nama }}</td>
+                        <td>{{ $d->tgl_ambil }} ~ {{ $d->tgl_serah }}</td>
+                        <td align="right">{{ $d->gr_eo_awal }} ~ {{ $d->gr_eo_akhir }}</td>
+                        @php
+                        $susut = empty($d->gr_eo_akhir) ? 0 : (1 - $d->gr_eo_akhir / $d->gr_eo_awal) * 100;
+                        @endphp
+                        <td align="right">{{ number_format($susut,0) }}%</td>
+                        <td align="right">{{ number_format($d->ttl_rp,0)}} </td>
+                        <td align="center">
+                            @if ($d->selesai == 'T')
+                            <a class="btn btn-warning btn-sm inputAkhir" href="#" no_box="{{ $d->no_box }}"
+                                id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
+                                data-bs-target="#inputAkhir"></i>Akhir</a>
 
-                                    @if (!empty($d->gr_eo_akhir))
-                                        <a class="btn btn-primary btn-sm selesai" href="#"
-                                            id_cabut="{{ $d->id_eo }}" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#selesai"></i>Selesai</a>
-                                    @endif
-                                @endif
-                            </td>
-                        </tr>
+                            @if (!empty($d->gr_eo_akhir))
+                            <a class="btn btn-primary btn-sm selesai" href="#" id_cabut="{{ $d->id_eo }}" href="#"
+                                data-bs-toggle="modal" data-bs-target="#selesai"></i>Selesai</a>
+                            @endif
+                            @endif
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -77,13 +75,15 @@
                                         <select name="no_box" class="form-control select2 pilihBox" id="">
                                             <option value="">- Pilih No Box -</option>
                                             @foreach ($nobox as $d)
-                                                <option value="{{ $d->no_box }}">{{ $d->no_box }}</option>
+                                            <option value="{{ $d->no_box }}">{{ $d->no_box }}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" readonly value="{{ auth()->user()->name }}" name="example" class="form-control">
-                                        <input type="hidden" name="id_pengawas" readonly value="{{ auth()->user()->id }}">
+                                        <input type="text" readonly value="{{ auth()->user()->name }}" name="example"
+                                            class="form-control">
+                                        <input type="hidden" name="id_pengawas" readonly
+                                            value="{{ auth()->user()->id }}">
                                     </td>
                                 </tr>
                             </tbody>
@@ -104,24 +104,24 @@
                             <td>
                                 <input type="date" value="{{ date('Y-m-d') }}" name="tgl_ambil[]" class="form-control">
                             </td>
-                          
+
                             <td>
                                 <select required name="id_anak[]" class="form-control select2" id="">
                                     <option value="">- Pilih Anak -</option>
                                     @foreach ($anak as $d)
-                                        <option value="{{ $d->id_anak }}">{{ strtoupper($d->nama) }}</option>
+                                    <option value="{{ $d->id_anak }}">{{ strtoupper($d->nama) }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td>
                                 <input name="gr_eo_awal[]" type="text" class="form-control text-end" value="0">
                             </td>
-                          
+
                             <td>
                                 <select required name="id_kelas[]" id="" class="form-control">
                                     <option value="">- Pilih Kelas -</option>
                                     @foreach ($kelas as $k)
-                                        <option value="{{ $k->id_kelas }}">{{ strtoupper($k->kelas) }}</option>
+                                    <option value="{{ $k->id_kelas }}">{{ strtoupper($k->kelas) }}</option>
                                     @endforeach
                                 </select>
                             </td>
@@ -138,9 +138,9 @@
                                 </button>
                             </th>
                         </tr>
-                    </tfoot>    
+                    </tfoot>
                 </table>
-               
+
             </x-theme.modal>
         </form>
 
@@ -187,7 +187,7 @@
     </x-slot>
     @section('scripts')
     <script>
-            plusRow(1, 'tbh_baris', "eo/tbh_baris")
+        plusRow(1, 'tbh_baris', "eo/tbh_baris")
             $(document).on('click', '.inputAkhir', function() {
                     var no_box = $(this).attr('no_box')
                     var id_anak = $(this).attr('id_anak')
