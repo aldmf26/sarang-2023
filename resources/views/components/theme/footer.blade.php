@@ -109,6 +109,7 @@
                     $(".select2-add").select2({
                         dropdownParent: $('#tambah .modal-content')
                     });
+                    $(".select3-add").select2()
                 },
             });
         });
