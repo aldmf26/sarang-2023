@@ -52,7 +52,7 @@
                         $denda = empty($d->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
                         $denda_hcr = $d->pcs_hcr * 5000;
 
-                        $eot_bonus = empty($d->eot) ? 0 : ($d->eot - $d->gr_awal * 0.02) * 750;
+                        $eot_bonus = empty($d->eot) ? 0 : (($d->eot - $d->gr_awal) * 0.02) * 750;
                         @endphp
                         <td align="right">{{ number_format($susut, 0) }}%</td>
                         {{-- <td align="right">{{ number_format($denda,0)}}</td> --}}

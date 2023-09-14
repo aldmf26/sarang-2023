@@ -1,6 +1,6 @@
 <tr class="baris{{$count}}">
     <td>
-        <select name="no_box[]" id="" class="select2-add pilihBox" count="{{ $count }}">
+        <select name="no_box[]" id="" class="select3-add pilihBox" count="{{ $count }}">
             <option value="">Pilih Box</option>
             @foreach ($boxBk as $d)
             <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
@@ -12,7 +12,7 @@
         <input type="hidden" class="form-control" name="id_pengawas[]" readonly value="{{ auth()->user()->id }}">
     </td>
     <td>
-        <select name="id_anak[]" id="" class="select2-add pilihAnak" count="{{ $count }}">
+        <select name="id_anak[]" id="" class="select3-add pilihAnak" count="{{ $count }}">
             <option value="">Pilih Anak</option>
 
             @foreach ($anak as $d)

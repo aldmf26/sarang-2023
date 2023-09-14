@@ -84,9 +84,12 @@ class CabutSpecialController extends Controller
 
     public function add_delete_anak(Request $r)
     {
-        DB::table('tb_anak')->where('id_anak', $r->id_anak)->update(
-            ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
-        );
+        $idArray = explode(",", $r->id_anak);
+        foreach($idArray as $n) {
+            DB::table('tb_anak')->where('id_anak', $n)->update(
+                ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
+            );
+        }
     }
 
     public function create_anak(Request $r)

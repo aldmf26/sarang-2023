@@ -2,7 +2,8 @@
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
-        <a href="{{ route('bk.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="float-end btn btn-sm icon icon-left btn-primary me-2">
+        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+            class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
 
@@ -49,7 +50,7 @@
                             <td>{{ $b->nm_warna }}</td>
                             <td>{{ tanggal($b->tgl) }}</td>
                             <td>{{ $b->pengawas }}</td>
-                            <td>{{ $b->penerima == '1' ? 'Jenah' : ($b->penerima == '2' ? 'Nurul' : 'Erna') }}
+                            <td>{{ $b->name }}
                             </td>
                             <td>{{ $b->pcs_awal }}</td>
                             <td>{{ $b->gr_awal }}</td>
@@ -57,8 +58,10 @@
                                     name="" id=""></td>
                             <td>
                                 @if (date('Y-m-d') == $b->tgl)
-                                    <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                    <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="" class="btn btn-sm btn-warning edit_bk"><i
+                                            class="fas fa-edit"></i></a>
+                                    <a href="" class="btn btn-sm btn-danger delete"><i
+                                            class="fas fa-trash-alt"></i></a>
                                 @endif
 
                             </td>
@@ -73,7 +76,7 @@
     @section('scripts')
         <script>
             $(document).ready(function() {
-               
+
                 pencarian('pencarian', 'tablealdi')
                 // $(document).on("click", ".detail_nota", function() {
                 //     var no_nota = $(this).attr('no_nota');
@@ -86,26 +89,44 @@
                 //     });
 
                 // });
+                function clickCekKirim(kelas, link, formDelete = null) {
+                    $(document).on('click', `${kelas}`, function(e) {
+                        e.preventDefault();
 
-                $(document).on('click', '.btn_bayar', function() {
-                    var dipilih = [];
-                    $('.cek_bayar:checked').each(function() {
-                        var no_nota = $(this).attr('no_nota');
-                        dipilih.push(no_nota);
+                        var dipilih = [];
+                        $('.cek_bayar:checked').each(function() {
+                            var no_nota = $(this).attr('no_nota');
+                            dipilih.push(no_nota);
+
+                        });
+                        var params = new URLSearchParams();
+
+                        dipilih.forEach(function(orderNumber) {
+                            params.append('no_nota', orderNumber);
+                        });
+                        var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
+                        var targetUrl = `/home/bk/${link}?` + queryString
+                        if (formDelete === null) {
+                            window.location.assign(targetUrl)
+                        } else {
+                            if (confirm('Yakin ingin dihapus ? ')) {
+                                window.location.assign(targetUrl)
+                                // window.open(targetUrl);
+                            }
+
+                        }
 
                     });
-                    var params = new URLSearchParams();
+                }
+                clickCekKirim('.btn_bayar', 'print')
+                clickCekKirim('.edit_bk', 'edit')
+                clickCekKirim('.delete', 'delete', 'formDelete')
 
-                    dipilih.forEach(function(orderNumber) {
-                        params.append('no_nota', orderNumber);
-                    });
-                    var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
-                    // window.location.href = "/print?" + queryString;
-                    window.open("/home/bk/print?" + queryString, '_blank');
-
-                });
                 $(".btn_bayar").hide();
                 $(".piutang_cek").hide();
+                $(".delete").hide();
+                $(".edit_bk").hide();
+
                 $(document).on('change', '.cek_bayar', function() {
                     var totalPiutang = 0
                     $('.cek_bayar:checked').each(function() {
@@ -115,43 +136,11 @@
                     var anyChecked = $('.cek_bayar:checked').length > 0;
                     $('.btn_bayar').toggle(anyChecked);
                     $(".piutang_cek").toggle(anyChecked);
+                    $('.delete').toggle(anyChecked);
+                    $(".edit_bk").toggle(anyChecked);
                     $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
                 });
 
-                $('.hide_bayar').hide();
-                $(document).on("click", ".detail_bayar", function() {
-                    var no_nota = $(this).attr('no_nota');
-                    var clickedElement = $(this); // Simpan elemen yang diklik dalam variabel
-
-                    clickedElement.prop('disabled', true); // Menonaktifkan elemen yang diklik
-
-                    $.ajax({
-                        type: "get",
-                        url: "/get_pembayaranpiutang_telur?no_nota=" + no_nota,
-                        success: function(data) {
-                            $('.induk_detail' + no_nota).after("<tr>" + data + "</tr>");
-                            $(".show_detail" + no_nota).show();
-                            $(".detail_bayar" + no_nota).hide();
-                            $(".hide_bayar" + no_nota).show();
-
-                            clickedElement.prop('disabled',
-                                false
-                            ); // Mengaktifkan kembali elemen yang diklik setelah tampilan ditambahkan
-                        },
-                        error: function() {
-                            clickedElement.prop('disabled',
-                                false
-                            ); // Jika ada kesalahan dalam permintaan AJAX, pastikan elemen yang diklik diaktifkan kembali
-                        }
-                    });
-                });
-                $(document).on("click", ".hide_bayar", function() {
-                    var no_nota = $(this).attr('no_nota');
-                    $(".show_detail" + no_nota).remove();
-                    $(".detail_bayar" + no_nota).show();
-                    $(".hide_bayar" + no_nota).hide();
-
-                });
             });
         </script>
     @endsection
