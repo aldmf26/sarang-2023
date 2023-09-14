@@ -59,6 +59,6 @@ class AbsenController extends Controller
     }
     public function delete_absen(Request $r)
     {
-        DB::table('absen')->where('id_absen', $r->id_absen)->delete();
+        DB::table('absen')->where([['id_anak', $r->id_anak], ['tgl', $r->tgl]])->delete();
     }
 }
