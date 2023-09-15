@@ -159,7 +159,7 @@ class CetakController extends Controller
                 FROM cabut
                 GROUP BY no_box
             ) as c ON a.no_box = c.no_box
-            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2'
+            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' AND a.id_pengawas = '$id'
             GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
         ");
 
