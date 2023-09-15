@@ -6,8 +6,7 @@
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
-            teks="Krywn" />
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
         <x-theme.btn_filter />
     </x-slot>
 
@@ -35,50 +34,49 @@
                 </thead>
                 <tbody>
                     @foreach ($cabut as $no => $d)
-                        <tr>
-                            <td>{{ $no + 1 }}</td>
-                            <td>{{ $d->no_box }}</td>
-                            {{-- <td>{{ ucwords(auth()->user()->name) }}</td> --}}
-                            <td>{{ $d->nama }}</td>
-                            <td>{{ date('d M y', strtotime($d->tgl_terima)) }}</td>
-                            <td align="right">{{ $d->pcs_awal }}</td>
-                            <td align="right">{{ $d->gr_awal }}</td>
-                            <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
-                            <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
-                            <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
-                            <td align="right">{{ $d->eot ?? 0 }}</td>
-                            @php
-                                $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
-                                
-                                $denda = empty($d->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
-                                $denda_hcr = $d->pcs_hcr * 5000;
-                                
-                                $eot_bonus = empty($d->eot) ? 0 : ($d->eot - $d->gr_awal * 0.02 )* 750;
-                            @endphp
-                            <td align="right">{{ number_format($susut, 0) }}%</td>
-                            {{-- <td align="right">{{ number_format($denda,0)}}</td> --}}
-                            <td align="right">{{ number_format($d->rupiah - $denda - $denda_hcr + $eot_bonus, 0) }}
-                            </td>
-                            <td align="center">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
-                                    class="btn btn-sm btn-primary detail" id_cabut="{{ $d->id_cabut }}"><i
-                                        class="fas fa-eye"></i></a>
-                                @if ($d->selesai == 'T')
-                                    <a class="btn btn-warning btn-sm inputAkhir" href="#"
-                                        no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
-                                        data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                    <tr>
+                        <td>{{ $no + 1 }}</td>
+                        <td>{{ $d->no_box }}</td>
+                        {{-- <td>{{ ucwords(auth()->user()->name) }}</td> --}}
+                        <td>{{ $d->nama }}</td>
+                        <td>{{ date('d M y', strtotime($d->tgl_terima)) }}</td>
+                        <td align="right">{{ $d->pcs_awal }}</td>
+                        <td align="right">{{ $d->gr_awal }}</td>
+                        <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
+                        <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
+                        <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
+                        <td align="right">{{ $d->eot ?? 0 }}</td>
+                        @php
+                        $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
 
-                                    @if (!empty($d->eot))
-                                        <a class="btn btn-primary btn-sm selesai" href="#"
-                                            id_cabut="{{ $d->id_cabut }}" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#selesai"></i>Selesai</a>
-                                    @endif
-                                @endif
+                        $denda = empty($d->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
+                        $denda_hcr = $d->pcs_hcr * 5000;
 
+                        $eot_bonus = empty($d->eot) ? 0 : ($d->eot - $d->gr_awal * 0.02 )* 750;
+                        @endphp
+                        <td align="right">{{ number_format($susut, 0) }}%</td>
+                        {{-- <td align="right">{{ number_format($denda,0)}}</td> --}}
+                        <td align="right">{{ number_format($d->rupiah - $denda - $denda_hcr + $eot_bonus, 0) }}
+                        </td>
+                        <td align="center">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
+                                class="btn btn-sm btn-primary detail" id_cabut="{{ $d->id_cabut }}"><i
+                                    class="fas fa-eye"></i></a>
+                            @if ($d->selesai == 'T')
+                            <a class="btn btn-warning btn-sm inputAkhir" href="#" no_box="{{ $d->no_box }}"
+                                id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
+                                data-bs-target="#inputAkhir"></i>Akhir</a>
+
+                            @if (!empty($d->eot))
+                            <a class="btn btn-primary btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}" href="#"
+                                data-bs-toggle="modal" data-bs-target="#selesai"></i>Selesai</a>
+                            @endif
+                            @endif
 
 
-                            </td>
-                        </tr>
+
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
 
@@ -134,8 +132,8 @@
             </x-theme.modal>
         </form>
         @section('scripts')
-            <script>
-                $(".select3").select2()
+        <script>
+            $(".select3").select2()
 
                 load_anak()
                 load_anak_nopengawas()
@@ -224,7 +222,7 @@
 
                     $('.cetak').val(id_cabut);
                 });
-            </script>
+        </script>
         @endsection
     </x-slot>
 </x-theme.app>

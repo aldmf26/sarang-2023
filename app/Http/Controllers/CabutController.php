@@ -86,7 +86,7 @@ class CabutController extends Controller
     public function add_delete_anak(Request $r)
     {
         $idArray = explode(",", $r->id_anak);
-        foreach($idArray as $n) {
+        foreach ($idArray as $n) {
             DB::table('tb_anak')->where('id_anak', $n)->update(
                 ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
             );
@@ -95,7 +95,7 @@ class CabutController extends Controller
 
     public function create_anak(Request $r)
     {
-        
+
         for ($i = 0; $i < count($r->id_anak); $i++) {
             DB::table('tb_anak')->where('id_anak', $r->id_anak[$i])->update(
                 [
@@ -246,5 +246,30 @@ class CabutController extends Controller
             ->get();
 
         return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
+    }
+
+    public function rekap(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $id = auth()->user()->id;
+
+        $data = [
+            'title' => 'Divisi Cabut',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'cabut' => DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
+            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, sum(c.pcs_awal) as pcs_bk, sum(c.gr_awal) as gr_bk,
+            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah, sum(a.gr_flx) as gr_flx
+            FROM cabut as a
+            left join users as b on b.id = a.id_pengawas
+            left JOIN bk as c on c.no_box = a.no_box 
+            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' and a.id_pengawas = $id
+            GROUP by a.no_box;
+            "),
+        ];
+        return view('home.cabut.rekap', $data);
     }
 }
