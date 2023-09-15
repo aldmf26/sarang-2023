@@ -134,4 +134,12 @@ class CetakController extends Controller
         return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
        
     }
+
+    public function rekap()
+    {
+        $data = [
+'title' => 'Rekap Summary Cetak'
+        ];
+        return view('home.cetak.rekap',$data);
+    }
 }
