@@ -137,7 +137,10 @@ class CetakController extends Controller
     public function rekap(Request $r)
     {
         $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
 
+        
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
@@ -159,7 +162,7 @@ class CetakController extends Controller
                 FROM cabut
                 GROUP BY no_box
             ) as c ON a.no_box = c.no_box
-            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' AND a.id_pengawas = '$id'
+            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' $pengawas
             GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
         ");
 

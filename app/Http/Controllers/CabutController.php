@@ -254,6 +254,8 @@ class CabutController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
         $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
 
         $data = [
             'title' => 'Divisi Cabut',
@@ -266,7 +268,7 @@ class CabutController extends Controller
             FROM cabut as a
             left join users as b on b.id = a.id_pengawas
             left JOIN bk as c on c.no_box = a.no_box 
-            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' and a.id_pengawas = $id
+            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' $pengawas
             GROUP by a.no_box;
             "),
         ];
