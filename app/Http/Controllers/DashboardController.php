@@ -9,38 +9,7 @@ class DashboardController extends Controller
 {
     public function index(Request $r)
     {
-        // $datas = [
-        //     [
-        //         'nobox' => '1098',
-        //         'pcs_awal_bk' => '128',
-        //         'gr_awal_bk' => '1000',
-        //         'bulan' => 'JULI 2023',
-        //         'pengawas' => 'JENAH',
-        //         'pcs_awal_kerja' => '128',
-        //         'gr_awal_kerja' => '1000',
-        //         'rupiah' => '1137536',
-        //     ],
-        //     [
-        //         'nobox' => '1106',
-        //         'pcs_awal_bk' => '135',
-        //         'gr_awal_bk' => '1000',
-        //         'bulan' => 'JULI 2023',
-        //         'pengawas' => 'YULI',
-        //         'pcs_awal_kerja' => '135',
-        //         'gr_awal_kerja' => '1000',
-        //         'rupiah' => '1126114',
-        //     ],
-        //     [
-        //         'nobox' => '1126',
-        //         'pcs_awal_bk' => '117',
-        //         'gr_awal_bk' => '895',
-        //         'bulan' => 'JULI 2023',
-        //         'pengawas' => 'FATIMAH',
-        //         'pcs_awal_kerja' => '117',
-        //         'gr_awal_kerja' => '895',
-        //         'rupiah' => '1009217',
-        //     ],
-        // ];
+
         $datas = DB::select("SELECT * FROM bk as a 
         left join ket_bk as b on b.id_ket_bk = a.id_ket 
         left join warna as c on c.id_warna = a.id_warna

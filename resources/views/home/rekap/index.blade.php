@@ -1,8 +1,10 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
 
-        <h6 class="float-start mt-1">{{ $title }}</h6>
-        <a href="" class="btn btn-success float-end"><i class="fas fa-file-excel"></i> Export</a>
+        <h6 class="float-start mt-1">{{ $title }}: {{tanggal($tgl1)}} ~ {{tanggal($tgl2)}}</h6>
+        <a href="{{ route('rekap.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}" class="btn btn-success float-end"><i
+                class="fas fa-file-excel"></i> Export</a>
+        <x-theme.btn_filter />
 
     </x-slot>
 
@@ -15,7 +17,7 @@
                         <th>Pengawas</th>
                         <th>Nama Anak</th>
                         <th>Kelas</th>
-                        <th>Masuk</th>
+                        <th class="text-end">Masuk</th>
                         <th class="text-end">Cabut</th>
                         <th class="text-end">Cabut Spesial</th>
                         <th class="text-end">EO</th>
@@ -34,7 +36,7 @@
                         <td>{{$a->name}}</td>
                         <td>{{$a->nama}}</td>
                         <td>{{$a->id_kelas}}</td>
-                        <td>{{$a->absen}}</td>
+                        <td align="right">{{$a->absen}}</td>
                         <td align="right">Rp. {{number_format($a->rupiah - $a->d_susut - $a->d_hcr +
                             $a->eot_lebih,0)}}</td>
                         <td align="right">Rp. {{number_format($a->rp_spesial,0)}}</td>
@@ -48,7 +50,7 @@
                         ($a->rp_pcs_cetak - $a->d_cetak) + $a->rp_sortir + $a->rp_dll
                         @endphp
                         <td align="right">Rp. {{number_format($total,0)}}</td>
-                        <td align="right">Rp. {{number_format($total / $a->absen,0)}}</td>
+                        <td align="right">Rp. {{ empty($a->absen) ? 0 : number_format($total / $a->absen,0)}}</td>
                     </tr>
                     @endforeach
                 </tbody>

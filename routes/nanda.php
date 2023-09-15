@@ -105,6 +105,7 @@ Route::middleware('auth')->group(function () {
         ->name('rekap.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/export', 'export')->name('export');
         });
 });
 
