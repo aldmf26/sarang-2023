@@ -54,7 +54,7 @@
     <x-slot name="cardBody">
 
         <section class="row">
-            <table class="table  table-bordered">
+            <table class="table  table-bordered" id="table">
                 <thead>
                     <tr>
                         <th class="dhead">Bulan</th>
