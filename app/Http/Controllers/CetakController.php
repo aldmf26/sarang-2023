@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class CetakController extends Controller
 {
-    
+
     public function getAnak($id = null)
     {
         return DB::table('tb_anak as a')
@@ -132,14 +132,43 @@ class CetakController extends Controller
         $totalrow = count($tbl) + 1;
 
         return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
-       
     }
 
-    public function rekap()
+    public function rekap(Request $r)
     {
+        $id = auth()->user()->id;
+
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];
+        $datas = DB::select("SELECT
+                MAX(a.no_box) as no_box,
+                MAX(a.tgl) as tgl,
+                a.pcs_awal,
+                a.gr_awal,
+                a.gr_akhir,
+                a.gr_tidak_ctk,
+                a.rp_pcs,
+                b.name,
+                c.pcs_akhir as cabut_pcs_akhir,
+                c.gr_akhir as cabut_gr_akhir
+            FROM cetak as a
+            LEFT JOIN users as b ON a.id_pengawas = b.id
+            LEFT JOIN (
+                SELECT no_box, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
+                FROM cabut
+                GROUP BY no_box
+            ) as c ON a.no_box = c.no_box
+            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2'
+            GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
+        ");
+
         $data = [
-'title' => 'Rekap Summary Cetak'
+            'title' => 'Rekap Summary Cetak',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'datas' => $datas,
         ];
-        return view('home.cetak.rekap',$data);
+        return view('home.cetak.rekap', $data);
     }
 }

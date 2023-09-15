@@ -109,6 +109,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/', 'create')->name('create');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
+
         });
     Route::controller(SortirController::class)
         ->prefix('home/sortir')
