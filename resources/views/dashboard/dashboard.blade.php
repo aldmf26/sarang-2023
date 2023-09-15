@@ -1,18 +1,19 @@
 <x-theme.app title="{{ $title }}" table="T" sizeCard="12" cont="container-fluid">
     <div class="row justify-content-center">
-        <ul class="nav nav-pills float-start">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Aktiva</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Peralatan</a>
 
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Atk</a>
-            </li>
-        </ul>
         <div class="col-lg-9">
+            <ul class="nav nav-pills float-start">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Aktiva</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Peralatan</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Atk</a>
+                </li>
+            </ul>
             <table class="table small table-bordered table-striped table-hover" id="table">
                 <thead>
                     <tr>
