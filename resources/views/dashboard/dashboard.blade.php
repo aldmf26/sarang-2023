@@ -4,16 +4,28 @@
         <div class="col-lg-9">
             <ul class="nav nav-pills float-start">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Aktiva</a>
+                    <a class="nav-link active" aria-current="page" href="{{route('cabut.rekap')}}">Cabut</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Peralatan</a>
+                    <a class="nav-link" href="{{route('cabutSpesial.rekap')}}">Cabut Spesial</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('eo.rekap')}}">EO</a>
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Atk</a>
+                    <a class="nav-link" href="{{route('cetak.rekap')}}">Cetak</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('sortir.rekap')}}">Sortir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('hariandll.rekap')}}">DLL</a>
                 </li>
             </ul>
+            <br>
+            <br>
+            <br>
             <table class="table small table-bordered table-striped table-hover" id="table">
                 <thead>
                     <tr>

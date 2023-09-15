@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/selesai', 'selesai')->name('selesai');
             Route::post('/', 'add_target')->name('add_target');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/rekap', 'rekap')->name('rekap');
 
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
@@ -88,6 +89,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::post('/', 'create')->name('create');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
+            Route::get('/rekap', 'rekap')->name('rekap');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
         });

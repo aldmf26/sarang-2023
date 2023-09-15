@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/', 'create')->name('create');
+            Route::get('/rekap', 'rekap')->name('rekap');
         });
     Route::controller(SortirController::class)
         ->prefix('home/sortir')
@@ -126,6 +127,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::get('/export', 'export')->name('export');
+            Route::get('/rekap', 'rekap')->name('rekap');
         });
     Route::controller(EoController::class)
         ->prefix('home/eo')
@@ -142,6 +144,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_anak', 'load_anak')->name('load_anak');
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
+            Route::get('/rekap', 'rekap')->name('rekap');
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
@@ -179,6 +182,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/export', 'export')->name('export');
             Route::post('/update', 'update')->name('update');
             Route::get('/edit_load/{id}', 'edit_load')->name('edit_load');
+            Route::get('/rekap', 'rekap')->name('rekap');
         });
     Route::controller(KelasController::class)
         ->prefix('data_master/kelas')
