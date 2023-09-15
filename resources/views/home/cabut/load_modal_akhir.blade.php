@@ -9,6 +9,8 @@
                     <th class="dhead">No Box</th>
                     <th class="dhead text-end">Pcs Awal</th>
                     <th class="dhead text-end">Gr Awal</th>
+                    <th class="dhead">Tgl Serah</th>
+                    <th class="dhead text-end">Gr Flx</th>
                     <th class="dhead text-end">Pcs Akhir</th>
                     <th class="dhead text-end">Gr Akhir</th>
                     <th class="dhead text-end">Pcs Hcr</th>
@@ -27,6 +29,13 @@
                     </td>
                     <td>
                         <input readonly value="{{ $detail->gr_awal }}" type="text" class="form-control text-end">
+                    </td>
+                    
+                    <td>
+                        <input value="{{ $detail->tgl_serah ?? date('Y-m-d') }}" name="tgl_serah" type="date" class="form-control">
+                    </td>
+                    <td>
+                        <input name="gr_flx" value="{{ $detail->gr_flx ?? 0 }}" type="text" class="form-control text-end">
                     </td>
                     <td>
                         <input value="{{ $detail->pcs_akhir ?? 0}}" required name="pcs_akhir" type="text"

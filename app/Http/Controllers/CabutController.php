@@ -205,7 +205,9 @@ class CabutController extends Controller
     {
         DB::table('cabut')->where([['id_anak', $r->id_anak], ['no_box', $r->no_box]])->update([
             'pcs_akhir' => $r->pcs_akhir,
+            'tgl_serah' => $r->tgl_serah,
             'gr_akhir' => $r->gr_akhir,
+            'gr_flx' => $r->gr_flx,
             'pcs_hcr' => $r->pcs_hcr,
             'eot' => $r->eot,
         ]);

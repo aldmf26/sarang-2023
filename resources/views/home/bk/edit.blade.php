@@ -27,7 +27,6 @@
                                     <th class="dhead">Tgl Terima</th>
                                     <th class="dhead text-end">Pcs Awal</th>
                                     <th class="dhead text-end">Gr Awal</th>
-
                                 </tr>
                             </thead>
 
