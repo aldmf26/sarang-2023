@@ -107,7 +107,9 @@
                 success: function(data) {
                     $("#" + classPlus).append(data);
                     $(".select2-add").select2({
-                        dropdownParent: $('#tambah .modal-content')
+                        dropdownParent: $('#tambah .modal-content'),
+                        dropdownParent: $('#tambah2 .modal-content')
+
                     });
                     $(".select3-add").select2()
                 },
@@ -120,6 +122,7 @@
 
         })
     }
+
     function plusRow2(count, classPlus, url) {
         $(document).on("click", "." + classPlus, function() {
             count = count + 1;
@@ -192,7 +195,7 @@
             });
         })
     }
-        
+
     function aksiBtn(idForm) {
         $(document).on('submit', idForm, function() {
             $(".button-save").hide();
@@ -251,8 +254,8 @@
     }
 </script>
 @if (session()->has('sukses'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('sukses') }}",
                 duration: 3000,
@@ -264,11 +267,11 @@
                 avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
             }).showToast();
         });
-</script>
+    </script>
 @endif
 @if (session()->has('error'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('error') }}",
                 duration: 3000,
@@ -282,7 +285,7 @@
 
 
         });
-</script>
+    </script>
 @endif
 @yield('scripts')
 @yield('js')

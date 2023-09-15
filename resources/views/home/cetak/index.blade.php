@@ -1,12 +1,13 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah_target" addClass="float-end" teks="Target" />
-        <a href="{{ route('cetak.export',['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+        <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah2" addClass="float-end" teks="Target" />
+        <a href="{{ route('cetak.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+            teks="Krywn" />
         <x-theme.btn_filter />
     </x-slot>
 
@@ -32,45 +33,45 @@
                 </thead>
                 <tbody>
                     @foreach ($cetak as $no => $c)
-                    <tr>
-                        <td>{{$no+1}}</td>
-                        <td>{{$c->no_box}}</td>
-                        <td>VL</td>
-                        <td>{{$c->nama}}</td>
-                        <td>{{date('d M y',strtotime($c->tgl))}}</td>
-                        <td>
-                            pcs: <br>
-                            gr :
-                        </td>
-                        <td align="right">
-                            {{$c->pcs_awal}} <br> {{$c->gr_awal}}
-                        </td>
-                        <td align="right">
-                            {{$c->pcs_tidak_ctk}} <br> {{$c->gr_tidak_ctk}}
-                        </td>
-                        <td align="right">
-                            {{$c->pcs_akhir}} <br> {{$c->gr_akhir}}
-                        </td>
-                        @php
-                        $susut = empty($c->gr_akhir) ? '0' :(1-($c->gr_akhir / ($c->gr_awal -
-                        $c->gr_tidak_ctk))) * 100;
-                        $denda = round($susut,0) * 50000;
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $c->no_box }}</td>
+                            <td>VL</td>
+                            <td>{{ $c->nama }}</td>
+                            <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                            <td>
+                                pcs: <br>
+                                gr :
+                            </td>
+                            <td align="right">
+                                {{ $c->pcs_awal }} <br> {{ $c->gr_awal }}
+                            </td>
+                            <td align="right">
+                                {{ $c->pcs_tidak_ctk }} <br> {{ $c->gr_tidak_ctk }}
+                            </td>
+                            <td align="right">
+                                {{ $c->pcs_akhir }} <br> {{ $c->gr_akhir }}
+                            </td>
+                            @php
+                                $susut = empty($c->gr_akhir) ? '0' : (1 - $c->gr_akhir / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+                                $denda = round($susut, 0) * 50000;
+                                
+                            @endphp
+                            <td align="right">{{ number_format($susut, 1) }} %</td>
+                            <td align="right">Rp.{{ number_format($denda, 0) }}</td>
+                            <td align="right">Rp. {{ number_format($c->rp_pcs * $c->pcs_awal - $denda, 0) }}</td>
+                            <td>
+                                @if ($c->selesai == 'T')
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#akhir"
+                                        class="btn btn-sm btn-warning akhir" id_cetak="{{ $c->id_cetak }}">Akhir</a>
 
-                        @endphp
-                        <td align="right">{{number_format($susut,1)}} %</td>
-                        <td align="right">Rp.{{ number_format($denda,0)}}</td>
-                        <td align="right">Rp. {{number_format( ($c->rp_pcs * $c->pcs_awal) - $denda,0)}}</td>
-                        <td>
-                            @if ($c->selesai == 'T')
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#akhir"
-                                class="btn btn-sm btn-warning akhir" id_cetak="{{$c->id_cetak}}">Akhir</a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#selesai"
+                                        class="btn btn-sm btn-primary selesai"
+                                        id_cetak="{{ $c->id_cetak }}">Selesai</a>
+                                @endif
 
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#selesai"
-                                class="btn btn-sm btn-primary selesai" id_cetak="{{$c->id_cetak}}">Selesai</a>
-                            @endif
-
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforeach
 
 
@@ -88,7 +89,7 @@
                             <label for="">Tambah Anak</label>
                             <select class="select3" name="" multiple id="">
                                 @foreach ($anakNoPengawas as $d)
-                                <option value="{{ $d->id_anak }}">{{ ucwords($d->nama) }}</option>
+                                    <option value="{{ $d->id_anak }}">{{ ucwords($d->nama) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -108,13 +109,14 @@
                                 <th>Aksi</th>
                             </tr>
                             @foreach ($anak as $d)
-                            <tr>
-                                <td>{{ ucwords($d->nama) }}</td>
-                                <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><button class="btn btn-sm btn-danger"><i class="fas fa-window-close"></i></button>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{ ucwords($d->nama) }}</td>
+                                    <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
+                                    <td><input type="date" class="form-control"></td>
+                                    <td><button class="btn btn-sm btn-danger"><i
+                                                class="fas fa-window-close"></i></button>
+                                    </td>
+                                </tr>
                             @endforeach
                         </table>
                     </div>
@@ -124,7 +126,7 @@
 
         <form action="{{ route('cetak.add_target') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah_target" size="modal-lg-max" title="tambah Target" btnSave="Y">
+            <x-theme.modal idModal="tambah2" size="modal-lg-max" title="tambah Target" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-striped">
@@ -144,10 +146,11 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <select name="no_box[]" id="" class="select3 pilihBox" count="1">
+                                        <select name="no_box[]" id="" class="select2-tambah2 pilihBox"
+                                            count="1">
                                             <option value="">Pilih Box</option>
                                             @foreach ($cabut as $c)
-                                            <option value="{{$c->no_box}}">{{$c->no_box}}</option>
+                                                <option value="{{ $c->no_box }}">{{ $c->no_box }}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -155,18 +158,22 @@
                                         <input type="text" class="form-control" name="grade[]">
                                     </td>
                                     <td>
-                                        <select name="id_anak[]" id="" class="select3 pilihAnak" count="1">
+                                        <select name="id_anak[]" id="" class="select2-tambah2 pilihAnak"
+                                            count="1">
                                             <option value="">Pilih Anak</option>
                                             @foreach ($anak as $d)
-                                            <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
-                                                ({{ $d->kelas }}) {{ ucwords($d->nama) }}</option>
+                                                <option data-kelas="{{ $d->kelas }}"
+                                                    value="{{ $d->id_anak }}">
+                                                    ({{ $d->kelas }})
+                                                    {{ ucwords($d->nama) }}</option>
                                             @endforeach
                                         </select>
                                         {{-- <input type="hidden" class="setHargaSatuan1"> --}}
                                     </td>
                                     <td><input type="date" class="form-control" name="tgl[]"></td>
                                     <td>
-                                        <select name="target[]" id="" class="select3 pilihTarget" count="1">
+                                        <select name="target[]" id="" class="select2-tambah2 pilihTarget"
+                                            count="1">
                                             <option value="">Pilih target</option>
                                             <option value="1">TARGET</option>
                                             <option value="2">CU</option>
@@ -224,47 +231,47 @@
 
 
         @section('scripts')
-        <script>
-            $(".select3").select2()
-            
-            plusRow(1, 'tbh_baris', "cetak/tbh_baris")
-            $(document).on('change', '.pilihTarget', function() {
-                var target = $(this).val()
-                if (target == '1') {
-                    $('.rp_target').val(900)
-                } else {
-                    $('.rp_target').val(600)
-                }
-            });
-            $(document).on('keyup', '.pcs_awal', function() {
-              
-                var target =  $('.rp_target').val();
-                var pcs =  $(this).val();
+            <script>
+                $(".select3").select2()
 
-                var total = parseFloat(target) * parseFloat(pcs);
+                plusRow(1, 'tbh_baris', "cetak/tbh_baris")
+                $(document).on('change', '.pilihTarget', function() {
+                    var target = $(this).val()
+                    if (target == '1') {
+                        $('.rp_target').val(900)
+                    } else {
+                        $('.rp_target').val(600)
+                    }
+                });
+                $(document).on('keyup', '.pcs_awal', function() {
 
-                $('.total_rp').val(total);
-                
-            });
-            $(document).on('click', '.akhir', function() {
-              var id_cetak = $(this).attr('id_cetak');
-              $.ajax({
-                type: "get",
-                url: "{{route('cetak.akhir')}}",
-                data: {
-                    id_cetak: id_cetak,
-                },
-                success: function (r) {
-                    $('#akhir_detail').html(r)
-                }
-              });              
-            });
-            $(document).on('click', '.selesai', function() {
-                var id_cetak = $(this).attr('id_cetak');
-                
-                $('.cetak').val(id_cetak);
-            });
-        </script>
+                    var target = $('.rp_target').val();
+                    var pcs = $(this).val();
+
+                    var total = parseFloat(target) * parseFloat(pcs);
+
+                    $('.total_rp').val(total);
+
+                });
+                $(document).on('click', '.akhir', function() {
+                    var id_cetak = $(this).attr('id_cetak');
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.akhir') }}",
+                        data: {
+                            id_cetak: id_cetak,
+                        },
+                        success: function(r) {
+                            $('#akhir_detail').html(r)
+                        }
+                    });
+                });
+                $(document).on('click', '.selesai', function() {
+                    var id_cetak = $(this).attr('id_cetak');
+
+                    $('.cetak').val(id_cetak);
+                });
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>
