@@ -153,7 +153,7 @@ class EoController extends Controller
     public function add_delete_anak(Request $r)
     {
         $idArray = explode(",", $r->id_anak);
-        foreach($idArray as $n) {
+        foreach ($idArray as $n) {
             DB::table('tb_anak')->where('id_anak', $n)->update(
                 ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
             );
@@ -185,5 +185,29 @@ class EoController extends Controller
             ->orderBy('a.id_eo', 'DESC')->get();
 
         return Excel::download(new EoExport($tbl, $view), 'Export EO.xlsx');
+    }
+
+    public function rekap(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+
+        $data = [
+            'title' => 'Divisi Cabut',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'eo' => DB::select("SELECT max(b.name) as pengawas, max(a.tgl_ambil) as tgl, a.no_box, sum(a.gr_eo_awal) as gr_awal , sum(a.gr_eo_akhir) as gr_akhir, sum(a.ttl_rp) as rupiah, sum(c.gr
+            FROM eo as a
+            left join users as b on b.id = a.id_pengawas
+            left JOIN bk as c on c.no_box = a.no_box 
+            WHERE a.tgl_ambil BETWEEN '$tgl1' and '$tgl2' $pengawas
+            GROUP by a.no_box;
+            "),
+        ];
+        return view('home.eo.rekap', $data);
     }
 }

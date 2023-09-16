@@ -39,8 +39,11 @@
                                 <td>
                                     <select name="no_box[]" id="" class="select3 pilihBox" count="1">
                                         <option value="">Pilih Box</option>
-                                        <option value="h103">h103</option>
-                                        <option value="h108">h108</option>
+                                        @foreach ($boxBk as $d)
+                                        @if ($d->pcs_awal - $d->pcs_cabut > 1)
+                                        <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
+                                        @endif
+                                        @endforeach
                                     </select>
                                 </td>
                                 <td>
