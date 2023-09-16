@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/', 'add_target')->name('add_target');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
 
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');

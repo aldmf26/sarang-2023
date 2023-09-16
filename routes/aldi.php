@@ -130,6 +130,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::get('/export', 'export')->name('export');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
     Route::controller(EoController::class)
         ->prefix('home/eo')
@@ -185,6 +186,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/update', 'update')->name('update');
             Route::get('/edit_load/{id}', 'edit_load')->name('edit_load');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
     Route::controller(KelasController::class)
         ->prefix('data_master/kelas')

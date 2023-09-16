@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CabutRekapExport;
 use App\Exports\CetakExport;
+use App\Exports\CetakRekapExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -134,37 +136,41 @@ class CetakController extends Controller
         return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
     }
 
-    public function rekap(Request $r)
+    public function queryRekap($tgl1, $tgl2)
     {
         $id = auth()->user()->id;
         $posisi = auth()->user()->posisi_id;
         $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
 
-        
+        return DB::select("SELECT
+                    MAX(a.no_box) as no_box,
+                    MAX(a.tgl) as tgl,
+                    a.pcs_awal,
+                    a.gr_awal,
+                    a.gr_akhir,
+                    a.gr_tidak_ctk,
+                    a.rp_pcs,
+                    b.name,
+                    c.pcs_akhir as cabut_pcs_akhir,
+                    c.gr_akhir as cabut_gr_akhir
+                FROM cetak as a
+                LEFT JOIN users as b ON a.id_pengawas = b.id
+                LEFT JOIN (
+                    SELECT no_box, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
+                    FROM cabut
+                    GROUP BY no_box
+                ) as c ON a.no_box = c.no_box
+                WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' $pengawas
+                GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
+            ");
+    }
+
+    public function rekap(Request $r)
+    {
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
-        $datas = DB::select("SELECT
-                MAX(a.no_box) as no_box,
-                MAX(a.tgl) as tgl,
-                a.pcs_awal,
-                a.gr_awal,
-                a.gr_akhir,
-                a.gr_tidak_ctk,
-                a.rp_pcs,
-                b.name,
-                c.pcs_akhir as cabut_pcs_akhir,
-                c.gr_akhir as cabut_gr_akhir
-            FROM cetak as a
-            LEFT JOIN users as b ON a.id_pengawas = b.id
-            LEFT JOIN (
-                SELECT no_box, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
-                FROM cabut
-                GROUP BY no_box
-            ) as c ON a.no_box = c.no_box
-            WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' $pengawas
-            GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
-        ");
+        $datas = $this->queryRekap($tgl1, $tgl2);
 
         $data = [
             'title' => 'Rekap Summary Cetak',
@@ -173,5 +179,15 @@ class CetakController extends Controller
             'datas' => $datas,
         ];
         return view('home.cetak.rekap', $data);
+    }
+
+    public function export_rekap(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.cetak.export_rekap';
+        $tbl = $this->queryRekap($tgl1, $tgl2);
+
+        return Excel::download(new CetakRekapExport($tbl, $view), 'Export REKAP CETAK.xlsx');
     }
 }

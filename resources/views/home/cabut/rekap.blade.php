@@ -6,7 +6,7 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm icon icon-left btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
@@ -15,38 +15,8 @@
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
             </div>
-            <ul class="nav nav-pills float-start">
-                @php
-                $rot = request()
-                ->route()
-                ->getName();
-                @endphp
+            @include('home.cetak.nav')
 
-                <li class="nav-item">
-                    <a class="nav-link {{ $rot == 'cabut.rekap' ? 'active' : '' }}" aria-current="page"
-                        href="{{ route('cabut.rekap') }}">Cabut</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $rot == 'cabutSpesial.rekap' ? 'active' : '' }}"
-                        href="{{ route('cabutSpesial.rekap') }}">Cabut Spesial</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $rot == 'eo.rekap' ? 'active' : '' }}" href="{{ route('eo.rekap') }}">EO</a>
-
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $rot == 'cetak.rekap' ? 'active' : '' }}"
-                        href="{{ route('cetak.rekap') }}">Cetak</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $rot == 'sortir.rekap' ? 'active' : '' }}"
-                        href="{{ route('sortir.rekap') }}">Sortir</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $rot == 'hariandll.rekap' ? 'active' : '' }}"
-                        href="{{ route('hariandll.rekap') }}">DLL</a>
-                </li>
-            </ul>
         </div>
 
     </x-slot>

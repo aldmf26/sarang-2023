@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CabutExport;
+use App\Exports\CabutRekapExport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -248,30 +249,44 @@ class CabutController extends Controller
         return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 
+    public function queryRekap($tgl1, $tgl2)
+    {
+        $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+        return DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
+        SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+        SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, sum(c.pcs_awal) as pcs_bk, sum(c.gr_awal) as gr_bk,
+        sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah, sum(a.gr_flx) as gr_flx
+        FROM cabut as a
+        left join users as b on b.id = a.id_pengawas
+        left JOIN bk as c on c.no_box = a.no_box 
+        WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' $pengawas
+        GROUP by a.no_box;");
+    }
     public function rekap(Request $r)
     {
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
-        $id = auth()->user()->id;
-        $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+        
 
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'cabut' => DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
-            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
-            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, sum(c.pcs_awal) as pcs_bk, sum(c.gr_awal) as gr_bk,
-            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah, sum(a.gr_flx) as gr_flx
-            FROM cabut as a
-            left join users as b on b.id = a.id_pengawas
-            left JOIN bk as c on c.no_box = a.no_box 
-            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' $pengawas
-            GROUP by a.no_box;
-            "),
+            'cabut' => $this->queryRekap($tgl1, $tgl2),
         ];
         return view('home.cabut.rekap', $data);
+    }
+
+    public function export_rekap(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.cabut.export_rekap';
+        $tbl = $this->queryRekap($tgl1, $tgl2);
+
+        return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SortirExport;
+use App\Exports\SortirRekapExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -224,5 +225,59 @@ class SortirController extends Controller
             ->get();
 
         return Excel::download(new SortirExport($tbl, $view), 'Export SORTIR.xlsx');
+    }
+
+    public function queryRekap($tgl1, $tgl2)
+    {
+        $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+
+        return DB::select("SELECT
+        MAX(a.no_box) as no_box,
+        MAX(a.tgl) as tgl,
+        sum(a.pcs_awal) as pcs_awal,
+        sum(a.gr_awal) as gr_awal,
+        sum(a.gr_akhir) as gr_akhir,
+        sum(a.ttl_rp) as ttl_rp,
+        b.name,
+        c.pcs_akhir as cabut_pcs_akhir,
+        c.gr_akhir as cabut_gr_akhir
+        FROM sortir as a
+        LEFT JOIN users as b ON a.id_pengawas = b.id
+        LEFT JOIN (
+            SELECT no_box, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
+            FROM cetak
+            GROUP BY no_box
+        ) as c ON a.no_box = c.no_box
+        WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' $pengawas
+        GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
+        ");
+    }
+
+    public function rekap(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];  
+        $datas = $this->queryRekap($tgl1, $tgl2);
+
+        $data = [
+            'title' => 'Rekap Summary Sortir',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'datas' => $datas,
+        ];
+        return view('home.sortir.rekap', $data);
+    }
+
+    public function export_rekap(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.sortir.export_rekap';
+        $tbl = $this->queryRekap($tgl1, $tgl2);
+
+        return Excel::download(new SortirRekapExport($tbl, $view), 'Export REKAP SORTIR.xlsx');
     }
 }

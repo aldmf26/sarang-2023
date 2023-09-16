@@ -90,4 +90,26 @@ class HariandllController extends Controller
 
         return Excel::download(new HariandllExport($tbl, $view), 'Export HARIAN DLL.xlsx');
     }
+
+    public function rekap(Request $r)
+    {
+
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];
+        $datas = DB::select("SELECT a.tgl,b.nama, GROUP_CONCAT(ket, ',') AS ket,GROUP_CONCAT(lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
+       FROM tb_hariandll as a
+       LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
+       WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
+       GROUP BY a.id_anak;");
+
+        $data = [
+            'title' => 'Rekap Summary Cetak',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'datas' => $datas,
+        ];
+
+        return view('home.hariandll.rekap', $data);
+    }
 }
