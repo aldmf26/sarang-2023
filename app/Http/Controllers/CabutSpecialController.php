@@ -16,6 +16,17 @@ class CabutSpecialController extends Controller
             ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
             ->get();
     }
+    public function getStokBk($no_box = null)
+    {
+        $id_user = auth()->user()->id;
+        $query = !empty($no_box) ? "selectOne" : 'select';
+        $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
+
+        return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
+        LEFT JOIN (
+            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
+        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user'");
+    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -85,7 +96,7 @@ class CabutSpecialController extends Controller
     public function add_delete_anak(Request $r)
     {
         $idArray = explode(",", $r->id_anak);
-        foreach($idArray as $n) {
+        foreach ($idArray as $n) {
             DB::table('tb_anak')->where('id_anak', $n)->update(
                 ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
             );
@@ -109,7 +120,7 @@ class CabutSpecialController extends Controller
     {
         $data = [
             'title' => 'Tambah Divisi Cabut',
-            // 'boxBk' => $this->getStokBk(),
+            'boxBk' => $this->getStokBk(),
             'anak' => $this->getAnak(),
             'target' => DB::table('grade_spesial')->get()
         ];
@@ -191,5 +202,31 @@ class CabutSpecialController extends Controller
     {
         DB::table('cabut_spesial')->where('id_cabut_spesial', $r->id_cabut)->update(['selesai' => 'Y']);
         return redirect()->route('cabutSpesial.index')->with('sukses', 'Data telah diselesaikan');
+    }
+
+    public function rekap(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $id = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+
+        $data = [
+            'title' => 'Divisi Cabut',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'cabut_spesial' => DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
+            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, sum(c.pcs_awal) as pcs_bk, sum(c.gr_awal) as gr_bk, sum(a.eot) as eot, sum(a.rp_target) as rupiah
+            FROM cabut_spesial as a
+            left join users as b on b.id = a.id_pengawas
+            left JOIN bk as c on c.no_box = a.no_box 
+            WHERE a.tgl BETWEEN '$tgl1' and '$tgl2' $pengawas
+            GROUP by a.no_box;
+            "),
+        ];
+        return view('home.cabut_spesial.rekap', $data);
     }
 }
