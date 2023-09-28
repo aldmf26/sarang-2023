@@ -302,7 +302,7 @@
                     });
                 }
                 // Panggil fungsi untuk pertama kali saat halaman dimuat
-                updateAnakBelum();
+                updateAnakBelum()
                 loadListAnakSisa()
                 loadHalaman()
                 loadTambahcabut()
