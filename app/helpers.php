@@ -115,6 +115,45 @@ if (!function_exists('buatNota')) {
     }
 }
 
+if (!function_exists('rumusTotalRp ')) {
+    function rumusTotalRp($detail)
+    {
+        $result = json_decode('{}'); // Buat objek kosong
+
+        $susut = empty($detail->pcs_awal) ? 0 : (1 - ($detail->gr_flx + $detail->gr_akhir) / $detail->gr_awal) * 100;
+        $denda = 0;
+        $bonus_susut = 0;
+        $rupiah = $detail->rupiah;
+
+        if ($susut > 23.4) {
+            $denda = ($susut - 23.4) * 0.03 * $detail->rupiah;
+            $rupiah = $rupiah - $denda;
+        }
+
+        if ($susut < 19.5) {
+            $bonus_susut = ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas;
+        }
+
+        $denda_hcr = $detail->pcs_hcr * 5000;
+        $eot_bonus = ($detail->eot - $detail->gr_awal * 0.02) * 750;
+
+        $ttl_rp = $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
+
+        // Set nilai-nilai dalam objek menggunakan json_decode
+        $result->susut = $susut;
+        $result->denda = $denda;
+        $result->bonus_susut = $bonus_susut;
+        $result->rupiah = $rupiah;
+        $result->denda_hcr = $denda_hcr;
+        $result->eot_bonus = $eot_bonus;
+        $result->ttl_rp = $ttl_rp;
+
+        return $result;
+    }
+}
+
+
+
 
 class Nonaktif
 {

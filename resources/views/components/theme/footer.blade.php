@@ -203,6 +203,15 @@
         })
     }
 
+    function loadTable(namaTable) {
+        $('#'+namaTable).DataTable({
+            "paging": true,
+            "pageLength": 10,
+            "lengthChange": true,
+            "stateSave": true,
+            "searching": true,
+        });
+    }
     $('#table').DataTable({
         "paging": true,
         "pageLength": 10,
@@ -238,17 +247,19 @@
         "paging": false,
     });
 
-    function alertToast(pesan) {
+    function alertToast(jenis = 'sukses',pesan) {
+        var ava = jenis == 'sukses' ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" : "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+        var bg = jenis == 'sukses' ? "#EAF7EE" : "#FCEDE9"
         $(document).ready(function() {
             Toastify({
                 text: pesan,
                 duration: 3000,
                 style: {
-                    background: "#EAF7EE",
+                    background: bg,
                     color: "#7F8B8B"
                 },
                 close: true,
-                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                avatar: ava
             }).showToast();
         });
     }

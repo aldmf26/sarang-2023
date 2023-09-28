@@ -1,91 +1,44 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="{{ route('cabut.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
+            teks="Cabut" />
+        {{-- <x-theme.button modal="Y" idModal="tambahAnak" href="#" icon="fa-plus" addClass="float-end"
+            teks="Tambah Kerja Anak" /> --}}
+        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cbt Kerja Anak <span
+                class="badge bg-danger" id="anakBelum"></span></a>
         <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-            class="float-end btn btn-sm icon icon-left btn-primary me-2">
+            class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+            teks="Krywn" />
         <x-theme.btn_filter />
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
-            <table class="table" id="table1">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>No Box</th>
-                        {{-- <th>Pengawas</th> --}}
-                        <th>Anak</th>
-                        <th>Tgl Terima</th>
-                        <th class="text-end">Pcs Awal</th>
-                        <th class="text-end">Gr Awal</th>
-                        <th class="text-end">Pcs Akhir</th>
-                        <th class="text-end">Gr Akhir</th>
-                        <th class="text-end">Pcs Hcr</th>
-                        <th class="text-end">EOT</th>
-                        <th class="text-end">Susut</th>
-                        {{-- <th class="text-end">Denda</th> --}}
-                        <th class="text-end">Ttl Gaji</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($cabut as $no => $d)
-                    <tr>
-                        <td>{{ $no + 1 }}</td>
-                        <td>{{ $d->no_box }}</td>
-                        {{-- <td>{{ ucwords(auth()->user()->name) }}</td> --}}
-                        <td>{{ $d->nama }}</td>
-                        <td>{{ date('d M y', strtotime($d->tgl_terima)) }}</td>
-                        <td align="right">{{ $d->pcs_awal }}</td>
-                        <td align="right">{{ $d->gr_awal }}</td>
-                        <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
-                        <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
-                        <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
-                        <td align="right">{{ $d->eot ?? 0 }}</td>
-                        @php
-                        $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
-
-                        $denda = empty($d->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
-                        $denda_hcr = $d->pcs_hcr * 5000;
-
-                        $eot_bonus = empty($d->eot) ? 0 : ($d->eot - $d->gr_awal * 0.02 )* 750;
-                        @endphp
-                        <td align="right">{{ number_format($susut, 0) }}%</td>
-                        {{-- <td align="right">{{ number_format($denda,0)}}</td> --}}
-                        <td align="right">{{ number_format($d->rupiah - $denda - $denda_hcr + $eot_bonus, 0) }}
-                        </td>
-                        <td align="center">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
-                                class="btn btn-sm btn-primary detail" id_cabut="{{ $d->id_cabut }}"><i
-                                    class="fas fa-eye"></i></a>
-                            @if ($d->selesai == 'T')
-                            <a class="btn btn-warning btn-sm inputAkhir" href="#" no_box="{{ $d->no_box }}"
-                                id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
-                                data-bs-target="#inputAkhir"></i>Akhir</a>
-
-                            @if (!empty($d->eot))
-                            <a class="btn btn-primary btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}" href="#"
-                                data-bs-toggle="modal" data-bs-target="#selesai"></i>Selesai</a>
-                            @endif
-                            @endif
-
-
-
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-
-            </table>
+            <div id="loadHalaman"></div>
         </section>
 
-        <form action="{{ route('cabut.input_akhir') }}" method="post">
+        <form id="createCabut">
             @csrf
-            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="Y" size="modal-lg-max">
+            <x-theme.modal idModal="tambah2" title="tambah cabut" btnSave="Y" size="modal-lg-max">
+                <div id="load_tambah_cabut"></div>
+            </x-theme.modal>
+        </form>
+        <form id="createTambahAnakCabut">
+            @csrf
+            <x-theme.modal idModal="tambahAnak" title="tambah anak" btnSave="Y" size="modal-md">
+                <div id="load_tambah_anak"></div>
+            </x-theme.modal>
+        </form>
+
+
+        <form id="createCabutAkhir">
+            @csrf
+            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg-max">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
@@ -116,6 +69,7 @@
                 </div>
             </div>
         </x-theme.modal>
+
         <form action="{{ route('cabut.selesai_cabut') }}" method="post">
             @csrf
             <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
@@ -132,11 +86,136 @@
             </x-theme.modal>
         </form>
         @section('scripts')
-        <script>
-            $(".select3").select2()
+            <script>
+                $(".select3").select2()
 
-                load_anak()
-                load_anak_nopengawas()
+                function updateAnakBelum() {
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ route('cabut.updateAnakBelum') }}", // Sesuaikan dengan URL rute yang telah Anda buat
+                        dataType: 'json',
+                        success: function(response) {
+                            // Perbarui nilai di dalam <span> dengan ID "anakBelum"
+                            $('#anakBelum').text(response.anakBelum);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
+
+                function loadHalaman() {
+                    updateAnakBelum();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.load_halaman') }}",
+                        data: {
+                            tgl1: "{{ $tgl1 }}",
+                            tgl2: "{{ $tgl2 }}",
+                        },
+                        success: function(r) {
+                            $("#loadHalaman").html(r);
+                            $('#table').DataTable({
+                                "paging": true,
+                                "pageLength": 10,
+                                "lengthChange": true,
+                                "stateSave": true,
+                                "searching": true,
+                            });
+                        }
+                    });
+
+
+                }
+
+                function loadTambahcabut() {
+                    updateAnakBelum();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.load_tambah_cabut') }}",
+                        success: function(r) {
+                            $("#load_tambah_cabut").html(r);
+                            $(".select3").select2({
+                                dropdownParent: $('#tambah2 .modal-content')
+                            })
+                            plusRow(1, 'tbh_baris', "cabut/tbh_baris")
+                            // formatRibuan('rupiah')
+
+                            $(document).on('change', '.pilihBox', function() {
+                                var no_box = $(this).val()
+                                var count = $(this).attr('count')
+                                $.ajax({
+                                    type: "GET",
+                                    url: "cabut/get_box_sinta",
+                                    data: {
+                                        no_box: no_box
+                                    },
+                                    dataType: "json",
+                                    success: function(r) {
+                                        console.log(r)
+                                        $(".setGr" + count).val(r.gr_awal - r.gr_cabut)
+                                        $(".setPcs" + count).val(r.pcs_awal - r.pcs_cabut)
+                                    }
+                                });
+                            })
+
+                            $(document).on('change', '.pilihAnak', function() {
+                                var id_kelas = $(this).val()
+                                var count = $(this).attr('count')
+                                var nilaiGr = $(".setGr" + count).val()
+
+                                // var id_kelas = $('option:selected', this).data('kelas');
+                                $.ajax({
+                                    type: "GET",
+                                    url: "cabut/get_kelas_anak",
+                                    data: {
+                                        id_kelas: id_kelas,
+                                    },
+                                    dataType: "json",
+                                    success: function(r) {
+                                        console.log(r)
+                                        var hrga_satuan = (r.rupiah / r.gr)
+                                        var rupiah = hrga_satuan * parseFloat(nilaiGr);
+                                        $('.rupiahBiasa' + count).val(rupiah);
+                                        $(".setHargaSatuan" + count).val(hrga_satuan)
+                                        rupiah = rupiah.toLocaleString('id-ID', {
+                                            maximumFractionDigits: 0
+                                        })
+                                        $(".setRupiah" + count).val(rupiah)
+                                    }
+                                });
+                            })
+
+                            $(document).on('keyup', '.setGr', function() {
+                                var isi = $(this).val()
+                                var count = $(this).attr('count')
+                                var hrga_satuan = $('.setHargaSatuan' + count).val()
+                                var rupiah = hrga_satuan * isi
+                                $('.rupiahBiasa' + count).val(parseFloat(rupiah));
+                                rupiah = rupiah.toLocaleString('id-ID', {
+                                    maximumFractionDigits: 0
+                                })
+                                $(".setRupiah" + count).val(rupiah)
+
+
+                            })
+                        }
+                    });
+                }
+
+                function loadTambahAnak() {
+                    updateAnakBelum();
+
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.load_tambah_anak') }}",
+                        success: function(r) {
+                            $("#load_tambah_anak").html(r);
+                            pencarian('pencarian', 'tablealdi')
+                            inputChecked('cekSemua', 'cek')
+                        }
+                    });
+                }
 
                 function load_anak() {
                     $.ajax({
@@ -159,13 +238,150 @@
                         }
                     });
                 }
+
+                function setRupiah(kelas) {
+                    $(document).on('keyup', '.' + kelas, function() {
+                        var count = $(this).attr('count')
+                        var row = $(this).closest("tr");
+                        var data = {
+                            count: count
+                        };
+
+                        var floatFields = ['gr_flx', 'gr_kelas', 'id_kelas', 'rp_bonus', 'rupiah_kelas', 'pcs_akhir',
+                            'gr_akhir', 'gr_awal', 'eot', 'pcs_hcr', 'rupiah'
+                        ];
+
+                        floatFields.forEach((fieldName) => {
+                            data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) ||
+                                0;
+                        })
+                        var susut = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
+                        var denda = 0
+                        var bonus_susut = 0
+                        var rupiah = data.rupiah
+                        if (susut > 23.4) {
+                            denda = (susut - 23.4) * 0.03 * data.rupiah
+                            rupiah = rupiah - denda
+                        }
+                        if (susut < 19.5) {
+                            bonus_susut = (data.rp_bonus * data.gr_awal) / data.gr_kelas
+                        }
+                        var denda_hcr = data.pcs_hcr * 5000;
+
+                        var eot_bonus = (data.eot - data.gr_awal * 0.02) * 750;
+                        var ttl_rp = rupiah - denda_hcr + eot_bonus + bonus_susut
+                        console.log(`rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`)
+                        var setRupiah = ttl_rp.toLocaleString('id-ID', {
+                            maximumFractionDigits: 0
+                        })
+                        $('.ttlRpKeyup' + data.count).text(setRupiah)
+                        $('.ttlRpSet' + data.count).val(ttl_rp)
+                    })
+                }
+                // Panggil fungsi untuk pertama kali saat halaman dimuat
+                updateAnakBelum();
+
+                loadHalaman()
+                loadTambahcabut()
+                loadTambahAnak()
+                load_anak()
+                load_anak_nopengawas()
+
+                $(document).on('submit', '#createCabut', function(e) {
+                    e.preventDefault();
+                    var datas = $(this).serialize()
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('cabut.create') }}",
+                        data: datas,
+                        dataType: 'json',
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil tambah data cabut')
+                            $('#tambah2').modal('hide')
+                            loadHalaman()
+                        },
+                        error: function(xhr, status, error) {
+                            alertToast('error', 'Pcs / Gr Ambil Lebih banyak dari BK Ambil !!')
+                            console.log(xhr.responseText);
+                            console.log(status);
+                            console.log(error);
+                        }
+                    });
+                })
+
+                $(document).on('submit', '#createTambahAnakCabut', function(e) {
+                    e.preventDefault();
+                    var selectedRows = [];
+                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                    $('input[name="cek[]"]:checked').each(function() {
+                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                        // Mengambil ID dari kolom pertama (kolom #)
+                        var anakId = $(this).closest('tr').find('td:eq(0)').text();
+
+                        // Tambahkan ID anak ke dalam array
+                        selectedRows.push(anakId);
+                    });
+                    var tipe = $('.tipe').val()
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cabut.createTambahAnakCabut') }}",
+                        data: {
+                            rows: selectedRows,
+                            tipe:tipe
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil tambah')
+                            $('#tambahAnak').modal('hide')
+                            loadTambahcabut()
+                            loadHalaman()
+                            loadTambahAnak()
+                            $('#tambah2').modal('show')
+                        }
+                    });
+                })
+
+                $(document).on('click', '.btnKembaliTambahCabut', function() {
+                    $('#tambah2').modal('hide')
+                    $('#tambahAnak').modal('show')
+                    loadTambahAnak()
+                })
+                $(document).on('click', '.btnLanjutkanTambahCabut', function() {
+                    $('#tambah2').modal('show')
+                    $('#tambahAnak').modal('hide')
+                    loadTambahcabut()
+                })
+
+                $(document).on('click', '.hapusCabutRow', function() {
+                    if(confirm('Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')){
+                        var id_cabut = $(this).attr('id_cabut')
+                        var id_anak = $(this).attr('id_anak')
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('cabut.hapusCabutRow') }}",
+                            data: {
+                                id_cabut: id_cabut,
+                                id_anak: id_anak,
+                            },
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil hapus row')
+    
+                                loadTambahcabut()
+                                loadHalaman()
+                                loadTambahAnak()
+                            }
+                        });
+                    }
+                })
+                // cabut add end -----------------
+
                 $(document).on('click', '#add_anak', function() {
                     var id_anak = $(".anakNoPengawas").val()
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.add_delete_anak') }}?id_anak=" + id_anak,
                         success: function(r) {
-                            alertToast('Berhasil tambah anak')
+                            alertToast('sukses', 'Berhasil tambah anak')
                             load_anak()
                             load_anak_nopengawas()
                         }
@@ -182,13 +398,14 @@
                             delete: 1,
                         },
                         success: function(r) {
-                            alertToast('Berhasil tambah anak')
+                            alertToast('sukses', 'Berhasil tambah anak')
                             load_anak()
                             load_anak_nopengawas()
                         }
                     });
                 })
 
+                // cabut akhur
                 $(document).on('click', '.inputAkhir', function() {
                     var no_box = $(this).attr('no_box')
                     var id_anak = $(this).attr('id_anak')
@@ -204,6 +421,44 @@
                         }
                     });
                 })
+                // setRupiah('grFlexKeyup')
+                // setRupiah('pcsAkhirKeyup')
+                // setRupiah('grAkhirKeyup')
+                setRupiah('eotKeyup')
+                setRupiah('pcsHcrKeyup')
+
+                $(document).on('click', '.saveCabutAkhir', function(e) {
+                    e.preventDefault()
+                    var count = $(this).attr('count')
+                    var row = $(this).closest("tr");
+                    var data = {
+                        tgl_serah: row.find(`input[name='tgl_serah${count}[]']`).val(),
+                        id_anak: row.find(`input[name='id_anak${count}[]']`).val(),
+                        no_box: row.find(`input[name='no_box${count}[]']`).val(),
+                        nama: row.find(`.nama`).text(),
+                        gr_flx: row.find(`input[name='gr_flx${count}[]']`).val(),
+                        pcs_akhir: row.find(`input[name='pcs_akhir${count}[]']`).val(),
+                        gr_akhir: row.find(`input[name='gr_akhir${count}[]']`).val(),
+                        eot: row.find(`input[name='eot${count}[]']`).val(),
+                        pcs_hcr: row.find(`input[name='pcs_hcr${count}[]']`).val(),
+                        ttl_rp: row.find(`input[name='ttl_rp${count}[]']`).val(),
+                        count: count,
+                        _token: row.data("csrf-token")
+                    };
+                    // var datas = $(this).serialize()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.input_akhir') }}",
+                        data: data,
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil input akhir')
+                            // $('#inputAkhir').modal('hide')
+                            loadHalaman()
+                        }
+                    });
+
+                })
+                // end save cabut akhir
                 $(document).on('click', '.detail', function() {
                     var id_cabut = $(this).attr('id_cabut')
                     $.ajax({
@@ -222,7 +477,7 @@
 
                     $('.cetak').val(id_cabut);
                 });
-        </script>
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>

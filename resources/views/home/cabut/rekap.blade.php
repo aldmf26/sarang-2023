@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -22,49 +22,100 @@
     </x-slot>
 
     <x-slot name="cardBody">
+        <style>
+            .badge {
+                cursor: pointer;
+            }
+        </style>
 
         <section class="row">
-            <table class="table  table-bordered" id="table">
-                <thead>
-                    <tr>
-                        <th class="dhead">Bulan</th>
-                        <th class="dhead">Pengawas</th>
-                        <th class="dhead ">No Box</th>
-                        <th class="dhead text-end">Pcs Awal Bk</th>
-                        <th class="dhead text-end">Gr Awal Bk</th>
-                        <th class="dhead text-end">Pcs Awal Kerja</th>
-                        <th class="dhead text-end">Gr Awal Kerja</th>
-                        <th class="dhead text-end">Total Rupiah</th>
-                        <th class="dhead text-end">Pcs Sisa Bk</th>
-                        <th class="dhead text-end">Gr Sisa Bk</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($cabut as $c)
-                    <tr>
-                        <td>{{date("M y",strtotime($c->tgl)) }}</td>
-                        <td>{{$c->pengawas}}</td>
-                        <td>{{$c->no_box}}</td>
-                        <td align="right">{{$c->pcs_bk}}</td>
-                        <td align="right">{{$c->gr_bk}}</td>
-                        <td align="right">{{$c->pcs_awal}}</td>
-                        <td align="right">{{$c->gr_awal}}</td>
-                        @php
-                        $susut = empty($c->gr_akhir) ? 0 : (1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100;
-                        $denda = empty($c->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $c->rupiah : 0);
-                        $denda_hcr = $c->pcs_hcr * 5000;
-                        $eot_bonus = empty($c->eot) ? 0 : ($c->eot - $c->gr_awal * 0.02 )* 750;
-                        @endphp
-                        <td align="right">{{ number_format($c->rupiah - $denda - $denda_hcr + $eot_bonus, 0) }}
-                        </td>
-                        <td align="right">{{$c->pcs_bk - $c->pcs_awal}}</td>
-                        <td align="right">{{$c->gr_bk - $c->gr_awal}}</td>
-                    </tr>
+            <div class="col-lg-4 mb-2">
+                <table class="float-end">
+                    <tbody>
+                        <tr>
+                            <td>Pencarian :</td>
+                            <td><input autofocus type="text" id="pencarian" class="form-control float-end"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12">
+
+                <table style="border:1px solid #97a1c3" class="table table-bordered" id="tablealdi"
+                    x-data="{
+                        openRows: [],
+                    }">
+                    <thead>
+                        <tr>
+                            <th class="dhead" width="120">Pengawas </th>
+                            <th class="dhead text-end" width="50">No Box</th>
+                            <th class="dhead text-end">Pcs Awal Bk <br> ({{ number_format($ttlPcsBk, 0) }})</th>
+                            <th class="dhead text-end">Gr Awal Bk <br> ({{ number_format($ttlGrBk, 0) }})</th>
+                            <th class="dhead text-end">Pcs Awal Kerja <br> ({{ number_format($ttlPcsAwal, 0) }})</th>
+                            <th class="dhead text-end">Gr Awal Kerja <br> ({{ number_format($ttlGrAwal, 0) }})</th>
+                            <th class="dhead text-end" width="80">Total Rupiah <br> (Rp
+                                {{ number_format($ttlRp, 0) }})</th>
+                            <th class="dhead text-end">Pcs Sisa Bk</th>
+                            <th class="dhead text-end">Gr Sisa Bk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($cabutGroup as $i => $d)
+                            <tr>
+                                <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
+                                        x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
+                                        <i class="fas fa-caret-down"></i></span></th>
+                                <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->pcs_bk, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->pcs_awal, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->gr_awal, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
+                            </tr>
+                            @php
+                                $id = $d->id_pengawas;
+                                $query = DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
+                                            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+                                            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+                                            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,sum(a.ttl_rp) as ttl_rp, sum(a.gr_flx) as gr_flx
+                                            FROM cabut as a
+                                            left join users as b on b.id = a.id_pengawas
+                                            left JOIN bk as c on c.no_box = a.no_box 
+                                            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' AND a.id_pengawas = '$id'
+                                            GROUP by a.no_box");
+                            @endphp
+                            @foreach ($query as $x)
+                    <tbody x-show="openRows.includes({{ $i }})">
+
+                        <tr>
+                            <td></td>
+                            <td align="right"><a class="detail" target="_blank"
+                                    href="{{ route('dashboard.detail', $x->no_box) }}">{{ number_format($x->no_box, 0) }}
+                                    <i class="me-2 fas fa-eye"></i></a></td>
+                            <td align="right">{{ $x->pcs_bk }}</td>
+                            <td align="right">{{ $x->gr_bk }}</td>
+                            <td align="right">{{ $x->pcs_awal }}</td>
+                            <td align="right">{{ $x->gr_awal }}</td>
+                            <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
+                            <td align="right">{{ $x->pcs_bk - $x->pcs_awal }}</td>
+                            <td align="right">{{ $x->gr_bk - $x->gr_awal }}</td>
+                        </tr>
+                    </tbody>
                     @endforeach
-                </tbody>
-            </table>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
         </section>
 
+        @section('scripts')
+            <script>
+                pencarian('pencarian', 'tablealdi')
+            </script>
+        @endsection
     </x-slot>
 
 </x-theme.app>

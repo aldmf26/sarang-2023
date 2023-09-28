@@ -16,7 +16,7 @@ class KelasController extends Controller
             'route' => $rot,
             'routeRemove' => $rotRemove,
             'lokasi' => ['alpa', 'mtd', 'sby'],
-            'datas' => DB::table($rotRemove == 'index' ? 'tb_kelas' : "tb_kelas_$rotRemove")->get()
+            'datas' => DB::table($rotRemove == 'index' ? 'tb_kelas' : "tb_kelas_$rotRemove")->orderBy('kelas', 'ASC')->get()
         ];
         return view("data_master.kelas.index", $data);
     }

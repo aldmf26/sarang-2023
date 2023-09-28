@@ -51,10 +51,35 @@ class DashboardController extends Controller
         $data = [
             'title' => 'Detail Gaji Box',
             'detail' => $detailNobox,
-            'cabut' => DB::select("SELECT * FROM cabut as a 
-            left join tb_anak as b on b.id_anak = a.id_anak 
-            left join users as c on c.id = a.id_pengawas
-            where a.no_box = $nobox"),
+            'cabut' => DB::table('cabut as a')
+            ->select(
+                'b.id_anak',
+                'a.no_box',
+                'a.rupiah',
+                'c.gr as gr_kelas',
+                'c.rupiah as rupiah_kelas',
+                'b.id_kelas',
+                'c.rp_bonus',
+                'a.tgl_serah',
+                'a.tgl_terima',
+                'a.id_cabut',
+                'a.selesai',
+                'b.nama',
+                'a.pcs_awal',
+                'a.gr_awal',
+                'a.gr_flx',
+                'a.pcs_akhir',
+                'a.pcs_hcr',
+                'a.gr_akhir',
+                'a.gr_awal',
+                'a.eot',
+                'd.name',
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+            ->join('users as d', 'a.id_pengawas', 'd.id')
+            ->where([['a.no_box', $nobox]])
+            ->get(),
 
             'cetak' => DB::select("SELECT * FROM cetak as a 
             left join tb_anak as b on b.id_anak = a.id_anak 

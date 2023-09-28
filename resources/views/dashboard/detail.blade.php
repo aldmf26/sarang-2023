@@ -84,11 +84,11 @@
                 <tbody>
                     <tr>
                         <td><b>BK</b></td>
-                        <td>{{$detail->pengawas}}</td>
-                        <td>{{$detail->name}}
+                        <td>{{ $detail->pengawas }}</td>
+                        <td>{{ $detail->name }}
                         </td>
-                        <td>{{date('d M y',strtotime($detail->tgl))}}</td>
-                        <td align="right">{{$detail->pcs_awal}}</td>
+                        <td>{{ date('d M y', strtotime($detail->tgl)) }}</td>
+                        <td align="right">{{ $detail->pcs_awal }}</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
@@ -101,61 +101,71 @@
                     </tr>
 
                     @if (empty($cabut))
-                    <tr>
-                        <td><b>CBT</b></td>
-                        <td></td>
-                        <td></td>
-                        <td>-</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td><b>CBT</b></td>
+                            <td></td>
+                            <td></td>
+                            <td>-</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            <td><b>TERIMA</b></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($cabut as $c)
-                    <tr>
-                        <td><b>CBT</b></td>
-                        <td>{{$c->name}}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>{{date('d M y',strtotime($c->tgl_terima))}}</td>
-                        <td align="right">{{$c->pcs_awal}}</td>
-                        <td align="right">{{$c->pcs_hcr}}</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->pcs_awal + $c->pcs_hcr}}</td>
-                        <td align="right">{{number_format($c->rupiah,0)}}</td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td>{{$c->name}}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>{{date('d M y',strtotime($c->tgl_terima))}}</td>
-                        <td align="right">{{$c->pcs_akhir}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->pcs_akhir}}</td>
-                        @php
-                        $susut = empty($c->gr_akhir) ? 0 : (1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100;
-
-                        $denda = empty($c->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $c->rupiah : 0);
-                        $denda_hcr = $c->pcs_hcr * 5000;
-
-                        $eot_bonus = empty($c->eot) ? 0 : ($c->eot - $c->gr_awal * 0.02) * 750;
-                        @endphp
-                        <td align="right">{{number_format($c->rupiah - $denda - $denda_hcr + $eot_bonus,0)}}</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($cabut as $c)
+                            <tr>
+                                <td><b>CBT</b></td>
+                                <td>{{ $c->name }}</td>
+                                <td>{{ $c->nama }}</td>
+                                <td>{{ date('d M y', strtotime($c->tgl_terima)) }}</td>
+                                <td align="right">{{ $c->pcs_awal }}</td>
+                                <td align="right"></td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->pcs_awal + $c->pcs_hcr }}</td>
+                                <td align="right">{{ number_format($c->rupiah, 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>TERIMA</b></td>
+                                <td>{{ $c->name }}</td>
+                                <td>{{ $c->nama }}</td>
+                                <td>{{ date('d M y', strtotime($c->tgl_terima)) }}</td>
+                                <td align="right">{{ $c->pcs_akhir }}</td>
+                                <td align="right">{{ $c->pcs_hcr }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->pcs_akhir }}</td>
+                                @php
+                                    $susut = empty($c->pcs_awal) ? 0 : (1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100;
+                                    $denda = 0;
+                                    $bonus_susut = 0;
+                                    $rupiah = $c->rupiah;
+                                    if ($susut > 23.4) {
+                                        $denda = ($susut - 23.4) * 0.03 * $c->rupiah;
+                                        $rupiah = $rupiah - $denda;
+                                    }
+                                    if ($susut < 19.5) {
+                                        $bonus_susut = ($c->rp_bonus * $c->gr_awal) / $c->gr_kelas;
+                                    }
+                                    $denda_hcr = $c->pcs_hcr * 5000;
+                                    
+                                    $eot_bonus = ($c->eot - $c->gr_awal * 0.02) * 750;
+                                    $ttl_rp = $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
+                                @endphp
+                                <td align="right">{{ number_format($ttl_rp, 0) }}
+                                </td>
+                            </tr>
+                        @endforeach
                     @endif
                     <tr>
                         <td colspan="9" class="border-hilang">&nbsp;</td>
@@ -172,58 +182,57 @@
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
                     @if (empty($cetak))
-                    <tr>
-                        <td><b>CTK</b></td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td><b>CTK</b></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            <td><b>TERIMA</b></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($cetak as $c)
-                    <tr>
-                        <td><b>CTK</b></td>
-                        <td>{{$c->name}}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>{{date('d M y',strtotime($c->tgl))}}</td>
-                        <td align="right">{{$c->pcs_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->pcs_awal}}</td>
-                        <td align="right">{{number_format($c->pcs_awal * $c->rp_pcs,0)}}</td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td>{{$c->name}}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>{{date('d M y',strtotime($c->tgl))}}</td>
-                        <td align="right">{{$c->pcs_akhir}}</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->pcs_tidak_ctk}}</td>
-                        <td align="right">{{$c->pcs_akhir + $c->pcs_tidak_ctk}}</td>
-                        @php
-                        $susut = empty($c->gr_akhir) ? '0' : (1-($c->gr_akhir / ($c->gr_awal -
-                        $c->gr_tidak_ctk))) * 100;
-                        $denda = round($susut,0) * 50000;
-                        @endphp
-                        <td align="right">{{number_format(($c->pcs_akhir * $c->rp_pcs) - $denda,0)}}</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($cetak as $c)
+                            <tr>
+                                <td><b>CTK</b></td>
+                                <td>{{ $c->name }}</td>
+                                <td>{{ $c->nama }}</td>
+                                <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                                <td align="right">{{ $c->pcs_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->pcs_awal }}</td>
+                                <td align="right">{{ number_format($c->pcs_awal * $c->rp_pcs, 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>TERIMA</b></td>
+                                <td>{{ $c->name }}</td>
+                                <td>{{ $c->nama }}</td>
+                                <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                                <td align="right">{{ $c->pcs_akhir }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->pcs_tidak_ctk }}</td>
+                                <td align="right">{{ $c->pcs_akhir + $c->pcs_tidak_ctk }}</td>
+                                @php
+                                    $susut = empty($c->gr_akhir) ? '0' : (1 - $c->gr_akhir / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+                                    $denda = round($susut, 0) * 50000;
+                                @endphp
+                                <td align="right">{{ number_format($c->pcs_akhir * $c->rp_pcs - $denda, 0) }}</td>
+                            </tr>
+                        @endforeach
                     @endif
 
 
@@ -243,53 +252,53 @@
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
                     @if (empty($sortir))
-                    <tr>
-                        <td><b>SORTIR</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                        <td align="right"></td>
-                    </tr>
+                        <tr>
+                            <td><b>SORTIR</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                        </tr>
+                        <tr>
+                            <td><b>TERIMA</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td align="right"></td>
+                            <td align="right"></td>
+                            <td align="right"></td>
+                            <td align="right"></td>
+                            <td align="right"></td>
+                        </tr>
                     @else
-                    @foreach ($sortir as $s)
-                    <tr>
-                        <td><b>SORTIR</b></td>
-                        <td>{{$s->name}}</td>
-                        <td>{{$s->nama}}</td>
-                        <td>{{date('d M y',strtotime($s->tgl))}}</td>
-                        <td align="right">{{$s->pcs_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$s->pcs_awal}}</td>
-                        <td align="right">{{number_format($s->rp_target,0)}}</td>
-                    </tr>
-                    <tr>
-                        <td><b>TERIMA</b></td>
-                        <td>{{$s->name}}</td>
-                        <td>{{$s->nama}}</td>
-                        <td>{{date('d M y',strtotime($s->tgl))}}</td>
-                        <td align="right">{{$s->pcs_akhir}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$s->pcs_akhir}}</td>
-                        <td align="right">{{number_format($s->ttl_rp,0)}}</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($sortir as $s)
+                            <tr>
+                                <td><b>SORTIR</b></td>
+                                <td>{{ $s->name }}</td>
+                                <td>{{ $s->nama }}</td>
+                                <td>{{ date('d M y', strtotime($s->tgl)) }}</td>
+                                <td align="right">{{ $s->pcs_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $s->pcs_awal }}</td>
+                                <td align="right">{{ number_format($s->rp_target, 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>TERIMA</b></td>
+                                <td>{{ $s->name }}</td>
+                                <td>{{ $s->nama }}</td>
+                                <td>{{ date('d M y', strtotime($s->tgl)) }}</td>
+                                <td align="right">{{ $s->pcs_akhir }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $s->pcs_akhir }}</td>
+                                <td align="right">{{ number_format($s->ttl_rp, 0) }}</td>
+                            </tr>
+                        @endforeach
                     @endif
 
                     <tr>
@@ -307,31 +316,31 @@
                         <th class="text-end dhead">TTL RP</th>
                     </tr>
                     @if (empty($grade))
-                    <tr>
-                        <td><b>GRADE</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                    </tr>
+                        <tr>
+                            <td><b>GRADE</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                        </tr>
                     @else
-                    @foreach ($grade as $g)
-                    <tr>
-                        <td><b>GRADE</b></td>
-                        <td>{{$g->name}}</td>
-                        <td>{{$g->nama}}</td>
-                        <td>{{date('d M y',strtotime($g->tgl))}}</td>
-                        <td align="right">{{$g->pcs_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$g->pcs_awal}}</td>
-                        <td align="right"></td>
-                    </tr>
-                    @endforeach
+                        @foreach ($grade as $g)
+                            <tr>
+                                <td><b>GRADE</b></td>
+                                <td>{{ $g->name }}</td>
+                                <td>{{ $g->nama }}</td>
+                                <td>{{ date('d M y', strtotime($g->tgl)) }}</td>
+                                <td align="right">{{ $g->pcs_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $g->pcs_awal }}</td>
+                                <td align="right"></td>
+                            </tr>
+                        @endforeach
                     @endif
 
 
@@ -355,7 +364,7 @@
                 <tbody>
                     <tr>
                         {{-- gr --}}
-                        <td align="right">{{number_format($detail->gr_awal,0)}}</td>
+                        <td align="right">{{ number_format($detail->gr_awal, 0) }}</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
                         <td align="right">0</td>
@@ -367,43 +376,43 @@
                         <td colspan="6" class="border-hilang">&nbsp;</td>
                     </tr>
                     @if (empty($cabut))
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        {{-- gr cabut --}}
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            {{-- gr cabut --}}
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($cabut as $c)
-                    <tr>
-                        <td align="right">{{number_format($c->gr_awal,0)}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{number_format($c->gr_awal,0)}}</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        {{-- gr cabut --}}
-                        <td align="right">{{number_format($c->gr_akhir,0)}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{number_format($c->gr_akhir,0)}}</td>
-                        <td align="right"></td>
-                        <td align="right">{{number_format((1-($c->gr_akhir / $c->gr_awal)) * 100,0)}}%</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($cabut as $c)
+                            <tr>
+                                <td align="right">{{ number_format($c->gr_awal, 0) }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ number_format($c->gr_awal, 0) }}</td>
+                                <td align="right"></td>
+                                <td align="right">0</td>
+                            </tr>
+                            <tr>
+                                {{-- gr cabut --}}
+                                <td align="right">{{ number_format($c->gr_akhir, 0) }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ number_format($c->gr_flx, 0) }}</td>
+                                <td align="right">{{ number_format($c->gr_akhir, 0) }}</td>
+                                <td align="right"></td>
+                                <td align="right">{{ number_format((1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100, 0) }}%</td>
+                            </tr>
+                        @endforeach
                     @endif
 
 
@@ -420,41 +429,41 @@
                         <th class="text-end dhead">SUSUT</th>
                     </tr>
                     @if (empty($cetak))
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($cetak as $c)
-                    <tr>
-                        <td align="right">{{$c->gr_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->gr_awal}}</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td align="right">{{$c->gr_akhir}}</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$c->gr_tidak_ctk}}</td>
-                        <td align="right">{{$c->gr_akhir}}</td>
-                        <td align="right"></td>
-                        <td align="right">{{number_format((1-($c->gr_akhir/$c->gr_awal))*100,0)}}%</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($cetak as $c)
+                            <tr>
+                                <td align="right">{{ $c->gr_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->gr_awal }}</td>
+                                <td align="right"></td>
+                                <td align="right">0</td>
+                            </tr>
+                            <tr>
+                                <td align="right">{{ $c->gr_akhir }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->gr_tidak_ctk }}</td>
+                                <td align="right">{{ $c->gr_akhir }}</td>
+                                <td align="right"></td>
+                                <td align="right">{{ number_format((1 - $c->gr_akhir / $c->gr_awal) * 100, 0) }}%</td>
+                            </tr>
+                        @endforeach
                     @endif
 
 
@@ -470,41 +479,41 @@
                         <th class="text-end dhead">SUSUT</th>
                     </tr>
                     @if (empty($sortir))
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($sortir as $s)
-                    <tr>
-                        <td align="right">{{$s->gr_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$s->gr_awal}}</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    <tr>
-                        <td align="right">{{$s->gr_akhir}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$s->gr_akhir}}</td>
-                        <td align="right"></td>
-                        <td align="right">{{ number_format((1- ($s->gr_akhir/$s->gr_awal)) * 100,0)}}%</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($sortir as $s)
+                            <tr>
+                                <td align="right">{{ $s->gr_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $s->gr_awal }}</td>
+                                <td align="right"></td>
+                                <td align="right">0</td>
+                            </tr>
+                            <tr>
+                                <td align="right">{{ $s->gr_akhir }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $s->gr_akhir }}</td>
+                                <td align="right"></td>
+                                <td align="right">{{ number_format((1 - $s->gr_akhir / $s->gr_awal) * 100, 0) }}%</td>
+                            </tr>
+                        @endforeach
 
                     @endif
 
@@ -522,25 +531,25 @@
                         <th class="text-end dhead">SST GLOBAL</th>
                     </tr>
                     @if (empty($grade))
-                    <tr>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right"></td>
+                            <td align="right">0</td>
+                        </tr>
                     @else
-                    @foreach ($grade as $g)
-                    <tr>
-                        <td align="right">{{$g->gr_awal}}</td>
-                        <td align="right">0</td>
-                        <td align="right">0</td>
-                        <td align="right">{{$g->gr_awal}}</td>
-                        <td align="right"></td>
-                        <td align="right">0</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($grade as $g)
+                            <tr>
+                                <td align="right">{{ $g->gr_awal }}</td>
+                                <td align="right">0</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $g->gr_awal }}</td>
+                                <td align="right"></td>
+                                <td align="right">0</td>
+                            </tr>
+                        @endforeach
                     @endif
 
 
@@ -605,24 +614,24 @@
                         <th class="dhead text-end">GR</th>
                     </tr>
                     @php
-                    $total_pcs_bentuk = 0;
-                    $total_gram_bentuk = 0;
+                        $total_pcs_bentuk = 0;
+                        $total_gram_bentuk = 0;
                     @endphp
                     @foreach ($grading_bentuk as $g)
-                    @php
-                    $total_pcs_bentuk += $g->pcs;
-                    $total_gram_bentuk += $g->gram;
-                    @endphp
-                    <tr>
-                        <td>{{$g->tipe}}</td>
-                        <td align="right">{{$g->pcs}}</td>
-                        <td align="right">{{$g->gram}}</td>
-                    </tr>
+                        @php
+                            $total_pcs_bentuk += $g->pcs;
+                            $total_gram_bentuk += $g->gram;
+                        @endphp
+                        <tr>
+                            <td>{{ $g->tipe }}</td>
+                            <td align="right">{{ $g->pcs }}</td>
+                            <td align="right">{{ $g->gram }}</td>
+                        </tr>
                     @endforeach
                     <tr>
                         <th class="text-center">Total</th>
-                        <th class="text-end">{{$total_pcs_bentuk}}</th>
-                        <th class="text-end">{{$total_gram_bentuk}}</th>
+                        <th class="text-end">{{ $total_pcs_bentuk }}</th>
+                        <th class="text-end">{{ $total_gram_bentuk }}</th>
                     </tr>
                 </tbody>
 
@@ -654,25 +663,25 @@
                 </thead>
                 <tbody>
                     @php
-                    $total_pcs_turun = 0;
-                    $total_gram_turun = 0;
+                        $total_pcs_turun = 0;
+                        $total_gram_turun = 0;
                     @endphp
                     @foreach ($grading_turun as $g)
-                    @php
-                    $total_pcs_turun += $g->pcs;
-                    $total_gram_turun = $g->gram;
-                    @endphp
-                    <tr>
-                        <td>{{$g->tipe}}</td>
-                        <td align="right">{{$g->pcs}}</td>
-                        <td align="right">{{$g->gram}}</td>
-                    </tr>
+                        @php
+                            $total_pcs_turun += $g->pcs;
+                            $total_gram_turun = $g->gram;
+                        @endphp
+                        <tr>
+                            <td>{{ $g->tipe }}</td>
+                            <td align="right">{{ $g->pcs }}</td>
+                            <td align="right">{{ $g->gram }}</td>
+                        </tr>
                     @endforeach
                     <tr>
 
                         <th class="text-center">Total</th>
-                        <th class="text-end">{{$total_pcs_turun}}</th>
-                        <th class="text-end">{{$total_gram_turun}}</th>
+                        <th class="text-end">{{ $total_pcs_turun }}</th>
+                        <th class="text-end">{{ $total_gram_turun }}</th>
                     </tr>
 
                 </tbody>

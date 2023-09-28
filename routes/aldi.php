@@ -94,6 +94,10 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
+            Route::get('/load_tambah_cabut', 'load_tambah_cabut')->name('load_tambah_cabut');
+            Route::get('/load_tambah_anak', 'load_tambah_anak')->name('load_tambah_anak');
+            Route::get('/createTambahAnakCabut', 'createTambahAnakCabut')->name('createTambahAnakCabut');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/get_kelas_anak', 'get_kelas_anak')->name('get_kelas_anak');
@@ -104,11 +108,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::get('/load_detail_cabut', 'load_detail_cabut')->name('load_detail_cabut');
             Route::get('/export', 'export')->name('export');
-            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/', 'create')->name('create');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
+            Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
 
         });

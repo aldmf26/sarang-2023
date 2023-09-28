@@ -5,15 +5,16 @@
             <th>Tgl Terima</th>
             <th>No Box</th>
             <th>Anak</th>
-            <th >Pcs Awal</th>
-            <th >Gr Awal</th>
-            <th >Gr Flx</th>
-            <th >Pcs Akhir</th>
-            <th >Gr Akhir</th>
-            <th >EOT</th>
-            <th >Pcs Hcr</th>
-            <th >Susut</th>
-            <th >Ttl Gaji</th>
+            <th>Pcs Awal</th>
+            <th>Gr Awal</th>
+            <th>Gr Flx</th>
+            <th>Pcs Akhir</th>
+            <th>Gr Akhir</th>
+            <th>EOT</th>
+            <th>Pcs Hcr</th>
+            <th>Susut</th>
+            <th>Rp Target</th>
+            <th>Ttl Gaji</th>
         </tr>
     </thead>
     <tbody>
@@ -31,15 +32,11 @@
                 <td>{{ $d->eot ?? 0 }}</td>
                 <td>{{ $d->pcs_hcr ?? 0 }}</td>
                 @php
-                    $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
-                    
-                    $denda = empty($d->gr_akhir) ? 0 : ($susut > 23.4 ? ($susut - 23.4) * 0.03 * $d->rupiah : 0);
-                    $denda_hcr = $d->pcs_hcr * 5000;
-                    
-                    $eot_bonus = empty($d->eot) ? 0 : ($d->eot - $d->gr_awal * 0.02) * 750;
+                    $hasil = rumusTotalRp($d);
                 @endphp
-                <td>{{ $susut }}%</td>
-                <td>{{ $d->rupiah - $denda - $denda_hcr + $eot_bonus }}</td>
+                <td>{{ $hasil->susut }}%</td>
+                <td>{{ $d->rupiah }}</td>
+                <td>{{ $hasil->ttl_rp }}</td>
             </tr>
         @endforeach
     </tbody>
