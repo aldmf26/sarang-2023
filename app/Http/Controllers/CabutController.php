@@ -268,6 +268,24 @@ class CabutController extends Controller
         return view('home.cabut.load_modal_akhir', $data);
     }
 
+    public function load_modal_anak_sisa(Request $r)
+    {
+        $datas = DB::table('absen as a')
+        ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                    ->where('a.ket', 'cabut sisa')
+                    ->get();
+        $data = [
+            'tittle' => 'tes',
+            'datas' => $datas
+        ];
+        return view('home.cabut.load_modal_anak_sisa',$data);
+    }
+
+    public function hapusAnakSisa(Request $r)
+    {
+        DB::table('absen')->where('id_absen', $r->id_absen)->delete();
+    }
+
     public function load_anak()
     {
         $anak = $this->getAnak();

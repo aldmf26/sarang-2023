@@ -115,8 +115,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
+            Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
+            Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
-
         });
     Route::controller(SortirController::class)
         ->prefix('home/sortir')

@@ -43,10 +43,10 @@
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
-        <x-theme.modal idModal="listAnakSisa" title="tambah cabut akhir" btnSave="T" size="">
-            <div id="load_modal_listAnakSisa"></div>
+        <x-theme.modal idModal="listAnakSisa" title="List Anak Kerja Sisa" btnSave="T" size="">
+            <div id="load_modal_anak_sisa"></div>
         </x-theme.modal>
-
+        
         <form action="{{ route('cabut.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah Anak" btnSave="Y">
@@ -284,9 +284,26 @@
                         $('.ttlRpSet' + data.count).val(ttl_rp)
                     })
                 }
+
+                function loadListAnakSisa() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('cabut.load_modal_anak_sisa')}}",
+                        success: function (r) {
+                            $("#load_modal_anak_sisa").html(r);
+                            $('#tableAnak').DataTable({
+                                "paging": true,
+                                "pageLength": 10,
+                                "lengthChange": true,
+                                "stateSave": true,
+                                "searching": true,
+                            });
+                        }
+                    });
+                }
                 // Panggil fungsi untuk pertama kali saat halaman dimuat
                 updateAnakBelum();
-
+                loadListAnakSisa()
                 loadHalaman()
                 loadTambahcabut()
                 loadTambahAnak()
@@ -342,6 +359,7 @@
                             loadTambahcabut()
                             loadHalaman()
                             loadTambahAnak()
+                            loadListAnakSisa()
                             $('#tambah2').modal('show')
                         }
                     });
@@ -379,6 +397,24 @@
                             }
                         });
                     }
+                })
+                $(document).on('click', '.hapusAnakSisa', function() {
+                    
+                    var id_absen = $(this).attr('id_absen')
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('cabut.hapusAnakSisa') }}",
+                            data: {
+                                id_absen: id_absen,
+                            },
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil hapus row')
+                                loadListAnakSisa()
+                                loadTambahcabut()
+                                loadHalaman()
+                                loadTambahAnak()
+                            }
+                        });
                 })
                 // cabut add end -----------------
 
@@ -428,6 +464,7 @@
                         }
                     });
                 })
+
                 setRupiah('grFlexKeyup')
                 setRupiah('pcsAkhirKeyup')
                 setRupiah('grAkhirKeyup')
