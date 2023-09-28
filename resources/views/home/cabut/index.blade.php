@@ -341,6 +341,7 @@
 
                         // Mengambil ID dari kolom pertama (kolom #)
                         var anakId = $(this).closest('tr').find('td:eq(0)').text();
+
                         // Tambahkan ID anak ke dalam array
                         selectedRows.push(anakId);
                     });
