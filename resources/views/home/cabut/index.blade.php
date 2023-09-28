@@ -46,7 +46,7 @@
         <x-theme.modal idModal="listAnakSisa" title="List Anak Kerja Sisa" btnSave="T" size="">
             <div id="load_modal_anak_sisa"></div>
         </x-theme.modal>
-        
+
         <form action="{{ route('cabut.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah Anak" btnSave="Y">
@@ -288,8 +288,8 @@
                 function loadListAnakSisa() {
                     $.ajax({
                         type: "GET",
-                        url: "{{route('cabut.load_modal_anak_sisa')}}",
-                        success: function (r) {
+                        url: "{{ route('cabut.load_modal_anak_sisa') }}",
+                        success: function(r) {
                             $("#load_modal_anak_sisa").html(r);
                             $('#tableAnak').DataTable({
                                 "paging": true,
@@ -341,7 +341,6 @@
 
                         // Mengambil ID dari kolom pertama (kolom #)
                         var anakId = $(this).closest('tr').find('td:eq(0)').text();
-
                         // Tambahkan ID anak ke dalam array
                         selectedRows.push(anakId);
                     });
@@ -399,22 +398,22 @@
                     }
                 })
                 $(document).on('click', '.hapusAnakSisa', function() {
-                    
+
                     var id_absen = $(this).attr('id_absen')
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('cabut.hapusAnakSisa') }}",
-                            data: {
-                                id_absen: id_absen,
-                            },
-                            success: function(r) {
-                                alertToast('sukses', 'Berhasil hapus row')
-                                loadListAnakSisa()
-                                loadTambahcabut()
-                                loadHalaman()
-                                loadTambahAnak()
-                            }
-                        });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.hapusAnakSisa') }}",
+                        data: {
+                            id_absen: id_absen,
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil hapus row')
+                            loadListAnakSisa()
+                            loadTambahcabut()
+                            loadHalaman()
+                            loadTambahAnak()
+                        }
+                    });
                 })
                 // cabut add end -----------------
 
