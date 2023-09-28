@@ -1,13 +1,14 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
+        <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
+            teks="List anak sisa" />
         <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
             teks="Cabut" />
-        {{-- <x-theme.button modal="Y" idModal="tambahAnak" href="#" icon="fa-plus" addClass="float-end"
-            teks="Tambah Kerja Anak" /> --}}
         <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cbt Kerja Anak <span
-                class="badge bg-danger" id="anakBelum"></span></a>
+                class="badge bg-danger" id="anakBelum"></span>
+        </a>
         <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
@@ -42,6 +43,9 @@
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
+        <x-theme.modal idModal="listAnakSisa" title="tambah cabut akhir" btnSave="T" size="">
+            <div id="load_modal_listAnakSisa"></div>
+        </x-theme.modal>
 
         <form action="{{ route('cabut.create_anak') }}" method="post">
             @csrf
@@ -270,7 +274,9 @@
 
                         var eot_bonus = (data.eot - data.gr_awal * 0.02) * 750;
                         var ttl_rp = rupiah - denda_hcr + eot_bonus + bonus_susut
-                        console.log(`rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`)
+                        console.log(
+                            `rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`
+                        )
                         var setRupiah = ttl_rp.toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         })
@@ -328,7 +334,7 @@
                         url: "{{ route('cabut.createTambahAnakCabut') }}",
                         data: {
                             rows: selectedRows,
-                            tipe:tipe
+                            tipe: tipe
                         },
                         success: function(r) {
                             alertToast('sukses', 'Berhasil tambah')
@@ -353,7 +359,8 @@
                 })
 
                 $(document).on('click', '.hapusCabutRow', function() {
-                    if(confirm('Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')){
+                    if (confirm(
+                            'Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')) {
                         var id_cabut = $(this).attr('id_cabut')
                         var id_anak = $(this).attr('id_anak')
                         $.ajax({
@@ -365,7 +372,7 @@
                             },
                             success: function(r) {
                                 alertToast('sukses', 'Berhasil hapus row')
-    
+
                                 loadTambahcabut()
                                 loadHalaman()
                                 loadTambahAnak()
@@ -421,9 +428,9 @@
                         }
                     });
                 })
-                // setRupiah('grFlexKeyup')
-                // setRupiah('pcsAkhirKeyup')
-                // setRupiah('grAkhirKeyup')
+                setRupiah('grFlexKeyup')
+                setRupiah('pcsAkhirKeyup')
+                setRupiah('grAkhirKeyup')
                 setRupiah('eotKeyup')
                 setRupiah('pcsHcrKeyup')
 

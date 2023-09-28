@@ -34,6 +34,7 @@ class KelasController extends Controller
     public function update(Request $r)
     {
         $data = $r->all();
+        
         unset($data['_token']);
         unset($data['routeRemove']);
 

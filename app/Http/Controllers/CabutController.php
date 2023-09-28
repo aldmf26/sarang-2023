@@ -120,8 +120,6 @@ class CabutController extends Controller
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-
-
         ];
         return view('home.cabut.index', $data);
     }
