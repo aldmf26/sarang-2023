@@ -26,7 +26,7 @@
                             @php
                                 $count = ((1 / $d->count) * $d->count) - $d->countStgh;
                             @endphp
-                            <td align="right">{{ $d->count > 1 ? $count : $d->ttl_absen + $d->countStgh }}</td>
+                            <td align="right">{{ number_format($d->count > 1 ? $d->ttlBub : $d->ttl_absen + $d->countStgh,1) }}</td>
                             <td align="center">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
                                     class="btn btn-sm btn-{{ $d->count > 1 ? 'danger' : 'primary' }} detail"

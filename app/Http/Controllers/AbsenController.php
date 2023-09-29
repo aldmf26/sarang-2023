@@ -21,7 +21,7 @@ class AbsenController extends Controller
         $tgl2 = $tgl['tgl2'];
         session(['tgl1' => $tgl1, 'tgl2' => $tgl2]);
 
-            $absen = DB::select("SELECT f.countStgh,a.id_anak,b.count,c.ttl_absen,d.nama,e.kelas FROM `absen` as a
+            $absen = DB::select("SELECT f.countStgh,a.id_anak,b.count,c.ttl_absen,d.nama,e.kelas,(c.ttl_absen - f.countStgh) as ttlBub FROM `absen` as a
             JOIN tb_anak as d ON a.id_anak = d.id_anak
             JOIN tb_kelas as e ON d.id_kelas = e.id_kelas
             LEFT JOIN (
