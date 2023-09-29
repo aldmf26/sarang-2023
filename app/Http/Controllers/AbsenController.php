@@ -16,18 +16,66 @@ class AbsenController extends Controller
     }
     public function index(Request $r)
     {
-        if (empty($r->tgl)) {
-            $tanggal = date('Y-m-d');
-        } else {
-            $tanggal = $r->tgl;
-        }
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        session(['tgl1' => $tgl1, 'tgl2' => $tgl2]);
 
+            $absen = DB::select("SELECT f.countStgh,a.id_anak,b.count,c.ttl_absen,d.nama,e.kelas FROM `absen` as a
+            JOIN tb_anak as d ON a.id_anak = d.id_anak
+            JOIN tb_kelas as e ON d.id_kelas = e.id_kelas
+            LEFT JOIN (
+                SELECT id_anak,count(*) as count FROM `absen` GROUP BY id_anak,tgl
+            ) as b ON a.id_anak = b.id_anak
+            LEFT JOIN (
+                SELECT id_anak,count(*) as ttl_absen FROM `absen` WHERE ket != 'stgh hari' GROUP BY id_anak
+            ) as c ON a.id_anak = c.id_anak
+            LEFT JOIN (
+                SELECT id_anak,count(*) / 2 as countStgh FROM `absen` WHERE ket = 'stgh hari' GROUP BY id_anak
+            ) as f ON f.id_anak = a.id_anak
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' GROUP BY a.id_anak ORDER BY e.kelas DESC, d.nama;");
         $data = [
-            'title' => 'Absensi',
+            'title' => 'Rekap Absensi',
             'anak' => $this->getAnak(),
-            'tanggal' => $tanggal
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'absen' => $absen
         ];
-        return view('home.absen.index', $data);
+        return view('home.absen.rekap', $data);
+    }
+
+    public function detail($id_anak)
+    {
+        $tgl1 = session('tgl1');
+        $tgl2 = session('tgl2');
+        $absen = DB::table('absen as a')
+                    ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                    ->join('tb_kelas as c', 'b.id_kelas', 'c.id_kelas')
+                    ->where('a.id_anak', $id_anak)->whereBetween('a.tgl',[$tgl1, $tgl2])->get();
+        $data = [
+            'absen' => $absen
+        ];
+        return view('home.absen.rekap_detail',$data);
+    }
+
+    public function tbh_baris(Request $r)
+    {
+        $data = [
+            'anak' => $this->getAnak(),
+            'count' => $r->count
+        ];
+        return view('home.absen.tbh_baris',$data);
+    }
+    public function create_stgh_hari(Request $r)
+    {
+        for ($i=0; $i < count($r->id_anak); $i++) { 
+            DB::table('absen')->insert([
+                'id_anak' => $r->id_anak[$i],
+                'tgl' => $r->tgl[$i],
+                'ket' => 'stgh hari'
+            ]);
+        }
+        return redirect()->route('absen.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function tabelAbsen(Request $r)

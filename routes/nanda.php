@@ -102,6 +102,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/tabelAbsen', 'tabelAbsen')->name('tabelAbsen');
             Route::get('/SaveAbsen', 'SaveAbsen')->name('SaveAbsen');
             Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
+            Route::post('/create_stgh_hari', 'create_stgh_hari')->name('create_stgh_hari');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/detail/{id_anak}', 'detail')->name('detail');
         });
     Route::controller(RekapanController::class)
         ->prefix('home/rekapan')

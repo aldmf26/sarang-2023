@@ -28,7 +28,7 @@ if (!function_exists('tanggalFilter')) {
             case 'mounthly':
                 $tglawal = "$tahun-$bulan-01";
                 $tglakhir = "$tahun-$bulan-" . date('t', strtotime($tglawal));
-                $result = ['tgl1' => $firstDayOfMonth, 'tgl2' => date('Y-m-t', strtotime($tglakhir))];
+                $result = ['tgl1' => $tglawal, 'tgl2' => date('Y-m-t', strtotime($tglakhir))];
                 break;
             case 'costume':
                 $result = ['tgl1' => $tgl1, 'tgl2' => $tgl2];

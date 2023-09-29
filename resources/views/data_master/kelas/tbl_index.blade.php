@@ -40,6 +40,7 @@
             <thead>
                 <tr>
                     <th class="dhead">Kelas</th>
+                    <th class="dhead">Tipe</th>
                     <th class="dhead">Gr</th>
                     <th class="dhead">Rupiah</th>
                     <th class="dhead">Lokasi</th>
@@ -48,6 +49,7 @@
             <tbody>
                 <tr>
                     <td><input name="kelas" type="text" class="form-control"></td>
+                    <td><input name="tipe" type="text" class="form-control"></td>
                     <td><input name="gr" type="text" class="form-control"></td>
                     <td><input name="rupiah" type="text" class="form-control"></td>
                     <td>

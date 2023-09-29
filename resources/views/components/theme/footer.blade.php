@@ -111,7 +111,9 @@
                         dropdownParent: $('#tambah2 .modal-content')
 
                     });
-                    $(".select3-add").select2()
+                    $(".select3-add").select2({
+                        dropdownParent: $('#tambah .modal-content'),
+                    })
                 },
             });
         });
@@ -155,6 +157,13 @@
                     $(`#${load}`).html(r);
                     $('.select2-edit').select2({
                         dropdownParent: $('#edit .modal-content')
+                    });
+                    $('#tableDetail').DataTable({
+                        "paging": true,
+                        "pageLength": 10,
+                        "lengthChange": true,
+                        "stateSave": true,
+                        "searching": true,
                     });
                 }
             });
@@ -204,7 +213,7 @@
     }
 
     function loadTable(namaTable) {
-        $('#'+namaTable).DataTable({
+        $('#' + namaTable).DataTable({
             "paging": true,
             "pageLength": 10,
             "lengthChange": true,
@@ -247,8 +256,9 @@
         "paging": false,
     });
 
-    function alertToast(jenis = 'sukses',pesan) {
-        var ava = jenis == 'sukses' ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" : "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+    function alertToast(jenis = 'sukses', pesan) {
+        var ava = jenis == 'sukses' ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" :
+            "https://cdn-icons-png.flaticon.com/512/564/564619.png"
         var bg = jenis == 'sukses' ? "#EAF7EE" : "#FCEDE9"
         $(document).ready(function() {
             Toastify({
