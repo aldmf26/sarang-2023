@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\CabutExport;
 use App\Exports\CabutRekapExport;
-use App\Imports\AnakImport;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
