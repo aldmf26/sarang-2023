@@ -13,6 +13,7 @@ class CabutRekapExport implements FromView, WithEvents
     protected $tbl;
     protected $view;
     protected $totalrow;
+    
 
     public function __construct($tbl, $view)
     {
