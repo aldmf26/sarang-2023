@@ -35,7 +35,7 @@ class CabutController extends Controller
             SELECT id_anak
             FROM absen
             WHERE DATE(tgl) = CURDATE() AND ket = 'cabut sisa'
-        );");
+        )");
     }
 
     public function queryRekap($tgl1, $tgl2)
@@ -398,18 +398,21 @@ class CabutController extends Controller
             $no_box = $r->no_box[$i];
             $box = $this->getStokBk($no_box);
 
-            if ($box->pcs_awal - $box->pcs_cabut - $r->pcs_awal[$i] < 0 || $box->gr_awal - $box->gr_cabut - $r->gr_awal[$i] < 0) {
-                // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
-            } else {
-
-                DB::table('cabut')->where([['id_pengawas', $r->id_pengawas[$i]], ['id_anak', $r->id_anak[$i]], ['tgl_terima', $r->tgl_terima[$i]], ['no_box', '9999']])->update([
-                    'no_box' => $r->no_box[$i],
-                    'pcs_awal' => $r->pcs_awal[$i],
-                    'gr_awal' => $r->gr_awal[$i],
-                    'rupiah' => $r->rupiah[$i],
-                    'id_kelas' => $r->kelas_tipe[$i],
-                ]);
-            }
+            // if ($box->pcs_awal - $box->pcs_cabut - $r->pcs_awal[$i] < 0 || $box->gr_awal - $box->gr_cabut - $r->gr_awal[$i] < 0) {
+            //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
+            // } else {
+            // }
+            DB::table('absen')->where([['id_anak',$r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
+                'tgl' => $r->tgl_terima[$i]
+            ]);
+            DB::table('cabut')->where([['id_pengawas', $r->id_pengawas[$i]], ['id_anak', $r->id_anak[$i]], ['tgl_terima', date('Y-m-d')], ['no_box', '9999']])->update([
+                'no_box' => $r->no_box[$i] ?? '9999',
+                'pcs_awal' => $r->pcs_awal[$i],
+                'gr_awal' => $r->gr_awal[$i],
+                'rupiah' => $r->rupiah[$i],
+                'id_kelas' => $r->kelas_tipe[$i],
+                'tgl_terima' => $r->tgl_terima[$i],
+            ]);
         }
         // return redirect()->route('cabut.index')->with('sukses', 'Berhasil tambah Data');
         return json_encode([

@@ -75,7 +75,7 @@
             </div>
         </x-theme.modal>
 
-        <form action="{{ route('cabut.selesai_cabut') }}" method="post">
+        <form id="selesai_cabut">
             @csrf
             <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
                 <div class="row">
@@ -462,6 +462,7 @@
                         },
                         success: function(r) {
                             $("#load_modal_akhir").html(r);
+                            pencarian('pencarian2', 'tablealdi2')
                         }
                     });
                 })
@@ -522,6 +523,21 @@
 
                     $('.cetak').val(id_cabut);
                 });
+
+                $(document).on('submit', '#selesai_cabut', function(e){
+                    e.preventDefault()
+                    var datas = $(this).serialize()
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('cabut.selesai_cabut')}}",
+                        data: datas,
+                        success: function (r) {
+                            alertToast('sukses', 'Berhasil menyelesaikan')
+                            $('#selesai').modal('hide')
+                            loadHalaman()
+                        }
+                    });
+                })
             </script>
         @endsection
     </x-slot>

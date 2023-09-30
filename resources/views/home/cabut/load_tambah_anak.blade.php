@@ -7,20 +7,11 @@
         </select>
     </div>
     <div class="col-lg-8 mb-2">
-        @php
-            $cek = DB::table('cabut')->where([['tgl_terima', date('Y-m-d')], ['id_pengawas', auth()->user()->id]])->first();
-        @endphp
-        @if (!empty($cek))
-        {{-- <button type="button" class="btn btn-sm btn-primary mb-3 btnLanjutkanTambahCabut"><i class="fas fa-arrow-right"></i> Lanjutkan</button> --}}
-        
-        @endif
         <label for="">Pencarian :</label>
         <td><input autofocus type="text" id="pencarian" class="form-control float-end"></td>
-       
-        
     </div>
     <div class="col-lg-12">
-        <table class="table table-bordered" id="tablealdi">
+        <table class="table table-bordered table-hover" id="tablealdi">
             <thead>
                 <tr>
                     <th class="dhead" width="15">#</th>

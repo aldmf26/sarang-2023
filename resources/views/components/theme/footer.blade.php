@@ -194,6 +194,30 @@
         $(document).on('click', '#' + allId, function() {
             $("." + itemClass).prop('checked', $(this).prop('checked'));
         })
+
+        $('.table tbody tr').click(function(event) {
+        // Temukan kotak centang di baris ini
+        var checkbox = $(this).find('.cek');
+
+        // Jika yang diklik adalah sel yang bukan kotak centang
+        if (!$(event.target).is('.cek')) {
+            // Mengebalikan status kotak centang (ceklis jika sebelumnya tidak terceklis, dan sebaliknya)
+            checkbox.prop('checked', !checkbox.prop('checked'));
+
+            // Memeriksa apakah semua kotak centang di seluruh tabel terceklis atau tidak
+            var semuaTerceklis = true;
+            $('.table tbody .cek').each(function() {
+                if (!$(this).prop('checked')) {
+                    semuaTerceklis = false;
+                    return false; // Keluar dari loop jika ada yang tidak terceklis
+                }
+            });
+
+            // Mengatur status kotak centang "cekSemua" berdasarkan apakah semua terceklis atau tidak
+            $('#' + allId).prop('checked', semuaTerceklis);
+        }
+    });
+
     }
 
     function pencarian(inputId, tblId) {

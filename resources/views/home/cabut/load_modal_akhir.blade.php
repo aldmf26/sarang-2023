@@ -1,7 +1,10 @@
 <div class="row">
-
+    <div class="col-lg-4 mb-2">
+        <label for="">Pencarian :</label>
+        <input autofocus type="text" id="pencarian2" class="form-control float-end">
+    </div>
     <div class="col-lg-12">
-        <table class="table table-bordered" style="border: 0.5px solid #a0a7c1">
+        <table class="table table-bordered" style="border: 0.5px solid #a0a7c1" id="tablealdi2">
             <thead>
                 <tr>
                     <th class="dhead">Tgl Terima Akhir</th>
@@ -79,7 +82,7 @@
                             Rp <span class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary saveCabutAkhir" type="button"
+                            <button class="btn btn-sm btn-{{empty($d->gr_akhir) ? 'warning' : 'primary'}} saveCabutAkhir" type="button"
                                 count="{{ $i + 1 }}">Save</button>
                         </td>
                     </tr>

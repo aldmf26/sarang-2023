@@ -1,6 +1,7 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="7">
     <x-slot name="cardHeader">
-        <h6 class="float-start">{{ $title }} <span style="font-size: 13px">{{ tanggal($tgl1) }} ~ {{ tanggal($tgl2) }}</span></h6>
+        <h6 class="float-start">{{ $title }} <span style="font-size: 13px">{{ tanggal($tgl1) }} ~
+                {{ tanggal($tgl2) }}</span></h6>
         <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Absen Stgh Hari" />
         <x-theme.btn_filter />
     </x-slot>
@@ -24,9 +25,10 @@
                             <td>{{ ucwords($d->nama) }}</td>
                             <td align="right">{{ $d->kelas }}</td>
                             @php
-                                $count = ((1 / $d->count) * $d->count) - $d->countStgh;
+                                $count = (1 / $d->count) * $d->count - $d->countStgh;
                             @endphp
-                            <td align="right">{{ number_format($d->count > 1 ? $d->ttlBub : $d->ttl_absen + $d->countStgh,1) }}</td>
+                            <td align="right">
+                                {{ number_format($d->count > 1 ? $d->ttlBub : $d->ttl_absen + $d->countStgh, 1) }}</td>
                             <td align="center">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
                                     class="btn btn-sm btn-{{ $d->count > 1 ? 'danger' : 'primary' }} detail"
@@ -58,7 +60,8 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="date" value="{{ date('Y-m-d') }}" name="tgl[]" class="form-control">
+                                    <input type="date" value="{{ date('Y-m-d') }}" name="tgl[]"
+                                        class="form-control">
                                 </td>
                                 <td></td>
                             </tr>
@@ -81,13 +84,13 @@
             <x-theme.modal idModal="detail" title="Detail Absen">
                 <div id="load_detail"></div>
             </x-theme.modal>
-            
+
         </section>
         @section('scripts')
-        <script>
-            detail('detail', 'id_anak', 'absen/detail','load_detail')
-            plusRow(1, 'tbh_baris', "absen/tbh_baris")
-        </script>
+            <script>
+                detail('detail', 'id_anak', 'absen/detail', 'load_detail')
+                plusRow(1, 'tbh_baris', "absen/tbh_baris")
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>

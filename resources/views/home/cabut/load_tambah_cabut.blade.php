@@ -11,7 +11,7 @@
                     <th class="dhead" width="100">Tgl Terima</th>
                     <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="150">Nama Anak</th>
-                    <th class="dhead">Kelas</th>
+                    <th class="dhead">Kelas / Paket</th>
                     <th class="dhead text-end" width="110">Pcs Awal</th>
                     <th class="dhead text-end" width="110">Gr Awal</th>
                     <th class="dhead text-end" width="130">Ttl Rp</th>
@@ -33,7 +33,7 @@
                             <select name="no_box[]" id="" class="select3 pilihBox" count="{{ $i+1 }}">
                                 <option value="">Pilih Box</option>
                                 @foreach ($boxBk as $d)
-                                    @if ($d->pcs_awal - $d->pcs_cabut > 1)
+                                    @if ($d->gr_awal - $d->gr_cabut > 1)
                                         <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}</option>
                                     @endif
                                 @endforeach
