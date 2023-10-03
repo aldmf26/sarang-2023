@@ -293,8 +293,8 @@
                 style: {
                     background: bg,
                     color: "#7F8B8B",
-                    fontSize: "18px", // Menyesuaikan ukuran teks
-                    padding: "20px", // Menyesuaikan jarak padding
+                    fontSize: "15px", // Menyesuaikan ukuran teks
+                    padding: "15px", // Menyesuaikan jarak padding
                     borderRadius: "10px" // Menambahkan sudut elemen
                 },
                 close: true,

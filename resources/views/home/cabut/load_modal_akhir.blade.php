@@ -1,5 +1,3 @@
-
-
 <div class="row">
     <div class="col-lg-4 mb-2">
         <label for="">Pencarian :</label>
@@ -46,11 +44,11 @@
                                 name="ttl_rp{{ $i + 1 }}[]" value="{{ $hasil->ttl_rp }}">
                         </td>
                         <td>
-                            <input style="width:140px" value="{{ $d->tgl_serah ?? date('Y-m-d') }}" name="tgl_serah{{ $i + 1 }}[]"
-                                type="date" class="form-control">
+                            <input style="width:140px" value="{{ $d->tgl_serah ?? date('Y-m-d') }}"
+                                name="tgl_serah{{ $i + 1 }}[]" type="date" class="form-control">
                         </td>
                         <td>
-                            <input  type="text" readonly value="{{ $d->no_box }}" class="form-control">
+                            <input type="text" readonly value="{{ $d->no_box }}" class="form-control">
                         </td>
                         <td class="fs-bold">{{ strtoupper($d->nama) }}</td>
                         <td>
@@ -77,31 +75,35 @@
                                 class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->pcs_hcr ?? 0 }}" name="pcs_hcr{{ $i + 1 }}[]" type="text"
-                                class="form-control text-end pcsHcrKeyup" count="{{ $i + 1 }}">
+                            <input value="{{ $d->pcs_hcr ?? 0 }}" name="pcs_hcr{{ $i + 1 }}[]"
+                                type="text" class="form-control text-end pcsHcrKeyup"
+                                count="{{ $i + 1 }}">
                         </td>
 
 
                         <td align="right" class="h6">
-                            Rp <span class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
+                            Rp <span
+                                class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
                         </td>
                         <td>
-                            <select name="bulan{{$i+1}}[]" class="form-control">
+                            <select name="bulan{{ $i + 1 }}[]" class="form-control">
                                 <option value="0">Pilih Bulan</option>
                                 @php
                                     $listBulan = DB::table('bulan')->get();
                                 @endphp
                                 @foreach ($listBulan as $l)
-                                    <option value="{{ $l->bulan }}" {{  $d->bulan == $l->bulan ? 'selected' : '' }}>
+                                    <option value="{{ $l->bulan }}"
+                                        {{ $d->bulan == $l->bulan ? 'selected' : '' }}>
                                         {{ $l->nm_bulan }}</option>
                                 @endforeach
                             </select>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-{{empty($d->gr_akhir) ? 'warning' : 'primary'}} saveCabutAkhir" type="button"
-                                count="{{ $i + 1 }}">Save</button>
-                                <a class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
-                                href="#" data-bs-toggle="modal" data-bs-target="#selesai">Akhir</a>
+                            <button style="font-size: 12px"
+                                class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
+                                type="button" count="{{ $i + 1 }}">Save</button>
+                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
+                                href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
                         </td>
                     </tr>
                 @endforeach

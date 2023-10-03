@@ -140,6 +140,7 @@ class CabutController extends Controller
                 'c.rp_bonus',
                 'a.tgl_serah',
                 'a.selesai',
+                'a.bulan_dibayar',
                 'a.tgl_terima',
                 'a.id_cabut',
                 'a.selesai',
@@ -471,6 +472,7 @@ class CabutController extends Controller
 
     public function selesai_cabut(Request $r)
     {
+        
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
         return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
     }
