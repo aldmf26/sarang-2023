@@ -1,5 +1,5 @@
 <div class="row">
-    
+
     <div class="col-lg-12">
         <table class="table table-hover table-bordered" style="border:1px solid #97a1c3" id="tableHalaman">
             <thead>
@@ -32,7 +32,6 @@
                     <tr>
                         <td>{{ $no + 1 }}</td>
                         <td>{{ date('M y', strtotime($d->tgl_terima)) }}</td>
-
                         <td>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
                                 id_cabut="{{ $d->id_cabut }}">{{ $d->no_box }}</a>
@@ -57,16 +56,13 @@
                                 class="badge bg-{{ $d->selesai == 'Y' ? 'primary' : 'warning' }}">{{ $d->selesai == 'Y' ? 'Selesai' : 'Belum' }}</span>
                         </td>
                         <td align="center">
-
                             @if ($d->selesai == 'T')
                                 <a class="btn btn-warning btn-sm inputAkhir" href="#"
                                     no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
                                     data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
                             @else
-                                <input type="checkbox" class="form-check cekTutup" name="cekTutup[]" id_cabut="{{ $d->id_cabut }}">
-
-                                {{-- <a class="btn btn-primary btn-sm tutup" href="#" id_cabut="{{ $d->id_cabut }}"
-                                href="#"></i>Tutup</a> --}}
+                                <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
+                                    id_cabut="{{ $d->id_cabut }}">
                             @endif
 
 
