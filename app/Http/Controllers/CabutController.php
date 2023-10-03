@@ -35,7 +35,6 @@ class CabutController extends Controller
             WHERE DATE(tgl) = CURDATE() AND ket = 'cabut sisa'
         )");
     }
-
     public function queryRekap($tgl1, $tgl2)
     {
         $id = auth()->user()->id;
@@ -95,7 +94,6 @@ class CabutController extends Controller
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
-
     public function getStokBk($no_box = null)
     {
         $id_user = auth()->user()->id;
@@ -107,7 +105,6 @@ class CabutController extends Controller
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user'");
     }
-
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -126,7 +123,6 @@ class CabutController extends Controller
         $anakBelum = count($this->getAnakTambah('NOT'));
         return response()->json(['anakBelum' => $anakBelum]);
     }
-
     public function load_halaman(Request $r)
     {
         $tgl1 = $r->tgl1;
@@ -175,7 +171,6 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_halaman', $data);
     }
-
     public function load_tambah_anak(Request $r)
     {
         $data = [
@@ -183,7 +178,6 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_tambah_anak', $data);
     }
-
     public function createTambahAnakCabut(Request $r)
     {
         $tgl = date('Y-m-d');
@@ -208,14 +202,12 @@ class CabutController extends Controller
         }
         return 'Berhasil tambah anak';
     }
-
     public function hapusCabutRow(Request $r)
     {
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->delete();
         DB::table('absen')->where([['id_anak', $r->id_anak], ['tgl', date('Y-m-d')], ['ket', 'Cabut']])->delete();
         return 'Berhasil hapus baris';
     }
-
     public function load_tambah_cabut(Request $r)
     {
         $data = [
@@ -225,7 +217,6 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_tambah_cabut', $data);
     }
-
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('cabut as a')
@@ -266,7 +257,6 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_modal_akhir', $data);
     }
-
     public function load_modal_anak_sisa(Request $r)
     {
         $datas = DB::table('absen as a')
