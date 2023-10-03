@@ -143,6 +143,7 @@ class CabutController extends Controller
                 'b.id_kelas',
                 'c.rp_bonus',
                 'a.tgl_serah',
+                'a.selesai',
                 'a.tgl_terima',
                 'a.id_cabut',
                 'a.selesai',
@@ -158,9 +159,8 @@ class CabutController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->whereBetween('a.tgl_terima', [$tgl1, $tgl2])
-            ->where('no_box', '!=', '9999')
-            ->orderBY('a.id_cabut', 'DESC');
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            ->orderBY('a.selesai', 'ASC');
 
         if (auth()->user()->posisi_id != 1) {
             $cabut->where('a.id_pengawas', $id);
@@ -237,6 +237,7 @@ class CabutController extends Controller
             ->select(
                 'b.id_anak',
                 'a.no_box',
+                'a.id_cabut',
                 'a.rupiah',
                 'c.gr as gr_kelas',
                 'c.rupiah as rupiah_kelas',
@@ -269,14 +270,14 @@ class CabutController extends Controller
     public function load_modal_anak_sisa(Request $r)
     {
         $datas = DB::table('absen as a')
-        ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                    ->where('a.ket', 'cabut sisa')
-                    ->get();
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where('a.ket', 'cabut sisa')
+            ->get();
         $data = [
             'tittle' => 'tes',
             'datas' => $datas
         ];
-        return view('home.cabut.load_modal_anak_sisa',$data);
+        return view('home.cabut.load_modal_anak_sisa', $data);
     }
 
     public function hapusAnakSisa(Request $r)
@@ -400,7 +401,7 @@ class CabutController extends Controller
             //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
             // } else {
             // }
-            DB::table('absen')->where([['id_anak',$r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
+            DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
                 'tgl' => $r->tgl_terima[$i]
             ]);
             DB::table('cabut')->where([['id_pengawas', $r->id_pengawas[$i]], ['id_anak', $r->id_anak[$i]], ['tgl_terima', date('Y-m-d')], ['no_box', '9999']])->update([
@@ -482,6 +483,13 @@ class CabutController extends Controller
         return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
     }
 
+    public function ditutup(Request $r)
+    {
+        foreach($r->datas as $d) {
+            DB::table('cabut')->where('id_cabut', $d)->update(['penutup'=> 'Y']);
+        }
+    }
+
     public function export(Request $r)
     {
 
@@ -513,7 +521,6 @@ class CabutController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->whereBetween('a.tgl_terima', [$tgl1, $tgl2])
             ->where('no_box', '!=', '9999')
             ->orderBY('a.id_cabut', 'DESC')
             ->get();

@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/', 'create')->name('create');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
+            Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');

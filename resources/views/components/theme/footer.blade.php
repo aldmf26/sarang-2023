@@ -196,27 +196,28 @@
         })
 
         $('.table tbody tr').click(function(event) {
-        // Temukan kotak centang di baris ini
-        var checkbox = $(this).find('.cek');
+            // Temukan kotak centang di baris ini
+            var checkbox = $(this).find('.'+itemClass);
 
-        // Jika yang diklik adalah sel yang bukan kotak centang
-        if (!$(event.target).is('.cek')) {
-            // Mengebalikan status kotak centang (ceklis jika sebelumnya tidak terceklis, dan sebaliknya)
-            checkbox.prop('checked', !checkbox.prop('checked'));
+            // Jika yang diklik adalah sel yang bukan kotak centang
+            if (!$(event.target).is('.'+itemClass)) {
+                // Mengebalikan status kotak centang (ceklis jika sebelumnya tidak terceklis, dan sebaliknya)
+                checkbox.prop('checked', !checkbox.prop('checked'));
 
-            // Memeriksa apakah semua kotak centang di seluruh tabel terceklis atau tidak
-            var semuaTerceklis = true;
-            $('.table tbody .cek').each(function() {
-                if (!$(this).prop('checked')) {
-                    semuaTerceklis = false;
-                    return false; // Keluar dari loop jika ada yang tidak terceklis
-                }
-            });
+                // Memeriksa apakah semua kotak centang di seluruh tabel terceklis atau tidak
+                var semuaTerceklis = true;
+                $('.table tbody .'+itemClass).each(function() {
+                    if (!$(this).prop('checked')) {
+                        semuaTerceklis = false;
+                        return false; // Keluar dari loop jika ada yang tidak terceklis
+                    }
+                });
 
-            // Mengatur status kotak centang "cekSemua" berdasarkan apakah semua terceklis atau tidak
-            $('#' + allId).prop('checked', semuaTerceklis);
-        }
-    });
+                // Mengatur status kotak centang "cekSemua" berdasarkan apakah semua terceklis atau tidak
+                $('#' + allId).prop('checked', semuaTerceklis);
+                checkbox.trigger('change');
+            }
+        });
 
     }
 
@@ -288,9 +289,13 @@
             Toastify({
                 text: pesan,
                 duration: 3000,
+                position: "center",
                 style: {
                     background: bg,
-                    color: "#7F8B8B"
+                    color: "#7F8B8B",
+                    fontSize: "18px", // Menyesuaikan ukuran teks
+                    padding: "20px", // Menyesuaikan jarak padding
+                    borderRadius: "10px" // Menambahkan sudut elemen
                 },
                 close: true,
                 avatar: ava

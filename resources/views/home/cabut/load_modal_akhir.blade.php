@@ -18,7 +18,7 @@
                     <th class="dhead text-end" width="85">EOT</th>
                     <th class="dhead text-end" width="85">Pcs Hcr</th>
                     <th class="dhead text-end" width="150">Ttl Rp</th>
-                    <th class="dhead text-center">Aksi</th>
+                    <th class="dhead text-center" width="110">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +84,8 @@
                         <td>
                             <button class="btn btn-sm btn-{{empty($d->gr_akhir) ? 'warning' : 'primary'}} saveCabutAkhir" type="button"
                                 count="{{ $i + 1 }}">Save</button>
+                                <a class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
+                                href="#" data-bs-toggle="modal" data-bs-target="#selesai"><i class="fas fa-check"></i></i></a>
                         </td>
                     </tr>
                 @endforeach

@@ -1,6 +1,8 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
+        <x-theme.button href="#" icon="fa-window-close" variant="danger" addClass="float-end btn_tutup"
+            teks="Tutup" />
         <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
@@ -13,10 +15,9 @@
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
                 class="badge bg-danger" id="anakBelum"></span>
         </a>
-        
+
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
             teks="kry baru" />
-        <x-theme.btn_filter />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -40,10 +41,27 @@
 
         <form id="createCabutAkhir">
             @csrf
-            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg-max">
+            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-full">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
+
+        <form id="selesai_cabut">
+            @csrf
+            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
+                        <p class="text-center fw-bold">Note : </p>
+                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
+                            maupun dihapus
+                        </p>
+                        <input type="hidden" name="id_cabut" class="cetak">
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
+
         <x-theme.modal idModal="listAnakSisa" title="List Anak Kerja Sisa" btnSave="T" size="">
             <div id="load_modal_anak_sisa"></div>
         </x-theme.modal>
@@ -75,21 +93,7 @@
             </div>
         </x-theme.modal>
 
-        <form id="selesai_cabut">
-            @csrf
-            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
-                        <p class="text-center fw-bold">Note : </p>
-                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
-                            maupun dihapus
-                        </p>
-                        <input type="hidden" name="id_cabut" class="cetak">
-                    </div>
-                </div>
-            </x-theme.modal>
-        </form>
+
         @section('scripts')
             <script>
                 $(".select3").select2()
@@ -120,13 +124,16 @@
                         },
                         success: function(r) {
                             $("#loadHalaman").html(r);
-                            $('#table').DataTable({
-                                "paging": true,
-                                "pageLength": 10,
-                                "lengthChange": true,
-                                "stateSave": true,
+                            $('#tableHalaman').DataTable({
                                 "searching": true,
+                                scrollY: '400px',
+                                scrollX: true,
+                                scrollCollapse: true,
+                                "autoWidth": false,
+                                "paging": false,
+                                "ordering": false
                             });
+                            inputChecked('cekSemuaTutup', 'cekTutup')
                         }
                     });
 
@@ -221,6 +228,37 @@
                         }
                     });
                 }
+                $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
+                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                    $('.btn_tutup').toggle(this.checked);
+                })
+               
+                $(document).on('click', '.btn_tutup', function() {
+                    var selectedRows = [];
+                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                    $('input[name="cekTutup[]"]:checked').each(function() {
+                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                        // Mengambil ID dari kolom pertama (kolom #)
+                        var anakId = $(this).attr('id_cabut');
+
+                        // Tambahkan ID anak ke dalam array
+                        selectedRows.push(anakId);
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.ditutup') }}",
+                        data: {
+                            datas: selectedRows
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil save')
+                            loadHalaman()
+                            $('.btn_tutup').hide();
+                        }
+                    });
+
+                })
 
                 function load_anak() {
                     $.ajax({
@@ -302,6 +340,17 @@
                         }
                     });
                 }
+
+                function load_input_akhir() {
+                    $.ajax({
+                        type: "GET",
+                        url: "cabut/load_modal_akhir",
+                        success: function(r) {
+                            $("#load_modal_akhir").html(r);
+                            pencarian('pencarian2', 'tablealdi2')
+                        }
+                    });
+                }
                 // Panggil fungsi untuk pertama kali saat halaman dimuat
                 updateAnakBelum()
                 loadListAnakSisa()
@@ -310,6 +359,7 @@
                 loadTambahAnak()
                 load_anak()
                 load_anak_nopengawas()
+                load_input_akhir()
 
                 $(document).on('submit', '#createCabut', function(e) {
                     e.preventDefault();
@@ -451,20 +501,7 @@
 
                 // cabut akhur
                 $(document).on('click', '.inputAkhir', function() {
-                    var no_box = $(this).attr('no_box')
-                    var id_anak = $(this).attr('id_anak')
-                    $.ajax({
-                        type: "GET",
-                        url: "cabut/load_modal_akhir",
-                        data: {
-                            no_box: no_box,
-                            id_anak: id_anak,
-                        },
-                        success: function(r) {
-                            $("#load_modal_akhir").html(r);
-                            pencarian('pencarian2', 'tablealdi2')
-                        }
-                    });
+                    load_input_akhir()
                 })
 
                 setRupiah('grFlexKeyup')
@@ -522,19 +559,22 @@
                     var id_cabut = $(this).attr('id_cabut');
 
                     $('.cetak').val(id_cabut);
+
                 });
 
-                $(document).on('submit', '#selesai_cabut', function(e){
+                $(document).on('submit', '#selesai_cabut', function(e) {
                     e.preventDefault()
                     var datas = $(this).serialize()
                     $.ajax({
                         type: "POST",
-                        url: "{{route('cabut.selesai_cabut')}}",
+                        url: "{{ route('cabut.selesai_cabut') }}",
                         data: datas,
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil menyelesaikan')
                             $('#selesai').modal('hide')
                             loadHalaman()
+                            load_input_akhir()
+                            $("#inputAkhir").modal('show')
                         }
                     });
                 })
