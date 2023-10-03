@@ -232,7 +232,7 @@
                 $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
                     $('.btn_tutup').toggle(this.checked);
                 })
-               
+
                 $(document).on('click', '.btn_tutup', function() {
                     var selectedRows = [];
                     // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
@@ -347,6 +347,9 @@
                         url: "cabut/load_modal_akhir",
                         success: function(r) {
                             $("#load_modal_akhir").html(r);
+                            $(".select2-akhir").select2({
+                                dropdownParent: $('#inputAkhir .modal-content'),
+                            })
                             pencarian('pencarian2', 'tablealdi2')
                         }
                     });
@@ -517,7 +520,9 @@
                     var data = {
                         tgl_serah: row.find(`input[name='tgl_serah${count}[]']`).val(),
                         id_anak: row.find(`input[name='id_anak${count}[]']`).val(),
+                        id_cabut: row.find(`input[name='id_cabut${count}[]']`).val(),
                         no_box: row.find(`input[name='no_box${count}[]']`).val(),
+                        bulan: row.find(`select[name='bulan${count}[]']`).val(),
                         nama: row.find(`.nama`).text(),
                         gr_flx: row.find(`input[name='gr_flx${count}[]']`).val(),
                         pcs_akhir: row.find(`input[name='pcs_akhir${count}[]']`).val(),

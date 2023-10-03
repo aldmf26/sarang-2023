@@ -238,6 +238,7 @@ class CabutController extends Controller
                 'b.nama',
                 'a.pcs_awal',
                 'a.gr_awal',
+                'a.bulan_dibayar as bulan',
                 'a.gr_flx',
                 'a.pcs_akhir',
                 'a.pcs_hcr',
@@ -394,7 +395,7 @@ class CabutController extends Controller
             DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
                 'tgl' => $r->tgl_terima[$i]
             ]);
-            DB::table('cabut')->where([['id_pengawas', $r->id_pengawas[$i]], ['id_anak', $r->id_anak[$i]], ['tgl_terima', date('Y-m-d')], ['no_box', '9999']])->update([
+            DB::table('cabut')->where('id_cabut', $r->id_cabut[$i])->update([
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
@@ -421,12 +422,13 @@ class CabutController extends Controller
 
     public function input_akhir(Request $r)
     {
-        DB::table('cabut')->where([['id_anak', $r->id_anak], ['no_box', $r->no_box]])->update([
+        DB::table('cabut')->where('id_cabut', $r->id_cabut)->update([
             'pcs_akhir' => $r->pcs_akhir,
             'tgl_serah' => $r->tgl_serah,
             'gr_akhir' => $r->gr_akhir,
             'gr_flx' => $r->gr_flx,
             'pcs_hcr' => $r->pcs_hcr,
+            'bulan_dibayar' => $r->bulan,
             'eot' => $r->eot,
             'ttl_rp' => $r->ttl_rp,
         ]);
