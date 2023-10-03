@@ -7,8 +7,8 @@
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
-            teks="List anak sisa" />
+        {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
+            teks="List anak sisa" /> --}}
         <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
             teks="Cabut" />
         <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
