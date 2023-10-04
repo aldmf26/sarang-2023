@@ -93,6 +93,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
+            Route::post('/save_absen', 'save_absen')->name('save_absen');
+
+            Route::get('/load_anak_kerja', 'load_anak_kerja')->name('load_anak_kerja');
+            Route::get('/load_anak_kerja_belum', 'load_anak_kerja_belum')->name('load_anak_kerja_belum');
+            Route::get('/load_ambil_cbt', 'load_ambil_cbt')->name('load_ambil_cbt');
+            Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
+            Route::get('/get_box', 'get_box')->name('get_box');
         });
     Route::controller(AbsenController::class)
         ->prefix('home/absen')
