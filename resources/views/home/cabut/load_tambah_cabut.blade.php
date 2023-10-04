@@ -28,6 +28,7 @@
                         </td>
                         <td>
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
+                            <input type="hidden" value="{{ $x->id_cabut }}" class="form-control" name="id_cabut[]">
                         </td>
                         <td>
                             <select name="no_box[]" id="" class="select3 pilihBox" count="{{ $i+1 }}">
