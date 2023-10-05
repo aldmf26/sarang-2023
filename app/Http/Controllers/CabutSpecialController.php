@@ -47,6 +47,8 @@ class CabutSpecialController extends Controller
         return view('home.cabut_spesial.index', $data);
     }
 
+
+
     public function load_anak()
     {
         $anak = $this->getAnak();
@@ -152,6 +154,12 @@ class CabutSpecialController extends Controller
 
     public function create(Request $r)
     {
+        for ($i = 0; $i < count($r->id_absen); $i++) {
+            $data = [
+                'tgl' => $r->tgl_terima[$i]
+            ];
+            DB::table('absen')->where('id_absen', $r->id_absen[$i])->update($data);
+        }
         for ($i = 0; $i < count($r->no_box); $i++) {
             // $no_box = $r->no_box[$i];
             // $box = $this->getStokBk($no_box);
@@ -228,5 +236,91 @@ class CabutSpecialController extends Controller
             "),
         ];
         return view('home.cabut_spesial.rekap', $data);
+    }
+
+    function load_anak_kerja(Request $r)
+    {
+        $now =  date('Y-m-d');
+        $id_pengawas =  auth()->user()->id;
+
+        $total_anak = DB::selectOne("SELECT count(a.id_anak) as jumlah
+        FROM tb_anak as a
+        where a.id_pengawas =  $id_pengawas and a.id_anak not in (SELECT a.id_anak FROM absen as a where a.tgl = '$now' and a.ket = 'cabut spesial')
+        ");
+
+        $data = [
+            'total_anak' => $total_anak->jumlah
+        ];
+        echo json_encode($data);
+    }
+
+    function load_anak_kerja_belum(Request $r)
+    {
+        $now =  date('Y-m-d');
+        $id_pengawas =  auth()->user()->id;
+
+        $anak_spesial = DB::select("SELECT *
+        FROM tb_anak as a
+        where a.id_pengawas =  $id_pengawas and a.id_anak not in(SELECT a.id_anak FROM absen as a where a.tgl = '$now' and a.ket = 'cabut spesial') ");
+
+        $data = [
+            'anak_spesial' => $anak_spesial,
+        ];
+        return view('home.cabut_spesial.load_anak', $data);
+    }
+
+    function load_ambil_cbt(Request $r)
+    {
+        $now =  date('Y-m-d');
+        $id_pengawas =  auth()->user()->id;
+
+        $anak_spesial = DB::select("SELECT * 
+        FROM absen as a
+        left join tb_anak as b on b.id_anak = a.id_anak
+        where a.tgl = '$now' and a.id_pengawas = $id_pengawas and a.ket = 'cabut spesial' and a.id_anak not in(SELECT c.id_anak FROM cabut_spesial as c where c.tgl = '$now')
+        ");
+
+        $data = [
+            'anak_spesial' => $anak_spesial,
+            'boxBk' => $this->getStokBk(),
+            'anak' => $this->getAnak(),
+            'target' => DB::table('grade_spesial')->get()
+        ];
+        return view('home.cabut_spesial.gram_awal', $data);
+    }
+
+    function save_absen(Request $r)
+    {
+        for ($x = 0; $x < count($r->id_anak); $x++) {
+            $data = [
+                'id_anak' => $r->id_anak[$x],
+                'tgl' => date('Y-m-d'),
+                'id_pengawas' =>  auth()->user()->id,
+                'ket' => 'cabut spesial'
+            ];
+            DB::table('absen')->insert($data);
+        }
+    }
+
+    function delete_absen(Request $r)
+    {
+
+        DB::table('absen')->where('id_absen', $r->id_absen)->delete();
+    }
+    function get_box(Request $r)
+    {
+        $id_pengawas =  auth()->user()->id;
+        $box = DB::selectOne("SELECT *
+        FROM bk as a where a.no_box =  '$r->no_box' and a.penerima = '$id_pengawas'");
+
+        $cabut_spesial = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal FROM cabut_spesial as a where a.no_box = '$r->no_box' and a.id_pengawas = '$id_pengawas' group by a.no_box");
+
+        $pcs_awal = empty($cabut_spesial->pcs_awal) ? 0 : $cabut_spesial->pcs_awal;
+        $gr_awal = empty($cabut_spesial->gr_awal) ? 0 : $cabut_spesial->gr_awal;
+        $data = [
+            'pcs' => $box->pcs_awal - $pcs_awal,
+            'gram' => $box->gr_awal - $gr_awal
+        ];
+        echo json_encode($data);
     }
 }

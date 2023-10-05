@@ -9,57 +9,41 @@
 
 
     <x-slot name="cardBody">
+        <style>
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #000000;
+                line-height: 36px;
+                font-size: 12px;
+                width: auto;
+            }
+        </style>
         <form action="{{ route('bk.create') }}" method="post">
             @csrf
             <section class="row">
-                @for ($i = 0; $i < 10; $i++) <p>Kolom {{$i + 1}}</p>
-                    {{-- <table class="table table-striped">
+
+                <div class="col-lg-12">
+                    <table class="table table-striped" width="100%">
                         <thead>
                             <tr>
+                                {{-- <th class="dhead" width="70">Tipe</th> --}}
+
+                                <th class="dhead">No</th>
                                 <th class="dhead">No Lot</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
-                                <th class="dhead">Ket</th>
-                                <th class="dhead">Warna</th>
+                                <th class="dhead" width="80">Ket</th>
+                                <th class="dhead" width="60">Warna</th>
+                                <th class="dhead">Pgws</th>
+                                <th class="dhead" width="120">Nama</th>
+                                <th class="dhead">Tgl Terima</th>
+                                <th class="dhead text-end">Pcs Awal</th>
+                                <th class="dhead text-end">Gr Awal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-
-                            </tr>
-                        </tbody>
-                    </table> --}}
-
-                    {{-- </div> --}}
-                    <div class="col-lg-12">
-                        <table class="table table-striped" width="100%">
-                            <thead>
+                            @for ($i = 0; $i < 10; $i++)
                                 <tr>
-                                    {{-- <th class="dhead" width="70">Tipe</th> --}}
-                                    <th class="dhead">No Lot</th>
-                                    <th class="dhead">No Box</th>
-                                    <th class="dhead">Tipe</th>
-                                    <th class="dhead">Ket</th>
-                                    <th class="dhead">Warna</th>
-                                    <th class="dhead">Pgws</th>
-                                    <th class="dhead">Nama</th>
-                                    <th class="dhead">Tgl Terima</th>
-                                    <th class="dhead text-end">Pcs Awal</th>
-                                    <th class="dhead text-end">Gr Awal</th>
-                                    {{-- <th class="dhead text-end">Pcs Hcr</th>
-                                    <th class="dhead text-end">Gr Hcr</th>
-                                    <th class="dhead text-end">Pcs Flex</th>
-                                    <th class="dhead text-end">Gr Flex</th>
-                                    <th class="dhead text-end">Pcs Ttl</th>
-                                    <th class="dhead text-end">Gr Ttl</th> --}}
-                                    {{-- <th class="dhead text-end">Ttl Rp</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    {{-- <td>
-                                        <input type="text" class="form-control" value="BK" readonly name="tipe[]">
-                                    </td> --}}
+                                    <td>{{ $i + 1 }}</td>
                                     <td>
                                         <input name="no_lot[]" type="text" class="form-control">
                                     </td>
@@ -72,14 +56,14 @@
                                     <td>
                                         <select name="id_ket[]" id="" class="select3">
                                             @foreach ($ket_bk as $k)
-                                            <option value="{{$k->id_ket_bk}}">{{$k->ket_bk}}</option>
+                                                <option value="{{ $k->id_ket_bk }}">{{ $k->ket_bk }}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
                                         <select name="id_warna[]" id="" class="select3">
                                             @foreach ($warna as $w)
-                                            <option value="{{$w->id_warna}}">{{$w->nm_warna}}</option>
+                                                <option value="{{ $w->id_warna }}">{{ $w->nm_warna }}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -89,12 +73,9 @@
                                     </td>
                                     <td>
                                         <select name="nama[]" id="" class="select3">
-                                            {{-- @foreach ($pengawas as $d)
-                                            <option value="{{ $d->posisi_id }}">{{ ucwords($d->name) }}</option>
-                                            @endforeach --}}
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
-                                            <option value="{{$p->id}}">{{$p->name}}</option>
+                                                <option value="{{ $p->id }}">{{ $p->name }}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -110,39 +91,13 @@
                                         <input type="text" class="form-control text-end gr_awal" name="gr_awal[]"
                                             value="0">
                                     </td>
-                                    {{-- <td>
-                                        <input type="text" class="form-control text-end pcs_hcr" name="pcs_hcr"
-                                            value="0">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control text-end gr_hcr" name="gr_hcr" value="0">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control text-end pcs_flex" name="pcs_flex"
-                                            value="0">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control text-end gr_flex" name="gr_flex"
-                                            value="0">
-                                    </td> --}}
-                                    {{-- <td>
-                                        <input type="text" class="form-control text-end pcs_ttl" name="pcs_ttl"
-                                            readonly>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control text-end gr_ttl" name="gr_ttl" readonly>
-                                    </td> --}}
-                                    {{-- <td>
-                                        <input type="text" class="form-control text-end" value="0" name="ttl_rp">
-                                    </td> --}}
+
                                 </tr>
-                            </tbody>
-                        </table>
-                        <br>
-                        <hr style="border: 1px solid #435EBE">
-                        <br>
-                    </div>
-                    @endfor
+                            @endfor
+                        </tbody>
+                    </table>
+                </div>
+
             </section>
     </x-slot>
     <x-slot name="cardFooter">
@@ -155,69 +110,69 @@
         </form>
     </x-slot>
     @section('scripts')
-    <script>
-        $(".select3").select2()
+        <script>
+            $(".select3").select2()
 
-        $(document).ready(function () {
-            $(document).on("keyup", ".pcs_awal", function () {
-                var pcs_awal = $(this).val();
-                var pcs_hcr = $('.pcs_hcr').val();
-                var pcs_flex = $('.pcs_flex').val();
+            $(document).ready(function() {
+                $(document).on("keyup", ".pcs_awal", function() {
+                    var pcs_awal = $(this).val();
+                    var pcs_hcr = $('.pcs_hcr').val();
+                    var pcs_flex = $('.pcs_flex').val();
 
-                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
 
-                $('.pcs_ttl').val(total_pcs);
+                    $('.pcs_ttl').val(total_pcs);
+                });
+                $(document).on("keyup", ".pcs_hcr", function() {
+                    var pcs_hcr = $(this).val();
+                    var pcs_awal = $('.pcs_awal').val();
+                    var pcs_flex = $('.pcs_flex').val();
+
+                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+
+                    $('.pcs_ttl').val(total_pcs);
+                });
+                $(document).on("keyup", ".pcs_flex", function() {
+                    var pcs_hcr = $('.pcs_hcr').val();
+                    var pcs_awal = $('.pcs_awal').val();
+                    var pcs_flex = $(this).val();
+
+                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
+
+                    $('.pcs_ttl').val(total_pcs);
+                });
+
+
+                // Gram
+
+                $(document).on("keyup", ".gr_awal", function() {
+                    var gr_awal = $(this).val();
+                    var gr_hcr = $('.gr_hcr').val();
+                    var gr_flex = $('.gr_flex').val();
+
+                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                    $('.gr_ttl').val(total_gr);
+                });
+                $(document).on("keyup", ".gr_hcr", function() {
+                    var gr_hcr = $(this).val();
+                    var gr_awal = $('.gr_awal').val();
+                    var gr_flex = $('.gr_flex').val();
+
+                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                    $('.gr_ttl').val(total_gr);
+                });
+                $(document).on("keyup", ".gr_flex", function() {
+                    var gr_hcr = $('.gr_hcr').val();
+                    var gr_awal = $('.gr_awal').val();
+                    var gr_flex = $(this).val();
+
+                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
+
+                    $('.gr_ttl').val(total_gr);
+                });
             });
-            $(document).on("keyup", ".pcs_hcr", function () {
-                var pcs_hcr = $(this).val();
-                var pcs_awal = $('.pcs_awal').val();
-                var pcs_flex = $('.pcs_flex').val();
-
-                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
-
-                $('.pcs_ttl').val(total_pcs);
-            });
-            $(document).on("keyup", ".pcs_flex", function () {
-                var pcs_hcr = $('.pcs_hcr').val();
-                var pcs_awal = $('.pcs_awal').val();
-                var pcs_flex = $(this).val();
-
-                var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
-
-                $('.pcs_ttl').val(total_pcs);
-            });
-
-
-            // Gram
-
-            $(document).on("keyup", ".gr_awal", function () {
-                var gr_awal = $(this).val();
-                var gr_hcr = $('.gr_hcr').val();
-                var gr_flex = $('.gr_flex').val();
-
-                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                $('.gr_ttl').val(total_gr);
-            });
-            $(document).on("keyup", ".gr_hcr", function () {
-                var gr_hcr = $(this).val();
-                var gr_awal = $('.gr_awal').val();
-                var gr_flex = $('.gr_flex').val();
-
-                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                $('.gr_ttl').val(total_gr);
-            });
-            $(document).on("keyup", ".gr_flex", function () {
-                var gr_hcr = $('.gr_hcr').val();
-                var gr_awal = $('.gr_awal').val();
-                var gr_flex = $(this).val();
-
-                var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                $('.gr_ttl').val(total_gr);
-            });
-        });
-    </script>
+        </script>
     @endsection
 </x-theme.app>
