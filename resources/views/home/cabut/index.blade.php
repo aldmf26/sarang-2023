@@ -431,6 +431,7 @@
                 })
 
                 $(document).on('click', '.hapusCabutRow', function() {
+                    var count = $(this).attr('count')
                     if (confirm(
                             'Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')) {
                         var id_cabut = $(this).attr('id_cabut')
@@ -444,8 +445,8 @@
                             },
                             success: function(r) {
                                 alertToast('sukses', 'Berhasil hapus row')
-
-                                loadTambahcabut()
+                                $(".baris" + count).remove();
+                                // loadTambahcabut()
                                 loadHalaman()
                                 loadTambahAnak()
                             }

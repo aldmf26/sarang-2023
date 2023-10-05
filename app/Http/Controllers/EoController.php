@@ -16,7 +16,7 @@ class EoController extends Controller
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
 
         return DB::$query("SELECT a.no_box, a.pcs_awal,a.gr_awal FROM `bk` as a
-         ");
+        WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.no_box NOT IN (select no_box FROM cabut_spesial) AND a.penerima = '$id_user'");
     }
 
     public function getAnak($id = null)
@@ -46,6 +46,87 @@ class EoController extends Controller
         ];
         return view('home.eo.index', $data);
     }
+    public function getAnakTambah($cabut = null)
+    {
+
+        $id_user = auth()->user()->id;
+        $whereQ = empty($cabut) ? "AND c.no_box = 9999" : '';
+        return DB::select("SELECT c.id_eo,a.id_anak,a.nama,b.kelas FROM `tb_anak` as a
+        LEFT JOIN tb_kelas as b ON a.id_kelas = b.id_kelas
+        LEFT JOIN eo as c ON a.id_anak = c.id_anak AND DATE(c.tgl_ambil) = CURDATE()
+        WHERE a.id_pengawas = '$id_user' $whereQ AND a.id_anak $cabut IN (
+            SELECT id_anak
+            FROM eo
+            WHERE DATE(tgl_ambil) = CURDATE()
+        ) AND a.id_anak NOT IN (
+            SELECT id_anak
+            FROM absen
+            WHERE DATE(tgl) = CURDATE() AND ket = 'eo sisa'
+        )");
+    }
+
+    public function load_tambah_anak(Request $r)
+    {
+        $data = [
+            'anak' => $this->getAnakTambah('NOT')
+        ];
+        return view('home.eo.load_tambah_anak', $data);
+    }
+
+    public function updateAnakBelum()
+    {
+        $anakBelum = count($this->getAnakTambah('NOT'));
+        return response()->json(['anakBelum' => $anakBelum]);
+    }
+    public function createTambahAnakCabut(Request $r)
+    {
+        $tgl = date('Y-m-d');
+        $id_pengawas = auth()->user()->id;
+        // DB::table('cabut')->where([['tgl_terima', $tgl], ['id_pengawas', $id_pengawas], ['no_box', '9999']])->delete();
+        // DB::table('absen')->where([['tgl', $tgl], ['ket', 'cabut']])->delete();
+        foreach ($r->all()['rows'] as $d) {
+            DB::table('absen')->insert([
+                'tgl' => $tgl,
+                'id_pengawas' => $id_pengawas,
+                'id_anak' => $d,
+                'ket' => $r->tipe == 'eo' ? 'eo' : 'eo sisa'
+            ]);
+            if ($r->tipe == 'eo') {
+                DB::table('eo')->insert([
+                    'no_box' => 9999,
+                    'id_pengawas' => $id_pengawas,
+                    'id_anak' => $d,
+                    'tgl_ambil' => $tgl
+                ]);
+            }
+        }
+        return 'Berhasil tambah anak';
+    }
+
+    public function load_tambah_cabut(Request $r)
+    {
+        $data = [
+            'title' => 'Tambah Divisi Eo',
+            'nobox' => $this->getStokBk(),
+            'anak' => $this->getAnak(),
+            'getAnak' => $this->getAnakTambah(),
+            'kelas' => DB::table('tb_kelas_eo')->get()
+        ];
+
+        return view('home.eo.load_tambah_cabut', $data);
+    }
+    public function get_box_sinta(Request $r)
+    {
+        $bk = $this->getStokBk($r->no_box);
+
+        $data = [
+            'pcs_awal' => $bk->pcs_awal,
+            'gr_awal' => $bk->gr_awal,
+        ];
+        return json_encode($data);
+    }
+
+    // 
 
     public function tbh_baris(Request $r)
     {
@@ -60,44 +141,119 @@ class EoController extends Controller
 
     public function create(Request $r)
     {
-        for ($i = 0; $i < count($r->id_anak); $i++) {
-            DB::table('eo')->insert([
-                'tgl_input' => date('Y-m-d'),
-                'id_pengawas' => auth()->user()->id,
-                'id_anak' => $r->id_anak[$i],
-                'no_box' => $r->no_box,
+        for ($i = 0; $i < count($r->no_box); $i++) {
+            $no_box = $r->no_box[$i];
+
+            // if ($box->pcs_awal - $box->pcs_cabut - $r->pcs_awal[$i] < 0 || $box->gr_awal - $box->gr_cabut - $r->gr_awal[$i] < 0) {
+            //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
+            // } else {
+            // }
+            DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
+                'tgl' => $r->tgl_ambil[$i]
+            ]);
+            DB::table('eo')->where('id_eo', $r->id_eo[$i])->update([
+                'no_box' => $r->no_box[$i] ?? '9999',
+                'gr_eo_awal' => $r->gr_eo_awal[$i],
                 'id_kelas' => $r->id_kelas[$i],
                 'tgl_ambil' => $r->tgl_ambil[$i],
-                'gr_eo_awal' => $r->gr_eo_awal[$i],
+                'tgl_input' => date('Y-m-d'),
             ]);
         }
-        return redirect()->route('eo.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return json_encode([
+            'pesan' => "Berhasil tambah data cabut"
+        ]);
+    }
+    public function load_halaman(Request $r)
+    {
+        $tgl1 = $r->tgl1;
+        $tgl2 = $r->tgl2;
+        $id = auth()->user()->id;
+
+        $cabut = DB::table('eo as a')
+            ->select(
+                'a.id_anak',
+                'a.id_eo',
+                'a.no_box',
+                'a.ttl_rp',
+                'a.id_pengawas',
+                'a.id_kelas',
+                'a.tgl_ambil',
+                'a.tgl_serah',
+                'a.tgl_input',
+                'a.gr_eo_awal',
+                'a.gr_eo_akhir',
+                'a.selesai',
+                'a.penutup',
+                'b.nama',
+                'c.kelas',
+                'c.rupiah',
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas_eo as c', 'a.id_kelas', 'c.id_kelas')
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            ->orderBY('a.selesai', 'ASC');
+
+        if (auth()->user()->posisi_id != 1) {
+            $cabut->where('a.id_pengawas', $id);
+        }
+
+        $query = $cabut->get();
+        $data = [
+            'title' => 'Divisi Cabut',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'cabut' => $query,
+        ];
+        return view('home.eo.load_halaman', $data);
     }
 
     public function load_modal_akhir(Request $r)
     {
-        $detail = DB::table('eo as a')
-            ->select('a.id_kelas as id_kelas', 'b.nama', 'a.*')
+        $detail = DB::table('cabut as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
             ->first();
+
+        $datas = DB::table('eo as a')
+            ->select(
+                'a.id_anak',
+                'a.id_eo',
+                'a.no_box',
+                'a.ttl_rp',
+                'a.bulan_dibayar as bulan',
+                'a.id_pengawas',
+                'a.id_kelas',
+                'a.tgl_ambil',
+                'a.tgl_serah',
+                'a.tgl_input',
+                'a.gr_eo_awal',
+                'a.gr_eo_akhir',
+                'a.selesai',
+                'a.penutup',
+                'b.nama',
+                'c.kelas',
+                'c.rupiah',
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas_eo as c', 'a.id_kelas', 'c.id_kelas')
+            ->where([['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
+            ->orderBy('a.id_eo', 'DESC')
+            ->get();
         $data = [
-            'detail' => $detail
+            'detail' => $detail,
+            'datas' => $datas
         ];
         return view('home.eo.load_modal_akhir', $data);
     }
 
     public function input_akhir(Request $r)
     {
-        $getKelas = DB::table('tb_kelas_eo')->where('id_kelas', $r->id_kelas)->first();
-        $ttl_rp = $getKelas->rupiah * $r->gr_eo_akhir;
         DB::table('eo')->where('id_eo', $r->id_eo)->update([
             'gr_eo_akhir' => $r->gr_eo_akhir,
             'tgl_serah' => $r->tgl_serah,
-            'ttl_rp' => $ttl_rp,
+            'ttl_rp' => $r->ttl_rp,
+            'bulan_dibayar' => $r->bulan,
         ]);
-
-        return redirect()->route('eo.index')->with('sukses', 'Data Berhasil Ditambahkan');
     }
 
     public function selesai(Request $r)

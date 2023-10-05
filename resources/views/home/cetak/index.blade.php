@@ -7,7 +7,7 @@
             <i class="fas fa-file-excel"></i> Export
         </a>
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
-            teks="Krywn" />
+            teks="kry baru" />
         <x-theme.btn_filter />
     </x-slot>
 

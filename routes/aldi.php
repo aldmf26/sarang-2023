@@ -126,7 +126,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
-            Route::post('/create', 'create')->name('create');
+            Route::post('/', 'create')->name('create');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
@@ -148,7 +148,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/add', 'add')->name('add');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/export', 'export')->name('export');
-            Route::post('/create', 'create')->name('create');
+            Route::get('/create', 'create')->name('create');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::get('/selesai', 'selesai')->name('selesai');
@@ -156,6 +156,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
             Route::get('/rekap', 'rekap')->name('rekap');
+
+            Route::get('/load_tambah_anak', 'load_tambah_anak')->name('load_tambah_anak');
+            Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
+            Route::get('/createTambahAnakCabut', 'createTambahAnakCabut')->name('createTambahAnakCabut');
+            Route::get('/load_tambah_cabut', 'load_tambah_cabut')->name('load_tambah_cabut');
+            Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
+            Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
+            Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
+
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
@@ -206,5 +215,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/delete', 'delete')->name('delete');
             Route::post('/update', 'update')->name('update');
             Route::post('/create', 'create')->name('create');
+            Route::post('/cabutCreate', 'cabutCreate')->name('cabutCreate');
         });
 });
