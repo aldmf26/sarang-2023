@@ -37,14 +37,22 @@ class CabutSpecialController extends Controller
             'title' => 'Divisi Cabut Spesial',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+
+        ];
+        return view('home.cabut_spesial.index', $data);
+    }
+
+    function load_cabut(Request $r)
+    {
+        $data = [
             'cabut' => DB::table('cabut_spesial as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
-                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                ->where('a.penutup', 'T')
                 ->orderBY('a.id_cabut_spesial', 'DESC')
                 ->get(),
         ];
-        return view('home.cabut_spesial.index', $data);
+        return view('home.cabut_spesial.load_cabut', $data);
     }
 
 
@@ -80,20 +88,6 @@ class CabutSpecialController extends Controller
         ";
     }
 
-    public function load_anak_nopengawas()
-    {
-        $anakNoPengawas = $this->getAnak(1);
-
-        echo "
-        <select class='select3-load anakNoPengawas' name='' multiple id=''>
-        ";
-        foreach ($anakNoPengawas as $d) {
-            echo "<option value='" . $d->id_anak . "'>" . ucwords($d->nama) . "</option>";
-        }
-        echo "
-                            </select>
-        ";
-    }
 
     public function add_delete_anak(Request $r)
     {
@@ -186,30 +180,43 @@ class CabutSpecialController extends Controller
 
     public function load_modal_akhir(Request $r)
     {
-        $detail = DB::table('cabut_spesial as a')
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['a.id_cabut_spesial', $r->id_cabut]])
-            ->first();
+        // $detail = DB::table('cabut_spesial as a')
+        //     ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+        //     ->where([['a.id_cabut_spesial', $r->id_cabut]])
+        //     ->first();
+
+        $cabut_spesial = DB::select("SELECT *
+        FROM cabut_spesial as a
+        left join tb_anak as b on b.id_anak = a.id_anak
+        where a.selesai = 'T'
+        ");
         $data = [
-            'detail' => $detail
+            'cabut_spesial' => $cabut_spesial,
+            'bulan' => DB::table('bulan')->get()
         ];
         return view('home.cabut_spesial.load_modal_akhir', $data);
     }
     public function input_akhir(Request $r)
     {
-        DB::table('cabut_spesial')->where([['id_anak', $r->id_anak]])->update([
+        DB::table('cabut_spesial')->where([['id_cabut_spesial', $r->id_cabut_spesial]])->update([
             'pcs_akhir' => $r->pcs_akhir,
             'gr_akhir' => $r->gr_akhir,
-            // 'pcs_hcr' => $r->pcs_hcr,
+            'gr_flex' => $r->gr_flex,
+            'pcs_hcr' => $r->pcs_hcr,
             'eot' => $r->eot,
+            'tgl_terima' => $r->tgl_terima,
+            'bulan_dibayar' => $r->bulan_dibayar,
+            'ttl_rp' =>  $r->pcs_hcr > 0 ? 0 : $r->ttl_rp
         ]);
 
-        return redirect()->route('cabutSpesial.index')->with('sukses', 'Data Berhasil Ditambahkan');
+
+        // return redirect()->route('cabutSpesial.index')->with('sukses', 'Data Berhasil Ditambahkan');
     }
     public function selesai_cabut(Request $r)
     {
+        // dd($r->id_cabut);
         DB::table('cabut_spesial')->where('id_cabut_spesial', $r->id_cabut)->update(['selesai' => 'Y']);
-        return redirect()->route('cabutSpesial.index')->with('sukses', 'Data telah diselesaikan');
+        // return redirect()->route('cabutSpesial.index')->with('sukses', 'Data telah diselesaikan');
     }
 
     public function rekap(Request $r)
@@ -322,5 +329,44 @@ class CabutSpecialController extends Controller
             'gram' => $box->gr_awal - $gr_awal
         ];
         echo json_encode($data);
+    }
+
+    function load_row(Request $r)
+    {
+        $cabut_spesial = DB::selectOne("SELECT *
+        FROM cabut_spesial as a
+        left join tb_anak as b on b.id_anak = a.id_anak
+        where a.id_cabut_spesial = $r->id
+        ");
+        $data = [
+            'detail' => $cabut_spesial,
+            'bulan' => DB::table('bulan')->get()
+        ];
+        return view('home.cabut_spesial.load_row', $data);
+    }
+
+    function ditutup(Request $r)
+    {
+        foreach ($r->datas as $d) {
+            DB::table('cabut_spesial')->where('id_cabut_spesial', $d)->update(['penutup' => 'Y']);
+        }
+    }
+
+    function history(Request $r)
+    {
+        if (empty($r->tgl1)) {
+            $tgl1 = date('Y-m-01');
+            $tgl2 = date('Y-m-t');
+        } else {
+            $tgl1 = $r->tgl1;
+            $tgl2 = $r->tgl2;
+        }
+        $data = [
+            'cabut' => DB::table('cabut_spesial as a')
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->orderBY('a.id_cabut_spesial', 'DESC')
+                ->get(),
+        ];
     }
 }

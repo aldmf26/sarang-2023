@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
-            Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
+            Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/save_absen', 'save_absen')->name('save_absen');
 
             Route::get('/load_anak_kerja', 'load_anak_kerja')->name('load_anak_kerja');
@@ -100,6 +100,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_ambil_cbt', 'load_ambil_cbt')->name('load_ambil_cbt');
             Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
             Route::get('/get_box', 'get_box')->name('get_box');
+            Route::get('/load_cabut', 'load_cabut')->name('load_cabut');
+            Route::get('/load_row', 'load_row')->name('load_row');
+            Route::get('/ditutup', 'ditutup')->name('ditutup');
         });
     Route::controller(AbsenController::class)
         ->prefix('home/absen')

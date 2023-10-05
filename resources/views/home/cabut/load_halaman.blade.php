@@ -31,7 +31,8 @@
                 @foreach ($cabut as $no => $d)
                     <tr>
                         <td>{{ $no + 1 }}</td>
-                        <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-'.$d->bulan_dibayar.'-'.date('Y'))) : '' }}</td>
+                        <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
+                        </td>
                         <td>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
                                 id_cabut="{{ $d->id_cabut }}">{{ $d->no_box }}</a>
