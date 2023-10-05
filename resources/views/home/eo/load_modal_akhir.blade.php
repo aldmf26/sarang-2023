@@ -1,43 +1,72 @@
-<div class="row">
-    <input type="hidden" name="id_eo" value="{{ $detail->id_eo }}">
+<div class="row justify-content-center">
+    {{-- <input type="hidden" name="id_eo" value="{{ $detail->id_eo }}">
     <input type="hidden" name="id_anak" value="{{ $detail->id_anak }}">
-    <input type="hidden" name="no_box" value="{{ $detail->no_box }}">
+    <input type="hidden" name="no_box" value="{{ $detail->no_box }}"> --}}
     <div class="col-lg-12">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="dhead"  width="100">Nama Anak</th>
-                    <th class="dhead">No Box</th>
+                    <th class="dhead">Tgl Terima</th>
+                    <th class="dhead" width="80">No Box</th>
+                    <th class="dhead" width="80">Nama</th>
                     <th class="dhead">Kelas</th>
                     <th class="dhead text-end">Gr EO Awal</th>
-                    <th class="dhead">Tgl Serah</th>
                     <th class="dhead text-end">Gr EO Akhir</th>
+                    <th class="dhead text-end" width="120">Ttl Rp</th>
+                    <th class="dhead" width="120">Dibayar</th>
+                    <th class="dhead text-center" width="120">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="fs-bold">{{ strtoupper($detail->nama) }}</td>
-                
-                    <td>
-                        <input type="text" readonly value="{{ $detail->no_box }}" class="form-control">
-                    </td>
-                    @php
-                        $kelas = DB::table('tb_kelas_eo')->where('id_kelas', $detail->id_kelas)->first()->kelas;
-                    @endphp
-                    <td>
-                        <input type="text" readonly value="{{ $kelas }}" class="form-control">
-                        <input name="id_kelas" type="hidden" value="{{ $detail->id_kelas }}" class="form-control">
-                    </td>
-                    <td>
-                        <input readonly value="{{ $detail->gr_eo_awal }}" type="text" class="form-control text-end">
-                    </td>
-                    <td><input name="tgl_serah" type="date" value="{{ date('Y-m-d') }}" class="form-control"></td>
-                    <td>
-                        <input name="gr_eo_akhir" value="{{ $detail->gr_eo_akhir }}" type="text" class="form-control text-end">
-                    </td>
-                    
-               
-                </tr>
+                @foreach ($datas as $i => $x)
+                    <tr>
+                        <td>
+                            <input name="tgl_serah{{ $i + 1 }}[]" style="font-size: 12px;" type="date" value="{{ date('Y-m-d') }}" class="form-control">
+                        </td>
+                        <td>
+                            <input type="text" readonly value="{{ $x->no_box }}" class="form-control">
+                            <input type="hidden" value="{{ $x->id_eo }}" name="id_eo{{ $i + 1 }}[]">
+                        </td>
+                        <td class="fs-bold">{{ strtoupper($x->nama) }}</td>
+                        <td>
+                            <input type="text" readonly value="{{ $x->kelas }}" class="form-control">
+                        </td>
+                        <td>
+                            <input readonly value="{{ $x->gr_eo_awal }}" name="gr_eo_awal{{$i+1}}[]" type="text" class="form-control text-end">
+                            <input value="{{ $x->rupiah }}" type="hidden" name="rupiah{{$i+1}}[]" class="rupiah_kelas{{ $i+1 }}">
+                        </td>
+                       
+                        <td>
+                            <input name="gr_eo_akhir{{ $i + 1 }}[]" value="{{ $x->gr_eo_akhir }}" type="text"
+                                class="form-control text-end grEoAkhirKeyup" count="{{ $i+1 }}">
+                        </td>
+                        <td align="right">
+
+                            <input type="hidden" name="ttl_rp{{ $i + 1 }}[]" value="{{$x->ttl_rp ?? 0}}" class="ttlRpSet{{$i+1}}">
+                            <span class="ttlRpKeyup{{$i+1}} h6">{{ number_format($x->ttl_rp ?? 0,0)  }}</span>
+                        </td>
+                        <td>
+                            <select name="bulan{{ $i + 1 }}[]" class="form-control">
+                                <option value="0">Pilih Bulan </option>
+                                @php
+                                    $listBulan = DB::table('bulan')->get();
+                                @endphp
+                                @foreach ($listBulan as $l)
+                                    <option value="{{ $l->bulan }}"
+                                        {{ $x->bulan == $l->bulan ? 'selected' : '' }}>
+                                        {{ $l->nm_bulan }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <button style="font-size: 12px"
+                                class="btn btn-sm btn-{{ empty($x->gr_eo_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
+                                type="button" count="{{ $i + 1 }}">Save</button>
+                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $x->id_eo }}"
+                                href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

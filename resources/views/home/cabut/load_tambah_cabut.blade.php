@@ -20,11 +20,12 @@
             </thead>
             <tbody>
                 @foreach ($getAnak as $i => $x)
-                    <tr>
+                    <tr class="baris{{ $i+1 }}">
                         <td>
                             <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">
                             <input type="hidden" class="form-control" name="id_pengawas[]" readonly
                                 value="{{ auth()->user()->id }}">
+                            
                         </td>
                         <td>
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
