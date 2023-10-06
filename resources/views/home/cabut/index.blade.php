@@ -92,8 +92,6 @@
                 </div>
             </div>
         </x-theme.modal>
-
-
         @section('scripts')
             <script>
                 $(".select3").select2()
@@ -175,6 +173,8 @@
                                 var id_kelas = $(this).val()
                                 var count = $(this).attr('count')
                                 var nilaiGr = $(".setGr" + count).val()
+                                var nilaiPcs = $(".setPcs" + count).val()
+                                var hitung = $('.pilihHitung' + count).val()
 
                                 // var id_kelas = $('option:selected', this).data('kelas');
                                 $.ajax({
@@ -187,9 +187,16 @@
                                     success: function(r) {
                                         console.log(r)
                                         var hrga_satuan = (r.rupiah / r.gr)
-                                        var rupiah = hrga_satuan * parseFloat(nilaiGr);
+                                        var hrga_satuan_pcs = (r.rupiah / r.pcs)
+                                        var rupiah
+                                        if (hitung === 'pcs') {
+                                            rupiah = hrga_satuan_pcs * parseFloat(nilaiPcs);
+                                        } else {
+                                            rupiah = hrga_satuan * parseFloat(nilaiGr);
+                                        }
                                         $('.rupiahBiasa' + count).val(rupiah);
-                                        $(".setHargaSatuan" + count).val(hrga_satuan)
+                                        $(".setHargaSatuanGr" + count).val(hrga_satuan)
+                                        $(".setHargaSatuanPcs" + count).val(hrga_satuan_pcs)
                                         rupiah = rupiah.toLocaleString('id-ID', {
                                             maximumFractionDigits: 0
                                         })
@@ -198,19 +205,44 @@
                                 });
                             })
 
-                            $(document).on('keyup', '.setGr', function() {
-                                var isi = $(this).val()
+                            $(document).on('change', '.pilihHitung', function() {
+                                var selectedVal = $(this).val()
                                 var count = $(this).attr('count')
-                                var hrga_satuan = $('.setHargaSatuan' + count).val()
-                                var rupiah = hrga_satuan * isi
-                                $('.rupiahBiasa' + count).val(parseFloat(rupiah));
+                                var nilaiGr = $(".setGr" + count).val()
+                                var nilaiPcs = $(".setPcs" + count).val()
+                                var hrga_satuanGr = $('.setHargaSatuanGr' + count).val()
+                                var hrga_satuanPcs = $('.setHargaSatuanPcs' + count).val()
+                                var rupiah
+
+                                console.log(`${nilaiGr} == ${nilaiPcs}`)
+                                if (selectedVal === 'pcs') {
+                                    rupiah = hrga_satuanPcs * nilaiPcs
+                                    keyupFormAwalCabut('Pcs')
+                                } else {
+                                    rupiah = hrga_satuanGr * nilaiGr
+                                    keyupFormAwalCabut('Gr')
+                                }
+
                                 rupiah = rupiah.toLocaleString('id-ID', {
                                     maximumFractionDigits: 0
                                 })
                                 $(".setRupiah" + count).val(rupiah)
-
-
                             })
+
+                            function keyupFormAwalCabut(jenis) {
+                                $(document).on('keyup', '.set' + jenis, function() {
+                                    var isi = $(this).val()
+                                    var count = $(this).attr('count')
+                                    var hitung = $('.pilihHitung' + count).val()
+                                    var hrga_satuan = $('.setHargaSatuan' + jenis + count).val()
+                                    var rupiah = hrga_satuan * isi
+                                    $('.rupiahBiasa' + count).val(parseFloat(rupiah));
+                                    rupiah = rupiah.toLocaleString('id-ID', {
+                                        maximumFractionDigits: 0
+                                    })
+                                    $(".setRupiah" + count).val(rupiah)
+                                })
+                            }
                         }
                     });
                 }

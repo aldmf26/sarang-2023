@@ -213,6 +213,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/eo', 'index')->name('eo');
             Route::get('/sortir', 'index')->name('sortir');
             Route::get('/delete', 'delete')->name('delete');
+            Route::get('/deleteCabut', 'deleteCabut')->name('deleteCabut');
+            Route::get('/info/{id_kelas}', 'info')->name('info');
             Route::post('/update', 'update')->name('update');
             Route::post('/create', 'create')->name('create');
             Route::post('/cabutCreate', 'cabutCreate')->name('cabutCreate');

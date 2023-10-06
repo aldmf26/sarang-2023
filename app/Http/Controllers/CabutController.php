@@ -231,10 +231,12 @@ class CabutController extends Controller
                 'a.no_box',
                 'a.id_cabut',
                 'a.rupiah',
+                'c.pcs as pcs_kelas',
                 'c.gr as gr_kelas',
                 'c.rupiah as rupiah_kelas',
-                'b.id_kelas',
                 'c.rp_bonus',
+                'c.kategori',
+                'b.id_kelas',
                 'a.tgl_serah',
                 'b.nama',
                 'a.pcs_awal',
@@ -377,6 +379,7 @@ class CabutController extends Controller
         $bk = DB::table('tb_kelas')->where('id_kelas', $r->id_kelas)->first();
         $data = [
             'gr' => $bk->gr,
+            'pcs' => $bk->pcs,
             'rupiah' => $bk->rupiah,
             'lokasi' => $bk->lokasi,
         ];
@@ -401,6 +404,7 @@ class CabutController extends Controller
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
                 'rupiah' => $r->rupiah[$i],
+                'hitung' => $r->hitung[$i],
                 'id_kelas' => $r->kelas_tipe[$i],
                 'tgl_terima' => $r->tgl_terima[$i],
             ]);

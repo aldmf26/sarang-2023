@@ -44,7 +44,37 @@
 
         @section('js')
             <script>
-                
+                detail('infoKelas', 'id_kelas', 'kelas/info', 'infoBody')
+                $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
+                $(document).on('change', '.cekTutup', function() {
+                    $('.btn_tutup').toggle(this.checked);
+                })
+                $(document).on('click', '.btn_tutup', function() {
+                    if (confirm('Yakin dihapus ?')) {
+                        var selectedRows = [];
+                        // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                        $('input[name="cekTutup[]"]:checked').each(function() {
+                            // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                            // Mengambil ID dari kolom pertama (kolom #)
+                            var anakId = $(this).attr('id_kelas');
+
+                            // Tambahkan ID anak ke dalam array
+                            selectedRows.push(anakId);
+                        });
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('kelas.deleteCabut') }}",
+                            data: {
+                                datas: selectedRows
+                            },
+                            success: function(r) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+
+                })
                 plusRow(1, 'tbh_baris', "hariandll/tbh_baris")
                 detail('edit-btn', 'id_hariandll', 'hariandll/edit_load', 'editBody')
             </script>

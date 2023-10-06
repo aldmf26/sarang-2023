@@ -40,6 +40,7 @@
                                 value="{{ $d->rupiah_kelas }}">
                             <input type="text" name="id_kelas{{ $i + 1 }}[]" value="{{ $d->id_kelas }}">
                             <input type="text" name="rp_bonus{{ $i + 1 }}[]" value="{{ $d->rp_bonus }}">
+                            <input type="text" name="kategori{{ $i + 1 }}[]" value="{{ $d->kategori }}">
                             <input class="ttlRpSet{{ $i + 1 }}" type="text"
                                 name="ttl_rp{{ $i + 1 }}[]" value="{{ $hasil->ttl_rp }}">
                         </td>

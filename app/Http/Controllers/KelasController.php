@@ -16,14 +16,17 @@ class KelasController extends Controller
             'route' => $rot,
             'routeRemove' => $rotRemove,
             'lokasi' => ['alpa', 'mtd', 'sby'],
-            'datas' => DB::table($rotRemove == 'index' ? 'tb_kelas' : "tb_kelas_$rotRemove")->orderBy('kelas', 'ASC')->get()
+            'datas' => DB::table($rotRemove == 'index' ? 'tb_kelas' : "tb_kelas_$rotRemove")->orderBy('kategori', 'ASC')->get()
         ];
         return view("data_master.kelas.index", $data);
     }
 
     public function cabutCreate(Request $r)
     {
-        $buang = ['rupiah', 'gr', 'rp_bonus', 'rupiah_tambah', 'gr_tambah', 'rp_bonus_tambah'];
+        $buang = [
+            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'eot', 'denda_hcr',
+            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'eot_tambah', 'denda_hcr_tambah'
+        ];
         foreach ($buang as $d) {
             $r->$d = str()->remove(',', $r->$d);
         }
@@ -34,10 +37,15 @@ class KelasController extends Controller
                     'kelas' => $r->kelas_tambah[$i],
                     'tipe' => $r->tipe_tambah[$i],
                     'gr' => $r->gr_tambah[$i],
+                    'pcs' => $r->pcs_tambah[$i],
                     'rupiah' => $r->rupiah_tambah[$i],
                     'rp_bonus' => $r->rp_bonus_tambah[$i],
+                    'batas_susut' => $r->batas_susut_tambah[$i],
+                    'bonus_susut' => $r->bonus_susut_tambah[$i],
+                    'eot' => $r->eot_tambah[$i],
+                    'denda_hcr' => $r->denda_hcr_tambah[$i],
                     'ket' => $r->ket_tambah[$i],
-                    'kategori' => 1,
+                    'kategori' => $r->kategori_tambah[$i],
                 ]);
             }
         }
@@ -47,17 +55,44 @@ class KelasController extends Controller
                 DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->update([
                     'kelas' => $r->kelas[$i],
                     'tipe' => $r->tipe[$i],
+                    'pcs' => $r->pcs[$i],
                     'gr' => $r->gr[$i],
                     'rupiah' => $r->rupiah[$i],
                     'rp_bonus' => $r->rp_bonus[$i],
                     'ket' => $r->ket[$i],
-                    'kategori' => 1,
+                    'kategori' => $r->kategori[$i],
+                    'batas_susut' => $r->batas_susut[$i],
+                    'bonus_susut' => $r->bonus_susut[$i],
+                    'eot' => $r->eot[$i],
+                    'denda_hcr' => $r->denda_hcr[$i],
                 ]);
             }
         }
         return redirect()->route('kelas.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
+    public function info($id_kelas)
+    {
+        $detail = DB::table('tb_kelas')->where('id_kelas', $id_kelas)->first();
+        $view = [
+            1 => 'cabut',
+            2 => 'spesial',
+            3 => 'eo',
+        ];
+        $data = [
+            'detail' => $detail,
+            'jenis' => $view[$detail->kategori]
+        ];
+
+        return view('data_master.kelas.info_' . $data['jenis'], $data);
+    }
+    public function deleteCabut(Request $r)
+    {
+        foreach($r->datas as $d){
+            DB::table('tb_kelas')->where('id_kelas', $d)->delete();
+        }
+        return redirect()->route('kelas.index')->with('sukses', 'Data Berhasil dihapus');
+    }
     public function create(Request $r)
     {
         $data = $r->all();

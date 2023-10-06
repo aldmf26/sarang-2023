@@ -1,9 +1,18 @@
+<style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #000000;
+        line-height: 36px;
+        font-size: 12px;
+        width: auto;
+    }
+</style>
 <section class="row">
     <div class="col-lg-4">
-        <button type="button" class="btn btn-sm btn-primary mb-3 btnKembaliTambahCabut"><i class="fas fa-arrow-left"></i> Kembali</button>
+        <button type="button" class="btn btn-sm btn-primary mb-3 btnKembaliTambahCabut"><i class="fas fa-arrow-left"></i>
+            Kembali</button>
     </div>
     <div class="col-lg-12">
-        
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -11,6 +20,7 @@
                     <th class="dhead" width="100">Tgl Terima</th>
                     <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="150">Nama Anak</th>
+                    <th class="dhead" width="100">Hitung</th>
                     <th class="dhead">Kelas / Paket</th>
                     <th class="dhead text-end" width="110">Pcs Awal</th>
                     <th class="dhead text-end" width="110">Gr Awal</th>
@@ -20,19 +30,19 @@
             </thead>
             <tbody>
                 @foreach ($getAnak as $i => $x)
-                    <tr class="baris{{ $i+1 }}">
+                    <tr class="baris{{ $i + 1 }}">
                         <td>
                             <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">
                             <input type="hidden" class="form-control" name="id_pengawas[]" readonly
                                 value="{{ auth()->user()->id }}">
-                            
+
                         </td>
                         <td>
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
                             <input type="hidden" value="{{ $x->id_cabut }}" class="form-control" name="id_cabut[]">
                         </td>
                         <td>
-                            <select name="no_box[]" id="" class="select3 pilihBox" count="{{ $i+1 }}">
+                            <select name="no_box[]" id="" class="select3 pilihBox" count="{{ $i + 1 }}">
                                 <option value="">Pilih Box</option>
                                 @foreach ($boxBk as $d)
                                     @if ($d->gr_awal - $d->gr_cabut > 1)
@@ -44,46 +54,56 @@
                         <td>
                             <span class="h6">{{ strtoupper($x->nama) }} <span
                                     class="float-end">({{ $x->kelas }})</span></span>
-                                    <input type="hidden" name="id_anak[]" value="{{ $x->id_anak }}">
-                            {{-- <select name="id_anak[]" id="" class="select3 pilihAnak" count="1">
-                            <option value="">Pilih Anak</option>
-                            @foreach ($anak as $a)
-                            <option {{$d->id_anak == $a->id_anak ? 'selected' : ''}} data-kelas="{{ $a->kelas }}" value="{{ $a->id_anak }}">
-                                ({{ $a->kelas }}) {{ ucwords($a->nama) }}</option>
-                            @endforeach
-                        </select> --}}
-                            <input type="hidden" class="setHargaSatuan{{$i+1}}">
+                            <input type="hidden" name="id_anak[]" value="{{ $x->id_anak }}">
+
+                            <input type="hidden" class="setHargaSatuanGr{{ $i + 1 }}">
+                            <input type="hidden" class="setHargaSatuanPcs{{ $i + 1 }}">
+                        </td>
+                        <td>
+                            <select name="hitung[]" id="" class="form-control pilihHitung pilihHitung{{ $i + 1 }}" count="{{ $i + 1 }}">
+                                <option value="gr" selected>Gr</option>
+                                <option value="pcs">Pcs</option>
+                            </select>
                         </td>
                         <td>
                             @php
-                                $kelasSelect = DB::table('tb_kelas')
-                                    ->where('kelas', $x->kelas)
-                                    ->get();
+                                $tipe = [
+                                    1 => 'cbt',
+                                    2 => 'spc',
+                                    3 => 'eo',
+                                ];
+                                $kelasSelect = DB::table('tb_kelas')->get();
                             @endphp
-                            <select name="kelas_tipe[]" id="" class="select3 pilihAnak" count="{{$i+1}}">
+                            <select name="kelas_tipe[]" id="" class="select3 pilihAnak"
+                                count="{{ $i + 1 }}">
                                 <option value="">Pilih Kelas</option>
                                 @foreach ($kelasSelect as $d)
-                                        <option value="{{ $d->id_kelas }}">{{ ucwords("$d->kelas $d->tipe ($d->gr gr) " . number_format($d->rupiah,0)) }}</option>
+                                    <option value="{{ $d->id_kelas }}">
+                                        {{ $tipe[$d->kategori] }} {{ ucwords("$d->kelas $d->tipe") }} <br>
+                                        {{ "$d->pcs pcs $d->gr gr Rp " . number_format($d->rupiah,0) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </td>
                         <td>
-                            <input type="text" class="form-control text-end setPcs{{$i+1}}" value="0" id="pcsInput"
-                                name="pcs_awal[]">
+                            <input type="text" class="form-control text-end setPcs setPcs{{ $i + 1 }}"
+                                value="0" id="pcsInput" name="pcs_awal[]" count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input type="text" class="form-control text-end setGr setGr{{$i+1}}" count="{{$i+1}}"
-                                value="0" id="grInput" name="gr_awal[]">
+                            <input type="text" class="form-control text-end setGr setGr{{ $i + 1 }}"
+                                count="{{ $i + 1 }}" value="0" id="grInput" name="gr_awal[]">
                         </td>
                         <td>
-                            <input readonly type="text" class="form-control rupiahInput text-end setRupiah{{$i+1}}"
-                                value="0">
-                            <input readonly type="hidden" class="form-control rupiahInput text-end rupiahBiasa{{$i+1}}"
-                                value="0" name="rupiah[]">
+                            <input readonly type="text"
+                                class="form-control rupiahInput text-end setRupiah{{ $i + 1 }}" value="0">
+                            <input readonly type="hidden"
+                                class="form-control rupiahInput text-end rupiahBiasa{{ $i + 1 }}" value="0"
+                                name="rupiah[]">
                         </td>
                         <td align="center">
-                            <button type="button" class="btn rounded-pill hapusCabutRow" id_cabut="{{ $x->id_cabut }}" id_anak="{{ $x->id_anak }}" count="{{ $i+1 }}"><i
-                                    class="fas fa-trash text-danger"></i>
+                            <button type="button" class="btn rounded-pill hapusCabutRow"
+                                id_cabut="{{ $x->id_cabut }}" id_anak="{{ $x->id_anak }}"
+                                count="{{ $i + 1 }}"><i class="fas fa-trash text-danger"></i>
                             </button>
                         </td>
                     </tr>

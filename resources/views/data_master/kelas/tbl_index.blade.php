@@ -1,5 +1,7 @@
 <form action="{{ route('kelas.cabutCreate') }}" method="post">
-    <button class="btn btn-primary btn-sm float-end mb-3" type="submit"><i class="fas fa-plus"></i>Simpan</button>
+    <x-theme.button href="#" icon="fa-window-close" variant="danger" addClass="float-end btn_tutup"
+            teks="Hapus" />
+    <button class="btn btn-primary btn-sm float-end mb-3 me-2" type="submit"><i class="fas fa-plus"></i>Simpan</button>
     @csrf
     <table class="table" id="tblScroll" x-data="{
         rows: []
@@ -7,30 +9,43 @@
         <thead>
             <tr>
                 <th class="dhead" width="15">#</th>
+                <th class="dhead" width="90">Kategori</th>
                 <th class="dhead" width="80">Kelas</th>
-                <th class="dhead" width="90">Tipe</th>
-                <th class="text-end dhead" width="90">Gr</th>
-                <th class="text-end dhead">Rp</th>
+                <th class="dhead" width="70">Tipe</th>
+                <th class="text-end dhead" width="70">Pcs</th>
+                <th class="text-end dhead" width="70">Gr</th>
+                <th class="text-end dhead" width="100">Rp</th>
                 <th class="text-end dhead">Batas Susut</th>
                 <th class="text-end dhead">Bonus Susut</th>
-                <th class="text-end dhead">Rp Bonus</th>
+                <th class="text-end dhead" width="100">Rp Bonus</th>
                 <th class="text-end dhead">Eot</th>
                 <th class="text-end dhead">Denda Hcr</th>
                 <th class="dhead">Keterangan</th>
-                <th class="dhead">Aksi</th>
+                <th class="dhead" width="70">Aksi</th>
                 {{-- <th>Lokasi</th> --}}
                 {{-- <th width="20%">Aksi</th> --}}
             </tr>
         </thead>
         <tbody>
-            
+
             <tr class="bg-info">
                 <td></td>
+                <td>
+                    <select name="kategori_tambah[]" id="" class="form-control">
+                        <option value="">Pilih</option>
+                        <option value="1">Cabut</option>
+                        <option value="2">Spesial</option>
+                        <option value="3">Eo</option>
+                    </select>
+                </td>
                 <td>
                     <input type="text" name="kelas_tambah[]" class="form-control">
                 </td>
                 <td>
                     <input type="text" name="tipe_tambah[]" class="form-control">
+                </td>
+                <td>
+                    <input x-mask:dynamic=" $money($input)" class="form-control text-end" name="pcs_tambah[]">
                 </td>
                 <td>
                     <input x-mask:dynamic=" $money($input)" class="form-control text-end" name="gr_tambah[]">
@@ -39,7 +54,7 @@
                     <input x-mask:dynamic="$money($input)" class="form-control text-end" name="rupiah_tambah[]">
                 </td>
                 <td>
-                    <input x-mask:dynamic="$money($input)" class="form-control text-end" name="denda_susut_tambah[]">
+                    <input x-mask:dynamic="$money($input)" class="form-control text-end" name="batas_susut_tambah[]">
                 </td>
                 <td>
                     <input x-mask:dynamic="$money($input)" class="form-control text-end" name="bonus_susut_tambah[]">
@@ -57,7 +72,8 @@
                     <input type="text" class="form-control" name="ket_tambah[]">
                 </td>
                 <td>
-                    <span class="badge bg-primary" @click="rows.push({ value: '' })" style="cursor: pointer"><i class="fas fa-plus"></i></span>
+                    <span class="badge bg-primary" @click="rows.push({ value: '' })" style="cursor: pointer"><i
+                            class="fas fa-plus"></i></span>
                 </td>
 
             </tr>
@@ -65,10 +81,21 @@
                 <tr class="bg-info">
                     <td></td>
                     <td>
+                        <select name="kategori_tambah[]" id="" class="form-control">
+                            <option value="">Pilih</option>
+                            <option value="1">Cabut</option>
+                            <option value="2">Spesial</option>
+                            <option value="3">Eo</option>
+                        </select>
+                    </td>
+                    <td>
                         <input type="text" name="kelas_tambah[]" class="form-control">
                     </td>
                     <td>
                         <input type="text" name="tipe_tambah[]" class="form-control">
+                    </td>
+                    <td>
+                        <input x-mask:dynamic=" $money($input)" class="form-control text-end" name="pcs_tambah[]">
                     </td>
                     <td>
                         <input x-mask:dynamic=" $money($input)" class="form-control text-end" name="gr_tambah[]">
@@ -77,10 +104,12 @@
                         <input x-mask:dynamic="$money($input)" class="form-control text-end" name="rupiah_tambah[]">
                     </td>
                     <td>
-                        <input x-mask:dynamic="$money($input)" class="form-control text-end" name="denda_susut_tambah[]">
+                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                            name="batas_susut_tambah[]">
                     </td>
                     <td>
-                        <input x-mask:dynamic="$money($input)" class="form-control text-end" name="bonus_susut_tambah[]">
+                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                            name="bonus_susut_tambah[]">
                     </td>
                     <td>
                         <input x-mask:dynamic="$money($input)" class="form-control text-end" name="rp_bonus_tambah[]">
@@ -95,9 +124,10 @@
                         <input type="text" class="form-control" name="ket_tambah[]">
                     </td>
                     <td>
-                        <span class="badge bg-danger" @click="rows.splice(index, 1)" style="cursor: pointer"><i class="fas fa-minus"></i></span>
+                        <span class="badge bg-danger" @click="rows.splice(index, 1)" style="cursor: pointer"><i
+                                class="fas fa-minus"></i></span>
                     </td>
-    
+
                 </tr>
             </template>
             @foreach ($datas as $no => $d)
@@ -105,10 +135,21 @@
                 <tr>
                     <td>{{ $no + 1 }}</td>
                     <td>
+                        <select name="kategori[]" id="" class="form-control">
+                            <option {{$d->kategori == 1 ? 'selected' : ''}} value="1">Cabut</option>
+                            <option {{$d->kategori == 2 ? 'selected' : ''}} value="2">Spesial</option>
+                            <option {{$d->kategori == 3 ? 'selected' : ''}} value="3">Eo</option>
+                        </select>
+                    </td>
+                    <td>
                         <input type="text" value="{{ $d->kelas }}" name="kelas[]" class="form-control">
                     </td>
                     <td>
                         <input type="text" value="{{ $d->tipe }}" name="tipe[]" class="form-control">
+                    </td>
+                    <td>
+                        <input x-mask:dynamic=" $money($input)" value="{{ $d->pcs }}"
+                            class="form-control text-end" name="pcs[]">
                     </td>
                     <td>
                         <input x-mask:dynamic=" $money($input)" value="{{ $d->gr }}"
@@ -119,8 +160,8 @@
                             class="form-control text-end" name="rupiah[]">
                     </td>
                     <td>
-                        <input x-mask:dynamic=" $money($input)" value="{{ $d->denda_susut }}"
-                            class="form-control text-end" name="denda_susut[]">
+                        <input x-mask:dynamic=" $money($input)" value="{{ $d->batas_susut }}"
+                            class="form-control text-end" name="batas_susut[]">
                     </td>
                     <td>
                         <input x-mask:dynamic=" $money($input)" value="{{ $d->bonus_susut }}"
@@ -141,8 +182,10 @@
                     <td>
                         <input type="text" class="form-control" name="ket[]" value="{{ $d->ket }}">
                     </td>
-                    <td>
-                        <span class="badge bg-primary" style="cursor: pointer"><i class="fas fa-question"></i></span>
+                    <td >
+                        <span id_kelas="{{ $d->id_kelas }}" data-bs-target="#infoKelas" data-bs-toggle="modal" class="badge bg-primary infoKelas" style="cursor: pointer"><i class="fas fa-question"></i></span>
+                        <input type="checkbox" class="cekTutup float-end" name="cekTutup[]"
+                                    id_kelas="{{ $d->id_kelas }}">
                     </td>
                     {{-- <td>{{ strtoupper($d->lokasi) }}</td> --}}
                     {{-- <td>
@@ -158,78 +201,7 @@
 
     </table>
 </form>
-<form action="{{ route('kelas.create') }}" method="post">
-    @csrf
-    <input type="hidden" name="routeRemove" value="{{ $routeRemove }}">
-    <x-theme.modal title="Tambah Paket Cabut" idModal="tambah">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="dhead">Kelas</th>
-                    <th class="dhead">Tipe</th>
-                    <th class="dhead">Gr</th>
-                    <th class="dhead">Rupiah</th>
-                    <th class="dhead">Lokasi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input name="kelas" type="text" class="form-control"></td>
-                    <td><input name="tipe" type="text" class="form-control"></td>
-                    <td><input name="gr" type="text" class="form-control"></td>
-                    <td><input name="rupiah" type="text" class="form-control"></td>
-                    <td>
-                        <select name="lokasi" id="" class="form-control">
-                            <option value="">- Pilih Lokasi -</option>
-                            @foreach ($lokasi as $d)
-                                <option value="{{ $d }}">{{ $d }}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </x-theme.modal>
-</form>
 
-@foreach ($datas as $s)
-    <form action="{{ route('kelas.update') }}" method="post">
-        @csrf
-        <input type="hidden" name="routeRemove" value="{{ $routeRemove }}">
-        <input type="hidden" name="id_kelas" value="{{ $s->id_kelas }}">
-        <x-theme.modal idModal="edit{{ $s->id_kelas }}" title="Edit Kelas Cabut" size="modal-lg" btnSave="Y">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="dhead">Kelas</th>
-                        <th class="dhead">Tipe</th>
-                        <th class="dhead">Gr</th>
-                        <th class="dhead">Rupiah</th>
-                        <th class="dhead">Lokasi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input value="{{ $s->kelas }}" name="kelas" type="text" class="form-control">
-                        </td>
-                        <td><input value="{{ $s->tipe }}" name="tipe" type="text" class="form-control">
-                        </td>
-                        <td><input value="{{ $s->gr }}" name="gr" type="text" class="form-control">
-                        </td>
-                        <td><input value="{{ $s->rupiah }}" name="rupiah" type="text" class="form-control">
-                        </td>
-                        <td>
-                            <select name="lokasi" id="" class="form-control">
-                                <option value="">- Pilih Lokasi -</option>
-                                @foreach ($lokasi as $d)
-                                    <option {{ $s->lokasi == $d ? 'selected' : '' }} value="{{ $d }}">
-                                        {{ $d }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </x-theme.modal>
-    </form>
-@endforeach
+<x-theme.modal idModal="infoKelas" title="Info Rules" btnSave="T" size="modal-lg">
+    <div id="infoBody"></div>
+</x-theme.modal>
