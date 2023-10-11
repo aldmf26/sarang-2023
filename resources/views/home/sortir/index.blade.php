@@ -6,7 +6,8 @@
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Krywn" />
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+            teks="Krywn" />
         <x-theme.btn_filter />
 
     </x-slot>
@@ -33,37 +34,38 @@
                 </thead>
                 <tbody>
                     @foreach ($cabut as $no => $d)
-                    <tr>
-                        <td>{{ $no + 1 }}</td>
-                        <td>{{ $d->no_box }}</td>
-                        <td>{{ $d->kelas }}</td>
-                        <td>{{ ucwords(auth()->user()->name) }}</td>
-                        <td>{{ $d->nama }}</td>
-                        <td>{{ $d->tgl }}</td>
-                        <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
-                        <td align="right">{{ $d->gr_awal ?? 0 }}</td>
-                        <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
-                        <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
-                        @php
-                        $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
-                        @endphp
-                        <td align="right">{{ number_format($susut, 0) }}%</td>
-                        <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $d->no_box }}</td>
+                            <td>{{ $d->kelas }}</td>
+                            <td>{{ ucwords(auth()->user()->name) }}</td>
+                            <td>{{ $d->nama }}</td>
+                            <td>{{ $d->tgl }}</td>
+                            <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
+                            <td align="right">{{ $d->gr_awal ?? 0 }}</td>
+                            <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
+                            <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
+                            @php
+                                $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                            @endphp
+                            <td align="right">{{ number_format($susut, 0) }}%</td>
+                            <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
 
-                        <td align="center">
-                            @if ($d->selesai == 'T')
-                            <a class="btn btn-warning btn-sm inputAkhir" href="#" no_box="{{ $d->no_box }}"
-                                id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
-                                data-bs-target="#inputAkhir"></i>Akhir</a>
+                            <td align="center">
+                                @if ($d->selesai == 'T')
+                                    <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                        no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
+                                        data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
 
-                            @if (!empty($d->gr_akhir))
-                            <a class="btn btn-primary btn-sm selesai" href="#" id_cabut="{{ $d->id_sortir }}" href="#"
-                                data-bs-toggle="modal" data-bs-target="#selesai"></i>Selesai</a>
-                            @endif
-                            @endif
+                                    @if (!empty($d->gr_akhir))
+                                        <a class="btn btn-primary btn-sm selesai" href="#"
+                                            id_cabut="{{ $d->id_sortir }}" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#selesai"></i>Selesai</a>
+                                    @endif
+                                @endif
 
 
-                            {{-- @if (!empty($d->pcs_akhir))
+                                {{-- @if (!empty($d->pcs_akhir))
                             @php
                             $isSelesai = $d->selesai === 'Y';
                             $nama = $isSelesai ? 'Batalkan' : 'Selesai';
@@ -84,8 +86,8 @@
                                 data-bs-target="#inputAkhir"></i>Akhir</a>
                             @endif --}}
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -134,8 +136,8 @@
         </form>
 
         @section('scripts')
-        <script>
-            $(".select3").select2()
+            <script>
+                $(".select3").select2()
                 load_anak()
                 load_anak_nopengawas()
 
@@ -209,7 +211,10 @@
 
                     $('.cetak').val(id_cabut);
                 });
-        </script>
+            </script>
+            <script>
+                load_sortir()
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>

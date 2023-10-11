@@ -35,6 +35,8 @@ class SortirController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
+
+
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
@@ -47,6 +49,7 @@ class SortirController extends Controller
                 ->orderBy('id_sortir', 'DESC')
                 ->get()
         ];
+
         return view('home.sortir.index', $data);
     }
 
@@ -187,7 +190,7 @@ class SortirController extends Controller
     public function add_delete_anak(Request $r)
     {
         $idArray = explode(",", $r->id_anak);
-        foreach($idArray as $n) {
+        foreach ($idArray as $n) {
             DB::table('tb_anak')->where('id_anak', $n)->update(
                 ['id_pengawas' => empty($r->delete) ? auth()->user()->id : null]
             );
@@ -259,7 +262,7 @@ class SortirController extends Controller
     {
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
-        $tgl2 =  $tgl['tgl2'];  
+        $tgl2 =  $tgl['tgl2'];
         $datas = $this->queryRekap($tgl1, $tgl2);
 
         $data = [
