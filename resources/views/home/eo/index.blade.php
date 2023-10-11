@@ -1,18 +1,32 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
     <x-slot name="cardHeader">
+        <div class="row justify-content-end">
+            <div class="col-lg-6">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <a href="{{ route('eo.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-            class="float-end btn btn-sm btn-primary me-2">
-            <i class="fas fa-file-excel"></i> Export
-        </a>
-        <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end" teks="Eo" />
-        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
-            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
-                class="badge bg-danger" id="anakBelum"></span>
-        </a>
-        <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
-            teks="kry baru" />
-        <x-theme.btn_filter />
+
+            </div>
+            <div class="col-lg-6">
+                <a href="{{ route('eo.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end btn btn-sm btn-primary me-2">
+                    <i class="fas fa-file-excel"></i> Export
+                </a>
+                <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end" teks="Eo" />
+                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+                        class="badge bg-danger" id="anakBelum"></span>
+                </a>
+                <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
+                    teks="kry baru" />
+                <x-theme.btn_filter />
+            </div>
+            <div class="col-lg-12">
+                <hr style="border: 2px solid #435EBE">
+
+            </div>
+        </div>
+        
+        @include('home.cabut.nav')
+
     </x-slot>
 
     <x-slot name="cardBody">

@@ -1,26 +1,41 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="#" icon="fa-window-close" variant="danger" addClass="float-end btn_tutup"
-            teks="Tutup" />
-        <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-            class="float-end btn btn-sm btn-primary me-2">
-            <i class="fas fa-file-excel"></i> Export
-        </a>
-        {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
-            teks="List anak sisa" /> --}}
-        <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
-            teks="Cabut" />
-        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
-            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
-                class="badge bg-danger" id="anakBelum"></span>
-        </a>
+        <div class="row justify-content-end">
+            <div class="col-lg-6">
+                <h6 class="float-start mt-1">{{ $title }}</h6>
 
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
-            teks="kry baru" />
+            </div>
+            <div class="col-lg-6">
+                <x-theme.button href="#" icon="fa-window-close" variant="danger" addClass="float-end btn_tutup"
+                    teks="Tutup" />
+                <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end btn btn-sm btn-primary me-2">
+                    <i class="fas fa-file-excel"></i> Export
+                </a>
+                {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
+                teks="List anak sisa" /> --}}
+                <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
+                    teks="Cabut" />
+                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+                        class="badge bg-danger" id="anakBelum"></span>
+                </a>
+
+                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+                    teks="kry baru" />
+            </div>
+            <div class="col-lg-12">
+                <hr style="border: 2px solid #435EBE">
+
+            </div>
+            @include('home.cabut.nav')
+        </div>
+
     </x-slot>
 
     <x-slot name="cardBody">
+        
+
         <section class="row">
             <div id="loadHalaman"></div>
         </section>
@@ -148,7 +163,6 @@
                             $(".select3").select2({
                                 dropdownParent: $('#tambah2 .modal-content')
                             })
-                            plusRow(1, 'tbh_baris', "cabut/tbh_baris")
                             // formatRibuan('rupiah')
 
                             $(document).on('change', '.pilihBox', function() {
@@ -161,6 +175,9 @@
                                         no_box: no_box
                                     },
                                     dataType: "json",
+                                    beforeSend: function() {
+
+                                    },
                                     success: function(r) {
                                         console.log(r)
                                         $(".setGr" + count).val(r.gr_awal - r.gr_cabut)
@@ -189,7 +206,7 @@
                                         var hrga_satuan = (r.rupiah / r.gr)
                                         var hrga_satuan_pcs = (r.rupiah / r.pcs)
                                         var rupiah
-                                        if (hitung === 'pcs') {
+                                        if (hitung === '1') {
                                             rupiah = hrga_satuan_pcs * parseFloat(nilaiPcs);
                                         } else {
                                             rupiah = hrga_satuan * parseFloat(nilaiGr);
@@ -208,6 +225,25 @@
                             $(document).on('change', '.pilihHitung', function() {
                                 var selectedVal = $(this).val()
                                 var count = $(this).attr('count')
+                                var selectElement = $('select[name="id_paket[]"][count="' + count + '"]');
+                                $.ajax({
+                                    type: "GET",
+                                    url: "{{ route('cabut.get_kelas_jenis') }}",
+                                    data: {
+                                        jenis: selectedVal
+                                    },
+                                    success: function(r) {
+                                        // Bersihkan elemen <select> saat ini
+                                        selectElement.empty();
+
+                                        // Tambahkan opsi yang diterima dari server ke elemen <select>
+                                        selectElement.append(r);
+
+                                        // Inisialisasi kembali elemen <select> jika Anda menggunakan Select2 atau plugin serupa
+                                        selectElement.select3();
+                                    }
+
+                                });
                                 var nilaiGr = $(".setGr" + count).val()
                                 var nilaiPcs = $(".setPcs" + count).val()
                                 var hrga_satuanGr = $('.setHargaSatuanGr' + count).val()
@@ -215,26 +251,28 @@
                                 var rupiah
 
                                 console.log(`${nilaiGr} == ${nilaiPcs}`)
-                                if (selectedVal === 'pcs') {
-                                    rupiah = hrga_satuanPcs * nilaiPcs
-                                    keyupFormAwalCabut('Pcs')
-                                } else {
+                                if (selectedVal === '2') {
                                     rupiah = hrga_satuanGr * nilaiGr
-                                    keyupFormAwalCabut('Gr')
+                                    keyupFormAwalCabut('Gr' + count)
+                                } else {
+                                    rupiah = hrga_satuanPcs * nilaiPcs
+                                    keyupFormAwalCabut('Pcs' + count)
+
                                 }
 
                                 rupiah = rupiah.toLocaleString('id-ID', {
                                     maximumFractionDigits: 0
                                 })
+
                                 $(".setRupiah" + count).val(rupiah)
                             })
 
                             function keyupFormAwalCabut(jenis) {
-                                $(document).on('keyup', '.set' + jenis, function() {
+                                $(document).on('keyup', `.set${jenis}`, function() {
                                     var isi = $(this).val()
                                     var count = $(this).attr('count')
                                     var hitung = $('.pilihHitung' + count).val()
-                                    var hrga_satuan = $('.setHargaSatuan' + jenis + count).val()
+                                    var hrga_satuan = $('.setHargaSatuan' + jenis).val()
                                     var rupiah = hrga_satuan * isi
                                     $('.rupiahBiasa' + count).val(parseFloat(rupiah));
                                     rupiah = rupiah.toLocaleString('id-ID', {
@@ -314,6 +352,28 @@
                     });
                 }
 
+                function rulesCabut(data) {
+                    susut = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
+                    denda = 0
+                    bonus_susut = 0
+                    rupiah = data.rupiah
+                    if (susut > data.batas_susut) {
+                        denda = (susut - data.batas_susut) * (data.denda_susut_persen / 100) * data.rupiah
+                        rupiah = rupiah - denda
+                    }
+                    if (susut < data.bonus_susut) {
+                        bonus_susut = (data.rp_bonus * data.gr_awal) / data.gr_kelas
+                    }
+                    denda_hcr = data.pcs_hcr * data.denda_hcr;
+
+                    eot_bonus = (data.eot - data.gr_awal * 0.02) * data.eot_rp;
+                    ttl_rp = rupiah - denda_hcr + eot_bonus + bonus_susut
+                    return ttl_rp
+                    console.log(
+                        `rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`
+                    )
+                }
+
                 function setRupiah(kelas) {
                     $(document).on('keyup', '.' + kelas, function() {
                         var count = $(this).attr('count')
@@ -322,7 +382,10 @@
                             count: count
                         };
 
-                        var floatFields = ['gr_flx', 'gr_kelas', 'id_kelas', 'rp_bonus', 'rupiah_kelas', 'pcs_akhir',
+                        var floatFields = ['gr_flx', 'gr_kelas', 'pcs_kelas', 'jenis', 'id_kategori', 'id_kelas',
+                            'rp_bonus',
+                            'rupiah_kelas', 'denda_susut_persen', 'eot_rp', 'denda_hcr', 'batas_susut', 'bonus_susut',
+                            'pcs_akhir',
                             'gr_akhir', 'gr_awal', 'eot', 'pcs_hcr', 'rupiah'
                         ];
 
@@ -330,29 +393,26 @@
                             data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) ||
                                 0;
                         })
-                        var susut = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
-                        var denda = 0
-                        var bonus_susut = 0
-                        var rupiah = data.rupiah
-                        if (susut > 23.4) {
-                            denda = (susut - 23.4) * 0.03 * data.rupiah
-                            rupiah = rupiah - denda
-                        }
-                        if (susut < 19.5) {
-                            bonus_susut = (data.rp_bonus * data.gr_awal) / data.gr_kelas
-                        }
-                        var denda_hcr = data.pcs_hcr * 5000;
+                        var susut, denda, bonus_susut, rupiah, denda_hcr, eot_bonus, ttl_rp, setRupiah
 
-                        var eot_bonus = (data.eot - data.gr_awal * 0.02) * 750;
-                        var ttl_rp = rupiah - denda_hcr + eot_bonus + bonus_susut
-                        console.log(
-                            `rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`
-                        )
-                        var setRupiah = ttl_rp.toLocaleString('id-ID', {
+                        switch (data.id_kategori) {
+                            case 2:
+                                rulesCabut(data)
+                                break;
+                            case 3:
+                                rulesCabut(data)
+                                break;
+                            default:
+                                rulesCabut(data)
+                                break;
+                        }
+
+
+                        setRupiah = rulesCabut(data).toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         })
                         $('.ttlRpKeyup' + data.count).text(setRupiah)
-                        $('.ttlRpSet' + data.count).val(ttl_rp)
+                        $('.ttlRpSet' + data.count).val(rulesCabut(data))
                     })
                 }
 

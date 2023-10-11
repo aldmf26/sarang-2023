@@ -197,16 +197,16 @@
 
         $('.table tbody tr').click(function(event) {
             // Temukan kotak centang di baris ini
-            var checkbox = $(this).find('.'+itemClass);
+            var checkbox = $(this).find('.' + itemClass);
 
             // Jika yang diklik adalah sel yang bukan kotak centang
-            if (!$(event.target).is('.'+itemClass)) {
+            if (!$(event.target).is('.' + itemClass)) {
                 // Mengebalikan status kotak centang (ceklis jika sebelumnya tidak terceklis, dan sebaliknya)
                 checkbox.prop('checked', !checkbox.prop('checked'));
 
                 // Memeriksa apakah semua kotak centang di seluruh tabel terceklis atau tidak
                 var semuaTerceklis = true;
-                $('.table tbody .'+itemClass).each(function() {
+                $('.table tbody .' + itemClass).each(function() {
                     if (!$(this).prop('checked')) {
                         semuaTerceklis = false;
                         return false; // Keluar dari loop jika ada yang tidak terceklis
@@ -302,6 +302,27 @@
             }).showToast();
         });
     }
+
+    // alpine select2
+    function initSelect2() {
+        $('.select2-alpine').select2();
+        $('.select2-alpine-data').select2();
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.directive('select2', (el, {
+            expression
+        }) => {
+            return {
+                init() {
+                    initSelect2();
+                },
+                updated() {
+                    initSelect2();
+                },
+            };
+        });
+    });
 </script>
 @if (session()->has('sukses'))
     <script>

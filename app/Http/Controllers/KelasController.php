@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Nonaktif;
 
 class KelasController extends Controller
 {
-    public function index()
+    public $tipe, $paket;
+    public function __construct()
     {
-        $rot = request()->route()->getName();
-        $rotRemove = str()->remove('kelas.', $rot);
+        $this->tipe = DB::table('tipe_cabut')->get();
+        $this->paket = DB::table('paket_cabut')->get();
+    }
+    public function index(Request $r)
+    {
+        $jenis = empty($r->jenis) ? 1 : 2;
         $data = [
-            'title' => 'Data Paket',
-            'route' => $rot,
-            'routeRemove' => $rotRemove,
+            'title' => 'Data Paket Cabut',
+            'jenis' => $jenis,
             'lokasi' => ['alpa', 'mtd', 'sby'],
-            'datas' => DB::table($rotRemove == 'index' ? 'tb_kelas' : "tb_kelas_$rotRemove")->orderBy('kategori', 'ASC')->get()
+            'tipe' => $this->tipe,
+            'kategori' => DB::table('paket_cabut')->get(),
+            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view("data_master.kelas.index", $data);
     }
@@ -24,8 +31,8 @@ class KelasController extends Controller
     public function cabutCreate(Request $r)
     {
         $buang = [
-            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'eot', 'denda_hcr',
-            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'eot_tambah', 'denda_hcr_tambah'
+            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'eot', 'denda_hcr',
+            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'eot_tambah', 'denda_hcr_tambah'
         ];
         foreach ($buang as $d) {
             $r->$d = str()->remove(',', $r->$d);
@@ -35,17 +42,18 @@ class KelasController extends Controller
             for ($i = 0; $i < count($r->rupiah_tambah); $i++) {
                 DB::table('tb_kelas')->insert([
                     'kelas' => $r->kelas_tambah[$i],
-                    'tipe' => $r->tipe_tambah[$i],
-                    'gr' => $r->gr_tambah[$i],
-                    'pcs' => $r->pcs_tambah[$i],
+                    'gr' => $r->gr_tambah[$i] ?? 0,
+                    'pcs' => $r->pcs_tambah[$i] ?? 0,
                     'rupiah' => $r->rupiah_tambah[$i],
                     'rp_bonus' => $r->rp_bonus_tambah[$i],
                     'batas_susut' => $r->batas_susut_tambah[$i],
+                    'denda_susut_persen' => $r->denda_susut_persen_tambah[$i],
                     'bonus_susut' => $r->bonus_susut_tambah[$i],
                     'eot' => $r->eot_tambah[$i],
                     'denda_hcr' => $r->denda_hcr_tambah[$i],
-                    'ket' => $r->ket_tambah[$i],
-                    'kategori' => $r->kategori_tambah[$i],
+                    'id_kategori' => $r->id_kategori_tambah[$i],
+                    'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
+                    'jenis' => $r->jenis,
                 ]);
             }
         }
@@ -54,13 +62,14 @@ class KelasController extends Controller
             for ($i = 0; $i < count($r->rupiah); $i++) {
                 DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->update([
                     'kelas' => $r->kelas[$i],
-                    'tipe' => $r->tipe[$i],
-                    'pcs' => $r->pcs[$i],
-                    'gr' => $r->gr[$i],
+                    'jenis' => $r->jenis,
+                    'pcs' => $r->pcs[$i] ?? 0,
+                    'gr' => $r->gr[$i] ?? 0,
                     'rupiah' => $r->rupiah[$i],
                     'rp_bonus' => $r->rp_bonus[$i],
-                    'ket' => $r->ket[$i],
-                    'kategori' => $r->kategori[$i],
+                    'id_kategori' => $r->id_kategori[$i],
+                    'id_tipe_brg' => $r->id_tipe_brg[$i],
+                    'denda_susut_persen' => $r->denda_susut_persen[$i],
                     'batas_susut' => $r->batas_susut[$i],
                     'bonus_susut' => $r->bonus_susut[$i],
                     'eot' => $r->eot[$i],
@@ -68,7 +77,7 @@ class KelasController extends Controller
                 ]);
             }
         }
-        return redirect()->route('kelas.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('kelas.index', ['jenis' => $r->jenis == 2 ? 'gr' : ''])->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function info($id_kelas)
@@ -81,48 +90,152 @@ class KelasController extends Controller
         ];
         $data = [
             'detail' => $detail,
-            'jenis' => $view[$detail->kategori]
+            'jenis' => $view[$detail->id_kategori]
         ];
 
         return view('data_master.kelas.info_' . $data['jenis'], $data);
     }
     public function deleteCabut(Request $r)
     {
-        foreach($r->datas as $d){
-            DB::table('tb_kelas')->where('id_kelas', $d)->delete();
+        foreach ($r->datas as $d) {
+            Nonaktif::delete('tb_kelas', 'id_kelas', $d);
+            // DB::table('tb_kelas')->where('id_kelas', $d)->delete();
         }
-        return redirect()->route('kelas.index')->with('sukses', 'Data Berhasil dihapus');
-    }
-    public function create(Request $r)
-    {
-        $data = $r->all();
-        unset($data['_token']);
-        unset($data['routeRemove']);
-
-        DB::table($r->routeRemove == 'index' ? 'tb_kelas' : "tb_kelas_$r->routeRemove")->insert($data);
-        return redirect()->route("kelas.$r->routeRemove")->with('sukses', 'Data Berhasil ditambahkan');
+        return '2323';
     }
 
-    public function update(Request $r)
+    public function spesial(Request $r)
     {
-        $data = $r->all();
+        $jenis = empty($r->jenis) ? 1 : 2;
 
-        unset($data['_token']);
-        unset($data['routeRemove']);
+        $data = [
+            'title' => 'Kelas Spesial',
+            'jenis' => $jenis,
+            'paket' => $this->paket,
+            'tipe' => $this->tipe,
+            'datas' => DB::table('tb_kelas')->where('id_kategori', 2)->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
+        ];
+        return view('data_master.kelas.spesial_index', $data);
+    }
+    public function spesialCreate(Request $r)
+    {
+        $buang = [
+            'rupiah', 'pcs', 'pcs_xbayar',
+            'rupiah_tambah', 'pcs_tambah', 'pcs_xbayar_tambah'
+        ];
+        foreach ($buang as $d) {
+            $r->$d = str()->remove(',', $r->$d);
+        }
 
-        DB::table($r->routeRemove == 'index' ? 'tb_kelas' : "tb_kelas_$r->routeRemove")->where('id_kelas', $r->id_kelas)->update($data);
-        return redirect()->route("kelas.$r->routeRemove")->with('sukses', 'Data Berhasil diubah');
+        if (!empty($r->rupiah_tambah[0])) {
+            for ($i = 0; $i < count($r->rupiah_tambah); $i++) {
+                DB::table('tb_kelas')->insert([
+                    'kelas' => $r->kelas[$i],
+                    'jenis' => 1,
+                    'pcs' => $r->pcs_tambah[$i] ?? 0,
+                    'pcs_xbayar' => $r->pcs_xbayar_tambah[$i] ?? 0,
+                    'rupiah' => $r->rupiah_tambah[$i],
+                    'id_kategori' => 2,
+                    'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
+                    'id_paket' => $r->id_paket_tambah[$i],
+                ]);
+            }
+        }
+
+        if (!empty($r->rupiah[0])) {
+            for ($i = 0; $i < count($r->rupiah); $i++) {
+                // $cek = DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->first();
+
+                // DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->update([
+                //     'kelas' => $r->kelas[$i],
+                //     'jenis' => 1,
+                //     'pcs' => $r->pcs[$i] ?? 0,
+                //     'pcs_xbayar' => $r->pcs_xbayar[$i] ?? 0,
+                //     'rupiah' => $r->rupiah[$i],
+                //     'id_kategori' => 2,
+                //     'id_tipe_brg' => $r->id_tipe_brg[$i],
+                //     'id_paket' => $r->id_paket[$i],
+                // ]);
+                $data = [
+                    'kelas' => $r->kelas[$i],
+                    'jenis' => 1,
+                    'pcs' => $r->pcs[$i] ?? 0,
+                    'pcs_xbayar' => $r->pcs_xbayar[$i] ?? 0,
+                    'rupiah' => $r->rupiah[$i],
+                    'id_kategori' => 2,
+                    'id_tipe_brg' => $r->id_tipe_brg[$i],
+                    'id_paket' => $r->id_paket[$i],
+                ];
+                Nonaktif::edit('tb_kelas', 'id_kelas', $r->id_kelas[$i], $data);
+            }
+        }
+        return redirect()->route('kelas.spesial')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
-    public function delete(Request $r)
+    public function tambahPaketSelect2(Request $r)
     {
-        $parts = explode("_", $r->urutan);
-        $id = $parts[0];
-        $route = $parts[1];
+        $existingRecord = DB::table($r->database . '_cabut')->where($r->database, $r->ket)->first();
 
-        DB::table($route == 'index' ? 'tb_kelas' : "tb_kelas_$route")
-            ->where('id_kelas', $id)
-            ->delete();
-        return redirect()->route("kelas.$route")->with('sukses', 'Data Berhasil dihapus');
+        if (!$existingRecord) {
+            // Jika $r->ket belum ada dalam tabel, maka lakukan insert.
+            $lastId = DB::table($r->database . '_cabut')->insertGetId([
+                $r->database => $r->ket
+            ]);
+            return json_encode([
+                'id' => $lastId,
+                'teks' => $r->ket
+            ]);
+        }
+    }
+    public function eo(Request $r)
+    {
+        $data = [
+            'title' => 'Kelas Spesial',
+            'paket' => $this->paket,
+            'tipe' => $this->tipe,
+            'datas' => DB::table('tb_kelas')->where('id_kategori', 3)->orderBy('id_kategori', 'ASC')->get()
+        ];
+        return view('data_master.kelas.eo_index', $data);
+    }
+    public function eoCreate(Request $r)
+    {
+        $buang = [
+            'rupiah',
+            'rupiah_tambah'
+        ];
+        foreach ($buang as $d) {
+            $r->$d = str()->remove(',', $r->$d);
+        }
+
+        if (!empty($r->rupiah_tambah[0])) {
+            for ($i = 0; $i < count($r->rupiah_tambah); $i++) {
+                DB::table('tb_kelas')->insert([
+                    'id_paket' => $r->id_paket_tambah[$i],
+                    'kelas' => $r->kelas[$i],
+                    'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
+                    'rupiah' => $r->rupiah_tambah[$i],
+                    'jenis' => 2,
+                    'id_kategori' => 3,
+                ]);
+            }
+        }
+
+        if (!empty($r->rupiah[0])) {
+            for ($i = 0; $i < count($r->rupiah); $i++) {
+                DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->update([
+                    'id_paket' => $r->id_paket[$i],
+                    'kelas' => $r->kelas[$i],
+                    'id_tipe_brg' => $r->id_tipe_brg[$i],
+                    'rupiah' => $r->rupiah[$i],
+                    'jenis' => 2,
+                    'id_kategori' => 3,
+                ]);
+            }
+        }
+        return redirect()->route('kelas.eo')->with('sukses', 'Data Berhasil ditambahkan');
+    }
+    public function getTipe(Request $r)
+    {
+        return response()->json($r->database == 'paket' ? $this->paket : $this->tipe);
     }
 }

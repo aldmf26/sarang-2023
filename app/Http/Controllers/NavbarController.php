@@ -34,7 +34,7 @@ class NavbarController extends Controller
                 'deskripsi' => 'ini adalah data user',
             ],
             [
-                'judul' => 'Data Paket',
+                'judul' => 'Data Paket Cabut',
                 'route' => 'kelas.index',
                 'img' => 'kelas.png',
                 'deskripsi' => 'ini adalah data user',
