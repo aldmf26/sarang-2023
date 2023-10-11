@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
+            Route::get('/get_kelas_jenis', 'get_kelas_jenis')->name('get_kelas_jenis');
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
@@ -214,9 +215,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/sortir', 'index')->name('sortir');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/deleteCabut', 'deleteCabut')->name('deleteCabut');
+            Route::get('/spesial', 'spesial')->name('spesial');
+            Route::get('/eo', 'eo')->name('eo');
             Route::get('/info/{id_kelas}', 'info')->name('info');
             Route::post('/update', 'update')->name('update');
             Route::post('/create', 'create')->name('create');
             Route::post('/cabutCreate', 'cabutCreate')->name('cabutCreate');
+            Route::post('/spesialCreate', 'spesialCreate')->name('spesialCreate');
+            Route::get('/tambahPaketSelect2', 'tambahPaketSelect2')->name('tambahPaketSelect2');
+            Route::get('/getTipe', 'getTipe')->name('getTipe');
+            Route::post('/eoCreate', 'eoCreate')->name('eoCreate');
         });
 });

@@ -218,6 +218,35 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_tambah_cabut', $data);
     }
+
+    public function get_kelas_jenis(Request $r)
+    {
+        switch ($r->jenis) {
+            case '3':
+                $kolom = 'a.id_kategori';
+                $jenis = 2;
+                break;
+            case '4':
+                $kolom = 'a.id_kategori';
+                $jenis = 3;
+                break;
+
+            default:
+                $kolom = 'a.jenis';
+                $jenis = $r->jenis;
+                break;
+        }
+        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where($kolom, $jenis)->where('a.nonaktif', 'T')->get();
+        echo "
+                <option value=''>Pilih</option>
+            ";
+        foreach ($get as $d) {
+            $jenis = $d->jenis == 1 ? "$d->pcs pcs" : "$d->gr gr";
+            echo "
+                <option value='" . $d->id_kelas . "'>$d->paket $d->kelas ~ $jenis </option>
+            ";
+        }
+    }
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('cabut as a')
@@ -235,7 +264,14 @@ class CabutController extends Controller
                 'c.gr as gr_kelas',
                 'c.rupiah as rupiah_kelas',
                 'c.rp_bonus',
-                'c.kategori',
+                'c.id_kategori as kategori',
+                'c.jenis',
+                'c.id_kategori',
+                'c.denda_susut_persen',
+                'c.denda_hcr',
+                'c.batas_susut',
+                'c.bonus_susut',
+                'c.eot as eot_rp',
                 'b.id_kelas',
                 'a.tgl_serah',
                 'b.nama',
@@ -378,8 +414,8 @@ class CabutController extends Controller
     {
         $bk = DB::table('tb_kelas')->where('id_kelas', $r->id_kelas)->first();
         $data = [
-            'gr' => $bk->gr,
-            'pcs' => $bk->pcs,
+            'gr' => $bk->gr ?? 0,
+            'pcs' => $bk->pcs ?? 0,
             'rupiah' => $bk->rupiah,
             'lokasi' => $bk->lokasi,
         ];
@@ -404,8 +440,7 @@ class CabutController extends Controller
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
                 'rupiah' => $r->rupiah[$i],
-                'hitung' => $r->hitung[$i],
-                'id_kelas' => $r->kelas_tipe[$i],
+                'id_kelas' => $r->id_paket[$i],
                 'tgl_terima' => $r->tgl_terima[$i],
             ]);
         }
@@ -476,15 +511,15 @@ class CabutController extends Controller
 
     public function selesai_cabut(Request $r)
     {
-        
+
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
         return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
     }
 
     public function ditutup(Request $r)
     {
-        foreach($r->datas as $d) {
-            DB::table('cabut')->where('id_cabut', $d)->update(['penutup'=> 'Y']);
+        foreach ($r->datas as $d) {
+            DB::table('cabut')->where('id_cabut', $d)->update(['penutup' => 'Y']);
         }
     }
 

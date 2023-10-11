@@ -20,7 +20,7 @@
                     <th class="dhead" width="100">Tgl Terima</th>
                     <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="150">Nama Anak</th>
-                    <th class="dhead" width="100">Hitung</th>
+                    <th class="dhead" width="100">Pcs/Gr</th>
                     <th class="dhead">Kelas / Paket</th>
                     <th class="dhead text-end" width="110">Pcs Awal</th>
                     <th class="dhead text-end" width="110">Gr Awal</th>
@@ -35,7 +35,6 @@
                             <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">
                             <input type="hidden" class="form-control" name="id_pengawas[]" readonly
                                 value="{{ auth()->user()->id }}">
-
                         </td>
                         <td>
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
@@ -60,29 +59,19 @@
                             <input type="hidden" class="setHargaSatuanPcs{{ $i + 1 }}">
                         </td>
                         <td>
-                            <select name="hitung[]" id="" class="form-control pilihHitung pilihHitung{{ $i + 1 }}" count="{{ $i + 1 }}">
-                                <option value="gr" selected>Gr</option>
-                                <option value="pcs">Pcs</option>
+                            <select name="hitung[]" id="" class="form-control pilihHitung pilihHitung{{$i+1}}" count="{{ $i + 1 }}">
+                                <option value="">Pilih</option>
+                                <option value="1">Pcs</option>
+                                <option value="2">Gr</option>
+                                <option value="3">Spesial</option>
+                                <option value="4">Eo</option>
                             </select>
                         </td>
                         <td>
-                            @php
-                                $tipe = [
-                                    1 => 'cbt',
-                                    2 => 'spc',
-                                    3 => 'eo',
-                                ];
-                                $kelasSelect = DB::table('tb_kelas')->get();
-                            @endphp
-                            <select name="kelas_tipe[]" id="" class="select3 pilihAnak"
+                           
+                            <select name="id_paket[]" id="" class="select3 pilihAnak pilihAnak{{$i+1}}"
                                 count="{{ $i + 1 }}">
-                                <option value="">Pilih Kelas</option>
-                                @foreach ($kelasSelect as $d)
-                                    <option value="{{ $d->id_kelas }}">
-                                        {{ $tipe[$d->kategori] }} {{ ucwords("$d->kelas $d->tipe") }} <br>
-                                        {{ "$d->pcs pcs $d->gr gr Rp " . number_format($d->rupiah,0) }}
-                                    </option>
-                                @endforeach
+                                <option value="">Pilih</option>
                             </select>
                         </td>
                         <td>

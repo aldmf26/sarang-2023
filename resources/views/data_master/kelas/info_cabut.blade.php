@@ -15,19 +15,24 @@
             <tr>
                 <th width="100" style="vertical-align: middle">Eot Bonus</th>
                 <td width="10">=</td>
-                <td>(eot cabut - gr awal cabut * 0.2 ) * rp eot ({{ $detail->eot }})</td>
+                <td>jika cabut eot gr / gr awal lebih dari 2% <br>
+                    maka (eot gr - (gr awal * 2%) * eot {{ $detail->eot }})
+                </td>
+                
+                {{-- <td>(eot cabut - gr awal cabut * 0.2 ) * rp eot ({{ $detail->eot }})</td> --}}
             </tr>
             <tr>
                 <th width="100" style="vertical-align: middle">Denda Susut</th>
                 <td width="10">=</td>
-                <td>susut saat cabut (lebih dari >) batas susut {{ number_format($detail->batas_susut,1) }}% <br>
-                     maka (susut cabut - batas susut {{ number_format($detail->batas_susut,1) }}%) * 100 * 3% * rp targetnya  </td>
+                <td>susut saat cabut (lebih dari) batas susut {{ number_format($detail->batas_susut,1) }}% <br>
+                     maka (susut cabut - batas susut {{ number_format($detail->batas_susut,1) }}%) * 100 * dnda susut persen {{$detail->denda_susut_persen}}% * rp targetnya  </td>
             </tr>
             <tr>
                 <th width="100" style="vertical-align: middle">Bonus Susut</th>
                 <td width="10">=</td>
-                <td>susut saat cabut (kurang dari <) bonus susut {{ number_format($detail->bonus_susut,1) }}% <br>
-                     maka (rp bonus ({{ number_format($detail->rp_bonus,0) }}) * gr awal cabut) / gr kelas {{ number_format($detail->gr) }} </td>
+                <td>susut saat cabut (kurang dari) bonus susut {{ number_format($detail->bonus_susut,1) }}% <br>
+                     maka (rp bonus ({{ number_format($detail->rp_bonus,0) }}) * gr awal cabut) / gr kelas {{ number_format($detail->gr) }} 
+                    </td>
             </tr>
         </table>
     </div>

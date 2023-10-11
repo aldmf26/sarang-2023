@@ -30,17 +30,24 @@
                     @endphp
 
                     <tr data-csrf-token="{{ csrf_token() }}">
-                        <td style="display:none">
-                            <input type="hidden" name="id_anak{{ $i + 1 }}[]" value="{{ $d->id_anak }}">
-                            <input type="hidden" name="id_cabut{{ $i + 1 }}[]" value="{{ $d->id_cabut }}">
-                            <input type="hidden" name="no_box{{ $i + 1 }}[]" value="{{ $d->no_box }}">
-                            <input type="hidden" name="rupiah{{ $i + 1 }}[]" value="{{ $d->rupiah }}">
+                        <td class="d-none">
+                            <input type="text" name="id_anak{{ $i + 1 }}[]" value="{{ $d->id_anak }}">
+                            <input type="text" name="id_cabut{{ $i + 1 }}[]" value="{{ $d->id_cabut }}">
+                            <input type="text" name="no_box{{ $i + 1 }}[]" value="{{ $d->no_box }}">
+                            <input type="text" name="rupiah{{ $i + 1 }}[]" value="{{ $d->rupiah }}">
                             <input type="text" name="gr_kelas{{ $i + 1 }}[]" value="{{ $d->gr_kelas }}">
                             <input type="text" name="rupiah_kelas{{ $i + 1 }}[]"
                                 value="{{ $d->rupiah_kelas }}">
                             <input type="text" name="id_kelas{{ $i + 1 }}[]" value="{{ $d->id_kelas }}">
                             <input type="text" name="rp_bonus{{ $i + 1 }}[]" value="{{ $d->rp_bonus }}">
-                            <input type="text" name="kategori{{ $i + 1 }}[]" value="{{ $d->kategori }}">
+                            <input type="text" name="id_kategori{{ $i + 1 }}[]" value="{{ $d->id_kategori }}">
+                            <input type="text" name="jenis{{ $i + 1 }}[]" value="{{ $d->jenis }}">
+                            <input type="text" name="denda_susut_persen{{ $i + 1 }}[]" value="{{ $d->denda_susut_persen }}">
+                            <input type="text" name="denda_hcr{{ $i + 1 }}[]" value="{{ $d->denda_hcr }}">
+                            <input type="text" name="pcs_kelas{{ $i + 1 }}[]" value="{{ $d->pcs_kelas }}">
+                            <input type="text" name="batas_susut{{ $i + 1 }}[]" value="{{ $d->batas_susut }}">
+                            <input type="text" name="bonus_susut{{ $i + 1 }}[]" value="{{ $d->bonus_susut }}">
+                            <input type="text" name="eot_rp{{ $i + 1 }}[]" value="{{ $d->eot_rp }}">
                             <input class="ttlRpSet{{ $i + 1 }}" type="text"
                                 name="ttl_rp{{ $i + 1 }}[]" value="{{ $hasil->ttl_rp }}">
                         </td>

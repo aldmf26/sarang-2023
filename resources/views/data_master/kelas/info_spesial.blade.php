@@ -10,7 +10,7 @@
             <tr>
                 <th width="100" style="vertical-align: middle">Ttl Rp Spc</th>
                 <td width="10">=</td>   
-                <td>jika pcs xbayar (lebih dari >) 0 <br> maka hasilnya 0 jika tidak mengambil rp target</td>
+                <td>jika pcs xbayar (lebih dari) 0 <br> maka hasilnya 0</td>
             </tr>
         </table>
     </div>

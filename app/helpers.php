@@ -129,9 +129,8 @@ if (!function_exists('rumusTotalRp ')) {
             $denda = ($susut - 23.4) * 0.03 * $detail->rupiah;
             $rupiah = $rupiah - $denda;
         }
-
         if ($susut < 19.5) {
-            $bonus_susut = ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas;
+            $bonus_susut = $detail->rp_bonus != 0  ? ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas : 0; 
         }
 
         $denda_hcr = $detail->pcs_hcr * 5000;
