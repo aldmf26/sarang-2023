@@ -55,8 +55,6 @@ class CabutSpecialController extends Controller
         return view('home.cabut_spesial.load_cabut', $data);
     }
 
-
-
     public function load_anak()
     {
         $anak = $this->getAnak();
@@ -125,7 +123,7 @@ class CabutSpecialController extends Controller
 
     public function getrp_target(Request $r)
     {
-        $target = DB::table('grade_spesial')->where('id_grade_spesial', $r->id_target)->first();
+        $target = DB::table('tb_kelas')->where('id_kelas', $r->id_target)->first();
 
         $data = [
             'rupiah' => $target->rupiah,
@@ -169,6 +167,7 @@ class CabutSpecialController extends Controller
                 'tgl' => $r->tgl_terima[$i],
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
+                'id_kelas' => $r->id_target[$i],
                 'ttl_rp' => $r->ttl_rp[$i],
                 'rp_target' => $r->rp_target[$i],
                 'pcs_target' => $r->pcs_target[$i],
@@ -276,6 +275,42 @@ class CabutSpecialController extends Controller
         return view('home.cabut_spesial.load_anak', $data);
     }
 
+    public function load_detail_cabut(Request $r)
+    {
+        $detail = DB::table('cabut_spesial as a')
+            ->select(
+                'a.id_cabut_spesial',
+                'a.tgl',
+                'a.tgl_terima',
+                'a.no_box',
+                'b.id_anak',
+                'a.ttl_rp',
+                'a.rp_target',
+                'c.gr as gr_kelas',
+                'c.rupiah as rupiah_kelas',
+                'c.kelas',
+                'b.id_kelas',
+                'c.rp_bonus',
+                'a.selesai',
+                'b.nama',
+                'a.pcs_awal',
+                'a.gr_awal',
+                'a.gr_flex',
+                'a.pcs_akhir',
+                'a.gr_akhir',
+                'a.pcs_hcr',
+                'a.eot',
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+            ->where([['a.id_cabut_spesial', $r->id_cabut]])
+            ->first();
+        $data = [
+            'detail' => $detail
+        ];
+        return view('home.cabut_spesial.load_modal_detail', $data);
+    }
+
     function load_ambil_cbt(Request $r)
     {
         $now =  date('Y-m-d');
@@ -291,7 +326,7 @@ class CabutSpecialController extends Controller
             'anak_spesial' => $anak_spesial,
             'boxBk' => $this->getStokBk(),
             'anak' => $this->getAnak(),
-            'target' => DB::table('grade_spesial')->get()
+            'target' => DB::table('tb_kelas')->where([['id_kategori',2],['nonaktif', 'T'],['jenis', '!=', 2]])->get()
         ];
         return view('home.cabut_spesial.gram_awal', $data);
     }
@@ -368,5 +403,44 @@ class CabutSpecialController extends Controller
                 ->orderBY('a.id_cabut_spesial', 'DESC')
                 ->get(),
         ];
+    }
+    public function export(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.cabut.export';
+        $tbl = DB::table('cabut as a')
+            ->select(
+                'b.id_anak',
+                'a.no_box',
+                'a.rupiah',
+                'c.gr as gr_kelas',
+                'c.rupiah as rupiah_kelas',
+                'b.id_kelas',
+                'c.rp_bonus',
+                'c.batas_susut',
+                'c.bonus_susut',
+                'c.denda_hcr',
+                'c.eot as eot_rp',
+                'a.tgl_serah',
+                'a.tgl_terima',
+                'a.id_cabut',
+                'a.selesai',
+                'b.nama',
+                'a.pcs_awal',
+                'a.gr_awal',
+                'a.gr_flx',
+                'a.pcs_akhir',
+                'a.pcs_hcr',
+                'a.gr_akhir',
+                'a.gr_awal',
+                'a.eot',
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+            ->where('no_box', '!=', '9999')
+            ->orderBY('a.id_cabut', 'DESC')
+            ->get();
+        return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 }

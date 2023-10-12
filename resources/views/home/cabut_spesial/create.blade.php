@@ -26,7 +26,7 @@
                                 <th class="dhead">Pgws</th>
                                 <th class="dhead">Nama Anak</th>
                                 <th class="dhead">Tgl Terima</th>
-                                <th class="dhead">Target</th>
+                                <th class="dhead">Kelas / Paket</th>
                                 <th class="dhead text-end" width="110">Pcs Awal</th>
                                 <th class="dhead text-end" width="110">Gr Awal</th>
                                 <th class="dhead text-end" width="130">Ttl Rp</th>

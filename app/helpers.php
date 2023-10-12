@@ -125,16 +125,16 @@ if (!function_exists('rumusTotalRp ')) {
         $bonus_susut = 0;
         $rupiah = $detail->rupiah;
 
-        if ($susut > 23.4) {
-            $denda = ($susut - 23.4) * 0.03 * $detail->rupiah;
+        if ($susut > $detail->batas_susut) {
+            $denda = ($susut - $detail->batas_susut) * 0.03 * $detail->rupiah;
             $rupiah = $rupiah - $denda;
         }
-        if ($susut < 19.5) {
+        if ($susut < $detail->bonus_susut) {
             $bonus_susut = $detail->rp_bonus != 0  ? ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas : 0; 
         }
 
         $denda_hcr = $detail->pcs_hcr * 5000;
-        $eot_bonus = ($detail->eot - $detail->gr_awal * 0.02) * 750;
+        $eot_bonus = ($detail->eot - $detail->gr_awal * 0.02) * $detail->eot_rp;
 
         $ttl_rp = $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
 

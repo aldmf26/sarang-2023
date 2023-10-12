@@ -34,7 +34,7 @@ class NavbarController extends Controller
                 'deskripsi' => 'ini adalah data user',
             ],
             [
-                'judul' => 'Data Paket Cabut',
+                'judul' => 'Data Paket',
                 'route' => 'kelas.index',
                 'img' => 'kelas.png',
                 'deskripsi' => 'ini adalah data user',
@@ -71,18 +71,18 @@ class NavbarController extends Controller
                 'img' => 'warehouse.png',
                 'deskripsi' => 'ini adalah data user',
             ],
-            [
-                'judul' => 'CABUT SPESIAL',
-                'route' => 'cabutSpesial.index',
-                'img' => 'warehouse.png',
-                'deskripsi' => 'ini adalah data user',
-            ],
-            [
-                'judul' => 'EO',
-                'route' => 'eo.index',
-                'img' => 'warehouse.png',
-                'deskripsi' => 'ini adalah data user',
-            ],
+            // [
+            //     'judul' => 'CABUT SPESIAL',
+            //     'route' => 'cabutSpesial.index',
+            //     'img' => 'warehouse.png',
+            //     'deskripsi' => 'ini adalah data user',
+            // ],
+            // [
+            //     'judul' => 'EO',
+            //     'route' => 'eo.index',
+            //     'img' => 'warehouse.png',
+            //     'deskripsi' => 'ini adalah data user',
+            // ],
             [
                 'judul' => 'CETAK',
                 'route' => 'cetak.index',

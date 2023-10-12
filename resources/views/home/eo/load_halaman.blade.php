@@ -28,14 +28,18 @@
                         <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
                         </td>
                         <td>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
-                                id_cabut="{{ $d->id_eo }}">{{ $d->no_box }}</a>
+                            {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
+                                id_cabut="{{ $d->id_eo }}">{{ $d->no_box }}</a> --}}
+                                {{ $d->no_box }}
                         </td>
                         <td>{{ $d->kelas }} - {{number_format($d->rupiah,0)}}</td>
                         <td>{{ $d->nama }}</td>
                         <td>{{ date('d M y', strtotime($d->tgl_ambil)) }}</td>
                         <td align="right">{{ number_format($d->gr_eo_awal,0) . ' ~ ' . number_format($d->gr_eo_akhir,0) }}</td>
-                        <td align="right">0</td>
+                        @php
+                            $susut = (1 - ($d->gr_eo_akhir / $d->gr_eo_awal)) * 100;
+                        @endphp
+                        <td align="right">{{ number_format($susut,0) }}%</td>
                         <td align="right">{{ number_format($d->ttl_rp, 0) }}
                         </td>
                         <td align="center"><span
@@ -50,9 +54,6 @@
                                 <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
                                     id_cabut="{{ $d->id_eo }}">
                             @endif
-
-
-
                         </td>
                     </tr>
                 @endforeach

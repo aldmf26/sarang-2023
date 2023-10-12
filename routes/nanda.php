@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_cabut', 'load_cabut')->name('load_cabut');
             Route::get('/load_row', 'load_row')->name('load_row');
             Route::get('/ditutup', 'ditutup')->name('ditutup');
+            Route::get('/load_detail_cabut', 'load_detail_cabut')->name('load_detail_cabut');
+            Route::get('/export', 'export')->name('export');
         });
     Route::controller(AbsenController::class)
         ->prefix('home/absen')

@@ -136,6 +136,10 @@ class CabutController extends Controller
                 'a.rupiah',
                 'c.gr as gr_kelas',
                 'c.rupiah as rupiah_kelas',
+                'c.batas_susut',
+                'c.bonus_susut',
+                'c.denda_hcr',
+                'c.eot as eot_rp',
                 'b.id_kelas',
                 'c.rp_bonus',
                 'a.tgl_serah',
@@ -236,7 +240,7 @@ class CabutController extends Controller
                 $jenis = $r->jenis;
                 break;
         }
-        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where($kolom, $jenis)->where('a.nonaktif', 'T')->get();
+        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where([[$kolom, $jenis],['id_kategori', '!=', 3]])->where('a.nonaktif', 'T')->get();
         echo "
                 <option value=''>Pilih</option>
             ";
@@ -485,6 +489,10 @@ class CabutController extends Controller
                 'c.rupiah as rupiah_kelas',
                 'b.id_kelas',
                 'c.rp_bonus',
+                'c.batas_susut',
+                'c.bonus_susut',
+                'c.denda_hcr',
+                'c.eot as eot_rp',
                 'a.tgl_serah',
                 'a.tgl_terima',
                 'a.id_cabut',
@@ -538,6 +546,10 @@ class CabutController extends Controller
                 'c.rupiah as rupiah_kelas',
                 'b.id_kelas',
                 'c.rp_bonus',
+                'c.batas_susut',
+                'c.bonus_susut',
+                'c.denda_hcr',
+                'c.eot as eot_rp',
                 'a.tgl_serah',
                 'a.tgl_terima',
                 'a.id_cabut',

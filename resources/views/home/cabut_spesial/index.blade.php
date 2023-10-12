@@ -13,7 +13,7 @@
                 <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history" variant="primary"
                     addClass="float-end history" teks="History" />
 
-                <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('cabutSpesial.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm  btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
@@ -67,7 +67,7 @@
             </x-theme.modal>
         </form>
 
-        <x-theme.modal idModal="detail" title="Detail Cabut" size="modal-lg-max" btnSave="T">
+        <x-theme.modal idModal="detail" title="Detail Cabut Spesial" size="modal-lg-max" btnSave="T">
             <div class="row">
                 <div class="col-lg-12">
                     <div id="load_detail_cabut"></div>
@@ -220,7 +220,7 @@
                     var id_cabut = $(this).attr('id_cabut')
                     $.ajax({
                         type: "GET",
-                        url: "cabut/load_detail_cabut",
+                        url: "cabutSpesial/load_detail_cabut",
                         data: {
                             id_cabut: id_cabut,
                         },

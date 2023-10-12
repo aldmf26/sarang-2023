@@ -2,7 +2,7 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-        <h6 class="float-start mt-1">{{ $title }}</h6>
+                <h6 class="float-start mt-1">{{ $title }}</h6>
 
             </div>
             <div class="col-lg-6">
@@ -10,7 +10,8 @@
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
-                <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end" teks="Eo" />
+                <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
+                    teks="Eo" />
                 <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
                     class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
                         class="badge bg-danger" id="anakBelum"></span>
@@ -24,7 +25,7 @@
 
             </div>
         </div>
-        
+
         @include('home.cabut.nav')
 
     </x-slot>
@@ -157,8 +158,8 @@
                     success: function(r) {
                         alertToast('sukses', 'Berhasil tambah')
                         $('#tambahAnak').modal('hide')
-                        // loadTambahcabut()
-                        // loadHalaman()
+                        loadTambahcabut()
+                        loadHalaman()
                         loadTambahAnak()
                         $('#tambah2').modal('show')
                     }
@@ -364,7 +365,29 @@
                         loadHalaman()
                     }
                 });
-
+            })
+            $(document).on('click', '.hapusCabutRow', function() {
+                var count = $(this).attr('count')
+                if (confirm(
+                        'Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')) {
+                    var id_cabut = $(this).attr('id_cabut')
+                    var id_anak = $(this).attr('id_anak')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.hapusCabutRow') }}",
+                        data: {
+                            id_cabut: id_cabut,
+                            id_anak: id_anak,
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil hapus row')
+                            $(".baris" + count).remove();
+                            loadTambahcabut()
+                            loadHalaman()
+                            loadTambahAnak()
+                        }
+                    });
+                }
             })
 
             function load_anak_nopengawas() {

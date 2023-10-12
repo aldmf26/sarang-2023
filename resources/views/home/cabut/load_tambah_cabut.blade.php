@@ -63,8 +63,8 @@
                                 <option value="">Pilih</option>
                                 <option value="1">Pcs</option>
                                 <option value="2">Gr</option>
-                                <option value="3">Spesial</option>
-                                <option value="4">Eo</option>
+                                {{-- <option value="3">Spesial</option>
+                                <option value="4">Eo</option> --}}
                             </select>
                         </td>
                         <td>

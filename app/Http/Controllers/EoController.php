@@ -110,7 +110,7 @@ class EoController extends Controller
             'nobox' => $this->getStokBk(),
             'anak' => $this->getAnak(),
             'getAnak' => $this->getAnakTambah(),
-            'kelas' => DB::table('tb_kelas_eo')->get()
+            'kelas' => DB::table('tb_kelas')->where([['nonaktif', 'T'], ['id_kategori', 3]])->get()
         ];
 
         return view('home.eo.load_tambah_cabut', $data);
@@ -184,12 +184,13 @@ class EoController extends Controller
                 'a.gr_eo_akhir',
                 'a.selesai',
                 'a.penutup',
+                'a.bulan_dibayar',
                 'b.nama',
                 'c.kelas',
                 'c.rupiah',
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas_eo as c', 'a.id_kelas', 'c.id_kelas')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
             ->orderBY('a.selesai', 'ASC');
 
@@ -205,6 +206,12 @@ class EoController extends Controller
             'cabut' => $query,
         ];
         return view('home.eo.load_halaman', $data);
+    }
+    public function hapusCabutRow(Request $r)
+    {
+        DB::table('eo')->where('id_eo', $r->id_cabut)->delete();
+        DB::table('absen')->where([['id_anak', $r->id_anak], ['tgl', date('Y-m-d')], ['ket', 'eo']])->delete();
+        return 'Berhasil hapus baris';
     }
 
     public function load_modal_akhir(Request $r)
@@ -235,7 +242,7 @@ class EoController extends Controller
                 'c.rupiah',
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas_eo as c', 'a.id_kelas', 'c.id_kelas')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->where([['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
             ->orderBy('a.id_eo', 'DESC')
             ->get();
@@ -335,7 +342,7 @@ class EoController extends Controller
         $view = 'home.eo.export';
         $tbl = DB::table('eo as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas_eo as c', 'a.id_kelas', 'c.id_kelas')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->join('users as d', 'd.id', 'a.id_pengawas')
             ->whereBetween('a.tgl_input', [$tgl1, $tgl2])
             ->orderBy('a.id_eo', 'DESC')->get();

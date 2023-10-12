@@ -164,6 +164,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_tambah_cabut', 'load_tambah_cabut')->name('load_tambah_cabut');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
+            Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
 
         });

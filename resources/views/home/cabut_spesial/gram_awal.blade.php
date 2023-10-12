@@ -5,13 +5,11 @@
             <th class="dhead">Pgws</th>
             <th class="dhead">Nama Anak</th>
             <th class="dhead">Tgl Terima</th>
-            <th class="dhead">Target</th>
+            <th class="dhead">Kelas / Paket</th>
             <th class="dhead text-end" width="110">Pcs Awal</th>
             <th class="dhead text-end" width="110">Gr Awal</th>
             <th class="dhead text-end" width="130">Ttl Rp</th>
             <th class="dhead" width="50">Aksi</th>
-
-
         </tr>
     </thead>
     <tbody>
@@ -44,9 +42,9 @@
                 <td>
                     <select name="id_target[]" id="" class="select2-add pilihTarget"
                         count="{{ $no }}">
-                        <option value="">Pilih Target</option>
+                        <option value="">Pilih Kelas</option>
                         @foreach ($target as $d)
-                            <option value="{{ $d->id_grade_spesial }}">{{ $d->ket }}</option>
+                            <option value="{{ $d->id_kelas }}">{{ $d->pcs }}pcs ~ {{ number_format($d->rupiah,0) }}</option>
                         @endforeach
                     </select>
                 </td>
