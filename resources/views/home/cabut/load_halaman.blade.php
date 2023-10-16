@@ -18,7 +18,7 @@
                     <th class="text-end dhead">Pcs Hcr</th>
                     <th class="text-end dhead">Susut</th>
                     <th class="text-end dhead">Rp Trgt</th>
-                    <th class="text-end dhead">Ttl Gaji</th>
+                    <th class="text-end dhead">Ttl Gaji asdasdas</th>
                     <th class="dhead">Selesai</th>
                     <th class="dhead" width="50">
                         <center>
