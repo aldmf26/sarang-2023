@@ -160,17 +160,19 @@ class CabutController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T'], ['a.id_pengawas', $id]])
-            ->orderBY('a.selesai', 'ASC')->get();
-        // if (auth()->user()->posisi_id != 1) {
-        //     $cabut->where('a.id_pengawas', $id);
-        // }
-        // $query = $cabut->get();
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            ->orderBY('a.selesai', 'ASC');
+
+        if (auth()->user()->posisi_id != 1) {
+            $cabut->where('a.id_pengawas', $id);
+        }
+        
+        $query = $cabut->get();
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'cabut' => $cabut,
+            'cabut' => $query,
         ];
         return view('home.cabut.load_halaman', $data);
     }
