@@ -166,7 +166,7 @@ class CabutController extends Controller
         if (auth()->user()->posisi_id != 1) {
             $cabut->where('a.id_pengawas', $id);
         }
-        
+
         $query = $cabut->get();
         $data = [
             'title' => 'Divisi Cabut',
@@ -190,27 +190,28 @@ class CabutController extends Controller
         // DB::table('cabut')->where([['tgl_terima', $tgl], ['id_pengawas', $id_pengawas], ['no_box', '9999']])->delete();
         // DB::table('absen')->where([['tgl', $tgl], ['ket', 'cabut']])->delete();
         foreach ($r->all()['rows'] as $d) {
-            DB::table('absen')->insert([
-                'tgl' => $tgl,
-                'id_pengawas' => $id_pengawas,
-                'id_anak' => $d,
-                'ket' => $r->tipe == 'cbt' ? 'cabut' : 'cabut sisa'
-            ]);
             if ($r->tipe == 'cbt') {
-                DB::table('cabut')->insert([
+                $id = DB::table('cabut')->insertGetId([
                     'no_box' => 9999,
                     'id_pengawas' => $id_pengawas,
                     'id_anak' => $d,
                     'tgl_terima' => $tgl
                 ]);
             }
+            DB::table('absen')->insert([
+                'tgl' => $tgl,
+                'id_pengawas' => $id_pengawas,
+                'id_anak' => $d,
+                'ket' => $r->tipe == 'cbt' ? 'cabut' : 'cabut sisa',
+                'id_kerja' => $id
+            ]);
         }
         return 'Berhasil tambah anak';
     }
     public function hapusCabutRow(Request $r)
     {
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->delete();
-        DB::table('absen')->where([['id_anak', $r->id_anak], ['tgl', date('Y-m-d')], ['ket', 'Cabut']])->delete();
+        DB::table('absen')->where([['id_kerja', $r->id_cabut], ['ket', 'Cabut']])->delete();
         return 'Berhasil hapus baris';
     }
     public function load_tambah_cabut(Request $r)
@@ -240,7 +241,7 @@ class CabutController extends Controller
                 $jenis = $r->jenis;
                 break;
         }
-        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where([[$kolom, $jenis],['id_kategori', '!=', 3]])->where('a.nonaktif', 'T')->get();
+        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where([[$kolom, $jenis], ['id_kategori', '!=', 3]])->where('a.nonaktif', 'T')->get();
         echo "
                 <option value=''>Pilih</option>
             ";
@@ -251,6 +252,23 @@ class CabutController extends Controller
             ";
         }
     }
+
+    public function cancel(Request $r)
+    {
+        // $data = [
+        //     'no_box' => 9999,
+        //     'id_pengawas' => $id_pengawas,
+        //     'id_anak' => $d,
+        //     'tgl_terima' => $tgl
+        // ];
+
+        DB::table('cabut')->where('id_cabut', $r->id_cabut)->update([
+            'no_box' => 9999,
+            'tgl_terima' => date('Y-m-d'),
+        ]);
+        // DB::table('absen')->where('id_kerja', $r->id_cabut)->delete();
+    }
+
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('cabut as a')
@@ -292,7 +310,7 @@ class CabutController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
+            ->where([['no_box', '!=', '9999'],['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
             ->orderBy('a.id_cabut', 'DESC')
             ->get();
         $data = [
@@ -436,7 +454,7 @@ class CabutController extends Controller
             //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
             // } else {
             // }
-            DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
+            DB::table('absen')->where('id_kerja', $r->id_cabut[$i])->update([
                 'tgl' => $r->tgl_terima[$i]
             ]);
             DB::table('cabut')->where('id_cabut', $r->id_cabut[$i])->update([

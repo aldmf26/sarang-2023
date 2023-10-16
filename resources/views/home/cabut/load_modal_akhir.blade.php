@@ -108,10 +108,14 @@
                         </td>
                         <td>
                             <button style="font-size: 12px"
+                                class="btn btn-sm btn-danger cancelCabutAkhir"
+                                type="button" count="{{ $i + 1 }}" id_cabut="{{ $d->id_cabut }}">Cancel</button>
+                            <button style="font-size: 12px"
                                 class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
                             <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
                                 href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
+                          
                         </td>
                     </tr>
                 @endforeach

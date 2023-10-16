@@ -676,6 +676,19 @@
                         }
                     });
                 })
+
+                $(document).on('click', '.cancelCabutAkhir', function(){
+                    var id_cabut = $(this).attr('id_cabut')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('cabut.cancel')}}?id_cabut="+id_cabut,
+                        success: function (r) {
+                            loadTambahcabut()
+                            loadHalaman()
+                            load_input_akhir()
+                        }
+                    });
+                })
             </script>
         @endsection
     </x-slot>

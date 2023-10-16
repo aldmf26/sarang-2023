@@ -119,6 +119,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
             Route::get('/get_kelas_jenis', 'get_kelas_jenis')->name('get_kelas_jenis');
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
+            Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
     Route::controller(SortirController::class)
