@@ -166,8 +166,8 @@ class CabutController extends Controller
         if (auth()->user()->posisi_id != 1) {
             $cabut->where('a.id_pengawas', $id);
         }
-
         $query = $cabut->get();
+        dd($query);
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
