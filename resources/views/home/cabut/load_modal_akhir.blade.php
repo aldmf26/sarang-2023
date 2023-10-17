@@ -58,7 +58,7 @@
                         <td>
                             <input type="text" readonly value="{{ $d->no_box }}" class="form-control">
                         </td>
-                        <td class="fs-bold">{{ strtoupper($d->nama) }} / {{ $d->tgl_terima }}</td>
+                        <td class="fs-bold">{{ strtoupper($d->nama) }} / {{ date('d M y', strtotime($d->tgl_terima)) }}</td>
                         <td>
                             <input readonly value="{{ $d->pcs_awal }}" type="text" class="form-control text-end">
                         </td>
