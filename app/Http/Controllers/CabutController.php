@@ -297,6 +297,7 @@ class CabutController extends Controller
                 'c.eot as eot_rp',
                 'b.id_kelas',
                 'a.tgl_serah',
+                'a.tgl_terima',
                 'b.nama',
                 'a.pcs_awal',
                 'a.gr_awal',
