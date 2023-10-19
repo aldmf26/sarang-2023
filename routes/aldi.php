@@ -227,5 +227,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/getTipe', 'getTipe')->name('getTipe');
             Route::post('/eoCreate', 'eoCreate')->name('eoCreate');
             Route::get('/cetak', 'cetak')->name('cetak');
+            Route::post('/cetakCreate', 'cetakCreate')->name('cetakCreate');
         });
 });

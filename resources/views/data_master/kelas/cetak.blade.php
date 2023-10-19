@@ -28,8 +28,8 @@
             }
         </style>
         <section class="row">
-            <div class="col-lg-8">
-                <form action="{{ route('kelas.eoCreate') }}" method="post">
+            <div class="col-lg-10">
+                <form action="{{ route('kelas.cetakCreate') }}" method="post">
                     <x-theme.button href="#" icon="fa-window-close" variant="danger"
                         addClass="float-end btn_tutup" teks="Hapus" />
                     <button class="btn btn-primary btn-sm float-end mb-3 me-2" type="submit"><i
@@ -45,7 +45,10 @@
                                 <th class="dhead" width="100">Paket</th>
                                 <th class="dhead" width="100">Kelas</th>
                                 <th class="dhead" width="100">Tipe</th>
-                                <th class="text-end dhead" width="150">Rp</th>
+                                <th class="text-end dhead" width="150">Rp Pcs</th>
+                                <th class="text-end dhead">Denda HCR</th>
+                                <th class="text-end dhead">Bts Sst %</th>
+                                <th class="text-end dhead">Denda Sst</th>
                                 <th class="dhead" width="50">Aksi</th>
                             </tr>
                         </thead>
@@ -73,6 +76,18 @@
                                     <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                         name="rupiah_tambah[]">
                                 </td>
+                                <td>
+                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                        name="denda_hcr[]">
+                                </td>
+                                <td>
+                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                        name="batas_susut[]">
+                                </td>
+                                <td>
+                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                        name="denda_susut[]">
+                                </td>
 
                                 <td>
                                     <span class="badge bg-primary" @click="rows.push({ value: '' })"
@@ -87,7 +102,7 @@
                                         <select database="paket" x-model="selectedOption" x-init="initSelect2()"
                                             class="select2-alpine" name="id_paket_tambah[]" id="">
                                             <option value="">Paket</option>
-                                            @foreach ($paket as $t)
+                                            @foreach ($kategori as $t)
                                                 <option value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}
                                                 </option>
                                             @endforeach
@@ -119,14 +134,14 @@
                                     </td>
                                 </tr>
                             </template>
-                            @foreach ($datas as $no => $d)
+                            @foreach ($kelas as $no => $d)
                                 <input type="hidden" name="id_kelas[]" value="{{ $d->id_kelas }}">
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
                                     <td>
-                                        <select database="paket" x-data="{ selectedTipeKategori: {{ $d->id_paket }} }" x-model="selectedTipeKategori"
-                                            x-init="initSelect2()" class="select2-alpine-data" name="id_paket[]"
-                                            id="">
+                                        <select database="paket" x-data="{ selectedTipeKategori: {{ $d->id_paket }} }"
+                                            x-model="selectedTipeKategori" x-init="initSelect2()"
+                                            class="select2-alpine-data" name="id_paket[]" id="">
                                             @foreach ($paket as $t)
                                                 <option
                                                     x-bind:selected="selectedTipeKategori == $t - > id_paket ? true : false"

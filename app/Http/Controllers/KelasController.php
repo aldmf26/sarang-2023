@@ -243,8 +243,28 @@ class KelasController extends Controller
     {
         $data = [
             'title' => 'Data Paket Cetak',
-            'kelas' => DB::table('kelas_cetak')->get()
+            'kelas' => DB::table('kelas_cetak')->get(),
+            'kategori' => DB::table('paket_cabut')->get(),
+            'tipe' => DB::table('tipe_cabut')->get()
         ];
         return view("data_master.kelas.cetak", $data);
+    }
+
+    function cetakCreate(Request $r)
+    {
+        for ($x = 0; $x < count($r->id_paket); $x++) {
+            $data = [
+                'id_paket' => $r->id_paket_tambah[$x],
+                'kelas' => $r->kelas_tambah[$x],
+                'tipe' => $r->id_tipe_brg_tambah[$x],
+                'tipe' => $r->id_tipe_brg_tambah[$x],
+                'rp_pcs' => $r->rupiah_tambah[$x],
+                'denda_hcr' => $r->denda_hcr[$x],
+                'batas_susut' => $r->batas_susut[$x],
+                'denda_susut' => $r->denda_susut[$x],
+            ];
+            DB::table('kelas_cetak')->insert($data);
+        }
+        return redirect()->route('kelas.cetak')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
