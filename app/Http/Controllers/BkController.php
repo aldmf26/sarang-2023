@@ -15,26 +15,35 @@ class BkController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
+
+        if (empty($r->kategori)) {
+            $kategori = 'cabut';
+        } else {
+            $kategori = $r->kategori;
+        }
+
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+            'kategori' => $kategori,
             'bk' => DB::select("SELECT * FROM bk as a 
             left join ket_bk as b on b.id_ket_bk = a.id_ket 
             left join warna as c on c.id_warna = a.id_warna 
             left join users as d on d.id = a.penerima 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'")
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = '$kategori'")
         ];
         return view('home.bk.index', $data);
     }
 
-    public function add()
+    public function add(Request $r)
     {
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
             'ket_bk' => DB::table('ket_bk')->get(),
             'warna' => DB::table('warna')->get(),
+            'kategori' => $r->kategori
         ];
         return view('home.bk.create', $data);
     }
@@ -42,7 +51,7 @@ class BkController extends Controller
     public function create(Request $r)
     {
         for ($x = 0; $x < count($r->no_lot); $x++) {
-            if(!empty($r->no_lot[$x])) {
+            if (!empty($r->no_lot[$x])) {
                 $data = [
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
@@ -54,11 +63,12 @@ class BkController extends Controller
                     'pcs_awal' => $r->pcs_awal[$x],
                     'gr_awal' => $r->gr_awal[$x],
                     'tgl' => $r->tgl_terima[$x],
+                    'kategori' => $r->kategori
                 ];
                 DB::table('bk')->insert($data);
             }
         }
-        return redirect('home/bk')->with('sukses', 'Data berhasil ditambahkan');
+        return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
     }
 
     public function print(Request $r)
@@ -81,7 +91,6 @@ class BkController extends Controller
         $totalrow = count($tbl) + 1;
 
         return Excel::download(new BkExport($tbl, $totalrow, $view), 'Export BK.xlsx');
-       
     }
 
     public function edit(Request $r)
@@ -99,7 +108,7 @@ class BkController extends Controller
     public function update(Request $r)
     {
         for ($x = 0; $x < count($r->no_lot); $x++) {
-            if(!empty($r->no_lot[$x])) {
+            if (!empty($r->no_lot[$x])) {
                 $data = [
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
@@ -120,10 +129,28 @@ class BkController extends Controller
 
     public function delete(Request $r)
     {
-        foreach($r->no_nota as $n){
+        foreach ($r->no_nota as $n) {
             DB::table('bk')->where('no_box', $n)->delete();
         }
         return redirect('home/bk')->with('sukses', 'Data berhasil ditambahkan');
     }
 
+
+    function cetak(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $data = [
+            'title' => 'Divisi BK',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'bk' => DB::select("SELECT * FROM bk as a 
+            left join ket_bk as b on b.id_ket_bk = a.id_ket 
+            left join warna as c on c.id_warna = a.id_warna 
+            left join users as d on d.id = a.penerima 
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = 'cetak'")
+        ];
+        return view('home.bk.index', $data);
+    }
 }

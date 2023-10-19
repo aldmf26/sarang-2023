@@ -7,14 +7,18 @@
             <i class="fas fa-file-excel"></i> Export
         </a>
 
-        <x-theme.button href="{{ route('bk.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
+            teks="Tambah" />
         <x-theme.btn_filter />
+
 
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
-            <div class="col-lg-8"></div>
+            <div class="col-lg-8">
+                @include('home.bk.nav')
+            </div>
             <div class="col-lg-4 mb-2">
                 <table class="float-end">
                     <td>Pencarian :</td>
@@ -33,8 +37,8 @@
                         <th>Tgl terima</th>
                         <th>Pengawas</th>
                         <th>Penerima</th>
-                        <th>Pcs Awal</th>
-                        <th>Gr Awal</th>
+                        <th class="text-end">Pcs Awal</th>
+                        <th class="text-end">Gr Awal</th>
                         <th>Cek</th>
                         <th>Aksi</th>
                     </tr>
@@ -52,8 +56,8 @@
                             <td>{{ $b->pengawas }}</td>
                             <td>{{ $b->name }}
                             </td>
-                            <td>{{ $b->pcs_awal }}</td>
-                            <td>{{ $b->gr_awal }}</td>
+                            <td class="text-end">{{ $b->pcs_awal }}</td>
+                            <td class="text-end">{{ $b->gr_awal }}</td>
                             <td align="center"><input type="checkbox" no_nota="{{ $b->no_box }}" class="cek_bayar"
                                     name="" id=""></td>
                             <td>

@@ -52,6 +52,23 @@ class CetakController extends Controller
         return view('home.cetak.index', $data);
     }
 
+    function get_cetak(Request $r)
+    {
+        $id = auth()->user()->id;
+
+        $tgl = tanggalFilter($r);
+        $tgl1 =  $tgl['tgl1'];
+        $tgl2 =  $tgl['tgl2'];
+        $data = [
+            'cetak' => DB::select("SELECT *
+            FROM cetak as a
+            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+            where a.id_pengawas = '$id' and a.tgl between '$tgl1' and '$tgl2'
+            "),
+        ];
+        return view('home.cetak.get', $data);
+    }
+
     public function add_target(Request $r)
     {
         for ($x = 0; $x < count($r->no_box); $x++) {

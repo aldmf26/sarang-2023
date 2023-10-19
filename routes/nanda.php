@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         ->name('cetak.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
             Route::get('/add', 'add')->name('add');
             Route::get('/akhir', 'akhir')->name('akhir');
             Route::post('/add_akhir', 'add_akhir')->name('add_akhir');
