@@ -22,7 +22,7 @@ class AbsenController extends Controller
         $tgl2 = $tgl['tgl2'];
         session(['tgl1' => $tgl1, 'tgl2' => $tgl2]);
         $data = [
-            'title' => 'Absensi',
+            'title' => 'Form Absensi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get()
@@ -30,10 +30,38 @@ class AbsenController extends Controller
         return view('home.absen.index', $data);
     }
 
+    public function detailAbsen(Request $r)
+    {
+        $bulan = $r->bulan ?? (int) date('m');
+        $tahun = $r->tahun ?? date('Y');
+
+        $absen = DB::select("SELECT *,count(*) as ttl FROM absen AS a
+        JOIN users AS b ON a.id_pengawas = b.id
+        JOIN tb_anak AS c ON a.id_anak = c.id_anak
+        WHERE a.id_pengawas = '$r->id_pengawas' AND MONTH(a.tgl) = '$bulan' AND YEAR(a.tgl) = '$tahun'
+        group BY a.id_anak");
+
+        $data = [
+            'absen' => $absen,
+            'bulanGet' => $bulan,
+            'tahunGet' => $tahun,
+        ];
+        return view('home.absen.detail_absen',$data);
+    }
+
     public function create(Request $r)
     {
-        foreach($r->id_anak as $d){
-            DB::table('')
+        DB::table('absen')->where('tgl', $r->tgl)->delete();
+
+        for ($i=0; $i < count($r->id_anak); $i++) { 
+            
+            DB::table('absen')->insert([
+                'id_anak' => $r->id_anak[$i],
+                'id_pengawas' => $r->id_pengawas[$i],
+                'tgl' => $r->tgl,
+                'ket' => '',
+                'id_kerja' => 0
+            ]);
         }
     }
     // public function index(Request $r)
