@@ -6,11 +6,7 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm icon icon-left btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export
-                </a>
-                <x-theme.btn_filter />
+
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
@@ -65,9 +61,13 @@
 
                             @foreach ($pengawas as $i => $d)
                                 <tr>
-                                    <th>{{ $d->name }} <span class="badge bg-primary float-end"
+                                    <th><a href="#" class="detailAbsen"
+                                            id_pengawas="{{ $d->id }}">{{ $d->name }}</a>
+                                        <span class="badge bg-primary float-end"
                                             @click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
-                                            <i class="fas fa-caret-down"></i></span></th>
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </th>
                                     <th></th>
                                     <th></th>
                                     <th>
@@ -87,12 +87,18 @@
                                 @foreach ($query as $x)
                         <tbody x-show="openRows.includes({{ $i }})">
 
+                            @php
+                                $absenHariIni = DB::table('absen')
+                                    ->where([['id_anak', $x->id_anak], ['tgl', date('Y-m-d')]])
+                                    ->first();
+                            @endphp
                             <tr>
                                 <td>{{ $x->name }}</td>
                                 <td>{{ $x->nama }}</td>
                                 <td>{{ $x->id_kelas }}</td>
                                 <td align="center">
-                                    <input type="checkbox" id_anak="{{ $x->id_anak }}"
+                                    <input {{ !empty($absenHariIni) ? 'checked' : '' }} type="checkbox"
+                                        id_anak="{{ $x->id_anak }}" id_pengawas="{{ $x->id_pengawas }}"
                                         data-category="{{ $i }}" class="form-check cekTutup"
                                         name="cekTutup[]">
                                 </td>
@@ -106,6 +112,11 @@
 
             </section>
         </form>
+
+        <x-theme.modal idModal="detailAbsen" btnSave="T" title="Detail Absen Anak">
+
+            <div id="loadDetailAbsen"></div>
+        </x-theme.modal>
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tablealdi')
@@ -116,26 +127,73 @@
                         // Cari checkbox subkategori yang sesuai dengan kategori ini
                         $(".cekTutup[data-category='" + categoryIndex + "']").prop("checked", this.checked);
                     });
-                   
+
                     $(document).on('submit', '#formAbsen', function(e) {
                         e.preventDefault();
 
-                        var checkedItems = [];
+                        var idAnakWadah = [];
+                        var idPengawasWadah = [];
                         var tgl = $("input[name='tgl']").val()
                         // Loop melalui checkbox cekTutup yang dicentang
                         $(".cekTutup:checked").each(function() {
                             var idAnak = $(this).attr("id_anak");
-                            checkedItems.push(idAnak);
+                            idAnakWadah.push(idAnak);
+
+                            var idPengawas = $(this).attr("id_pengawas");
+                            idPengawasWadah.push(idPengawas);
+
                         });
+
+
                         $.ajax({
                             type: "GET",
                             url: "{{ route('absen.create') }}",
                             data: {
-                                id_anak: checkedItems,
-                                tgl:tgl
+                                id_anak: idAnakWadah,
+                                id_pengawas: idPengawasWadah,
+                                tgl: tgl
                             },
                             success: function(r) {
+                                window.location.reload()
+                            }
+                        });
+                    })
 
+                    $(document).on('click', '.detailAbsen', function(e) {
+                        e.preventDefault()
+                        var id_pengawas = $(this).attr('id_pengawas')
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('absen.detailAbsen') }}",
+                            data: {
+                                id_pengawas: id_pengawas
+                            },
+                            success: function(r) {
+                                $('#detailAbsen').modal('show')
+                                $("#loadDetailAbsen").html(r);
+                                $("#tableDetailAbsen").dataTable()
+                            }
+                        });
+                    })
+
+                    $(document).on('submit', '#viewDetailAbsen', function(e) {
+                        e.preventDefault()
+                        var id_pengawas = $("input[name='id_pengawas']").val()
+                        var bulan = $("select[name='bulan']").val()
+                        var tahun = $("select[name='tahun']").val()
+
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('absen.detailAbsen') }}",
+                            data: {
+                                id_pengawas: id_pengawas,
+                                bulan: bulan,
+                                tahun: tahun,
+                            },
+                            success: function(r) {
+                                $('#detailAbsen').modal('show')
+                                $("#loadDetailAbsen").html(r);
+                                $("#tableDetailAbsen").dataTable()
                             }
                         });
                     })

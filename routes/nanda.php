@@ -113,6 +113,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
+            Route::get('/detailAbsen', 'detailAbsen')->name('detailAbsen');
             Route::get('/tabelAbsen', 'tabelAbsen')->name('tabelAbsen');
             Route::get('/SaveAbsen', 'SaveAbsen')->name('SaveAbsen');
             Route::get('/delete_absen', 'delete_absen')->name('delete_absen');
