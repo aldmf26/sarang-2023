@@ -2,7 +2,7 @@
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }}</h6>
+            <h6 class="float-start mt-1">{{ $title }} {{ $kategori }}</h6>
         </div>
 
     </x-slot>
@@ -20,7 +20,7 @@
         <form action="{{ route('bk.create') }}" method="post">
             @csrf
             <section class="row">
-
+                <input type="hidden" name="kategori" value="{{ $kategori }}">
                 <div class="col-lg-12">
                     <table class="table table-striped" width="100%">
                         <thead>

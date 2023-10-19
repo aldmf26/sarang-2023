@@ -167,7 +167,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
-
         });
     Route::controller(DataPengawasController::class)
         ->prefix('data_master/data_pengawas')
