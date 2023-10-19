@@ -23,7 +23,7 @@ class KelasController extends Controller
             'lokasi' => ['alpa', 'mtd', 'sby'],
             'tipe' => $this->tipe,
             'kategori' => DB::table('paket_cabut')->get(),
-            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T'],['id_kategori', '!=', 3]])->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T'], ['id_kategori', '!=', 3]])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view("data_master.kelas.index", $data);
     }
@@ -113,7 +113,7 @@ class KelasController extends Controller
             'jenis' => $jenis,
             'paket' => $this->paket,
             'tipe' => $this->tipe,
-            'datas' => DB::table('tb_kelas')->where([['id_kategori', 2],['jenis', '!=', 2]])->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['id_kategori', 2], ['jenis', '!=', 2]])->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.spesial_index', $data);
     }
@@ -193,7 +193,7 @@ class KelasController extends Controller
             'title' => 'Kelas Spesial',
             'paket' => $this->paket,
             'tipe' => $this->tipe,
-            'datas' => DB::table('tb_kelas')->where([['id_kategori', 3],['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['id_kategori', 3], ['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.eo_index', $data);
     }
@@ -237,5 +237,14 @@ class KelasController extends Controller
     public function getTipe(Request $r)
     {
         return response()->json($r->database == 'paket' ? $this->paket : $this->tipe);
+    }
+
+    function cetak(Request $r)
+    {
+        $data = [
+            'title' => 'Data Paket Cetak',
+            'kelas' => DB::table('kelas_cetak')->get()
+        ];
+        return view("data_master.kelas.cetak", $data);
     }
 }

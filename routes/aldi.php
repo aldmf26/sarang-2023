@@ -226,5 +226,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/tambahPaketSelect2', 'tambahPaketSelect2')->name('tambahPaketSelect2');
             Route::get('/getTipe', 'getTipe')->name('getTipe');
             Route::post('/eoCreate', 'eoCreate')->name('eoCreate');
+            Route::get('/cetak', 'cetak')->name('cetak');
         });
 });
