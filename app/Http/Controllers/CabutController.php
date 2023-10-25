@@ -103,7 +103,7 @@ class CabutController extends Controller
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user'");
+        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori = 'cabut'");
     }
     public function index(Request $r)
     {
@@ -180,7 +180,7 @@ class CabutController extends Controller
     public function load_tambah_anak(Request $r)
     {
         $data = [
-            'anak' => $this->getAnakTambah('NOT')
+            'anak' => $this->getAnak()
         ];
         return view('home.cabut.load_tambah_anak', $data);
     }
@@ -199,13 +199,13 @@ class CabutController extends Controller
                     'tgl_terima' => $tgl
                 ]);
             }
-            DB::table('absen')->insert([
-                'tgl' => $tgl,
-                'id_pengawas' => $id_pengawas,
-                'id_anak' => $d,
-                'ket' => $r->tipe == 'cbt' ? 'cabut' : 'cabut sisa',
-                'id_kerja' => $id
-            ]);
+            // DB::table('absen')->insert([
+            //     'tgl' => $tgl,
+            //     'id_pengawas' => $id_pengawas,
+            //     'id_anak' => $d,
+            //     'ket' => $r->tipe == 'cbt' ? 'cabut' : 'cabut sisa',
+            //     'id_kerja' => $id
+            // ]);
         }
         return 'Berhasil tambah anak';
     }
@@ -456,9 +456,9 @@ class CabutController extends Controller
             //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
             // } else {
             // }
-            DB::table('absen')->where('id_kerja', $r->id_cabut[$i])->update([
-                'tgl' => $r->tgl_terima[$i]
-            ]);
+            // DB::table('absen')->where('id_kerja', $r->id_cabut[$i])->update([
+            //     'tgl' => $r->tgl_terima[$i]
+            // ]);
             DB::table('cabut')->where('id_cabut', $r->id_cabut[$i])->update([
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'pcs_awal' => $r->pcs_awal[$i],
@@ -546,8 +546,14 @@ class CabutController extends Controller
 
     public function ditutup(Request $r)
     {
-        foreach ($r->datas as $d) {
-            DB::table('cabut')->where('id_cabut', $d)->update(['penutup' => 'Y']);
+        if($r->tipe == 'tutup') {
+            foreach ($r->datas as $d) {
+                DB::table('cabut')->where('id_cabut', $d)->update(['penutup' => 'Y']);
+            }
+        } else {
+            foreach ($r->datas as $d) {
+                DB::table('cabut')->where('id_cabut', $d)->delete();
+            }
         }
     }
 

@@ -25,7 +25,7 @@ class CabutSpecialController extends Controller
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user'");
+        ) as b ON a.no_box = b.no_box WHERE   $noBoxAda a.penerima = '$id_user' AND a.kategori = 'cabut_spesial'");
     }
     public function index(Request $r)
     {
@@ -48,7 +48,7 @@ class CabutSpecialController extends Controller
             'cabut' => DB::table('cabut_spesial as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where('a.id_pengawas', auth()->user()->id)
-                ->where('a.penutup', 'T')
+                ->where([['a.penutup', 'T'],['no_box', '!=', '9999']])
                 ->orderBY('a.id_cabut_spesial', 'DESC')
                 ->get(),
         ];
@@ -316,31 +316,30 @@ class CabutSpecialController extends Controller
         $now =  date('Y-m-d');
         $id_pengawas =  auth()->user()->id;
 
-        $anak_spesial = DB::select("SELECT * 
-        FROM absen as a
-        left join tb_anak as b on b.id_anak = a.id_anak
-        where a.tgl = '$now' and a.id_pengawas = $id_pengawas and a.ket = 'cabut spesial' and a.id_anak not in(SELECT c.id_anak FROM cabut_spesial as c where c.tgl = '$now')
-        ");
-
+        $anak_spesial = DB::select("SELECT * FROM `cabut_spesial` as a
+        LEFT JOIN tb_anak as b ON a.id_anak = b.id_anak
+        LEFT JOIN tb_kelas as c ON c.id_kelas = b.id_kelas
+        WHERE a.id_pengawas = '$id_pengawas' AND a.no_box = 9999 AND DATE(a.tgl_terima) = CURDATE();");
         $data = [
             'anak_spesial' => $anak_spesial,
             'boxBk' => $this->getStokBk(),
             'anak' => $this->getAnak(),
-            'target' => DB::table('tb_kelas')->where([['id_kategori',2],['nonaktif', 'T'],['jenis', '!=', 2]])->get()
+            'target' => DB::table('tb_kelas')->where([['id_kategori', 2], ['nonaktif', 'T'], ['jenis', '!=', 2]])->get()
         ];
         return view('home.cabut_spesial.gram_awal', $data);
     }
 
     function save_absen(Request $r)
     {
-        for ($x = 0; $x < count($r->id_anak); $x++) {
-            $data = [
-                'id_anak' => $r->id_anak[$x],
-                'tgl' => date('Y-m-d'),
-                'id_pengawas' =>  auth()->user()->id,
-                'ket' => 'cabut spesial'
-            ];
-            DB::table('absen')->insert($data);
+        $tgl = date('Y-m-d');
+        $id_pengawas = auth()->user()->id;
+        foreach ($r->id_anak as $d) {
+            $id = DB::table('cabut_spesial')->insertGetId([
+                'no_box' => 9999,
+                'id_pengawas' => $id_pengawas,
+                'id_anak' => $d,
+                'tgl_terima' => $tgl
+            ]);
         }
     }
 

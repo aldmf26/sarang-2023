@@ -290,7 +290,7 @@
                     formData += "&_token=" + csrfToken;
 
                     $.ajax({
-                        type: "POST",
+                        type: "GET",
                         url: "{{ route('cabutSpesial.save_absen') }}",
                         data: formData,
                         success: function(response) {

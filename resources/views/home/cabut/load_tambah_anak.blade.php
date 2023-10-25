@@ -1,10 +1,11 @@
 <div class="row">
     <div class="col-lg-4">
         <label for="">Tipe Kerja</label>
-        <select name="tipe" id="" class="form-control mb-2 tipe">
+        <input type="text" readonly value="cbt" name="tipe" class="tipe form-control">
+        {{-- <select name="tipe" id="" class="form-control mb-2 tipe">
             <option value="cbt" selected>cbt</option>
             <option value="sisa">sisa</option>
-        </select>
+        </select> --}}
     </div>
     <div class="col-lg-8 mb-2">
         <label for="">Pencarian :</label>

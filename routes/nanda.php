@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
-            Route::post('/save_absen', 'save_absen')->name('save_absen');
+            Route::get('/save_absen', 'save_absen')->name('save_absen');
 
             Route::get('/load_anak_kerja', 'load_anak_kerja')->name('load_anak_kerja');
             Route::get('/load_anak_kerja_belum', 'load_anak_kerja_belum')->name('load_anak_kerja_belum');
