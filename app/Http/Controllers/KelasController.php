@@ -23,7 +23,7 @@ class KelasController extends Controller
             'lokasi' => ['alpa', 'mtd', 'sby'],
             'tipe' => $this->tipe,
             'kategori' => DB::table('paket_cabut')->get(),
-            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T'],['id_kategori', '!=', 3]])->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T'], ['id_kategori', '!=', 3]])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view("data_master.kelas.index", $data);
     }
@@ -113,7 +113,7 @@ class KelasController extends Controller
             'jenis' => $jenis,
             'paket' => $this->paket,
             'tipe' => $this->tipe,
-            'datas' => DB::table('tb_kelas')->where([['id_kategori', 2],['jenis', '!=', 2]])->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['id_kategori', 2], ['jenis', '!=', 2]])->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.spesial_index', $data);
     }
@@ -193,7 +193,7 @@ class KelasController extends Controller
             'title' => 'Kelas Spesial',
             'paket' => $this->paket,
             'tipe' => $this->tipe,
-            'datas' => DB::table('tb_kelas')->where([['id_kategori', 3],['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
+            'datas' => DB::table('tb_kelas')->where([['id_kategori', 3], ['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.eo_index', $data);
     }
@@ -237,5 +237,34 @@ class KelasController extends Controller
     public function getTipe(Request $r)
     {
         return response()->json($r->database == 'paket' ? $this->paket : $this->tipe);
+    }
+
+    function cetak(Request $r)
+    {
+        $data = [
+            'title' => 'Data Paket Cetak',
+            'kelas' => DB::table('kelas_cetak')->get(),
+            'kategori' => DB::table('paket_cabut')->get(),
+            'tipe' => DB::table('tipe_cabut')->get()
+        ];
+        return view("data_master.kelas.cetak", $data);
+    }
+
+    function cetakCreate(Request $r)
+    {
+        for ($x = 0; $x < count($r->id_paket); $x++) {
+            $data = [
+                'id_paket' => $r->id_paket_tambah[$x],
+                'kelas' => $r->kelas_tambah[$x],
+                'tipe' => $r->id_tipe_brg_tambah[$x],
+                'tipe' => $r->id_tipe_brg_tambah[$x],
+                'rp_pcs' => $r->rupiah_tambah[$x],
+                'denda_hcr' => $r->denda_hcr[$x],
+                'batas_susut' => $r->batas_susut[$x],
+                'denda_susut' => $r->denda_susut[$x],
+            ];
+            DB::table('kelas_cetak')->insert($data);
+        }
+        return redirect()->route('kelas.cetak')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
