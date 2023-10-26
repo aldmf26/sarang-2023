@@ -54,11 +54,23 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
+            Route::get('/load_anak_kerja_belum', 'load_anak_kerja_belum')->name('load_anak_kerja_belum');
+            Route::get('/get_total_anak', 'getTotalAnak')->name('get_total_anak');
+            Route::post('/save_kerja', 'save_kerja')->name('save_kerja');
+            Route::get('/ambil_awal', 'ambil_awal')->name('ambil_awal');
+            Route::get('/get_kelas', 'get_kelas')->name('get_kelas');
+            Route::post('/add_target', 'add_target')->name('add_target');
+            Route::get('/get_box', 'get_box')->name('get_box');
+            Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::post('/save_akhir', 'save_akhir')->name('save_akhir');
+            Route::get('/load_row', 'load_row')->name('load_row');
+            Route::post('/selesai_cetak', 'selesai_cetak')->name('selesai_cetak');
+            Route::get('/delete_awal_cetak', 'delete_awal_cetak')->name('delete_awal_cetak');
+
             Route::get('/add', 'add')->name('add');
             Route::get('/akhir', 'akhir')->name('akhir');
             Route::post('/add_akhir', 'add_akhir')->name('add_akhir');
             Route::post('/selesai', 'selesai')->name('selesai');
-            Route::post('/', 'add_target')->name('add_target');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');

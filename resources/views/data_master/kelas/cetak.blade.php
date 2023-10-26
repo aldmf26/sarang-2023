@@ -49,7 +49,7 @@
                                 <th class="text-end dhead">Denda HCR</th>
                                 <th class="text-end dhead">Bts Sst %</th>
                                 <th class="text-end dhead">Denda Sst</th>
-                                <th class="dhead" width="50">Aksi</th>
+                                <th class="dhead" width="60">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,10 +103,8 @@
                                             class="select2-alpine" name="id_paket_tambah[]" id="">
                                             <option value="">Paket</option>
                                             @foreach ($kategori as $t)
-                                                <option value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}
-                                                </option>
+                                                <option value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}</option>
                                             @endforeach
-                                            <option value="tambah">+ Paket</option>
                                         </select>
                                     </td>
 
@@ -118,15 +116,27 @@
                                             class="select2-alpine" name="id_tipe_brg_tambah[]" id="">
                                             <option value="">Tipe</option>
                                             @foreach ($tipe as $t)
-                                                <option value="{{ $t->id_tipe }}">{{ strtoupper($t->tipe) }}
-                                                </option>
+                                                <option value="{{ $t->id_tipe }}">{{ strtoupper($t->tipe) }}</option>
                                             @endforeach
-                                            <option value="tambah">+ Tipe</option>
+
                                         </select>
                                     </td>
+
                                     <td>
                                         <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                             name="rupiah_tambah[]">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="denda_hcr[]">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="batas_susut[]">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="denda_susut[]">
                                     </td>
                                     <td>
                                         <span class="badge bg-danger" @click="rows.splice(index, 1)"
@@ -135,14 +145,14 @@
                                 </tr>
                             </template>
                             @foreach ($kelas as $no => $d)
-                                <input type="hidden" name="id_kelas[]" value="{{ $d->id_kelas }}">
+                                <input type="hidden" name="id_kelas_cetak[]" value="{{ $d->id_kelas_cetak }}">
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
                                     <td>
                                         <select database="paket" x-data="{ selectedTipeKategori: {{ $d->id_paket }} }"
                                             x-model="selectedTipeKategori" x-init="initSelect2()"
                                             class="select2-alpine-data" name="id_paket[]" id="">
-                                            @foreach ($paket as $t)
+                                            @foreach ($kategori as $t)
                                                 <option
                                                     x-bind:selected="selectedTipeKategori == $t - > id_paket ? true : false"
                                                     value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}</option>
@@ -156,7 +166,7 @@
                                             class="form-control">
                                     </td>
                                     <td>
-                                        <select database="tipe" x-data="{ selectedTipe: {{ $d->id_tipe_brg }} }" x-model="selectedTipe"
+                                        <select database="tipe" x-data="{ selectedTipe: {{ $d->tipe }} }" x-model="selectedTipe"
                                             x-init="initSelect2()" class="select2-alpine-data" name="id_tipe_brg[]"
                                             id="">
                                             @foreach ($tipe as $t)
@@ -166,18 +176,28 @@
                                             <option value="tambah">+ Tipe</option>
                                         </select>
                                     </td>
-
                                     <td>
-                                        <input x-mask:dynamic=" $money($input)" value="{{ $d->rupiah }}"
+                                        <input x-mask:dynamic=" $money($input)" value="{{ $d->rp_pcs }}"
                                             class="form-control text-end" name="rupiah[]">
                                     </td>
-
                                     <td>
-                                        <span id_kelas="{{ $d->id_kelas }}" data-bs-target="#infoKelas"
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="denda_hcr[]" value="{{ $d->denda_hcr }}">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="batas_susut[]" value="{{ $d->batas_susut }}">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="denda_susut[]" value="{{ $d->denda_susut }}">
+                                    </td>
+                                    <td>
+                                        <span id_kelas="{{ $d->id_kelas_cetak }}" data-bs-target="#infoKelas"
                                             data-bs-toggle="modal" class="badge bg-primary infoKelas"
                                             style="cursor: pointer"><i class="fas fa-question"></i></span>
                                         <input type="checkbox" class="cekTutup float-end" name="cekTutup[]"
-                                            id_kelas="{{ $d->id_kelas }}">
+                                            id_kelas="{{ $d->id_kelas_cetak }}">
                                     </td>
                                 </tr>
                             @endforeach

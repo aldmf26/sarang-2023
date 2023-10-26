@@ -252,7 +252,17 @@ class KelasController extends Controller
 
     function cetakCreate(Request $r)
     {
-        for ($x = 0; $x < count($r->id_paket); $x++) {
+        $buang = [
+            'rupiah',
+            'rupiah_tambah',
+            'denda_hcr',
+            'denda_susut'
+        ];
+        foreach ($buang as $d) {
+            $r->$d = str()->remove(',', $r->$d);
+        }
+
+        for ($x = 0; $x < count($r->id_paket_tambah); $x++) {
             $data = [
                 'id_paket' => $r->id_paket_tambah[$x],
                 'kelas' => $r->kelas_tambah[$x],
@@ -265,6 +275,11 @@ class KelasController extends Controller
             ];
             DB::table('kelas_cetak')->insert($data);
         }
+
+        for ($x = 0; $x < count($r->id_kelas_cetak); $x++) {
+            # code...
+        }
+
         return redirect()->route('kelas.cetak')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
