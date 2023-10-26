@@ -6,8 +6,7 @@
 
             </div>
             <div class="col-lg-6">
-                <x-theme.button href="#" icon="fa-window-close" variant="danger" addClass="float-end btn_tutup"
-                    teks="Tutup" />
+                
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
@@ -224,8 +223,10 @@
 
                             $(document).on('change', '.pilihHitung', function() {
                                 var selectedVal = $(this).val()
+                                $('.pilihHitung').val(selectedVal);
                                 var count = $(this).attr('count')
-                                var selectElement = $('select[name="id_paket[]"][count="' + count + '"]');
+                                // var selectElement = $(`select[name="id_paket[]"][count="${count}"]`);
+                                var selectElement = $(`select[name="id_paket[]"]`);
                                 $.ajax({
                                     type: "GET",
                                     url: "{{ route('cabut.get_kelas_jenis') }}",
@@ -250,15 +251,15 @@
                                 var hrga_satuanPcs = $('.setHargaSatuanPcs' + count).val()
                                 var rupiah
 
-                                console.log(`${nilaiGr} == ${nilaiPcs}`)
-                                if (selectedVal === '2') {
-                                    rupiah = hrga_satuanGr * nilaiGr
-                                    keyupFormAwalCabut('Gr' + count)
-                                } else {
-                                    rupiah = hrga_satuanPcs * nilaiPcs
-                                    keyupFormAwalCabut('Pcs' + count)
+                                
 
-                                }
+                                console.log(`${nilaiGr} == ${nilaiPcs}`)
+                                // if (selectedVal === '2') {
+                                // } else {
+                                    
+                                // }
+                                keyupFormAwalCabut('Gr')
+                                keyupFormAwalCabut('Pcs')
 
                                 rupiah = rupiah.toLocaleString('id-ID', {
                                     maximumFractionDigits: 0
@@ -272,7 +273,7 @@
                                     var isi = $(this).val()
                                     var count = $(this).attr('count')
                                     var hitung = $('.pilihHitung' + count).val()
-                                    var hrga_satuan = $('.setHargaSatuan' + jenis).val()
+                                    var hrga_satuan = $('.setHargaSatuan' + jenis + count).val()
                                     var rupiah = hrga_satuan * isi
                                     $('.rupiahBiasa' + count).val(parseFloat(rupiah));
                                     rupiah = rupiah.toLocaleString('id-ID', {
@@ -300,10 +301,13 @@
                 }
                 $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
                 $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                    $('.btn_tutup').removeClass('d-none');
+
                     $('.btn_tutup').toggle(this.checked);
                 })
 
                 $(document).on('click', '.btn_tutup', function() {
+                    var tipe = $(this).attr('tipe')
                     var selectedRows = [];
                     // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
                     $('input[name="cekTutup[]"]:checked').each(function() {
@@ -315,18 +319,21 @@
                         // Tambahkan ID anak ke dalam array
                         selectedRows.push(anakId);
                     });
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ route('cabut.ditutup') }}",
-                        data: {
-                            datas: selectedRows
-                        },
-                        success: function(r) {
-                            alertToast('sukses', 'Berhasil save')
-                            loadHalaman()
-                            $('.btn_tutup').hide();
-                        }
-                    });
+                    if(confirm('Apakah anda yakin ?')) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('cabut.ditutup') }}",
+                            data: {
+                                datas: selectedRows,
+                                tipe:tipe
+                            },
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil save')
+                                loadHalaman()
+                                $('.btn_tutup').hide();
+                            }
+                        });
+                    }
 
                 })
 

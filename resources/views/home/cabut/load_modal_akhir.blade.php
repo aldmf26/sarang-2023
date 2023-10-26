@@ -58,7 +58,7 @@
                         <td>
                             <input type="text" readonly value="{{ $d->no_box }}" class="form-control">
                         </td>
-                        <td class="fs-bold">{{ strtoupper($d->nama) }} / {{ date('d M y', strtotime($d->tgl_terima)) }}</td>
+                        <td class="fs-bold">{{ strtoupper($d->nama) }} <br> {{ date('d M y', strtotime($d->tgl_terima)) }}</td>
                         <td>
                             <input readonly value="{{ $d->pcs_awal }}" type="text" class="form-control text-end">
                         </td>
@@ -107,15 +107,17 @@
                             </select>
                         </td>
                         <td>
-                            {{-- <button style="font-size: 12px"
-                                class="btn btn-sm btn-danger cancelCabutAkhir"
-                                type="button" count="{{ $i + 1 }}" id_cabut="{{ $d->id_cabut }}">Cancel</button> --}}
+                            
                             <button style="font-size: 12px"
                                 class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
+                            @if (!empty($d->gr_akhir))
                             <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
                                 href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
-                          
+                            @endif
+                            <button style="font-size: 12px"
+                            class="btn btn-sm btn-danger cancelCabutAkhir"
+                            type="button" count="{{ $i + 1 }}" id_cabut="{{ $d->id_cabut }}">Cancel</button>
                         </td>
                     </tr>
                 @endforeach

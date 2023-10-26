@@ -34,7 +34,6 @@
                 <td>
                     {{ $a->nama }}
                     <input type="hidden" name="id_anak[]" value="{{ $a->id_anak }}">
-                    <input type="text" style="display: none" name="id_absen[]" value="{{ $a->id_absen }}">
                 </td>
                 <td>
                     <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
@@ -68,7 +67,7 @@
                         name="pcs_target[]">
                 </td>
                 <td align="center">
-                    <button type="button" class="btn rounded-pill remove_baris" id_absen={{ $a->id_absen }}
+                    <button type="button" class="btn rounded-pill remove_baris" 
                         count="{{ $no }}"><i class="fas fa-trash text-danger"></i>
                     </button>
                 </td>

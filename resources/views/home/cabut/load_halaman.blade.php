@@ -20,9 +20,19 @@
                     <th class="text-end dhead">Rp Trgt</th>
                     <th class="text-end dhead">Ttl Gaji</th>
                     <th class="dhead">Selesai</th>
-                    <th class="dhead" width="50">
+                    <th class="dhead" width="70">
                         <center>
+                            @php
+                                $adaDitutup = DB::table('cabut')->where([['selesai', 'Y'],['penutup', 'T']])->first();
+                            @endphp
+                            @if (!empty($adaDitutup))
                             <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                            @endif
+                            <br>
+                            <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i class="fas fa-check"></i> Tutup    </span>
+                            <span class="badge bg-danger btn_tutup d-none mt-3" tipe="cancel_data" style="cursor: pointer">Cancel</span>
+                            {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
+                            teks="Tutup" /> --}}
                         </center>
                     </th>
                 </tr>
@@ -65,7 +75,7 @@
                                 <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
                                     id_cabut="{{ $d->id_cabut }}">
                             @endif
-
+                            
 
 
                         </td>
