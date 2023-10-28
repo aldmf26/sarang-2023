@@ -8,7 +8,7 @@
 
 <div {{ $attributes->merge(['id' => $idModal]) }} class="modal tambah" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog  {{ $size }}" role="document">
+    <div class="modal-dialog  modal-dialog-scrollable  {{ $size }}" role="document">
         <div class="modal-content">
             <div class="modal-header {{$color_header}}">
                 <h4 class="modal-title" {{ $attributes->merge(['id' => $idModal]) }}>

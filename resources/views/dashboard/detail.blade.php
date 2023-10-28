@@ -146,23 +146,10 @@
                                 <td align="right">0</td>
                                 <td align="right">{{ $c->pcs_akhir }}</td>
                                 @php
-                                    $susut = empty($c->pcs_awal) ? 0 : (1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100;
-                                    $denda = 0;
-                                    $bonus_susut = 0;
-                                    $rupiah = $c->rupiah;
-                                    if ($susut > 23.4) {
-                                        $denda = ($susut - 23.4) * 0.03 * $c->rupiah;
-                                        $rupiah = $rupiah - $denda;
-                                    }
-                                    if ($susut < 19.5) {
-                                        $bonus_susut = ($c->rp_bonus * $c->gr_awal) / $c->gr_kelas;
-                                    }
-                                    $denda_hcr = $c->pcs_hcr * 5000;
-                                    
-                                    $eot_bonus = ($c->eot - $c->gr_awal * 0.02) * 750;
-                                    $ttl_rp = $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
-                                @endphp
-                                <td align="right">{{ number_format($ttl_rp, 0) }}
+                            $hasil = rumusTotalRp($c);
+                        @endphp
+                               
+                                <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                                 </td>
                             </tr>
                         @endforeach

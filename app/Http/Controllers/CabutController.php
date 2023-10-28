@@ -99,7 +99,6 @@ class CabutController extends Controller
         $id_user = auth()->user()->id;
         $query = !empty($no_box) ? "selectOne" : 'select';
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
-
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
@@ -272,6 +271,7 @@ class CabutController extends Controller
 
     public function load_modal_akhir(Request $r)
     {
+
         $detail = DB::table('cabut as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
@@ -312,12 +312,32 @@ class CabutController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['no_box', '!=', '9999'],['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
-            ->orderBy('a.id_cabut', 'DESC')
-            ->get();
+            ->where([['no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
+        
+        
+        switch ($r->orderBy) {
+            case 'nobox':
+                $datas->orderBy('a.no_box', 'ASC');
+                break;
+            case 'tgl_terima':
+                $datas->orderBy('a.tgl_terima', 'ASC');
+                break;
+            case 'kelas':
+                $datas->orderBy('b.id_kelas', 'DESC');
+                break;
+            case 'nama':
+                $datas->orderBy('b.nama', 'ASC');
+                break;
+
+            default:
+                $datas->orderBy('a.id_cabut', 'DESC');
+                break;
+        }
+
         $data = [
             'detail' => $detail,
-            'datas' => $datas
+            'datas' => $datas->get(),
+            'orderBy' => $r->orderBy
         ];
         return view('home.cabut.load_modal_akhir', $data);
     }
@@ -546,14 +566,10 @@ class CabutController extends Controller
 
     public function ditutup(Request $r)
     {
-        if($r->tipe == 'tutup') {
-            foreach ($r->datas as $d) {
-                DB::table('cabut')->where('id_cabut', $d)->update(['penutup' => 'Y']);
-            }
-        } else {
-            foreach ($r->datas as $d) {
-                DB::table('cabut')->where('id_cabut', $d)->delete();
-            }
+
+        $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
+        foreach ($r->datas as $d) {
+            DB::table('cabut')->where('id_cabut', $d)->update($data);
         }
     }
 

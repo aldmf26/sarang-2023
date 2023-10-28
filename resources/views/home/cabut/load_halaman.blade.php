@@ -23,14 +23,18 @@
                     <th class="dhead" width="70">
                         <center>
                             @php
-                                $adaDitutup = DB::table('cabut')->where([['selesai', 'Y'],['penutup', 'T']])->first();
+                                $adaDitutup = DB::table('cabut')
+                                    ->where([['selesai', 'Y'], ['penutup', 'T']])
+                                    ->first();
                             @endphp
                             @if (!empty($adaDitutup))
-                            <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
                             @endif
                             <br>
-                            <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i class="fas fa-check"></i> Tutup    </span>
-                            <span class="badge bg-danger btn_tutup d-none mt-3" tipe="cancel_data" style="cursor: pointer">Cancel</span>
+                            <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
+                                    class="fas fa-check"></i> Tutup </span>
+                            <span class="badge bg-danger btn_tutup d-none mt-3" tipe="cancel_data"
+                                style="cursor: pointer">Cancel</span>
                             {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
                             teks="Tutup" /> --}}
                         </center>
@@ -63,21 +67,20 @@
                         <td align="right">{{ number_format($d->rupiah, 0) }}
                         <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                         </td>
-                        <td align="center"><span
-                                class="badge bg-{{ $d->selesai == 'Y' ? 'primary' : 'warning' }}">{{ $d->selesai == 'Y' ? 'SELESAI' : 'BELUM' }}</span>
-                        </td>
                         <td align="center">
                             @if ($d->selesai == 'T')
                                 <a class="btn btn-warning btn-sm inputAkhir" href="#"
                                     no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
                                     data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
                             @else
+                                <span class="badge bg-primary">SELESAI</span>
+                            @endif
+                        </td>
+                        <td align="center">
+                            @if ($d->selesai != 'T')
                                 <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
                                     id_cabut="{{ $d->id_cabut }}">
                             @endif
-                            
-
-
                         </td>
                     </tr>
                 @endforeach

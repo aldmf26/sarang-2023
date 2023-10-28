@@ -440,10 +440,13 @@
                     });
                 }
 
-                function load_input_akhir() {
+                function load_input_akhir(orderBy = null) {
                     $.ajax({
                         type: "GET",
                         url: "cabut/load_modal_akhir",
+                        data:{
+                            orderBy:orderBy
+                        },
                         success: function(r) {
                             $("#load_modal_akhir").html(r);
                             $(".select2-akhir").select2({
@@ -453,6 +456,10 @@
                         }
                     });
                 }
+                $(document).on('change', '#orderBy', function(){
+                    var nilai = $(this).val()
+                    load_input_akhir(nilai)
+                })
                 // Panggil fungsi untuk pertama kali saat halaman dimuat
                 updateAnakBelum()
                 loadListAnakSisa()
@@ -696,6 +703,8 @@
                         }
                     });
                 })
+
+                
             </script>
         @endsection
     </x-slot>

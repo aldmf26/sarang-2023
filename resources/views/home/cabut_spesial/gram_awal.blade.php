@@ -54,7 +54,7 @@
                 <td>
                     <input type="text" class="form-control text-end setGr setGr{{ $no }}"
                         count="{{ $no }}" value="0" id="grInput" name="gr_awal[]">
-                </td>
+                </td>   
                 <td>
                     <input readonly type="text"
                         class="form-control rupiahInput text-end setRupiah{{ $no }}" value="0"

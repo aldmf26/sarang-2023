@@ -1,14 +1,26 @@
 <div class="row">
-    <div class="col-lg-4 mb-2">
+    <div class="col-lg-3 mb-2">
         <label for="">Pencarian :</label>
         <input autofocus type="text" id="pencarian2" class="form-control float-end">
+    </div>
+    <div class="col-lg-2 mb-2">
+        <div class="form-group">
+        <label for="">Urutkan Dengan</label>
+        <select class="form-control" name="" id="orderBy">
+            <option value="">Pilih</option>
+            <option {{$orderBy == 'nama' ? 'selected' : ''}} value="nama">Nama</option>
+            <option {{$orderBy == 'kelas' ? 'selected' : ''}} value="kelas">Kelas</option>
+            <option {{$orderBy == 'nobox' ? 'selected' : ''}} value="nobox">No Box</option>
+            <option {{$orderBy == 'tgl_terima' ? 'selected' : ''}} value="tgl_terima">Tgl Cabut</option>
+        </select>
+    </div>
     </div>
     <div class="col-lg-12">
         <table class="table table-bordered" style="border: 0.5px solid #a0a7c1; font-size: 12px" id="tablealdi2">
             <thead>
                 <tr>
                     <th class="dhead">Tgl Trma</th>
-                    <th class="dhead" width="90">No Box</th>
+                    <th class="dhead"  width="90">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="75">Pcs Awal</th>
                     <th class="dhead text-end" width="75">Gr Awal</th>

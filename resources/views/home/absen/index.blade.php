@@ -72,7 +72,7 @@
                                     <th></th>
                                     <th>
                                         <center
-                                            @click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                            >
                                             <input data-category="{{ $i }}" style="text-align: center"
                                                 type="checkbox" class="form-check toggle-category" id="cekSemuaTutup">
                                         </center>

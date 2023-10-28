@@ -83,14 +83,16 @@
                                             FROM cabut as a
                                             left join users as b on b.id = a.id_pengawas
                                             left JOIN bk as c on c.no_box = a.no_box 
-                                            WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' AND a.id_pengawas = '$id'
+                                            WHERE  a.id_pengawas = '$id'
                                             GROUP by a.no_box");
                             @endphp
                             @foreach ($query as $x)
                     <tbody x-show="openRows.includes({{ $i }})">
 
                         <tr>
-                            <td></td>
+                            <td>{{ $d->pengawas }} <span class="badge bg-primary float-end"
+                                x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                <i class="fas fa-caret-up"></i></span></td>
                             <td align="right"><a class="detail" target="_blank"
                                     href="{{ route('dashboard.detail', $x->no_box) }}">{{ number_format($x->no_box, 0) }}
                                     <i class="me-2 fas fa-eye"></i></a></td>
