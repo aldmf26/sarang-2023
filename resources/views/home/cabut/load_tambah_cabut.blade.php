@@ -60,7 +60,9 @@
                             <input type="hidden" class="setHargaSatuanPcs{{ $i + 1 }}">
                         </td>
                         <td>
-                            <select name="hitung[]" id="" class="form-control pilihHitung pilihHitung{{$i+1}}" count="{{ $i + 1 }}">
+                            <select name="hitung[]" id=""
+                                class="form-control pilihHitung pilihHitung{{ $i + 1 }}"
+                                count="{{ $i + 1 }}">
                                 <option value="">Pilih</option>
                                 <option value="1">Pcs</option>
                                 <option value="2">Gr</option>
@@ -69,9 +71,9 @@
                             </select>
                         </td>
                         <td>
-                           
-                            <select name="id_paket[]" id="" class="select3 pilihAnak pilihAnak{{$i+1}}"
-                                count="{{ $i + 1 }}">
+
+                            <select name="id_paket[]" id=""
+                                class="select3 pilihAnak pilihAnak{{ $i + 1 }}" count="{{ $i + 1 }}">
                                 <option value="">Pilih</option>
                             </select>
                         </td>

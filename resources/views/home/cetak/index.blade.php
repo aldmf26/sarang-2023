@@ -1,14 +1,19 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button href="#" icon="fa-plus" modal="Y" idModal="tambah2" addClass="float-end" teks="Target" />
         <a href="{{ route('cetak.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-            class="float-end btn btn-sm icon icon-left btn-primary me-2">
+            class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
+        <x-theme.button href="#" modal="Y" idModal="tambah_awal" icon="fa-plus" addClass="float-end tbh_cetak"
+            teks="Cetak" />
+        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+            class="btn tambahAnak btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+                class="badge bg-danger" id="anakBelum"></span>
+        </a>
+
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
             teks="kry baru" />
-        <x-theme.btn_filter />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -60,103 +65,42 @@
             </x-theme.modal>
         </form>
 
-        <form action="{{ route('cetak.add_target') }}" method="post">
-            @csrf
-            <x-theme.modal idModal="tambah2" size="modal-lg-max" title="tambah Target" btnSave="Y">
+        <form id="save_kerja">
+            <x-theme.modal idModal="tambahAnak" title="Tambah anak" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="dhead">No Box</th>
-                                    <th class="dhead" width="10%">Grade</th>
-                                    <th class="dhead">Nama Anak</th>
-                                    <th class="dhead">Tgl Terima</th>
-                                    <th class="dhead">Target</th>
-                                    <th class="dhead text-end" width="110">Pcs Awal</th>
-                                    <th class="dhead text-end" width="110">Gr Awal</th>
-                                    <th class="dhead text-end" width="130">Ttl Rp</th>
-                                    <th class="dhead">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <select name="no_box[]" id="" class="select2-tambah2 pilihBox"
-                                            count="1">
-                                            <option value="">Pilih Box</option>
-                                            @foreach ($cabut as $c)
-                                                <option value="{{ $c->no_box }}">{{ $c->no_box }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="grade[]">
-                                    </td>
-                                    <td>
-                                        <select name="id_anak[]" id="" class="select2-tambah2 pilihAnak"
-                                            count="1">
-                                            <option value="">Pilih Anak</option>
-                                            @foreach ($anak as $d)
-                                                <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
-                                                    ({{ $d->kelas }})
-                                                    {{ ucwords($d->nama) }}</option>
-                                            @endforeach
-                                        </select>
-                                        {{-- <input type="hidden" class="setHargaSatuan1"> --}}
-                                    </td>
-                                    <td><input type="date" class="form-control" name="tgl[]"></td>
-                                    <td>
-                                        <select name="target[]" id="" class="select2-tambah2 pilihTarget"
-                                            count="1">
-                                            <option value="">Pilih target</option>
-                                            <option value="1">TARGET</option>
-                                            <option value="2">CU</option>
-                                            <option value="3">LN</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="rp_pcs[]" class="form-control rp_target">
-                                        <input type="text" name="pcs_awal[]" class="form-control pcs_awal">
-                                    </td>
-                                    <td><input type="text" name="gr_awal[]" class="form-control"></td>
-                                    <td><input type="text" class="form-control total_rp text-end" readonly></td>
-                                    <td></td>
-
-                                </tr>
-                            </tbody>
-                            <tbody id="tbh_baris">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="9">
-                                        <button type="button" class="btn btn-block btn-lg tbh_baris"
-                                            style="background-color: #F4F7F9; color: #435EBE; font-size: 14px; padding: 13px;">
-                                            <i class="fas fa-plus"></i> Tambah Baris Baru
-                                        </button>
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div id="load_anak_cetak"></div>
                     </div>
                 </div>
             </x-theme.modal>
         </form>
-        <form action="{{ route('cetak.add_akhir') }}" method="post">
-            @csrf
-            <x-theme.modal idModal="akhir" size="modal-lg-max" title="Akhir Target" btnSave="Y">
-                <div id="akhir_detail"></div>
+
+        <form id="save_awal">
+            <x-theme.modal idModal="tambah_awal" title="Tambah anak" size="modal-lg-max" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="load_ambil_awal"></div>
+                    </div>
+                </div>
             </x-theme.modal>
         </form>
-        <form action="{{ route('cetak.selesai') }}" method="post">
-            @csrf
+
+        <x-theme.modal idModal="inputAkhir" title="Input Akhir Cetak" size="modal-lg-max">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="load_ambil_akhir"></div>
+                </div>
+            </div>
+        </x-theme.modal>
+
+        <form id="save_selesai">
             <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
                 <div class="row">
                     <div class="col-lg-12">
                         <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
                         <p class="text-center fw-bold">Note : </p>
-                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
-                            maupun dihapus
+                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan akan hilang dari form
+                            input
                         </p>
                         <input type="hidden" name="id_cetak" class="cetak">
                     </div>
@@ -167,27 +111,188 @@
 
         @section('scripts')
             <script>
-                $(".select3").select2()
+                $(document).on('click', '.selesai', function() {
+                    var id_cetak = $(this).attr('id_cetak');
 
-                plusRow(1, 'tbh_baris', "cetak/tbh_baris")
-                $(document).on('change', '.pilihTarget', function() {
-                    var target = $(this).val()
-                    if (target == '1') {
-                        $('.rp_target').val(900)
-                    } else {
-                        $('.rp_target').val(600)
-                    }
+                    $('.cetak').val(id_cetak);
                 });
-                $(document).on('keyup', '.pcs_awal', function() {
+                $(document).on('click', '.btnKembaliTambahCetak', function() {
+                    $('#tambahAnak').modal('show');
+                    $('#tambah_awal').modal('hide');
+                });
 
-                    var target = $('.rp_target').val();
+
+                loadTotalAnak();
+
+                function loadTotalAnak() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.get_total_anak') }}",
+                        success: function(response) {
+                            var totalAnak = response.total_anak;
+                            $('#anakBelum').text(totalAnak);
+                        }
+                    });
+                }
+                load_anak();
+
+                function load_anak() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.load_anak_kerja_belum') }}",
+                        success: function(r) {
+                            pencarian('pencarian', 'table_cbt_spesial')
+                            $('#load_anak_cetak').html(r);
+                            inputChecked('cekSemuaTutup', 'cek')
+                        }
+                    });
+                }
+                load_gr_awal();
+
+                function load_gr_awal() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.ambil_awal') }}",
+                        success: function(r) {
+                            $('#load_ambil_awal').html(r);
+                            $(".select2-add").select2({
+                                dropdownParent: $('#tambah_awal .modal-content'),
+
+
+                            });
+                        }
+                    });
+                }
+                $(document).on('click', '.tbh_cetak', function() {
+                    load_gr_awal();
+                });
+                $(document).on('click', '.hapusCetakRow', function() {
+                    var id_cetak = $(this).attr('id_cetak');
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.delete_awal_cetak') }}",
+                        data: {
+                            id_cetak: id_cetak
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil dihapus');
+                            load_gr_awal();
+                        }
+                    });
+                });
+
+                $(document).on('keyup', '.pcs_awal', function() {
+                    var count = $(this).attr('count');
+                    var target = $('.rp_pcs' + count).val();
                     var pcs = $(this).val();
 
                     var total = parseFloat(target) * parseFloat(pcs);
 
-                    $('.total_rp').val(total);
+                    $('.total_rp' + count).val(total);
 
                 });
+                $(document).on('change', '.pilihkelas', function() {
+                    var count = $(this).attr('count');
+                    var id_kelas_cetak = $(this).val();
+
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.get_kelas') }}",
+                        data: {
+                            id_kelas_cetak: id_kelas_cetak
+                        },
+                        success: function(r) {
+                            $('.rp_pcs' + count).val(r);
+
+                            var target = r;
+                            var pcs = $('.pcs_awal' + count).val();
+                            var total = parseFloat(target) * parseFloat(pcs);
+                            $('.total_rp' + count).val(total);
+                        }
+                    });
+                });
+                $(document).on('change', '.pilihBox', function() {
+                    var count = $(this).attr('count');
+                    var no_box = $(this).val();
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.get_box') }}",
+                        data: {
+                            no_box: no_box
+                        },
+                        dataType: "JSON",
+                        success: function(r) {
+                            $('.pcs_awal' + count).val(r.pcs);
+                            $('.gr_awal' + count).val(r.gr);
+                        }
+                    });
+                });
+
+
+
+                $('#save_kerja').submit(function(e) {
+                    e.preventDefault();
+
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var formData = $(this).serialize();
+                    formData += "&_token=" + csrfToken;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('cetak.save_kerja') }}",
+                        data: formData,
+                        success: function(response) {
+                            alertToast('sukses', 'Berhasil ditambahkan');
+                            load_gr_awal();
+                            $('#tambah_awal').modal('show');
+                            $('#tambahAnak').modal('hide');
+                            // load_anak_kerja();
+                        },
+                    });
+
+                });
+                $('#save_awal').submit(function(e) {
+                    e.preventDefault();
+
+                    var isValid = true;
+                    $('tbody tr').each(function(index, row) {
+                        var tgl = $(row).find('input[name="tgl[]"]').val();
+                        var no_box = $(row).find('select[name="no_box[]"]').val();
+                        var paket = $(row).find('select[name="paket[]"]').val();
+                        var pcs_awal = $(row).find('input[name="pcs_awal[]"]').val();
+                        var gr_awal = $(row).find('input[name="gr_awal[]"]').val();
+                        if (tgl === '' || no_box === '' || paket === '' || pcs_awal === '' || gr_awal ===
+                            '') {
+                            isValid = false;
+                            alertToast('error', 'Isi semua data terlebih dahulu');
+                            return false;
+                        }
+                    });
+
+                    if (isValid) {
+                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        var formData = $(this).serialize();
+                        formData += "&_token=" + csrfToken;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('cetak.add_target') }}",
+                            data: formData,
+                            success: function(response) {
+                                alertToast('sukses', 'Berhasil ditambahkan');
+                                $('#tambah_awal').modal('hide');
+                                $('#tambahAnak').modal('hide');
+                                load_cetak();
+                            },
+                        });
+                    }
+
+                });
+
+
+
                 $(document).on('click', '.akhir', function() {
                     var id_cetak = $(this).attr('id_cetak');
                     $.ajax({
@@ -205,6 +310,194 @@
                     var id_cetak = $(this).attr('id_cetak');
 
                     $('.cetak').val(id_cetak);
+                });
+
+                load_cetak();
+
+                function load_cetak() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.get_cetak') }}",
+                        success: function(r) {
+                            $("#load-cetak").html(r);
+                            $('#tableHalaman').DataTable({
+                                "searching": true,
+                                scrollY: '400px',
+                                scrollX: true,
+                                scrollCollapse: true,
+                                "autoWidth": false,
+                                "paging": false,
+                                "ordering": false
+                            });
+                        }
+                    });
+
+
+
+
+                }
+
+                function input_akhir() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetak.input_akhir') }}",
+                        success: function(r) {
+                            $("#load_ambil_akhir").html(r);
+                            $(".select2-add").select2({
+                                dropdownParent: $('#inputAkhir .modal-content'),
+                            });
+                        }
+                    });
+                }
+
+                $(document).on('click', '.inputAkhir', function() {
+                    input_akhir();
+                });
+
+                $(document).on("click", ".btn_simpan", function() {
+
+                    var row = $(this).closest("tr"); // Mendapatkan baris terkait dengan tombol "Simpan"
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var formData = row.find('input, select').serialize();
+                    formData += "&_token=" + csrfToken;
+
+                    // Kirim data ke server menggunakan AJAX
+                    $.ajax({
+                        url: "{{ route('cetak.save_akhir') }}", // Ganti dengan URL endpoint penyimpanan data
+                        method: "POST",
+                        data: formData,
+                        success: function(response) {
+                            alertToast('sukses', 'Berhasil ditambahkan');
+                            var savedRowId = row.data('id');
+
+                            // Muat kembali data baris yang disimpan
+                            $.ajax({
+                                url: "{{ route('cetak.load_row') }}", // Ganti dengan URL endpoint untuk memuat satu baris
+                                method: "GET",
+                                data: {
+                                    id: savedRowId
+                                }, // Sertakan ID baris yang disimpan
+                                success: function(data) {
+                                    var updatedRow = $(data);
+                                    row.replaceWith(
+                                        updatedRow
+                                    );
+                                    $(".select2-add").select2({
+                                        dropdownParent: $('#inputAkhir .modal-content'),
+                                    });
+                                },
+                            });
+
+                            load_cetak();
+                        },
+                    });
+                });
+                $('#save_selesai').submit(function(e) {
+                    e.preventDefault();
+
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var formData = $(this).serialize();
+                    formData += "&_token=" + csrfToken;
+
+                    $.ajax({
+                        type: "Post",
+                        url: "{{ route('cetak.selesai_cetak') }}",
+                        data: formData,
+                        success: function(response) {
+                            alertToast('sukses', 'Data berhasil diselesaikan');
+                            load_cetak();
+                            input_akhir();
+                            $('#inputAkhir').modal('show');
+                            $('#selesai').modal('hide');
+                        },
+                    });
+
+                });
+            </script>
+            <script>
+                $(document).on('keyup', '.pcs_awal', function() {
+                    var count = $(this).attr('count');
+                    var target = $('.rp_pcs' + count).val();
+                    var pcs_awal = $(this).val();
+
+                    var batas_susut = $('.batas_susut' + count).val();
+                    var denda_susut = $('.denda_susut' + count).val();
+
+                    var gr_awal = $('.gr_awal' + count).val();
+                    var gr_akhir = $('.gr_akhir' + count).val();
+                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+                    var susut2 = Math.round(susut);
+                    if (susut2 >= batas_susut) {
+                        var denda = susut2 * denda_susut;
+                    } else {
+                        var denda = 0;
+                    }
+                    var pcs_hcr = $('.pcs_hcr' + count).val();
+                    var denda_hcr = $('.denda_hcr' + count).val();
+
+                    var rp_hcr = parseFloat(pcs_hcr) * parseFloat(denda_hcr);
+
+                    var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
+                    $('.ttl_rp' + count).text(total);
+
+                });
+                $(document).on('keyup', '.gr_akhir', function() {
+                    var count = $(this).attr('count');
+                    var gr_awal = $('.gr_awal' + count).val();
+                    var gr_akhir = $(this).val();
+
+                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+
+                    var batas_susut = $('.batas_susut' + count).val();
+                    var denda_susut = $('.denda_susut' + count).val();
+
+                    var target = $('.rp_pcs' + count).val();
+                    var pcs_awal = $('.pcs_awal' + count).val();
+
+                    var susut2 = Math.round(susut);
+                    if (susut2 >= batas_susut) {
+                        var denda = susut2 * denda_susut;
+                    } else {
+                        var denda = 0;
+                    }
+                    $('.susut' + count).text(susut2 + '%');
+
+                    var pcs_hcr = $('.pcs_hcr' + count).val();
+                    var denda_hcr = $('.denda_hcr' + count).val();
+
+                    var rp_hcr = parseFloat(pcs_hcr) * parseFloat(denda_hcr);
+
+                    var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
+                    $('.ttl_rp' + count).text(total);
+
+                });
+                $(document).on('keyup', '.pcs_hcr', function() {
+                    var count = $(this).attr('count');
+                    var gr_awal = $('.gr_awal' + count).val();
+                    var gr_akhir = $('.gr_akhir' + count).val();
+
+                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+                    var batas_susut = $('.batas_susut' + count).val();
+                    var denda_susut = $('.denda_susut' + count).val();
+
+                    var target = $('.rp_pcs' + count).val();
+                    var pcs_awal = $('.pcs_awal' + count).val();
+
+                    var susut2 = Math.round(susut);
+                    if (susut2 >= batas_susut) {
+                        var denda = susut2 * denda_susut;
+                    } else {
+                        var denda = 0;
+                    }
+                    $('.susut' + count).text(susut2 + '%');
+                    var pcs_hcr = $(this).val();
+                    var denda_hcr = $('.denda_hcr' + count).val();
+
+                    var rp_hcr = parseFloat(pcs_hcr) * parseFloat(denda_hcr);
+
+                    var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
+                    $('.ttl_rp' + count).text(total);
+
                 });
             </script>
         @endsection
