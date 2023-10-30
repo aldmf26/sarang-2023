@@ -6,7 +6,7 @@
 
             </div>
             <div class="col-lg-6">
-                
+
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
@@ -33,7 +33,7 @@
     </x-slot>
 
     <x-slot name="cardBody">
-        
+
 
         <section class="row">
             <div id="loadHalaman"></div>
@@ -251,12 +251,12 @@
                                 var hrga_satuanPcs = $('.setHargaSatuanPcs' + count).val()
                                 var rupiah
 
-                                
+
 
                                 console.log(`${nilaiGr} == ${nilaiPcs}`)
                                 // if (selectedVal === '2') {
                                 // } else {
-                                    
+
                                 // }
                                 keyupFormAwalCabut('Gr')
                                 keyupFormAwalCabut('Pcs')
@@ -319,13 +319,13 @@
                         // Tambahkan ID anak ke dalam array
                         selectedRows.push(anakId);
                     });
-                    if(confirm('Apakah anda yakin ?')) {
+                    if (confirm('Apakah anda yakin ?')) {
                         $.ajax({
                             type: "GET",
                             url: "{{ route('cabut.ditutup') }}",
                             data: {
                                 datas: selectedRows,
-                                tipe:tipe
+                                tipe: tipe
                             },
                             success: function(r) {
                                 alertToast('sukses', 'Berhasil save')
@@ -401,7 +401,6 @@
                                 0;
                         })
                         var susut, denda, bonus_susut, rupiah, denda_hcr, eot_bonus, ttl_rp, setRupiah
-
                         switch (data.id_kategori) {
                             case 2:
                                 rulesCabut(data)
@@ -419,9 +418,14 @@
                             maximumFractionDigits: 0
                         })
                         $('.ttlRpKeyup' + data.count).text(setRupiah)
+                        var susutH = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
+                        susutH = susutH.toFixed(0)
+                        $('.susut' + count).text(susutH + '%')
                         $('.ttlRpSet' + data.count).val(rulesCabut(data))
                     })
                 }
+
+               
 
                 function loadListAnakSisa() {
                     $.ajax({
@@ -444,8 +448,8 @@
                     $.ajax({
                         type: "GET",
                         url: "cabut/load_modal_akhir",
-                        data:{
-                            orderBy:orderBy
+                        data: {
+                            orderBy: orderBy
                         },
                         success: function(r) {
                             $("#load_modal_akhir").html(r);
@@ -456,7 +460,7 @@
                         }
                     });
                 }
-                $(document).on('change', '#orderBy', function(){
+                $(document).on('change', '#orderBy', function() {
                     var nilai = $(this).val()
                     load_input_akhir(nilai)
                 })
@@ -691,20 +695,18 @@
                     });
                 })
 
-                $(document).on('click', '.cancelCabutAkhir', function(){
+                $(document).on('click', '.cancelCabutAkhir', function() {
                     var id_cabut = $(this).attr('id_cabut')
                     $.ajax({
                         type: "GET",
-                        url: "{{route('cabut.cancel')}}?id_cabut="+id_cabut,
-                        success: function (r) {
+                        url: "{{ route('cabut.cancel') }}?id_cabut=" + id_cabut,
+                        success: function(r) {
                             loadTambahcabut()
                             loadHalaman()
                             load_input_akhir()
                         }
                     });
                 })
-
-                
             </script>
         @endsection
     </x-slot>

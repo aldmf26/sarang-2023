@@ -1,21 +1,42 @@
-<table width="50%">
-    <tr>
-        <td width="20%" style="padding: 10px;" class="fw-bold">No Box</td>
-        <td width="2%" style="padding: 10px;">:</td>
-        <td style="padding: 10px;">{{ $detail->no_box }}</td>
-    </tr>
-    <tr>
-        <td width="20%" style="padding: 10px;" class="fw-bold">Tanggal Terima</td>
-        <td width="2%" style="padding: 10px;">:</td>
-        <td style="padding: 10px;">{{ tanggal($detail->tgl_terima) }}</td>
-    </tr>
-    <tr>
-        <td width="20%" style="padding: 10px;" class="fw-bold">Nama Anak</td>
-        <td width="2%" style="padding: 10px;">:</td>
-        <td style="padding: 10px;">{{ $detail->nama }}</td>
-    </tr>
+<div class="row">
+    <div class="col-lg-5">
+        <table>
+            <tr>
+                <td width="25%" style="padding: 10px;" class="fw-bold">No Box</td>
+                <td width="2%" style="padding: 10px;">:</td>
+                <td style="padding: 10px;">{{ $detail->no_box }}</td>
+            </tr>
+            <tr>
+                <td width="25%" style="padding: 10px;" class="fw-bold">Tanggal Terima</td>
+                <td width="2%" style="padding: 10px;">:</td>
+                <td style="padding: 10px;">{{ tanggal($detail->tgl_terima) }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-lg-6">
+        <table >
+            <tr>
+                <td width="20%" style="padding: 10px;" class="fw-bold">Nama Anak</td>
+                <td width="2%" style="padding: 10px;">:</td>
+                <td style="padding: 10px;">{{ strtoupper($detail->nama) . ' / ' . $detail->id_kelas }}</td>
+            </tr>
+            <tr>
+                <td width="20%" style="padding: 10px;" class="fw-bold">Kelas/Paket</td>
+                <td width="2%" style="padding: 10px;">:</td>
+                @php
+                    $paket = [
+                        1 => 'pcs',
+                        2 => 'gr',
+                    ];
+                    $jenis = $paket[$detail->jenis_kelas];
+                @endphp
+                <td style="padding: 10px;">Kelas {{ $detail->nm_kelas }} ({{ $detail->$jenis . ' ' .$jenis }}) {{ number_format($detail->rupiah_kelas,0) }}</td>
+            </tr>
+        
+        </table>
+    </div>
+</div>
 
-</table>
 
 <hr style="border: 1px solid #435EBE">
 <table class="table table-bordered" width="100%">

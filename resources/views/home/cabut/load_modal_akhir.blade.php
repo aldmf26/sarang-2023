@@ -5,22 +5,22 @@
     </div>
     <div class="col-lg-2 mb-2">
         <div class="form-group">
-        <label for="">Urutkan Dengan</label>
-        <select class="form-control" name="" id="orderBy">
-            <option value="">Pilih</option>
-            <option {{$orderBy == 'nama' ? 'selected' : ''}} value="nama">Nama</option>
-            <option {{$orderBy == 'kelas' ? 'selected' : ''}} value="kelas">Kelas</option>
-            <option {{$orderBy == 'nobox' ? 'selected' : ''}} value="nobox">No Box</option>
-            <option {{$orderBy == 'tgl_terima' ? 'selected' : ''}} value="tgl_terima">Tgl Cabut</option>
-        </select>
-    </div>
+            <label for="">Urutkan Dengan</label>
+            <select class="form-control" name="" id="orderBy">
+                <option value="">Pilih</option>
+                <option {{ $orderBy == 'nama' ? 'selected' : '' }} value="nama">Nama</option>
+                <option {{ $orderBy == 'kelas' ? 'selected' : '' }} value="kelas">Kelas</option>
+                <option {{ $orderBy == 'nobox' ? 'selected' : '' }} value="nobox">No Box</option>
+                <option {{ $orderBy == 'tgl_terima' ? 'selected' : '' }} value="tgl_terima">Tgl Cabut</option>
+            </select>
+        </div>
     </div>
     <div class="col-lg-12">
         <table class="table table-bordered" style="border: 0.5px solid #a0a7c1; font-size: 12px" id="tablealdi2">
             <thead>
                 <tr>
                     <th class="dhead">Tgl Trma</th>
-                    <th class="dhead"  width="90">No Box</th>
+                    <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="75">Pcs Awal</th>
                     <th class="dhead text-end" width="75">Gr Awal</th>
@@ -29,6 +29,7 @@
                     <th class="dhead text-end" width="75">Gr Akhir</th>
                     <th class="dhead text-end" width="75">EOT</th>
                     <th class="dhead text-end" width="75">Pcs Hcr</th>
+                    <th class="dhead text-end" width="55">Susut</th>
                     <th class="dhead text-end" width="120">Ttl Rp</th>
                     <th class="dhead" width="120">Dibayar</th>
                     <th class="dhead text-center" width="140">Aksi</th>
@@ -52,13 +53,17 @@
                                 value="{{ $d->rupiah_kelas }}">
                             <input type="text" name="id_kelas{{ $i + 1 }}[]" value="{{ $d->id_kelas }}">
                             <input type="text" name="rp_bonus{{ $i + 1 }}[]" value="{{ $d->rp_bonus }}">
-                            <input type="text" name="id_kategori{{ $i + 1 }}[]" value="{{ $d->id_kategori }}">
+                            <input type="text" name="id_kategori{{ $i + 1 }}[]"
+                                value="{{ $d->id_kategori }}">
                             <input type="text" name="jenis{{ $i + 1 }}[]" value="{{ $d->jenis }}">
-                            <input type="text" name="denda_susut_persen{{ $i + 1 }}[]" value="{{ $d->denda_susut_persen }}">
+                            <input type="text" name="denda_susut_persen{{ $i + 1 }}[]"
+                                value="{{ $d->denda_susut_persen }}">
                             <input type="text" name="denda_hcr{{ $i + 1 }}[]" value="{{ $d->denda_hcr }}">
                             <input type="text" name="pcs_kelas{{ $i + 1 }}[]" value="{{ $d->pcs_kelas }}">
-                            <input type="text" name="batas_susut{{ $i + 1 }}[]" value="{{ $d->batas_susut }}">
-                            <input type="text" name="bonus_susut{{ $i + 1 }}[]" value="{{ $d->bonus_susut }}">
+                            <input type="text" name="batas_susut{{ $i + 1 }}[]"
+                                value="{{ $d->batas_susut }}">
+                            <input type="text" name="bonus_susut{{ $i + 1 }}[]"
+                                value="{{ $d->bonus_susut }}">
                             <input type="text" name="eot_rp{{ $i + 1 }}[]" value="{{ $d->eot_rp }}">
                             <input class="ttlRpSet{{ $i + 1 }}" type="text"
                                 name="ttl_rp{{ $i + 1 }}[]" value="{{ $hasil->ttl_rp }}">
@@ -70,9 +75,11 @@
                         <td>
                             <input type="text" readonly value="{{ $d->no_box }}" class="form-control">
                         </td>
-                        <td class="fs-bold">{{ strtoupper($d->nama) }} <br> {{ date('d M y', strtotime($d->tgl_terima)) }}</td>
+                        <td class="fs-bold">{{ strtoupper($d->nama) }} {{ $d->id_kelas }} <br>
+                            {{ date('d M y', strtotime($d->tgl_terima)) }}</td>
                         <td>
-                            <input readonly value="{{ $d->pcs_awal }}" type="text" class="form-control text-end">
+                            <input readonly value="{{ $d->pcs_awal }}" type="text"
+                                class="form-control text-end">
                         </td>
                         <td>
                             <input readonly value="{{ $d->gr_awal }}" name="gr_awal{{ $i + 1 }}[]"
@@ -83,12 +90,14 @@
                                 class="form-control text-end grFlexKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->pcs_akhir ?? 0 }}" required name="pcs_akhir{{ $i + 1 }}[]"
-                                type="text" class="form-control text-end pcsAkhirKeyup" count="{{ $i + 1 }}">
+                            <input value="{{ $d->pcs_awal }}" required name="pcs_akhir{{ $i + 1 }}[]"
+                                type="text" class="form-control text-end pcsAkhirKeyup"
+                                count="{{ $i + 1 }}">
                         </td>
                         <td>
                             <input value="{{ $d->gr_akhir ?? 0 }}" required name="gr_akhir{{ $i + 1 }}[]"
-                                type="text" class="form-control text-end grAkhirKeyup" count="{{ $i + 1 }}">
+                                type="text" class="form-control text-end grAkhirKeyup"
+                                count="{{ $i + 1 }}">
                         </td>
                         <td>
                             <input value="{{ $d->eot ?? 0 }}" name="eot{{ $i + 1 }}[]" type="text"
@@ -98,6 +107,9 @@
                             <input value="{{ $d->pcs_hcr ?? 0 }}" name="pcs_hcr{{ $i + 1 }}[]"
                                 type="text" class="form-control text-end pcsHcrKeyup"
                                 count="{{ $i + 1 }}">
+                        </td>
+                        <td class="susut{{ $i + 1 }} text-end">
+
                         </td>
 
 
@@ -119,17 +131,18 @@
                             </select>
                         </td>
                         <td>
-                            
+
                             <button style="font-size: 12px"
                                 class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
                             @if (!empty($d->gr_akhir))
-                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $d->id_cabut }}"
-                                href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
+                                <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
+                                    id_cabut="{{ $d->id_cabut }}" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#selesai">Selesai</a>
                             @endif
-                            <button style="font-size: 12px"
-                            class="btn btn-sm btn-danger cancelCabutAkhir"
-                            type="button" count="{{ $i + 1 }}" id_cabut="{{ $d->id_cabut }}">Cancel</button>
+                            <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
+                                type="button" count="{{ $i + 1 }}"
+                                id_cabut="{{ $d->id_cabut }}">Cancel</button>
                         </td>
                     </tr>
                 @endforeach

@@ -72,7 +72,7 @@
                                             value="{{ auth()->user()->name }}" name="pgws[]">
                                     </td>
                                     <td>
-                                        <select name="nama[]" id="" class="select3">
+                                        <select name="nama[]" id="" class="select3 selectPengawas">
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
                                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
@@ -112,7 +112,17 @@
     @section('scripts')
         <script>
             $(".select3").select2()
+            $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
 
+            $('.selectPengawas').on('change', function() {
+                var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
+
+                // Memperbarui semua elemen dengan kelas .selectPengawas
+                $('.selectPengawas').not(this).each(function() {
+                    $(this).val(nilaiselect).trigger(
+                    'change.select2'); // Update nilai Select2 dan trigger event change
+                });
+            });
             $(document).ready(function() {
                 $(document).on("keyup", ".pcs_awal", function() {
                     var pcs_awal = $(this).val();
