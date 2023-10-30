@@ -120,7 +120,7 @@ if (!function_exists('rumusTotalRp ')) {
     {
         $result = json_decode('{}'); // Buat objek kosong
 
-        $susut = empty($detail->pcs_awal) ? 0 : (1 - ($detail->gr_flx + $detail->gr_akhir) / $detail->gr_awal) * 100;
+        $susut = empty($detail->gr_awal) ? 0 : (1 - ($detail->gr_flx + $detail->gr_akhir) / $detail->gr_awal) * 100;
         $denda = 0;
         $bonus_susut = 0;
         $rupiah = $detail->rupiah;
@@ -146,7 +146,6 @@ if (!function_exists('rumusTotalRp ')) {
         $result->denda_hcr = $denda_hcr;
         $result->eot_bonus = $eot_bonus;
         $result->ttl_rp = $ttl_rp;
-
         return $result;
     }
 }
