@@ -34,7 +34,7 @@
                 @php
                     $hasil = rumusTotalRp($d);
                 @endphp
-                <td>{{ $hasil->susut }}%</td>
+                <td>{{  number_format($hasil->susut,0) }}%</td>
                 <td>{{ $d->rupiah }}</td>
                 <td>{{ $hasil->ttl_rp }}</td>
             </tr>
