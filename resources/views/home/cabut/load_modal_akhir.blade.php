@@ -31,7 +31,7 @@
                     <th class="dhead text-end" width="75">Pcs Hcr</th>
                     <th class="dhead text-end" width="120">Ttl Rp</th>
                     <th class="dhead" width="120">Dibayar</th>
-                    <th class="dhead text-center" width="120">Aksi</th>
+                    <th class="dhead text-center" width="140">Aksi</th>
                 </tr>
             </thead>
             <tbody>
