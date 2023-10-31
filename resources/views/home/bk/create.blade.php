@@ -4,7 +4,7 @@
         <div class="col-lg-6">
             <h6 class="float-start mt-1">{{ $title }} {{ $kategori }}</h6>
         </div>
-
+        
     </x-slot>
 
 

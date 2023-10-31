@@ -56,7 +56,7 @@
                                     @php
                                         $cek = DB::table('permission_navbar')->where([['id_user', $d->id],['id_sub_navbar', $h->id_sub_navbar]])->first();
                                     @endphp
-                                    <input name="home[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}" class="form-check-input"
+                                    <input name="home_{{ $d->id }}[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}" class="form-check-input"
                                         type="checkbox" id="home_{{ $i }}_{{ $loop->index }}">
                                     <label class="form-check-label"
                                         for="home_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
@@ -67,7 +67,7 @@
                                 @php
                                         $cek = DB::table('permission_navbar')->where([['id_user', $d->id],['id_sub_navbar', $h->id_sub_navbar]])->first();
                                     @endphp
-                                    <input name="home[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}"
+                                    <input name="home_{{ $d->id }}[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}"
                                         class="form-check-input" type="checkbox" id="data_{{ $i }}_{{ $loop->index }}">
                                     <label class="form-check-label"
                                         for="data_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>

@@ -13,8 +13,8 @@ class PermissionController extends Controller
         $data = [
             'title' => 'Permission',
             'users' => DB::table('users as a')
-            ->orderBy(DB::raw('CAST(a.id AS UNSIGNED)'), 'ASC')
-            ->get(),
+                ->orderBy(DB::raw('CAST(a.id AS UNSIGNED)'), 'ASC')
+                ->get(),
             'data_master' => $sub_navbar->where('navbar', 1),
             'home' => $sub_navbar->where('navbar', 2),
         ];
@@ -24,13 +24,23 @@ class PermissionController extends Controller
     public function create(Request $r)
     {
         DB::table('permission_navbar')->truncate();
-        $id_user = auth()->user()->id;
-        if(!empty($r->home)) {
-            foreach($r->home as $d) {
-                DB::table('permission_navbar')->insert([
-                    'id_user' => $id_user,
-                    'id_sub_navbar' => $d
-                ]);
+        // Ambil semua data dari formulir
+        $data = $r->all();
+        // Looping untuk menyimpan setiap ceklis sesuai ID user
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                // Misalnya, jika nama field checkbox adalah 'home_{user_id}[]' atau 'data_master_{user_id}[]'
+                // Anda bisa memisahkan ID user dari nama field untuk menyimpan ke tabel yang sesuai
+                $user_id = explode('_', $key)[1]; // Mengambil ID user dari nama field
+
+                // Simpan data ke dalam tabel sesuai dengan ID user
+                // Lakukan proses penyimpanan ke database sesuai dengan kebutuhan aplikasi Anda
+                // Contoh: menyimpan ID sub navbar yang diceklis ke dalam tabel permission_navbar
+                foreach ($value as $item) {
+                    DB::table('permission_navbar')->insert(
+                        ['id_user' => $user_id, 'id_sub_navbar' => $item],
+                    );
+                }
             }
         }
 

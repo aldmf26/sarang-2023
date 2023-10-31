@@ -7,17 +7,31 @@ use Illuminate\Support\Facades\DB;
 
 class NavbarController extends Controller
 {
+    public function queryNavbar($jenis)
+    {
+        $id_user = auth()->user()->id;
+
+        $data = DB::table('sub_navbar as a')
+            ->join('permission_navbar as b', 'a.id_sub_navbar', 'b.id_sub_navbar')
+            ->where([
+                ['a.navbar', $jenis],
+                ['b.id_user', $id_user],
+            ])
+            ->get();
+        return $data;
+    }
     public function data_master()
     {
-        $data = DB::table('sub_navbar')->where('navbar', 1)->get();
-     
+
+        $data = $this->queryNavbar(1);
+
         $title = 'Data Master';
         return view('navbar.data_master', compact(['data', 'title']));
     }
 
     public function home()
     {
-        $data = DB::table('sub_navbar')->where('navbar', 2)->get();
+        $data = $this->queryNavbar(2);
 
         $title = 'Data Master';
         return view('navbar.data_master', compact(['data', 'title']));

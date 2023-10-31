@@ -27,7 +27,7 @@
                     {{ in_array(request()->route()->getName(),$array)? ' active_navbar_new': '' }}'>
                                 <span>{{ ucwords($d->nama) }}</span>
                             </a>
-                        </li>   
+                        </li>
                     @endif
                 @endforeach
             </ul>
