@@ -12,9 +12,7 @@ class PermissionController extends Controller
         $sub_navbar = DB::table('sub_navbar')->get();
         $data = [
             'title' => 'Permission',
-            'users' => DB::table('users as a')
-                ->orderBy(DB::raw('CAST(a.id AS UNSIGNED)'), 'ASC')
-                ->get(),
+            'users' => DB::table('users as a')->get(),
             'data_master' => $sub_navbar->where('navbar', 1),
             'home' => $sub_navbar->where('navbar', 2),
         ];
