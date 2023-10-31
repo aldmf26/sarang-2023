@@ -24,10 +24,10 @@
                         <li class="menu-item">
                             <a href="{{ route($d->route) }}"
                                 class='menu-link 
-                    {{ in_array(request()->route()->getName(),$array)? ' active_navbar_new': '' }}'>
+                                    {{ in_array(request()->route()->getName(),$array)? ' active_navbar_new': '' }}'>
                                 <span>{{ ucwords($d->nama) }}</span>
                             </a>
-                        </li>   
+                        </li>
                     @endif
                 @endforeach
             </ul>

@@ -16,25 +16,22 @@ class CekPosisiUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $id_user = auth()->user()->id;
+        $routeName = $request->route()->getName();
+        
+        $routeNamePotong = strstr($routeName, '.', true); // dipotong setelah . nya
+        $routeYgBulih = [
+            'cabut.rekap'
+        ];
+        $data = DB::table('sub_navbar as a')
+            ->join('permission_navbar as b', 'a.id_sub_navbar', 'b.id_sub_navbar')
+            ->where([['b.id_user', $id_user], ['a.route', 'LIKE', "%$routeNamePotong%"]])
+            ->first();
 
-        // $allowedRoutesForPosition1 = [];
-        // $posisi_id = auth()->user()->posisi_id /* peroleh posisi ID dari pengguna, misalnya: Auth::user()->posisi_id */;
+        if ($data || in_array($routeName, $routeYgBulih)) {
+            return $next($request);
+        }
 
-
-        // // Mengambil array rute dari ID navbar 14 jika posisi ID adalah 1
-        // if ($posisi_id === 1) {
-        //     return $next($request);
-        // } 
-        // $navbar14 = DB::table('navbar')->where('id_navbar', 14)->first();
-        // if ($navbar14) {
-        //     $string = $navbar14->isi;
-        //     $allowedRoutesForPosition1 = json_decode($string, true);
-        // }
-        // // Pengecekan jika rute yang diakses adalah salah satu dari rute yang diizinkan
-        // if (!in_array($request->route()->getName(), $allowedRoutesForPosition1)) {
-        //     return abort('404');
-        // }
-
-        return $next($request);
+        return abort('404');
     }
 }

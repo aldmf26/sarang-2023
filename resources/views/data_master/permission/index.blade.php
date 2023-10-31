@@ -46,35 +46,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                      
+                        @php
+                            function getSubNavbar($idUser, $idSub)
+                            {
+                                return DB::table('permission_navbar')
+                                    ->where([['id_user', $idUser], ['id_sub_navbar', $idSub]])
+                                    ->first();
+                            }
+                        @endphp
                         @foreach ($users as $i => $d)
-                        <tr>
-                            <td>{{ ucwords($d->name) }}</td>
-                            <td>
-                                @foreach ($home as $h)
-                                
-                                    @php
-                                        $cek = DB::table('permission_navbar')->where([['id_user', $d->id],['id_sub_navbar', $h->id_sub_navbar]])->first();
-                                    @endphp
-                                    <input name="home[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}" class="form-check-input"
-                                        type="checkbox" id="home_{{ $i }}_{{ $loop->index }}">
-                                    <label class="form-check-label"
-                                        for="home_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
-                                @endforeach
-                            </td>
-                            <td>
-                                @foreach ($data_master as $h)
-                                @php
-                                        $cek = DB::table('permission_navbar')->where([['id_user', $d->id],['id_sub_navbar', $h->id_sub_navbar]])->first();
-                                    @endphp
-                                    <input name="home[]" {{$cek ? 'checked' : ''}} value="{{ $h->id_sub_navbar }}"
-                                        class="form-check-input" type="checkbox" id="data_{{ $i }}_{{ $loop->index }}">
-                                    <label class="form-check-label"
-                                        for="data_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
-                                @endforeach
-                            </td>
-                        </tr>
-                    @endforeach
+                            <tr>
+                                <td>{{ ucwords($d->name) }}</td>
+                                <td>
+                                    @foreach ($home as $h)
+                                        @php
+                                            $cek = getSubNavbar($d->id, $h->id_sub_navbar);
+                                        @endphp
+
+                                        <input name="home_{{ $d->id }}[]" {{ $cek ? 'checked' : '' }}
+                                            value="{{ $h->id_sub_navbar }}" class="form-check-input" type="checkbox"
+                                            id="home_{{ $i }}_{{ $loop->index }}">
+                                        <label class="form-check-label"
+                                            for="home_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($data_master as $h)
+                                        @php
+                                            $cek = getSubNavbar($d->id, $h->id_sub_navbar);
+                                        @endphp
+
+                                        <input name="home_{{ $d->id }}[]" {{ $cek ? 'checked' : '' }}
+                                            value="{{ $h->id_sub_navbar }}" class="form-check-input" type="checkbox"
+                                            id="data_{{ $i }}_{{ $loop->index }}">
+                                        <label class="form-check-label"
+                                            for="data_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
+                                    @endforeach
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
         </form>

@@ -87,10 +87,10 @@ class CabutController extends Controller
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut
+                            FROM cabut WHERE no_box != 9999
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE a.tgl_terima BETWEEN '$tgl1' AND '$tgl2'
+                        WHERE a.tgl_terima BETWEEN '$tgl1' AND '$tgl2' AND a.no_box != 9999
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
@@ -313,8 +313,8 @@ class CabutController extends Controller
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->where([['no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
-        
-        
+
+
         switch ($r->orderBy) {
             case 'nobox':
                 $datas->orderBy('a.no_box', 'ASC');
