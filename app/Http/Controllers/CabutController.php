@@ -313,8 +313,8 @@ class CabutController extends Controller
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->where([['no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
-        
-        
+
+
         switch ($r->orderBy) {
             case 'nobox':
                 $datas->orderBy('a.no_box', 'ASC');
