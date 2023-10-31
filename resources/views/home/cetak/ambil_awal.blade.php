@@ -12,10 +12,12 @@
                     <th class="dhead">No Box</th>
                     <th class="dhead">Nama Anak</th>
                     <th class="dhead">Kelas/Paket</th>
+                    <th class="dhead">Pcs Tidak ctk</th>
+                    <th class="dhead">Gr Tidak ctk</th>
                     <th class="dhead">Pcs Awal</th>
                     <th class="dhead">Gr Awal</th>
                     <th class="dhead">Ttl Rp</th>
-                    <th class="dhead">Aksi</th>
+                    <th class="dhead">Selesai</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,18 +39,27 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td style="white-space: nowrap"><span class="h6">{{ strtoupper($c->nama) }}
-                                ({{ $c->id_kelas }})</span></td>
+                        <td style="white-space: nowrap">{{ strtoupper($c->nama) }}
+                            ({{ $c->id_kelas }})</td>
                         <td>
                             <select name="id_kelas_cetak[]" id="" class="select2-add pilihkelas"
                                 count="{{ $i + 1 }}">
-                                <option value="">Pilih Box</option>
+                                <option value="">Pilih Kelas</option>
                                 @foreach ($kelas as $d)
                                     <option value="{{ $d->id_kelas_cetak }}">
                                         {{ ucwords($d->paket . ' ' . $d->kelas . '~' . ' Rp.' . $d->rp_pcs) }}
                                     </option>
                                 @endforeach
                             </select>
+                        </td>
+
+                        <td>
+                            <input type="text"
+                                class="form-control text-end pcs_tdk_ctk{{ $i + 1 }} pcs_tdk_ctk"
+                                name="pcs_tidak_ctk[]" count="{{ $i + 1 }}">
+                        </td>
+                        <td><input type="text" class="form-control text-end gr_tdk_ctk{{ $i + 1 }}"
+                                name="gr_tidak_ctk[]">
                         </td>
                         <td>
                             <input type="hidden" class="rp_pcs{{ $i + 1 }}" name="rp_pcs[]">

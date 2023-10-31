@@ -62,6 +62,14 @@ class CetakController extends Controller
         ];
         return view('home.cetak.index', $data);
     }
+    public function ditutup(Request $r)
+    {
+
+        $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
+        foreach ($r->datas as $d) {
+            DB::table('cetak')->where('id_cetak', $d)->update($data);
+        }
+    }
 
     function get_cetak(Request $r)
     {
@@ -75,7 +83,8 @@ class CetakController extends Controller
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-            where a.id_pengawas = '$id' and a.tgl between '$tgl1' and '$tgl2'
+            where a.id_pengawas = '$id' and a.tgl between '$tgl1' and '$tgl2' and a.penutup = 'T'
+            order by a.selesai ASC
             "),
         ];
         return view('home.cetak.get', $data);
@@ -113,11 +122,8 @@ class CetakController extends Controller
     {
         $tgl = date('Y-m-d');
         $id = auth()->user()->id;
-
-        $totalAnak = DB::table('absen as a')
-            ->leftJoin('tb_anak as b', 'b.id_anak', '=', 'a.id_anak')
-            ->where('a.tgl', $tgl)
-            ->where('b.id_pengawas', $id)
+        $totalAnak = DB::table('tb_anak as a')
+            ->where('a.id_pengawas', $id)
             ->count();
 
         return response()->json(['total_anak' => $totalAnak]);
@@ -155,10 +161,9 @@ class CetakController extends Controller
     {
         $tgl = date('Y-m-d');
         $id = auth()->user()->id;
-        $absen = DB::select("SELECT a.id_anak, b.nama, b.id_kelas
-        From absen as a 
-        left join tb_anak as b on b.id_anak = a.id_anak
-        where a.tgl = '$tgl' and b.id_pengawas = $id
+        $absen = DB::select("SELECT a.id_anak, a.nama, a.id_kelas
+        From tb_anak as a 
+        where a.id_pengawas = $id
         group by a.id_anak");
 
         $data = [
@@ -191,8 +196,12 @@ class CetakController extends Controller
                 'tgl' => $r->tgl[$x],
                 'no_box' => $r->no_box[$x],
                 'id_kelas' => $r->id_kelas_cetak[$x],
-                'pcs_awal' => $r->pcs_awal[$x],
-                'gr_awal' => $r->gr_awal[$x],
+                'pcs_awal_ctk' => $r->pcs_awal[$x],
+                'gr_awal_ctk' => $r->gr_awal[$x],
+                'pcs_tidak_ctk' => $r->pcs_tidak_ctk[$x],
+                'gr_tidak_ctk' => $r->gr_tidak_ctk[$x],
+                'pcs_awal' => $r->pcs_awal[$x] + $r->pcs_tidak_ctk[$x],
+                'gr_awal' => $r->gr_awal[$x] + $r->gr_tidak_ctk[$x],
                 'rp_pcs' => $r->rp_pcs[$x],
                 'status' => 'akhir'
             ];
@@ -223,12 +232,10 @@ class CetakController extends Controller
     function save_akhir(Request $r)
     {
         DB::table('cetak')->where([['id_cetak', $r->id_cetak]])->update([
-            'pcs_tidak_ctk' => $r->pcs_tidak_ctk,
-            'gr_tidak_ctk' => $r->gr_tidak_ctk,
-            'pcs_awal_ctk' => $r->pcs_awal_ctk,
-            'gr_awal_ctk' => $r->gr_awal_ctk,
             'pcs_akhir' => $r->pcs_akhir,
             'gr_akhir' => $r->gr_akhir,
+            'pcs_cu' => $r->pcs_cu,
+            'gr_cu' => $r->gr_cu,
             'pcs_hcr' => $r->pcs_hcr,
             'bulan_dibayar' => $r->bulan_dibayar,
         ]);

@@ -420,12 +420,16 @@
                     var target = $('.rp_pcs' + count).val();
                     var pcs_awal = $(this).val();
 
+
+
                     var batas_susut = $('.batas_susut' + count).val();
                     var denda_susut = $('.denda_susut' + count).val();
 
                     var gr_awal = $('.gr_awal' + count).val();
                     var gr_akhir = $('.gr_akhir' + count).val();
-                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+                    var gr_cu = $('.gr_cu' + count).val();
+
+                    var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
                     var susut2 = Math.round(susut);
                     if (susut2 >= batas_susut) {
                         var denda = susut2 * denda_susut;
@@ -444,9 +448,41 @@
                 $(document).on('keyup', '.gr_akhir', function() {
                     var count = $(this).attr('count');
                     var gr_awal = $('.gr_awal' + count).val();
+                    var gr_cu = $('.gr_cu' + count).val();
                     var gr_akhir = $(this).val();
 
-                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+                    var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
+
+                    var batas_susut = $('.batas_susut' + count).val();
+                    var denda_susut = $('.denda_susut' + count).val();
+
+                    var target = $('.rp_pcs' + count).val();
+                    var pcs_awal = $('.pcs_awal' + count).val();
+
+                    var susut2 = Math.round(susut);
+                    if (susut2 >= batas_susut) {
+                        var denda = susut2 * denda_susut;
+                    } else {
+                        var denda = 0;
+                    }
+                    $('.susut' + count).text(susut2 + '%');
+
+                    var pcs_hcr = $('.pcs_hcr' + count).val();
+                    var denda_hcr = $('.denda_hcr' + count).val();
+
+                    var rp_hcr = parseFloat(pcs_hcr) * parseFloat(denda_hcr);
+
+                    var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
+                    $('.ttl_rp' + count).text(total);
+
+                });
+                $(document).on('keyup', '.gr_cu', function() {
+                    var count = $(this).attr('count');
+                    var gr_awal = $('.gr_awal' + count).val();
+                    var gr_akhir = $('.gr_akhir' + count).val();
+                    var gr_cu = $(this).val();
+
+                    var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
 
                     var batas_susut = $('.batas_susut' + count).val();
                     var denda_susut = $('.denda_susut' + count).val();
@@ -475,8 +511,9 @@
                     var count = $(this).attr('count');
                     var gr_awal = $('.gr_awal' + count).val();
                     var gr_akhir = $('.gr_akhir' + count).val();
+                    var gr_cu = $('.gr_cu' + count).val();
 
-                    var susut = (1 - (parseFloat(gr_akhir) / parseFloat(gr_awal))) * 100;
+                    var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
                     var batas_susut = $('.batas_susut' + count).val();
                     var denda_susut = $('.denda_susut' + count).val();
 
@@ -499,6 +536,44 @@
                     $('.ttl_rp' + count).text(total);
 
                 });
+
+                $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
+                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                    $('.btn_tutup').removeClass('d-none');
+
+                    $('.btn_tutup').toggle(this.checked);
+                })
+
+                $(document).on('click', '.btn_tutup', function() {
+                    var tipe = $(this).attr('tipe')
+                    var selectedRows = [];
+                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                    $('input[name="cekTutup[]"]:checked').each(function() {
+                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                        // Mengambil ID dari kolom pertama (kolom #)
+                        var anakId = $(this).attr('id_cetak');
+
+                        // Tambahkan ID anak ke dalam array
+                        selectedRows.push(anakId);
+                    });
+                    if (confirm('Apakah anda yakin ?')) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('cetak.ditutup') }}",
+                            data: {
+                                datas: selectedRows,
+                                tipe: tipe
+                            },
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil save')
+                                load_cetak();
+                                $('.btn_tutup').hide();
+                            }
+                        });
+                    }
+
+                })
             </script>
         @endsection
     </x-slot>
