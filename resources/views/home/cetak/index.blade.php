@@ -547,14 +547,8 @@
                 $(document).on('click', '.btn_tutup', function() {
                     var tipe = $(this).attr('tipe')
                     var selectedRows = [];
-                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
                     $('input[name="cekTutup[]"]:checked').each(function() {
-                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
-
-                        // Mengambil ID dari kolom pertama (kolom #)
                         var anakId = $(this).attr('id_cetak');
-
-                        // Tambahkan ID anak ke dalam array
                         selectedRows.push(anakId);
                     });
                     if (confirm('Apakah anda yakin ?')) {
