@@ -60,7 +60,7 @@ class DendaController extends Controller
             'anak' => DB::table('tb_anak')->get(),
             'denda' => $denda,
         ];
-        return view('data_master.denda.index', $data);
+        return view('home.denda.index', $data);
     }
 
     public function create(Request $r)
@@ -87,7 +87,7 @@ class DendaController extends Controller
             'detail' => $detail,
             'anak' => DB::table('tb_anak')->get(),
         ];
-        return view("data_master.denda.detail", $data);
+        return view("home.denda.detail", $data);
     }
 
     public function update(Request $r)
@@ -125,6 +125,6 @@ class DendaController extends Controller
                 GROUP BY a.id_anak"),
         ];
 
-        return view('data_master.denda.print', $data);
+        return view('home.denda.print', $data);
     }
 }

@@ -61,6 +61,7 @@
                     </thead>
                     <tbody>
                         @foreach ($cabutGroup as $i => $d)
+                            
                             <tr>
                                 <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
@@ -83,7 +84,7 @@
                                             FROM cabut as a
                                             left join users as b on b.id = a.id_pengawas
                                             left JOIN bk as c on c.no_box = a.no_box 
-                                            WHERE  a.id_pengawas = '$id'
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
                                             GROUP by a.no_box");
                             @endphp
                             @foreach ($query as $x)

@@ -11,10 +11,11 @@ use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/403', function () {
         view('error.403');
     })->name('403');
@@ -228,5 +229,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/eoCreate', 'eoCreate')->name('eoCreate');
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::post('/cetakCreate', 'cetakCreate')->name('cetakCreate');
+        });
+    Route::controller(PermissionController::class)
+        ->prefix('data_master/permission')
+        ->name('permission.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'create')->name('create');
         });
 });

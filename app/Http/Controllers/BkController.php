@@ -52,6 +52,9 @@ class BkController extends Controller
     {
         for ($x = 0; $x < count($r->no_lot); $x++) {
             if (!empty($r->no_lot[$x])) {
+                $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]); 
+                $gr_awal = str()->remove(' ', $r->gr_awal[$x]); 
+                
                 $data = [
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
@@ -60,8 +63,8 @@ class BkController extends Controller
                     'id_warna' => $r->id_warna[$x],
                     'pengawas' => $r->pgws[$x],
                     'penerima' => $r->nama[$x],
-                    'pcs_awal' => $r->pcs_awal[$x],
-                    'gr_awal' => $r->gr_awal[$x],
+                    'pcs_awal' => $pcs_awal,
+                    'gr_awal' => $gr_awal,
                     'tgl' => $r->tgl_terima[$x],
                     'kategori' => $r->kategori
                 ];

@@ -39,11 +39,12 @@ class HariandllController extends Controller
     public function create(Request $r)
     {
         for ($i = 0; $i < count($r->id_anak); $i++) {
+        $rupiah = str()->remove(',', $r->rupiah[$i]);
             DB::table('tb_hariandll')->insert([
-                'tgl' => $r->tgl,
+                'tgl' => $r->tgl[$i],
                 'id_anak' => $r->id_anak[$i],
                 'ket' => $r->ket[$i],
-                'rupiah' => $r->rupiah[$i],
+                'rupiah' => $rupiah,
                 'lokasi' => $r->lokasi[$i],
             ]);
         }
@@ -61,11 +62,13 @@ class HariandllController extends Controller
 
     public function update(Request $r)
     {
+        $rupiah = str()->remove(',', $r->rupiah);
         DB::table('tb_hariandll')->where('id_hariandll', $r->id_hariandll)->update([
+            
             'tgl' => $r->tgl,
             'id_anak' => $r->id_anak,
             'ket' => $r->ket,
-            'rupiah' => $r->rupiah,
+            'rupiah' => $rupiah,
             'lokasi' => $r->lokasi,
         ]);
         return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil diubah');
