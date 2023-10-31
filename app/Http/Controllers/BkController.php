@@ -31,7 +31,7 @@ class BkController extends Controller
             left join ket_bk as b on b.id_ket_bk = a.id_ket 
             left join warna as c on c.id_warna = a.id_warna 
             left join users as d on d.id = a.penerima 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = '$kategori'")
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%'")
         ];
         return view('home.bk.index', $data);
     }

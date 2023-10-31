@@ -46,6 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                      
                         @foreach ($users as $i => $d)
                         <tr>
                             <td>{{ ucwords($d->name) }}</td>
