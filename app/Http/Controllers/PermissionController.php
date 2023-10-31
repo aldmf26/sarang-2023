@@ -15,6 +15,7 @@ class PermissionController extends Controller
             'users' => DB::table('users as a')->get(),
             'data_master' => $sub_navbar->where('navbar', 1),
             'home' => $sub_navbar->where('navbar', 2),
+            
         ];
         return view('data_master.permission.index', $data);
     }
