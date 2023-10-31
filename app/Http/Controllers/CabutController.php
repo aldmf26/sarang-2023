@@ -87,10 +87,10 @@ class CabutController extends Controller
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut
+                            FROM cabut WHERE no_box != 9999
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE a.tgl_terima BETWEEN '$tgl1' AND '$tgl2'
+                        WHERE a.tgl_terima BETWEEN '$tgl1' AND '$tgl2' AND a.no_box != 9999
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
