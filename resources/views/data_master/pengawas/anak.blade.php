@@ -26,11 +26,10 @@
                             <td>{{ ucwords($d->kelas) }}</td>
                             <td>{{ ucwords($d->name) }}</td>
                             <td>
-                                <x-theme.button modal="Y" idModal="delete" href="#" icon="fa-trash" variant="danger" addClass="float-end delete_nota" teks=""
-                                    data="id={{ $d->id_anak }}" />
+                                <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a>
 
                                 <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen" addClass="float-end edit" teks=""
-                                    data="id={{ $d->id_anak }}" />
+                                data="id={{ $d->id_anak }}" />
                             </td>
                         </tr>
                     @endforeach
@@ -96,7 +95,6 @@
         </form>
 
         {{-- delete --}}
-        {{-- <x-theme.btn_alert_delete route="pengawas.destroy_anak" name="id_anak" tgl1="2022" tgl2="2022" id_proyek="1" /> --}}
 
     </x-slot>
 
