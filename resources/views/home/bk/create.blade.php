@@ -1,10 +1,9 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
-        <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }} {{ $kategori }}</h6>
-        </div>
-        
+        <h6 class="float-start mt-1">{{ $title }} {{ $kategori }}</h6>
+
+
     </x-slot>
 
 
@@ -17,6 +16,23 @@
                 width: auto;
             }
         </style>
+        <form action="" method="GET">
+            <div class="row mb-3">
+                <div class="col-lg-1">
+                    <label for="">Baris</label>
+                    <input type="hidden" name="kategori" value="cabut">
+                    @php
+                        $baris = Request::get('baris') ?? 10;
+                    @endphp
+                    <input min="0" name="baris" value="{{ $baris }}" type="number" class="form-control">
+                </div>
+                <div class="col-lg-1">
+                    <label for="">Aksi</label><br>
+                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+
+            </div>
+        </form>
         <form action="{{ route('bk.create') }}" method="post">
             @csrf
             <section class="row">
@@ -41,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 0; $i < 10; $i++)
+                            @for ($i = 0; $i < $baris; $i++)
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
                                     <td>
@@ -120,7 +136,7 @@
                 // Memperbarui semua elemen dengan kelas .selectPengawas
                 $('.selectPengawas').not(this).each(function() {
                     $(this).val(nilaiselect).trigger(
-                    'change.select2'); // Update nilai Select2 dan trigger event change
+                        'change.select2'); // Update nilai Select2 dan trigger event change
                 });
             });
             $(document).ready(function() {
