@@ -17,19 +17,22 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{$cetak->no_box}}</td>
-                    <td>{{$cetak->grade}}</td>
-                    <td>{{$cetak->nama}}</td>
-                    <td>{{$cetak->pcs_awal}}</td>
-                    <td>{{$cetak->gr_awal}}</td>
+                    <td>{{ $cetak->no_box }}</td>
+                    <td>{{ $cetak->grade }}</td>
+                    <td>{{ $cetak->nama }}</td>
+                    <td>{{ $cetak->pcs_awal }}</td>
+                    <td>{{ $cetak->gr_awal }}</td>
                     <td>
-                        <input type="hidden" name="id_cetak" class="form-control" value="{{$cetak->id_cetak}}">
-                        <input type="text" name="pcs_tidak_ctk" class="form-control" value="{{$cetak->pcs_tidak_ctk}}">
+                        <input type="hidden" name="id_cetak" class="form-control" value="{{ $cetak->id_cetak }}">
+                        <input type="text" name="pcs_tidak_ctk" class="form-control"
+                            value="{{ $cetak->pcs_tidak_ctk }}">
                     </td>
-                    <td><input type="text" name="gr_tidak_ctk" class="form-control" value="{{$cetak->gr_tidak_ctk}}">
+                    <td><input type="text" name="gr_tidak_ctk" class="form-control"
+                            value="{{ $cetak->gr_tidak_ctk }}">
                     </td>
-                    <td><input type="text" name="pcs_akhir" class="form-control" value="{{$cetak->pcs_akhir}}"></td>
-                    <td><input type="text" name="gr_akhir" class="form-control" value="{{$cetak->gr_akhir}}"></td>
+                    <td><input type="text" name="pcs_akhir" class="form-control" value="{{ $cetak->pcs_akhir }}">
+                    </td>
+                    <td><input type="text" name="gr_akhir" class="form-control" value="{{ $cetak->gr_akhir }}"></td>
 
 
                 </tr>

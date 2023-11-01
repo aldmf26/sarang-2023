@@ -69,12 +69,11 @@
                         </td>
                         <td align="center">
                             @if ($d->selesai == 'T')
-                                <a class="btn btn-warning btn-sm inputAkhir" href="#" 
-                                    gr_flx="{{ $d->gr_flx }}" 
-                                    gr_awal="{{ $d->gr_awal }}" 
-                                    gr_akhir="{{ $d->gr_akhir ?? 0 }}" 
-                                    no_box="{{ $d->no_box }}" id_anak="{{ $d->id_anak }}" href="#"
-                                    data-bs-toggle="modal" data-bs-target="#inputAkhir"></i>Akhir</a>
+                                <a class="btn btn-warning btn-sm inputAkhir" href="#"
+                                    gr_flx="{{ $d->gr_flx }}" gr_awal="{{ $d->gr_awal }}"
+                                    gr_akhir="{{ $d->gr_akhir ?? 0 }}" no_box="{{ $d->no_box }}"
+                                    id_anak="{{ $d->id_anak }}" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#inputAkhir"></i>Akhir</a>
                             @else
                                 <span class="badge bg-primary">SELESAI</span>
                             @endif
