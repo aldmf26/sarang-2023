@@ -43,6 +43,7 @@ class BkController extends Controller
             'pengawas' => User::where('posisi_id', 13)->get(),
             'ket_bk' => DB::table('ket_bk')->get(),
             'warna' => DB::table('warna')->get(),
+            'tipe' => DB::table('tipe_cabut')->get(),
             'kategori' => $r->kategori
         ];
         return view('home.bk.create', $data);

@@ -67,7 +67,11 @@
                                         <input name="no_box[]" type="text" class="form-control">
                                     </td>
                                     <td>
-                                        <input name="tipe[]" type="text" class="form-control">
+                                        <select name="tipe[]" id="" class="select3">
+                                            @foreach ($tipe as $k)
+                                                <option value="{{ $k->id_tipe }}">{{ $k->tipe }}</option>
+                                            @endforeach
+                                        </select>
                                     </td>
                                     <td>
                                         <select name="id_ket[]" id="" class="select3">

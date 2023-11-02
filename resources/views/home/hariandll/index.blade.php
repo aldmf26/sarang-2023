@@ -77,7 +77,7 @@
                                 <select required name="id_anak[]" class="form-control select2" id="">
                                     <option value="">- Pilih Anak -</option>
                                     @foreach ($anak as $d)
-                                        <option value="{{ $d->id_anak }}">{{ strtoupper($d->nama) }} - {{{{ $d->name }}}}</option>
+                                        <option value="{{ $d->id_anak }}">{{ strtoupper($d->nama) }}</option>
                                     @endforeach
                                 </select>
                             </td>
