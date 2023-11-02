@@ -18,7 +18,7 @@ class HariandllController extends Controller
             'title' => 'Harian DLL',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'anak' => DB::table('tb_anak as a')->join('users as b', 'a.id_pengawas', 'b.id')->get(),
+            'anak' => DB::table('tb_anak as a')->where('id_pengawas', auth()->user()->id)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->whereBetween('a.tgl', [$tgl1, $tgl2])
