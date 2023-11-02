@@ -55,6 +55,7 @@
                             <th class="text-end dhead">Batas Susut</th>
                             <th class="text-end dhead">Bonus Susut</th>
                             <th class="text-end dhead" width="100">Rp Bonus</th>
+                            <th class="text-end dhead">Batas Eot</th>
                             <th class="text-end dhead">Eot</th>
                             <th class="text-end dhead">Denda Hcr</th>
                             <th class="dhead" width="70">Aksi</th>
@@ -117,6 +118,10 @@
                             <td>
                                 <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                     name="rp_bonus_tambah[]">
+                            </td>
+                            <td>
+                                <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                    name="batas_eot_tambah[]">
                             </td>
                             <td>
                                 <input x-mask:dynamic="$money($input)" class="form-control text-end"
@@ -193,6 +198,10 @@
                                 </td>
                                 <td>
                                     <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                        name="batas_eot_tambah[]">
+                                </td>
+                                <td>
+                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                         name="eot_tambah[]">
                                 </td>
                                 <td>
@@ -266,6 +275,10 @@
                                 <td>
                                     <input x-mask:dynamic=" $money($input)" value="{{ $d->rp_bonus }}"
                                         class="form-control text-end" name="rp_bonus[]">
+                                </td>
+                                <td>
+                                    <input x-mask:dynamic=" $money($input)" value="{{ $d->batas_eot }}"
+                                        class="form-control text-end" name="batas_eot[]">
                                 </td>
                                 <td>
                                     <input x-mask:dynamic=" $money($input)" value="{{ $d->eot }}"

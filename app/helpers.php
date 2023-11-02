@@ -121,6 +121,7 @@ if (!function_exists('rumusTotalRp ')) {
         $result = json_decode('{}'); // Buat objek kosong
 
         $susut = empty($detail->gr_awal) ? 0 : (1 - ($detail->gr_flx + $detail->gr_akhir) / $detail->gr_awal) * 100;
+        $batas_eot = empty($detail->gr_awal) ? 0 : $detail->gr_awal * $detail->batas_eot;
         $denda = 0;
         $bonus_susut = 0;
         $rupiah = $detail->rupiah;
@@ -134,12 +135,13 @@ if (!function_exists('rumusTotalRp ')) {
         }
 
         $denda_hcr = $detail->pcs_hcr * 5000;
-        $eot_bonus = ($detail->eot - $detail->gr_awal * 0.02) * $detail->eot_rp;
+        $eot_bonus = ($detail->eot - $detail->gr_awal * $detail->batas_eot) * $detail->eot_rp;
 
         $ttl_rp = $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
 
         // Set nilai-nilai dalam objek menggunakan json_decode
         $result->susut = $susut;
+        $result->batas_eot = $batas_eot;
         $result->denda = $denda;
         $result->bonus_susut = $bonus_susut;
         $result->rupiah = $rupiah;

@@ -31,7 +31,7 @@ class BkController extends Controller
             left join ket_bk as b on b.id_ket_bk = a.id_ket 
             left join warna as c on c.id_warna = a.id_warna 
             left join users as d on d.id = a.penerima 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%'")
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC")
         ];
         return view('home.bk.index', $data);
     }
@@ -41,21 +41,73 @@ class BkController extends Controller
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
-            'ket_bk' => DB::table('ket_bk')->get(),
-            'warna' => DB::table('warna')->get(),
-            'tipe' => DB::table('tipe_cabut')->get(),
+            'noBoxTerakhir' => DB::table('bk')->where('kategori', 'cabut')->orderBy('id_bk','DESC')->first()->no_box,
             'kategori' => $r->kategori
         ];
         return view('home.bk.create', $data);
+    }
+    public function load_select(Request $r)
+    {
+        $elemen = $r->elemen;
+        $count = $r->count;
+
+        // Mendapatkan data dari database
+        $tipe = DB::table('tipe_cabut')->get();
+        $ket_bk = DB::table('ket_bk')->get();
+        $warna = DB::table('warna')->get();
+
+        // Inisialisasi variabel $data
+        $data = [];
+
+        // Menentukan data berdasarkan elemen yang dipilih
+        if ($elemen === 'tipe') {
+            $data = $tipe;
+        } elseif ($elemen === 'ket') {
+            $data = $ket_bk;
+        } elseif ($elemen === 'warna') {
+            $data = $warna;
+        }
+
+        // Membangun opsi select berdasarkan data
+        $tdContent = '<td><select name="' . $elemen . '[]" id="" pilihan="' . $elemen . '" count="' . $count . '" class="selectTipe select2-tipe">';
+        foreach ($data as $item) {
+            if ($elemen === 'tipe') {
+                $tdContent .= '<option value="' . $item->id_tipe . '">' . $item->tipe . '</option>';
+            } elseif ($elemen === 'ket') {
+                $tdContent .= '<option value="' . $item->id_ket_bk . '">' . $item->ket_bk . '</option>';
+            } elseif ($elemen === 'warna') {
+                $tdContent .= '<option value="' . $item->id_warna . '">' . $item->nm_warna . '</option>';
+            }
+        }
+
+        // Tambahkan opsi "Tambah Baru" di akhir setiap select
+        $tdContent .= '<option value="tambah">+ Baru</option>';
+        $tdContent .= '</select></td>';
+
+        return $tdContent;
+    }
+
+    public function create_select(Request $r)
+    {
+        $pilihanArr = [
+            'ket' => 'ket_bk',
+            'warna' => 'nm_warna',
+            'tipe' => 'tipe_cabut',
+        ];
+        $pilihan = $pilihanArr[$r->pilihan];
+
+        DB::table($pilihan)->insert([
+            $pilihan == 'tipe_cabut' ? 'tipe' : $pilihan => $r->ket
+        ]);
     }
 
     public function create(Request $r)
     {
         for ($x = 0; $x < count($r->no_lot); $x++) {
-            if (!empty($r->no_lot[$x])) {
-                $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]); 
-                $gr_awal = str()->remove(' ', $r->gr_awal[$x]); 
-                
+            if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
+                $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
+                $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
+
                 $data = [
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],

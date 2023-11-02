@@ -31,8 +31,8 @@ class KelasController extends Controller
     public function cabutCreate(Request $r)
     {
         $buang = [
-            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'eot', 'denda_hcr',
-            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'eot_tambah', 'denda_hcr_tambah'
+            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'batas_eot','eot', 'denda_hcr',
+            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'batas_eot_tambah','eot_tambah', 'denda_hcr_tambah'
         ];
         foreach ($buang as $d) {
             $r->$d = str()->remove(',', $r->$d);
@@ -49,6 +49,7 @@ class KelasController extends Controller
                     'batas_susut' => $r->batas_susut_tambah[$i],
                     'denda_susut_persen' => $r->denda_susut_persen_tambah[$i],
                     'bonus_susut' => $r->bonus_susut_tambah[$i],
+                    'batas_eot' => $r->batas_eot_tambah[$i],
                     'eot' => $r->eot_tambah[$i],
                     'denda_hcr' => $r->denda_hcr_tambah[$i],
                     'id_kategori' => $r->id_kategori_tambah[$i],
@@ -72,6 +73,7 @@ class KelasController extends Controller
                     'denda_susut_persen' => $r->denda_susut_persen[$i],
                     'batas_susut' => $r->batas_susut[$i],
                     'bonus_susut' => $r->bonus_susut[$i],
+                    'batas_eot' => $r->batas_eot[$i],
                     'eot' => $r->eot[$i],
                     'denda_hcr' => $r->denda_hcr[$i],
                 ]);

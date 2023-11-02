@@ -13,7 +13,7 @@
                 color: #000000;
                 line-height: 36px;
                 font-size: 12px;
-                width: auto;
+                width: 75px !important;
             }
         </style>
         <form action="" method="GET">
@@ -24,7 +24,8 @@
                     @php
                         $baris = Request::get('baris') ?? 10;
                     @endphp
-                    <input min="0" name="baris" value="{{ $baris }}" type="number" class="form-control">
+                    <input min="0" name="baris" value="{{ $baris }}" type="number"
+                        class="form-control">
                 </div>
                 <div class="col-lg-1">
                     <label for="">Aksi</label><br>
@@ -47,45 +48,35 @@
                                 <th class="dhead">No Lot</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
-                                <th class="dhead" width="80">Ket</th>
-                                <th class="dhead" width="60">Warna</th>
+                                <th class="dhead">Ket</th>
+                                <th class="dhead">Warna</th>
                                 <th class="dhead">Pgws</th>
                                 <th class="dhead" width="120">Nama</th>
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
-                                <th class="dhead text-end">Gr Awal</th>
+                                <th class="dhead text-end">Gr Awal {{ $noBoxTerakhir }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 0; $i < $baris; $i++)
+                            @for ($i = 1; $i <= $baris; $i++)
                                 <tr>
-                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $i }}</td>
                                     <td>
-                                        <input name="no_lot[]" type="text" class="form-control">
+                                        <input name="no_lot[]" type="number" class="form-control nolot"
+                                            count="{{ $i }}">
                                     </td>
                                     <td>
-                                        <input name="no_box[]" type="text" class="form-control">
+                                        <input readonly value="{{ $noBoxTerakhir + $i }}" name="no_box[]" type="text"
+                                            class="form-control">
                                     </td>
                                     <td>
-                                        <select name="tipe[]" id="" class="select3">
-                                            @foreach ($tipe as $k)
-                                                <option value="{{ $k->id_tipe }}">{{ $k->tipe }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div count="{{ $i }}" class="load_tipe"></div>
                                     </td>
                                     <td>
-                                        <select name="id_ket[]" id="" class="select3">
-                                            @foreach ($ket_bk as $k)
-                                                <option value="{{ $k->id_ket_bk }}">{{ $k->ket_bk }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div count="{{ $i }}" class="load_ket"></div>
                                     </td>
                                     <td>
-                                        <select name="id_warna[]" id="" class="select3">
-                                            @foreach ($warna as $w)
-                                                <option value="{{ $w->id_warna }}">{{ $w->nm_warna }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div count="{{ $i }}" class="load_warna"></div>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" readonly
@@ -119,6 +110,7 @@
                 </div>
 
             </section>
+
     </x-slot>
     <x-slot name="cardFooter">
         <button type="submit" class="float-end btn btn-primary button-save">Simpan</button>
@@ -128,11 +120,116 @@
         </button>
         <a href="{{ route('bk.index') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
         </form>
+
+        <form id="formSelect">
+            <x-theme.modal title="Tambah Data" idModal="selectTipe">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Jenis</label>
+                            <input readonly type="text" id="pilihanSelect" class="form-control" name="pilihan">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <input type="text" name="ket" class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+            </x-theme.modal>
+        </form>
     </x-slot>
     @section('scripts')
         <script>
             $(".select3").select2()
             $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
+
+            $('.nolot').on('keyup', function() {
+                var currentCount = $(this).attr('count');
+                var currentValue = $(this).val();
+
+                var shouldUpdate = false;
+                $('.nolot').each(function() {
+                    var count = $(this).attr('count');
+                    if (shouldUpdate) {
+                        $(this).val(currentValue);
+                    }
+                    if (count === currentCount) {
+                        shouldUpdate = true;
+                    }
+                });
+            });
+
+            function loadSelect(elemen, baris) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('bk.load_select') }}",
+                    data: {
+                        elemen: elemen,
+                        count: baris
+                    },
+                    success: function(r) {
+                        $('.load_' + elemen).html(r);
+                        $(".select2-tipe").select2()
+                    }
+                });
+            }
+            loadSelect('tipe');
+            loadSelect('ket');
+            loadSelect('warna');
+
+            function selectBerubah(tipe) {
+                $(document).on('change', `.selectTipe[pilihan=${tipe}]`, function() {
+                    var nilai = $(this).val()
+                    var currentCount = $(this).closest(`.load_${tipe}`).attr('count');
+                    var shouldUpdate = false;
+    
+                    $(`.selectTipe[pilihan=${tipe}]`).each(function() {
+                        var count = $(this).closest(`.load_${tipe}`).attr('count');
+                        if (shouldUpdate) {
+                            $(this).val(nilai).trigger('change.select2');
+                        }
+                        if (count === currentCount) {
+                            shouldUpdate = true;
+                        }
+                    });
+    
+                })
+            }
+            selectBerubah('tipe')
+            selectBerubah('ket')
+            selectBerubah('warna')
+
+
+            $(document).on('change', '.selectTipe', function() {
+                var nilai = $(this).val()
+                var pilihan = $(this).attr('pilihan')
+                if (nilai == 'tambah') {
+                    $("#selectTipe").modal('show')
+                    $("#pilihanSelect").val(pilihan);
+                }
+            })
+
+            $(document).on('submit', '#formSelect', function(e) {
+                e.preventDefault();
+                var form = $(this).serialize()
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('bk.create_select') }}",
+                    data: form,
+                    success: function(r) {
+                        $("#selectTipe").modal('hide')
+                        loadSelect('tipe')
+                        loadSelect('ket')
+                        loadSelect('warna')
+                        alertToast('sukses', 'Berhasil  tambah data')
+                    }
+                });
+            })
+
 
             $('.selectPengawas').on('change', function() {
                 var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
@@ -141,66 +238,6 @@
                 $('.selectPengawas').not(this).each(function() {
                     $(this).val(nilaiselect).trigger(
                         'change.select2'); // Update nilai Select2 dan trigger event change
-                });
-            });
-            $(document).ready(function() {
-                $(document).on("keyup", ".pcs_awal", function() {
-                    var pcs_awal = $(this).val();
-                    var pcs_hcr = $('.pcs_hcr').val();
-                    var pcs_flex = $('.pcs_flex').val();
-
-                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
-
-                    $('.pcs_ttl').val(total_pcs);
-                });
-                $(document).on("keyup", ".pcs_hcr", function() {
-                    var pcs_hcr = $(this).val();
-                    var pcs_awal = $('.pcs_awal').val();
-                    var pcs_flex = $('.pcs_flex').val();
-
-                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
-
-                    $('.pcs_ttl').val(total_pcs);
-                });
-                $(document).on("keyup", ".pcs_flex", function() {
-                    var pcs_hcr = $('.pcs_hcr').val();
-                    var pcs_awal = $('.pcs_awal').val();
-                    var pcs_flex = $(this).val();
-
-                    var total_pcs = parseFloat(pcs_awal) + parseFloat(pcs_hcr) + parseFloat(pcs_flex);
-
-                    $('.pcs_ttl').val(total_pcs);
-                });
-
-
-                // Gram
-
-                $(document).on("keyup", ".gr_awal", function() {
-                    var gr_awal = $(this).val();
-                    var gr_hcr = $('.gr_hcr').val();
-                    var gr_flex = $('.gr_flex').val();
-
-                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                    $('.gr_ttl').val(total_gr);
-                });
-                $(document).on("keyup", ".gr_hcr", function() {
-                    var gr_hcr = $(this).val();
-                    var gr_awal = $('.gr_awal').val();
-                    var gr_flex = $('.gr_flex').val();
-
-                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                    $('.gr_ttl').val(total_gr);
-                });
-                $(document).on("keyup", ".gr_flex", function() {
-                    var gr_hcr = $('.gr_hcr').val();
-                    var gr_awal = $('.gr_awal').val();
-                    var gr_flex = $(this).val();
-
-                    var total_gr = parseFloat(gr_awal) + parseFloat(gr_hcr) + parseFloat(gr_flex);
-
-                    $('.gr_ttl').val(total_gr);
                 });
             });
         </script>

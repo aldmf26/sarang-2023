@@ -62,6 +62,7 @@ class DashboardController extends Controller
                 'c.bonus_susut',
                 'c.denda_hcr',
                 'c.eot as eot_rp',
+                'c.batas_eot',
                 'b.id_kelas',
                 'c.rp_bonus',
                 'a.tgl_serah',

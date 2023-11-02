@@ -82,6 +82,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/load_select', 'load_select')->name('load_select');
+            Route::get('/create_select', 'create_select')->name('create_select');
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
