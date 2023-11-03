@@ -6,7 +6,7 @@
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.btn_filter />
+        {{-- <x-theme.btn_filter /> --}}
     </x-slot>
 
     <x-slot name="cardBody">
