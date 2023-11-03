@@ -18,6 +18,9 @@ Route::get('/', function () {
 Route::get('/template1', function () {
     return view('template-notable');
 })->name('template1');
+Route::get('/template-chart', function () {
+    return view('template-chart');
+})->name('template1');
 Route::get('/template2', function () {
     return redirect()->route('dashboard.index');
 })->name('template2');

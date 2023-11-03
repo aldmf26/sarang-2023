@@ -90,7 +90,7 @@ class CabutController extends Controller
                             FROM cabut WHERE no_box != 9999
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE a.tgl_terima BETWEEN '$tgl1' AND '$tgl2' AND a.no_box != 9999
+                        WHERE  a.no_box != 9999
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }

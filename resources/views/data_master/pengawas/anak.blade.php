@@ -54,10 +54,10 @@
                             <select name="kelas" class="select2" id="">
                                 <option value="">Kelas</option>
                                 @php
-                                    $kelas = DB::table('tb_kelas')->get();
+                                    $kelas = [1,2,3];
                                 @endphp
                                 @foreach ($kelas as $k)
-                                    <option value="{{ $k->id_kelas }}">{{ $k->kelas }} - {{ $k->lokasi }}</option>
+                                    <option value="{{ $k }}">{{ $k }}</option>
                                 @endforeach
                             </select>
                         </div>
