@@ -21,7 +21,6 @@ class HariandllController extends Controller
             'anak' => DB::table('tb_anak as a')->where('id_pengawas', auth()->user()->id)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];
