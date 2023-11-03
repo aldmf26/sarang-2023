@@ -10,24 +10,40 @@
     </x-slot>
 
     <x-slot name="cardBody">
-      
+
         <section class="row">
-            <table class="table" id="table1">
+            <table class="table" id="tableHalaman">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Tanggal</th>
-                        <th>Nama Anak</th>
-                        <th>Keterangan</th>
-                        <th>Lokasi</th>
+                        <th class="dhead">#</th>
+                        <th class="dhead">Tanggal</th>
+                        <th class="dhead">Nama Anak</th>
+                        <th class="dhead">Keterangan</th>
+                        <th class="dhead">Lokasi</th>
                         @php
-                        $ttlRp = 0;
-                            foreach($datas as $d) {
+                            $ttlRp = 0;
+                            foreach ($datas as $d) {
                                 $ttlRp += $d->rupiah;
                             }
                         @endphp
-                        <th class="text-end">Rupiah <br> (Rp {{number_format($ttlRp,0)}})</th>
-                        <th>Aksi</th>
+                        <th class="text-end dhead">Rupiah <br> (Rp {{ number_format($ttlRp, 0) }})</th>
+                        <th class="dhead">
+                            @php
+                                $adaDitutup = DB::table('tb_hariandll')
+                                    ->where('ditutup', 'T')
+                                    ->first();
+                            @endphp
+                            @if (!empty($adaDitutup))
+                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                            @endif
+                            <br>
+                            <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
+                                    class="fas fa-check"></i> Tutup </span>
+                            <span class="badge bg-danger btn_tutup d-none mt-3" tipe="edit"
+                                style="cursor: pointer">Edit</span>
+                            {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
+                                teks="Tutup" /> --}}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,12 +56,15 @@
                             <td>{{ $d->lokasi }}</td>
                             <td class="text-end">{{ number_format($d->rupiah, 0) }}</td>
                             <td>
-
-                                <x-theme.button modal="Y" idModal="delete" data="no_nota={{ $d->id_hariandll }}"
-                                    icon="fa-trash" addClass="float-end delete_nota" teks="" variant="danger" />
-                                <x-theme.button modal="Y" idModal="edit" icon="fa-pen"
+                                @if ($d->ditutup != 'Y')
+                                    <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
+                                        id_cabut="{{ $d->id_hariandll }}">
+                                @endif
+                                {{-- <x-theme.button modal="Y" idModal="delete" data="no_nota={{ $d->id_hariandll }}"
+                                    icon="fa-trash" addClass="float-end delete_nota" teks="" variant="danger" /> --}}
+                                {{-- <x-theme.button modal="Y" idModal="edit" icon="fa-pen"
                                     addClass="me-1 float-end edit-btn" teks=""
-                                    data="id_hariandll={{ $d->id_hariandll }}" />
+                                    data="id_hariandll={{ $d->id_hariandll }}" /> --}}
                             </td>
                         </tr>
                     @endforeach
@@ -127,8 +146,70 @@
         <x-theme.btn_alert_delete route="hariandll.delete" name="urutan" :tgl1="$tgl1" :tgl2="$tgl2" />
         @section('js')
             <script>
+                $('#tableHalaman').DataTable({
+                    "searching": true,
+                    scrollY: '400px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    "autoWidth": false,
+                    "paging": false,
+                    "ordering": false
+                });
+                inputChecked('cekSemuaTutup', 'cekTutup')
+                $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
+                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                    $('.btn_tutup').removeClass('d-none');
+
+                    $('.btn_tutup').toggle(this.checked);
+                })
                 plusRow(1, 'tbh_baris', "hariandll/tbh_baris")
-                detail('edit-btn', 'id_hariandll', 'hariandll/edit_load', 'editBody')
+                $(document).on('click', '.btn_tutup', function() {
+                    var tipe = $(this).attr('tipe')
+                    var selectedRows = [];
+                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                    $('input[name="cekTutup[]"]:checked').each(function() {
+                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                        // Mengambil ID dari kolom pertama (kolom #)
+                        var anakId = $(this).attr('id_cabut');
+
+                        // Tambahkan ID anak ke dalam array
+                        selectedRows.push(anakId);
+                    });
+                    if (tipe == 'edit') {
+                        $('#edit').modal('show')
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('hariandll.edit') }}",
+                            data: {
+                                id: selectedRows
+                            },
+                            success: function(response) {
+                                $("#editBody").html(response);
+                                alertToast('sukses', 'Berhasil save')
+                            }
+                        });
+                    } else {
+                        if (confirm('Apakah anda yakin ?')) {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ route('hariandll.delete') }}",
+                                data: {
+                                    id: selectedRows,
+                                },
+                                success: function(r) {
+                                    window.location.reload()
+                                    alertToast('sukses', 'Berhasil save')
+                                }
+                            });
+                        }
+                    }
+
+
+                })
+
+                $(document).on('click', '.edit', function() {})
+                // detail('edit-btn', 'id_hariandll', 'hariandll/edit_load', 'editBody')
             </script>
         @endsection
     </x-slot>

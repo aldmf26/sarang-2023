@@ -21,6 +21,7 @@ class HariandllController extends Controller
             'anak' => DB::table('tb_anak as a')->where('id_pengawas', auth()->user()->id)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->where('ditutup', 'T')
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];
@@ -50,10 +51,10 @@ class HariandllController extends Controller
         return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
-    public function edit_load($id)
+    public function edit(Request $r)
     {
         $data = [
-            'detail' => DB::table('tb_hariandll')->where('id_hariandll', $id)->first(),
+            'detail' => DB::table('tb_hariandll')->whereIn('id_hariandll', $r->id)->get(),
             'anak' => DB::table('tb_anak')->get(),
         ];
         return view('home.hariandll.edit_load', $data);
@@ -61,22 +62,25 @@ class HariandllController extends Controller
 
     public function update(Request $r)
     {
-        $rupiah = str()->remove(',', $r->rupiah);
-        DB::table('tb_hariandll')->where('id_hariandll', $r->id_hariandll)->update([
-            
-            'tgl' => $r->tgl,
-            'id_anak' => $r->id_anak,
-            'ket' => $r->ket,
-            'rupiah' => $rupiah,
-            'lokasi' => $r->lokasi,
-        ]);
+        for ($i=0; $i < count($r->tgl); $i++) { 
+            $rupiah = str()->remove(',', $r->rupiah[$i]);
+            DB::table('tb_hariandll')->where('id_hariandll', $r->id_hariandll[$i])->update([
+                
+                'tgl' => $r->tgl[$i],
+                'id_anak' => $r->id_anak[$i],
+                'ket' => $r->ket[$i],
+                'rupiah' => $rupiah,
+                'lokasi' => $r->lokasi[$i],
+            ]);
+        }
         return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil diubah');
     }
 
     public function delete(Request $r)
     {
-        DB::table('tb_hariandll')->where('id_hariandll', $r->urutan)->delete();
-        return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil dihapus');
+        for ($i=0; $i < count($r->id); $i++) { 
+            DB::table('tb_hariandll')->where('id_hariandll', $r->id[$i])->update(['ditutup' => 'Y']);
+        }
     }
 
     public function export(Request $r)

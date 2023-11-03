@@ -206,7 +206,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/export', 'export')->name('export');
             Route::post('/update', 'update')->name('update');
-            Route::get('/edit_load/{id}', 'edit_load')->name('edit_load');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
