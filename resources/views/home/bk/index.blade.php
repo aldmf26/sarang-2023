@@ -1,6 +1,8 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">{{ $title }}</h6>
+        <div class="col-lg-6">
+            <h6 class="float-start mt-1">{{ $title }}</h6>
+        </div>
         <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
         <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
@@ -10,14 +12,12 @@
         <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
             teks="Tambah" />
         <x-theme.btn_filter />
-
-
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-8">
-                @include('home.bk.nav')
+                @include('home.bk.nav', ['name' => 'index'])
             </div>
             <div class="col-lg-4 mb-2">
                 <table class="float-end">

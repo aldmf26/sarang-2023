@@ -111,6 +111,7 @@
                         dropdownParent: $('#tambah2 .modal-content')
 
                     });
+                    $('.select2-aja').select2()
                     $(".select3-add").select2({
                         dropdownParent: $('#tambah .modal-content'),
                     })

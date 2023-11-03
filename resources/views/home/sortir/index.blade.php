@@ -1,6 +1,6 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">{{ $title }}</h6>
+        {{-- <h6 class="float-start mt-1">{{ $title }}</h6>
         <x-theme.button href="{{ route('sortir.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
         <a href="{{ route('sortir.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
@@ -10,6 +10,35 @@
             teks="Krywn" />
         <x-theme.btn_filter />
 
+         --}}
+        <div class="col-lg-6">
+            <h6 class="float-start mt-1">{{ $title }}</h6>
+
+        </div>
+        <div class="col-lg-6">
+
+            <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                class="float-end btn btn-sm btn-primary me-2">
+                <i class="fas fa-file-excel"></i> Export
+            </a>
+            {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
+            teks="List anak sisa" /> --}}
+            <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
+                teks="Cabut" />
+            <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+                    class="badge bg-danger" id="anakBelum"></span>
+            </a>
+
+            <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+                teks="kry baru" />
+        </div>
+        {{-- <div class="col-lg-12">
+            <br>
+            <hr style="border: 2px solid #435EBE">
+
+        </div>
+        @include('home.cabut.nav') --}}
     </x-slot>
 
     <x-slot name="cardBody">

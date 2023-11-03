@@ -1,9 +1,15 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">{{ $title }} {{ $kategori }}</h6>
-
-
+        <div class="col-lg-6">
+            <h6 class="float-start mt-1">{{ $title }} {{ucwords($kategori)}}</h6>
+        </div>
+        <div class="col-lg-12"><br>
+            <hr style="border: 2px solid #435EBE">
+        </div>
+        
+        @include('home.bk.nav', ['name' => 'add'])
+  
     </x-slot>
 
 
@@ -54,7 +60,7 @@
                                 <th class="dhead" width="120">Nama</th>
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
-                                <th class="dhead text-end">Gr Awal {{ $noBoxTerakhir }}</th>
+                                <th class="dhead text-end">Gr Awal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,8 +72,8 @@
                                             count="{{ $i }}">
                                     </td>
                                     <td>
-                                        <input readonly value="{{ $noBoxTerakhir + $i }}" name="no_box[]" type="text"
-                                            class="form-control">
+                                        <input value="{{ $noBoxTerakhir + $i }}" name="no_box[] nobox"
+                                            count="{{ $i }}" type="text" class="form-control">
                                     </td>
                                     <td>
                                         <div count="{{ $i }}" class="load_tipe"></div>
@@ -162,6 +168,20 @@
                     }
                 });
             });
+            // $('.nobox').on('keyup', function() {
+            //     var currentCount = $(this).attr('count');
+            //     var currentValue = $(this).val();
+            //     var shouldUpdate = false;
+            //     $('.nobox').each(function() {
+            //         var count = $(this).attr('count');
+            //         if (shouldUpdate) {
+            //             $(this).val(currentValue + 1);
+            //         }
+            //         if (count === currentCount) {
+            //             shouldUpdate = true;
+            //         }
+            //     });
+            // });
 
             function loadSelect(elemen, baris) {
                 $.ajax({
@@ -186,7 +206,7 @@
                     var nilai = $(this).val()
                     var currentCount = $(this).closest(`.load_${tipe}`).attr('count');
                     var shouldUpdate = false;
-    
+
                     $(`.selectTipe[pilihan=${tipe}]`).each(function() {
                         var count = $(this).closest(`.load_${tipe}`).attr('count');
                         if (shouldUpdate) {
@@ -196,7 +216,7 @@
                             shouldUpdate = true;
                         }
                     });
-    
+
                 })
             }
             selectBerubah('tipe')

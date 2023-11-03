@@ -41,7 +41,7 @@ class BkController extends Controller
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
-            'noBoxTerakhir' => DB::table('bk')->where('kategori', 'cabut')->orderBy('id_bk','DESC')->first()->no_box,
+            'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk','DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori
         ];
         return view('home.bk.create', $data);
@@ -112,8 +112,8 @@ class BkController extends Controller
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
-                    'id_ket' => $r->id_ket[$x],
-                    'id_warna' => $r->id_warna[$x],
+                    'id_ket' => $r->ket[$x],
+                    'id_warna' => $r->warna[$x],
                     'pengawas' => $r->pgws[$x],
                     'penerima' => $r->nama[$x],
                     'pcs_awal' => $pcs_awal,

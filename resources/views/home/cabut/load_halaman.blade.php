@@ -63,7 +63,7 @@
                                 $warna =  $d->eot < rumusTotalRp($d)->batas_eot ? 'text-danger' : '';
                             }
                         @endphp
-                        <td align="right" class="{{$warna}}">{{ $d->eot ?? 0 }}</td>
+                        <td align="right" class="{{$warna ?? ''}}">{{ $d->eot ?? 0 }}</td>
                         <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
                         @php
                             $hasil = rumusTotalRp($d);
