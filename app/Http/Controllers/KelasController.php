@@ -284,4 +284,13 @@ class KelasController extends Controller
 
         return redirect()->route('kelas.cetak')->with('sukses', 'Data Berhasil ditambahkan');
     }
+
+    public function sortir()
+    {
+        $data = [
+            'datas' => DB::table('tb_kelas_sortir')->get(),
+            'title' => 'Kelas Sortir'
+        ];
+        return view('data_master.kelas.sortir',$data);
+    }
 }

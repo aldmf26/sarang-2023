@@ -34,8 +34,8 @@
                 const data = {
                     labels: labels,
                     datasets: [{
-                        label: 'My First Dataset',
-                        data: [65, 59, 80, 81, 56, 55, 40],
+                        label: 'Total Uang Keluar',
+                        data: [10000, 5900, 8000, 8100, 5600, 5500, 4000],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(255, 159, 64, 0.2)',
