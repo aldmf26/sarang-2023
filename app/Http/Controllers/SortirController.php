@@ -153,6 +153,7 @@ class SortirController extends Controller
         $getSortir->update([
             'pcs_akhir' => $pcs_akhir,
             'gr_akhir' => $gr_akhir,
+            'bulan' => $bulan,
             'ttl_rp' => $rupiah,
             'denda_sp' => $denda,
         ]);
@@ -312,8 +313,7 @@ class SortirController extends Controller
         $tbl = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-            ->where('a.id_pengawas', auth()->user()->id)
-            ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            ->where([['a.id_pengawas', auth()->user()->id],['no_box', '!=', 9999]])
             ->orderBy('id_sortir', 'DESC')
             ->get();
 

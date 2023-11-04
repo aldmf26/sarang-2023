@@ -11,7 +11,7 @@
                     <th class="dhead text-end">Pcs Akhir</th>
                     <th class="dhead text-end">Gr Akhir</th>
                     <th class="dhead text-end">Susut</th>
-                    <th class="dhead">Bulan</th>
+                    <th class="dhead" width="80">Bulan</th>
                     <th class="dhead text-center" width="140">Aksi</th>
                 </tr>
             </thead>
@@ -48,7 +48,7 @@
                             $susut = empty($v->gr_akhir) ? 0 : (1 - $v->gr_akhir / $v->gr_awal) * 100;
                         @endphp
                         <td class="susut{{ $i }} text-end">
-                            {{ $susut }} %
+                            {{ number_format($susut,0) }} %
                         </td>
                         <td>
                             <select name="bulan{{ $i }}[]" class="form-control">
@@ -59,7 +59,7 @@
                                 @foreach ($listBulan as $l)
                                     <option value="{{ $l->bulan }}"
                                         {{ $v->bulan == $l->bulan ? 'selected' : '' }}>
-                                        {{ $l->nm_bulan }}</option>
+                                        {{ substr($l->nm_bulan,0,3) }}</option>
                                 @endforeach
                             </select>
                         </td>
