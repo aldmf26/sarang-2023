@@ -131,16 +131,24 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
-            Route::post('/', 'create')->name('create');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
-            Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
+            Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
+            Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
+            Route::get('/selesai_sortir', 'selesai_sortir')->name('selesai_sortir');
+            Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/load_anak', 'load_anak')->name('load_anak');
+            Route::get('/load_tambah_sortir', 'load_tambah_sortir')->name('load_tambah_sortir');
+            Route::get('/load_tambah_anak', 'load_tambah_anak')->name('load_tambah_anak');
+            Route::get('/load_tambah_anak', 'load_tambah_anak')->name('load_tambah_anak');
+            Route::get('/createTambahAnakSortir', 'createTambahAnakSortir')->name('createTambahAnakSortir');
+            Route::get('/hapusKerjaSortir', 'hapusKerjaSortir')->name('hapusKerjaSortir');
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
-            Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::get('/export', 'export')->name('export');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');

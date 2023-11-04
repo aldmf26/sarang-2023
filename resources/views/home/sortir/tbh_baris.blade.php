@@ -1,6 +1,6 @@
 <tr class="baris{{ $count }}">
     <td>
-        <select name="id_anak[]" id="" class="select2-aja pilihAnak" count="{{ $count }}">
+        <select name="id_anak[]" id="" class="select2-add pilihAnak" count="{{ $count }}">
             <option value="">Pilih Anak</option>
 
             @foreach ($anak as $d)

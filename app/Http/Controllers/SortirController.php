@@ -40,6 +40,8 @@ class SortirController extends Controller
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+            'boxBk' => $this->getStokBk(),
+            'anak' => $this->getAnak(),
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
@@ -87,10 +89,11 @@ class SortirController extends Controller
 
     public function create(Request $r)
     {
+        
         for ($i = 0; $i < count($r->rupiah); $i++) {
             $rupiah = str()->remove('.', $r->rupiah[$i]);
 
-            DB::table('sortir')->insert([
+            DB::table('sortir')->where('id_sortir', $r->id_sortir[$i])->update([
                 'no_box' => $r->no_box,
                 'tgl' => $r->tgl_terima[$i],
                 'id_pengawas' => $r->id_pengawas,
@@ -105,12 +108,20 @@ class SortirController extends Controller
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
+    public function cancel(Request $r)
+    {
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->update([
+            'no_box' => 9999,
+            'tgl' => date('Y-m-d'),
+        ]);
+    }
+
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
-            ->first();
+            ->where([['selesai', 'T'],['no_box', '!=', 9999]])
+            ->get();
         $data = [
             'detail' => $detail
         ];
@@ -119,9 +130,16 @@ class SortirController extends Controller
 
     public function input_akhir(Request $r)
     {
-        $getSortir = DB::table('sortir')->where([['id_anak', $r->id_anak], ['no_box', $r->no_box]]);
+        $id_anak = $r->id_anak;
+        $no_box = $r->no_box;
+        $gr_akhir = $r->gr_akhir;
+        $pcs_akhir = $r->pcs_akhir;
+        $id_sortir = $r->id_sortir;
+        $bulan = $r->bulan;
+
+        $getSortir = DB::table('sortir')->where([['id_anak', $id_anak], ['no_box', $no_box]]);
         $get = $getSortir->first();
-        $susut = $r->gr_akhir == 0  ? 0 : (1 - $r->gr_akhir / $get->gr_awal) * 100;
+        $susut = $gr_akhir == 0  ? 0 : (1 - $gr_akhir / $get->gr_awal) * 100;
 
         $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $get->id_kelas)->first();
 
@@ -133,13 +151,37 @@ class SortirController extends Controller
         }
 
         $getSortir->update([
-            'pcs_akhir' => $r->pcs_akhir,
-            'gr_akhir' => $r->gr_akhir,
+            'pcs_akhir' => $pcs_akhir,
+            'gr_akhir' => $gr_akhir,
             'ttl_rp' => $rupiah,
             'denda_sp' => $denda,
         ]);
 
-        return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil Ditambahkan');
+        // return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil Ditambahkan');
+    }
+
+    public function load_halaman(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+
+
+        $data = [
+            'title' => 'Sortir Divisi',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+
+            'cabut' => DB::table('sortir as a')
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+                ->orderBy('id_sortir', 'DESC')
+                ->get()
+        ];
+
+        return view('home.sortir.load_halaman', $data);
     }
 
     public function load_anak()
@@ -207,10 +249,59 @@ class SortirController extends Controller
         }
         return redirect()->route('cabut.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
-    public function selesai_cabut(Request $r)
+    public function selesai_sortir(Request $r)
     {
-        DB::table('sortir')->where('id_sortir', $r->id_cabut)->update(['selesai' => empty($r->batal) ? 'Y' : 'T']);
-        return redirect()->route('sortir.index')->with('sukses', 'Data telah diselesaikan');
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->update(['selesai' => 'Y']);
+    }
+
+    public function ditutup(Request $r)
+    {
+        $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
+        foreach ($r->datas as $d) {
+            DB::table('sortir')->where('id_sortir', $d)->update($data);
+        }
+    }
+
+    public function load_tambah_sortir()
+    {
+        $data = [
+            'boxBk' => $this->getStokBk(),
+            'datas' => DB::table('sortir as a')
+                        ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                        ->where('a.no_box', 9999)
+                        ->get()
+        ];
+        return view('home.sortir.load_tambah_sortir', $data);
+    }
+
+    public function hapusKerjaSortir(Request $r)
+    {
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->delete();
+        return 'berhasil';
+    }
+
+    public function load_tambah_anak()
+    {
+        $data = [
+            'anak' => $this->getAnak()
+        ];
+        return view('home.sortir.load_tambah_anak', $data);
+    }
+
+    public function createTambahAnakSortir(Request $r)
+    {
+        $tgl = date('Y-m-d');
+        $id_pengawas = auth()->user()->id;
+        foreach ($r->all()['rows'] as $d) {
+
+            DB::table('sortir')->insertGetId([
+                'no_box' => 9999,
+                'id_pengawas' => $id_pengawas,
+                'id_anak' => $d,
+                'tgl' => $tgl
+            ]);
+        }
+        return 'Berhasil tambah anak';
     }
 
     public function export(Request $r)

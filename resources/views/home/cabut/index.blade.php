@@ -652,6 +652,7 @@
                         success: function(r) {
                             alertToast('sukses', 'Berhasil input akhir')
                             // $('#inputAkhir').modal('hide')
+                            load_input_akhir()
                             loadHalaman()
                         }
                     });

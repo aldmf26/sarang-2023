@@ -40,6 +40,7 @@ class AbsenController extends Controller
         JOIN tb_anak AS c ON a.id_anak = c.id_anak
         WHERE a.id_pengawas = '$r->id_pengawas' AND MONTH(a.tgl) = '$bulan' AND YEAR(a.tgl) = '$tahun'
         group BY a.id_anak");
+        
 
         $data = [
             'absen' => $absen,

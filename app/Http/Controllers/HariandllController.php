@@ -90,7 +90,7 @@ class HariandllController extends Controller
         $view = 'home.hariandll.export';
         $tbl = DB::table('tb_hariandll  as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            ->where('a.ditutup', 'T')
             ->orderBy('a.id_hariandll', 'DESC')
             ->get();
 

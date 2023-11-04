@@ -1,3 +1,6 @@
+@if (empty($absen))
+kosong
+@else
 <div class="row">
     <form id="viewDetailAbsen">
         <div class="col-lg-12">
@@ -17,8 +20,7 @@
                         @endphp
                         <select name="bulan" class="form-control select2" id="">
                             @foreach ($bulan as $d)
-                                <option {{ $bulanGet == $d->bulan ? 'selected' : '' }}
-                                    value="{{ $d->bulan }}">
+                                <option {{ $bulanGet == $d->bulan ? 'selected' : '' }} value="{{ $d->bulan }}">
                                     {{ $d->nm_bulan }}
                                 </option>
                             @endforeach
@@ -45,21 +47,19 @@
         </div>
     </form>
 </div>
-@empty($absen[0])
-    kosong
-@else
-    
 
-    <table class="table table-boredered" id="tableDetailAbsen">
-        <thead>
-            <tr>
-                <th class="">#</th>
-                <th class="">Nama Anak</th>
-                <th class="">Kelas</th>
-                <th class="text-center">Ttl Absen</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table table-boredered" id="tableDetailAbsen">
+    <thead>
+        <tr>
+            <th class="">#</th>
+            <th class="">Nama Anak</th>
+            <th class="">Kelas</th>
+            <th class="text-center">Ttl Absen</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (empty($absen))
+            @else
             @foreach ($absen as $i => $d)
                 <tr>
                     <td>{{ $i + 1 }}</td>
@@ -68,6 +68,7 @@
                     <td align="center">{{ $d->ttl }}</td>
                 </tr>
             @endforeach
-        </tbody>
-    </table>
-@endempty
+        @endif
+    </tbody>
+</table>
+@endif

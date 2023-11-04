@@ -90,10 +90,11 @@
                                     <select name="tipe[]" id="" class="form-control">
                                         @foreach ($kelas as $i => $d)
                                             <option value="{{ $d->id_kelas }}"
-                                                {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}</option>
+                                                {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}
+                                            </option>
                                         @endforeach
                                     </select>
-                                   
+
                                 </td>
                                 <td>
                                     <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
@@ -128,6 +129,7 @@
                     </table>
                 </div>
             </section>
+        </form>
     </x-slot>
     <x-slot name="cardFooter">
         <button type="submit" class="float-end btn btn-primary button-save">Simpan</button>
