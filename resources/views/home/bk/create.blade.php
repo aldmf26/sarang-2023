@@ -101,12 +101,12 @@
                                             name="tgl_terima[]">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}" class="form-control text-end pcs_awal" name="pcs_awal[]"
-                                            value="0">
+                                        <input type="text" count="{{ $i }}"
+                                            class="form-control text-end pcs_awal" name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}" class="form-control text-end gr_awal" name="gr_awal[]"
-                                            value="0">
+                                        <input type="text" count="{{ $i }}"
+                                            class="form-control text-end gr_awal" name="gr_awal[]" value="0">
                                     </td>
 
                                 </tr>
@@ -153,7 +153,7 @@
             $(".select3").select2()
             $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
 
-
+          
 
             function keyupBp(kelas, ditambah = false) {
                 $('.' + kelas).on('keyup', function() {

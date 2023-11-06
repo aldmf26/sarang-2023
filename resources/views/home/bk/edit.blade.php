@@ -12,7 +12,6 @@
         <form action="{{ route('bk.update') }}" method="post">
             @csrf
             <section class="row">
-                @foreach ($no_nota as $n)
                     <div class="col-lg-12">
                         <table class="table table-striped" width="100%">
                             <thead>
@@ -29,7 +28,7 @@
                                     <th class="dhead text-end">Gr Awal</th>
                                 </tr>
                             </thead>
-
+                            @foreach ($no_nota as $n)
                             @php
                                 $detail = DB::table('bk as a')
                                     ->where('no_box', $n)
@@ -95,12 +94,13 @@
 
                                 </tr>
                             </tbody>
+                @endforeach
+
                         </table>
                         <br>
                         <hr style="border: 1px solid #435EBE">
                         <br>
                     </div>
-                @endforeach
             </section>
     </x-slot>
     <x-slot name="cardFooter">
