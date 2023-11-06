@@ -12,23 +12,24 @@
         <form action="{{ route('bk.update') }}" method="post">
             @csrf
             <section class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-striped" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="dhead">No Lot</th>
-                                    <th class="dhead">No Box</th>
-                                    <th class="dhead">Tipe</th>
-                                    <th class="dhead">Ket</th>
-                                    <th class="dhead">Warna</th>
-                                    <th class="dhead">Pgws</th>
-                                    <th class="dhead">Nama</th>
-                                    <th class="dhead">Tgl Terima</th>
-                                    <th class="dhead text-end">Pcs Awal</th>
-                                    <th class="dhead text-end">Gr Awal</th>
-                                </tr>
-                            </thead>
-                            @foreach ($no_nota as $n)
+                <div class="col-lg-12">
+                    <table class="table table-striped" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="dhead">No</th>
+                                <th class="dhead">No Lot</th>
+                                <th class="dhead">No Box</th>
+                                <th class="dhead">Tipe</th>
+                                <th class="dhead">Ket</th>
+                                <th class="dhead">Warna</th>
+                                <th class="dhead">Pgws</th>
+                                <th class="dhead">Nama</th>
+                                <th class="dhead">Tgl Terima</th>
+                                <th class="dhead text-end">Pcs Awal</th>
+                                <th class="dhead text-end">Gr Awal</th>
+                            </tr>
+                        </thead>
+                        @foreach ($no_nota as $i => $n)
                             @php
                                 $detail = DB::table('bk as a')
                                     ->where('no_box', $n)
@@ -37,6 +38,7 @@
                             <input type="hidden" name="id_bk[]" value="{{ $detail->id_bk }}">
                             <tbody>
                                 <tr>
+                                    <td>{{ $i+1 }}</td>
                                     <td>
                                         <input name="no_lot[]" value="{{ $detail->no_lot }}" type="text"
                                             class="form-control">
@@ -94,13 +96,13 @@
 
                                 </tr>
                             </tbody>
-                @endforeach
+                        @endforeach
 
-                        </table>
-                        <br>
-                        <hr style="border: 1px solid #435EBE">
-                        <br>
-                    </div>
+                    </table>
+                    <br>
+                    <hr style="border: 1px solid #435EBE">
+                    <br>
+                </div>
             </section>
     </x-slot>
     <x-slot name="cardFooter">
