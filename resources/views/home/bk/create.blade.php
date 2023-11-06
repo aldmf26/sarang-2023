@@ -32,6 +32,8 @@
                     @endphp
                     <input min="0" name="baris" value="{{ $baris }}" type="number"
                         class="form-control">
+                    <input min="0" name="kategori" value="{{ $kategori }}" type="number"
+                        class="form-control">
                 </div>
                 <div class="col-lg-1">
                     <label for="">Aksi</label><br>
