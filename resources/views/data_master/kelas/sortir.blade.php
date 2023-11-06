@@ -27,7 +27,7 @@
                 width: auto;
             }
         </style>
-        {{-- <section class="row">
+        <section class="row">
             <div class="col-lg-10">
                 <form action="{{ route('kelas.cetakCreate') }}" method="post">
                     <x-theme.button href="#" icon="fa-window-close" variant="danger"
@@ -42,13 +42,11 @@
                         <thead>
                             <tr>
                                 <th class="dhead" width="15">#</th>
-                                <th class="dhead" width="100">Paket</th>
                                 <th class="dhead" width="100">Kelas</th>
-                                <th class="dhead" width="100">Tipe</th>
-                                <th class="text-end dhead" width="150">Rp Pcs</th>
-                                <th class="text-end dhead">Denda HCR</th>
-                                <th class="text-end dhead">Bts Sst %</th>
+                                <th class="dhead" width="100">Gr</th>
+                                <th class="text-end dhead" width="150">Rupiah</th>
                                 <th class="text-end dhead">Denda Sst</th>
+                                <th class="text-end dhead">Denda Rp</th>
                                 <th class="dhead" width="60">Aksi</th>
                             </tr>
                         </thead>
@@ -56,149 +54,74 @@
 
                             <tr class="bg-info">
                                 <td></td>
-                                <td>
-                                    <select database="paket" x-model="selectedOption" x-init="initSelect2()"
-                                        class="select2-alpine" name="id_paket_tambah[]" id="">
-                                    </select>
-                                </td>
+                              
 
                                 <td>
                                     <input type="text" name="kelas_tambah[]" class="form-control">
                                 </td>
                                 <td>
-                                    <select database="tipe" x-model="selectedOption" x-init="initSelect2()"
-                                        class="select2-alpine" name="id_tipe_brg_tambah[]" id="">
-
-                                    </select>
-                                </td>
-
-                                <td>
-                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                        name="rupiah_tambah[]">
+                                    <input type="text" name="kelas_tambah[]" class="form-control">
                                 </td>
                                 <td>
-                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                        name="denda_hcr[]">
+                                    <input type="text" name="kelas_tambah[]" class="form-control">
                                 </td>
                                 <td>
-                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                        name="batas_susut[]">
+                                    <input type="text" name="kelas_tambah[]" class="form-control">
                                 </td>
                                 <td>
-                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                        name="denda_susut[]">
+                                    <input type="text" name="kelas_tambah[]" class="form-control">
                                 </td>
-
-                                <td>
-                                    <span class="badge bg-primary" @click="rows.push({ value: '' })"
-                                        style="cursor: pointer"><i class="fas fa-plus"></i></span>
-                                </td>
-
                             </tr>
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr class="bg-info">
                                     <td></td>
-                                    <td>
-                                        <select database="paket" x-model="selectedOption" x-init="initSelect2()"
-                                            class="select2-alpine" name="id_paket_tambah[]" id="">
-                                            <option value="">Paket</option>
-                                            @foreach ($kategori as $t)
-                                                <option value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
+                                    
 
                                     <td>
                                         <input type="text" name="kelas_tambah[]" class="form-control">
                                     </td>
                                     <td>
-                                        <select database="tipe" x-model="selectedOption" x-init="initSelect2()"
-                                            class="select2-alpine" name="id_tipe_brg_tambah[]" id="">
-                                            <option value="">Tipe</option>
-                                            @foreach ($tipe as $t)
-                                                <option value="{{ $t->id_tipe }}">{{ strtoupper($t->tipe) }}</option>
-                                            @endforeach
-
-                                        </select>
-                                    </td>
-
-                                    <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="rupiah_tambah[]">
+                                        <input type="text" name="kelas_tambah[]" class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="denda_hcr[]">
+                                        <input type="text" name="kelas_tambah[]" class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="batas_susut[]">
+                                        <input type="text" name="kelas_tambah[]" class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="denda_susut[]">
+                                        <input type="text" name="kelas_tambah[]" class="form-control">
                                     </td>
-                                    <td>
-                                        <span class="badge bg-danger" @click="rows.splice(index, 1)"
-                                            style="cursor: pointer"><i class="fas fa-minus"></i></span>
-                                    </td>
+                                    
                                 </tr>
                             </template>
                             @foreach ($kelas as $no => $d)
-                                <input type="hidden" name="id_kelas_cetak[]" value="{{ $d->id_kelas_cetak }}">
+                                <input type="hidden" name="id_kelas[]" value="{{ $d->id_kelas }}">
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
-                                    <td>
-                                        <select database="paket" x-data="{ selectedTipeKategori: {{ $d->id_paket }} }"
-                                            x-model="selectedTipeKategori" x-init="initSelect2()"
-                                            class="select2-alpine-data" name="id_paket[]" id="">
-                                            @foreach ($kategori as $t)
-                                                <option
-                                                    x-bind:selected="selectedTipeKategori == $t - > id_paket ? true : false"
-                                                    value="{{ $t->id_paket }}">{{ strtoupper($t->paket) }}</option>
-                                            @endforeach
-                                            <option value="tambah">+ Paket</option>
-                                        </select>
-                                    </td>
+                                    
 
                                     <td>
                                         <input type="text" value="{{ $d->kelas }}" name="kelas[]"
                                             class="form-control">
                                     </td>
                                     <td>
-                                        <select database="tipe" x-data="{ selectedTipe: {{ $d->tipe }} }" x-model="selectedTipe"
-                                            x-init="initSelect2()" class="select2-alpine-data" name="id_tipe_brg[]"
-                                            id="">
-                                            @foreach ($tipe as $t)
-                                                <option x-bind:selected="selectedTipe == $t - > id_tipe ? true : false"
-                                                    value="{{ $t->id_tipe }}">{{ strtoupper($t->tipe) }}</option>
-                                            @endforeach
-                                            <option value="tambah">+ Tipe</option>
-                                        </select>
+                                        <input type="text" value="{{ $d->kelas }}" name="kelas[]"
+                                            class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic=" $money($input)" value="{{ $d->rp_pcs }}"
-                                            class="form-control text-end" name="rupiah[]">
+                                        <input type="text" value="{{ $d->kelas }}" name="kelas[]"
+                                            class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="denda_hcr[]" value="{{ $d->denda_hcr }}">
+                                        <input type="text" value="{{ $d->kelas }}" name="kelas[]"
+                                            class="form-control">
                                     </td>
                                     <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="batas_susut[]" value="{{ $d->batas_susut }}">
+                                        <input type="text" value="{{ $d->kelas }}" name="kelas[]"
+                                            class="form-control">
                                     </td>
-                                    <td>
-                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
-                                            name="denda_susut[]" value="{{ $d->denda_susut }}">
-                                    </td>
-                                    <td>
-                                        <span id_kelas="{{ $d->id_kelas_cetak }}" data-bs-target="#infoKelas"
-                                            data-bs-toggle="modal" class="badge bg-primary infoKelas"
-                                            style="cursor: pointer"><i class="fas fa-question"></i></span>
-                                        <input type="checkbox" class="cekTutup float-end" name="cekTutup[]"
-                                            id_kelas="{{ $d->id_kelas_cetak }}">
-                                    </td>
+                                   
                                 </tr>
                             @endforeach
                         </tbody>
@@ -216,7 +139,7 @@
                     <input type="hidden" class="form-control database" name="database" value="0">
                 </x-theme.modal>
             </form>
-        </section> --}}
+        </section>
 
 
         {{-- @section('scripts')

@@ -288,8 +288,8 @@ class KelasController extends Controller
     public function sortir()
     {
         $data = [
-            'datas' => DB::table('tb_kelas_sortir')->get(),
-            'title' => 'Kelas Sortir'
+            'kelas' => DB::table('tb_kelas_sortir')->get(),
+            'title' => 'Kelas Sortir',
         ];
         return view('data_master.kelas.sortir',$data);
     }
