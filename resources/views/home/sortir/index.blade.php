@@ -323,7 +323,7 @@
                             data: data,
                             success: function(r) {
                                 alertToast('sukses', 'Berhasil input akhir')
-                                
+                                loadHalaman()
                             }
                         });
 

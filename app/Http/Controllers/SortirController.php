@@ -114,10 +114,7 @@ class SortirController extends Controller
 
     public function cancel(Request $r)
     {
-        DB::table('sortir')->where('id_sortir', $r->id_sortir)->update([
-            'no_box' => 9999,
-            'tgl' => date('Y-m-d'),
-        ]);
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->delete();
     }
 
     public function load_modal_akhir(Request $r)
