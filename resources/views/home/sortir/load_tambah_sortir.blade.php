@@ -19,8 +19,10 @@
                             <select name="no_box" id="" required class="select3 pilihBox" count="1">
                                 <option value="">Pilih Box</option>
                                 @foreach ($boxBk as $d)
+                                    @if ($d->gr_awal - $d->gr_cabut > 1)
                                         <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}
                                         </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </td>
