@@ -28,7 +28,11 @@ class SortirController extends Controller
             ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
             ->get();
     }
-
+    public function updateAnakBelum()
+    {
+        $anakBelum = count(DB::table('sortir')->where('no_box', 9999)->get());
+        return response()->json(['anakBelum' => $anakBelum]);
+    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);

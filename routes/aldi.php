@@ -151,6 +151,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
             Route::get('/export', 'export')->name('export');
             Route::get('/rekap', 'rekap')->name('rekap');
+            Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
         });
     Route::controller(EoController::class)
@@ -239,6 +240,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/eoCreate', 'eoCreate')->name('eoCreate');
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::post('/cetakCreate', 'cetakCreate')->name('cetakCreate');
+            Route::post('/cetakSortir', 'cetakSortir')->name('cetakSortir');
+            Route::get('/deleteSortir', 'deleteSortir')->name('deleteSortir');
         });
     Route::controller(PermissionController::class)
         ->prefix('data_master/permission')

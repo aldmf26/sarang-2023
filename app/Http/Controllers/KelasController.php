@@ -106,6 +106,14 @@ class KelasController extends Controller
         return '2323';
     }
 
+    public function deleteSortir(Request $r)
+    {
+        foreach ($r->datas as $d) {
+            Nonaktif::delete('tb_kelas_sortir', 'id_kelas', $d);
+        }
+        return '2323';
+    }
+
     public function spesial(Request $r)
     {
         $jenis = empty($r->jenis) ? 1 : 2;
@@ -288,9 +296,51 @@ class KelasController extends Controller
     public function sortir()
     {
         $data = [
-            'kelas' => DB::table('tb_kelas_sortir')->get(),
+            'kelas' => DB::table('tb_kelas_sortir')->where('nonaktif', 'T')->get(),
             'title' => 'Kelas Sortir',
         ];
         return view('data_master.kelas.sortir',$data);
+    }
+
+    public function cetakSortir(Request $r)
+    {
+        $buang = [
+            'gr',
+            'gr_tambah',
+            'rupiah',
+            'rupiah_tambah',
+            'denda_susut',
+            'denda_susut_tambah',
+            'denda',
+            'denda_tambah',
+        ];
+        foreach ($buang as $d) {
+            $r->$d = str()->remove(',', $r->$d);
+        }
+
+        if (!empty($r->rupiah_tambah[0])) {
+            for ($i = 0; $i < count($r->rupiah_tambah); $i++) {
+                DB::table('tb_kelas_sortir')->insert([
+                    'kelas' => $r->kelas_tambah[$i],
+                    'gr' => $r->gr_tambah[$i],
+                    'rupiah' => $r->rupiah_tambah[$i],
+                    'denda_susut' => $r->denda_susut_tambah[$i],
+                    'denda' => $r->denda_tambah[$i],
+                ]);
+            }
+        }
+
+        if (!empty($r->rupiah[0])) {
+            for ($i = 0; $i < count($r->rupiah); $i++) {
+                DB::table('tb_kelas_sortir')->where('id_kelas', $r->id_kelas[$i])->update([
+                    'kelas' => $r->kelas[$i],
+                    'gr' => $r->gr[$i],
+                    'rupiah' => $r->rupiah[$i],
+                    'denda_susut' => $r->denda_susut[$i],
+                    'denda' => $r->denda[$i],
+                ]);
+            }
+        }
+        return redirect()->route('kelas.sortir')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

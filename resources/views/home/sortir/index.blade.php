@@ -1,7 +1,7 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-      
+
 
 
         <a href="{{ route('sortir.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
@@ -9,14 +9,18 @@
             <i class="fas fa-file-excel"></i> Export
         </a>
 
-        <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
-            teks="Sortir" />
-        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
-            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+
+        <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
+            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Sortir <span
                 class="badge bg-danger" id="anakBelum"></span>
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
-            teks="kry baru" />
+
+        <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
+
+
+            <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+                teks="kry baru" />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -97,6 +101,20 @@
                         $(".setRupiah" + count).val(rupiah)
                     })
 
+                    function updateAnakBelum() {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ route('sortir.updateAnakBelum') }}", // Sesuaikan dengan URL rute yang telah Anda buat
+                            dataType: 'json',
+                            success: function(response) {
+                                // Perbarui nilai di dalam <span> dengan ID "anakBelum"
+                                $('#anakBelum').text(response.anakBelum);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
                     $(".select3").select2()
                     $(".select2-add").select2({
                         dropdownParent: $('#tambah2 .modal-content')
@@ -106,6 +124,7 @@
                     loadTambahsortir()
 
                     function loadTambahsortir() {
+                        updateAnakBelum()
                         $.ajax({
                             type: "GET",
                             url: "{{ route('sortir.load_tambah_sortir') }}",
@@ -120,6 +139,8 @@
                     loadTambahAnak()
 
                     function loadTambahAnak() {
+                        updateAnakBelum()
+
                         $.ajax({
                             type: "GET",
                             url: "{{ route('sortir.load_tambah_anak') }}",
@@ -154,6 +175,7 @@
                     }
 
                     function loadInputAkhir() {
+                        updateAnakBelum()
                         $.ajax({
                             type: "GET",
                             url: "sortir/load_modal_akhir",
@@ -165,6 +187,7 @@
                     }
                     loadHalaman()
                     loadInputAkhir()
+
                     function loadHalaman() {
                         $.ajax({
                             type: "GET",
@@ -380,8 +403,8 @@
                         $.ajax({
                             type: "GET",
                             url: "{{ route('sortir.cancel') }}",
-                            data:{
-                                id_sortir:id_sortir
+                            data: {
+                                id_sortir: id_sortir
                             },
                             success: function(r) {
                                 loadHalaman()
