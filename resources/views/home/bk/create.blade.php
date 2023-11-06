@@ -2,14 +2,14 @@
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }} {{ucwords($kategori)}}</h6>
+            <h6 class="float-start mt-1">{{ $title }} {{ ucwords($kategori) }}</h6>
         </div>
         <div class="col-lg-12"><br>
             <hr style="border: 2px solid #435EBE">
         </div>
-        
+
         @include('home.bk.nav', ['name' => 'add'])
-  
+
     </x-slot>
 
 
@@ -72,8 +72,8 @@
                                             count="{{ $i }}">
                                     </td>
                                     <td>
-                                        <input value="{{ $noBoxTerakhir + $i }}" name="no_box[] nobox"
-                                            count="{{ $i }}" type="text" class="form-control">
+                                        <input name="no_box[]" count="{{ $i }}" type="text"
+                                            class="form-control nobox">
                                     </td>
                                     <td>
                                         <div count="{{ $i }}" class="load_tipe"></div>
@@ -101,11 +101,11 @@
                                             name="tgl_terima[]">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control text-end pcs_awal" name="pcs_awal[]"
+                                        <input type="text" count="{{ $i }}" class="form-control text-end pcs_awal" name="pcs_awal[]"
                                             value="0">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control text-end gr_awal" name="gr_awal[]"
+                                        <input type="text" count="{{ $i }}" class="form-control text-end gr_awal" name="gr_awal[]"
                                             value="0">
                                     </td>
 
@@ -153,35 +153,37 @@
             $(".select3").select2()
             $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
 
-            $('.nolot').on('keyup', function() {
-                var currentCount = $(this).attr('count');
-                var currentValue = $(this).val();
 
-                var shouldUpdate = false;
-                $('.nolot').each(function() {
-                    var count = $(this).attr('count');
-                    if (shouldUpdate) {
-                        $(this).val(currentValue);
-                    }
-                    if (count === currentCount) {
-                        shouldUpdate = true;
-                    }
+
+            function keyupBp(kelas, ditambah = false) {
+                $('.' + kelas).on('keyup', function() {
+                    var currentCount = $(this).attr('count');
+                    var currentValue = $(this).val();
+                    var hasil = 0
+
+                    var shouldUpdate = false;
+                    $('.' + kelas).each(function() {
+                        var count = $(this).attr('count');
+                        if (ditambah) {
+                            currentValue++
+                            hasil = parseFloat(currentValue - 1);
+                        } else {
+                            hasil = currentValue
+                        }
+                        if (shouldUpdate) {
+                            $(this).val(hasil);
+                        }
+                        if (count === currentCount) {
+                            shouldUpdate = true;
+                        }
+                    });
                 });
-            });
-            // $('.nobox').on('keyup', function() {
-            //     var currentCount = $(this).attr('count');
-            //     var currentValue = $(this).val();
-            //     var shouldUpdate = false;
-            //     $('.nobox').each(function() {
-            //         var count = $(this).attr('count');
-            //         if (shouldUpdate) {
-            //             $(this).val(currentValue + 1);
-            //         }
-            //         if (count === currentCount) {
-            //             shouldUpdate = true;
-            //         }
-            //     });
-            // });
+            }
+            keyupBp('nolot')
+            keyupBp('pcs_awal')
+            keyupBp('gr_awal')
+            keyupBp('nobox', true)
+
 
             function loadSelect(elemen, baris) {
                 $.ajax({

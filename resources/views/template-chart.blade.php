@@ -24,6 +24,9 @@
                 </div>
             </div>
         </div>
+        @php
+            
+        @endphp
         @section('scripts')
             <script>
                 // Misalkan Anda memiliki data yang akan ditampilkan dalam grafik
