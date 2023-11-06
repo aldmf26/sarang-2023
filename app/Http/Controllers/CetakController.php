@@ -75,15 +75,14 @@ class CetakController extends Controller
     {
         $id = auth()->user()->id;
 
-        $tgl = tanggalFilter($r);
-        $tgl1 =  $tgl['tgl1'];
-        $tgl2 =  $tgl['tgl2'];
+
+
         $data = [
             'cetak' => DB::select("SELECT *
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-            where a.id_pengawas = '$id' and a.tgl between '$tgl1' and '$tgl2' and a.penutup = 'T'
+            where a.id_pengawas = '$id' and a.penutup = 'T'
             order by a.selesai ASC
             "),
         ];

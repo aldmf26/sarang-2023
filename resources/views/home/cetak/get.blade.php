@@ -4,6 +4,7 @@
             <th class="dhead">#</th>
             <th class="dhead">Bulan</th>
             <th class="dhead">No Box</th>
+            <th class="dhead">Nama</th>
             <th class="dhead">Tgl Terima Brg</th>
             <th class="dhead text-center">Pcs <br> Tdk Ctk</th>
             <th class="dhead text-center">Gr <br> Tdk Ctk</th>
@@ -33,13 +34,14 @@
                 $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
                 $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
                 $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
-                $ttl_rp = $c->pcs_awal_ctk * $c->rp_pcs;
+                $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
             @endphp
             <tr>
                 <td>{{ $no + 1 }}</td>
                 <td>{{ !empty($c->bulan_dibayar) ? date('M y', strtotime('01-' . $c->bulan_dibayar . '-' . date('Y'))) : '' }}
                 </td>
                 <td>{{ $c->no_box }}</td>
+                <td>{{ $c->nama }} ({{ $c->kelas }})</td>
                 <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
                 {{-- <td class="text-end">{{ $c->pcs_awal }}</td>
                 <td class="text-end">{{ $c->gr_awal }}</td> --}}
