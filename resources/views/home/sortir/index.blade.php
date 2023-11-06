@@ -409,6 +409,7 @@
                             success: function(r) {
                                 loadHalaman()
                                 loadInputAkhir()
+                                loadTambahsortir()
                             }
                         });
                     })
