@@ -24,7 +24,7 @@
                 $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
                 $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
                 $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
-                $ttl_rp = $c->pcs_awal_ctk * $c->rp_pcs;
+                $ttl_rp = $c->pcs_akhir == 0 ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
             @endphp
             <tr data-id="{{ $c->id_cetak }}">
                 <td><span>{{ strtoupper($c->nama) }}
@@ -82,7 +82,7 @@
                         @endforeach
                     </select>
                 </td>
-                <td>
+                <td style="white-space: nowrap">
                     <button type="button" class="btn btn-sm btn-primary btn_simpan">Simpan</button>
                     <button type="button" data-bs-target="#selesai" data-bs-toggle="modal"
                         id_cetak="{{ $c->id_cetak }}" class="btn btn-sm btn-success selesai"
