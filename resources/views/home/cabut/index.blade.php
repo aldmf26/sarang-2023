@@ -13,11 +13,15 @@
                 </a>
                 {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
                 teks="List anak sisa" /> --}}
-                <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
-                    teks="Cabut" />
-                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
-                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
+                
+                    
+                <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
+                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cabut <span
                         class="badge bg-danger" id="anakBelum"></span>
+                </a>
+
+                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
                 </a>
 
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
@@ -652,7 +656,7 @@
                         success: function(r) {
                             alertToast('sukses', 'Berhasil input akhir')
                             // $('#inputAkhir').modal('hide')
-                            load_input_akhir()
+                            // load_input_akhir()
                             loadHalaman()
                         }
                     });

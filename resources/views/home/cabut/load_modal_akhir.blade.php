@@ -22,8 +22,8 @@
                     <th class="dhead">Tgl Trma</th>
                     <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
-                    <th class="dhead text-end" width="75">Pcs Awal</th>
-                    <th class="dhead text-end" width="75">Gr Awal</th>
+                    <th class="dhead text-end" width="85">Pcs Awal</th>
+                    <th class="dhead text-end" width="85">Gr Awal</th>
                     <th class="dhead text-end" width="75">Gr Flx</th>
                     <th class="dhead text-end" width="75">Pcs Akhir</th>
                     <th class="dhead text-end" width="75">Gr Akhir</th>
@@ -114,7 +114,7 @@
 
 
                         <td align="right" class="h6">
-                            Rp <span
+                            <span
                                 class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
                         </td>
                         <td>

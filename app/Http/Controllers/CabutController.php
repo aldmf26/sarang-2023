@@ -119,7 +119,7 @@ class CabutController extends Controller
     }
     public function updateAnakBelum()
     {
-        $anakBelum = count($this->getAnakTambah('NOT'));
+        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999],['id_pengawas', auth()->user()->id]])->get());
         return response()->json(['anakBelum' => $anakBelum]);
     }
     public function load_halaman(Request $r)
@@ -631,6 +631,10 @@ class CabutController extends Controller
         $ttlGrBk = 0;
         $ttlPcsAwal = 0;
         $ttlGrAwal = 0;
+        $ttlPcsAkhir = 0;
+        $ttlGrAkhir = 0;
+        $ttlFlx = 0;
+        $ttlEot = 0;
         $ttlRp = 0;
         $cabutGroup = $this->queryRekapGroup($tgl1, $tgl2);
 
@@ -639,7 +643,11 @@ class CabutController extends Controller
             $ttlGrBk += $d->gr_bk;
             $ttlPcsAwal += $d->pcs_awal;
             $ttlGrAwal += $d->gr_awal;
+            $ttlPcsAkhir += $d->pcs_akhir;
+            $ttlGrAkhir += $d->gr_akhir;
             $ttlRp += $d->ttl_rp;
+            $ttlFlx += $d->gr_flx;
+            $ttlEot += $d->eot;
         }
 
         $data = [
@@ -650,6 +658,10 @@ class CabutController extends Controller
             'ttlGrBk' => $ttlGrBk,
             'ttlPcsAwal' => $ttlPcsAwal,
             'ttlGrAwal' => $ttlGrAwal,
+            'ttlPcsAkhir' => $ttlPcsAkhir,
+            'ttlGrAkhir' => $ttlGrAkhir,
+            'ttlFlx' => $ttlFlx,
+            'ttlEot' => $ttlEot,
             'ttlRp' => $ttlRp,
             'cabutGroup' => $cabutGroup
         ];

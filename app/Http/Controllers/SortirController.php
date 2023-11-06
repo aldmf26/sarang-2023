@@ -30,7 +30,7 @@ class SortirController extends Controller
     }
     public function updateAnakBelum()
     {
-        $anakBelum = count(DB::table('sortir')->where('no_box', 9999)->get());
+        $anakBelum = count(DB::table('sortir')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id]])->get());
         return response()->json(['anakBelum' => $anakBelum]);
     }
     public function index(Request $r)
@@ -93,7 +93,7 @@ class SortirController extends Controller
 
     public function create(Request $r)
     {
-        
+
         for ($i = 0; $i < count($r->rupiah); $i++) {
             $rupiah = str()->remove('.', $r->rupiah[$i]);
 
@@ -126,7 +126,7 @@ class SortirController extends Controller
     {
         $detail = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['selesai', 'T'],['no_box', '!=', 9999]])
+            ->where([['selesai', 'T'], ['no_box', '!=', 9999]])
             ->get();
         $data = [
             'detail' => $detail
@@ -274,9 +274,9 @@ class SortirController extends Controller
         $data = [
             'boxBk' => $this->getStokBk(),
             'datas' => DB::table('sortir as a')
-                        ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                        ->where('a.no_box', 9999)
-                        ->get()
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->where('a.no_box', 9999)
+                ->get()
         ];
         return view('home.sortir.load_tambah_sortir', $data);
     }
@@ -319,7 +319,7 @@ class SortirController extends Controller
         $tbl = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.id_pengawas', auth()->user()->id],['no_box', '!=', 9999]])
+            ->where([['a.id_pengawas', auth()->user()->id], ['no_box', '!=', 9999]])
             ->orderBy('id_sortir', 'DESC')
             ->get();
 
@@ -376,7 +376,7 @@ class SortirController extends Controller
         $tgl2 =  $r->tgl2;
         $view = 'home.sortir.export_rekap';
         $tbl = $this->queryRekap($tgl1, $tgl2);
-
+        
         return Excel::download(new SortirRekapExport($tbl, $view), 'Export REKAP SORTIR.xlsx');
     }
 }
