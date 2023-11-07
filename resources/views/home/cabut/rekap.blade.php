@@ -49,14 +49,14 @@
                         <tr>
                             <th width="180" rowspan="2" class="text-center dhead">Pengawas</th>
                             <th width="85" rowspan="2" class="text-center dhead">No Box</th>
-                            <th  colspan="2" class="text-center dhead">BK Awal</th>
+                            <th colspan="2" class="text-center dhead">BK Awal</th>
                             <th colspan="2" class="text-center dhead"> Kerja Awal</th>
                             <th colspan="5" class="text-center dhead"> Kerja Akhir</th>
                             <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
-                            <th  width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
+                            <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
                         </tr>
-            
+
                         <tr>
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
                             <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrBk, 0) }})</th>
@@ -71,10 +71,9 @@
                             <th class="dhead text-center">Gr</th>
                         </tr>
                     </thead>
-                   
+
                     <tbody>
                         @foreach ($cabutGroup as $i => $d)
-                            
                             <tr>
                                 <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
@@ -88,7 +87,10 @@
                                 <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_flx, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->eot, 0) }}</th>
-                                <th class="text-end">{{ number_format(9999, 0) }}</th>
+                                {{-- @php
+                                    $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
+                                @endphp --}}
+                                <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
                                 <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
@@ -110,24 +112,28 @@
 
                         <tr>
                             <td>{{ $d->pengawas }} <span class="badge bg-primary float-end"
-                                x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
-                                <i class="fas fa-caret-up"></i></span></td>
+                                    x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                    <i class="fas fa-caret-up"></i></span></td>
                             <td align="right"><a class="detail" target="_blank"
                                     href="{{ route('dashboard.detail', $x->no_box) }}">{{ number_format($x->no_box, 0) }}
                                     <i class="me-2 fas fa-eye"></i></a></td>
-                            <td align="right">{{ number_format($x->pcs_bk,0) }}</td>
-                            <td align="right">{{ number_format($x->gr_bk,0) }}</td>
-                            <td align="right">{{ number_format($x->pcs_awal,0) }}</td>
-                            <td align="right">{{ number_format($x->gr_awal,0) }}</td>
-                            <td align="right">{{ number_format($x->pcs_akhir,0) }}</td>
-                            <td align="right">{{ number_format($x->gr_akhir,0) }}</td>
-                            <td align="right">{{ number_format($x->gr_flx,0) }}</td>
-                            <td align="right">{{ number_format($x->eot,0) }}</td>
-                            <td align="right">susut</td>
-                        
+                            <td align="right">{{ number_format($x->pcs_bk, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_bk, 0) }}</td>
+                            <td align="right">{{ number_format($x->pcs_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->pcs_akhir, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_flx, 0) }}</td>
+                            <td align="right">{{ number_format($x->eot, 0) }}</td>
+                            @php
+                                $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
+
+                            @endphp
+                            <td align="right">{{ number_format($susut, 0) }} %</td>
+
                             <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
-                            <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal,0) }}</td>
-                            <td align="right">{{ number_format($x->gr_bk - $x->gr_awal,0) }}</td>
+                            <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
                         </tr>
                     </tbody>
                     @endforeach

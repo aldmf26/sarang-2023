@@ -39,16 +39,20 @@ class CabutController extends Controller
     {
         $id = auth()->user()->id;
         $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+        $pengawas = $posisi == 13 ? "a.id_pengawas = '$id'" : '';
 
-        return DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
-        SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
-        SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+        return DB::select("SELECT max(b.name) as pengawas, 
+        max(a.tgl_terima) as tgl, 
+        a.no_box, 
+        SUM(a.pcs_awal) as pcs_awal , 
+        sum(a.gr_awal) as gr_awal,
+        SUM(a.pcs_akhir) as pcs_akhir, 
+        SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
         sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah, sum(a.gr_flx) as gr_flx
         FROM cabut as a
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box 
-        WHERE a.tgl_terima BETWEEN '$tgl1' and '$tgl2' $pengawas
+        WHERE $pengawas
         GROUP by a.no_box;");
     }
     public function queryRekapGroup($tgl1, $tgl2)
@@ -67,6 +71,7 @@ class CabutController extends Controller
                         d.gr_bk,
                         d.pcs_bk,
                         c.ttl_rp,
+                        sum((1 - (c.gr_flx + c.gr_akhir) / c.gr_awal) * 100) as susut,
                         c.rupiah
                         FROM cabut as a 
                         left join users as b on b.id = a.id_pengawas 
