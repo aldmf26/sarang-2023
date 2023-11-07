@@ -66,7 +66,7 @@
                             <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAkhir, 0) }})</th>
                             <th class="dhead text-center">Flx <br> ({{ number_format($ttlFlx, 0) }})</th>
                             <th class="dhead text-center">Eot <br> ({{ number_format($ttlEot, 0) }})</th>
-                            <th class="dhead text-center">Susut</th>
+                            <th class="dhead text-center">Susut </th>
                             <th class="dhead text-center">Pcs </th>
                             <th class="dhead text-center">Gr</th>
                         </tr>
