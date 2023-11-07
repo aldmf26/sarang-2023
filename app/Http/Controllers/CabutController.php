@@ -4,111 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Exports\CabutExport;
 use App\Exports\CabutRekapExport;
+use App\Models\Cabut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CabutController extends Controller
 {
-    public function getAnak($id = null)
-    {
-        return DB::table('tb_anak as a')
-            ->join('tb_kelas as b', 'a.id_kelas', 'b.id_kelas')
-            ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
-            ->get();
-    }
-    public function getAnakTambah($cabut = null)
-    {
-
-        $id_user = auth()->user()->id;
-        $whereQ = empty($cabut) ? "AND c.no_box = 9999" : '';
-        return DB::select("SELECT c.id_cabut,a.id_anak,a.nama,b.kelas FROM `tb_anak` as a
-        LEFT JOIN tb_kelas as b ON a.id_kelas = b.id_kelas
-        LEFT JOIN cabut as c ON a.id_anak = c.id_anak AND DATE(c.tgl_terima) = CURDATE()
-        WHERE a.id_pengawas = '$id_user' $whereQ AND a.id_anak $cabut IN (
-            SELECT id_anak
-            FROM cabut
-            WHERE DATE(tgl_terima) = CURDATE()
-        ) AND a.id_anak NOT IN (
-            SELECT id_anak
-            FROM absen
-            WHERE DATE(tgl) = CURDATE() AND ket = 'cabut sisa'
-        )");
-    }
-    public function queryRekap($tgl1, $tgl2)
-    {
-        $id = auth()->user()->id;
-        $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "a.id_pengawas = '$id'" : '';
-
-        return DB::select("SELECT max(b.name) as pengawas, 
-        max(a.tgl_terima) as tgl, 
-        a.no_box, 
-        SUM(a.pcs_awal) as pcs_awal , 
-        sum(a.gr_awal) as gr_awal,
-        SUM(a.pcs_akhir) as pcs_akhir, 
-        SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
-        sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah, sum(a.gr_flx) as gr_flx
-        FROM cabut as a
-        left join users as b on b.id = a.id_pengawas
-        left JOIN bk as c on c.no_box = a.no_box 
-        WHERE $pengawas
-        GROUP by a.no_box;");
-    }
-    public function queryRekapGroup($tgl1, $tgl2)
-    {
-        $cabutGroup = DB::select("SELECT 
-                        max(b.name) as pengawas, 
-                        e.ttl_box,
-                        a.id_pengawas,
-                        c.pcs_awal,
-                        c.gr_awal,
-                        c.pcs_hcr,
-                        c.eot,
-                        c.gr_flx,
-                        c.gr_akhir,
-                        c.pcs_akhir,
-                        d.gr_bk,
-                        d.pcs_bk,
-                        c.ttl_rp,
-                        sum((1 - (c.gr_flx + c.gr_akhir) / c.gr_awal) * 100) as susut,
-                        c.rupiah
-                        FROM cabut as a 
-                        left join users as b on b.id = a.id_pengawas 
-                        LEFT JOIN (
-                            SELECT 
-                                id_pengawas,no_box, 
-                                sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal, 
-                                sum(gr_akhir) as gr_akhir, sum(pcs_akhir) as pcs_akhir,
-                                sum(pcs_hcr) as pcs_hcr,
-                                sum(eot) as eot,
-                                sum(gr_flx) as gr_flx,
-                                SUM(rupiah) as rupiah,
-                                SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE no_box != 9999 GROUP BY id_pengawas
-                        ) as c ON c.id_pengawas = a.id_pengawas
-                        LEFT JOIN (
-                            SELECT penerima,no_box,sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM `bk` WHERE kategori LIKE '%cabut%' GROUP BY penerima
-                        ) as d ON d.penerima = a.id_pengawas
-                        LEFT JOIN (
-                            SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut WHERE no_box != 9999
-                            GROUP BY id_pengawas
-                        ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE  a.no_box != 9999
-                        GROUP BY a.id_pengawas");
-        return $cabutGroup;
-    }
-    public function getStokBk($no_box = null)
-    {
-        $id_user = auth()->user()->id;
-        $query = !empty($no_box) ? "selectOne" : 'select';
-        $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
-        return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
-        LEFT JOIN (
-            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%'");
-    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -133,59 +35,20 @@ class CabutController extends Controller
         $tgl2 = $r->tgl2;
         $id = auth()->user()->id;
 
-        $cabut = DB::table('cabut as a')
-            ->select(
-                'b.id_anak',
-                'a.no_box',
-                'a.rupiah',
-                'c.gr as gr_kelas',
-                'c.rupiah as rupiah_kelas',
-                'c.batas_susut',
-                'c.bonus_susut',
-                'c.denda_hcr',
-                'c.eot as eot_rp',
-                'c.batas_eot',
-                'b.id_kelas',
-                'c.rp_bonus',
-                'a.tgl_serah',
-                'a.selesai',
-                'a.bulan_dibayar',
-                'a.tgl_terima',
-                'a.id_cabut',
-                'a.selesai',
-                'b.nama',
-                'a.pcs_awal',
-                'a.gr_awal',
-                'a.gr_flx',
-                'a.pcs_akhir',
-                'a.pcs_hcr',
-                'a.gr_akhir',
-                'a.gr_awal',
-                'a.eot',
-            )
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-            ->orderBY('a.selesai', 'ASC')
-            ->orderBY('a.tgl_terima', 'ASC');
+        $cabut = Cabut::getCabut();
 
-        if (auth()->user()->posisi_id != 1) {
-            $cabut->where('a.id_pengawas', $id);
-        }
-
-        $query = $cabut->get();
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'cabut' => $query,
+            'cabut' => $cabut,
         ];
         return view('home.cabut.load_halaman', $data);
     }
     public function load_tambah_anak(Request $r)
     {
         $data = [
-            'anak' => $this->getAnak()
+            'anak' => Cabut::getAnak()
         ];
         return view('home.cabut.load_tambah_anak', $data);
     }
@@ -193,8 +56,6 @@ class CabutController extends Controller
     {
         $tgl = date('Y-m-d');
         $id_pengawas = auth()->user()->id;
-        // DB::table('cabut')->where([['tgl_terima', $tgl], ['id_pengawas', $id_pengawas], ['no_box', '9999']])->delete();
-        // DB::table('absen')->where([['tgl', $tgl], ['ket', 'cabut']])->delete();
         foreach ($r->all()['rows'] as $d) {
             if ($r->tipe == 'cbt') {
                 $id = DB::table('cabut')->insertGetId([
@@ -204,13 +65,7 @@ class CabutController extends Controller
                     'tgl_terima' => $tgl
                 ]);
             }
-            // DB::table('absen')->insert([
-            //     'tgl' => $tgl,
-            //     'id_pengawas' => $id_pengawas,
-            //     'id_anak' => $d,
-            //     'ket' => $r->tipe == 'cbt' ? 'cabut' : 'cabut sisa',
-            //     'id_kerja' => $id
-            // ]);
+           
         }
         return 'Berhasil tambah anak';
     }
@@ -224,8 +79,8 @@ class CabutController extends Controller
     {
         $data = [
             'title' => 'Tambah Divisi Cabut',
-            'boxBk' => $this->getStokBk(),
-            'getAnak' => $this->getAnakTambah()
+            'boxBk' => Cabut::getStokBk(),
+            'getAnak' => Cabut::getAnakTambah()
         ];
         return view('home.cabut.load_tambah_cabut', $data);
     }
@@ -261,18 +116,10 @@ class CabutController extends Controller
 
     public function cancel(Request $r)
     {
-        // $data = [
-        //     'no_box' => 9999,
-        //     'id_pengawas' => $id_pengawas,
-        //     'id_anak' => $d,
-        //     'tgl_terima' => $tgl
-        // ];
-
         DB::table('cabut')->where('id_cabut', $r->id_cabut)->update([
             'no_box' => 9999,
             'tgl_terima' => date('Y-m-d'),
         ]);
-        // DB::table('absen')->where('id_kerja', $r->id_cabut)->delete();
     }
 
     public function load_modal_akhir(Request $r)
@@ -283,67 +130,11 @@ class CabutController extends Controller
             ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
             ->first();
 
-        $datas = DB::table('cabut as a')
-            ->select(
-                'b.id_anak',
-                'a.no_box',
-                'a.id_cabut',
-                'a.rupiah',
-                'c.pcs as pcs_kelas',
-                'c.gr as gr_kelas',
-                'c.rupiah as rupiah_kelas',
-                'c.rp_bonus',
-                'c.id_kategori as kategori',
-                'c.jenis',
-                'c.id_kategori',
-                'c.denda_susut_persen',
-                'c.denda_hcr',
-                'c.batas_susut',
-                'c.bonus_susut',
-                'c.eot as eot_rp',
-                'c.batas_eot',
-                'b.id_kelas',
-                'a.tgl_serah',
-                'a.tgl_terima',
-                'b.nama',
-                'a.pcs_awal',
-                'a.gr_awal',
-                'a.bulan_dibayar as bulan',
-                'a.gr_flx',
-                'a.pcs_akhir',
-                'a.pcs_hcr',
-                'a.gr_akhir',
-                'a.gr_awal',
-                'a.ttl_rp',
-                'a.eot',
-            )
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
-
-
-        switch ($r->orderBy) {
-            case 'nobox':
-                $datas->orderBy('a.no_box', 'ASC');
-                break;
-            case 'tgl_terima':
-                $datas->orderBy('a.tgl_terima', 'ASC');
-                break;
-            case 'kelas':
-                $datas->orderBy('b.id_kelas', 'DESC');
-                break;
-            case 'nama':
-                $datas->orderBy('b.nama', 'ASC');
-                break;
-
-            default:
-                $datas->orderBy('a.id_cabut', 'DESC');
-                break;
-        }
+        $datas = Cabut::getCabutAkhir($r->orderBy);
 
         $data = [
             'detail' => $detail,
-            'datas' => $datas->get(),
+            'datas' => $datas,
             'orderBy' => $r->orderBy
         ];
         return view('home.cabut.load_modal_akhir', $data);
@@ -368,7 +159,7 @@ class CabutController extends Controller
 
     public function load_anak()
     {
-        $anak = $this->getAnak();
+        $anak = Cabut::getAnak();
         echo "
         <div class='row'>
                     <div class='col-lg-12'>
@@ -399,7 +190,7 @@ class CabutController extends Controller
 
     public function load_anak_nopengawas()
     {
-        $anakNoPengawas = $this->getAnak(1);
+        $anakNoPengawas = Cabut::getAnak(1);
 
         echo "
         <select class='select3-load anakNoPengawas' name='' multiple id=''>
@@ -440,8 +231,8 @@ class CabutController extends Controller
     {
         $data = [
             'title' => 'Tambah Divisi Cabut',
-            'boxBk' => $this->getStokBk(),
-            'anak' => $this->getAnak(),
+            'boxBk' => Cabut::getStokBk(),
+            'anak' => Cabut::getAnak(),
             'count' => $r->count,
 
         ];
@@ -450,7 +241,7 @@ class CabutController extends Controller
 
     public function get_box_sinta(Request $r)
     {
-        $bk = $this->getStokBk($r->no_box);
+        $bk = Cabut::getStokBk($r->no_box);
 
         $data = [
             'pcs_awal' => $bk->pcs_awal,
@@ -477,15 +268,8 @@ class CabutController extends Controller
     {
         for ($i = 0; $i < count($r->no_box); $i++) {
             $no_box = $r->no_box[$i];
-            $box = $this->getStokBk($no_box);
+            $box = Cabut::getStokBk($no_box);
 
-            // if ($box->pcs_awal - $box->pcs_cabut - $r->pcs_awal[$i] < 0 || $box->gr_awal - $box->gr_cabut - $r->gr_awal[$i] < 0) {
-            //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
-            // } else {
-            // }
-            // DB::table('absen')->where('id_kerja', $r->id_cabut[$i])->update([
-            //     'tgl' => $r->tgl_terima[$i]
-            // ]);
             DB::table('cabut')->where('id_cabut', $r->id_cabut[$i])->update([
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'pcs_awal' => $r->pcs_awal[$i],
@@ -505,8 +289,8 @@ class CabutController extends Controller
     {
         $data = [
             'title' => 'Tambah Divisi Cabut',
-            'boxBk' => $this->getStokBk(),
-            'anak' => $this->getAnak(),
+            'boxBk' => Cabut::getStokBk(),
+            'anak' => Cabut::getAnak(),
         ];
         return view('home.cabut.create', $data);
     }
@@ -527,41 +311,7 @@ class CabutController extends Controller
 
     public function load_detail_cabut(Request $r)
     {
-        $detail = DB::table('cabut as a')
-            ->select(
-                'b.id_anak',
-                'a.no_box',
-                'a.rupiah',
-                'c.gr as gr_kelas',
-                'c.gr',
-                'c.rupiah as rupiah_kelas',
-                'b.id_kelas',
-                'c.rp_bonus',
-                'c.batas_susut',
-                'c.bonus_susut',
-                'c.denda_hcr',
-                'c.kelas as nm_kelas',
-                'c.jenis as jenis_kelas',
-                'c.eot as eot_rp',
-                'c.batas_eot',
-                'a.tgl_serah',
-                'a.tgl_terima',
-                'a.id_cabut',
-                'a.selesai',
-                'b.nama',
-                'a.pcs_awal',
-                'a.gr_awal',
-                'a.gr_flx',
-                'a.pcs_akhir',
-                'a.pcs_hcr',
-                'a.gr_akhir',
-                'a.gr_awal',
-                'a.eot',
-            )
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.id_cabut', $r->id_cabut]])
-            ->first();
+        $detail = Cabut::getDetailPerId($r->id_cabut);
         $data = [
             'detail' => $detail
         ];
@@ -590,39 +340,7 @@ class CabutController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cabut.export';
-        $tbl = DB::table('cabut as a')
-            ->select(
-                'b.id_anak',
-                'a.no_box',
-                'a.rupiah',
-                'c.gr as gr_kelas',
-                'c.rupiah as rupiah_kelas',
-                'b.id_kelas',
-                'c.rp_bonus',
-                'c.batas_susut',
-                'c.bonus_susut',
-                'c.denda_hcr',
-                'c.eot as eot_rp',
-                'c.batas_eot',
-                'a.tgl_serah',
-                'a.tgl_terima',
-                'a.id_cabut',
-                'a.selesai',
-                'b.nama',
-                'a.pcs_awal',
-                'a.gr_awal',
-                'a.gr_flx',
-                'a.pcs_akhir',
-                'a.pcs_hcr',
-                'a.gr_akhir',
-                'a.gr_awal',
-                'a.eot',
-            )
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where('no_box', '!=', '9999')
-            ->orderBY('a.id_cabut', 'DESC')
-            ->get();
+        $tbl = Cabut::getQueryExport();
         return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 
@@ -641,7 +359,7 @@ class CabutController extends Controller
         $ttlFlx = 0;
         $ttlEot = 0;
         $ttlRp = 0;
-        $cabutGroup = $this->queryRekapGroup($tgl1, $tgl2);
+        $cabutGroup = Cabut::queryRekapGroup($tgl1, $tgl2);
 
         foreach ($cabutGroup as $d) {
             $ttlPcsBk += $d->pcs_bk;
@@ -678,7 +396,7 @@ class CabutController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cabut.export_rekap';
-        $tbl = $this->queryRekap($tgl1, $tgl2);
+        $tbl = Cabut::queryRekap($tgl1, $tgl2);
 
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
+use App\Http\Controllers\RekapGajiPeranakController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -137,13 +138,22 @@ Route::middleware('auth')->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/detail/{id_anak}', 'detail')->name('detail');
         });
-    Route::controller(RekapanController::class)
+    Route::controller(RekapGajiPeranakController::class)
         ->prefix('home/rekapan')
         ->name('rekap.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/export', 'export')->name('export');
         });
+    // Route::controller(RekapanController::class)
+    //     ->prefix('home/rekapan')
+    //     ->name('rekap.')
+    //     ->group(function () {
+    //         Route::get('/', 'index')->name('index');
+    //         Route::get('/export', 'export')->name('export');
+    //     });
 });
 
 
