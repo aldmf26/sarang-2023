@@ -97,19 +97,19 @@
                                 <td>{{ $d->name }}</td>
                                 <td>{{ $x->nama }} / {{ $x->id_kelas }}</td>
                                 <td class="text-center">{{ $x->ttl ?? 0 }}</td>
-                                <td class="text-end">{{ $x->pcs_awal ?? 0 }}</td>
-                                <td class="text-end">{{ $x->gr_awal ?? 0 }}</td>
-                                <td class="text-end">{{ $x->pcs_akhir ?? 0 }}</td>
-                                <td class="text-end">{{ $x->gr_akhir ?? 0 }}</td>
-                                <td class="text-end">{{ $x->gr_flx ?? 0 }}</td>
-                                <td class="text-end">{{ $x->eot ?? 0 }}</td>
-                                <td class="text-end">{{ number_format($x->susut ?? 0, 0) }} %</td>
-                                <td class="text-end">{{ number_format($x->ttl_rp ?? 0, 0) }}</td>
-                                <td class="text-end">{{ number_format($x->nominal ?? 0, 0) }}</td>
+                                <td class="text-end">{{ $x->pcs_awal }}</td>
+                                <td class="text-end">{{ $x->gr_awal }}</td>
+                                <td class="text-end">{{ $x->pcs_akhir }}</td>
+                                <td class="text-end">{{ $x->gr_akhir }}</td>
+                                <td class="text-end">{{ $x->gr_flx }}</td>
+                                <td class="text-end">{{ $x->eot }}</td>
+                                <td class="text-end">{{ number_format($x->susut, 0) }} %</td>
+                                <td class="text-end">{{ number_format($x->ttl_rp, 0) }}</td>
+                                <td class="text-end">{{ number_format($x->nominal, 0) }}</td>
                                 @php
                                     $ttlGaji = $x->ttl_rp - $x->nominal;
                                 @endphp
-                                <td class="text-end">{{ number_format($ttlGaji ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($ttlGaji, 0) }}</td>
                                 <td class="text-end">{{ number_format(!empty($x->ttl) ? $ttlGaji / $x->ttl : 0, 0) }}
                                 </td>
 
