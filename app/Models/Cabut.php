@@ -232,8 +232,11 @@ class Cabut extends Model
                                 SUM(ttl_rp) as ttl_rp
                                 FROM cabut WHERE no_box != 9999 GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
-                        JOIN (
-                            SELECT penerima,no_box,sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM `bk` WHERE kategori LIKE '%cabut%' GROUP BY penerima
+                        LEFT JOIN (
+                            SELECT penerima,no_box,sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk 
+                            FROM `bk` 
+                            INNER JOIN cabut ON bk.no_box = cabut.no_box
+                            WHERE kategori LIKE '%cabut%' GROUP BY penerima
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
