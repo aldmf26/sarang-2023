@@ -56,10 +56,10 @@
                         <td>
                             <input type="text"
                                 class="form-control text-end pcs_tdk_ctk{{ $i + 1 }} pcs_tdk_ctk"
-                                name="pcs_tidak_ctk[]" count="{{ $i + 1 }}">
+                                name="pcs_tidak_ctk[]" count="{{ $i + 1 }}" value="0">
                         </td>
                         <td><input type="text" class="form-control text-end gr_tdk_ctk{{ $i + 1 }}"
-                                name="gr_tidak_ctk[]">
+                                name="gr_tidak_ctk[]" value="0">
                         </td>
                         <td>
                             <input type="hidden" class="rp_pcs{{ $i + 1 }}" name="rp_pcs[]">
