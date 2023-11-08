@@ -52,41 +52,43 @@ class DashboardController extends Controller
             'title' => 'Detail Gaji Box',
             'detail' => $detailNobox,
             'cabut' => DB::table('cabut as a')
-            ->select(
-                'b.id_anak',
-                'a.no_box',
-                'a.rupiah',
-                'c.gr as gr_kelas',
-                'c.rupiah as rupiah_kelas',
-                'c.batas_susut',
-                'c.bonus_susut',
-                'c.denda_hcr',
-                'c.eot as eot_rp',
-                'c.batas_eot',
-                'b.id_kelas',
-                'c.rp_bonus',
-                'a.tgl_serah',
-                'a.selesai',
-                'a.bulan_dibayar',
-                'a.tgl_terima',
-                'a.id_cabut',
-                'a.selesai',
-                'b.nama',
-                'd.name',
-                'a.pcs_awal',
-                'a.gr_awal',
-                'a.gr_flx',
-                'a.pcs_akhir',
-                'a.pcs_hcr',
-                'a.gr_akhir',
-                'a.gr_awal',
-                'a.eot',    
-            )
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->join('users as d', 'a.id_pengawas', 'd.id')
-            ->where([['a.no_box', $nobox]])
-            ->get(),
+                ->select(
+                    'b.id_anak',
+                    'a.no_box',
+                    'a.rupiah',
+                    'c.gr as gr_kelas',
+                    'c.rupiah as rupiah_kelas',
+                    'c.batas_susut',
+                    'c.bonus_susut',
+                    'c.denda_hcr',
+                    'c.eot as eot_rp',
+                    'c.batas_eot',
+                    'b.id_kelas',
+                    'c.rp_bonus',
+                    'a.tgl_serah',
+                    'a.selesai',
+                    'a.bulan_dibayar',
+                    'a.tgl_terima',
+                    'a.id_cabut',
+                    'a.selesai',
+                    'b.nama',
+                    'd.name',
+                    'a.pcs_awal',
+                    'a.pcs_flx',
+                    'a.gr_awal',
+                    'a.gr_flx',
+                    'a.pcs_akhir',
+                    'a.pcs_hcr',
+                    'a.gr_hcr',
+                    'a.gr_akhir',
+                    'a.gr_awal',
+                    'a.eot',
+                )
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+                ->join('users as d', 'a.id_pengawas', 'd.id')
+                ->where([['a.no_box', $nobox]])
+                ->get(),
 
             'cetak' => DB::select("SELECT * FROM cetak as a 
             left join tb_anak as b on b.id_anak = a.id_anak 
@@ -122,6 +124,6 @@ class DashboardController extends Controller
             ) as c on c.box_grading = a.no_box")
 
         ];
-        return view('dashboard.detail', $data);
+        return view('dashboard.detail_new', $data);
     }
 }

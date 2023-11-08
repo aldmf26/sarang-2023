@@ -1,59 +1,59 @@
 <table class="table table-bordered" id="table1">
     <thead>
         <tr>
-            <th>#</th>
-            <th>No Box</th>
-            <th>Grade</th>
-            <th>Nama</th>
-            <th>Tanggal</th>
-            <th>Pcs Awal</th>
-            <th>Gr Awal</th>
-            <th>Pcs Tidak Cetak</th>
-            <th>Gr Tidak Cetak</th>
-            <th>Pcs Akhir</th>
-            <th>Gr Akhir</th>
-            <th>Susut</th>
-            <th>Denda</th>
-            <th>Ttl Rp</th>
-            <th>Selesai</th>
+            <th class="">#</th>
+            <th class="">Bulan</th>
+            <th class="">No Box</th>
+            <th class="">Nama</th>
+            <th class="">Tgl Terima Brg</th>
+            <th class=" text-center">Pcs Tdk Ctk</th>
+            <th class=" text-center">Gr Tdk Ctk</th>
+            <th class=" text-center">Pcs Awal </th>
+            <th class=" text-center">Gr Awal </th>
+            <th class=" text-center">Pcs Akhir</th>
+            <th class=" text-center">Gr Akhir</th>
+            <th class=" text-end">Pcs Cu</th>
+            <th class=" text-end">Gr Cu</th>
+            <th class=" text-end">Pcs Hcr</th>
+            <th class=" text-end">Susut</th>
+            <th class=" text-end">Ttl Gaji</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($datas as $no => $c)
+            @php
+                $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+                $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
+                $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
+                $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
+            @endphp
             <tr>
                 <td>{{ $no + 1 }}</td>
+                <td>{{ !empty($c->bulan_dibayar) ? date('M y', strtotime('01-' . $c->bulan_dibayar . '-' . date('Y'))) : '' }}
+                </td>
                 <td>{{ $c->no_box }}</td>
-                <td>VL</td>
-                <td>{{ $c->nama }}</td>
-                <td>{{ $c->tgl }}</td>
-                <td>
-                    {{ $c->pcs_awal }}
+                <td>{{ $c->nama }} ({{ $c->kelas }})</td>
+                <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                {{-- <td class="text-end">{{ $c->pcs_awal }}</td>
+                <td class="text-end">{{ $c->gr_awal }}</td> --}}
+                <td class="text-end">{{ $c->pcs_tidak_ctk }}</td>
+                <td class="text-end">{{ $c->gr_tidak_ctk }}</td>
+                <td class="text-end">{{ $c->pcs_awal_ctk }}</td>
+                <td class="text-end">{{ $c->gr_awal_ctk }}</td>
+                <td class="text-end">{{ $c->pcs_akhir }}</td>
+                <td class="text-end">{{ $c->gr_akhir }}</td>
+                <td class="text-end">{{ $c->pcs_cu }}</td>
+                <td class="text-end">{{ $c->gr_cu }}</td>
+                <td class="text-end">{{ $c->pcs_hcr }}</td>
+                <td class="text-end">{{ round($susut) }}%</td>
+                <td class="text-end">{{ number_format($ttl_rp - $denda - $denda_hcr, 0) }}</td>
+                <td class="text-end">
+                    @if ($c->selesai == 'Y')
+                        SELESAI
+                    @else
+                        AKHIR
+                    @endif
                 </td>
-                <td>
-                    {{ $c->gr_awal }}
-                </td>
-                <td>
-                    {{ $c->pcs_tidak_ctk }}
-                </td>
-                <td>
-                    {{ $c->gr_tidak_ctk }}
-                </td>
-                <td>
-                    {{ $c->pcs_akhir }}
-                </td>
-                <td>
-                    {{ $c->gr_akhir }}
-                </td>
-                @php
-                    $susut = empty($c->gr_akhir) ? '0' : (1 - $c->gr_akhir / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
-                    $denda = round($susut, 0) * 50000;
-                    
-                @endphp
-                <td>{{ $susut }} %</td>
-                <td>{{ $denda }}</td>
-                <td>{{ $c->rp_pcs * $c->pcs_awal - $denda }}</td>
-                <td>{{ $c->selesai }}</td>
-
             </tr>
         @endforeach
 

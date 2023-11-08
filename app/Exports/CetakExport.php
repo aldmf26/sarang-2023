@@ -14,7 +14,7 @@ class CetakExport  implements FromView, WithEvents
     protected $view;
     protected $totalrow;
 
-    public function __construct($tbl, $totalrow,$view)
+    public function __construct($tbl, $totalrow, $view)
     {
         $this->tbl = $tbl;
         $this->view = $view;
@@ -32,9 +32,9 @@ class CetakExport  implements FromView, WithEvents
     {
         return [
             AfterSheet::class    => function (AfterSheet $event) {
-                $sheet = $event->sheet; 
-                $cellRange = 'A1:O1';
-                $cellRangeLoop = 'A1:O' . $this->totalrow;
+                $sheet = $event->sheet;
+                $cellRange = 'A1:Q1';
+                $cellRangeLoop = 'A1:Q' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([

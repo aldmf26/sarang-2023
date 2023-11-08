@@ -146,9 +146,9 @@
                                 <td align="right">0</td>
                                 <td align="right">{{ $c->pcs_akhir }}</td>
                                 @php
-                            $hasil = rumusTotalRp($c);
-                        @endphp
-                               
+                                    $hasil = rumusTotalRp($c);
+                                @endphp
+
                                 <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                                 </td>
                             </tr>
@@ -397,7 +397,8 @@
                                 <td align="right">{{ number_format($c->gr_flx, 0) }}</td>
                                 <td align="right">{{ number_format($c->gr_akhir, 0) }}</td>
                                 <td align="right"></td>
-                                <td align="right">{{ number_format((1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100, 0) }}%</td>
+                                <td align="right">
+                                    {{ number_format((1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100, 0) }}%</td>
                             </tr>
                         @endforeach
                     @endif
@@ -448,7 +449,8 @@
                                 <td align="right">{{ $c->gr_tidak_ctk }}</td>
                                 <td align="right">{{ $c->gr_akhir }}</td>
                                 <td align="right"></td>
-                                <td align="right">{{ number_format((1 - $c->gr_akhir / $c->gr_awal) * 100, 0) }}%</td>
+                                <td align="right">{{ number_format((1 - $c->gr_akhir / $c->gr_awal) * 100, 0) }}%
+                                </td>
                             </tr>
                         @endforeach
                     @endif
@@ -498,7 +500,8 @@
                                 <td align="right">0</td>
                                 <td align="right">{{ $s->gr_akhir }}</td>
                                 <td align="right"></td>
-                                <td align="right">{{ number_format((1 - $s->gr_akhir / $s->gr_awal) * 100, 0) }}%</td>
+                                <td align="right">{{ number_format((1 - $s->gr_akhir / $s->gr_awal) * 100, 0) }}%
+                                </td>
                             </tr>
                         @endforeach
 

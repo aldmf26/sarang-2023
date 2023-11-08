@@ -93,7 +93,7 @@ class CetakController extends Controller
 
     function get_box(Request $r)
     {
-        $no_box = DB::table('bk')->where('no_box', $r->no_box)->first();
+        $no_box = DB::table('bk')->where('no_box', $r->no_box)->where('kategori', 'cetak')->first();
 
         $data = [
             'pcs' => $no_box->pcs_awal,
@@ -298,11 +298,14 @@ class CetakController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cetak.export';
+        $id = auth()->user()->id;
 
         $tbl = DB::select("SELECT *
-            FROM cetak as a
-            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
-            where a.tgl between '$tgl1' and '$tgl2'
+        FROM cetak as a
+        LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+        left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
+        where a.id_pengawas = '$id' and a.penutup = 'T'
+        order by a.selesai ASC
             ");
 
         $totalrow = count($tbl) + 1;
