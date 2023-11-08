@@ -104,11 +104,11 @@
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control text-end pcs_awal" name="pcs_awal[]" value="0">
+                                            class="form-control text-end " name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control text-end gr_awal" name="gr_awal[]" value="0">
+                                            class="form-control text-end" name="gr_awal[]" value="0">
                                     </td>
 
                                 </tr>

@@ -103,6 +103,7 @@ class SortirController extends Controller
                 'id_pengawas' => $r->id_pengawas,
                 'id_anak' => $r->id_anak[$i],
                 'id_kelas' => $r->tipe[$i],
+                'pcuc' => $r->pcuc[$i],
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
                 'rp_target' => $rupiah,
@@ -134,12 +135,30 @@ class SortirController extends Controller
         return view('home.sortir.load_modal_akhir', $data);
     }
 
+    public function load_detail_sortir(Request $r)
+    {
+        $detail = DB::selectOne("SELECT 
+        a.pcs_awal,a.gr_awal,a.pcs_akhir,
+        a.gr_akhir,a.tgl,a.no_box,b.gr,
+        b.kelas as nm_kelas,b.rupiah as rp_kelas,
+        c.nama,c.id_kelas
+        FROM sortir as a 
+        JOIN tb_kelas_sortir as b ON a.id_kelas = b.id_kelas
+        JOIN tb_anak as c ON c.id_anak = a.id_anak
+        WHERE a.id_sortir = '$r->id_sortir'");
+        $data = [
+            'detail' => $detail
+        ];
+        return view('home.sortir.load_modal_detail', $data);
+    }
+
     public function input_akhir(Request $r)
     {
         $id_anak = $r->id_anak;
         $no_box = $r->no_box;
         $gr_akhir = $r->gr_akhir;
         $pcs_akhir = $r->pcs_akhir;
+        $pcus = $r->pcus;
         $id_sortir = $r->id_sortir;
         $bulan = $r->bulan;
 
@@ -158,6 +177,7 @@ class SortirController extends Controller
 
         $getSortir->update([
             'pcs_akhir' => $pcs_akhir,
+            'pcus' => $pcus,
             'gr_akhir' => $gr_akhir,
             'bulan' => $bulan,
             'ttl_rp' => $rupiah,

@@ -68,7 +68,13 @@
             </x-theme.modal>
         </form>
 
-
+        <x-theme.modal idModal="detail" title="Detail Sortir" size="modal-lg-max" btnSave="T">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="load_detail_sortir"></div>
+                </div>
+            </div>
+        </x-theme.modal>
         @section('scripts')
             <script>
                 $(document).ready(function() {
@@ -213,6 +219,19 @@
 
 
                     }
+                    $(document).on('click', '.detail', function() {
+                    var id_sortir = $(this).attr('id_sortir')
+                    $.ajax({
+                        type: "GET",
+                        url: "sortir/load_detail_sortir",
+                        data: {
+                            id_sortir: id_sortir,
+                        },
+                        success: function(r) {
+                            $("#load_detail_sortir").html(r);
+                        }
+                    });
+                })
                     $(document).on('submit', '#createTambahAnakSortir', function(e) {
                         e.preventDefault();
                         var selectedRows = [];
@@ -313,6 +332,7 @@
                             no_box: row.find(`input[name='no_box${count}[]']`).val(),
                             gr_akhir: row.find(`input[name='gr_akhir${count}[]']`).val(),
                             pcs_akhir: row.find(`input[name='pcs_akhir${count}[]']`).val(),
+                            pcus: row.find(`input[name='pcus${count}[]']`).val(),
                             bulan: row.find(`select[name='bulan${count}[]']`).val(),
                             count: count,
                         };

@@ -38,7 +38,10 @@
         @foreach ($cabut as $no => $d)
             <tr>
                 <td>{{ $no + 1 }}</td>
-                <td>{{ $d->no_box }}</td>
+                <td>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
+                                    id_sortir="{{ $d->id_sortir }}">{{ $d->no_box }}</a>
+                </td>
                 <td>{{ $d->kelas }}</td>
                 <td>{{ ucwords(auth()->user()->name) }}</td>
                 <td>{{ $d->nama }}</td>
