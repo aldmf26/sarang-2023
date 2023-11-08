@@ -8,14 +8,14 @@
                 'rot' => 'cabut.rekap',
                 'nama' => 'Cabut',
             ],
-            [
-                'rot' => 'cabutSpesial.rekap',
-                'nama' => 'Cabut Spesial',
-            ],
-            [
-                'rot' => 'eo.rekap',
-                'nama' => 'EO',
-            ],
+            // [
+            //     'rot' => 'cabutSpesial.rekap',
+            //     'nama' => 'Cabut Spesial',
+            // ],
+            // [
+            //     'rot' => 'eo.rekap',
+            //     'nama' => 'EO',
+            // ],
             [
                 'rot' => 'cetak.rekap',
                 'nama' => 'Cetak',

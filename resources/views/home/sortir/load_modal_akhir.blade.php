@@ -37,7 +37,7 @@
                                 class="form-control text-end grAwalVal{{ $i }}">
                         </td>
                         <td>
-                            <input value="{{ $v->pcs_akhir ?? 0 }}" required name="pcs_akhir{{$i}}[]" type="text"
+                            <input value="{{ $v->pcs_akhir ?? $v->pcs_awal }}" required name="pcs_akhir{{$i}}[]" type="text"
                                 class="form-control text-end">
                         </td>
                         <td>

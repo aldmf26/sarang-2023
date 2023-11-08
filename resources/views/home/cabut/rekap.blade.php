@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -29,7 +29,7 @@
         </style>
 
         <section class="row">
-            <div class="col-lg-4 mb-2">
+            <div class="col-lg-12 mb-2">
                 <table class="float-end">
                     <tbody>
                         <tr>
@@ -41,27 +41,39 @@
             </div>
             <div class="col-lg-12">
 
-                <table style="border:1px solid #97a1c3" class="table table-bordered" id="tablealdi"
+                <table style="border:1px solid #97a1c3" class="table table-bordered" id="tblAld"
                     x-data="{
                         openRows: [],
                     }">
                     <thead>
                         <tr>
-                            <th class="dhead" width="120">Pengawas </th>
-                            <th class="dhead text-end" width="50">No Box</th>
-                            <th class="dhead text-end">Pcs Awal Bk <br> ({{ number_format($ttlPcsBk, 0) }})</th>
-                            <th class="dhead text-end">Gr Awal Bk <br> ({{ number_format($ttlGrBk, 0) }})</th>
-                            <th class="dhead text-end">Pcs Awal Kerja <br> ({{ number_format($ttlPcsAwal, 0) }})</th>
-                            <th class="dhead text-end">Gr Awal Kerja <br> ({{ number_format($ttlGrAwal, 0) }})</th>
-                            <th class="dhead text-end" width="80">Total Rupiah <br> (Rp
+                            <th width="180" rowspan="2" class="text-center dhead">Pengawas</th>
+                            <th width="85" rowspan="2" class="text-center dhead">No Box</th>
+                            <th colspan="2" class="text-center dhead">BK Awal</th>
+                            <th colspan="2" class="text-center dhead"> Kerja Awal</th>
+                            <th colspan="5" class="text-center dhead"> Kerja Akhir</th>
+                            <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
-                            <th class="dhead text-end">Pcs Sisa Bk</th>
-                            <th class="dhead text-end">Gr Sisa Bk</th>
+                            <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
+                        </tr>
+
+                        <tr>
+                            <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
+                            <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrBk, 0) }})</th>
+                            <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAwal, 0) }})</th>
+                            <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAwal, 0) }})</th>
+                            <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAkhir, 0) }})</th>
+                            <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAkhir, 0) }})</th>
+                            <th class="dhead text-center">Flx <br> ({{ number_format($ttlFlx, 0) }})</th>
+                            <th class="dhead text-center">Eot <br> ({{ number_format($ttlEot, 0) }})</th>
+                            <th class="dhead text-center">Susut </th>
+                            <th class="dhead text-center">Pcs </th>
+                            <th class="dhead text-center">Gr</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($cabutGroup as $i => $d)
-                            
                             <tr>
                                 <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
@@ -71,6 +83,14 @@
                                 <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_awal, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_awal, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->pcs_akhir, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->gr_flx, 0) }}</th>
+                                <th class="text-end">{{ number_format($d->eot, 0) }}</th>
+                                {{-- @php
+                                    $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
+                                @endphp --}}
+                                <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
                                 <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
@@ -92,18 +112,28 @@
 
                         <tr>
                             <td>{{ $d->pengawas }} <span class="badge bg-primary float-end"
-                                x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
-                                <i class="fas fa-caret-up"></i></span></td>
+                                    x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                    <i class="fas fa-caret-up"></i></span></td>
                             <td align="right"><a class="detail" target="_blank"
                                     href="{{ route('dashboard.detail', $x->no_box) }}">{{ number_format($x->no_box, 0) }}
                                     <i class="me-2 fas fa-eye"></i></a></td>
-                            <td align="right">{{ $x->pcs_bk }}</td>
-                            <td align="right">{{ $x->gr_bk }}</td>
-                            <td align="right">{{ $x->pcs_awal }}</td>
-                            <td align="right">{{ $x->gr_awal }}</td>
+                            <td align="right">{{ number_format($x->pcs_bk, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_bk, 0) }}</td>
+                            <td align="right">{{ number_format($x->pcs_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->pcs_akhir, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_flx, 0) }}</td>
+                            <td align="right">{{ number_format($x->eot, 0) }}</td>
+                            @php
+                                $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
+
+                            @endphp
+                            <td align="right">{{ number_format($susut, 0) }} %</td>
+
                             <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
-                            <td align="right">{{ $x->pcs_bk - $x->pcs_awal }}</td>
-                            <td align="right">{{ $x->gr_bk - $x->gr_awal }}</td>
+                            <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
+                            <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
                         </tr>
                     </tbody>
                     @endforeach
@@ -116,7 +146,7 @@
 
         @section('scripts')
             <script>
-                pencarian('pencarian', 'tablealdi')
+                pencarian('pencarian', 'tblAld')
             </script>
         @endsection
     </x-slot>
