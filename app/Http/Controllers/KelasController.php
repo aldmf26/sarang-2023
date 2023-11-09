@@ -30,7 +30,6 @@ class KelasController extends Controller
 
     public function cabutCreate(Request $r)
     {
-        dd($r->all())
         $buang = [
             'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'batas_eot','eot', 'denda_hcr',
             'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'batas_eot_tambah','eot_tambah', 'denda_hcr_tambah'
