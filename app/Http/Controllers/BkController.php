@@ -72,11 +72,11 @@ class BkController extends Controller
         $tdContent = '<td><select name="' . $elemen . '[]" id="" pilihan="' . $elemen . '" count="' . $count . '" class="selectTipe select2-tipe">';
         foreach ($data as $item) {
             if ($elemen === 'tipe') {
-                $tdContent .= '<option value="' . $item->id_tipe . '">' . $item->tipe . '</option>';
+                $tdContent .= '<option value="' . $item->id_tipe . '">' . strtoupper($item->tipe) . '</option>';
             } elseif ($elemen === 'ket') {
-                $tdContent .= '<option value="' . $item->id_ket_bk . '">' . $item->ket_bk . '</option>';
+                $tdContent .= '<option value="' . $item->id_ket_bk . '">' . strtoupper($item->ket_bk) . '</option>';
             } elseif ($elemen === 'warna') {
-                $tdContent .= '<option value="' . $item->id_warna . '">' . $item->nm_warna . '</option>';
+                $tdContent .= '<option value="' . $item->id_warna . '">' . strtoupper($item->nm_warna) . '</option>';
             }
         }
 

@@ -43,12 +43,7 @@
             <th class="dhead text-end">Pcs Akhir</th>
             <th class="dhead text-end">Gr Akhir</th>
             <th class="dhead text-end">Pcs Hcr</th>
-            <th class="dhead text-end">EOT</th>
             <th class="dhead text-end">Susut</th>
-            <th class="dhead text-end">Bonus</th>
-            <th class="dhead text-end">Denda sst</th>
-            <th class="dhead text-end">Denda Hcr</th>
-            <th class="dhead text-end">EOT Rp</th>
             <th class="dhead text-end">Rp Target</th>
             <th class="dhead text-end">Total Rp</th>
         </tr>
