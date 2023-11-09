@@ -43,47 +43,22 @@
         <section class="row">
             <div id="load-cetak"></div>
         </section>
-        <form action="{{ route('pengawas.create_anak') }}" method="post">
+        <form action="{{ route('cabut.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah Anak" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="form-group">
                             <label for="">Tambah Anak</label>
-                            <select class="select3" name="" multiple id="">
-                                @foreach ($anakNoPengawas as $d)
-                                    <option value="{{ $d->id_anak }}">{{ ucwords($d->nama) }}</option>
-                                @endforeach
-                            </select>
+                            <div id="load_anak_nopengawas"></div>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <label for="">Aksi</label><br>
-                        <button class="btn btn-sm btn-primary" type="button">Edit/Save</button>
+                        <button class="btn btn-sm btn-primary" type="button" id="add_anak">Edit/Save</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-striped">
-                            <tr>
-                                <th width="180">Nama</th>
-                                <th width="80">Kelas</th>
-                                <th>Tgl Masuk</th>
-                                <th>Aksi</th>
-                            </tr>
-                            @foreach ($anak as $d)
-                                <tr>
-                                    <td>{{ ucwords($d->nama) }}</td>
-                                    <td><input type="text" value="{{ $d->kelas }}" class="form-control"></td>
-                                    <td><input type="date" class="form-control"></td>
-                                    <td><button class="btn btn-sm btn-danger"><i
-                                                class="fas fa-window-close"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
+                <div id="load_anak"></div>
             </x-theme.modal>
         </form>
 
@@ -228,25 +203,6 @@
                         }
                     });
                 });
-                // $(document).on('change', '.pilihBox', function() {
-                //     var count = $(this).attr('count');
-                //     var no_box = $(this).val();
-                //     $.ajax({
-                //         type: "get",
-                //         url: "{{ route('cetak.get_box') }}",
-                //         data: {
-                //             no_box: no_box
-                //         },
-                //         dataType: "JSON",
-                //         success: function(r) {
-                //             $('.pcs_awal' + count).val(r.pcs);
-                //             $('.gr_awal' + count).val(r.gr);
-                //         }
-                //     });
-                // });
-
-
-
                 $('#save_kerja').submit(function(e) {
                     e.preventDefault();
 
@@ -679,6 +635,73 @@
                     }
 
                 })
+                load_anak_nopengawas()
+
+                function load_anak_nopengawas() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.load_anak_nopengawas') }}",
+                        success: function(r) {
+                            $("#load_anak_nopengawas").html(r)
+                            $(".select3-load").select2()
+
+                        }
+                    });
+                }
+                load_anak()
+
+                function load_anak() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.load_anak') }}",
+                        success: function(r) {
+                            $("#load_anak").html(r);
+                        }
+                    });
+                }
+                $(document).on('click', '#add_anak', function() {
+                    var id_anak = $(".anakNoPengawas").val()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.add_delete_anak') }}?id_anak=" + id_anak,
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil tambah anak')
+                            load_anak()
+                            load_anak_nopengawas()
+                        }
+                    });
+                })
+                $(document).on('click', '#delete_anak', function(e) {
+
+                    var id_anak = $(this).attr('id_anak')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cabut.add_delete_anak') }}",
+                        data: {
+                            id_anak: id_anak,
+                            delete: 1,
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil tambah anak')
+                            load_anak()
+                            load_anak_nopengawas()
+                        }
+                    });
+                })
+            </script>
+
+            <script>
+                $(document).on('change', '.tgl_urut', function() {
+                    var tgl = $(this).val();
+                    var count = $(this).attr('count');
+
+                    var no = count;
+                    $('.tgl_urut').each(function() {
+                        no++;
+                        $('.tgl_urut' + no).val(tgl);
+                    });
+
+                });
             </script>
         @endsection
     </x-slot>

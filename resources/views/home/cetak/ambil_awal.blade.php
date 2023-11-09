@@ -34,7 +34,8 @@
                         <td>{{ $c->name }}</td>
                         <td>
                             <input type="hidden" name="id_cetak[]" value="{{ $c->id_cetak }}">
-                            <input type="date" class="form-control" required name="tgl[]" required>
+                            <input type="date" class="form-control tgl_urut tgl_urut{{ $i + 1 }}"
+                                count="{{ $i + 1 }}" name="tgl[]" required>
                         </td>
                         <td>
                             <select name="no_box[]" id="" class="select2-add pilihBox"
