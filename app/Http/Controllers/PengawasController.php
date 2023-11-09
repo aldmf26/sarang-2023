@@ -29,6 +29,7 @@ class PengawasController extends Controller
                     $query->where('b.posisi_id', 13)
                         ->orWhereNull('a.id_pengawas');
                 })
+                ->where('b.id', auth()->user()->id)
                 ->orderBy('a.id_anak', 'DESC')
                 ->get(),
             'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
@@ -62,12 +63,13 @@ class PengawasController extends Controller
         ];
         return view("data_master.pengawas.anak_detail", $data);
     }
+    
     public function update_anak(Request $r)
     {
         DB::table('tb_anak')->where('id_anak', $r->id)->update([
             'tgl_masuk' => $r->tgl_masuk,
             'nama' => $r->nama,
-            'kelas' => $r->kelas,
+            'id_kelas' => $r->kelas,
             'id_pengawas' => $r->id_pengawas,
         ]);
 

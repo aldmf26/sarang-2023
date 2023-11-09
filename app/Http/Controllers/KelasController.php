@@ -53,6 +53,7 @@ class KelasController extends Controller
                     'eot' => $r->eot_tambah[$i],
                     'denda_hcr' => $r->denda_hcr_tambah[$i],
                     'id_kategori' => $r->id_kategori_tambah[$i],
+                    'id_paket' => $r->id_kategori_tambah[$i],
                     'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
                     'jenis' => $r->jenis,
                 ]);
@@ -69,6 +70,7 @@ class KelasController extends Controller
                     'rupiah' => $r->rupiah[$i],
                     'rp_bonus' => $r->rp_bonus[$i],
                     'id_kategori' => $r->id_kategori[$i],
+                    'id_paket' => $r->id_kategori[$i],
                     'id_tipe_brg' => $r->id_tipe_brg[$i],
                     'denda_susut_persen' => $r->denda_susut_persen[$i],
                     'batas_susut' => $r->batas_susut[$i],

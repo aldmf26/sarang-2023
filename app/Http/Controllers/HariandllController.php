@@ -14,14 +14,15 @@ class HariandllController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
+        $id_user = auth()->user()->id;
         $data = [
             'title' => 'Harian DLL',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'anak' => DB::table('tb_anak as a')->where('id_pengawas', auth()->user()->id)->get(),
+            'anak' => DB::table('tb_anak as a')->where('id_pengawas', $id_user)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where('ditutup', 'T')
+                ->where([['ditutup', 'T'],['b.id_pengawas', $id_user]])
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];

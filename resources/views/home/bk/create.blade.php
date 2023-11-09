@@ -104,11 +104,11 @@
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control pcsAwal text-end " name="pcs_awal[]" value="0">
+                                            class="form-control pcsAwal text-end" count="{{ $i }}" name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control grAwal text-end " name="gr_awal[]" value="0">
+                                            class="form-control grAwal text-end" count="{{ $i }}" name="gr_awal[]" value="0">
                                     </td>
 
                                 </tr>
@@ -168,6 +168,11 @@
 
                     if ($nextInput.length) {
                         $nextInput.focus();
+
+                        // Memeriksa jika kelas yang di-fokus adalah pcsAwal atau grAwal, lalu memilih seluruh teks di dalamnya.
+                        if ($nextInput.hasClass('pcsAwal') || $nextInput.hasClass('grAwal')) {
+                            $nextInput.select(); // Memilih seluruh teks dalam input.
+                        }
                     }
                 }
             }
@@ -189,14 +194,14 @@
                     var shouldUpdate = false;
                     $('.' + kelas).each(function() {
                         var count = $(this).attr('count');
-                        
+
                         if (shouldUpdate) {
                             if (ditambah) {
-                            currentValue++
-                            hasil = parseFloat(currentValue);
-                        } else {
-                            hasil = currentValue
-                        }
+                                currentValue++
+                                hasil = parseFloat(currentValue);
+                            } else {
+                                hasil = currentValue
+                            }
                             $(this).val(hasil);
                         }
                         if (count === currentCount) {

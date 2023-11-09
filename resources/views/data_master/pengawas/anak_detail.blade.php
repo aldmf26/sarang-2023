@@ -9,7 +9,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="">Kelas</label>
-            <input required type="text" value="{{ $detail->kelas }}" name="kelas" class="form-control">
+            <input required type="text" value="{{ $detail->id_kelas }}" name="kelas" class="form-control">
         </div>
     </div>
     <div class="col-lg-6">
