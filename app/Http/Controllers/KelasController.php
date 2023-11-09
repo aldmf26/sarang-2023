@@ -30,6 +30,7 @@ class KelasController extends Controller
 
     public function cabutCreate(Request $r)
     {
+        dd($r->all())
         $buang = [
             'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'batas_eot','eot', 'denda_hcr',
             'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'batas_eot_tambah','eot_tambah', 'denda_hcr_tambah'
@@ -53,6 +54,7 @@ class KelasController extends Controller
                     'eot' => $r->eot_tambah[$i],
                     'denda_hcr' => $r->denda_hcr_tambah[$i],
                     'id_kategori' => $r->id_kategori_tambah[$i],
+                    'id_paket' => $r->id_kategori_tambah[$i],
                     'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
                     'jenis' => $r->jenis,
                 ]);
@@ -69,6 +71,7 @@ class KelasController extends Controller
                     'rupiah' => $r->rupiah[$i],
                     'rp_bonus' => $r->rp_bonus[$i],
                     'id_kategori' => $r->id_kategori[$i],
+                    'id_paket' => $r->id_kategori[$i],
                     'id_tipe_brg' => $r->id_tipe_brg[$i],
                     'denda_susut_persen' => $r->denda_susut_persen[$i],
                     'batas_susut' => $r->batas_susut[$i],
