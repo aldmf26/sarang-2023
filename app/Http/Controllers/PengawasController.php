@@ -29,6 +29,7 @@ class PengawasController extends Controller
                     $query->where('b.posisi_id', 13)
                         ->orWhereNull('a.id_pengawas');
                 })
+                ->where('b.id', auth()->user()->id)
                 ->orderBy('a.id_anak', 'DESC')
                 ->get(),
             'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
