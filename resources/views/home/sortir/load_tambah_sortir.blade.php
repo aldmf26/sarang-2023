@@ -49,6 +49,7 @@
                         <th class="dhead" width="100">Tipe</th>
                         <th class="dhead">Tgl Terima</th>
                         <th class="dhead text-end" width="110">Pcs Awal</th>
+                        <th class="dhead text-end" width="110">Pcuc</th>
                         <th class="dhead text-end" width="110">Gr Awal</th>
                         <th class="dhead text-end" width="130">Rp Target</th>
                         <th class="dhead">Aksi</th>
@@ -56,7 +57,7 @@
                 </thead>
                 <tbody>
                     @foreach ($datas as $i => $d)
-                    <input type="hidden" value="{{ $d->id_sortir }}" name="id_sortir[]">
+                        <input type="hidden" value="{{ $d->id_sortir }}" name="id_sortir[]">
                         <tr>
                             <td>
                                 {{ strtoupper($d->nama) }} / {{ $d->id_kelas }}
@@ -76,7 +77,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-
                             </td>
                             <td>
                                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
@@ -87,16 +87,21 @@
                                     name="pcs_awal[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control text-end setGr" count="{{ $i }}" value="0"
-                                    id="grInput" name="gr_awal[]">
+                                <input type="text" class="form-control text-end" value="0" id="pcuc"
+                                    name="pcuc[]">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control rupiahInput text-end setRupiah{{ $i }}"
+                                <input type="text" class="form-control text-end setGr" count="{{ $i }}"
+                                    value="0" id="grInput" name="gr_awal[]">
+                            </td>
+                            <td>
+                                <input readonly type="text"
+                                    class="form-control rupiahInput text-end setRupiah{{ $i }}"
                                     value="0" name="rupiah[]">
                             </td>
                             <td align="center">
-                                <button type="button" class="btn rounded-pill hapusKerjSortir" id_sortir="{{ $d->id_sortir }}"><i
-                                        class="fas fa-trash text-danger"></i>
+                                <button type="button" class="btn rounded-pill hapusKerjSortir"
+                                    id_sortir="{{ $d->id_sortir }}"><i class="fas fa-trash text-danger"></i>
                                 </button>
                             </td>
                         </tr>

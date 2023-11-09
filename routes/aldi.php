@@ -138,6 +138,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
+            Route::get('/load_detail_sortir', 'load_detail_sortir')->name('load_detail_sortir');
             Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
             Route::get('/selesai_sortir', 'selesai_sortir')->name('selesai_sortir');
             Route::get('/ditutup', 'ditutup')->name('ditutup');

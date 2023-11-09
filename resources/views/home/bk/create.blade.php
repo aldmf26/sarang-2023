@@ -104,11 +104,11 @@
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control text-end pcs_awal" name="pcs_awal[]" value="0">
+                                            class="form-control pcsAwal text-end " name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}"
-                                            class="form-control text-end gr_awal" name="gr_awal[]" value="0">
+                                            class="form-control grAwal text-end " name="gr_awal[]" value="0">
                                     </td>
 
                                 </tr>
@@ -154,8 +154,31 @@
         <script>
             $(".select3").select2()
             $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
+            function navigateInputs(className, e) {
+                if (e.keyCode === 40 || e.keyCode === 38) {
+                    e.preventDefault();
 
-          
+                    var $input = $(e.target);
+                    var currentCount = parseInt($input.attr('count'));
+
+                    var direction = (e.keyCode === 40) ? 1 : (e.keyCode === 38) ? -1 : 0; // 1 for down arrow, -1 for up arrow
+
+                    var $nextInput = $input.closest('tr').siblings('tr').find('.' + className + '[count="' + (currentCount +
+                        direction) + '"]');
+
+                    if ($nextInput.length) {
+                        $nextInput.focus();
+                    }
+                }
+            }
+
+            // Menggunakan event delegation untuk menangani semua input dalam tabel
+            $('table').on('keydown', 'input', function(e) {
+                var className = $(this).attr('class').split(' ')[
+                    1]; // Mendapatkan kelas kedua (contoh: 'nolot' atau 'nobox')
+                navigateInputs(className, e);
+            });
+
 
             function keyupBp(kelas, ditambah = false) {
                 $('.' + kelas).on('keyup', function() {
@@ -166,13 +189,14 @@
                     var shouldUpdate = false;
                     $('.' + kelas).each(function() {
                         var count = $(this).attr('count');
-                        if (ditambah) {
+                        
+                        if (shouldUpdate) {
+                            if (ditambah) {
                             currentValue++
-                            hasil = parseFloat(currentValue - 1);
+                            hasil = parseFloat(currentValue);
                         } else {
                             hasil = currentValue
                         }
-                        if (shouldUpdate) {
                             $(this).val(hasil);
                         }
                         if (count === currentCount) {

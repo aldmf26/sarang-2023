@@ -5,11 +5,12 @@
             <thead>
                 <tr>
                     <th class="dhead" width="100">Nama Anak</th>
-                    <th class="dhead">No Box</th>
-                    <th class="dhead text-end">Pcs Awal</th>
-                    <th class="dhead text-end">Gr Awal</th>
-                    <th class="dhead text-end">Pcs Akhir</th>
-                    <th class="dhead text-end">Gr Akhir</th>
+                    <th class="dhead" width="90">No Box</th>
+                    <th class="dhead text-end" width="80">Pcs Awal</th>
+                    <th class="dhead text-end" width="80">Gr Awal</th>
+                    <th class="dhead text-end" width="80">Pcs Akhir</th>
+                    <th class="dhead text-end" width="80">Pcus</th>
+                    <th class="dhead text-end" width="80">Gr Akhir</th>
                     <th class="dhead text-end">Susut</th>
                     <th class="dhead" width="80">Bulan</th>
                     <th class="dhead text-center" width="140">Aksi</th>
@@ -38,6 +39,10 @@
                         </td>
                         <td>
                             <input value="{{ $v->pcs_akhir ?? $v->pcs_awal }}" required name="pcs_akhir{{$i}}[]" type="text"
+                                class="form-control text-end">
+                        </td>
+                        <td>
+                            <input value="{{ $v->pcus ?? 0 }}" required name="pcus{{$i}}[]" type="text"
                                 class="form-control text-end">
                         </td>
                         <td>
