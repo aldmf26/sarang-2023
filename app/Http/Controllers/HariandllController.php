@@ -22,7 +22,7 @@ class HariandllController extends Controller
             'anak' => DB::table('tb_anak as a')->where('id_pengawas', $id_user)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where([['ditutup', 'T'],['a.id_pengawas', $id_user]])
+                ->where([['ditutup', 'T'],['b.id_pengawas', $id_user]])
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];
