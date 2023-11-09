@@ -12,6 +12,7 @@
             <th class="text-end dhead">Pcs Akhir</th>
             <th class="text-end dhead">Gr Akhir</th>
             <th class="text-end dhead">Susut</th>
+            <th class="text-end dhead">Denda</th>
             <th class="text-end dhead">Ttl Gaji</th>
             <th class="dhead">Selesai</th>
             <th class="dhead" width="70">
@@ -54,6 +55,7 @@
                     $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
                 @endphp
                 <td align="right">{{ number_format($susut, 0) }}%</td>
+                <td align="right">{{ number_format($d->denda_sp ?? 0, 0) }}</td>
                 <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
                 <td align="center">
                     @if ($d->selesai == 'T')

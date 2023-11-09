@@ -45,7 +45,7 @@
                                 <th class="dhead" width="100">Kelas</th>
                                 <th class="dhead text-end" width="100">Gr</th>
                                 <th class="text-end dhead" width="150">Rupiah</th>
-                                <th class="text-end dhead">Denda Sst</th>
+                                <th class="text-end dhead">Batas Sst</th>
                                 <th class="text-end dhead">Denda Rp</th>
                                 <th class="dhead" width="60">Aksi</th>
                             </tr>

@@ -24,7 +24,7 @@
                 <td width="20%" style="padding: 10px;" class="fw-bold">Kelas/Paket</td>
                 <td width="2%" style="padding: 10px;">:</td>
                 
-                <td style="padding: 10px;">Kelas {{ $detail->nm_kelas }} (asd) {{ number_format($detail->rp_kelas,0) }}</td>
+                <td style="padding: 10px;">Kelas {{ $detail->nm_kelas }} {{ number_format($detail->rp_kelas,0) }}</td>
             </tr>
         
         </table>
@@ -32,7 +32,7 @@
 </div>
 
 
-<hr style="border: 1px solid #435EBE">
+{{-- <hr style="border: 1px solid #435EBE">
 <table class="table table-bordered" width="100%">
     <thead>
         <tr>
@@ -48,7 +48,7 @@
             <th class="dhead text-end">Total Rp</th>
         </tr>
     </thead>
-    {{-- <tbody>
+    <tbody>
         <tr>
             <td align="right">{{ number_format($detail->pcs_awal, 0) }}</td>
             <td align="right">{{ number_format($detail->gr_awal, 0) }}</td>
@@ -67,5 +67,5 @@
             <td align="right">{{ number_format($detail->rupiah, 0) }} </td>
             <td align="right">{{ number_format($hasil->ttl_rp, 0) }} </td>
         </tr>
-    </tbody> --}}
-</table>
+    </tbody>
+</table> --}}
