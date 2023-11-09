@@ -143,7 +143,7 @@
                             <td align="right">{{ empty($c->pcs_flx) ? '0' : $c->pcs_flx }}</td>
                             <td align="right">{{ $c->pcs_akhir + $c->pcs_flx }}</td>
                             <td align="right">{{ $c->pcs_hcr }}</td>
-                            <td align="right">5,000</td>
+                            <td align="right">{{ $c->denda_hcr * $c->pcs_hcr }}</td>
                             @php
                                 $hasil = rumusTotalRp($c);
                             @endphp
@@ -336,7 +336,7 @@
                                 <td align="right">{{ $c->gr_awal_ctk + $c->gr_tidak_ctk }}</td>
                                 <td rowspan="2"></td>
                                 <td rowspan="2" align="right">
-                                    {{ number_format((1 - $c->gr_awal_ctk / ($c->gr_akhir + $c->gr_cu)) * 100, 0) }} %
+                                    {{ number_format((1 - ($c->gr_akhir + $c->gr_cu) / $c->gr_awal_ctk) * 100, 0) }} %
                                 </td>
                                 <td rowspan="2"></td>
                             </tr>

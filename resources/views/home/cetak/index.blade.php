@@ -694,7 +694,6 @@
                 $(document).on('change', '.tgl_urut', function() {
                     var tgl = $(this).val();
                     var count = $(this).attr('count');
-
                     var no = count;
                     $('.tgl_urut').each(function() {
                         no++;
