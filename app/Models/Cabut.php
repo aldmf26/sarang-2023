@@ -10,6 +10,7 @@ class Cabut extends Model
 {
     public static function getCabut()
     {
+        $id_user = auth()->user()->id;
         return DB::table('cabut as a')
             ->select(
                 'b.id_anak',
@@ -42,7 +43,7 @@ class Cabut extends Model
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T'], ['a.id_pengawas', $id_user]])
             ->orderBY('a.selesai', 'ASC')
             ->orderBY('a.tgl_terima', 'ASC')
             ->get();
