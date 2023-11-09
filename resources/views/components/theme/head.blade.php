@@ -32,10 +32,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- Alpine Plugins -->
-<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-<!-- Alpine Core -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+    <!-- Alpine Core -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {{-- my css --}}
 
     {{--
@@ -58,6 +58,10 @@
 
         .modal-lg-max {
             max-width: 1200px;
+        }
+
+        .modal-lg-max-nanda {
+            max-width: 1250px;
         }
 
         .modal-lg-max_custome {
@@ -204,12 +208,13 @@
             background-color: #25387e !important;
             color: rgb(255, 255, 255);
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-                color: #000000;
-                line-height: 36px;
-                /* font-size: 12px; */
-                width: 170px;
-            }
+            color: #000000;
+            line-height: 36px;
+            /* font-size: 12px; */
+            width: 170px;
+        }
     </style>
     @yield('styles')
 

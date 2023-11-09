@@ -10,8 +10,10 @@
         </span>
     </td>
     <td>{{ $c->no_box }}</td>
+    <td><input type="date" required class="form-control" name="tgl_serah" value="{{ $c->tgl_serah }}">
+    </td>
     <td>
-        <input type="text" class="form-control text-end " name="pcs_awal_ctk"
+        <input type="text" class="form-control text-end pcs_awal_ctk{{ $c->id_cetak }}" name="pcs_awal_ctk"
             value="{{ $c->pcs_awal_ctk == 0 ? $c->pcs_awal : $c->pcs_awal_ctk }}" readonly>
         <input type="hidden" class="form-control text-end" name="id_cetak" value="{{ $c->id_cetak }}">
         <input type="hidden" class="rp_pcs{{ $c->id_cetak }}" value="{{ $c->rp_pcs }}">
@@ -32,7 +34,8 @@
         <input type="hidden" class="batas_susut{{ $c->id_cetak }}" value="{{ $c->batas_susut }}">
     </td>
     <td>
-        <input type="text" class="form-control text-end " name="pcs_cu"value="{{ $c->pcs_cu }}">
+        <input type="text" class="form-control text-end pcs_cu pcs_cu{{ $c->id_cetak }}"
+            count="{{ $c->id_cetak }}" name="pcs_cu"value="{{ $c->pcs_cu }}">
     </td>
     <td>
         <input type="text" class="form-control text-end gr_cu gr_cu{{ $c->id_cetak }}" count="{{ $c->id_cetak }}"
@@ -59,9 +62,11 @@
         </select>
     </td>
     <td style="white-space: nowrap">
-        <button type="button" class="btn btn-sm btn-primary btn_simpan">Simpan</button>
+        <button type="button" class="btn btn-xs btn-primary btn_simpan btn_simpan{{ $c->id_cetak }}">Simpan</button>
+
         <button type="button" data-bs-target="#selesai" data-bs-toggle="modal" id_cetak="{{ $c->id_cetak }}"
-            class="btn btn-sm btn-success selesai"
-            {{ empty($c->pcs_akhir) || empty($c->gr_akhir) ? 'hidden' : '' }}>Selesai</button>
+            class="btn btn-xs btn-success selesai selesai{{ $c->id_cetak }}"
+            {{ empty($c->pcs_akhir) || empty($c->gr_akhir) || $c->bulan_dibayar == '0' ? 'hidden' : '' }}>Selesai</button>
+        <button type="button" class="btn btn-xs btn-danger btn_hapus " id_cetak="{{ $c->id_cetak }}">Hapus</button>
     </td>
 </tr>

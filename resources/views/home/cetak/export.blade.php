@@ -4,19 +4,23 @@
             <th class="">#</th>
             <th class="">Bulan</th>
             <th class="">No Box</th>
+            <th class="">Grade</th>
             <th class="">Nama</th>
-            <th class="">Tgl Terima Brg</th>
+            <th class="">Kelas</th>
             <th class=" text-center">Pcs Tdk Ctk</th>
             <th class=" text-center">Gr Tdk Ctk</th>
+            <th class="">Tgl Terima Brg</th>
             <th class=" text-center">Pcs Awal </th>
             <th class=" text-center">Gr Awal </th>
-            <th class=" text-center">Pcs Akhir</th>
-            <th class=" text-center">Gr Akhir</th>
             <th class=" text-end">Pcs Cu</th>
             <th class=" text-end">Gr Cu</th>
+            <th class=" text-center">Pcs Akhir</th>
+            <th class=" text-center">Gr Akhir</th>
+            <th class=" text-center">harga/pcs</th>
             <th class=" text-end">Pcs Hcr</th>
             <th class=" text-end">Susut</th>
             <th class=" text-end">Ttl Gaji</th>
+            <th class=" text-end">Status</th>
         </tr>
     </thead>
     <tbody>
@@ -32,21 +36,25 @@
                 <td>{{ !empty($c->bulan_dibayar) ? date('M y', strtotime('01-' . $c->bulan_dibayar . '-' . date('Y'))) : '' }}
                 </td>
                 <td>{{ $c->no_box }}</td>
-                <td>{{ $c->nama }} ({{ $c->kelas }})</td>
-                <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                <td>{{ $c->ket_bk }}</td>
+                <td>{{ $c->nama }} </td>
+                <td>{{ $c->id_kelas }}</td>
                 {{-- <td class="text-end">{{ $c->pcs_awal }}</td>
                 <td class="text-end">{{ $c->gr_awal }}</td> --}}
                 <td class="text-end">{{ $c->pcs_tidak_ctk }}</td>
                 <td class="text-end">{{ $c->gr_tidak_ctk }}</td>
+                <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
                 <td class="text-end">{{ $c->pcs_awal_ctk }}</td>
                 <td class="text-end">{{ $c->gr_awal_ctk }}</td>
-                <td class="text-end">{{ $c->pcs_akhir }}</td>
-                <td class="text-end">{{ $c->gr_akhir }}</td>
                 <td class="text-end">{{ $c->pcs_cu }}</td>
                 <td class="text-end">{{ $c->gr_cu }}</td>
+                <td class="text-end">{{ $c->pcs_akhir }}</td>
+                <td class="text-end">{{ $c->gr_akhir }}</td>
+                <td class="text-end">{{ $c->rp_pcs }}</td>
+
                 <td class="text-end">{{ $c->pcs_hcr }}</td>
                 <td class="text-end">{{ round($susut) }}%</td>
-                <td class="text-end">{{ number_format($ttl_rp - $denda - $denda_hcr, 0) }}</td>
+                <td class="text-end">{{ $ttl_rp - $denda - $denda_hcr }}</td>
                 <td class="text-end">
                     @if ($c->selesai == 'Y')
                         SELESAI

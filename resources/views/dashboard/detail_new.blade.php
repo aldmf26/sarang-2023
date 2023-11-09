@@ -124,7 +124,7 @@
                         <tr>
                             <td>Cbt</td>
                             <td>{{ $c->name }}</td>
-                            <td rowspan="2">{{ $c->nama }}</td>
+                            <td rowspan="2">{{ $c->nama }} ({{ $c->id_kelas }})</td>
                             <td>{{ date('d M y', strtotime($c->tgl_terima)) }}</td>
                             <td align="right">{{ $c->pcs_awal }}</td>
                             <td align="right">0</td>
@@ -150,6 +150,107 @@
                             <td align="right">{{ number_format($hasil->ttl_rp, 0) }}</td>
                         </tr>
                     @endforeach
+                    <tr>
+                        <td colspan="8" class="border-hilang">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="dhead">Tipe</th>
+                        <th class="dhead">Pgws</th>
+                        <th class="dhead">Nama/kls</th>
+                        <th class="dhead">Tgl Terima</th>
+                        <th class="dhead text-end">Pcs dictk</th>
+                        <th class="dhead text-end">Pcs hcr</th>
+                        <th class="dhead text-end">Pcs cuc</th>
+                        <th class="dhead text-end">Pcs tdk ctk</th>
+                        <th class="dhead text-end">Pcs Ttl</th>
+                        <th class="dhead text-end">Rp denda</th>
+                        <th class="dhead text-end">Ttl Rp</th>
+                    </tr>
+                    @foreach ($cetak as $c)
+                        @php
+                            $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+                            $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
+                            $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
+                            $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
+                        @endphp
+                        <tr>
+                            <td>CTK</td>
+                            <td>{{ $c->name }}</td>
+                            <td rowspan="2">{{ $c->nama }}({{ $c->id_kelas }})</td>
+                            <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                            <td align="right">{{ $c->pcs_awal_ctk }}</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">{{ $c->pcs_tidak_ctk }}</td>
+                            <td align="right">{{ $c->pcs_tidak_ctk + $c->pcs_awal_ctk }}</td>
+                            <td align="right">0</td>
+                            <td align="right">{{ number_format($c->pcs_awal_ctk * $c->rp_pcs, 0) }} </td>
+                        </tr>
+                        <tr>
+                            <td>Terima</td>
+                            <td>{{ $c->name }}</td>
+                            <td>{{ date('d M y', strtotime($c->tgl_serah)) }}</td>
+                            <td align="right">{{ $c->pcs_akhir }}</td>
+                            <td align="right">{{ $c->pcs_hcr }}</td>
+                            <td align="right">{{ $c->pcs_cu }}</td>
+                            <td align="right">0</td>
+                            <td align="right">{{ $c->pcs_akhir + $c->pcs_cu }}</td>
+                            <td align="right">0</td>
+                            <td align="right">{{ number_format($ttl_rp - $denda - $denda_hcr, 0) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td colspan="8" class="border-hilang">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="dhead">Tipe</th>
+                        <th class="dhead">Pgws</th>
+                        <th class="dhead">Nama/kls</th>
+                        <th class="dhead">Tgl Terima</th>
+                        <th class="dhead text-end">Pcs sortir ck</th>
+                        <th class="dhead text-end">Pcs pcs cuc</th>
+                        <th class="dhead text-end">Pcs pcs tdk sortir</th>
+                        <th class="dhead text-end">Pcs cus</th>
+                        <th class="dhead text-end">Pcs Ttl</th>
+                        <th class="dhead text-end">Rp denda</th>
+                        <th class="dhead text-end">Ttl Rp</th>
+                    </tr>
+                    <tr>
+                        <td>Sortir</td>
+                        <td rowspan="2"></td>
+                        <td rowspan="3"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Check Cus</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Trima</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
 
                 </table>
@@ -163,8 +264,8 @@
                             <th class="dhead">Gr hcr</th>
                             <th class="dhead">Gr Flx</th>
                             <th class="dhead">Gr Ttl</th>
-                            <th class="dhead">Ttd Pgws</th>
                             <th class="dhead text-end">Susut</th>
+                            <th class="dhead">Ttd Pgws</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,8 +274,8 @@
                             <td class="text-end">0</td>
                             <td class="text-end">0</td>
                             <td class="text-end">{{ number_format($detail->gr_awal, 0) }}</td>
-                            <td></td>
                             <td class="text-end" rowspan="2">0</td>
+                            <td></td>
                             <td rowspan="3" class="border-hilang"></td>
                         </tr>
                         <tr>
@@ -215,6 +316,71 @@
                                 <td></td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="6" class="border-hilang">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="dhead text-end">Gr Dictk</th>
+                            <th class="dhead text-end">Gr Cu</th>
+                            <th class="dhead text-end">Gr Tdk Ctk</th>
+                            <th class="dhead text-end">Gr Ttl</th>
+                            <th class="dhead text-end"></th>
+                            <th class="dhead text-end">Susut</th>
+                            <th class="dhead">Ttd Pgws</th>
+                        </tr>
+                        @foreach ($cetak as $c)
+                            <tr>
+                                <td align="right">{{ $c->gr_awal_ctk }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->gr_tidak_ctk }}</td>
+                                <td align="right">{{ $c->gr_awal_ctk + $c->gr_tidak_ctk }}</td>
+                                <td rowspan="2"></td>
+                                <td rowspan="2" align="right">
+                                    {{ number_format((1 - $c->gr_awal_ctk / ($c->gr_akhir + $c->gr_cu)) * 100, 0) }} %
+                                </td>
+                                <td rowspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td align="right">{{ $c->gr_akhir }}</td>
+                                <td align="right">{{ $c->gr_cu }}</td>
+                                <td align="right">0</td>
+                                <td align="right">{{ $c->gr_akhir + $c->gr_cu }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="6" class="border-hilang">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="dhead text-end">Gr sortir</th>
+                            <th class="dhead text-end">Gr Cu</th>
+                            <th class="dhead text-end">Gr Tdk sortir</th>
+                            <th class="dhead text-end">Gr Ttl</th>
+                            <th class="dhead text-end"></th>
+                            <th class="dhead text-end">Susut</th>
+                            <th class="dhead text-center">Ttd Pgws</th>
+
+                        </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td rowspan="3"></td>
+                            <td rowspan="3"></td>
+                            <td rowspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
+                        <tr>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                            <td align="right">0</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
