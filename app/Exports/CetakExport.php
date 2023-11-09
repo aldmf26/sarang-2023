@@ -33,8 +33,8 @@ class CetakExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:Q1';
-                $cellRangeLoop = 'A1:Q' . $this->totalrow;
+                $cellRange = 'A1:T1';
+                $cellRangeLoop = 'A1:T' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([

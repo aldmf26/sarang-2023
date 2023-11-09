@@ -90,10 +90,13 @@ class DashboardController extends Controller
                 ->where([['a.no_box', $nobox]])
                 ->get(),
 
-            'cetak' => DB::select("SELECT * FROM cetak as a 
-            left join tb_anak as b on b.id_anak = a.id_anak 
-            left join users as c on c.id = a.id_pengawas
-            where a.no_box = $nobox"),
+            'cetak' => DB::select("SELECT *
+            FROM cetak as a
+            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
+            left join users as d on d.id = a.id_pengawas
+            where a.no_box = '$nobox'
+            order by a.selesai ASC"),
 
             'sortir' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')

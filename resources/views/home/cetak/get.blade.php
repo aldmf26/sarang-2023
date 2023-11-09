@@ -12,8 +12,8 @@
             <th class="dhead text-center">Gr <br> Awal </th>
             <th class="dhead text-center">Pcs <br> Akhir</th>
             <th class="dhead text-center">Gr <br> Akhir</th>
-            <th class="dhead text-end">Pcs Cu</th>
-            <th class="dhead text-end">Gr Cu</th>
+            <th class="dhead text-end">Pcs Cuc</th>
+            <th class="dhead text-end">Gr Cuc</th>
             <th class="dhead text-end">Pcs Hcr</th>
             <th class="dhead text-end">Susut</th>
             <th class="dhead text-end">Ttl Gaji</th>

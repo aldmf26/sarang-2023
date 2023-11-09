@@ -82,7 +82,7 @@ class CetakController extends Controller
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-            where a.id_pengawas = '$id' and a.penutup = 'T'
+            where a.id_pengawas = '$id' and a.penutup = 'T' and a.status = 'akhir'
             order by a.selesai ASC
             "),
         ];
@@ -121,8 +121,9 @@ class CetakController extends Controller
     {
         $tgl = date('Y-m-d');
         $id = auth()->user()->id;
-        $totalAnak = DB::table('tb_anak as a')
+        $totalAnak = DB::table('cetak as a')
             ->where('a.id_pengawas', $id)
+            ->where('a.status', 'awal')
             ->count();
 
         return response()->json(['total_anak' => $totalAnak]);
@@ -237,6 +238,7 @@ class CetakController extends Controller
             'gr_cu' => $r->gr_cu,
             'pcs_hcr' => $r->pcs_hcr,
             'bulan_dibayar' => $r->bulan_dibayar,
+            'tgl_serah' => $r->tgl_serah
         ]);
     }
 
@@ -300,10 +302,12 @@ class CetakController extends Controller
         $view = 'home.cetak.export';
         $id = auth()->user()->id;
 
-        $tbl = DB::select("SELECT *
+        $tbl = DB::select("SELECT a.*, b.nama,b.id_kelas,c.*, e.ket_bk
         FROM cetak as a
         LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
+        left join ket_bk as e on e.id_ket_bk = d.id_ket
         where a.id_pengawas = '$id' and a.penutup = 'T'
         order by a.selesai ASC
             ");
@@ -366,5 +370,10 @@ class CetakController extends Controller
         $tbl = $this->queryRekap($tgl1, $tgl2);
 
         return Excel::download(new CetakRekapExport($tbl, $view), 'Export REKAP CETAK.xlsx');
+    }
+
+    function delete_cetak(Request $r)
+    {
+        DB::table('cetak')->where('id_cetak', $r->id_cetak)->delete();
     }
 }

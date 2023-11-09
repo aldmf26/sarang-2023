@@ -5,11 +5,14 @@
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-        <x-theme.button href="#" modal="Y" idModal="tambah_awal" icon="fa-plus" addClass="float-end tbh_cetak"
-            teks="Cetak" />
+        {{-- <x-theme.button href="#" modal="Y" idModal="tambah_awal" icon="fa-plus" addClass="float-end tbh_cetak"
+            teks="Cetak" /> --}}
+        <a href="#" data-bs-target="#tambah_awal" class="btn btn-sm btn-primary me-2 float-end tbh_cetak"
+            data-bs-toggle="modal"><i class="fas fa-plus"></i> Cetak <span class="badge bg-danger"
+                id="anakBelum"></span></a>
+
         <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
-            class="btn tambahAnak btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
-                class="badge bg-danger" id="anakBelum"></span>
+            class="btn tambahAnak btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
         </a>
 
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
@@ -17,10 +20,29 @@
     </x-slot>
 
     <x-slot name="cardBody">
+        <style>
+            .btn-xs {
+                font-size: 10px;
+                /* Sesuaikan ukuran font sesuai keinginan Anda */
+                padding: 4px 8px;
+                /* Sesuaikan padding sesuai keinginan Anda */
+            }
+
+            td {
+                font-size: 12px;
+            }
+
+            th {
+                font-size: 12px;
+            }
+
+            .form-control {
+                font-size: 12px !important;
+            }
+        </style>
         <section class="row">
             <div id="load-cetak"></div>
         </section>
-
         <form action="{{ route('pengawas.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah Anak" btnSave="Y">
@@ -85,8 +107,9 @@
             </x-theme.modal>
         </form>
 
-        <x-theme.modal idModal="inputAkhir" title="Input Akhir Cetak" size="modal-lg-max">
+        <x-theme.modal idModal="inputAkhir" title="Input Akhir Cetak" btnSave="T" size="modal-lg-max-nanda">
             <div class="row">
+                <p class="fw-bold fst-italic">Note : Untuk pcs cuc tidak dibayar</p>
                 <div class="col-lg-12">
                     <div id="load_ambil_akhir"></div>
                 </div>
@@ -166,6 +189,7 @@
                 $(document).on('click', '.tbh_cetak', function() {
                     load_gr_awal();
                 });
+
                 $(document).on('click', '.hapusCetakRow', function() {
                     var id_cetak = $(this).attr('id_cetak');
 
@@ -182,16 +206,7 @@
                     });
                 });
 
-                $(document).on('keyup', '.pcs_awal', function() {
-                    var count = $(this).attr('count');
-                    var target = $('.rp_pcs' + count).val();
-                    var pcs = $(this).val();
 
-                    var total = parseFloat(target) * parseFloat(pcs);
-
-                    $('.total_rp' + count).val(total);
-
-                });
                 $(document).on('change', '.pilihkelas', function() {
                     var count = $(this).attr('count');
                     var id_kelas_cetak = $(this).val();
@@ -213,22 +228,22 @@
                         }
                     });
                 });
-                $(document).on('change', '.pilihBox', function() {
-                    var count = $(this).attr('count');
-                    var no_box = $(this).val();
-                    $.ajax({
-                        type: "get",
-                        url: "{{ route('cetak.get_box') }}",
-                        data: {
-                            no_box: no_box
-                        },
-                        dataType: "JSON",
-                        success: function(r) {
-                            $('.pcs_awal' + count).val(r.pcs);
-                            $('.gr_awal' + count).val(r.gr);
-                        }
-                    });
-                });
+                // $(document).on('change', '.pilihBox', function() {
+                //     var count = $(this).attr('count');
+                //     var no_box = $(this).val();
+                //     $.ajax({
+                //         type: "get",
+                //         url: "{{ route('cetak.get_box') }}",
+                //         data: {
+                //             no_box: no_box
+                //         },
+                //         dataType: "JSON",
+                //         success: function(r) {
+                //             $('.pcs_awal' + count).val(r.pcs);
+                //             $('.gr_awal' + count).val(r.gr);
+                //         }
+                //     });
+                // });
 
 
 
@@ -361,13 +376,14 @@
                     var formData = row.find('input, select').serialize();
                     formData += "&_token=" + csrfToken;
 
+
                     // Kirim data ke server menggunakan AJAX
                     $.ajax({
                         url: "{{ route('cetak.save_akhir') }}", // Ganti dengan URL endpoint penyimpanan data
                         method: "POST",
                         data: formData,
                         success: function(response) {
-                            alertToast('sukses', 'Berhasil ditambahkan');
+
                             var savedRowId = row.data('id');
 
                             // Muat kembali data baris yang disimpan
@@ -385,12 +401,35 @@
                                     $(".select2-add").select2({
                                         dropdownParent: $('#inputAkhir .modal-content'),
                                     });
+                                    alertToast('sukses', 'Berhasil ditambahkan');
                                 },
                             });
 
                             load_cetak();
                         },
                     });
+                });
+                $(document).on('click', '.btn_hapus', function() {
+                    var id_cetak = $(this).attr('id_cetak');
+                    var konfirmasi = confirm("Apakah Anda yakin?");
+
+                    if (konfirmasi) {
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetak.delete_cetak') }}",
+                            data: {
+                                id_cetak: id_cetak
+                            },
+                            success: function(response) {
+                                alertToast('sukses', 'Berhasil dihapus');
+                                load_cetak();
+                                input_akhir();
+                            }
+                        });
+                    } else {
+
+                    }
+
                 });
                 $('#save_selesai').submit(function(e) {
                     e.preventDefault();
@@ -445,11 +484,58 @@
                     $('.ttl_rp' + count).text(total);
 
                 });
+                $(document).on('keyup', '.pcs_awal', function() {
+                    var count = $(this).attr('count');
+                    var target = parseFloat($('.rp_pcs' + count).val()); // Ubah string ke angka
+                    var pcs = parseFloat($(this).val()); // Ubah string ke angka
+                    var pcs_awal_ctk = parseFloat($('.pcs_awal_ctk' + count).val()); // Ubah string ke angka
+                    var pcs_cu = parseFloat($('.pcs_cu' + count).val()); // Ubah string ke angka
+
+                    var gr_awal = parseFloat($('.gr_awal' + count).val());
+                    var gr_cu = parseFloat($('.gr_cu' + count).val());
+                    var gr_akhir = parseFloat($('.gr_akhir' + count).val());
+
+                    if (pcs_awal_ctk - pcs_cu - pcs < 0 || pcs_cu + pcs < pcs_awal_ctk || gr_akhir + gr_cu > gr_awal) {
+                        $('.btn_simpan' + count).hide();
+                        $('.selesai' + count).hide();
+                    } else {
+                        $('.btn_simpan' + count).show();
+                        $('.selesai' + count).show();
+                    }
+
+                    var total = target * pcs; // Tidak perlu mengonversi ke float lagi
+
+                    $('.total_rp' + count).val(total);
+                });
+
+                $(document).on('keyup', '.pcs_cu', function() {
+                    var count = $(this).attr('count');
+                    var pcs_cu = parseFloat($(this).val());
+                    var pcs_awal_ctk = parseFloat($('.pcs_awal_ctk' + count).val());
+                    var pcs = parseFloat($('.pcs_awal' + count).val());
+
+                    var gr_awal = parseFloat($('.gr_awal' + count).val());
+                    var gr_cu = parseFloat($('.gr_cu' + count).val());
+                    var gr_akhir = parseFloat($('.gr_akhir' + count).val());
+
+                    if (pcs_awal_ctk - pcs_cu - pcs < 0 || pcs_cu + pcs < pcs_awal_ctk || gr_akhir + gr_cu > gr_awal) {
+                        $('.btn_simpan' + count).hide();
+                        $('.selesai' + count).hide();
+                    } else {
+                        $('.btn_simpan' + count).show();
+                        $('.selesai' + count).show();
+                    }
+
+
+                });
                 $(document).on('keyup', '.gr_akhir', function() {
                     var count = $(this).attr('count');
                     var gr_awal = $('.gr_awal' + count).val();
                     var gr_cu = $('.gr_cu' + count).val();
                     var gr_akhir = $(this).val();
+
+
+
 
                     var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
 
@@ -458,6 +544,10 @@
 
                     var target = $('.rp_pcs' + count).val();
                     var pcs_awal = $('.pcs_awal' + count).val();
+                    var pcs_awal_ctk = parseFloat($('.pcs_awal_ctk' + count).val()); // Ubah string ke angka
+                    var pcs_cu = parseFloat($('.pcs_cu' + count).val()); // Ubah string ke angka
+
+
 
                     var susut2 = Math.round(susut);
                     if (susut2 >= batas_susut) {
@@ -474,6 +564,15 @@
 
                     var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
                     $('.ttl_rp' + count).text(total);
+
+                    if (pcs_awal_ctk - pcs_cu - parseFloat(pcs_awal) < 0 || pcs_cu + parseFloat(pcs_awal) < pcs_awal_ctk ||
+                        parseFloat(gr_akhir) + parseFloat(gr_cu) > parseFloat(gr_awal)) {
+                        $('.btn_simpan' + count).hide();
+                        $('.selesai' + count).hide();
+                    } else {
+                        $('.btn_simpan' + count).show();
+                        $('.selesai' + count).show();
+                    }
 
                 });
                 $(document).on('keyup', '.gr_cu', function() {
@@ -482,6 +581,7 @@
                     var gr_akhir = $('.gr_akhir' + count).val();
                     var gr_cu = $(this).val();
 
+
                     var susut = (1 - ((parseFloat(gr_akhir) + parseFloat(gr_cu)) / parseFloat(gr_awal))) * 100;
 
                     var batas_susut = $('.batas_susut' + count).val();
@@ -489,6 +589,8 @@
 
                     var target = $('.rp_pcs' + count).val();
                     var pcs_awal = $('.pcs_awal' + count).val();
+                    var pcs_awal_ctk = parseFloat($('.pcs_awal_ctk' + count).val()); // Ubah string ke angka
+                    var pcs_cu = parseFloat($('.pcs_cu' + count).val()); // Ubah string ke angka
 
                     var susut2 = Math.round(susut);
                     if (susut2 >= batas_susut) {
@@ -505,6 +607,15 @@
 
                     var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
                     $('.ttl_rp' + count).text(total);
+
+                    if (pcs_awal_ctk - pcs_cu - parseFloat(pcs_awal) < 0 || pcs_cu + parseFloat(pcs_awal) < pcs_awal_ctk ||
+                        parseFloat(gr_akhir) + parseFloat(gr_cu) > parseFloat(gr_awal)) {
+                        $('.btn_simpan' + count).hide();
+                        $('.selesai' + count).hide();
+                    } else {
+                        $('.btn_simpan' + count).show();
+                        $('.selesai' + count).show();
+                    }
 
                 });
                 $(document).on('keyup', '.pcs_hcr', function() {
