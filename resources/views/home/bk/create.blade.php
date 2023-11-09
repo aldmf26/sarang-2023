@@ -189,13 +189,14 @@
                     var shouldUpdate = false;
                     $('.' + kelas).each(function() {
                         var count = $(this).attr('count');
-                        if (ditambah) {
+                        
+                        if (shouldUpdate) {
+                            if (ditambah) {
                             currentValue++
-                            hasil = parseFloat(currentValue - 1);
+                            hasil = parseFloat(currentValue);
                         } else {
                             hasil = currentValue
                         }
-                        if (shouldUpdate) {
                             $(this).val(hasil);
                         }
                         if (count === currentCount) {
