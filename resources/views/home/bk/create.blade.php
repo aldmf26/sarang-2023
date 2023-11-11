@@ -211,10 +211,9 @@
                 });
             }
             keyupBp('nolot')
-            keyupBp('pcs_awal')
-            keyupBp('gr_awal')
+            keyupBp('pcsAwal')
+            keyupBp('grAwal')
             keyupBp('nobox', true)
-
 
             function loadSelect(elemen, baris) {
                 $.ajax({
