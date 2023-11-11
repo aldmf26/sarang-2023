@@ -17,14 +17,10 @@ class AbsenController extends Controller
     }
     public function index(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 = $tgl['tgl1'];
-        $tgl2 = $tgl['tgl2'];
-        session(['tgl1' => $tgl1, 'tgl2' => $tgl2]);
+        $tgl = $r->tgl ?? date('Y-m-d');
         $data = [
             'title' => 'Form Absensi',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
+            'tgl' => $tgl,
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get()
         ];
         return view('home.absen.index', $data);
