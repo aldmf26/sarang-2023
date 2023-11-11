@@ -1,6 +1,4 @@
-@if (empty($absen))
-kosong
-@else
+
 <div class="row">
     <form id="viewDetailAbsen">
         <div class="col-lg-12">
@@ -58,8 +56,7 @@ kosong
         </tr>
     </thead>
     <tbody>
-        @if (empty($absen))
-            @else
+        
             @foreach ($absen as $i => $d)
                 <tr>
                     <td>{{ $i + 1 }}</td>
@@ -68,7 +65,5 @@ kosong
                     <td align="center">{{ $d->ttl }}</td>
                 </tr>
             @endforeach
-        @endif
     </tbody>
 </table>
-@endif
