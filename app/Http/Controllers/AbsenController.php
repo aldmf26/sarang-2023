@@ -52,7 +52,7 @@ class AbsenController extends Controller
 
     public function create(Request $r)
     {
-        DB::table('absen')->where([['tgl', $r->tgl],['id_pengawas', auth()->user()->id]])->delete();
+        DB::table('absen')->where('tgl', $r->tgl)->delete();
 
         for ($i=0; $i < count($r->id_anak); $i++) { 
             

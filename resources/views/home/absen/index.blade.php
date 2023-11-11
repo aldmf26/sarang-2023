@@ -36,7 +36,7 @@
                 <div class="col-lg-5 mb-2">
                     <div class="form-group">
                         <label for="">Tanggal</label>
-                        <input type="date" value="{{ date('Y-m-d') }}" name="tgl" class="form-control">
+                        <input type="date" value="{{ request()->get('tgl') ?? date('Y-m-d') }}" name="tgl" id="tglChange" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3 mb-2">
@@ -89,7 +89,7 @@
 
                             @php
                                 $absenHariIni = DB::table('absen')
-                                    ->where([['id_anak', $x->id_anak], ['tgl', date('Y-m-d')]])
+                                    ->where([['id_anak', $x->id_anak], ['tgl', request()->get('tgl') ?? date('Y-m-d')]])
                                     ->first();
                             @endphp
                             <tr>
@@ -121,7 +121,10 @@
             <script>
                 pencarian('pencarian', 'tablealdi')
                 $(document).ready(function() {
-
+                    $(document).on('change', '#tglChange', function(){
+                        var nilai = $(this).val()
+                        document.location.href = "?tgl="+nilai
+                    })
                     $(".toggle-category").on("change", function() {
                         var categoryIndex = $(this).data("category");
                         // Cari checkbox subkategori yang sesuai dengan kategori ini
