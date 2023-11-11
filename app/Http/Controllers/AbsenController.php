@@ -36,12 +36,14 @@ class AbsenController extends Controller
         JOIN tb_anak AS c ON a.id_anak = c.id_anak
         WHERE a.id_pengawas = '$r->id_pengawas' AND MONTH(a.tgl) = '$bulan' AND YEAR(a.tgl) = '$tahun'
         group BY a.id_anak");
-        
+        $pngwas = DB::table('users')->where('id', $r->id_pengawas)->first();
 
         $data = [
             'absen' => $absen,
             'bulanGet' => $bulan,
             'tahunGet' => $tahun,
+            'id_pengawas' => $r->id_pengawas,
+            'nama' => $pngwas->name,
         ];
         return view('home.absen.detail_absen',$data);
     }

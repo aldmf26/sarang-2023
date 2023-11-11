@@ -3,7 +3,7 @@
     <form id="viewDetailAbsen">
         <div class="col-lg-12">
             <table class="table">
-                <input type="hidden" name="id_pengawas" value="{{ $absen[0]->id_pengawas }}">
+                <input type="hidden" name="id_pengawas" value="{{ $id_pengawas }}">
                 <tr>
                     <th class="dhead">Pengawas</th>
                     <th class="dhead">Bulan</th>
@@ -11,7 +11,7 @@
                     <th class="dhead">Aksi</th>
                 </tr>
                 <tr>
-                    <td>{{ $absen[0]->name }}</td>
+                    <td>{{ $nama }}</td>
                     <td>
                         @php
                             $bulan = DB::table('bulan')->get();
