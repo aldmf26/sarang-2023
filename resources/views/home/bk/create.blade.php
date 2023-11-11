@@ -211,7 +211,7 @@
                 });
             }
             keyupBp('nolot')
-            keyupBp('pcsAwal')
+            // keyupBp('pcsAwal')
             keyupBp('grAwal')
             keyupBp('nobox', true)
 
