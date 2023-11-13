@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="col-lg-12">
-        <table class="table table-striped">
+        <table class="table table-striped" >
             <thead>
                 <tr>
                     <th class="dhead" width="100">Nama Anak</th>

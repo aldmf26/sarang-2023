@@ -34,10 +34,9 @@
                 </table>
             </div>
             <div class="col-lg-12">
-                <table class="table table-bordered table-hover table-striped" id="tblAld">
+                {{-- <table class="table table-bordered table-hover table-striped" id="tblAld2">
                     <thead>
                         <tr>
-                            <th class="dhead">Bulan</th>
                             <th class="dhead">Pengawas</th>
                             <th class="dhead">No Box</th>
                             <th class="dhead text-end">Pcs Akhir Cetak</th>
@@ -58,7 +57,6 @@
                     <tbody>
                         @foreach ($datas as $n => $d)
                             <tr>
-                                <td>{{ date('M Y', strtotime($d->tgl)) }}</td>
                                 <td>{{ $d->name }}</td>
                                 <td>{{ $d->no_box }}</td>
                                 <td class="text-end">{{ $d->cabut_pcs_akhir }}</td>
@@ -71,13 +69,103 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                </table> --}}
+                <section class="row">
+                    <table style="border:1px solid #97a1c3" class="table table-bordered" id="tblAld2"
+                        x-data="{
+                            openRows: [],
+                        }">
+                        <thead>
+                            <tr>
+                                <th width="180" rowspan="2" class="text-center dhead">Pengawas</th>
+                                <th width="85" rowspan="2" class="text-center dhead">No Box</th>
+                                <th colspan="2" class="text-center dhead">BK Awal</th>
+                                <th colspan="2" class="text-center dhead"> Kerja Awal</th>
+                                <th colspan="3" class="text-center dhead"> Kerja Akhir</th>
+                                <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br> (
+                                    {{ number_format($ttlRp, 0) }})</th>
+                                <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
+                            </tr>
+
+                            <tr>
+                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
+                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrBk, 0) }})</th>
+                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAwal, 0) }})</th>
+                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAwal, 0) }})</th>
+                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAkhir, 0) }})</th>
+                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAkhir, 0) }})</th>
+                                <th class="dhead text-center">Susut </th>
+                                <th class="dhead text-center">Pcs </th>
+                                <th class="dhead text-center">Gr</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($sortirGroup as $i => $d)
+                                <tr>
+                                    <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
+                                            x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
+                                            <i class="fas fa-caret-down"></i></span></th>
+                                    <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->pcs_bk, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->pcs_awal, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->gr_awal, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->pcs_akhir, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
+                                   
+                                    <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
+                                    <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
+                                </tr>
+                                @php
+                                    $id = $d->id_pengawas;
+                                    $query = DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
+                                            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+                                            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+                                             sum(a.rp_target) as rp_target,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
+                                            FROM sortir as a
+                                            left join users as b on b.id = a.id_pengawas
+                                            left JOIN bk as c on c.no_box = a.no_box
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
+                                            GROUP by a.no_box");
+                                @endphp
+                                @foreach ($query as $x)
+                        <tbody x-show="openRows.includes({{ $i }})">
+
+                            <tr>
+                                <td>{{ $d->pengawas }} <span class="badge bg-primary float-end"
+                                        x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                        <i class="fas fa-caret-up"></i></span></td>
+                                <td align="right"><a class="detail" target="_blank"
+                                        href="{{ route('dashboard.detail', $x->no_box) }}">{{ number_format($x->no_box, 0) }}
+                                        <i class="me-2 fas fa-eye"></i></a></td>
+                                <td align="right">{{ number_format($x->pcs_bk, 0) }}</td>
+                                <td align="right">{{ number_format($x->gr_bk, 0) }}</td>
+                                <td align="right">{{ number_format($x->pcs_awal, 0) }}</td>
+                                <td align="right">{{ number_format($x->gr_awal, 0) }}</td>
+                                <td align="right">{{ number_format($x->pcs_akhir, 0) }}</td>
+                                <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
+                    
+                                <td align="right">{{ number_format($x->susut, 0) }} %</td>
+
+                                <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
+                                <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
+                                <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
+                            </tr>
+                        </tbody>
+                        @endforeach
+                        @endforeach
+                        </tbody>
+                    </table>
+                </section>
             </div>
 
         </section>
         @section('scripts')
             <script>
-                pencarian('pencarian', 'tblAld')
+                pencarian('pencarian', 'tblAld2')
             </script>
         @endsection
     </x-slot>

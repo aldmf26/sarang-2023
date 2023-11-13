@@ -220,18 +220,18 @@
 
                     }
                     $(document).on('click', '.detail', function() {
-                    var id_sortir = $(this).attr('id_sortir')
-                    $.ajax({
-                        type: "GET",
-                        url: "sortir/load_detail_sortir",
-                        data: {
-                            id_sortir: id_sortir,
-                        },
-                        success: function(r) {
-                            $("#load_detail_sortir").html(r);
-                        }
-                    });
-                })
+                        var id_sortir = $(this).attr('id_sortir')
+                        $.ajax({
+                            type: "GET",
+                            url: "sortir/load_detail_sortir",
+                            data: {
+                                id_sortir: id_sortir,
+                            },
+                            success: function(r) {
+                                $("#load_detail_sortir").html(r);
+                            }
+                        });
+                    })
                     $(document).on('submit', '#createTambahAnakSortir', function(e) {
                         e.preventDefault();
                         var selectedRows = [];

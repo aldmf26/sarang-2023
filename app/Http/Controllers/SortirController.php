@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\SortirExport;
 use App\Exports\SortirRekapExport;
+use App\Models\Sortir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,8 +18,8 @@ class SortirController extends Controller
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
-            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori = 'sortir'");
+            SELECT max(no_box) as no_box,id_pengawas,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` GROUP BY no_box,id_pengawas
+        ) as b ON a.no_box = b.no_box AND b.id_pengawas = a.penerima WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori = 'sortir'");
     }
 
     public function getAnak($id = null)
@@ -365,11 +366,11 @@ class SortirController extends Controller
         FROM sortir as a
         LEFT JOIN users as b ON a.id_pengawas = b.id
         LEFT JOIN (
-            SELECT no_box, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
-            FROM cetak
-            GROUP BY no_box
-        ) as c ON a.no_box = c.no_box
-        WHERE a.selesai = 'Y' AND a.tgl BETWEEN '$tgl1' AND '$tgl2' $pengawas
+            SELECT no_box,id_pengawas, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
+            FROM sortir
+            GROUP BY no_box, id_pengawas
+        ) as c ON a.no_box = c.no_box AND a.id_pengawas = c.id_pengawas
+        WHERE a.selesai = 'Y' $pengawas
         GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
         ");
     }
@@ -380,12 +381,39 @@ class SortirController extends Controller
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
         $datas = $this->queryRekap($tgl1, $tgl2);
+        
+        $ttlPcsBk = 0;
+        $ttlGrBk = 0;
+        $ttlPcsAwal = 0;
+        $ttlGrAwal = 0;
+        $ttlPcsAkhir = 0;
+        $ttlGrAkhir = 0;
+        $ttlRp = 0;
+        $sortirGroup = Sortir::queryRekapGroup($tgl1, $tgl2);
+
+        foreach ($sortirGroup as $d) {
+            $ttlPcsBk += $d->pcs_bk;
+            $ttlGrBk += $d->gr_bk;
+            $ttlPcsAwal += $d->pcs_awal;
+            $ttlGrAwal += $d->gr_awal;
+            $ttlPcsAkhir += $d->pcs_akhir;
+            $ttlGrAkhir += $d->gr_akhir;
+            $ttlRp += $d->ttl_rp;
+        }
 
         $data = [
             'title' => 'Rekap Summary Sortir',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'datas' => $datas,
+            'ttlPcsBk' => $ttlPcsBk,
+            'ttlGrBk' => $ttlGrBk,
+            'ttlPcsAwal' => $ttlPcsAwal,
+            'ttlGrAwal' => $ttlGrAwal,
+            'ttlPcsAkhir' => $ttlPcsAkhir,
+            'ttlGrAkhir' => $ttlGrAkhir,
+            'ttlRp' => $ttlRp,
+            'sortirGroup' => $sortirGroup
         ];
         return view('home.sortir.rekap', $data);
     }
