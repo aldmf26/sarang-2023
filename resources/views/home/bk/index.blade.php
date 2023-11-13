@@ -49,7 +49,7 @@
                             <td>{{ $no + 1 }}</td>
                             <td>{{ $b->no_lot }}</td>
                             <td>{{ $b->no_box }}</td>
-                            <td>{{ $b->tipe }}</td>
+                            <td>{{ $b->tipe_cbt }}</td>
                             <td>{{ $b->ket_bk }}</td>
                             <td>{{ $b->nm_warna }}</td>
                             <td>{{ tanggal($b->tgl) }}</td>

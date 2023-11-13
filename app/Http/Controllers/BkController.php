@@ -27,10 +27,11 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT * FROM bk as a 
+            'bk' => DB::select("SELECT *, e.tipe as tipe_cbt FROM bk as a 
             left join ket_bk as b on b.id_ket_bk = a.id_ket 
             left join warna as c on c.id_warna = a.id_warna 
             left join users as d on d.id = a.penerima 
+            left join tipe_cabut as e on e.id_tipe = a.tipe 
             WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC")
         ];
         return view('home.bk.index', $data);
