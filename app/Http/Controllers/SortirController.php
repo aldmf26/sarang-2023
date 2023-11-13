@@ -127,7 +127,7 @@ class SortirController extends Controller
     {
         $detail = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['selesai', 'T'], ['no_box', '!=', 9999],['id_pengawas', auth()->user()->id]])
+            ->where([['selesai', 'T'], ['no_box', '!=', 9999],['a.id_pengawas', auth()->user()->id]])
             ->get();
         $data = [
             'detail' => $detail
