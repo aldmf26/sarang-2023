@@ -376,13 +376,12 @@
                         bonus_susut = (data.rp_bonus * data.gr_awal) / data.gr_kelas
                     }
                     denda_hcr = data.pcs_hcr * data.denda_hcr;
-
                     eot_bonus = (data.eot - data.gr_awal * 0.02) * data.eot_rp;
                     ttl_rp = rupiah - denda_hcr + eot_bonus + bonus_susut
-                    return ttl_rp
                     console.log(
                         `rp target = ${data.rupiah} rupiah = ${rupiah} denda = ${denda} dnda_hcr = ${denda_hcr} eotbon = ${eot_bonus} bonussut = ${bonus_susut}`
                     )
+                    return ttl_rp
                 }
 
                 function setRupiah(kelas) {
@@ -428,8 +427,6 @@
                         $('.ttlRpSet' + data.count).val(rulesCabut(data))
                     })
                 }
-
-
 
                 function loadListAnakSisa() {
                     $.ajax({
