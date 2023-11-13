@@ -169,7 +169,7 @@ class SortirController extends Controller
 
         $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $get->id_kelas)->first();
 
-        $rupiah = $get->rp_target;
+        $rupiah = $get->rp_target;  
         $denda = 0;
         if ($susut > $kelas->denda_susut) {
             $denda = (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
@@ -353,25 +353,15 @@ class SortirController extends Controller
         $posisi = auth()->user()->posisi_id;
         $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
 
-        return DB::select("SELECT
-        MAX(a.no_box) as no_box,
-        MAX(a.tgl) as tgl,
-        sum(a.pcs_awal) as pcs_awal,
-        sum(a.gr_awal) as gr_awal,
-        sum(a.gr_akhir) as gr_akhir,
-        sum(a.ttl_rp) as ttl_rp,
-        b.name,
-        c.pcs_akhir as cabut_pcs_akhir,
-        c.gr_akhir as cabut_gr_akhir
+        return DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
+        SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+        SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+         sum(a.rp_target) as rupiah,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
         FROM sortir as a
-        LEFT JOIN users as b ON a.id_pengawas = b.id
-        LEFT JOIN (
-            SELECT no_box,id_pengawas, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as  gr_akhir
-            FROM sortir
-            GROUP BY no_box, id_pengawas
-        ) as c ON a.no_box = c.no_box AND a.id_pengawas = c.id_pengawas
-        WHERE a.selesai = 'Y' $pengawas
-        GROUP BY a.pcs_awal, a.gr_awal, b.name, c.pcs_akhir, c.gr_akhir;
+        left join users as b on b.id = a.id_pengawas
+        left JOIN bk as c on c.no_box = a.no_box AND a.id_pengawas = c.penerima
+        WHERE a.no_box != 9999 AND a.penutup = 'T'
+        GROUP by a.no_box,a.id_pengawas;
         ");
     }
 

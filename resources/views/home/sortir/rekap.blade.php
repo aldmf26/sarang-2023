@@ -7,7 +7,7 @@
 
             <div class="col-lg-6">
                 <a href="{{ route('sortir.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm icon icon-left btn-primary me-2">
+                    class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
                 <x-theme.btn_filter />
@@ -34,42 +34,7 @@
                 </table>
             </div>
             <div class="col-lg-12">
-                {{-- <table class="table table-bordered table-hover table-striped" id="tblAld2">
-                    <thead>
-                        <tr>
-                            <th class="dhead">Pengawas</th>
-                            <th class="dhead">No Box</th>
-                            <th class="dhead text-end">Pcs Akhir Cetak</th>
-                            <th class="dhead text-end">Gr Akhir Cetak</th>
-                            <th class="dhead text-end">Pcs Awal Sortir</th>
-                            <th class="dhead text-end">Gr Awal Sortir</th>
-                            @php
-                                $ttl = 0;
-                                foreach ($datas as $d) {
-                                    $ttl += $d->ttl_rp;
-                                }
-                            @endphp
-                            <th class="dhead text-end">Total Rupiah ({{ number_format($ttl, 0) }})</th>
-                            <th class="dhead text-end">Pcs Sisa Bk</th>
-                            <th class="dhead text-end">Gr Sisa Bk</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($datas as $n => $d)
-                            <tr>
-                                <td>{{ $d->name }}</td>
-                                <td>{{ $d->no_box }}</td>
-                                <td class="text-end">{{ $d->cabut_pcs_akhir }}</td>
-                                <td class="text-end">{{ $d->cabut_gr_akhir }}</td>
-                                <td class="text-end">{{ $d->pcs_awal }}</td>
-                                <td class="text-end">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ $d->ttl_rp }}</td>
-                                <td class="text-end">{{ $d->pcs_awal - $d->cabut_pcs_akhir }}</td>
-                                <td class="text-end">{{ $d->gr_awal - $d->cabut_gr_akhir }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table> --}}
+              
                 <section class="row">
                     <table style="border:1px solid #97a1c3" class="table table-bordered" id="tblAld2"
                         x-data="{
@@ -128,7 +93,7 @@
                                             FROM sortir as a
                                             left join users as b on b.id = a.id_pengawas
                                             left JOIN bk as c on c.no_box = a.no_box
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T'
                                             GROUP by a.no_box");
                                 @endphp
                                 @foreach ($query as $x)

@@ -1,38 +1,99 @@
 <table class="table table-bordered table-hover table-striped" id="table">
     <thead>
         <tr>
+            <th class="dhead ">No Box</th>
+            <th class="dhead text-end">Pcs Awal Bk</th>
+            <th class="dhead text-end">Gr Awal Bk</th>
             <th class="dhead">Bulan</th>
             <th class="dhead">Pengawas</th>
-            <th class="dhead">No Box</th>
-            <th class="dhead text-end">Pcs Akhir Cetak</th>
-            <th class="dhead text-end">Gr Akhir Cetak</th>
-            <th class="dhead text-end">Pcs Awal Sortir</th>
-            <th class="dhead text-end">Gr Awal Sortir</th>
-            @php
-                $ttl =0;
-                 foreach($datas as $d) {
-                     $ttl +=$d->ttl_rp;
-                 }
-            @endphp
-            <th class="dhead text-end">Total Rupiah ({{ number_format($ttl, 0) }})</th>
+            <th class="dhead text-end">Pcs Awal Kerja</th>
+            <th class="dhead text-end">Gr Awal Kerja</th>
+            <th class="dhead text-end">Pcs Akhir Kerja</th>
+            <th class="dhead text-end">Gr Akhir Kerja</th>
+            <th class="dhead text-end">Susut</th>
+            <th class="dhead text-end">Total Rupiah</th>
             <th class="dhead text-end">Pcs Sisa Bk</th>
             <th class="dhead text-end">Gr Sisa Bk</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($datas as $n => $d)
+        @php
+            $ttlPcsBk = 0;
+            $ttlGrBk = 0;
+
+            $ttlPcsAwal = 0;
+            $ttlGrAwal = 0;
+            $ttlPcsAkhir = 0;
+            $ttlGrAkhir = 0;
+
+            $ttlSusut = 0;
+
+            $ttlRp = 0;
+
+            $ttlPcsSisa = 0;
+            $ttlGrSisa = 0;
+        @endphp
+        @foreach ($datas as $c)
             <tr>
-                <td>{{ date('M Y', strtotime($d->tgl)) }}</td>
-                <td>{{ $d->name }}</td>
-                <td>{{ $d->no_box }}</td>
-                <td class="text-end">{{ $d->cabut_pcs_akhir }}</td>
-                <td class="text-end">{{ $d->cabut_gr_akhir }}</td>
-                <td class="text-end">{{ $d->pcs_awal }}</td>
-                <td class="text-end">{{ $d->gr_awal }}</td>
-                <td align="right">{{$d->ttl_rp }}</td>
-                <td class="text-end">{{ $d->pcs_awal - $d->cabut_pcs_akhir }}</td>
-                <td class="text-end">{{ $d->gr_awal - $d->cabut_gr_akhir }}</td>
+                <td>{{ $c->no_box }}</td>
+                <td align="right">{{ $c->pcs_bk }}</td>
+                <td align="right">{{ $c->gr_bk }}</td>
+                <td>{{ date('M y', strtotime($c->tgl)) }}</td>
+                <td>{{ $c->pengawas }}</td>
+                <td align="right">{{ $c->pcs_awal }}</td>
+                <td align="right">{{ $c->gr_awal }}</td>
+                <td align="right">{{ $c->pcs_akhir }}</td>
+                <td align="right">{{ $c->gr_akhir }}</td>
+
+                @php
+                    $susut = empty($c->gr_awal) ? 0 : (1 - $c->gr_akhir / $c->gr_awal) * 100;
+
+                @endphp
+                <td align="right">{{ number_format($susut, 0) }} %</td>
+
+                <td align="right">{{ $c->rupiah }}
+                </td>
+                <td align="right">{{ $c->pcs_bk - $c->pcs_awal }}</td>
+                <td align="right">{{ $c->gr_bk - $c->gr_awal }}</td>
             </tr>
+
+            @php
+                $ttlPcsBk += $c->pcs_bk;
+                $ttlGrBk += $c->gr_bk;
+
+                $ttlPcsAwal += $c->pcs_awal;
+                $ttlGrAwal += $c->gr_awal;
+                $ttlPcsAkhir += $c->pcs_akhir;
+                $ttlGrAkhir += $c->gr_akhir;
+
+                $ttlSusut += $susut;
+
+                $ttlRp += $c->rupiah;
+
+                $ttlPcsSisa += $c->pcs_bk - $c->pcs_awal;
+                $ttlGrSisa += $c->gr_bk - $c->gr_awal;
+            @endphp
         @endforeach
     </tbody>
+    <tfoot>
+  
+        <tr>
+            <th>Total</th>
+            <th>{{ $ttlPcsBk }}</th>
+            <th>{{ $ttlGrBk }}</th>
+            <th></th>
+            <th></th>
+            <th>{{ $ttlPcsAwal }}</th>
+            <th>{{ $ttlGrAwal }}</th>
+            <th>{{ $ttlPcsAkhir }}</th>
+            <th>{{ $ttlGrAkhir }}</th>
+
+            <th>{{ $ttlSusut }}</th>
+
+            <th>{{ $ttlRp }}</th>
+
+            <th>{{ $ttlPcsSisa }}</th>
+            <th>{{ $ttlGrSisa }}</th>
+        </tr>
+    </tfoot>
 </table>

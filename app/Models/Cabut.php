@@ -198,7 +198,7 @@ class Cabut extends Model
         FROM cabut as a
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box 
-        WHERE a.penutup = 'T' $pengawas
+        WHERE a.penutup = 'T'
         GROUP by a.no_box;");
     }
     public static function queryRekapGroup($tgl1, $tgl2)
