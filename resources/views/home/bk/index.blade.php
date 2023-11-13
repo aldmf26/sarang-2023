@@ -61,12 +61,10 @@
                             <td align="center"><input type="checkbox" no_nota="{{ $b->no_box }}" class="cek_bayar"
                                     name="" id=""></td>
                             <td>
-                                @if (date('Y-m-d') == $b->tgl)
                                     <a href="" class="btn btn-sm btn-warning edit_bk"><i
                                             class="fas fa-edit"></i></a>
                                     <a href="" class="btn btn-sm btn-danger delete"><i
                                             class="fas fa-trash-alt"></i></a>
-                                @endif
 
                             </td>
                         </tr>
