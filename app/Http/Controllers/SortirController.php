@@ -172,7 +172,7 @@ class SortirController extends Controller
         $rupiah = $get->rp_target;  
         $denda = 0;
         if ($susut > $kelas->denda_susut) {
-            $denda = (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
+            $denda = $susut > $kelas->bts_denda_sst ? $kelas->batas_denda_rp : (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
             $rupiah = $rupiah - $denda;
         }
 
