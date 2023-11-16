@@ -92,7 +92,7 @@
                                              sum(a.rp_target) as rp_target,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
                                             FROM sortir as a
                                             left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box
+                                            left JOIN bk as c on c.no_box = a.no_box AND c.penerima = b.id
                                             WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T'
                                             GROUP by a.no_box");
                                 @endphp
