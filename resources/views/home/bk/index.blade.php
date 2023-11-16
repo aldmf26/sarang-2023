@@ -11,8 +11,10 @@
 
         <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
             teks="Tambah" />
-        <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
-            teks="Import" />
+            @if (auth()->user()->name == 'aldi')
+            <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
+                teks="Import" />
+            @endif
         <x-theme.btn_filter />
     </x-slot>
 
