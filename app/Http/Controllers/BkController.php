@@ -136,6 +136,7 @@ class BkController extends Controller
     public function import(Request $r)
     {
         Excel::import(new BkImport, $r->file('file'));
+        return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
     }
 
     public function print(Request $r)
