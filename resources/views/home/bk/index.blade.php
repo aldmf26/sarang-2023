@@ -11,7 +11,7 @@
 
         <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
             teks="Tambah" />
-            @if (auth()->user()->name == 'Sinta')
+            @if (auth()->user()->name == 'sinta')
             <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
                 teks="Import" />
             @endif
