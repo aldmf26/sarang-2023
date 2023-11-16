@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BkExport;
+use App\Exports\BkTemplateExport;
+use App\Imports\BkImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,17 +23,15 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
+        
 
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT *, e.tipe as tipe_cbt FROM bk as a 
-            left join ket_bk as b on b.id_ket_bk = a.id_ket 
-            left join warna as c on c.id_warna = a.id_warna 
+            'bk' => DB::select("SELECT * FROM bk as a 
             left join users as d on d.id = a.penerima 
-            left join tipe_cabut as e on e.id_tipe = a.tipe 
             WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC")
         ];
         return view('home.bk.index', $data);
@@ -113,8 +113,8 @@ class BkController extends Controller
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
-                    'id_ket' => $r->ket[$x],
-                    'id_warna' => $r->warna[$x],
+                    'ket' => $r->ket[$x],
+                    'warna' => $r->warna[$x],
                     'pengawas' => $r->pgws[$x],
                     'penerima' => $r->nama[$x],
                     'pcs_awal' => $pcs_awal,
@@ -126,6 +126,17 @@ class BkController extends Controller
             }
         }
         return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
+    }
+
+    public function template()
+    {
+        return Excel::download(new BkTemplateExport(), 'Export Template BK.xlsx');
+    }
+
+    public function import(Request $r)
+    {
+        Excel::import(new BkImport, $r->file('file'));
+        return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
     }
 
     public function print(Request $r)
