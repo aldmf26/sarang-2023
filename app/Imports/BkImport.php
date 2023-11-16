@@ -14,8 +14,16 @@ class BkImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tgl']);
-        $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+
+        $tgl = $row['tgl'];
+        if (is_numeric($tgl)) {
+            // Jika nilai berupa angka, konversi ke format tanggal
+            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+        } else {
+            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+        }
 
         if (empty(array_filter($row))) {
             // Jika semua elemen kosong, lewati ke iterasi berikutnya
