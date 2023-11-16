@@ -80,7 +80,7 @@
                                     <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                    
                                     <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
-                                    <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->rp_target, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
                                 </tr>
@@ -115,7 +115,7 @@
                     
                                 <td align="right">{{ number_format($x->susut, 0) }} %</td>
 
-                                <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
+                                <td align="right">{{ number_format($x->rp_target, 0) }}</td>
                                 <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
                             </tr>
