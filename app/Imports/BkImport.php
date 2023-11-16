@@ -14,6 +14,9 @@ class BkImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tgl']);
+        $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+
         if (empty(array_filter($row))) {
             // Jika semua elemen kosong, lewati ke iterasi berikutnya
             return null;
@@ -24,7 +27,7 @@ class BkImport implements ToModel, WithHeadingRow
             'tipe' => $row['tipe'],
             'ket' => $row['ket'],
             'warna' => $row['warna'],
-            'tgl' => $row['tgl'],
+            'tgl' => $tanggalFormatted,
             'pengawas' => auth()->user()->name,
             'penerima' => $row['id_penerima'],
             'pcs_awal' => $row['pcs_awal'],

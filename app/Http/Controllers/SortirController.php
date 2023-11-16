@@ -388,7 +388,7 @@ class SortirController extends Controller
             $ttlGrAwal += $d->gr_awal;
             $ttlPcsAkhir += $d->pcs_akhir;
             $ttlGrAkhir += $d->gr_akhir;
-            $ttlRp += $d->ttl_rp;
+            $ttlRp += $d->rp_target;
         }
 
         $data = [
