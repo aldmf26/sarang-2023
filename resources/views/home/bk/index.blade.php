@@ -11,6 +11,8 @@
 
         <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
             teks="Tambah" />
+        <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
+            teks="Import" />
         <x-theme.btn_filter />
     </x-slot>
 
@@ -49,9 +51,9 @@
                             <td>{{ $no + 1 }}</td>
                             <td>{{ $b->no_lot }}</td>
                             <td>{{ $b->no_box }}</td>
-                            <td>{{ $b->tipe_cbt }}</td>
-                            <td>{{ $b->ket_bk }}</td>
-                            <td>{{ $b->nm_warna }}</td>
+                            <td>{{ $b->tipe }}</td>
+                            <td>{{ $b->ket }}</td>
+                            <td>{{ $b->warna }}</td>
                             <td>{{ tanggal($b->tgl) }}</td>
                             <td>{{ $b->pengawas }}</td>
                             <td>{{ $b->name }}
@@ -61,10 +63,9 @@
                             <td align="center"><input type="checkbox" no_nota="{{ $b->no_box }}" class="cek_bayar"
                                     name="" id=""></td>
                             <td>
-                                    <a href="" class="btn btn-sm btn-warning edit_bk"><i
-                                            class="fas fa-edit"></i></a>
-                                    <a href="" class="btn btn-sm btn-danger delete"><i
-                                            class="fas fa-trash-alt"></i></a>
+                                <a href="" class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i></a>
+                                <a href="" class="btn btn-sm btn-danger delete"><i
+                                        class="fas fa-trash-alt"></i></a>
 
                             </td>
                         </tr>
@@ -73,6 +74,47 @@
 
             </table>
         </section>
+        <form action="{{ route('bk.import') }}" enctype="multipart/form-data" method="post">
+            @csrf
+        <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">
+            <div class="row">
+                <table>
+                    <tr>
+                        <td width="100" class="pl-2">
+                            <img width="80px" src="{{ asset('/img/1.png') }}" alt="">
+                        </td>
+                        <td>
+                            <span style="font-size: 20px;"><b> Download Excel template</b></span><br>
+                            File ini memiliki kolom header dan isi yang sesuai dengan data menu
+                        </td>
+                        <td>
+                            <a href="{{ route('bk.template') }}" class="btn btn-primary btn-sm"><i
+                                    class="fa fa-download"></i> DOWNLOAD
+                                TEMPLATE</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100" class="pl-2">
+                            <img width="80px" src="{{ asset('/img/2.png') }}" alt="">
+                        </td>
+                        <td>
+                            <span style="font-size: 20px;"><b> Upload Excel template</b></span><br>
+                            Setelah mengubah, silahkan upload file.
+                        </td>
+                        <td>
+                            <input type="file" name="file" class="form-control">
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </x-theme.modal>
+     
 
     </x-slot>
     @section('scripts')

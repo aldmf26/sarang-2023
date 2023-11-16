@@ -90,6 +90,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/print', 'print')->name('print');
             Route::get('/export', 'export')->name('export');
+            Route::get('/template', 'template')->name('template');
+            Route::post('/import', 'import')->name('import');
+            Route::get('/export', 'export')->name('export');
         });
     Route::controller(CabutController::class)
         ->prefix('home/cabut')

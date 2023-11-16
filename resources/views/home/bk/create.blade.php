@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>
-                                        <input name="no_lot[]" type="number" class="form-control nolot"
+                                        <input name="no_lot[]" type="text" class="form-control nolot"
                                             count="{{ $i }}">
                                     </td>
                                     <td>
@@ -78,6 +78,15 @@
                                             class="form-control nobox">
                                     </td>
                                     <td>
+                                        <input type="text" count="{{ $i }}" name="tipe[]" class="form-control tipe">
+                                    </td>
+                                    <td>
+                                        <input type="text" count="{{ $i }}" name="ket[]" class="form-control ket">
+                                    </td>
+                                    <td>
+                                        <input type="text" count="{{ $i }}" name="warna[]" class="form-control warna">
+                                    </td>
+                                    {{-- <td>
                                         <div count="{{ $i }}" class="load_tipe"></div>
                                     </td>
                                     <td>
@@ -85,7 +94,7 @@
                                     </td>
                                     <td>
                                         <div count="{{ $i }}" class="load_warna"></div>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         <input type="text" class="form-control" readonly
                                             value="{{ auth()->user()->name }}" name="pgws[]">
@@ -103,11 +112,11 @@
                                             name="tgl_terima[]">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}"
+                                        <input type="text" 
                                             class="form-control pcsAwal text-end" count="{{ $i }}" name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}"
+                                        <input type="text" 
                                             class="form-control grAwal text-end" count="{{ $i }}" name="gr_awal[]" value="0">
                                     </td>
 
