@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class CetakController extends Controller
 {
@@ -302,12 +304,12 @@ class CetakController extends Controller
         $view = 'home.cetak.export';
         $id = auth()->user()->id;
 
-        $tbl = DB::select("SELECT a.*, b.nama,b.id_kelas,c.*, e.ket_bk
+        $tbl = DB::select("SELECT a.*, b.nama,b.id_kelas,c.*, d.ket
         FROM cetak as a
         LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
         left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
-        left join ket_bk as e on e.id_ket_bk = d.id_ket
+        
         where a.id_pengawas = '$id' and a.penutup = 'T'
         order by a.selesai ASC
             ");

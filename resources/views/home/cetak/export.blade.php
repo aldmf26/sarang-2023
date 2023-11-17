@@ -36,7 +36,7 @@
                 <td>{{ !empty($c->bulan_dibayar) ? date('M y', strtotime('01-' . $c->bulan_dibayar . '-' . date('Y'))) : '' }}
                 </td>
                 <td>{{ $c->no_box }}</td>
-                <td>{{ $c->ket_bk }}</td>
+                <td>{{ $c->ket }}</td>
                 <td>{{ $c->nama }} </td>
                 <td>{{ $c->id_kelas }}</td>
                 {{-- <td class="text-end">{{ $c->pcs_awal }}</td>

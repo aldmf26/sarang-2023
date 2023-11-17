@@ -5,6 +5,7 @@
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
+
         {{-- <x-theme.button href="#" modal="Y" idModal="tambah_awal" icon="fa-plus" addClass="float-end tbh_cetak"
             teks="Cetak" /> --}}
         <a href="#" data-bs-target="#tambah_awal" class="btn btn-sm btn-primary me-2 float-end tbh_cetak"
@@ -14,7 +15,6 @@
         <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn tambahAnak btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
         </a>
-
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
             teks="kry baru" />
     </x-slot>
