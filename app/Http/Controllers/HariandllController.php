@@ -9,6 +9,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class HariandllController extends Controller
 {
+    protected $anak;
+    public function __construct()
+    {
+        $this->anak = DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get();
+    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -19,7 +24,7 @@ class HariandllController extends Controller
             'title' => 'Harian DLL',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->get(),
+            'anak' => $this->anak,
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where([['ditutup', 'T'],['b.id_pengawas', $id_user]])
@@ -31,7 +36,7 @@ class HariandllController extends Controller
     public function tbh_baris(Request $r)
     {
         $data = [
-            'anak' => DB::table('tb_anak')->get(),
+            'anak' => $this->anak,
             'count' => $r->count,
         ];
         return view('home.hariandll.tbh_baris', $data);
@@ -56,7 +61,7 @@ class HariandllController extends Controller
     {
         $data = [
             'detail' => DB::table('tb_hariandll')->whereIn('id_hariandll', $r->id)->get(),
-            'anak' => DB::table('tb_anak')->get(),
+            'anak' => $this->anak,
         ];
         return view('home.hariandll.edit_load', $data);
     }
