@@ -19,7 +19,7 @@ class HariandllController extends Controller
             'title' => 'Harian DLL',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'anak' => DB::table('tb_anak as a')->where('id_pengawas', $id_user)->get(),
+            'anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where([['ditutup', 'T'],['b.id_pengawas', $id_user]])
