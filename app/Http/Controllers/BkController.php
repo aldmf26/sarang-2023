@@ -8,7 +8,9 @@ use App\Imports\BkImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class BkController extends Controller
 {
@@ -23,7 +25,10 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
-        
+        $response = Http::get("http://jurnal-2023.test/api/apibk");
+        $cabut = json_decode($response->body(), true);
+        dd($response);
+
 
         $data = [
             'title' => 'Divisi BK',
@@ -42,7 +47,7 @@ class BkController extends Controller
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
-            'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk','DESC')->first()->no_box ?? 5000,
+            'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori
         ];
         return view('home.bk.create', $data);
