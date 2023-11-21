@@ -29,6 +29,7 @@
                 <thead>
                     <tr>
                         <th class="dhead">Bulan</th>
+                        <th class="dhead ">Pgws</th>
                         <th class="dhead ">Nama Anak</th>
                         <th class="dhead">Keterangan</th>
 
@@ -46,6 +47,7 @@
                     @foreach ($datas as $c)
                     <tr>
                         <td>{{date("M y",strtotime($c->tgl)) }}</td>
+                        <td>{{$c->name}}</td>
                         <td>{{$c->nama}}</td>
                         <td>
                             Ket : {{ucwords($c->ket)}} <br>
