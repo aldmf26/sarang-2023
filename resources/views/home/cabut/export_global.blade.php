@@ -60,13 +60,13 @@
             <td>{{ $d->gr_akhir }}</td>
             <td>{{ $d->eot }}</td>
             <td>{{ $d->gr_flx }}</td>
-            <td>{{ $d->susut }}</td>
+            <td>{{ number_format($d->susut,0) }}</td>
             <td>{{ $d->ttl_rp }}</td>
 
             <td></td>
             <td>{{ $d->eo_awal }}</td>
             <td>{{ $d->eo_akhir }}</td>
-            <td>{{ $d->eo_susut }}</td>
+            <td>{{ number_format($d->eo_susut,0) }}</td>
             <td>{{ $d->eo_ttl_rp }}</td>
 
             <td></td>
@@ -74,7 +74,7 @@
             <td>{{ $d->sortir_gr_awal }}</td>
             <td>{{ $d->sortir_pcs_akhir }}</td>
             <td>{{ $d->sortir_gr_akhir }}</td>
-            <td>{{ $d->sortir_susut }}</td>
+            <td>{{ number_format($d->sortir_susut,0) }}</td>
             <td>{{ $d->sortir_ttl_rp }}</td>
 
             <td>{{ $d->ttl_rp_dll }}</td>

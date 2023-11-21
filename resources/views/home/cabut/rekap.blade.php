@@ -10,10 +10,7 @@
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
-                <a href="{{ route('cabut.export_global', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export Global
-                </a>
+                @include('home.cabut.btn_export_global')
                 <x-theme.btn_filter />
             </div>
             <div class="col-lg-12">

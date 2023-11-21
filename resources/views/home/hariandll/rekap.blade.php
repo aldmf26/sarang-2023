@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="6">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -7,9 +7,10 @@
 
             <div class="col-lg-6">
                 <a href="{{ route('hariandll.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm icon icon-left btn-primary me-2">
+                    class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                @include('home.cabut.btn_export_global')
                 <x-theme.btn_filter />
             </div>
             <div class="col-lg-12">
