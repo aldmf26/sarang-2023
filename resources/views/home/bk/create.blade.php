@@ -70,9 +70,9 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>
-                                        {{-- <input name="no_lot[]" type="text" class="form-control nolot"
-                                            count="{{ $i }}"> --}}
-                                        <select name="no_lot[]" id=""
+                                        <input name="no_lot[]" type="text" class="form-control nolot"
+                                            count="{{ $i }}">
+                                        {{-- <select name="no_lot[]" id=""
                                             class="select2_add nolot nomor_lot{{ $i }}"
                                             count="{{ $i }}">
                                             <option value="">--Pilih data--</option>
@@ -80,7 +80,7 @@
                                                 <option value="{{ $g->no_lot }}-{{ $g->ket }}">
                                                     {{ $g->no_lot }}-{{ $g->ket }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </td>
                                     <td>
                                         <input name="no_box[]" count="{{ $i }}" type="text"
@@ -231,7 +231,7 @@
                     });
                 });
             }
-            // keyupBp('nolot')
+            keyupBp('nolot')
             // keyupBp('pcsAwal')
             keyupBp('grAwal')
             keyupBp('nobox', true)
