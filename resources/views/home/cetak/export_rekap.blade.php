@@ -10,7 +10,7 @@
             <th class="dhead text-end">Gr Awal Cetak</th>
             @php
                 $ttl = 0;
-                foreach($datas as $d) {
+                foreach ($datas as $d) {
                     $susut = empty($d->gr_akhir) ? '0' : (1 - $d->gr_akhir / ($d->gr_awal - $d->gr_tidak_ctk)) * 100;
                     $denda = round($susut, 0) * 50000;
                     $ttl += $d->rp_pcs * $d->pcs_awal - $denda;

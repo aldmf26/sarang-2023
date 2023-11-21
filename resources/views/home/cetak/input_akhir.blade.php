@@ -22,7 +22,7 @@
     <tbody>
         @foreach ($cetak as $c)
             @php
-                $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+                $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / $c->gr_awal_ctk) * 100;
                 $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
                 $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
                 $ttl_rp = $c->pcs_akhir == 0 ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;

@@ -18,6 +18,7 @@
                     <th class="dhead">Pgws</th>
                     <th class="dhead">Tgl Terima</th>
                     <th class="dhead">No Box</th>
+                    <th class="dhead">Grade</th>
                     <th class="dhead">Nama Anak</th>
                     <th class="dhead">Kelas/Paket</th>
                     <th class="dhead">Pcs Tidak ctk</th>
@@ -49,6 +50,9 @@
                                     @endif
                                 @endforeach
                             </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="grade[]">
                         </td>
                         <td style="white-space: nowrap">{{ strtoupper($c->nama) }}
                             ({{ $c->id_kelas }})</td>

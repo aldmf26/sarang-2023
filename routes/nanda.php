@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/delete_awal_cetak', 'delete_awal_cetak')->name('delete_awal_cetak');
             Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/delete_cetak', 'delete_cetak')->name('delete_cetak');
+            Route::post('/import', 'import')->name('import');
 
             Route::get('/add', 'add')->name('add');
             Route::get('/akhir', 'akhir')->name('akhir');

@@ -5,6 +5,7 @@
             <th class="">Bulan</th>
             <th class="">No Box</th>
             <th class="">Grade</th>
+            <th class="">ID anak</th>
             <th class="">Nama</th>
             <th class="">Kelas</th>
             <th class=" text-center">Pcs Tdk Ctk</th>
@@ -32,11 +33,12 @@
                 $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
             @endphp
             <tr>
-                <td>{{ $no + 1 }}</td>
+                <td>{{ $c->id_cetak }}</td>
                 <td>{{ !empty($c->bulan_dibayar) ? date('M y', strtotime('01-' . $c->bulan_dibayar . '-' . date('Y'))) : '' }}
                 </td>
                 <td>{{ $c->no_box }}</td>
-                <td>{{ $c->ket }}</td>
+                <td>{{ $c->grade }}</td>
+                <td>{{ $c->id_anak }} </td>
                 <td>{{ $c->nama }} </td>
                 <td>{{ $c->id_kelas }}</td>
                 {{-- <td class="text-end">{{ $c->pcs_awal }}</td>

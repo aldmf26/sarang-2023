@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CetakController extends Controller
 {
@@ -80,11 +81,13 @@ class CetakController extends Controller
 
 
         $data = [
-            'cetak' => DB::select("SELECT *
+            'cetak' => DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.*, d.ket, a.rp_pcs as rp_per_pcs
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-            where a.id_pengawas = '$id' and a.penutup = 'T' and a.status = 'akhir'
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
+            
+            where a.id_pengawas = '$id' and a.penutup = 'T'
             order by a.selesai ASC
             "),
         ];
@@ -106,7 +109,7 @@ class CetakController extends Controller
 
     function input_akhir()
     {
-        $cetak = DB::select("SELECT *
+        $cetak = DB::select("SELECT 
         FROM cetak as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
@@ -197,6 +200,7 @@ class CetakController extends Controller
             $data = [
                 'tgl' => $r->tgl[$x],
                 'no_box' => $r->no_box[$x],
+                'grade' => $r->grade[$x],
                 'id_kelas' => $r->id_kelas_cetak[$x],
                 'pcs_awal_ctk' => $r->pcs_awal[$x],
                 'gr_awal_ctk' => $r->gr_awal[$x],
@@ -297,14 +301,93 @@ class CetakController extends Controller
         return view('home.cetak.tbh_baris', $data);
     }
 
-    public function export(Request $r)
+    // public function export(Request $r)
+    // {
+    //     $tgl1 =  $r->tgl1;
+    //     $tgl2 =  $r->tgl2;
+    //     $view = 'home.cetak.export';
+    //     $id = auth()->user()->id;
+
+    //     $tbl = DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.*, d.ket
+    //     FROM cetak as a
+    //     LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
+    //     left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
+    //     left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
+
+    //     where a.id_pengawas = '$id' and a.penutup = 'T'
+    //     order by a.selesai ASC
+    //         ");
+
+    //     $totalrow = count($tbl) + 1;
+
+    //     return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
+    // }
+
+    function export(Request $r)
     {
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
-        $view = 'home.cetak.export';
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Cetak');
+
+
+        $sheet1->getStyle("A1:V1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'ID');
+        $sheet1->setCellValue('B1', 'Bulan');
+        $sheet1->setCellValue('C1', 'No Box');
+        $sheet1->setCellValue('D1', 'Grade');
+        $sheet1->setCellValue('E1', 'ID anak');
+        $sheet1->setCellValue('F1', 'Nama');
+        $sheet1->setCellValue('G1', 'Kelas');
+        $sheet1->setCellValue('H1', 'ID Paket');
+        $sheet1->setCellValue('I1', 'Pcs Tdk Ctk');
+        $sheet1->setCellValue('J1', 'Gr Tdk Ctk');
+        $sheet1->setCellValue('K1', 'Tgl Terima Brg');
+        $sheet1->setCellValue('L1', 'Pcs Awal');
+        $sheet1->setCellValue('M1', 'Gr Awal');
+        $sheet1->setCellValue('N1', 'Pcs Cu');
+        $sheet1->setCellValue('O1', 'Gr Cu');
+        $sheet1->setCellValue('P1', 'Pcs Akhir');
+        $sheet1->setCellValue('Q1', 'Gr Akhir');
+        $sheet1->setCellValue('R1', 'Harga/pcs');
+        $sheet1->setCellValue('S1', 'Pcs Hcr');
+        $sheet1->setCellValue('T1', 'Susut');
+        $sheet1->setCellValue('U1', 'Ttl Gaji');
+        $sheet1->setCellValue('V1', 'Status');
+
+
+        $kolom = 2;
         $id = auth()->user()->id;
 
-        $tbl = DB::select("SELECT a.*, b.nama,b.id_kelas,c.*, d.ket
+        $tbl = DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.*, d.ket, a.rp_pcs as rp_per_pcs
         FROM cetak as a
         LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
@@ -314,9 +397,110 @@ class CetakController extends Controller
         order by a.selesai ASC
             ");
 
-        $totalrow = count($tbl) + 1;
+        foreach ($tbl as $c) {
+            $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal - $c->gr_tidak_ctk)) * 100;
+            $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
+            $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
+            $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_per_pcs : $c->pcs_akhir * $c->rp_per_pcs;
 
-        return Excel::download(new CetakExport($tbl, $totalrow, $view), 'Export CETAK.xlsx');
+
+            $sheet1->setCellValue('A' . $kolom, $c->id_cetak);
+            $sheet1->setCellValue('B' . $kolom, !empty($c->bulan_dibayar) ? $c->bulan_dibayar : '');
+            $sheet1->setCellValue('C' . $kolom, $c->no_box);
+            $sheet1->setCellValue('D' . $kolom, $c->grade);
+            $sheet1->setCellValue('E' . $kolom, $c->id_anak);
+            $sheet1->setCellValue('F' . $kolom, $c->nama);
+            $sheet1->setCellValue('G' . $kolom, $c->id_kelas);
+            $sheet1->setCellValue('H' . $kolom, $c->id_paket);
+            $sheet1->setCellValue('I' . $kolom, $c->pcs_tidak_ctk);
+            $sheet1->setCellValue('J' . $kolom, $c->gr_tidak_ctk);
+            $sheet1->setCellValue('K' . $kolom, $c->tgl);
+            $sheet1->setCellValue('L' . $kolom, $c->pcs_awal_ctk);
+            $sheet1->setCellValue('M' . $kolom, $c->gr_awal_ctk);
+            $sheet1->setCellValue('N' . $kolom, $c->pcs_cu);
+            $sheet1->setCellValue('O' . $kolom, $c->gr_cu);
+            $sheet1->setCellValue('P' . $kolom, $c->pcs_akhir);
+            $sheet1->setCellValue('Q' . $kolom, $c->gr_akhir);
+            $sheet1->setCellValue('R' . $kolom, $c->rp_per_pcs);
+            $sheet1->setCellValue('S' . $kolom, $c->pcs_hcr);
+            $sheet1->setCellValue('T' . $kolom, round($susut) . '%');
+            $sheet1->setCellValue('U' . $kolom, $ttl_rp - $denda - $denda_hcr);
+            $sheet1->setCellValue('V' . $kolom, $c->selesai == 'Y' ? 'Selesai' : 'Akhir');
+
+
+            $kolom++;
+        }
+        $sheet1->getStyle('A2:V' . $kolom - 1)->applyFromArray($style);
+
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet2 = $spreadsheet->getActiveSheet(1);
+        $sheet2->setTitle('Data Anak');
+        $sheet2->getStyle('A1:C1')->applyFromArray($style_atas);
+
+        $sheet2->setCellValue('A1', 'ID Anak');
+        $sheet2->setCellValue('B1', 'Nama');
+        $sheet2->setCellValue('C1', 'Kelas');
+
+        $id = auth()->user()->id;
+        $anak = DB::table('tb_anak as a')
+            ->join('tb_kelas as b', 'a.id_kelas', 'b.id_kelas')
+            ->where('id_pengawas', $id)
+            ->get();
+        $kolom2 = 2;
+        foreach ($anak as $b) {
+            $sheet2->setCellValue('A' . $kolom2, $b->id_anak);
+            $sheet2->setCellValue('B' . $kolom2, $b->nama);
+            $sheet2->setCellValue('C' . $kolom2, $b->id_kelas);
+            $kolom2++;
+        }
+        $sheet2->getStyle('A2:C' . $kolom2 - 1)->applyFromArray($style);
+
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(2);
+        $sheet3 = $spreadsheet->getActiveSheet(2);
+        $sheet3->setTitle('Data Paket');
+        $sheet3->getStyle('A1:H1')->applyFromArray($style_atas);
+
+        $sheet3->setCellValue('A1', 'ID Paket');
+        $sheet3->setCellValue('B1', 'Paket');
+        $sheet3->setCellValue('C1', 'Kelas');
+        $sheet3->setCellValue('D1', 'Tipe');
+        $sheet3->setCellValue('E1', 'Rp Pcs');
+        $sheet3->setCellValue('F1', 'Denda Hcr');
+        $sheet3->setCellValue('G1', 'Bts Sst');
+        $sheet3->setCellValue('H1', 'Denda Sst');
+
+        $id = auth()->user()->id;
+        $paket = DB::table('kelas_cetak as a')
+            ->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')
+            ->join('tipe_cabut as c', 'a.tipe', 'c.id_tipe')
+            ->get();
+        $kolom2 = 2;
+        foreach ($paket as $p) {
+            $sheet3->setCellValue('A' . $kolom2, $p->id_kelas_cetak);
+            $sheet3->setCellValue('B' . $kolom2, $p->paket);
+            $sheet3->setCellValue('C' . $kolom2, $p->kelas);
+            $sheet3->setCellValue('D' . $kolom2, $p->tipe);
+            $sheet3->setCellValue('E' . $kolom2, $p->rp_pcs);
+            $sheet3->setCellValue('F' . $kolom2, $p->denda_hcr);
+            $sheet3->setCellValue('G' . $kolom2, $p->batas_susut);
+            $sheet3->setCellValue('H' . $kolom2, $p->denda_susut);
+            $kolom2++;
+        }
+        $sheet3->getStyle('A2:H' . $kolom2 - 1)->applyFromArray($style);
+
+        $namafile = "Cetak.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 
     public function queryRekap($tgl1, $tgl2)
@@ -377,5 +561,107 @@ class CetakController extends Controller
     function delete_cetak(Request $r)
     {
         DB::table('cetak')->where('id_cetak', $r->id_cetak)->delete();
+    }
+
+    function import(Request $r)
+    {
+        $uploadedFile = $r->file('file');
+        $allowedExtensions = ['xlsx'];
+        $extension = $uploadedFile->getClientOriginalExtension();
+
+        if (in_array($extension, $allowedExtensions)) {
+            $spreadsheet = IOFactory::load($uploadedFile->getPathname());
+            $sheet = $spreadsheet->getSheetByName('Cetak');
+            $data = [];
+
+            foreach ($sheet->getRowIterator() as $index => $row) {
+                if ($index === 1) {
+                    continue;
+                }
+
+                $rowData = [];
+                foreach ($row->getCellIterator() as $cell) {
+                    $rowData[] = $cell->getValue();
+                }
+                $data[] = $rowData;
+            }
+
+            // $importGagal = false;
+
+            DB::beginTransaction(); // Mulai transaksi database
+
+            try {
+                foreach ($data as $rowData) {
+                    $tgl = $rowData[10];
+                    if (is_numeric($tgl)) {
+                        // Jika nilai berupa angka, konversi ke format tanggal
+                        $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                        $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                    } else {
+                        // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                        $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                    }
+                    $id = auth()->user()->id;
+                    if (empty($rowData[0])) {
+
+                        DB::table('cetak')->insert([
+                            'bulan_dibayar' => $rowData[1],
+                            'no_box' => $rowData[2],
+                            'grade' => $rowData[3],
+                            'id_anak' => $rowData[4],
+                            'id_kelas' => $rowData[7],
+                            'pcs_awal' => $rowData[8] + $rowData[11],
+                            'gr_awal' => $rowData[9] + $rowData[12],
+                            'pcs_tidak_ctk' => $rowData[8],
+                            'gr_tidak_ctk' => $rowData[9],
+                            'tgl' => $tanggalFormatted,
+                            'pcs_awal_ctk' => $rowData[11],
+                            'gr_awal_ctk' => $rowData[12],
+                            'pcs_cu' => $rowData[13],
+                            'gr_cu' => $rowData[14],
+                            'pcs_akhir' => $rowData[15],
+                            'gr_akhir' => $rowData[16],
+                            'rp_pcs' => $rowData[17],
+                            'pcs_hcr' => $rowData[18],
+                            'id_pengawas' => $id,
+                            'status' => empty($rowData[11]) ? 'awal' : 'akhir',
+                            'selesai' => $rowData[21] == 'Selesai' ? 'Y' : 'T'
+                        ]);
+                    } else {
+
+                        DB::table('cetak')->where('id_cetak', $rowData[0])->update([
+                            'bulan_dibayar' => $rowData[1],
+                            'no_box' => $rowData[2],
+                            'grade' => $rowData[3],
+                            'id_anak' => $rowData[4],
+                            'id_kelas' => $rowData[7],
+                            'pcs_awal' => $rowData[8] + $rowData[11],
+                            'gr_awal' => $rowData[9] + $rowData[12],
+                            'pcs_tidak_ctk' => $rowData[8],
+                            'gr_tidak_ctk' => $rowData[9],
+                            'tgl' => $tanggalFormatted,
+                            'pcs_awal_ctk' => $rowData[11],
+                            'gr_awal_ctk' => $rowData[12],
+                            'pcs_cu' => $rowData[13],
+                            'gr_cu' => $rowData[14],
+                            'pcs_akhir' => $rowData[15],
+                            'gr_akhir' => $rowData[16],
+                            'rp_pcs' => $rowData[17],
+                            'pcs_hcr' => $rowData[18],
+                            'id_pengawas' => $id,
+                            'status' => empty($rowData[11]) ? 'awal' : 'akhir',
+                            'selesai' => $rowData[21] == 'Selesai' ? 'Y' : 'T'
+                        ]);
+                    }
+                }
+                DB::commit(); // Konfirmasi transaksi jika berhasil
+                return redirect()->route('cetak.index')->with('sukses', 'Data berhasil import');
+            } catch (\Exception $e) {
+                DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
+                return redirect()->route('cetak.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->route('cetak.index')->with('error', 'File yang diunggah bukan file Excel yang valid');
+        }
     }
 }
