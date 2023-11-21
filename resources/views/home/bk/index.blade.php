@@ -4,7 +4,7 @@
             <h6 class="float-start mt-1">{{ $title }}</h6>
         </div>
         <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
-        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
             class="float-end btn btn-sm icon icon-left btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
@@ -49,7 +49,7 @@
                     @foreach ($bk as $no => $b)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ $b->no_lot }}</td>
+                            <td>{{ $b->no_lot }} - {{ $b->nm_partai }}</td>
                             <td>{{ $b->no_box }}</td>
                             <td>{{ $b->tipe }}</td>
                             <td>{{ $b->ket }}</td>

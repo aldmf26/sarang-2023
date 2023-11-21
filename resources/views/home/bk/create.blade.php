@@ -19,7 +19,7 @@
                 color: #000000;
                 line-height: 36px;
                 font-size: 12px;
-                width: 75px !important;
+                width: 120px !important;
             }
         </style>
         <form action="" method="GET">
@@ -70,21 +70,33 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>
-                                        <input name="no_lot[]" type="text" class="form-control nolot"
+                                        {{-- <input name="no_lot[]" type="text" class="form-control nolot"
+                                            count="{{ $i }}"> --}}
+                                        <select name="no_lot[]" id=""
+                                            class="select2_add nolot nomor_lot{{ $i }}"
                                             count="{{ $i }}">
+                                            <option value="">--Pilih data--</option>
+                                            @foreach ($gudangBk as $g)
+                                                <option value="{{ $g->no_lot }}-{{ $g->ket }}">
+                                                    {{ $g->no_lot }}-{{ $g->ket }}</option>
+                                            @endforeach
+                                        </select>
                                     </td>
                                     <td>
                                         <input name="no_box[]" count="{{ $i }}" type="text"
                                             class="form-control nobox">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}" name="tipe[]" class="form-control tipe">
+                                        <input type="text" count="{{ $i }}" name="tipe[]"
+                                            class="form-control tipe">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}" name="ket[]" class="form-control ket">
+                                        <input type="text" count="{{ $i }}" name="ket[]"
+                                            class="form-control ket">
                                     </td>
                                     <td>
-                                        <input type="text" count="{{ $i }}" name="warna[]" class="form-control warna">
+                                        <input type="text" count="{{ $i }}" name="warna[]"
+                                            class="form-control warna">
                                     </td>
                                     {{-- <td>
                                         <div count="{{ $i }}" class="load_tipe"></div>
@@ -112,12 +124,12 @@
                                             name="tgl_terima[]">
                                     </td>
                                     <td>
-                                        <input type="text" 
-                                            class="form-control pcsAwal text-end" count="{{ $i }}" name="pcs_awal[]" value="0">
+                                        <input type="text" class="form-control pcsAwal text-end"
+                                            count="{{ $i }}" name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
-                                        <input type="text" 
-                                            class="form-control grAwal text-end" count="{{ $i }}" name="gr_awal[]" value="0">
+                                        <input type="text" class="form-control grAwal text-end"
+                                            count="{{ $i }}" name="gr_awal[]" value="0">
                                     </td>
 
                                 </tr>
@@ -219,7 +231,7 @@
                     });
                 });
             }
-            keyupBp('nolot')
+            // keyupBp('nolot')
             // keyupBp('pcsAwal')
             keyupBp('grAwal')
             keyupBp('nobox', true)
@@ -299,6 +311,16 @@
                 $('.selectPengawas').not(this).each(function() {
                     $(this).val(nilaiselect).trigger(
                         'change.select2'); // Update nilai Select2 dan trigger event change
+                });
+            });
+            $(document).on('change', '.nolot', function() {
+                var nolot = $(this).val();
+                var count = $(this).attr('count');
+                var no = count;
+                $('.nolot').each(function() {
+                    no++;
+                    $('.nomor_lot' + no).val(nolot).trigger(
+                        'change.select2');
                 });
             });
         </script>

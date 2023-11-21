@@ -14,7 +14,7 @@ class BkExport  implements FromView, WithEvents
     protected $view;
     protected $totalrow;
 
-    public function __construct($tbl, $totalrow,$view)
+    public function __construct($tbl, $totalrow, $view)
     {
         $this->tbl = $tbl;
         $this->view = $view;
@@ -32,9 +32,9 @@ class BkExport  implements FromView, WithEvents
     {
         return [
             AfterSheet::class    => function (AfterSheet $event) {
-                $sheet = $event->sheet; 
-                $cellRange = 'A1:K1';
-                $cellRangeLoop = 'A1:K' . $this->totalrow;
+                $sheet = $event->sheet;
+                $cellRange = 'A1:L1';
+                $cellRangeLoop = 'A1:L' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
