@@ -35,26 +35,26 @@
 
                         @php
                             $ttl = 0;
-                            foreach($datas as $d) {
+                            foreach ($datas as $d) {
                                 $ttl += $d->total_rupiah;
                             }
                         @endphp
 
-                        <th class="dhead text-end">Rupiah ({{number_format($ttl,0)}})</th>
-                    </tr> 
+                        <th class="dhead text-end">Rupiah ({{ number_format($ttl, 0) }})</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($datas as $c)
-                    <tr>
-                        <td>{{date("M y",strtotime($c->tgl)) }}</td>
-                        <td>{{$c->name}}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>
-                            Ket : {{ucwords($c->ket)}} <br>
-                            Lokasi : {{ucwords($c->lokasi)}}
-                        </td>
-                        <td align="right">{{number_format($c->total_rupiah,0)}}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ date('M y', strtotime($c->tgl)) }}</td>
+                            <td>{{ $c->name }}</td>
+                            <td>{{ $c->nama }}</td>
+                            <td>
+                                Ket : {{ ucwords($c->ket) }} <br>
+                                Lokasi : {{ ucwords($c->lokasi) }}
+                            </td>
+                            <td align="right">{{ number_format($c->total_rupiah, 0) }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
