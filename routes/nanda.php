@@ -131,6 +131,8 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
+            Route::get('/detailSum', 'detailSum')->name('detailSum');
+            Route::get('/exportDetail/{bulan}/{tahun}/{id_pengawas}', 'exportDetail')->name('exportDetail');
             Route::get('/detailAbsen', 'detailAbsen')->name('detailAbsen');
             Route::get('/tabelAbsen', 'tabelAbsen')->name('tabelAbsen');
             Route::get('/SaveAbsen', 'SaveAbsen')->name('SaveAbsen');

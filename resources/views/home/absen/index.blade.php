@@ -1,19 +1,16 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="6">
     <x-slot name="cardHeader">
-        <div class="row justify-content-end">
-            <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
-            </div>
-
-            <div class="col-lg-6">
-
-            </div>
-            <div class="col-lg-12">
-                <hr style="border: 2px solid #435EBE">
-            </div>
-            {{-- @include('home.cetak.nav') --}}
-
+        <div class="col-lg-12">
+            <h6 class="float-start mt-1">{{ $title }}</h6>
         </div>
+
+        <x-theme.button modal="Y" idModal="tambah" href="#" icon="fa-calendar-alt" addClass="float-end"
+            teks="Detail" />
+        {{-- <div class="col-lg-12">
+                <hr style="border: 2px solid #435EBE">
+            </div> --}}
+        {{-- @include('home.cetak.nav') --}}
+
 
     </x-slot>
 
@@ -36,7 +33,8 @@
                 <div class="col-lg-5 mb-2">
                     <div class="form-group">
                         <label for="">Tanggal</label>
-                        <input type="date" value="{{ $tgl }}" name="tgl" id="tglChange" class="form-control">
+                        <input type="date" value="{{ $tgl }}" name="tgl" id="tglChange"
+                            class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3 mb-2">
@@ -71,8 +69,7 @@
                                     <th></th>
                                     <th></th>
                                     <th>
-                                        <center
-                                            >
+                                        <center>
                                             <input data-category="{{ $i }}" style="text-align: center"
                                                 type="checkbox" class="form-check toggle-category" id="cekSemuaTutup">
                                         </center>
@@ -117,13 +114,51 @@
 
             <div id="loadDetailAbsen"></div>
         </x-theme.modal>
+        <form action="{{ route('absen.detailSum') }}" method="get">
+            <x-theme.modal idModal="tambah"  title="Detail Absen">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Bulan</label>
+                            <select name="bulan" class="form-control select2" id="">
+                                <option value="">- Pilih Bulan -</option>
+                                
+                                @foreach ($bulan as $b)
+                                    <option {{ (int) date('m') == $b->bulan ? 'selected' : '' }} value="{{ $b->id_bulan }}">{{ $b->nm_bulan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Tahun</label>
+                            <select name="tahun" class="form-control select2" id="">
+                                <option value="">- Pilih Tahun -</option>
+                                <option value="2022">2022</option>
+                                <option value="2023" selected>2023</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Pengawas</label>
+                        <select name="id_pengawas" class="form-control select2" id="">
+                            <option value="all">- ALL -</option>
+                            @foreach ($pengawas as $d)
+                                <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+            </x-theme.modal>
+        </form>
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tablealdi')
                 $(document).ready(function() {
-                    $(document).on('change', '#tglChange', function(){
+                    $(document).on('change', '#tglChange', function() {
                         var nilai = $(this).val()
-                        document.location.href = "?tgl="+nilai
+                        document.location.href = "?tgl=" + nilai
                     })
                     $(".toggle-category").on("change", function() {
                         var categoryIndex = $(this).data("category");
