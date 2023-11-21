@@ -6,7 +6,7 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('hariandll.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('hariandll.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>

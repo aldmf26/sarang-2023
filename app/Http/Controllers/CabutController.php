@@ -410,6 +410,6 @@ class CabutController extends Controller
         $view = 'home.cabut.export_global';
         $tbl = Cabut::getRekapGlobal($tgl1, $tgl2, $id_pengawas);
 
-        return Excel::download(new CabutGlobalExport($tbl, $view), 'Export REKAP CABUT.xlsx');
+        return Excel::download(new CabutGlobalExport($tbl, $view), 'Export Rekap Global.xlsx');
     }
 }

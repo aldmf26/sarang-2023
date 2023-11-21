@@ -130,4 +130,15 @@ class HariandllController extends Controller
 
         return view('home.hariandll.rekap', $data);
     }
+
+    public function export_rekap(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $view = 'home.hariandll.export_rekap';
+        $tbl = $this->getQuery($tgl1,$tgl2);
+
+        return Excel::download(new HariandllExport($tbl, $view), 'Export REKAP HARIAN DLL.xlsx');
+    }
 }
