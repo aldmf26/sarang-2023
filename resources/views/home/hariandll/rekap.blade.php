@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
