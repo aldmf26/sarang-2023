@@ -40,7 +40,7 @@
                         name="pcs_awal_ctk" value="{{ $c->pcs_awal_ctk == 0 ? $c->pcs_awal : $c->pcs_awal_ctk }}"
                         readonly>
                     <input type="hidden" class="form-control text-end" name="id_cetak" value="{{ $c->id_cetak }}">
-                    <input type="hidden" class="rp_pcs{{ $c->id_cetak }}" value="{{ $c->rp_per_pcs }}">
+                    <input type="text" class="rp_pcs{{ $c->id_cetak }}" value="{{ $c->rp_per_pcs }}">
                 </td>
                 <td>
                     <input type="text" class="form-control text-end gr_awal gr_awal{{ $c->id_cetak }}"
@@ -69,7 +69,7 @@
                     <input type="text" class="form-control text-end pcs_hcr pcs_hcr{{ $c->id_cetak }}"
                         count="{{ $c->id_cetak }}" name="pcs_hcr"value="{{ $c->pcs_hcr }}">
 
-                    <input type="hidden" class="form-control text-end denda_hcr{{ $c->id_cetak }}"
+                    <input type="text" class="form-control text-end denda_hcr{{ $c->id_cetak }}"
                         value="{{ $c->denda_hcr }}">
                 </td>
                 <td class="text-end"> <span class=" susut{{ $c->id_cetak }}">{{ round($susut) }}%</span></td>

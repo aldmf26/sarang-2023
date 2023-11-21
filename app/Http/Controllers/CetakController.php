@@ -110,7 +110,7 @@ class CetakController extends Controller
     function input_akhir()
     {
         $id = auth()->user()->id;
-        $cetak = DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.*, d.ket, a.rp_pcs as rp_per_pcs
+        $cetak = DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.* , d.ket, a.rp_pcs as rp_per_pcs
         FROM cetak as a
         LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
@@ -374,7 +374,7 @@ class CetakController extends Controller
         $sheet1->setCellValue('H1', 'ID Paket');
         $sheet1->setCellValue('I1', 'Pcs Tdk Ctk');
         $sheet1->setCellValue('J1', 'Gr Tdk Ctk');
-        $sheet1->setCellValue('K1', 'Tgl Terima Brg');
+        $sheet1->setCellValue('K1', 'Tgl Serah Ctk');
         $sheet1->setCellValue('L1', 'Pcs Awal');
         $sheet1->setCellValue('M1', 'Gr Awal');
         $sheet1->setCellValue('N1', 'Pcs Cu');
@@ -415,7 +415,7 @@ class CetakController extends Controller
             $sheet1->setCellValue('E' . $kolom, $c->id_anak);
             $sheet1->setCellValue('F' . $kolom, $c->nama);
             $sheet1->setCellValue('G' . $kolom, $c->id_kelas);
-            $sheet1->setCellValue('H' . $kolom, $c->id_paket);
+            $sheet1->setCellValue('H' . $kolom, $c->id_kelas_cetak);
             $sheet1->setCellValue('I' . $kolom, $c->pcs_tidak_ctk);
             $sheet1->setCellValue('J' . $kolom, $c->gr_tidak_ctk);
             $sheet1->setCellValue('K' . $kolom, $c->tgl);
@@ -619,6 +619,7 @@ class CetakController extends Controller
                             'pcs_tidak_ctk' => $rowData[8],
                             'gr_tidak_ctk' => $rowData[9],
                             'tgl' => $tanggalFormatted,
+                            'tgl_serah' => $tanggalFormatted,
                             'pcs_awal_ctk' => $rowData[11],
                             'gr_awal_ctk' => $rowData[12],
                             'pcs_cu' => $rowData[13],
