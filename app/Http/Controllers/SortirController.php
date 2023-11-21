@@ -203,7 +203,7 @@ class SortirController extends Controller
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
+                ->where('b.id_pengawas', auth()->user()->id)
                 ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
                 ->orderBy('id_sortir', 'ASC')
                 ->get()

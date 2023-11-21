@@ -310,6 +310,92 @@ class Cabut extends Model
 
         return $query;
     }
+
+    public static function getRekapGlobal($tgl1, $tgl2,$id_pengawas)
+    {
+        return DB::select("SELECT a.id_anak,b.name as pgws,
+        absen.ttl as hariMasuk,
+        a.nama as nm_anak, 
+        a.id_kelas as kelas,
+        cabut.pcs_awal,
+        cabut.gr_awal,
+        cabut.pcs_akhir,
+        cabut.gr_akhir,
+        cabut.eot,
+        cabut.gr_flx,
+        cabut.susut,
+        cabut.ttl_rp,
+        eo.eo_awal,
+        eo.eo_akhir,
+        eo.susut as eo_susut,
+        eo.ttl_rp as eo_ttl_rp,
+        sortir.pcs_awal as sortir_pcs_awal,
+        sortir.pcs_akhir as sortir_gr_awal,
+        sortir.gr_awal as sortir_pcs_akhir,
+        sortir.gr_akhir as sortir_gr_akhir,
+        sortir.susut as sortir_susut,
+        sortir.ttl_rp as sortir_ttl_rp,
+        dll.ttl_rp_dll,
+        denda.ttl_rp_denda
+        FROM tb_anak as a
+        JOIN users as b on a.id_pengawas = b.id
+        
+        LEFT JOIN (
+                  SELECT 
+                    id_anak, 
+                    sum(pcs_awal) as pcs_awal, 
+                    sum(gr_awal) as gr_awal, 
+                    sum(gr_akhir) as gr_akhir, 
+                    sum(pcs_akhir) as pcs_akhir, 
+                    sum(pcs_hcr) as pcs_hcr, 
+                    sum(eot) as eot, 
+                    sum(gr_flx) as gr_flx, 
+                    SUM(rupiah) as rupiah, 
+                    sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
+                    SUM(ttl_rp) as ttl_rp 
+                  FROM `cabut` 
+                  WHERE penutup = 'T' 
+                  GROUP BY id_anak
+        ) as cabut on a.id_anak = cabut.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(gr_eo_awal) as eo_awal,
+            sum(gr_eo_akhir) as eo_akhir,
+            sum(ttl_rp) as ttl_rp,
+            sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
+            FROM eo 
+            WHERE penutup = 'T' 
+            GROUP by id_anak
+        ) as eo on eo.id_anak = a.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(pcs_awal) as pcs_awal, 
+            sum(gr_awal) as gr_awal, 
+            sum(pcs_akhir) as pcs_akhir, 
+            sum(gr_akhir) as gr_akhir, 
+            sum(ttl_rp) as ttl_rp,
+            sum((1 - gr_akhir / gr_awal) * 100) as susut
+            FROM `sortir` WHERE penutup = 'T' GROUP BY id_anak
+        ) as sortir on a.id_anak = sortir.id_anak
+        JOIN (
+            SELECT *, count(*) as ttl FROM absen AS a 
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
+             group BY a.id_anak
+        ) as absen on absen.id_anak = cabut.id_anak 
+        LEFT JOIN (
+            SELECT id_anak,sum(rupiah) as ttl_rp_dll 
+            FROM `tb_hariandll` 
+            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' GROUP by id_anak
+        ) as dll on a.id_anak = dll.id_anak
+        LEFT JOIN (
+            SELECT id_anak, sum(nominal) as ttl_rp_denda 
+            FROM `tb_denda` 
+            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' GROUP by id_anak
+        ) as denda ON a.id_anak = denda.id_anak
+        WHERE b.id = '$id_pengawas'");
+    }
     public static function getPengawasRekap($bulan, $tahun)
     {
         return DB::select("SELECT 

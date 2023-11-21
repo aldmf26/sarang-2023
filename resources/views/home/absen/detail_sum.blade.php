@@ -9,20 +9,10 @@
         <x-theme.button modal="Y" idModal="tambah" href="#" icon="fa-calendar-alt" addClass="float-end"
             teks="Detail" />
 
-        {{-- <div class="col-lg-12">
-                <hr style="border: 2px solid #435EBE">
-            </div> --}}
-        {{-- @include('home.cetak.nav') --}}
-
-
     </x-slot>
 
     <x-slot name="cardBody">
         <style>
-            .badge {
-                cursor: pointer;
-            }
-
             #sticky-header {
                 position: sticky;
                 top: 0;
@@ -97,7 +87,7 @@
         </section>
 
         <form action="{{ route('absen.detailSum') }}" method="get">
-            <x-theme.modal idModal="tambah"  title="Detail Absen">
+            <x-theme.modal idModal="tambah" title="Detail Absen">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
