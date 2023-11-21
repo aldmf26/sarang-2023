@@ -400,4 +400,50 @@ class CabutController extends Controller
 
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }
+
+    public function export_global(Request $r)
+    {
+        $tgl1 =  $r->tgl1;
+        $tgl2 =  $r->tgl2;
+        $bulan =  date('m', strtotime($tgl1));
+        $tahun =  date('Y', strtotime($tgl1));
+        $view = 'home.cabut.export_rekap';
+        $tbl = DB::select("SELECT b.name as pgws,
+        absen.ttl as hariMasuk,
+        a.nama as nm_anak, 
+        a.id_kelas as kelas,
+        cabut.pcs_awal,
+        cabut.gr_awal,
+        cabut.pcs_akhir,
+        cabut.gr_akhir,
+        cabut.eot,
+        cabut.gr_flx,
+        cabut.ttl_rp
+        FROM tb_anak as a
+        JOIN users as b on a.id_pengawas = b.id
+        LEFT JOIN (
+            SELECT *, count(*) as ttl FROM absen AS a 
+            WHERE MONTH(a.tgl) = '$bulan' AND YEAR(a.tgl) = '$tahun' group BY a.id_anak
+        ) as absen on absen.id_anak = a.id_anak 
+        LEFT JOIN (
+                  SELECT 
+                    id_anak, 
+                    sum(pcs_awal) as pcs_awal, 
+                    sum(gr_awal) as gr_awal, 
+                    sum(gr_akhir) as gr_akhir, 
+                    sum(pcs_akhir) as pcs_akhir, 
+                    sum(pcs_hcr) as pcs_hcr, 
+                    sum(eot) as eot, 
+                    sum(gr_flx) as gr_flx, 
+                    SUM(rupiah) as rupiah, 
+                    sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
+                    SUM(ttl_rp) as ttl_rp 
+                  FROM `cabut` 
+                  WHERE penutup = 'T' 
+                  GROUP BY id_anak
+        ) as cabut on a.id_anak = cabut.id_anak
+        WHERE b.id = 90;");
+
+        return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
+    }
 }

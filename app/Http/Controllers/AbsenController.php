@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +34,7 @@ class AbsenController extends Controller
         $absen = DB::select("SELECT b.name,c.nama,a.id_anak FROM `absen` as a 
        JOIN users as b on a.id_pengawas = b.id
        JOIN tb_anak as c on a.id_anak = c.id_anak
-       WHERE month(a.tgl) = '$bulan' and year(a.tgl) = '$tahun' $pengawas GROUP BY a.id_anak;");
+       WHERE a.tgl BETWEEN '$bulan' and '$tahun' $pengawas GROUP BY a.id_anak;");
 
 
         return $absen;
@@ -41,24 +42,26 @@ class AbsenController extends Controller
 
     public function detailSum(Request $r)
     {
-        // Mendapatkan bulan dan tahun saat ini
-        $absen = $this->getQueryDetail($r->id_pengawas, $r->bulan, $r->tahun);
+        $tgl1 = Carbon::parse("$r->tgl1");
+        $tgl2 = Carbon::parse("$r->tgl2");
+        $period = CarbonPeriod::create($tgl1, $tgl2);
 
-        $jumlahHari = Carbon::create($r->tahun, $r->bulan, 1)->daysInMonth;
+        // Mendapatkan bulan dan tahun saat ini
+        $absen = $this->getQueryDetail($r->id_pengawas, $r->tgl1, $r->tgl2);
+
+        // $jumlahHari = Carbon::create($r->tahun, $r->bulan, 1)->daysInMonth;
         $data = [
             'title' => 'Detail Absensi',
-            'jumlahHari' => $jumlahHari,
+            'period' => $period,
             'bulan' => DB::table('bulan')->get(),
             'absen' => $absen,
-            'bulanGet' => $r->bulan,
             'id_pengawas' => $r->id_pengawas,
-            'tahunGet' => $r->tahun,
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get()
         ];
         return view('home.absen.detail_sum', $data);
     }
 
-    public function exportDetail($bulan,$tahun,$id_pengawas)
+    public function exportDetail($bulan, $tahun, $id_pengawas)
     {
         $jumlahHari = Carbon::create($tahun, $bulan, 1)->daysInMonth;
         $absen = $this->getQueryDetail($id_pengawas, $bulan, $tahun);
@@ -73,8 +76,8 @@ class AbsenController extends Controller
             'id_pengawas' => $id_pengawas,
             'tahunGet' => $tahun,
         ];
-        
-        return view('home.absen.export_detail',$data);
+
+        return view('home.absen.export_detail', $data);
     }
 
     public function detailAbsen(Request $r)
