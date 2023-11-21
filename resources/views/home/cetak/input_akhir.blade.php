@@ -25,7 +25,7 @@
                 $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / $c->gr_awal_ctk) * 100;
                 $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
                 $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
-                $ttl_rp = $c->pcs_akhir == 0 ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
+                $ttl_rp = $c->pcs_akhir == 0 ? $c->pcs_awal_ctk * $c->rp_per_pcs : $c->pcs_akhir * $c->rp_per_pcs;
             @endphp
             <tr data-id="{{ $c->id_cetak }}">
                 <td><span>{{ strtoupper($c->nama) }}
@@ -40,7 +40,7 @@
                         name="pcs_awal_ctk" value="{{ $c->pcs_awal_ctk == 0 ? $c->pcs_awal : $c->pcs_awal_ctk }}"
                         readonly>
                     <input type="hidden" class="form-control text-end" name="id_cetak" value="{{ $c->id_cetak }}">
-                    <input type="hidden" class="rp_pcs{{ $c->id_cetak }}" value="{{ $c->rp_pcs }}">
+                    <input type="hidden" class="rp_pcs{{ $c->id_cetak }}" value="{{ $c->rp_per_pcs }}">
                 </td>
                 <td>
                     <input type="text" class="form-control text-end gr_awal gr_awal{{ $c->id_cetak }}"
@@ -75,7 +75,7 @@
                 <td class="text-end"> <span class=" susut{{ $c->id_cetak }}">{{ round($susut) }}%</span></td>
                 <td class="text-end">
                     <span
-                        class=" ttl_rp{{ $c->id_cetak }}">{{ $c->pcs_awal_ctk == 0 ? $c->pcs_awal * $c->rp_pcs : $ttl_rp - $denda - $denda_hcr }}</span>
+                        class=" ttl_rp{{ $c->id_cetak }}">{{ $c->pcs_awal_ctk == 0 ? $c->pcs_awal * $c->rp_per_pcs : $ttl_rp - $denda - $denda_hcr }}</span>
                 </td>
                 <td>
                     <select name="bulan_dibayar" id="" class="form-control">
