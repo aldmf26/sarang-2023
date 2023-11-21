@@ -2,13 +2,13 @@
     <x-slot name="cardHeader">
         <div class="col-lg-12">
             <h6 class="float-start mt-1">{{ $title }}
-                {{ date('M y', strtotime('01-' . $bulanGet . '-' . date('Y'))) }}</h6>
+                {{ request()->get('tgl1') }} ~ {{ request()->get('tgl2') }}</h6>
         </div>
         {{-- <x-theme.button href="{{ route('absen.exportDetail', [$bulanGet,$tahunGet,$id_pengawas]) }}" icon="fa-file-excel" addClass="float-end"
         teks="Export" /> --}}
         <x-theme.button modal="Y" idModal="tambah" href="#" icon="fa-calendar-alt" addClass="float-end"
             teks="Detail" />
-        
+
         {{-- <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
             </div> --}}
@@ -60,9 +60,9 @@
                         <tr id="sticky-header">
                             <th class="dhead">Pgws</th>
                             <th class="dhead">Anak</th>
-                            @for ($i = 1; $i <= $jumlahHari; $i++)
-                                <th class="dhead">{{ $i }}</th>
-                            @endfor
+                            @foreach ($period as $date)
+                                <th class="dhead">{{ $date->format('m/d') }}</th>
+                            @endforeach
                             <th class="dhead">Total</th>
                         </tr>
                     </thead>
@@ -75,15 +75,19 @@
                                 @php
                                     $ttl = 0;
                                 @endphp
-                                @for ($i = 1; $i <= $jumlahHari; $i++)
+                                @foreach ($period as $date)
                                     @php
+                                        $hari = $date->format('d');
+                                        $bulanH = $date->format('m');
+                                        $tahunH = $date->format('Y');
+
                                         $getTgl = DB::table('absen')
-                                            ->where([['id_anak', $d->id_anak], ['tgl', "$tahunGet-$bulanGet-$i"]])
+                                            ->where([['id_anak', $d->id_anak], ['tgl', "$tahunH-$bulanH-$hari"]])
                                             ->count();
                                         $ttl += $getTgl ?? 0;
                                     @endphp
                                     <td class="text-center">{{ empty($getTgl) ? '-' : $getTgl }}</td>
-                                @endfor
+                                @endforeach
                                 <td class="text-center">{{ $ttl }}</td>
                             </tr>
                         @endforeach
@@ -93,29 +97,19 @@
         </section>
 
         <form action="{{ route('absen.detailSum') }}" method="get">
-            <x-theme.modal idModal="tambah" title="Detail Absen">
+            <x-theme.modal idModal="tambah"  title="Detail Absen">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="">Bulan</label>
-                            <select name="bulan" class="form-control select2" id="">
-                                <option value="">- Pilih Bulan -</option>
-
-                                @foreach ($bulan as $b)
-                                    <option {{ (int) date('m') == $b->bulan ? 'selected' : '' }}
-                                        value="{{ $b->id_bulan }}">{{ $b->nm_bulan }}</option>
-                                @endforeach
-                            </select>
+                            <label for="">Dari</label>
+                            <input type="date" name="tgl1" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="">Tahun</label>
-                            <select name="tahun" class="form-control select2" id="">
-                                <option value="">- Pilih Tahun -</option>
-                                <option value="2022">2022</option>
-                                <option value="2023" selected>2023</option>
-                            </select>
+                            <label for="">Sampai</label>
+                            <input type="date" name="tgl2" class="form-control">
+
                         </div>
                     </div>
                     <div class="col-lg-4">

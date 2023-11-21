@@ -119,6 +119,35 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
+                            <label for="">Dari</label>
+                            <input type="date" name="tgl1" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Sampai</label>
+                            <input type="date" name="tgl2" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Pengawas</label>
+                        <select name="id_pengawas" class="form-control select2" id="">
+                            <option value="all">- ALL -</option>
+                            @foreach ($pengawas as $d)
+                                <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+            </x-theme.modal>
+        </form>
+        {{-- <form action="{{ route('absen.detailSum') }}" method="get">
+            <x-theme.modal idModal="tambah"  title="Detail Absen">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
                             <label for="">Bulan</label>
                             <select name="bulan" class="form-control select2" id="">
                                 <option value="">- Pilih Bulan -</option>
@@ -151,7 +180,7 @@
 
                 </div>
             </x-theme.modal>
-        </form>
+        </form> --}}
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tablealdi')
