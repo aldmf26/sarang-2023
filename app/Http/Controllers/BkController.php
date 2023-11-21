@@ -25,9 +25,7 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
-        $response = Http::get("http://jurnal-2023.test/api/apibk");
-        $cabut = json_decode($response->body(), true);
-        dd($response);
+
 
 
         $data = [
@@ -37,18 +35,23 @@ class BkController extends Controller
             'kategori' => $kategori,
             'bk' => DB::select("SELECT * FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC")
+            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
+
         ];
         return view('home.bk.index', $data);
     }
 
     public function add(Request $r)
     {
+        $response = Http::get("http://127.0.0.1:8000/api/apibk");
+        $gudang = $response['data']['gudang'];
+        $gudangBk = json_decode(json_encode($gudang));
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
-            'kategori' => $r->kategori
+            'kategori' => $r->kategori,
+            'gudangBk' => $gudangBk
         ];
         return view('home.bk.create', $data);
     }
@@ -114,8 +117,12 @@ class BkController extends Controller
                 $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
                 $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
 
+                $selectedValue = $r->no_lot[$x];
+                list($noLot, $ket) = explode('-', $selectedValue);
+
                 $data = [
-                    'no_lot' => $r->no_lot[$x],
+                    'no_lot' => $noLot,
+                    'nm_partai' => $ket,
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
                     'ket' => $r->ket[$x],
@@ -135,7 +142,9 @@ class BkController extends Controller
 
     public function template()
     {
-        return Excel::download(new BkTemplateExport(), 'Export Template BK.xlsx');
+        $tbl = DB::select("SELECT * FROM users as a where a.posisi_id = '13'");
+        $totalrow = count($tbl) + 1;
+        return Excel::download(new BkTemplateExport($tbl, $totalrow), 'Export Template BK.xlsx');
     }
 
     public function import(Request $r)
@@ -159,8 +168,8 @@ class BkController extends Controller
         $tgl2 =  $r->tgl2;
         $view = 'home.bk.export';
         $tbl = DB::select("SELECT * FROM bk as a 
-        left join ket_bk as b on b.id_ket_bk = a.id_ket 
-        left join warna as c on c.id_warna = a.id_warna WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'");
+        left join users as c on c.id = a.penerima
+        WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = '$r->kategori'");
         $totalrow = count($tbl) + 1;
 
         return Excel::download(new BkExport($tbl, $totalrow, $view), 'Export BK.xlsx');

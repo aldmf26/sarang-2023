@@ -56,14 +56,14 @@
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
                         <td align="right">{{ $d->gr_flx }}</td>
-                        <td align="right" >{{ $d->pcs_akhir ?? 0 }}</td>
+                        <td align="right">{{ $d->pcs_akhir ?? 0 }}</td>
                         <td align="right">{{ $d->gr_akhir ?? 0 }}</td>
                         @php
-                            if(!empty($d->eot)) {
-                                $warna =  $d->eot < rumusTotalRp($d)->batas_eot ? 'text-danger' : '';
+                            if (!empty($d->eot)) {
+                                $warna = $d->eot < rumusTotalRp($d)->batas_eot ? 'text-danger' : '';
                             }
                         @endphp
-                        <td align="right" class="{{$warna ?? ''}}">{{ $d->eot ?? 0 }}</td>
+                        <td align="right" class="{{ $warna ?? '' }}">{{ $d->eot ?? 0 }}</td>
                         <td align="right">{{ $d->pcs_hcr ?? 0 }}</td>
                         @php
                             $hasil = rumusTotalRp($d);
