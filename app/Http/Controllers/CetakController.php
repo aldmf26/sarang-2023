@@ -116,7 +116,7 @@ class CetakController extends Controller
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
         left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
         
-        where a.id_pengawas = '$id' and a.penutup = 'T'
+        where a.id_pengawas = '$id' and a.penutup = 'T' and a.selesai = 'T'
         order by a.selesai ASC
         ");
 
