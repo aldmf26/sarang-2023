@@ -110,7 +110,7 @@ class HariandllController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
-        $datas = DB::select("SELECT a.tgl,b.nama, GROUP_CONCAT(ket, ',') AS ket,GROUP_CONCAT(lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
+        $datas = DB::select("SELECT a.tgl,b.nama, GROUP_CONCAT(DISTINCT ket, ',') AS ket,GROUP_CONCAT(DISTINCT lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
        FROM tb_hariandll as a
        LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
        WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
