@@ -452,7 +452,7 @@
 
 
                     var rp_hcr = parseFloat(pcs_hcr) * parseFloat(denda_hcr);
-                    alert(denda_hcr);
+
 
                     var total = parseFloat(target) * parseFloat(pcs_awal) - parseFloat(denda) - rp_hcr;
                     $('.ttl_rp' + count).text(total);
