@@ -109,11 +109,15 @@ class CetakController extends Controller
 
     function input_akhir()
     {
-        $cetak = DB::select("SELECT 
-        FROM cetak as a 
-        left join tb_anak as b on b.id_anak = a.id_anak
+        $id = auth()->user()->id;
+        $cetak = DB::select("SELECT a.*,b.id_anak, b.nama,b.id_kelas,c.*, d.ket, a.rp_pcs as rp_per_pcs
+        FROM cetak as a
+        LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-        where a.selesai = 'T' and a.status = 'akhir'
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
+        
+        where a.id_pengawas = '$id' and a.penutup = 'T'
+        order by a.selesai ASC
         ");
 
         $data = [
