@@ -5,6 +5,8 @@
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
+        <x-theme.button href="#" modal="Y" idModal="gaji_global" icon="fa-file-excel" addClass="float-end"
+            teks="Export Gaji Global" />
         <x-theme.button href="#" modal="Y" idModal="import" icon="fa-upload" addClass="float-end"
             teks="Import" />
 
@@ -26,6 +28,17 @@
                     <div class="col-lg-12">
                         <label for="">File</label>
                         <input type="file" class="form-control" name="file">
+                    </div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+        <form action="{{ route('cetak.import') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Cetak" idModal="gaji_global" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+
                     </div>
                 </div>
 
