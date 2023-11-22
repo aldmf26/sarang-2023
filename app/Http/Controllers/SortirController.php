@@ -362,8 +362,8 @@ class SortirController extends Controller
         LEFT JOIN (
             SELECT no_box,penerima, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk GROUP BY no_box,penerima
         ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
-        WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T'
-        GROUP by a.no_box
+        WHERE  a.no_box != 9999 AND a.penutup = 'T'
+        GROUP by a.no_box,a.id_pengawas
         ");
     }
 
