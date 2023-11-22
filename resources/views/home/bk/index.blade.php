@@ -5,7 +5,7 @@
         </div>
         <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
         <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
-            class="float-end btn btn-sm icon icon-left btn-primary me-2">
+            class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
 

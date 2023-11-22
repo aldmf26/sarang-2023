@@ -330,8 +330,8 @@ class Cabut extends Model
         eo.susut as eo_susut,
         eo.ttl_rp as eo_ttl_rp,
         sortir.pcs_awal as sortir_pcs_awal,
-        sortir.pcs_akhir as sortir_gr_awal,
-        sortir.gr_awal as sortir_pcs_akhir,
+        sortir.pcs_akhir as sortir_pcs_akhir,
+        sortir.gr_awal as sortir_gr_awal,
         sortir.gr_akhir as sortir_gr_akhir,
         sortir.susut as sortir_susut,
         sortir.ttl_rp as sortir_ttl_rp,
@@ -339,7 +339,6 @@ class Cabut extends Model
         denda.ttl_rp_denda
         FROM tb_anak as a
         JOIN users as b on a.id_pengawas = b.id
-        
         LEFT JOIN (
                   SELECT 
                     id_anak, 

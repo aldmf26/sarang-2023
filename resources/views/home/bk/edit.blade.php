@@ -52,20 +52,13 @@
                                             class="form-control">
                                     </td>
                                     <td>
-                                        <select name="id_ket[]" id="" class="select3">
-                                            @foreach ($ket_bk as $k)
-                                                <option {{ $k->id_ket_bk == $detail->id_ket ? 'selected' : '' }}
-                                                    value="{{ $k->id_ket_bk }}">{{ $k->ket_bk }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input name="ket[]" value="{{ $detail->ket }}" type="text"
+                                            class="form-control">
                                     </td>
                                     <td>
-                                        <select name="id_warna[]" id="" class="select3">
-                                            @foreach ($warna as $w)
-                                                <option {{ $w->id_warna == $detail->id_warna ? 'selected' : '' }}
-                                                    value="{{ $w->id_warna }}">{{ $w->nm_warna }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input name="warna[]" value="{{ $detail->warna }}" type="text"
+                                            class="form-control">
+                                    
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" readonly

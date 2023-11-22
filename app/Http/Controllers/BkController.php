@@ -35,7 +35,7 @@ class BkController extends Controller
             'kategori' => $kategori,
             'bk' => DB::select("SELECT * FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
+            WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
 
         ];
         return view('home.bk.index', $data);
@@ -195,8 +195,8 @@ class BkController extends Controller
                     'no_lot' => $r->no_lot[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
-                    'id_ket' => $r->id_ket[$x],
-                    'id_warna' => $r->id_warna[$x],
+                    'ket' => $r->ket[$x],
+                    'warna' => $r->warna[$x],
                     'pengawas' => $r->pgws[$x],
                     'penerima' => $r->nama[$x],
                     'pcs_awal' => $r->pcs_awal[$x],

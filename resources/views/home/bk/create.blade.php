@@ -112,7 +112,8 @@
                                             value="{{ auth()->user()->name }}" name="pgws[]">
                                     </td>
                                     <td>
-                                        <select name="nama[]" id="" class="select3 selectPengawas">
+                                        <select pilihan="pengawas" count="{{ $i }}" name="nama[]"
+                                            id="" class="select3 selectPengawas selectTipe">
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
                                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
@@ -231,8 +232,11 @@
                     });
                 });
             }
-            // keyupBp('nolot')
-            // keyupBp('pcsAwal')
+            keyupBp('ket')
+            keyupBp('tipe')
+            keyupBp('warna')
+            keyupBp('nolot')
+            keyupBp('pcsAwal')
             keyupBp('grAwal')
             keyupBp('nobox', true)
 
@@ -257,11 +261,10 @@
             function selectBerubah(tipe) {
                 $(document).on('change', `.selectTipe[pilihan=${tipe}]`, function() {
                     var nilai = $(this).val()
-                    var currentCount = $(this).closest(`.load_${tipe}`).attr('count');
+                    var currentCount = $(this).attr('count');
                     var shouldUpdate = false;
-
                     $(`.selectTipe[pilihan=${tipe}]`).each(function() {
-                        var count = $(this).closest(`.load_${tipe}`).attr('count');
+                        var count = $(this).attr('count');
                         if (shouldUpdate) {
                             $(this).val(nilai).trigger('change.select2');
                         }
@@ -272,9 +275,7 @@
 
                 })
             }
-            selectBerubah('tipe')
-            selectBerubah('ket')
-            selectBerubah('warna')
+            selectBerubah('pengawas')
 
 
             $(document).on('change', '.selectTipe', function() {
@@ -304,25 +305,25 @@
             })
 
 
-            $('.selectPengawas').on('change', function() {
-                var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
+            // $('.selectPengawas').on('change', function() {
+            //     var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
 
-                // Memperbarui semua elemen dengan kelas .selectPengawas
-                $('.selectPengawas').not(this).each(function() {
-                    $(this).val(nilaiselect).trigger(
-                        'change.select2'); // Update nilai Select2 dan trigger event change
-                });
-            });
-            $(document).on('change', '.nolot', function() {
-                var nolot = $(this).val();
-                var count = $(this).attr('count');
-                var no = count;
-                $('.nolot').each(function() {
-                    no++;
-                    $('.nomor_lot' + no).val(nolot).trigger(
-                        'change.select2');
-                });
-            });
+            //     // Memperbarui semua elemen dengan kelas .selectPengawas
+            //     $('.selectPengawas').not(this).each(function() {
+            //         $(this).val(nilaiselect).trigger(
+            //             'change.select2'); // Update nilai Select2 dan trigger event change
+            //     });
+            // });
+            // $(document).on('change', '.nolot', function() {
+            //     var nolot = $(this).val();
+            //     var count = $(this).attr('count');
+            //     var no = count;
+            //     $('.nolot').each(function() {
+            //         no++;
+            //         $('.nomor_lot' + no).val(nolot).trigger(
+            //             'change.select2');
+            //     });
+            // });
         </script>
     @endsection
 </x-theme.app>
