@@ -57,4 +57,13 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
+
+    public static function export($no_lot, $nm_partai)
+    {
+        $result = DB::select("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tipe, a.ket, a.warna
+        FROM bk as a
+        WHERE a.no_lot = ? AND a.nm_partai = ? AND a.kategori ='cabut'
+        GROUP BY a.id_bk;", [$no_lot, $nm_partai]);
+        return $result;
+    }
 }

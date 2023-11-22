@@ -33,12 +33,24 @@
 
             </x-theme.modal>
         </form>
-        <form action="{{ route('cetak.import') }}" method="post" enctype="multipart/form-data">
-            @csrf
-            <x-theme.modal title="Cetak" idModal="gaji_global" btnSave="Y">
+        <form action="{{ route('cetak.export_gaji_global') }}" method="get" enctype="multipart/form-data">
+            <x-theme.modal title="Gaji Global Anak" idModal="gaji_global" btnSave="Y">
                 <div class="row">
-                    <div class="col-lg-12">
-
+                    <div class="col-lg-6">
+                        <select name="bulan" id="" class="select2_add">
+                            <option value="">Pilih Bulan</option>
+                            @foreach ($bulan as $b)
+                                <option value="{{ $b->bulan }}">{{ $b->nm_bulan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-6">
+                        <select name="tahun" id="" class="select2_add">
+                            <option value="">Pilih Tahun</option>
+                            @foreach ($tahun as $t)
+                                <option value="{{ $t->tahun }}">{{ $t->tahun }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

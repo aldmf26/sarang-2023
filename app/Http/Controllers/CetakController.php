@@ -48,6 +48,7 @@ class CetakController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'bulan' => DB::table('bulan')->get(),
+            'tahun' => DB::select("SELECT YEAR(a.tgl) as tahun FROM cetak as a group by YEAR(a.tgl)"),
             'cetak' => DB::select("SELECT *
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
@@ -669,5 +670,180 @@ class CetakController extends Controller
         } else {
             return redirect()->route('cetak.index')->with('error', 'File yang diunggah bukan file Excel yang valid');
         }
+    }
+
+    function export_gaji_global(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Gaji Global Cetak');
+
+
+        $sheet1->getStyle("A1:Q1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'Pengawas');
+        $sheet1->setCellValue('B1', 'Hari Masuk');
+        $sheet1->setCellValue('C1', 'Nama Anak');
+        $sheet1->setCellValue('D1', 'Kelas');
+        $sheet1->setCellValue('E1', 'Pcs Awal Cetak');
+        $sheet1->setCellValue('F1', 'Gr Awal Cetak');
+        $sheet1->setCellValue('G1', 'Pcs Akhir Cetak');
+        $sheet1->setCellValue('H1', 'Gr Akhir Cetak');
+        $sheet1->setCellValue('I1', 'Eo t gr');
+        $sheet1->setCellValue('J1', 'Ttl rp');
+        $sheet1->setCellValue('K1', 'Gr eo awal');
+        $sheet1->setCellValue('L1', 'Gr eo akhir');
+        $sheet1->setCellValue('M1', 'Ttl Rp Eo');
+        $sheet1->setCellValue('N1', 'Kerja dll');
+        $sheet1->setCellValue('O1', 'Rp denda');
+        $sheet1->setCellValue('P1', 'Total Gaji');
+        $sheet1->setCellValue('Q1', 'Rata2');
+
+
+        $kolom = 2;
+        $id = auth()->user()->id;
+        $nama = auth()->user()->name;
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $tgl_awal = '01-' . $bulan . '-' . $tahun;
+
+        $tgl = date('Y-m-27', strtotime('-1 month', strtotime($tgl_awal)));
+        $tgl2 = date('Y-m-27', strtotime($tgl_awal));
+
+
+        $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr
+        FROM tb_anak as a
+        left join (
+            SELECT b.id_anak, count(b.id_absen) as total_absen
+            FROM absen as b
+            where b.tgl between '$tgl' and '$tgl2'
+            group by b.id_anak
+        ) as b on b.id_anak = a.id_anak
+        left join (
+            SELECT
+            c.id_anak,
+            SUM(c.pcs_awal_ctk) AS pcs_awal_cetak,
+            SUM(c.gr_awal_ctk) AS gr_awal_cetak,
+            SUM(c.pcs_akhir + c.pcs_cu) AS pcs_akhir,
+            SUM(c.gr_akhir + c.gr_cu) AS gr_akhir,
+            SUM(
+                IF(
+                    round((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100) >= d.batas_susut,
+                    round(((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100)) * d.denda_susut,0
+                )
+            ) AS denda_susut,
+            sum(c.pcs_hcr * d.denda_hcr) as denda_hcr,
+            sum(c.pcs_akhir * c.rp_pcs) as total_rp
+            FROM
+                cetak AS c
+            LEFT JOIN
+                kelas_cetak AS d ON d.id_kelas_cetak = c.id_kelas
+            WHERE
+                c.bulan_dibayar = '$bulan' AND YEAR(c.tgl) = '$tahun' AND c.selesai = 'Y'
+            GROUP BY
+                c.id_anak
+        )  as c on c.id_anak = a.id_anak
+        where a.id_pengawas = '$id'
+        order by a.id_kelas DESC, a.nama ASC
+            ");
+
+        $pcs_awal_ctk = 0;
+        $gr_awal_ctk = 0;
+        $pcs_akhir = 0;
+        $gr_akhir = 0;
+        $ttl_rp = 0;
+        $rp_denda = 0;
+        $rata2 = 0;
+        $ttl_absen = 0;
+        foreach ($tbl as $c) {
+            $sheet1->setCellValue('A' . $kolom, $nama);
+            $sheet1->setCellValue('B' . $kolom, $c->total_absen);
+            $sheet1->setCellValue('C' . $kolom, $c->nama);
+            $sheet1->setCellValue('D' . $kolom, $c->id_kelas);
+            $sheet1->setCellValue('E' . $kolom, $c->pcs_awal_cetak);
+            $sheet1->setCellValue('F' . $kolom, $c->gr_awal_cetak);
+            $sheet1->setCellValue('G' . $kolom, $c->pcs_akhir);
+            $sheet1->setCellValue('H' . $kolom, $c->gr_akhir);
+            $sheet1->setCellValue('I' . $kolom, '');
+            $sheet1->setCellValue('J' . $kolom, $c->total_rp);
+            $sheet1->setCellValue('O' . $kolom, $c->denda_hcr + $c->denda_susut);
+            $sheet1->setCellValue('P' . $kolom, $c->total_rp - $c->denda_hcr - $c->denda_susut);
+            $sheet1->setCellValue('Q' . $kolom, ($c->total_rp - $c->denda_hcr - $c->denda_susut) / $c->total_absen);
+
+            $kolom++;
+
+            $pcs_awal_ctk += $c->pcs_awal_cetak;
+            $gr_awal_ctk += $c->gr_awal_cetak;
+            $pcs_akhir += $c->pcs_akhir;
+            $gr_akhir += $c->gr_akhir;
+            $ttl_rp += $c->total_rp;
+            $rp_denda += $c->denda_hcr + $c->denda_susut;
+            $rata2 += ($c->total_rp - $c->denda_hcr - $c->denda_susut) / $c->total_absen;
+            $ttl_absen += $c->total_absen;
+        }
+        $sheet1->getStyle('A2:Q' . $kolom - 1)->applyFromArray($style);
+        $sheet1->setCellValue('A' . $kolom, 'Total');
+        $sheet1->setCellValue('B' . $kolom, $ttl_absen);
+        $sheet1->setCellValue('C' . $kolom, '');
+        $sheet1->setCellValue('D' . $kolom, '');
+        $sheet1->setCellValue('E' . $kolom, $pcs_awal_ctk);
+        $sheet1->setCellValue('F' . $kolom, $gr_awal_ctk);
+        $sheet1->setCellValue('G' . $kolom,  $pcs_akhir);
+        $sheet1->setCellValue('H' . $kolom,  $gr_akhir);
+        $sheet1->setCellValue('I' . $kolom, '0');
+        $sheet1->setCellValue('J' . $kolom, $ttl_rp);
+        $sheet1->setCellValue('K' . $kolom, '0');
+        $sheet1->setCellValue('L' . $kolom, '0');
+        $sheet1->setCellValue('M' . $kolom, '0');
+        $sheet1->setCellValue('N' . $kolom, '0');
+        $sheet1->setCellValue('O' . $kolom, $rp_denda);
+        $sheet1->setCellValue('P' . $kolom, $ttl_rp - $rp_denda);
+        $sheet1->setCellValue('Q' . $kolom, $rata2);
+
+
+
+
+        $sheet1->getStyle("A" . $kolom . ':' .  "Q" . $kolom)->applyFromArray($style_atas);
+
+
+        $namafile = "Gaji global cetak.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }

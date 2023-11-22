@@ -70,7 +70,7 @@ class ApiBkController extends Controller
             $pcs_awal_ctk += $c->pcs_awal_ctk;
             $pcs_awal_ctk_dibawa +=  $c->selesai == 'Y' ? '0' : $c->pcs_awal_ctk - $c->pcs_akhir;
             $gr_awal_ctk_dibawa +=  $c->selesai == 'Y' ? '0' : $c->gr_awal_ctk - $c->gr_akhir + $c->gr_cu;
-            $pcs_akhir_ctk +=  $c->selesai == 'T' ? '0' : $c->pcs_akhir;
+            $pcs_akhir_ctk +=  $c->selesai == 'T' ? '0' : $c->pcs_akhir + $c->pcs_cu;
             $gr_awal_ctk +=   $c->gr_awal_ctk;
             $gr_akhir_ctk += $c->gr_akhir + $c->gr_cu;
         }
@@ -133,5 +133,14 @@ class ApiBkController extends Controller
 
     function export_sarang(Request $r)
     {
+        $bk_cabut = ApiBkModel::export($r->no_lot, $r->nm_partai);
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Sarang berhasil diambil',
+            'data' => [
+                'bk_cabut' => $bk_cabut,
+            ],
+        ];
+        return response()->json($response);
     }
 }

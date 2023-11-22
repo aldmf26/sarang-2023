@@ -112,8 +112,8 @@
                                             value="{{ auth()->user()->name }}" name="pgws[]">
                                     </td>
                                     <td>
-                                        <select pilihan="pengawas" count="{{ $i }}" name="nama[]" id=""
-                                            class="select3 selectPengawas selectTipe">
+                                        <select pilihan="pengawas" count="{{ $i }}" name="nama[]"
+                                            id="" class="select3 selectPengawas selectTipe">
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
                                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
