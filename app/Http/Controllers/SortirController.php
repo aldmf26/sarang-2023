@@ -416,7 +416,6 @@ class SortirController extends Controller
         $tgl2 =  $r->tgl2;
         $view = 'home.sortir.export_rekap';
         $tbl = $this->queryRekap($tgl1, $tgl2);
-dd($tbl);
         return Excel::download(new SortirRekapExport($tbl, $view), 'Export REKAP SORTIR.xlsx');
     }
 }
