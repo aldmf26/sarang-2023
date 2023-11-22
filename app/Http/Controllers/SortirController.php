@@ -372,7 +372,6 @@ class SortirController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
-        $datas = $this->queryRekap($tgl1, $tgl2);
 
         $ttlPcsBk = 0;
         $ttlGrBk = 0;
@@ -397,7 +396,6 @@ class SortirController extends Controller
             'title' => 'Rekap Summary Sortir',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'datas' => $datas,
             'ttlPcsBk' => $ttlPcsBk,
             'ttlGrBk' => $ttlGrBk,
             'ttlPcsAwal' => $ttlPcsAwal,
