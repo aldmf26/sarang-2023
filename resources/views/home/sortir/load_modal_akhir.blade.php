@@ -1,7 +1,10 @@
 <div class="row">
-
+    <div class="col-lg-3 mb-2">
+        <label for="">Pencarian :</label>
+        <input autofocus type="text" id="pencarian2" class="form-control float-end">
+    </div>
     <div class="col-lg-12">
-        <table class="table table-striped" >
+        <table class="table table-striped" id="tablealdi2">
             <thead>
                 <tr>
                     <th class="dhead" width="100">Nama Anak</th>
