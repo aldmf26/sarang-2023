@@ -374,7 +374,7 @@ class SortirController extends Controller
         $tgl2 =  $tgl['tgl2'];
 
         $ttlPcsBk = 0;
-        $ttlGrBk = 0;
+        $ttlGrBk = 0;   
         $ttlPcsAwal = 0;
         $ttlGrAwal = 0;
         $ttlPcsAkhir = 0;
