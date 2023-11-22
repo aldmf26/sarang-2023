@@ -29,10 +29,8 @@
 
                         </td>
                         <td class="fs-bold">{{ strtoupper($v->nama) }} / {{ $v->id_kelas }}</td>
+                        <td class="fs-bold">{{ $v->no_box }}</td>
 
-                        <td>
-                            <input type="text" readonly value="{{ $v->no_box }}" class="form-control">
-                        </td>
                         <td>
                             <input readonly value="{{ $v->pcs_awal }}" type="text" class="form-control text-end">
                         </td>
