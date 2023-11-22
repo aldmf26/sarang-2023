@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/delete_cetak', 'delete_cetak')->name('delete_cetak');
             Route::post('/import', 'import')->name('import');
+            Route::get('/export_gaji_global', 'export_gaji_global')->name('export_gaji_global');
 
             Route::get('/add', 'add')->name('add');
             Route::get('/akhir', 'akhir')->name('akhir');
