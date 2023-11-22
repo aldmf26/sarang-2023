@@ -47,6 +47,7 @@ class CetakController extends Controller
             'title' => 'Divisi Cetak',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+            'bulan' => DB::table('bulan')->get(),
             'cetak' => DB::select("SELECT *
             FROM cetak as a
             LEFT JOIN tb_anak as b on b.id_anak = a.id_anak

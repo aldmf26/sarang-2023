@@ -232,7 +232,7 @@
                 });
             }
             keyupBp('nolot')
-            // keyupBp('pcsAwal')
+            keyupBp('pcsAwal')
             keyupBp('grAwal')
             keyupBp('nobox', true)
 
@@ -313,16 +313,16 @@
                         'change.select2'); // Update nilai Select2 dan trigger event change
                 });
             });
-            $(document).on('change', '.nolot', function() {
-                var nolot = $(this).val();
-                var count = $(this).attr('count');
-                var no = count;
-                $('.nolot').each(function() {
-                    no++;
-                    $('.nomor_lot' + no).val(nolot).trigger(
-                        'change.select2');
-                });
-            });
+            // $(document).on('change', '.nolot', function() {
+            //     var nolot = $(this).val();
+            //     var count = $(this).attr('count');
+            //     var no = count;
+            //     $('.nolot').each(function() {
+            //         no++;
+            //         $('.nomor_lot' + no).val(nolot).trigger(
+            //             'change.select2');
+            //     });
+            // });
         </script>
     @endsection
 </x-theme.app>
