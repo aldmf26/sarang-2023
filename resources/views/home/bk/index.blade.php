@@ -49,7 +49,7 @@
                     @foreach ($bk as $no => $b)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ $b->no_lot }} - {{ $b->nm_partai }}</td>
+                            <td>{{ $b->no_lot }} </td>
                             <td>{{ $b->no_box }}</td>
                             <td>{{ $b->tipe }}</td>
                             <td>{{ $b->ket }}</td>
