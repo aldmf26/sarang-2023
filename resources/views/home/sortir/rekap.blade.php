@@ -90,11 +90,13 @@
                                     $id = $d->id_pengawas;
                                     $query = DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
                                             SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
-                                            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+                                            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_bk, c.gr_bk,
                                              sum(a.rp_target) as rp_target,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
                                             FROM sortir as a
                                             left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box AND c.penerima = b.id
+                                            LEFT JOIN (
+                                                SELECT no_box,penerima, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk GROUP BY no_box,penerima
+                                            ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
                                             WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T'
                                             GROUP by a.no_box");
                                 @endphp
