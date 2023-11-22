@@ -339,7 +339,6 @@ class Cabut extends Model
         denda.ttl_rp_denda
         FROM tb_anak as a
         JOIN users as b on a.id_pengawas = b.id
-        
         LEFT JOIN (
                   SELECT 
                     id_anak, 
