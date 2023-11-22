@@ -356,7 +356,7 @@ class SortirController extends Controller
         return DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
         SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
         SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_bk, c.gr_bk,
-         sum(a.rp_target) as rp_target,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
+         sum(a.rp_target) as rupiah,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
         FROM sortir as a
         left join users as b on b.id = a.id_pengawas
         LEFT JOIN (
