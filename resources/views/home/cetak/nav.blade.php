@@ -16,10 +16,10 @@
             //     'rot' => 'eo.rekap',
             //     'nama' => 'EO',
             // ],
-            [
-                'rot' => 'cetak.rekap',
-                'nama' => 'Cetak',
-            ],
+            // [
+            //     'rot' => 'cetak.rekap',
+            //     'nama' => 'Cetak',
+            // ],
             [
                 'rot' => 'sortir.rekap',
                 'nama' => 'Sortir',

@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="6">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -6,10 +6,11 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('hariandll.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm icon icon-left btn-primary me-2">
+                <a href="{{ route('hariandll.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                @include('home.cabut.btn_export_global')
                 <x-theme.btn_filter />
             </div>
             <div class="col-lg-12">
@@ -28,30 +29,32 @@
                 <thead>
                     <tr>
                         <th class="dhead">Bulan</th>
+                        <th class="dhead ">Pgws</th>
                         <th class="dhead ">Nama Anak</th>
                         <th class="dhead">Keterangan</th>
 
                         @php
                             $ttl = 0;
-                            foreach($datas as $d) {
+                            foreach ($datas as $d) {
                                 $ttl += $d->total_rupiah;
                             }
                         @endphp
 
-                        <th class="dhead text-end">Rupiah ({{number_format($ttl,0)}})</th>
-                    </tr> 
+                        <th class="dhead text-end">Rupiah ({{ number_format($ttl, 0) }})</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($datas as $c)
-                    <tr>
-                        <td>{{date("M y",strtotime($c->tgl)) }}</td>
-                        <td>{{$c->nama}}</td>
-                        <td>
-                            Ket : {{ucwords($c->ket)}} <br>
-                            Lokasi : {{ucwords($c->lokasi)}}
-                        </td>
-                        <td align="right">{{number_format($c->total_rupiah,0)}}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ date('M y', strtotime($c->tgl)) }}</td>
+                            <td>{{ $c->name }}</td>
+                            <td>{{ $c->nama }}</td>
+                            <td>
+                                Ket : {{ ucwords($c->ket) }} <br>
+                                Lokasi : {{ ucwords($c->lokasi) }}
+                            </td>
+                            <td align="right">{{ number_format($c->total_rupiah, 0) }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
