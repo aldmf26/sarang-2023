@@ -296,7 +296,7 @@ class SortirController extends Controller
             'boxBk' => $this->getStokBk(),
             'datas' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where([['a.no_box', 9999],['id_pengawas', auth()->user()->id]])
+                ->where([['a.no_box', 9999],['a.id_pengawas', auth()->user()->id]])
                 ->get()
         ];
         return view('home.sortir.load_tambah_sortir', $data);
