@@ -236,8 +236,8 @@
             keyupBp('tipe')
             keyupBp('warna')
             keyupBp('nolot')
-            keyupBp('pcsAwal')
-            keyupBp('grAwal')
+            // keyupBp('pcsAwal')
+            // keyupBp('grAwal')
             keyupBp('nobox', true)
 
             function loadSelect(elemen, baris) {

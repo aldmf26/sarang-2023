@@ -416,14 +416,15 @@
                                 break;
                         }
 
-
+                        var susutH = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
+                        susutH = susutH.toFixed(0)
+                        $('.susut' + count).text(susutH + '%')
+                        
                         setRupiah = rulesCabut(data).toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         })
                         $('.ttlRpKeyup' + data.count).text(setRupiah)
-                        var susutH = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
-                        susutH = susutH.toFixed(0)
-                        $('.susut' + count).text(susutH + '%')
+                        
                         $('.ttlRpSet' + data.count).val(rulesCabut(data))
                     })
                 }

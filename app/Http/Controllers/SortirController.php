@@ -97,8 +97,8 @@ class SortirController extends Controller
 
         for ($i = 0; $i < count($r->rupiah); $i++) {
             $rupiah = str()->remove('.', $r->rupiah[$i]);
-
-            DB::table('sortir')->where('id_sortir', $r->id_sortir[$i])->update([
+            $id_sortir = $r->id_sortir[$i];
+            $data = [
                 'no_box' => $r->no_box,
                 'tgl' => $r->tgl_terima[$i],
                 'id_pengawas' => $r->id_pengawas,
@@ -108,7 +108,12 @@ class SortirController extends Controller
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
                 'rp_target' => $rupiah,
-            ]);
+            ];
+            if ($id_sortir == 9999) {
+                DB::table('sortir')->insert($data);
+            } else {
+                DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
+            }
         }
 
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
@@ -128,6 +133,7 @@ class SortirController extends Controller
     {
         $detail = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas_sortir as c', 'c.id_kelas', 'a.id_kelas')
             ->where([['selesai', 'T'], ['no_box', '!=', 9999], ['a.id_pengawas', auth()->user()->id]])
             ->get();
         $data = [
@@ -162,6 +168,13 @@ class SortirController extends Controller
         $pcus = $r->pcus;
         $id_sortir = $r->id_sortir;
         $bulan = $r->bulan;
+        if($gr_akhir == 0 ) {
+            return [
+                'tipe' => 'error',
+                'pesan' => 'Gr Akhir kosong'
+            ];
+        } 
+        
 
         $getSortir = DB::table('sortir')->where('id_sortir', $id_sortir);
         $get = $getSortir->first();
@@ -184,8 +197,10 @@ class SortirController extends Controller
             'ttl_rp' => $rupiah,
             'denda_sp' => $denda,
         ]);
-
-        // return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil Ditambahkan');
+        return [
+            'tipe' => 'sukses',
+            'pesan' => 'Berhasil Input Akhir'
+        ];
     }
 
     public function load_halaman(Request $r)
@@ -296,7 +311,7 @@ class SortirController extends Controller
             'boxBk' => $this->getStokBk(),
             'datas' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where('a.no_box', 9999)
+                ->where([['a.no_box', 9999], ['a.id_pengawas', auth()->user()->id]])
                 ->get()
         ];
         return view('home.sortir.load_tambah_sortir', $data);
@@ -374,7 +389,7 @@ class SortirController extends Controller
         $tgl2 =  $tgl['tgl2'];
 
         $ttlPcsBk = 0;
-        $ttlGrBk = 0;   
+        $ttlGrBk = 0;
         $ttlPcsAwal = 0;
         $ttlGrAwal = 0;
         $ttlPcsAkhir = 0;
