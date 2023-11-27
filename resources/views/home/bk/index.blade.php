@@ -60,7 +60,7 @@
                             </td>
                             <td class="text-end">{{ $b->pcs_awal }}</td>
                             <td class="text-end">{{ $b->gr_awal }}</td>
-                            <td align="center"><input type="checkbox" no_nota="{{ $b->no_box }}" class="cek_bayar"
+                            <td align="center"><input type="checkbox" penerima="{{ $b->penerima }}" no_nota="{{ $b->no_box }}" class="cek_bayar"
                                     name="" id=""></td>
                             <td>
                                 <a href="" class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i></a>
@@ -141,16 +141,25 @@
                         $('.cek_bayar:checked').each(function() {
                             var no_nota = $(this).attr('no_nota');
                             dipilih.push(no_nota);
-
                         });
                         var params = new URLSearchParams();
-
                         dipilih.forEach(function(orderNumber) {
                             params.append('no_nota', orderNumber);
                         });
                         var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
+
+                        var penerima = [];
+                        $('.cek_bayar:checked').each(function() {
+                            var id_pengawas = $(this).attr('penerima');
+                            penerima.push(id_pengawas);
+                        });
+                        var params = new URLSearchParams();
+                        penerima.forEach(function(orderNumber) {
+                            params.append('id_pengawas', orderNumber);
+                        });
+                        var queryStringId = 'id_pengawas[]=' + penerima.join('&id_pengawas[]=');
                         var kategori = "{{request()->get('kategori') ?? 'cabut'}}"
-                        var targetUrl = `/home/bk/${link}?kategori=${kategori}&` + queryString
+                        var targetUrl = `/home/bk/${link}?kategori=${kategori}&${queryString}&${queryStringId}`
                         if (formDelete === null) {
                             window.location.assign(targetUrl)
                         } else {

@@ -32,7 +32,7 @@
                         @foreach ($no_nota as $i => $n)
                             @php
                                 $detail = DB::table('bk as a')
-                                    ->where([['no_box', $n],['kategori', $kategori]])
+                                    ->where([['no_box', $n],['kategori', $kategori],['penerima', $id_pengawas[$i]]])
                                     ->first();
                             @endphp
                             <input type="hidden" name="id_bk[]" value="{{ $detail->id_bk }}">

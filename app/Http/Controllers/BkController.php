@@ -33,7 +33,7 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            'bk' => DB::select("SELECT a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
 
@@ -183,6 +183,7 @@ class BkController extends Controller
             'ket_bk' => DB::table('ket_bk')->get(),
             'warna' => DB::table('warna')->get(),
             'no_nota' => $r->no_nota,
+            'id_pengawas' => $r->id_pengawas,
             'kategori' => $r->kategori,
         ];
         return view('home.bk.edit', $data);
