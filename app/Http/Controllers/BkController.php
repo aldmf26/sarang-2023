@@ -183,6 +183,7 @@ class BkController extends Controller
             'ket_bk' => DB::table('ket_bk')->get(),
             'warna' => DB::table('warna')->get(),
             'no_nota' => $r->no_nota,
+            'kategori' => $r->kategori,
         ];
         return view('home.bk.edit', $data);
     }
