@@ -168,6 +168,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/export', 'export')->name('export');
             Route::get('/create', 'create')->name('create');
+            Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::post('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::get('/selesai', 'selesai')->name('selesai');

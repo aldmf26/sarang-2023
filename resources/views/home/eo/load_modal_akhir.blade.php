@@ -14,14 +14,15 @@
                     <th class="dhead text-end">Gr EO Akhir</th>
                     <th class="dhead text-end" width="120">Ttl Rp</th>
                     <th class="dhead" width="120">Dibayar</th>
-                    <th class="dhead text-center" width="120">Aksi</th>
+                    <th class="dhead text-center" width="180">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($datas as $i => $x)
                     <tr>
                         <td>
-                            <input name="tgl_serah{{ $i + 1 }}[]" style="font-size: 12px;" type="date" value="{{ date('Y-m-d') }}" class="form-control">
+                            <input name="tgl_serah{{ $i + 1 }}[]" style="font-size: 12px;" type="date"
+                                value="{{ date('Y-m-d') }}" class="form-control">
                         </td>
                         <td>
                             <input type="text" readonly value="{{ $x->no_box }}" class="form-control">
@@ -32,18 +33,23 @@
                             <input type="text" readonly value="{{ $x->kelas }}" class="form-control">
                         </td>
                         <td>
-                            <input readonly value="{{ $x->gr_eo_awal }}" name="gr_eo_awal{{$i+1}}[]" type="text" class="form-control text-end">
-                            <input value="{{ $x->rupiah }}" type="hidden" name="rupiah{{$i+1}}[]" class="rupiah_kelas{{ $i+1 }}">
+                            <input readonly value="{{ $x->gr_eo_awal }}" name="gr_eo_awal{{ $i + 1 }}[]"
+                                type="text" class="form-control text-end">
+                            <input value="{{ $x->rupiah }}" type="hidden" name="rupiah{{ $i + 1 }}[]"
+                                class="rupiah_kelas{{ $i + 1 }}">
                         </td>
-                       
+
                         <td>
-                            <input name="gr_eo_akhir{{ $i + 1 }}[]" value="{{ $x->gr_eo_akhir }}" type="text"
-                                class="form-control text-end grEoAkhirKeyup" count="{{ $i+1 }}">
+                            <input name="gr_eo_akhir{{ $i + 1 }}[]" value="{{ $x->gr_eo_akhir }}"
+                                type="text" class="form-control text-end grEoAkhirKeyup"
+                                count="{{ $i + 1 }}">
                         </td>
                         <td align="right">
 
-                            <input type="hidden" name="ttl_rp{{ $i + 1 }}[]" value="{{$x->ttl_rp ?? 0}}" class="ttlRpSet{{$i+1}}">
-                            <span class="ttlRpKeyup{{$i+1}} h6">{{ number_format($x->ttl_rp ?? 0,0)  }}</span>
+                            <input type="hidden" name="ttl_rp{{ $i + 1 }}[]" value="{{ $x->ttl_rp ?? 0 }}"
+                                class="ttlRpSet{{ $i + 1 }}">
+                            <span
+                                class="ttlRpKeyup{{ $i + 1 }} h6">{{ number_format($x->ttl_rp ?? 0, 0) }}</span>
                         </td>
                         <td>
                             <select name="bulan{{ $i + 1 }}[]" class="form-control">
@@ -62,8 +68,12 @@
                             <button style="font-size: 12px"
                                 class="btn btn-sm btn-{{ empty($x->gr_eo_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
-                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#" id_cabut="{{ $x->id_eo }}"
-                                href="#" data-bs-toggle="modal" data-bs-target="#selesai">Selesai</a>
+                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
+                                id_cabut="{{ $x->id_eo }}" href="#" data-bs-toggle="modal"
+                                data-bs-target="#selesai">Selesai</a>
+                            <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
+                                type="button" count="{{ $i + 1 }}"
+                                id_cabut="{{ $x->id_eo }}">Cancel</button>
                         </td>
                     </tr>
                 @endforeach

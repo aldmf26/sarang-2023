@@ -222,46 +222,6 @@
                             });
                         })
 
-                        // $(document).on('change', '.pilihAnak', function() {
-                        //     var id_kelas = $(this).val()
-                        //     var count = $(this).attr('count')
-                        //     var nilaiGr = $(".setGr" + count).val()
-
-                        //     // var id_kelas = $('option:selected', this).data('kelas');
-                        //     $.ajax({
-                        //         type: "GET",
-                        //         url: "cabut/get_kelas_anak",
-                        //         data: {
-                        //             id_kelas: id_kelas,
-                        //         },
-                        //         dataType: "json",
-                        //         success: function(r) {
-                        //             console.log(r)
-                        //             var hrga_satuan = (r.rupiah / r.gr)
-                        //             var rupiah = hrga_satuan * parseFloat(nilaiGr);
-                        //             $('.rupiahBiasa' + count).val(rupiah);
-                        //             $(".setHargaSatuan" + count).val(hrga_satuan)
-                        //             rupiah = rupiah.toLocaleString('id-ID', {
-                        //                 maximumFractionDigits: 0
-                        //             })
-                        //             $(".setRupiah" + count).val(rupiah)
-                        //         }
-                        //     });
-                        // })
-
-                        // $(document).on('keyup', '.setGr', function() {
-                        //     var isi = $(this).val()
-                        //     var count = $(this).attr('count')
-                        //     var hrga_satuan = $('.setHargaSatuan' + count).val()
-                        //     var rupiah = hrga_satuan * isi
-                        //     $('.rupiahBiasa' + count).val(parseFloat(rupiah));
-                        //     rupiah = rupiah.toLocaleString('id-ID', {
-                        //         maximumFractionDigits: 0
-                        //     })
-                        //     $(".setRupiah" + count).val(rupiah)
-
-
-                        // })
                     }
                 });
             }
@@ -276,7 +236,9 @@
                     success: function(r) {
                         alertToast('sukses', 'Berhasil tambah data cabut')
                         $('#tambah2').modal('hide')
+                        loadTambahcabut()
                         loadHalaman()
+                        loadTambahAnak()
                     }
                 });
             })
@@ -427,6 +389,19 @@
                         alertToast('Berhasil tambah anak')
                         load_anak()
                         load_anak_nopengawas()
+                    }
+                });
+            })
+
+            $(document).on('click', '.cancelCabutAkhir', function() {
+                var id_cabut = $(this).attr('id_cabut')
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('eo.cancel') }}?id_cabut=" + id_cabut,
+                    success: function(r) {
+                        loadTambahcabut()
+                        loadHalaman()
+                        loadTambahAnak()
                     }
                 });
             })

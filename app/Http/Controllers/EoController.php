@@ -85,12 +85,12 @@ class EoController extends Controller
         // DB::table('cabut')->where([['tgl_terima', $tgl], ['id_pengawas', $id_pengawas], ['no_box', '9999']])->delete();
         // DB::table('absen')->where([['tgl', $tgl], ['ket', 'cabut']])->delete();
         foreach ($r->all()['rows'] as $d) {
-            DB::table('absen')->insert([
-                'tgl' => $tgl,
-                'id_pengawas' => $id_pengawas,
-                'id_anak' => $d,
-                'ket' => $r->tipe == 'eo' ? 'eo' : 'eo sisa'
-            ]);
+            // DB::table('absen')->insert([
+            //     'tgl' => $tgl,
+            //     'id_pengawas' => $id_pengawas,
+            //     'id_anak' => $d,
+            //     'ket' => $r->tipe == 'eo' ? 'eo' : 'eo sisa'
+            // ]);
             if ($r->tipe == 'eo') {
                 DB::table('eo')->insert([
                     'no_box' => 9999,
@@ -251,6 +251,12 @@ class EoController extends Controller
             'datas' => $datas
         ];
         return view('home.eo.load_modal_akhir', $data);
+    }
+    public function cancel(Request $r)
+    {
+        DB::table('eo')->where('id_eo', $r->id_cabut)->update([
+            'no_box' => 9999,
+        ]);
     }
 
     public function input_akhir(Request $r)

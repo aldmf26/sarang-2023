@@ -167,9 +167,10 @@ class BkController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.bk.export';
-        $tbl = DB::select("SELECT * FROM bk as a 
-        left join users as c on c.id = a.penerima
-        WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = '$r->kategori'");
+        $kategori = $r->kategori;
+        $tbl = DB::select("SELECT a.nm_partai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+        left join users as d on d.id = a.penerima 
+        WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC");
         $totalrow = count($tbl) + 1;
 
         return Excel::download(new BkExport($tbl, $totalrow, $view), 'Export BK.xlsx');
