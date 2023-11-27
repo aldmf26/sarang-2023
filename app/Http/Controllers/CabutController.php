@@ -37,13 +37,11 @@ class CabutController extends Controller
         $id = auth()->user()->id;
 
         $cabut = Cabut::getCabut();
-        $cabutSum = Cabut::getCabutSum()->sumRpTarget;
 
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'rpTargetSum' =>$cabutSum,
             'cabut' => $cabut,
         ];
         return view('home.cabut.load_halaman', $data);

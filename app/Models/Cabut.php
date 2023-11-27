@@ -49,18 +49,7 @@ class Cabut extends Model
             ->get();
     }
 
-    public static function getCabutSum()
-    {
-        $id_user = auth()->user()->id;
-        return DB::selectOne("SELECT 
-                    sum(a.rupiah) as sumRpTarget,
-                    
-                FROM cabut AS a
-                WHERE a.no_box != '9999'
-                    AND a.penutup = 'T'
-                    AND a.id_pengawas = $id_user
-                GROUP BY a.id_pengawas;");
-    }
+    
     public static function getCabutAkhir($orderBy)
     {
         $datas =  DB::table('cabut as a')
