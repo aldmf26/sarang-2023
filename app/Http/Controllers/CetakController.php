@@ -90,7 +90,7 @@ class CetakController extends Controller
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cetak'
             
             where a.id_pengawas = '$id' and a.penutup = 'T'
-            order by a.selesai ASC
+            order by a.selesai ASC, a.tgl ASC
             "),
         ];
         return view('home.cetak.get', $data);

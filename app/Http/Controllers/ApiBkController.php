@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ApiBkModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiBkController extends Controller
 {
@@ -133,12 +134,88 @@ class ApiBkController extends Controller
 
     function export_sarang(Request $r)
     {
+
         $bk_cabut = ApiBkModel::export($r->no_lot, $r->nm_partai);
         $response = [
             'status' => 'success',
             'message' => 'Data Sarang berhasil diambil',
             'data' => [
                 'bk_cabut' => $bk_cabut,
+            ],
+        ];
+        return response()->json($response);
+    }
+
+    function cabut_export(Request $r)
+    {
+        $cabut = ApiBkModel::datacabut_export($r->no_box);
+
+        $susut = empty($cabut->gr_awal) ? 0 : (1 - ($cabut->gr_flx + $cabut->gr_akhir) / $cabut->gr_awal) * 100;
+        $batas_eot = empty($cabut->gr_awal) ? 0 : $cabut->gr_awal * $cabut->batas_eot;
+        $bonus_susut = 0;
+        $rupiah = $cabut->rupiah;
+        if ($susut > $cabut->batas_susut) {
+            $denda = ($susut - $cabut->batas_susut) * 0.03 * $cabut->rupiah;
+            $rupiah = $rupiah - $denda;
+        }
+        if ($susut < $cabut->bonus_susut) {
+            $bonus_susut = $cabut->rp_bonus != 0  ? ($cabut->rp_bonus * $cabut->gr_awal) / $cabut->gr_kelas : 0;
+        }
+
+        $denda_hcr = $cabut->pcs_hcr * $cabut->denda_hcr;
+        $eot_bonus = ($cabut->eot - $cabut->gr_awal * $cabut->batas_eot) * $cabut->eot_rp;
+
+        $ttl_rp_cbt =  $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
+        $ttl_rp_cbt_hilang = $cabut->selesai == 'Y' ?  '0' : ($cabut->eot == 0 ? $cabut->rupiah : $rupiah - $denda_hcr + $eot_bonus + $bonus_susut);
+
+        $pcs_awal_cbt = $cabut->pcs_awal;
+        $pcs_akhir_cbt = $cabut->selesai == 'Y' ? $cabut->pcs_akhir : '0';
+
+        $gr_awal_cbt =  $cabut->gr_awal;
+        $gr_awal_cbt_hilang = $cabut->selesai == 'Y' ? '0' :  $cabut->gr_awal;
+        $gr_akhir_cbt = $cabut->selesai == 'Y' ?  $cabut->gr_akhir : '0';
+
+        $gr_flx_cbt = $cabut->selesai == 'Y' ? $cabut->gr_flx : '0';
+
+
+        $cetak = ApiBkModel::datacetak_export($r->no_box);
+        $susut = empty($cetak->gr_akhir) ? '0' : (1 - ($cetak->gr_akhir + $cetak->gr_cu) / ($cetak->gr_awal_ctk)) * 100;
+        $denda = round($susut, 0) >= $cetak->batas_susut ? round($susut) * $cetak->denda_susut : 0;
+        $denda_hcr = $cetak->pcs_hcr * $cetak->denda_hcr;
+        $ttl_rp = $cetak->pcs_akhir == '0' ? $cetak->pcs_awal_ctk * $cetak->rp_pcs : $cetak->pcs_akhir * $cetak->rp_pcs;
+
+        $ttl_rp_all_ctk =  $cetak->selesai == 'Y' ? '0' :  $ttl_rp - $denda - $denda_hcr;
+        $ttl_rp_all_ctk_dibawa = $ttl_rp - $denda - $denda_hcr;
+        $pcs_awal_ctk = $cetak->pcs_awal_ctk;
+        $pcs_awal_ctk_dibawa =  $cetak->selesai == 'Y' ? '0' : $cetak->pcs_awal_ctk - $cetak->pcs_akhir;
+        $gr_awal_ctk_dibawa =  $cetak->selesai == 'Y' ? '0' : $cetak->gr_awal_ctk - $cetak->gr_akhir + $cetak->gr_cu;
+        $pcs_akhir_ctk =  $cetak->selesai == 'T' ? '0' : $cetak->pcs_akhir + $cetak->pcs_cu;
+        $gr_awal_ctk =   $cetak->gr_awal_ctk;
+        $gr_akhir_ctk = $cetak->gr_akhir + $cetak->gr_cu;
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Sarang berhasil diambil',
+            'data' => [
+                'cabut' => [
+                    'pcs_awal' => $cabut->pcs_awal,
+                    'gr_awal' => $cabut->gr_awal,
+                    'pcs_akhir' => $cabut->pcs_akhir,
+                    'gr_akhir' => $cabut->gr_akhir,
+                    'rp_c' =>  $ttl_rp_cbt_hilang,
+                    'rp_gram' => $ttl_rp_cbt_hilang == 0 ? 0 :  $ttl_rp_cbt / $cabut->gr_awal,
+                    'susut' => $susut
+                ],
+                'cetak' => [
+                    'pcs_awal' => $cetak->pcs_awal,
+                    'gr_awal' => $cetak->gr_awal,
+                    'pcs_akhir' => $cetak->pcs_akhir,
+                    'gr_akhir' => $cetak->gr_akhir,
+                    'rp_c' => $ttl_rp_all_ctk,
+                    'rp_c_dibawa' => $ttl_rp_all_ctk_dibawa,
+                    'rp_gram' => empty($gr_akhir_ctk) ? '0' : ($ttl_rp_all_ctk) / $gr_akhir_ctk,
+                    'susut' => $ttl_rp_all_ctk == 0 ? '0' : (empty($gr_akhir_ctk) ? '0' : (1 - ($gr_akhir_ctk / $gr_awal_ctk)) * 100),
+                ],
             ],
         ];
         return response()->json($response);
