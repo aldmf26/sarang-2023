@@ -85,12 +85,12 @@ class EoController extends Controller
         // DB::table('cabut')->where([['tgl_terima', $tgl], ['id_pengawas', $id_pengawas], ['no_box', '9999']])->delete();
         // DB::table('absen')->where([['tgl', $tgl], ['ket', 'cabut']])->delete();
         foreach ($r->all()['rows'] as $d) {
-            DB::table('absen')->insert([
-                'tgl' => $tgl,
-                'id_pengawas' => $id_pengawas,
-                'id_anak' => $d,
-                'ket' => $r->tipe == 'eo' ? 'eo' : 'eo sisa'
-            ]);
+            // DB::table('absen')->insert([
+            //     'tgl' => $tgl,
+            //     'id_pengawas' => $id_pengawas,
+            //     'id_anak' => $d,
+            //     'ket' => $r->tipe == 'eo' ? 'eo' : 'eo sisa'
+            // ]);
             if ($r->tipe == 'eo') {
                 DB::table('eo')->insert([
                     'no_box' => 9999,
@@ -216,11 +216,6 @@ class EoController extends Controller
 
     public function load_modal_akhir(Request $r)
     {
-        $detail = DB::table('cabut as a')
-            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['a.id_anak', $r->id_anak], ['a.no_box', $r->no_box]])
-            ->first();
-
         $datas = DB::table('eo as a')
             ->select(
                 'a.id_anak',
@@ -243,14 +238,19 @@ class EoController extends Controller
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
+            ->where([['a.no_box', '!=', '9999'],['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
             ->orderBy('a.id_eo', 'DESC')
             ->get();
         $data = [
-            'detail' => $detail,
             'datas' => $datas
         ];
         return view('home.eo.load_modal_akhir', $data);
+    }
+    public function cancel(Request $r)
+    {
+        DB::table('eo')->where('id_eo', $r->id_cabut)->update([
+            'no_box' => 9999,
+        ]);
     }
 
     public function input_akhir(Request $r)
