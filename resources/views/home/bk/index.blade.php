@@ -149,7 +149,8 @@
                             params.append('no_nota', orderNumber);
                         });
                         var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
-                        var targetUrl = `/home/bk/${link}?` + queryString
+                        var kategori = "{{request()->get('kategori')}}"
+                        var targetUrl = `/home/bk/${link}?kategori=${kategori}&` + queryString
                         if (formDelete === null) {
                             window.location.assign(targetUrl)
                         } else {
