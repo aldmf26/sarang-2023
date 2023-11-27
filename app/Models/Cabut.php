@@ -48,6 +48,19 @@ class Cabut extends Model
             ->orderBY('a.tgl_terima', 'ASC')
             ->get();
     }
+
+    public static function getCabutSum()
+    {
+        $id_user = auth()->user()->id;
+        return DB::selectOne("SELECT 
+                    sum(a.rupiah) as sumRpTarget,
+                    
+                FROM cabut AS a
+                WHERE a.no_box != '9999'
+                    AND a.penutup = 'T'
+                    AND a.id_pengawas = $id_user
+                GROUP BY a.id_pengawas;");
+    }
     public static function getCabutAkhir($orderBy)
     {
         $datas =  DB::table('cabut as a')
@@ -231,7 +244,7 @@ class Cabut extends Model
                                 sum(gr_flx) as gr_flx,
                                 SUM(rupiah) as rupiah,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE no_box != 9999 GROUP BY id_pengawas
+                                FROM cabut WHERE no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT penerima,no_box,sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM `bk` GROUP BY penerima

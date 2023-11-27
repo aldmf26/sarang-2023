@@ -243,21 +243,19 @@
                 });
             })
             // ---------------
-
-            $(document).on('click', '.inputAkhir', function() {
-                var no_box = $(this).attr('no_box')
-                var id_anak = $(this).attr('id_anak')
+            function load_akhir() {
                 $.ajax({
                     type: "GET",
                     url: "eo/load_modal_akhir",
-                    data: {
-                        no_box: no_box,
-                        id_anak: id_anak,
-                    },
                     success: function(r) {
                         $("#load_modal_akhir").html(r);
                     }
                 });
+            }
+            $(document).on('click', '.inputAkhir', function() {
+                var no_box = $(this).attr('no_box')
+                var id_anak = $(this).attr('id_anak')
+                load_akhir()
             })
 
             $(document).on('click', '.selesai', function() {
@@ -402,6 +400,7 @@
                         loadTambahcabut()
                         loadHalaman()
                         loadTambahAnak()
+                        load_akhir()
                     }
                 });
             })
