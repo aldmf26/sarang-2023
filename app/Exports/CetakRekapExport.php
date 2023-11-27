@@ -33,8 +33,9 @@ class CetakRekapExport implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:J1';
-                $cellRangeLoop = 'A1:J' . $this->totalrow;
+                $cellRange = 'A1:O1';
+                $cellRangeLoop = 'A1:O' . $this->totalrow + 1;
+                $cellRangeFooter = "A" . $this->totalrow + 1 . ':' . "O" . $this->totalrow + 1;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
@@ -51,6 +52,7 @@ class CetakRekapExport implements FromView, WithEvents
                     ]
                 ]);
                 $sheet->getStyle($cellRange)->getFont()->setBold(true);
+                $sheet->getStyle($cellRangeFooter)->getFont()->setBold(true);
             },
         ];
     }

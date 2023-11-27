@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\CabutRekapExport;
 use App\Exports\CetakExport;
 use App\Exports\CetakRekapExport;
+use App\Models\CetakModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -543,13 +544,15 @@ class CetakController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 =  $tgl['tgl1'];
         $tgl2 =  $tgl['tgl2'];
-        $datas = $this->queryRekap($tgl1, $tgl2);
+        $cetakgroup = CetakModel::cetakGroup();
 
         $data = [
             'title' => 'Rekap Summary Cetak',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'datas' => $datas,
+            'cetakgroup' => $cetakgroup,
+            'bulan' => DB::table('bulan')->get(),
+            'tahun' => DB::select("SELECT YEAR(a.tgl) as tahun FROM cetak as a group by YEAR(a.tgl)"),
         ];
         return view('home.cetak.rekap', $data);
     }
@@ -559,7 +562,7 @@ class CetakController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cetak.export_rekap';
-        $tbl = $this->queryRekap($tgl1, $tgl2);
+        $tbl = CetakModel::cetak_export();
 
         return Excel::download(new CetakRekapExport($tbl, $view), 'Export REKAP CETAK.xlsx');
     }

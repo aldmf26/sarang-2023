@@ -311,7 +311,7 @@ class Cabut extends Model
         return $query;
     }
 
-    public static function getRekapGlobal($tgl1, $tgl2,$id_pengawas)
+    public static function getRekapGlobal($tgl1, $tgl2, $id_pengawas)
     {
         return DB::select("SELECT a.id_anak,b.name as pgws,
         absen.ttl as hariMasuk,
