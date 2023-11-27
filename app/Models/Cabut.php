@@ -248,7 +248,7 @@ class Cabut extends Model
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT penerima,no_box,sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM `bk` GROUP BY penerima
-                        ) as d ON d.penerima = a.id_pengawas
+                        ) as d ON d.penerima = a.id_pengawas AND d.no_box = a.no_box
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
                             FROM cabut WHERE no_box != 9999
