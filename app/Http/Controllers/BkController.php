@@ -33,9 +33,9 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT * FROM bk as a 
+            'bk' => DB::select("SELECT a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,d.name,a.pcs_awal,a.gr_awal FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
+            WHERE a.kategori = '%$kategori%' ORDER BY a.id_bk DESC"),
 
         ];
         return view('home.bk.index', $data);
