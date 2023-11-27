@@ -126,7 +126,7 @@
         })
     }
 
-    function plusRow2(count, classPlus, url) {
+    function plusRow2(count, classPlus, formModal, url) {
         $(document).on("click", "." + classPlus, function() {
             count = count + 1;
             $.ajax({
@@ -134,8 +134,8 @@
                 type: "GET",
                 success: function(data) {
                     $("#" + classPlus).append(data);
-                    $(".select2-add").select2({
-                        dropdownParent: $('#akhir .modal-content')
+                    $(".select2-plusRow2").select2({
+                        dropdownParent: $(`#${form} .modal-content`)
                     });
                 },
             });

@@ -1,6 +1,7 @@
 <tr class="baris{{ $count }}">
+    <input type="hidden" name="id_sortir[]" value="9999">
     <td>
-        <select name="id_anak[]" id="" class="select2-add pilihAnak" count="{{ $count }}">
+        <select name="id_anak[]" id="" class="select2-tambah pilihAnak" count="{{ $count }}">
             <option value="">Pilih Anak</option>
 
             @foreach ($anak as $d)
@@ -30,6 +31,10 @@
     <td>
         <input type="text" class="form-control text-end setPcs{{ $count }}" value="0" id="pcsInput"
             name="pcs_awal[]">
+    </td>
+    <td>
+        <input type="text" class="form-control text-end" value="0" id="pcuc"
+            name="pcuc[]">
     </td>
     <td>
         <input type="text" class="form-control text-end setGr setGr{{ $count }}" count="{{ $count }}"

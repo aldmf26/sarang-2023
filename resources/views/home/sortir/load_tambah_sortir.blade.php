@@ -47,7 +47,7 @@
                     <tr>
                         <th class="dhead" width="100">Nama Anak</th>
                         <th class="dhead" width="100">Tipe</th>
-                        <th class="dhead">Tgl Terima</th>
+                        <th class="dhead" >Tgl Terima</th>
                         <th class="dhead text-end" width="110">Pcs Awal</th>
                         <th class="dhead text-end" width="110">Pcuc</th>
                         <th class="dhead text-end" width="110">Gr Awal</th>
@@ -106,7 +106,18 @@
                             </td>
                         </tr>
                     @endforeach
-
+                    <tbody id="tbh_baris">
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="9">
+                                <button type="button" class="btn btn-block btn-lg tbh_baris"
+                                    style="background-color: #F4F7F9; color: #435EBE; font-size: 14px; padding: 13px;">
+                                    <i class="fas fa-plus"></i> Tambah Baris Baru
+                                </button>
+                            </th>
+                        </tr>
+                    </tfoot>
                 </tbody>
             </table>
         </div>

@@ -37,14 +37,14 @@
 
         <form id="createSortir">
             @csrf
-            <x-theme.modal idModal="tambah2" title="Tambah Sortir" size="modal-lg">
+            <x-theme.modal idModal="tambah2" title="Tambah Sortir" size="modal-lg-max">
                 <div id="load_tambah_sortir"></div>
             </x-theme.modal>
         </form>
 
         <form action="{{ route('sortir.input_akhir') }}" method="post">
             @csrf
-            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg">
+            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg-max">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
@@ -78,7 +78,28 @@
         @section('scripts')
             <script>
                 $(document).ready(function() {
+                    function plusSortir(count, classPlus, url) {
+                        $(document).on("click", "." + classPlus, function() {
+                            count = count + 1;
+                            $.ajax({
+                                url: `${url}?count=` + count,
+                                type: "GET",
+                                success: function(data) {
+                                    $("#" + classPlus).append(data);
+                                    $(".select2-tambah").select2({
+                                        dropdownParent: $(`#tambah2 .modal-content`)
+                                    });
+                                },
+                            });
+                        });
 
+                        $(document).on('click', '.remove_baris', function() {
+                            var delete_row = $(this).attr("count");
+                            $(".baris" + delete_row).remove();
+
+                        })
+                    }
+                    plusSortir(1, 'tbh_baris', "sortir/tbh_baris")
                     $(document).on('change', '.pilihBox', function() {
                         var no_box = $(this).val()
                         var count = $(this).attr('count')
@@ -188,7 +209,7 @@
 
                             success: function(r) {
                                 $("#load_modal_akhir").html(r);
-                            pencarian('pencarian2', 'tablealdi2')
+                                pencarian('pencarian2', 'tablealdi2')
                             }
                         });
                     }
@@ -212,7 +233,7 @@
                                     scrollCollapse: true,
                                     "autoWidth": false,
                                     "paging": false,
-                                    "ordering": false
+                                    "ordering": true
                                 });
                                 inputChecked('cekSemuaTutup', 'cekTutup')
                             }
@@ -322,6 +343,24 @@
 
                         var total = (1 - nilai / grAwal) * 100
                         $(".susut" + count).text(total.toFixed(0) + ' %')
+
+                        var rpTarget = $(`.rpTarget${count}`).val()
+                        var bts_denda_sst = $(`.bts_denda_sst${count}`).val()
+                        var batas_denda_rp = $(`.batas_denda_rp${count}`).val()
+                        var denda_susut = $(`.denda_susut${count}`).val()
+                        var dendaKelas = $(`.dendaKelas${count}`).val()
+                        var denda = 0
+                        if (total > denda_susut) {
+                            denda = total > bts_denda_sst ? batas_denda_rp : (total - denda_susut) * dendaKelas
+                            rpTarget = rpTarget - denda
+                        }
+
+                        var setRupiah = rpTarget.toLocaleString('id-ID', {
+                            maximumFractionDigits: 0
+                        });
+                        $('.ttlRpKeyup' + count).text(setRupiah)
+
+                        $('.ttlRpSet' + count).val(rpTarget)
                     })
                     $(document).on('click', '.saveSortirAkhir', function(e) {
                         e.preventDefault()
@@ -342,8 +381,9 @@
                             type: "GET",
                             url: "{{ route('sortir.input_akhir') }}",
                             data: data,
+                            dataType: 'json',
                             success: function(r) {
-                                alertToast('sukses', 'Berhasil input akhir')
+                                alertToast(r.tipe, r.pesan)
                                 loadHalaman()
                             }
                         });
