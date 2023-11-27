@@ -35,7 +35,7 @@ class BkController extends Controller
             'kategori' => $kategori,
             'bk' => DB::select("SELECT * FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori = '%$kategori%' ORDER BY a.id_bk DESC"),
+            WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
 
         ];
         return view('home.bk.index', $data);
