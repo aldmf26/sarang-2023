@@ -54,7 +54,7 @@
                         </td>
                         <td>
                             <input
-                                value="{{ empty($v->pcs_akhir) ?? $v->pcs_akhir == 0 ? $v->pcs_awal : $v->pcs_akhir }}"
+                                value="{{ empty($v->pcs_akhir) || $v->pcs_akhir == 0 ? $v->pcs_awal : $v->pcs_akhir }}"
                                 required name="pcs_akhir{{ $i }}[]" type="text"
                                 class="form-control text-end">
                         </td>
