@@ -12,14 +12,14 @@
             //     'rot' => 'cabutSpesial.rekap',
             //     'nama' => 'Cabut Spesial',
             // ],
-            // [
-            //     'rot' => 'eo.rekap',
-            //     'nama' => 'EO',
-            // ],
-            // [
-            //     'rot' => 'cetak.rekap',
-            //     'nama' => 'Cetak',
-            // ],
+            [
+                'rot' => 'eo.rekap',
+                'nama' => 'EO',
+            ],
+            [
+                'rot' => 'cetak.rekap',
+                'nama' => 'Cetak',
+            ],
             [
                 'rot' => 'sortir.rekap',
                 'nama' => 'Sortir',
@@ -29,7 +29,7 @@
                 'nama' => 'DLL',
             ],
         ];
-        
+
     @endphp
     @foreach ($navMenu as $d)
         <li class="nav-item">
