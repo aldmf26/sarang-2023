@@ -102,7 +102,7 @@
                                             SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
                                             SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
                                             sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,sum(a.ttl_rp) as ttl_rp, sum(a.gr_flx) as gr_flx,
-                        sum((1 - (a.gr_flx + a.gr_akhir) / a.gr_awal) * 100) as susut,
+                        sum((1 - (a.gr_flx + a.gr_akhir) / a.gr_awal) * 100) as susut
 
                                             FROM cabut as a
                                             left join users as b on b.id = a.id_pengawas
