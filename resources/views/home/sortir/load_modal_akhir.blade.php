@@ -23,17 +23,20 @@
             </thead>
             <tbody>
                 @foreach ($detail as $i => $v)
-                <tr>
-                    <td class="d-none">
-                            <input type="hidden" name="id_anak{{$i}}[]" value="{{ $v->id_anak }}">
-                            <input type="hidden" name="no_box{{$i}}[]" value="{{ $v->no_box }}">
-                            <input type="hidden" name="id_sortir{{$i}}[]" value="{{ $v->id_sortir }}">
-                            <input type="hidden" class="rpTarget{{$i}}"  value="{{ $v->rp_target }}">
-                            <input type="hidden" class="dendaSusut{{$i}}"  value="{{ $v->denda_susut }}">
-                            <input type="hidden" class="bts_denda_sst{{$i}}"  value="{{ $v->bts_denda_sst }}">
-                            <input type="hidden" class="batas_denda_rp{{$i}}"  value="{{ $v->batas_denda_rp }}">
-                            <input type="hidden" class="denda_susut{{$i}}"  value="{{ $v->denda_susut }}">
-                            <input type="hidden" class="dendakelas{{$i}}"  value="{{ $v->denda }}">
+                    <tr>
+                        <td class="d-none">
+                            <input type="hidden" name="id_anak{{ $i }}[]" value="{{ $v->id_anak }}">
+                            <input type="hidden" name="no_box{{ $i }}[]" value="{{ $v->no_box }}">
+                            <input type="hidden" name="id_sortir{{ $i }}[]" value="{{ $v->id_sortir }}">
+                            <input type="hidden" class="rpTarget{{ $i }}" value="{{ $v->rp_target }}">
+                            <input type="hidden" class="dendaSusut{{ $i }}" value="{{ $v->denda_susut }}">
+                            <input type="hidden" class="bts_denda_sst{{ $i }}"
+                                value="{{ $v->bts_denda_sst }}">
+                            <input type="hidden" class="batas_denda_rp{{ $i }}"
+                                value="{{ $v->batas_denda_rp }}">
+                            <input type="hidden" class="denda_susut{{ $i }}"
+                                value="{{ $v->denda_susut }}">
+                            <input type="hidden" class="dendakelas{{ $i }}" value="{{ $v->denda }}">
                             <input class="ttlRpSet{{ $i }}" type="text"
                                 name="ttl_rp{{ $i }}[]" value="{{ $v->ttl_rp }}">
 
@@ -50,26 +53,27 @@
                                 class="form-control text-end grAwalVal{{ $i }}">
                         </td>
                         <td>
-                            <input value="{{ empty($v->pcs_akhir) ?? $v->pcs_akhir == 0 ? $v->pcs_awal : $v->pcs_akhir }}" required name="pcs_akhir{{$i}}[]" type="text"
+                            <input
+                                value="{{ empty($v->pcs_akhir) ?? $v->pcs_akhir == 0 ? $v->pcs_awal : $v->pcs_akhir }}"
+                                required name="pcs_akhir{{ $i }}[]" type="text"
                                 class="form-control text-end">
                         </td>
                         <td>
-                            <input value="{{ $v->gr_akhir ?? 0 }}" required name="gr_akhir{{$i}}[]" type="text"
-                                class="form-control text-end grAkhirKeyup" count="{{ $i }}">
+                            <input value="{{ $v->gr_akhir ?? 0 }}" required name="gr_akhir{{ $i }}[]"
+                                type="text" class="form-control text-end grAkhirKeyup" count="{{ $i }}">
                         </td>
                         <td>
-                            <input value="{{ $v->pcus ?? 0 }}" required name="pcus{{$i}}[]" type="text"
-                                class="form-control text-end">
+                            <input value="{{ $v->pcus ?? 0 }}" required name="pcus{{ $i }}[]"
+                                type="text" class="form-control text-end">
                         </td>
                         @php
                             $susut = empty($v->gr_akhir) ? 0 : (1 - $v->gr_akhir / $v->gr_awal) * 100;
                         @endphp
                         <td class="susut{{ $i }} text-end">
-                            {{ number_format($susut,0) }} %
+                            {{ number_format($susut, 0) }} %
                         </td>
                         <td align="right" class="h6">
-                            <span
-                                class="ttlRpKeyup{{ $i }}">{{ number_format($v->ttl_rp, 0) }}</span>
+                            <span class="ttlRpKeyup{{ $i }}">{{ number_format($v->ttl_rp, 0) }}</span>
                         </td>
                         <td>
                             <select name="bulan{{ $i }}[]" class="form-control">
@@ -80,7 +84,7 @@
                                 @foreach ($listBulan as $l)
                                     <option value="{{ $l->bulan }}"
                                         {{ $v->bulan == $l->bulan ? 'selected' : '' }}>
-                                        {{ substr($l->nm_bulan,0,3) }}</option>
+                                        {{ substr($l->nm_bulan, 0, 3) }}</option>
                                 @endforeach
                             </select>
                         </td>
