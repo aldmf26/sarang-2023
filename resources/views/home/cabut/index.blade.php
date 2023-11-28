@@ -657,6 +657,8 @@
                             // $('#inputAkhir').modal('hide')
                             // load_input_akhir()
                             loadHalaman()
+                            $(".btn"+count).removeClass('btn-warning');
+                            $(".btn"+count).addClass('btn-primary');
                         }
                     });
 

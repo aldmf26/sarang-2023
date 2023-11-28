@@ -108,8 +108,9 @@
                                 type="text" class="form-control text-end pcsHcrKeyup"
                                 count="{{ $i + 1 }}">
                         </td>
+                        
                         <td class="susut{{ $i + 1 }} text-end">
-
+                            {{ number_format($hasil->susut == 100 ? 0 : $hasil->susut, 0) }} %
                         </td>
 
 
@@ -133,7 +134,7 @@
                         <td>
 
                             <button style="font-size: 12px"
-                                class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
+                                class="btn{{$i+1}} btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
 
                                 @php
