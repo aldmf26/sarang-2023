@@ -90,7 +90,7 @@
                         </td>
                         <td align="center">
                             <button style="font-size: 12px"
-                                class="mt-1 btn btn-sm btn-{{ empty($v->gr_akhir) ? 'warning' : 'primary' }} saveSortirAkhir"
+                                class="mt-1 btn{{$i}} btn btn-sm btn-{{ empty($v->gr_akhir) ? 'warning' : 'primary' }} saveSortirAkhir"
                                 type="button" count="{{ $i }}">Save</button>
                             <a style="font-size: 12px" class="mt-1 btn btn-success btn-sm selesai" href="#"
                                 id_sortir="{{ $v->id_sortir }}" href="#">Selesai </a>

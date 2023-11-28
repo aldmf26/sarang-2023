@@ -385,6 +385,10 @@
                             success: function(r) {
                                 alertToast(r.tipe, r.pesan)
                                 loadHalaman()
+                                if(r.tipe == 'sukses')  {
+                                    $(".btn" + count).removeClass('btn-warning');
+                                    $(".btn" + count).addClass('btn-primary');
+                                }
                             }
                         });
 
