@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     <th class="dhead">Tgl Trma</th>
-                    <th class="dhead" width="90">No Box</th>
+                    <th class="dhead" width="60">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="85">Pcs Awal</th>
                     <th class="dhead text-end" width="85">Gr Awal</th>
