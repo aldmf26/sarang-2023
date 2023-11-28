@@ -488,6 +488,7 @@
                             alertToast('sukses', 'Berhasil tambah data cabut')
                             $('#tambah2').modal('hide')
                             loadHalaman()
+                            loadTambahcabut()
                         },
                         error: function(xhr, status, error) {
                             alertToast('error', 'Pcs / Gr Ambil Lebih banyak dari BK Ambil !!')

@@ -41,24 +41,31 @@
                 </table>
             </div>
             <div class="col-lg-12">
-
+<style>
+    .sticky-header th {
+        position: sticky;
+        top: 0;
+        background-color: #f2f2f2; /* Add a background color to distinguish the header */
+        z-index: 100; /* Ensure the header stays on top of other elements */
+    }
+</style>
                 <table style="border:1px solid #97a1c3" class="table table-bordered" id="tblAld"
                     x-data="{
                         openRows: [],
                     }">
                     <thead>
-                        <tr>
+                        <tr class="sticky-header">
                             <th width="180" rowspan="2" class="text-center dhead">Pengawas</th>
                             <th width="85" rowspan="2" class="text-center dhead">No Box</th>
                             <th colspan="2" class="text-center dhead">BK Awal</th>
                             <th colspan="2" class="text-center dhead"> Kerja Awal</th>
                             <th colspan="5" class="text-center dhead"> Kerja Akhir</th>
-                            <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br> (
+                            <th width="110" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
                             <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
                         </tr>
 
-                        <tr>
+                        <tr class="sticky-header">
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
                             <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrBk, 0) }})</th>
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAwal, 0) }})</th>

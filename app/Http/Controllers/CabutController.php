@@ -27,7 +27,7 @@ class CabutController extends Controller
     }
     public function updateAnakBelum()
     {
-        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id]])->get());
+        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id],['tgl_terima', date('Y-m-d')]])->get());
         return response()->json(['anakBelum' => $anakBelum]);
     }
     public function load_halaman(Request $r)
