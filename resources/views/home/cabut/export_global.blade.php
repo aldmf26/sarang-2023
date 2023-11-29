@@ -48,6 +48,10 @@
         $rataTtlRp = 0;
     @endphp
     @foreach ($datas as $d)
+        @php
+            $hasil = rumusTotalRp($d);
+        @endphp
+
         <tr>
             <td></td>
             <td>{{ $d->pgws }}</td>
@@ -60,13 +64,13 @@
             <td>{{ $d->gr_akhir }}</td>
             <td>{{ $d->eot }}</td>
             <td>{{ $d->gr_flx }}</td>
-            <td>{{ number_format($d->susut,0) }}</td>
-            <td>{{ $d->ttl_rp }}</td>
+            <td>{{ number_format($hasil->susut, 0) }}</td>
+            <td>{{ $hasil->ttl_rp }}</td>
 
             <td></td>
             <td>{{ $d->eo_awal }}</td>
             <td>{{ $d->eo_akhir }}</td>
-            <td>{{ number_format($d->eo_susut,0) }}</td>
+            <td>{{ number_format($d->eo_susut, 0) }}</td>
             <td>{{ $d->eo_ttl_rp }}</td>
 
             <td></td>
@@ -74,7 +78,7 @@
             <td>{{ $d->sortir_gr_awal }}</td>
             <td>{{ $d->sortir_pcs_akhir }}</td>
             <td>{{ $d->sortir_gr_akhir }}</td>
-            <td>{{ number_format($d->sortir_susut,0) }}</td>
+            <td>{{ number_format($d->sortir_susut, 0) }}</td>
             <td>{{ $d->sortir_ttl_rp }}</td>
 
             <td>{{ $d->ttl_rp_dll }}</td>
