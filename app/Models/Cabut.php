@@ -358,7 +358,7 @@ class Cabut extends Model
                     sum(gr_flx) as gr_flx, 
                     SUM(rupiah) as rupiah, 
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
-                    SUM(ttl_rp) as ttl_rp,
+                    SUM(ttl_rp) as ttl_rp
                   FROM `cabut` 
                   WHERE penutup = 'T' 
                   GROUP BY id_anak
