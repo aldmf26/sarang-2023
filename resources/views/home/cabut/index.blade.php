@@ -147,7 +147,7 @@
                                 scrollCollapse: true,
                                 "autoWidth": false,
                                 "paging": false,
-                                "ordering": false
+                                "ordering": true
                             });
                             inputChecked('cekSemuaTutup', 'cekTutup')
                         }
