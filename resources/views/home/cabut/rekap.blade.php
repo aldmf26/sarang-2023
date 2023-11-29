@@ -108,10 +108,13 @@
                                 $query = DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
                                             SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
                                             SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
-                                            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,sum(a.ttl_rp) as ttl_rp, sum(a.gr_flx) as gr_flx,
+                                            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,rp.ttl_rp, sum(a.gr_flx) as gr_flx,
                         sum((1 - (a.gr_flx + a.gr_akhir) / a.gr_awal) * 100) as susut
 
                                             FROM cabut as a
+                                            JOIN (
+                                                SELECT sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
+                                            ) as rp ON rp.no_box = a.no_box
                                             left join users as b on b.id = a.id_pengawas
                                             left JOIN bk as c on c.no_box = a.no_box 
                                             WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
