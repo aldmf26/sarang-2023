@@ -393,7 +393,7 @@ class Cabut extends Model
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
-            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' GROUP by id_anak
+            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' AND ditutup = 'T' GROUP by id_anak
         ) as dll on a.id_anak = dll.id_anak
         LEFT JOIN (
             SELECT id_anak, sum(nominal) as ttl_rp_denda 
