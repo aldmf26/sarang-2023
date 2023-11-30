@@ -163,6 +163,7 @@ class SortirController extends Controller
     {
         $id_anak = $r->id_anak;
         $no_box = $r->no_box;
+        $tgl = $r->tgl;
         $gr_akhir = $r->gr_akhir;
         $pcs_akhir = $r->pcs_akhir;
         $pcus = $r->pcus;
@@ -195,6 +196,7 @@ class SortirController extends Controller
             'gr_akhir' => $gr_akhir,
             'bulan' => $bulan,
             'ttl_rp' => $rupiah,
+            'tgl' => $tgl,
             'denda_sp' => $denda,
         ]);
         return [

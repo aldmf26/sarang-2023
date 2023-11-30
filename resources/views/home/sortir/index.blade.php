@@ -44,7 +44,7 @@
 
         <form action="{{ route('sortir.input_akhir') }}" method="post">
             @csrf
-            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg-max">
+            <x-theme.modal idModal="inputAkhir" title="tambah sortir akhir" btnSave="T" size="modal-lg-max">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
@@ -368,6 +368,7 @@
                         var row = $(this).closest("tr");
                         var data = {
                             id_anak: row.find(`input[name='id_anak${count}[]']`).val(),
+                            tgl: row.find(`input[name='tgl${count}[]']`).val(),
                             id_sortir: row.find(`input[name='id_sortir${count}[]']`).val(),
                             no_box: row.find(`input[name='no_box${count}[]']`).val(),
                             gr_akhir: row.find(`input[name='gr_akhir${count}[]']`).val(),

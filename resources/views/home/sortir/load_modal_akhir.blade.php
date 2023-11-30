@@ -7,6 +7,7 @@
         <table class="table table-striped" id="tablealdi2">
             <thead>
                 <tr>
+                    <th class="dhead" width="100">Tgl</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead" width="90">No Box</th>
                     <th class="dhead" width="90">Paket</th>
@@ -41,10 +42,14 @@
                                 name="ttl_rp{{ $i }}[]" value="{{ $v->ttl_rp }}">
 
                         </td>
+                        <td>
+                            <input value="{{ $v->tgl }}" name="tgl{{ $i }}[]" type="date" class="form-control">
+                        </td>
                         <td class="fs-bold">{{ strtoupper($v->nama) }} / {{ $v->id_kelas }}</td>
                         <td class="fs-bold">{{ $v->no_box }}</td>
                         <td class="fs-bold">{{ $v->kelas }}</td>
 
+                        
                         <td>
                             <input readonly value="{{ $v->pcs_awal }}" type="text" class="form-control text-end">
                         </td>
