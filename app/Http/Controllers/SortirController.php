@@ -132,6 +132,28 @@ class SortirController extends Controller
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('sortir as a')
+            ->select(
+                    'a.id_anak',
+                    'a.no_box',
+                    'a.id_sortir',
+                    'a.rp_target',
+                    'a.ttl_rp',
+                    'a.tgl',
+                    'a.pcs_awal',
+                    'a.pcs_akhir',
+                    'a.gr_awal',
+                    'a.gr_akhir',
+                    'a.pcus',
+                    'a.bulan',
+                    'b.id_kelas',
+                    'b.nama',
+                    'c.kelas',
+                    'c.denda_susut',
+                    'c.bts_denda_sst',
+                    'c.batas_denda_rp',
+                    'c.denda_susut',
+                    'c.denda'
+             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'c.id_kelas', 'a.id_kelas')
             ->where([['selesai', 'T'], ['no_box', '!=', 9999], ['a.id_pengawas', auth()->user()->id]])
