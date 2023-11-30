@@ -37,7 +37,7 @@
                                 value="{{ $v->batas_denda_rp }}">
                             <input type="hidden" class="denda_susut{{ $i }}"
                                 value="{{ $v->denda_susut }}">
-                            <input type="hidden" class="dendakelas{{ $i }}" value="{{ $v->denda }}">
+                            <input type="hidden" class="dendaKelas{{ $i }}" value="{{ $v->denda }}">
                             <input class="ttlRpSet{{ $i }}" type="text"
                                 name="ttl_rp{{ $i }}[]" value="{{ $v->ttl_rp }}">
 

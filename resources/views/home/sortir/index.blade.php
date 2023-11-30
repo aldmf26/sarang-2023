@@ -342,13 +342,14 @@
                         var grAwal = parseFloat($('.grAwalVal' + count).val())
 
                         var total = (1 - nilai / grAwal) * 100
-                        $(".susut" + count).text(total.toFixed(0) + ' %')
+                        total = total.toFixed(0)
+                        $(".susut" + count).text(total + ' %')
 
-                        var rpTarget = $(`.rpTarget${count}`).val()
-                        var bts_denda_sst = $(`.bts_denda_sst${count}`).val()
-                        var batas_denda_rp = $(`.batas_denda_rp${count}`).val()
-                        var denda_susut = $(`.denda_susut${count}`).val()
-                        var dendaKelas = $(`.dendaKelas${count}`).val()
+                        var rpTarget = parseFloat($(`.rpTarget${count}`).val())
+                        var bts_denda_sst = parseFloat($(`.bts_denda_sst${count}`).val())
+                        var batas_denda_rp = parseFloat($(`.batas_denda_rp${count}`).val())
+                        var denda_susut = parseFloat($(`.denda_susut${count}`).val())
+                        var dendaKelas = parseFloat($(`.dendaKelas${count}`).val())
                         var denda = 0
                         if (total > denda_susut) {
                             denda = total > bts_denda_sst ? batas_denda_rp : (total - denda_susut) * dendaKelas
