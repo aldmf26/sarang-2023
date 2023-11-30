@@ -183,12 +183,10 @@ class Cabut extends Model
             ->where([['a.id_cabut', $id_cabut]])
             ->first();
     }
-    public static function queryRekap()
+    public static function queryRekap($id_pengawas = null)
     {
-        $id = auth()->user()->id;
-        $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
-
+        
+        $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
         a.no_box, 
@@ -200,7 +198,7 @@ class Cabut extends Model
         FROM cabut as a
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box 
-        WHERE a.penutup = 'T'
+        WHERE a.penutup = 'T' AND a.no_box != 9999 $where
         GROUP by a.no_box;");
     }
     public static function queryRekapGroup($tgl1, $tgl2)

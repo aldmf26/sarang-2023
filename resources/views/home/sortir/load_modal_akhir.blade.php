@@ -64,7 +64,7 @@
                                 class="form-control text-end">
                         </td>
                         <td>
-                            <input value="{{ $v->gr_akhir ?? 0 }}" required name="gr_akhir{{ $i }}[]"
+                            <input value="{{ $v->gr_akhir }}" required name="gr_akhir{{ $i }}[]"
                                 type="text" class="form-control text-end grAkhirKeyup" count="{{ $i }}">
                         </td>
                         <td>

@@ -354,7 +354,15 @@
                             denda = total > bts_denda_sst ? batas_denda_rp : (total - denda_susut) * dendaKelas
                             rpTarget = rpTarget - denda
                         }
-
+                        console.log(`
+                            total = ${total} 
+                            denda = ${denda} 
+                            rpTarget = ${rpTarget} 
+                            dendaSusut = ${denda_susut} 
+                            btsDendaSusut = ${bts_denda_sst} 
+                            btsDendaRp = ${batas_denda_rp} 
+                            dendaKelas = ${dendaKelas}
+                        `)
                         var setRupiah = rpTarget.toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         });

@@ -393,10 +393,9 @@ class CabutController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
+        $id_pengawas =  $r->id_pengawas;
         $view = 'home.cabut.export_rekap';
-        $tbl = Cabut::queryRekap($tgl1, $tgl2);
+        $tbl = Cabut::queryRekap($id_pengawas);
 
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }

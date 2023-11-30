@@ -2,14 +2,18 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
+                <h6 class="float-start mt-1">{{ $title }} {{ tanggal($tgl1) }} ~ {{ tanggal($tgl2) }}</h6>
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a data-bs-toggle="modal" data-bs-target="#tambah" href="#"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                {{-- <a  href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end btn btn-sm btn-primary me-2">
+                    <i class="fas fa-file-excel"></i> Export
+                </a> --}}
                 @include('home.cabut.btn_export_global')
                 <x-theme.btn_filter />
             </div>
@@ -159,6 +163,26 @@
 
         </section>
 
+        <form action="{{ route('cabut.export_rekap') }}">
+            <x-theme.modal idModal="tambah" title="Export">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="">Pengawas</label>
+                        <select name="id_pengawas" class="form-control select2" id="">
+                            <option value="all">- ALL -</option>
+                            @php
+                                $pngws = DB::table('users')
+                                    ->where('posisi_id', 13)
+                                    ->get();
+                            @endphp
+                            @foreach ($pngws as $d)
+                                <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tblAld')
