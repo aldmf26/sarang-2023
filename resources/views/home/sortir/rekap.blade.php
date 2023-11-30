@@ -119,7 +119,7 @@
                     
                                 <td align="right">{{ number_format($x->susut, 0) }} %</td>
 
-                                <td align="right">{{ number_format($x->rp_target, 0) }}</td>
+                                <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
                                 <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
                             </tr>
