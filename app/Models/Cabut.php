@@ -360,7 +360,7 @@ class Cabut extends Model
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
                     SUM(ttl_rp) as ttl_rp
                   FROM `cabut` 
-                  WHERE penutup = 'T' 
+                  WHERE penutup = 'T' AND no_box != 9999
                   GROUP BY id_anak
         ) as cabut on a.id_anak = cabut.id_anak
         LEFT join (
@@ -371,7 +371,7 @@ class Cabut extends Model
             sum(ttl_rp) as ttl_rp,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
-            WHERE penutup = 'T' 
+            WHERE penutup = 'T' AND no_box != 9999
             GROUP by id_anak
         ) as eo on eo.id_anak = a.id_anak
         LEFT join (
