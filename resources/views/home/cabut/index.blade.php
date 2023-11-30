@@ -64,22 +64,6 @@
             </x-theme.modal>
         </form>
 
-        <form id="selesai_cabut">
-            @csrf
-            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
-                        <p class="text-center fw-bold">Note : </p>
-                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
-                            maupun dihapus
-                        </p>
-                        <input type="hidden" name="id_cabut" class="cetak">
-                    </div>
-                </div>
-            </x-theme.modal>
-        </form>
-
         <x-theme.modal idModal="listAnakSisa" title="List Anak Kerja Sisa" btnSave="T" size="">
             <div id="load_modal_anak_sisa"></div>
         </x-theme.modal>
@@ -681,26 +665,18 @@
                 $(document).on('click', '.selesai', function() {
                     var id_cabut = $(this).attr('id_cabut');
 
-                    $('.cetak').val(id_cabut);
-
-                });
-
-                $(document).on('submit', '#selesai_cabut', function(e) {
-                    e.preventDefault()
-                    var datas = $(this).serialize()
                     $.ajax({
-                        type: "POST",
-                        url: "{{ route('cabut.selesai_cabut') }}",
-                        data: datas,
+                        type: "GET",
+                        url: "{{ route('cabut.selesai_cabut') }}?id_cabut="+id_cabut,
                         success: function(r) {
                             alertToast('sukses', 'Berhasil menyelesaikan')
-                            $('#selesai').modal('hide')
                             loadHalaman()
                             load_input_akhir()
                             $("#inputAkhir").modal('show')
                         }
                     });
-                })
+
+                });
 
                 $(document).on('click', '.cancelCabutAkhir', function() {
                     var id_cabut = $(this).attr('id_cabut')

@@ -143,8 +143,7 @@
                             {{-- @if ($eot >= rumusTotalRp($d)->batas_eot)
                             @endif --}}
                             <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
-                                id_cabut="{{ $d->id_cabut }}" href="#" data-bs-toggle="modal"
-                                data-bs-target="#selesai">Selesai </a>
+                                id_cabut="{{ $d->id_cabut }}" href="#" >Selesai </a>
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>

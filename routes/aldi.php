@@ -118,7 +118,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_global', 'export_global')->name('export_global');
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
-            Route::post('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
+            Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::post('/', 'create')->name('create');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');

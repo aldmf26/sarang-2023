@@ -340,7 +340,7 @@ class CabutController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cabut.export';
-        $tbl = Cabut::getQueryExport();
+        $tbl = Cabut::getCabut();
         return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 
