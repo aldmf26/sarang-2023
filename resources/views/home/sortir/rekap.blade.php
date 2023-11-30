@@ -82,7 +82,7 @@
                                     <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                    
                                     <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
-                                    <th class="text-end">{{ number_format($d->rp_target, 0) }}</th>
+                                    <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
                                 </tr>
