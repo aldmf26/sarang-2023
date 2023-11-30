@@ -401,6 +401,8 @@ class CabutController extends Controller
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }
 
+    
+
     public function export_global(Request $r)
     {
         $tgl1 =  $r->tgl1;

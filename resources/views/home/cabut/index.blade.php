@@ -404,6 +404,7 @@
                                 0;
                         })
                         var susut, denda, bonus_susut, rupiah, denda_hcr, eot_bonus, ttl_rp, setRupiah
+                        console.log(data)
                         switch (data.id_kategori) {
                             case 2:
                                 rulesCabut(data)

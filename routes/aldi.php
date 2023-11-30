@@ -9,6 +9,7 @@ use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
+use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PermissionController;
@@ -128,6 +129,14 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
             Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
+        });
+    Route::controller(GlobalController::class)
+        ->prefix('home/global')
+        ->name('global.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/sortir', 'sortir')->name('sortir');
         });
     Route::controller(SortirController::class)
         ->prefix('home/sortir')

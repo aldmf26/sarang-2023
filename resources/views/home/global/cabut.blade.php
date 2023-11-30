@@ -6,17 +6,13 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export
-                </a>
-                @include('home.cabut.btn_export_global')
+                @include('home.global.btn_export')
                 <x-theme.btn_filter />
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
             </div>
-            @include('home.cetak.nav')
+            @include('home.global.nav')
 
         </div>
 
@@ -98,8 +94,8 @@
                                 <th class="text-end">{{ number_format($d->gr_flx, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->eot, 0) }}</th>
                                 {{-- @php
-                                    $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
-                                @endphp --}}
+                                $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
+                            @endphp --}}
                                 <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
                                 <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
@@ -108,19 +104,19 @@
                             @php
                                 $id = $d->id_pengawas;
                                 $query = DB::select("SELECT max(b.name) as pengawas, max(a.tgl_terima) as tgl, a.no_box, 
-                                            SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
-                                            SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
-                                            sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,rp.ttl_rp, sum(a.gr_flx) as gr_flx,
-                        sum((1 - (a.gr_flx + a.gr_akhir) / a.gr_awal) * 100) as susut
+                                        SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+                                        SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
+                                        sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.rupiah) as rupiah,rp.ttl_rp, sum(a.gr_flx) as gr_flx,
+                    sum((1 - (a.gr_flx + a.gr_akhir) / a.gr_awal) * 100) as susut
 
-                                            FROM cabut as a
-                                            JOIN (
-                                                SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
-                                            ) as rp ON rp.no_box = a.no_box
-                                            left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box 
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
-                                            GROUP by a.no_box");
+                                        FROM cabut as a
+                                        JOIN (
+                                            SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
+                                        ) as rp ON rp.no_box = a.no_box
+                                        left join users as b on b.id = a.id_pengawas
+                                        left JOIN bk as c on c.no_box = a.no_box 
+                                        WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
+                                        GROUP by a.no_box");
                             @endphp
                             @foreach ($query as $x)
                     <tbody x-show="openRows.includes({{ $i }})">
@@ -141,9 +137,9 @@
                             <td align="right">{{ number_format($x->gr_flx, 0) }}</td>
                             <td align="right">{{ number_format($x->eot, 0) }}</td>
                             {{-- @php
-                                $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
+                            $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
 
-                            @endphp --}}
+                        @endphp --}}
                             <td align="right">{{ number_format($x->susut, 0) }} %</td>
 
                             <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
@@ -161,7 +157,7 @@
 
         @section('scripts')
             <script>
-                pencarian('pencarian', 'tblAld')
+                pencarian('pencarian', 'tblAld23')
             </script>
         @endsection
     </x-slot>
