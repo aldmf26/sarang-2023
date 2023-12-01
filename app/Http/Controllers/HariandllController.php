@@ -94,12 +94,12 @@ class HariandllController extends Controller
     }
     public function getQuery($bulan, $tahun)
     {
-        return DB::select("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, GROUP_CONCAT(DISTINCT ket, ',') AS ket,GROUP_CONCAT(DISTINCT lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
+        return DB::select("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, SUM(rupiah) AS total_rupiah
         FROM tb_hariandll as a
         LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
         LEFT JOIN users as c on c.id = b.id_pengawas
-        WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun'
-        GROUP BY a.id_anak;");
+        WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND a.ditutup = 'T'
+        GROUP BY b.id_pengawas;");
     }
     public function export(Request $r)
     {
