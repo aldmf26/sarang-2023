@@ -11,8 +11,9 @@
                 <thead>
                     <tr>
                         <th width="5">#</th>
-                        <th>Nama</th>
+                        <th>Bulan dibayar</th>
                         <th>Tgl</th>
+                        <th>Nama</th>
                         <th class="text-end">Nominal (Rp. {{number_format($ttlNominal,0)}})</th>
                         <th>Ket</th>
                         <th width="20%">Aksi</th>
@@ -22,8 +23,9 @@
                     @foreach ($denda as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ ucwords($d->nama) }}</td>
+                            <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
                             <td>{{ tanggal($d->tgl) }}</td>
+                            <td>{{ ucwords($d->nama) }}</td>
                             <td align="right">{{ number_format($d->nominal,0) }}</td>
                             <td>{{ ucwords($d->ket) }}</td>
                             <td>
@@ -44,24 +46,36 @@
             @csrf
             <x-theme.modal idModal="tambah" title="tambah user" btnSave="Y">
                 <div class="row">
+                   
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="">Nama Anak</label>
                             <select required name="id_anak[]" multiple class="select2" id="">
-       
                                 @foreach ($anak as $k)
                                     <option value="{{ $k->id_anak }}">{{ strtoupper($k->nama) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
+                        <label for="">Bulan dibayar</label>
+                        <select name="bulan_dibayar" class="form-control select2" id="">
+                            <option value="">- Pilih Bulan -</option>
+                            @php
+                                $bulan = DB::table('bulan')->get();
+                            @endphp
+                            @foreach ($bulan as $b)
+                                <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="">Tanggal</label>
                             <input type="date" name="tgl" value="{{ date('Y-m-d') }}" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="">Nominal</label>
                             <input required type="number" min="0" name="nominal" class="form-control">
@@ -92,11 +106,21 @@
 
     </x-slot>
 
-    @section('scripts')
+    @section('js')
         <script>
             $(document).ready(function() {
                 $(".select3").select2()
-                detail('edit', 'id', 'denda', 'get_edit')
+                $(document).on('click', '.edit', function(){
+                    var id = $(this).attr('id')
+                    $.ajax({
+                        type: "GET",
+                        url: `{{route('denda.detail')}}?id=`+id,
+                        success: function (r) {
+
+                            $("#get_edit").html(r);
+                        }
+                    });
+                })
             });
         </script>
     @endsection

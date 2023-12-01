@@ -6,11 +6,24 @@
 
             </div>
             <div class="col-lg-6">
-
+                @php
+                $id_pengawas = auth()->user()->id;
+                    $cekBtn = DB::selectOne("SELECT 
+                            CASE WHEN COUNT(*) = SUM(CASE WHEN selesai = 'y' THEN 1 ELSE 0 END) AND COUNT(*) > 0 THEN 'true' ELSE 'false' END AS hasil
+                            FROM 
+                            `cabut`
+                            WHERE 
+                            id_pengawas = '$id_pengawas' AND no_box != 9999;")
+                @endphp 
+                <a  href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end {{$cekBtn->hasil == 'true' ? '' : 'disabled' }} btn btn-sm btn-success me-2">
+                    <i class="fas fa-check"></i> Cabut Ok
+                </a>
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                
                 {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
                 teks="List anak sisa" /> --}}
                 

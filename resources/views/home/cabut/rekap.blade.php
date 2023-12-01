@@ -2,7 +2,10 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }} {{ tanggal($tgl1) }} ~ {{ tanggal($tgl2) }}</h6>
+                <h6 class="float-start mt-1">{{ $title }}
+                    {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
+                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu !</em></span>
+                </h6>
             </div>
 
             <div class="col-lg-6">
@@ -15,7 +18,38 @@
                     <i class="fas fa-file-excel"></i> Export
                 </a> --}}
                 @include('home.cabut.btn_export_global')
-                <x-theme.btn_filter />
+                <x-theme.button modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
+                    teks="View" />
+                <form action="">
+                    <x-theme.modal title="View Rekap" idModal="view">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="">Bulan dibayar</label>
+                                <select name="bulan" class="form-control selectView" id="">
+                                    <option value="">- Pilih Bulan -</option>
+                                    @php
+                                        $bulan = DB::table('bulan')->get();
+                                    @endphp
+                                    @foreach ($bulan as $b)
+                                        <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="">Tahun</label>
+                                <select name="tahun" class="form-control selectView" id="">
+                                    <option value="">- Pilih Tahun -</option>
+                                    @php
+                                        $tahun = [2022,2023];
+                                    @endphp
+                                    @foreach ($tahun as $b)
+                                        <option value="{{ $b }}">{{ strtoupper($b) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </x-theme.modal>
+                </form>
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">

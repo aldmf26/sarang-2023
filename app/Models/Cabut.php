@@ -201,7 +201,7 @@ class Cabut extends Model
         WHERE a.penutup = 'T' AND a.no_box != 9999 $where
         GROUP by a.no_box;");
     }
-    public static function queryRekapGroup($tgl1, $tgl2)
+    public static function queryRekapGroup($bulan, $tahun)
     {
         $cabutGroup = DB::select("SELECT 
                         max(b.name) as pengawas, 
@@ -231,7 +231,7 @@ class Cabut extends Model
                                 sum(gr_flx) as gr_flx,
                                 SUM(rupiah) as rupiah,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
+                                FROM cabut WHERE bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' AND no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
@@ -243,10 +243,10 @@ class Cabut extends Model
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut WHERE no_box != 9999
+                            FROM cabut WHERE no_box != 9999 AND penutup = 'T'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE  a.no_box != 9999 AND a.penutup = 'T' 
+                        WHERE  a.no_box != 9999 AND a.penutup = 'T'  AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
@@ -316,8 +316,12 @@ class Cabut extends Model
         return $query;
     }
 
-    public static function getRekapGlobal($tgl1, $tgl2, $id_pengawas)
+    public static function getRekapGlobal($bulan, $tahun, $id_pengawas)
     {
+        $bulanKurang = $bulan - 1;
+        $whrAbsen1 = "$tahun-$bulanKurang-27";
+        $whrAbsen2 = "$tahun-$bulan-26";
+
         return DB::select("SELECT a.id_anak,b.name as pgws,
         absen.ttl as hariMasuk,
         a.nama as nm_anak, 
@@ -358,8 +362,8 @@ class Cabut extends Model
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
                     SUM(ttl_rp) as ttl_rp
                   FROM `cabut` 
-                  WHERE penutup = 'T' AND no_box != 9999
-                  GROUP BY id_anak
+                  WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun'
+                  GROUP BY id_anak 
         ) as cabut on a.id_anak = cabut.id_anak
         LEFT join (
             SELECT 
@@ -369,7 +373,7 @@ class Cabut extends Model
             sum(ttl_rp) as ttl_rp,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
-            WHERE penutup = 'T' AND no_box != 9999
+            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_ambil) = '$tahun'
             GROUP by id_anak
         ) as eo on eo.id_anak = a.id_anak
         LEFT join (
@@ -381,24 +385,25 @@ class Cabut extends Model
             sum(gr_akhir) as gr_akhir, 
             sum(ttl_rp) as ttl_rp,
             sum((1 - gr_akhir / gr_awal) * 100) as susut
-            FROM `sortir` WHERE penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
         JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
-            WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
+            WHERE a.tgl BETWEEN '$whrAbsen1' AND '$whrAbsen2'
              group BY a.id_anak
         ) as absen on absen.id_anak = cabut.id_anak 
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
-            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' AND ditutup = 'T' GROUP by id_anak
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND ditutup = 'T' GROUP by id_anak
         ) as dll on a.id_anak = dll.id_anak
         LEFT JOIN (
             SELECT id_anak, sum(nominal) as ttl_rp_denda 
             FROM `tb_denda` 
-            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' GROUP by id_anak
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as denda ON a.id_anak = denda.id_anak
-        WHERE b.id = '$id_pengawas'");
+        WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
+        
     }
     public static function getPengawasRekap($bulan, $tahun)
     {

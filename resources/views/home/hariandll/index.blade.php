@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th class="dhead">#</th>
+                        <th class="dhead">Bulan dibayar</th>
                         <th class="dhead">Tanggal</th>
                         <th class="dhead">Nama Anak</th>
                         <th class="dhead">Keterangan</th>
@@ -50,6 +51,7 @@
                     @foreach ($datas as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
+                            <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
                             <td>{{ tanggal($d->tgl) }}</td>
                             <td>{{ $d->nama }}</td>
                             <td>{{ $d->ket }}</td>
@@ -75,6 +77,36 @@
         <form action="{{ route('hariandll.create') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="Tambah Harian DLL" size="modal-lg" btnSave="Y">
+
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <table class="table table-striped" width="50%">
+                            <thead>
+                                <tr>
+                                    <th class="dhead">Bulan dibayar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select required name="bulan_dibayar" class="form-control select2"
+                                            id="">
+                                            <option value="">- Pilih -</option>
+                                            @foreach ($bulan as $b)
+                                                <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6 class="text-warning mt-5"><em>Bulan dibayar harus dipilih</em></h6>
+                    </div>
+                </div>
                 <table class="table table-striped" x-data="{}">
                     <thead>
                         <tr>
@@ -88,6 +120,7 @@
                     </thead>
                     <tbody>
                         <tr>
+
                             <td>
                                 <input style="font-size: 13px;" type="date" value="{{ date('Y-m-d') }}"
                                     class="form-control" name="tgl[]">

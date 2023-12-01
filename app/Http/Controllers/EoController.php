@@ -16,7 +16,7 @@ class EoController extends Controller
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
 
         return DB::$query("SELECT a.no_box, a.pcs_awal,a.gr_awal FROM `bk` as a
-        WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.no_box NOT IN (select no_box FROM cabut_spesial) AND a.penerima = '$id_user'");
+            WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.no_box NOT IN (select no_box FROM cabut_spesial) AND a.penerima = '$id_user'");
     }
 
     public function getAnak($id = null)

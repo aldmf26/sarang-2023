@@ -346,10 +346,8 @@ class CabutController extends Controller
 
     public function rekap(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 = $tgl['tgl1'];
-        $tgl2 = $tgl['tgl2'];
-
+        $bulan = $r->bulan ?? date('m');
+        $tahun = $r->tahun ?? date('Y');
         $ttlPcsBk = 0;
         $ttlGrBk = 0;
         $ttlPcsAwal = 0;
@@ -359,7 +357,7 @@ class CabutController extends Controller
         $ttlFlx = 0;
         $ttlEot = 0;
         $ttlRp = 0;
-        $cabutGroup = Cabut::queryRekapGroup($tgl1, $tgl2);
+        $cabutGroup = Cabut::queryRekapGroup($bulan, $tahun);
 
         foreach ($cabutGroup as $d) {
             $ttlPcsBk += $d->pcs_bk;
@@ -375,8 +373,8 @@ class CabutController extends Controller
 
         $data = [
             'title' => 'Divisi Cabut',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
             'ttlPcsBk' => $ttlPcsBk,
             'ttlGrBk' => $ttlGrBk,
             'ttlPcsAwal' => $ttlPcsAwal,
@@ -400,17 +398,28 @@ class CabutController extends Controller
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }
 
-    
-
     public function export_global(Request $r)
     {
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
+        $bulan =  $r->bulan;
+        $tahun =  $r->tahun;
         $id_pengawas = auth()->user()->id;
 
         $view = 'home.cabut.export_global';
-        $tbl = Cabut::getRekapGlobal($tgl1, $tgl2, $id_pengawas);
+        $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
+        $fileName = "Export Rekap Global " . auth()->user()->name;
+        return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
+    }
 
-        return Excel::download(new CabutGlobalExport($tbl, $view), 'Export Rekap Global.xlsx');
+    public function cabut_ok(Request $r)
+    {
+        $cabut = Cabut::getCabut();
+        foreach($cabut as $d)
+        {
+            $hasil = rumusTotalRp($d);
+            DB::table('cabut')->where('id_cabut', $d->id_cabut)->update([
+                'ttl_rp' => $hasil->ttl_rp
+            ]);
+        }
+        return redirect()->route('cabut.index')->with('sukses', 'Data Tercek');
     }
 }

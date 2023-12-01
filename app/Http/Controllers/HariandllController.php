@@ -26,6 +26,7 @@ class HariandllController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'anak' => $this->anak(),
+            'bulan' => DB::table('bulan')->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where([['ditutup', 'T'],['b.id_pengawas', $id_user]])
@@ -52,6 +53,7 @@ class HariandllController extends Controller
                 'id_anak' => $r->id_anak[$i],
                 'ket' => $r->ket[$i],
                 'rupiah' => $rupiah,
+                'bulan_dibayar' => $r->bulan_dibayar,
                 'lokasi' => $r->lokasi[$i],
             ]);
         }
@@ -76,6 +78,7 @@ class HariandllController extends Controller
                 'tgl' => $r->tgl[$i],
                 'id_anak' => $r->id_anak[$i],
                 'ket' => $r->ket[$i],
+                'bulan_dibayar' => $r->bulan_dibayar[$i],
                 'rupiah' => $rupiah,
                 'lokasi' => $r->lokasi[$i],
             ]);
@@ -91,7 +94,7 @@ class HariandllController extends Controller
     }
     public function getQuery($tgl1, $tgl2)
     {
-        return DB::select("SELECT a.tgl,b.nama,c.name, GROUP_CONCAT(DISTINCT ket, ',') AS ket,GROUP_CONCAT(DISTINCT lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
+        return DB::select("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, GROUP_CONCAT(DISTINCT ket, ',') AS ket,GROUP_CONCAT(DISTINCT lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
         FROM tb_hariandll as a
         LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
         LEFT JOIN users as c on c.id = b.id_pengawas

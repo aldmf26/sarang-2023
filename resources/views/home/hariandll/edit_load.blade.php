@@ -2,6 +2,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th class="dhead">Bulan dibayar</th>
                 <th class="dhead">Tanggal</th>
                 <th class="dhead">Nama Anak</th>
                 <th class="dhead">Nama Anak</th>
@@ -14,6 +15,16 @@
                 <input type="hidden" name="id_hariandll[]" value="{{ $v->id_hariandll }}">
 
                 <tr class="baris">
+                    <td>
+                            @php
+                                $bulan = DB::table('bulan')->get();
+                            @endphp
+                        <select name="bulan_dibayar[]" id="" class="form-control">
+                            @foreach ($bulan as $b)
+                                <option {{$b->bulan == $v->bulan_dibayar ? 'selected' : ''}} value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
+                            @endforeach
+                        </select>
+                    </td>
                     <td>
                         <input style="font-size: 13px;" type="date" value="{{ $v->tgl }}" name="tgl[]"
                             class="form-control">

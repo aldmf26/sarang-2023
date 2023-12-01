@@ -119,6 +119,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
+            Route::get('/cabut_ok', 'cabut_ok')->name('cabut_ok');
             Route::post('/', 'create')->name('create');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
@@ -211,7 +212,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('denda.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/detail/{id_denda}', 'detail')->name('detail');
+            Route::get('/detail', 'detail')->name('detail');
             Route::get('/add', 'add')->name('add');
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');

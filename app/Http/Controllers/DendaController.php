@@ -46,6 +46,7 @@ class DendaController extends Controller
         $tgl2 =  $this->tgl2;
         $denda = DB::table('tb_denda as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->where('admin', auth()->user()->name)
             ->orderBy('a.id_denda', 'DESC')
             ->get();
         $ttlNominal = 0;
@@ -68,6 +69,7 @@ class DendaController extends Controller
         for ($i = 0; $i < count($r->id_anak); $i++) {
             DB::table('tb_denda')->insert([
                 'id_anak' => $r->id_anak[$i],
+                'bulan_dibayar' => $r->bulan_dibayar,
                 'tgl' => $r->tgl,
                 'nominal' => $r->nominal,
                 'ket' => $r->ket,
@@ -77,15 +79,15 @@ class DendaController extends Controller
         return redirect()->route('denda.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
-    public function detail($id)
+    public function detail(Request $r)
     {
-        $detail = DB::table('tb_denda')->where('id_denda', $id)->first();
+        $detail = DB::table('tb_denda')->where('id_denda', $r->id)->first();
         if (empty($detail)) {
             abort(404);
         }
         $data = [
             'detail' => $detail,
-            'anak' => DB::table('tb_anak')->get(),
+            'anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->orderBy('id_kelas', 'DESC')->get(),
         ];
         return view("home.denda.detail", $data);
     }
@@ -96,6 +98,7 @@ class DendaController extends Controller
             'id_anak' => $r->id_anak,
             'tgl' => $r->tgl,
             'nominal' => $r->nominal,
+            'bulan_dibayar' => $r->bulan_dibayar,
             'ket' => $r->ket,
             'admin' => auth()->user()->name
         ]);
