@@ -13,12 +13,14 @@ class HariandllExport  implements FromView, WithEvents
     protected $tbl;
     protected $view;
     protected $totalrow;
+    protected $kategori;
 
-    public function __construct($tbl, $view)
+    public function __construct($tbl, $view, $kategori)
     {
         $this->tbl = $tbl;
         $this->view = $view;
         $this->totalrow = count($tbl) + 1;
+        $this->kategori = $kategori;
     }
 
     public function view(): View

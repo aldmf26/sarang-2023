@@ -21,15 +21,23 @@ class HariandllController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
         $id_user = auth()->user()->id;
+
+        if (empty($r->kategori)) {
+            $kategori =  'biasa';
+        } else {
+            $kategori = $r->kategori;
+        }
+
         $data = [
             'title' => 'Harian DLL',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'anak' => $this->anak(),
+            'kategori' => $kategori,
             'bulan' => DB::table('bulan')->get(),
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->where([['ditutup', 'T'], ['b.id_pengawas', $id_user]])
+                ->where([['ditutup', 'T'], ['b.id_pengawas', $id_user]], ['kategori', $kategori])
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];
@@ -106,14 +114,15 @@ class HariandllController extends Controller
         $id_user = auth()->user()->id;
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
+        $kategori =  $r->kategori;
         $view = 'home.hariandll.export';
         $tbl = DB::table('tb_hariandll  as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-            ->where([['ditutup', 'T'], ['b.id_pengawas', $id_user]])
+            ->where([['ditutup', 'T'], ['b.id_pengawas', $id_user], ['kategori', $kategori]])
             ->orderBy('a.id_hariandll', 'DESC')
             ->get();
 
-        return Excel::download(new HariandllExport($tbl, $view), 'Export HARIAN DLL.xlsx');
+        return Excel::download(new HariandllExport($tbl, $view, $kategori), 'Export HARIAN DLL.xlsx');
     }
 
     public function rekap(Request $r)

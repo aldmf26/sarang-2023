@@ -1,8 +1,22 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
     <x-slot name="cardHeader">
+        <ul class="nav nav-pills float-start">
+            <li class="nav-item">
+                <a class="nav-link {{ $kategori == 'biasa' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('hariandll.index', ['kategori' => 'biasa']) }}">Harian</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $kategori == 'cetak' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('hariandll.index', ['kategori' => 'cetak']) }}">Harian
+                    Cetak</a>
+            </li>
+        </ul>
+        <br>
+        <br>
         <h6 class="float-start mt-1">{{ $title }}</h6>
-        <x-theme.button idModal="tambah" modal="Y" href="#" icon="fa-plus" addClass="float-end" teks="Tambah" />
-        <a href="{{ route('hariandll.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+        <x-theme.button idModal="tambah" modal="Y" href="#" icon="fa-plus" addClass="float-end"
+            teks="Tambah" />
+        <a href="{{ route('hariandll.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
@@ -21,6 +35,7 @@
 
             </x-theme.modal>
         </form>
+
     </x-slot>
 
     <x-slot name="cardBody">
@@ -34,6 +49,11 @@
                         <th class="dhead">Tanggal</th>
                         <th class="dhead">Nama Anak</th>
                         <th class="dhead">Keterangan</th>
+                        @if ($kategori == 'cetak')
+                            <th class="dhead">Pcs</th>
+                            <th class="dhead">Gr</th>
+                        @else
+                        @endif
                         <th class="dhead">Lokasi</th>
                         @php
                             $ttlRp = 0;
@@ -69,7 +89,13 @@
                             <td>{{ tanggal($d->tgl) }}</td>
                             <td>{{ $d->nama }}</td>
                             <td>{{ $d->ket }}</td>
+                            @if ($kategori == 'cetak')
+                                <td class="text-end">{{ $d->pcs }}</td>
+                                <td class="text-end">{{ $d->gr }}</td>
+                            @else
+                            @endif
                             <td>{{ $d->lokasi }}</td>
+
                             <td class="text-end">{{ number_format($d->rupiah, 0) }}</td>
                             <td>
                                 @if ($d->ditutup != 'Y')
