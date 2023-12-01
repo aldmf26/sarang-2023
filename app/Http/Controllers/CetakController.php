@@ -546,6 +546,32 @@ class CetakController extends Controller
         $tgl2 =  $tgl['tgl2'];
         $cetakgroup = CetakModel::cetakGroup();
 
+        $pcs_bk = 0;
+        $gr_bk = 0;
+        $pcs_tdk_ctk = 0;
+        $gr_tdk_ctk = 0;
+        $pcs_awal = 0;
+        $gr_awal = 0;
+        $pcs_akhir = 0;
+        $gr_akhir = 0;
+        $pcs_cu = 0;
+        $gr_cu = 0;
+        $ttl_rp = 0;
+        foreach ($cetakgroup as $c) {
+            $pcs_bk += $c->pcs_bk;
+            $gr_bk += $c->gr_bk;
+            $pcs_tdk_ctk += $c->pcs_tdk_ctk;
+            $gr_tdk_ctk += $c->gr_tidak_ctk;
+            $pcs_awal += $c->pcs_awal;
+            $gr_awal += $c->gr_awal;
+            $pcs_akhir += $c->pcs_akhir;
+            $gr_akhir += $c->gr_akhir;
+            $pcs_cu += $c->pcs_cu;
+            $gr_cu += $c->gr_cu;
+
+            $ttl_rp += $c->ttl_rp - $c->denda_susut - $c->denda_hcr;
+        }
+
         $data = [
             'title' => 'Rekap Summary Cetak',
             'tgl1' => $tgl1,
@@ -553,6 +579,17 @@ class CetakController extends Controller
             'cetakgroup' => $cetakgroup,
             'bulan' => DB::table('bulan')->get(),
             'tahun' => DB::select("SELECT YEAR(a.tgl) as tahun FROM cetak as a group by YEAR(a.tgl)"),
+            'pcs_bk' => $pcs_bk,
+            'gr_bk' => $gr_bk,
+            'pcs_tdk_ctk' => $pcs_tdk_ctk,
+            'gr_tdk_ctk' => $gr_tdk_ctk,
+            'pcs_awal' => $pcs_awal,
+            'gr_awal' => $gr_awal,
+            'pcs_akhir' => $pcs_akhir,
+            'gr_akhir' => $gr_akhir,
+            'pcs_cu' => $pcs_cu,
+            'gr_cu' => $gr_cu,
+            'ttl_rp' => $ttl_rp
         ];
         return view('home.cetak.rekap', $data);
     }
@@ -742,7 +779,7 @@ class CetakController extends Controller
         $tgl2 = date('Y-m-27', strtotime($tgl_awal));
 
 
-        $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr
+        $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr, e.rp_eo, e.gr_eo_awal, e.gr_eo_akhir, f.rp_harian
         FROM tb_anak as a
         left join (
             SELECT b.id_anak, count(b.id_absen) as total_absen
@@ -774,6 +811,18 @@ class CetakController extends Controller
             GROUP BY
                 c.id_anak
         )  as c on c.id_anak = a.id_anak
+        left join (
+            SELECT e.id_anak, sum(if(e.ttl_rp is null ,0,e.ttl_rp)) as rp_eo, sum(e.gr_eo_awal) as gr_eo_awal, sum(e.gr_eo_akhir) as gr_eo_akhir
+			FROM eo as e
+            where e.bulan_dibayar = '$bulan' and YEAR(e.tgl_ambil) = '$tahun' and e.selesai = 'Y' and e.id_pengawas = '$id'
+            group by e.id_anak
+        ) as e on e.id_anak = a.id_anak
+        left join (
+            SELECT f.id_anak, sum(if(f.rupiah is null ,0,f.rupiah)) as rp_harian
+			FROM tb_hariandll as f
+            where f.tgl BETWEEN '$tgl' and '$tgl2'
+            group by f.id_anak
+        ) as f on f.id_anak = a.id_anak
         where a.id_pengawas = '$id'
         order by a.id_kelas DESC, a.nama ASC
             ");
@@ -786,6 +835,11 @@ class CetakController extends Controller
         $rp_denda = 0;
         $rata2 = 0;
         $ttl_absen = 0;
+
+        $gr_awal_eo = 0;
+        $gr_akhir_eo = 0;
+        $rp_eo = 0;
+        $rp_harian = 0;
         foreach ($tbl as $c) {
             $sheet1->setCellValue('A' . $kolom, $nama);
             $sheet1->setCellValue('B' . $kolom, $c->total_absen);
@@ -797,9 +851,13 @@ class CetakController extends Controller
             $sheet1->setCellValue('H' . $kolom, $c->gr_akhir);
             $sheet1->setCellValue('I' . $kolom, '');
             $sheet1->setCellValue('J' . $kolom, $c->total_rp);
+            $sheet1->setCellValue('K' . $kolom, $c->gr_eo_awal);
+            $sheet1->setCellValue('L' . $kolom, $c->gr_eo_akhir);
+            $sheet1->setCellValue('M' . $kolom, $c->rp_eo);
+            $sheet1->setCellValue('N' . $kolom, $c->rp_harian);
             $sheet1->setCellValue('O' . $kolom, $c->denda_hcr + $c->denda_susut);
-            $sheet1->setCellValue('P' . $kolom, $c->total_rp - $c->denda_hcr - $c->denda_susut);
-            $sheet1->setCellValue('Q' . $kolom, ($c->total_rp - $c->denda_hcr - $c->denda_susut) / $c->total_absen);
+            $sheet1->setCellValue('P' . $kolom, $c->total_rp + $c->rp_eo + $c->rp_harian  - $c->denda_hcr - $c->denda_susut);
+            $sheet1->setCellValue('Q' . $kolom, ($c->total_rp + $c->rp_eo + $c->rp_harian - $c->denda_hcr - $c->denda_susut) / $c->total_absen);
 
             $kolom++;
 
@@ -809,8 +867,13 @@ class CetakController extends Controller
             $gr_akhir += $c->gr_akhir;
             $ttl_rp += $c->total_rp;
             $rp_denda += $c->denda_hcr + $c->denda_susut;
-            $rata2 += ($c->total_rp - $c->denda_hcr - $c->denda_susut) / $c->total_absen;
+            $rata2 += ($c->total_rp + $c->rp_eo + $c->rp_harian - $c->denda_hcr - $c->denda_susut) / $c->total_absen;
             $ttl_absen += $c->total_absen;
+
+            $gr_awal_eo += $c->gr_eo_awal;
+            $gr_akhir_eo += $c->gr_eo_akhir;
+            $rp_eo += $c->rp_eo;
+            $rp_harian += $c->rp_harian;
         }
         $sheet1->getStyle('A2:Q' . $kolom - 1)->applyFromArray($style);
         $sheet1->setCellValue('A' . $kolom, 'Total');
@@ -823,12 +886,12 @@ class CetakController extends Controller
         $sheet1->setCellValue('H' . $kolom,  $gr_akhir);
         $sheet1->setCellValue('I' . $kolom, '0');
         $sheet1->setCellValue('J' . $kolom, $ttl_rp);
-        $sheet1->setCellValue('K' . $kolom, '0');
-        $sheet1->setCellValue('L' . $kolom, '0');
-        $sheet1->setCellValue('M' . $kolom, '0');
-        $sheet1->setCellValue('N' . $kolom, '0');
+        $sheet1->setCellValue('K' . $kolom, $gr_awal_eo);
+        $sheet1->setCellValue('L' . $kolom, $gr_akhir_eo);
+        $sheet1->setCellValue('M' . $kolom, $rp_eo);
+        $sheet1->setCellValue('N' . $kolom, $rp_harian);
         $sheet1->setCellValue('O' . $kolom, $rp_denda);
-        $sheet1->setCellValue('P' . $kolom, $ttl_rp - $rp_denda);
+        $sheet1->setCellValue('P' . $kolom, $ttl_rp + $rp_eo + $rp_harian - $rp_denda);
         $sheet1->setCellValue('Q' . $kolom, $rata2);
 
 
