@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -29,10 +29,7 @@
             <table class="table  table-bordered" id="table">
                 <thead>
                     <tr>
-                        <th class="dhead">Bulan</th>
                         <th class="dhead ">Pgws</th>
-                        <th class="dhead ">Nama Anak</th>
-                        <th class="dhead">Keterangan</th>
 
                         @php
                             $ttl = 0;
@@ -47,13 +44,7 @@
                 <tbody>
                     @foreach ($datas as $c)
                         <tr>
-                            <td>{{ date('M y', strtotime($c->tgl)) }}</td>
                             <td>{{ $c->name }}</td>
-                            <td>{{ $c->nama }}</td>
-                            <td>
-                                Ket : {{ ucwords($c->ket) }} <br>
-                                Lokasi : {{ ucwords($c->lokasi) }}
-                            </td>
                             <td align="right">{{ number_format($c->total_rupiah, 0) }}</td>
                         </tr>
                     @endforeach
