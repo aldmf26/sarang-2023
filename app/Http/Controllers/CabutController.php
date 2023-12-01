@@ -6,9 +6,12 @@ use App\Exports\CabutExport;
 use App\Exports\CabutGlobalExport;
 use App\Exports\CabutRekapExport;
 use App\Models\Cabut;
+use App\Models\Sortir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CabutController extends Controller
 {
@@ -27,7 +30,7 @@ class CabutController extends Controller
     }
     public function updateAnakBelum()
     {
-        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id],['tgl_terima', date('Y-m-d')]])->get());
+        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id], ['tgl_terima', date('Y-m-d')]])->get());
         return response()->json(['anakBelum' => $anakBelum]);
     }
     public function load_halaman(Request $r)
@@ -410,11 +413,168 @@ class CabutController extends Controller
         return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
     }
 
+    public function export_ibu(Request $r)
+    {
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        JOIN users as b on a.penerima = b.id
+        WHERE a.kategori != 'cetak'
+        group by b.id");
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+
+        // Membuat objek Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        foreach ($pengawas as $i => $d) {
+            // Membuat sheet baru
+            $sheet = $spreadsheet->createSheet($i);
+            $sheet->setTitle(strtoupper($d->name));
+
+            // Mengisi sheet dengan data dari kategori tertentu
+            $koloms = [
+                'A1' => 'no box',
+                'B1' => 'pcs awal bk',
+                'C1' => 'gr awal bk',
+                'D1' => 'bulan',
+                'E1' => 'pgws',
+                'F1' => 'pcs awal kerja',
+                'G1' => 'gr awal kerja',
+                'H1' => 'pcs akhir kerja',
+                'I1' => 'gr akhir kerja',
+                'J1' => 'eot',
+                'K1' => 'flx',
+                'L1' => 'susut',
+                'M1' => 'ttl rp',
+                'N1' => 'pcs sisa bk',
+                'O1' => 'gr sisa bk',
+                'P1' => 'kategori',
+            ];
+            foreach ($koloms as $kolom => $isiKolom) {
+                $sheet->setCellValue($kolom, ucwords($isiKolom));
+            }
+            // Mengatur bold dan border untuk A1 dan B1
+            $styleBold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+            $styleBaris = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+            $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
+            $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
+            $ttlRp = 0;
+            // cabut
+            $row = 2;
+            $cabut = Cabut::queryRekap($d->id_pengawas);
+            foreach ($cabut as $data) {
+                $sheet->setCellValue('A' . $row, $data->no_box);
+                $sheet->setCellValue('B' . $row, $data->pcs_bk);
+                $sheet->setCellValue('C' . $row, $data->gr_bk);
+                $sheet->setCellValue('D' . $row, date('M y', strtotime($data->tgl)));
+                $sheet->setCellValue('E' . $row, $data->pengawas);
+                $sheet->setCellValue('F' . $row, $data->pcs_awal);
+                $sheet->setCellValue('G' . $row, $data->gr_awal);
+                $sheet->setCellValue('H' . $row, $data->pcs_akhir);
+                $sheet->setCellValue('I' . $row, $data->gr_akhir);
+                $sheet->setCellValue('J' . $row, $data->gr_flx);
+                $sheet->setCellValue('K' . $row, $data->eot);
+                $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
+                $sheet->setCellValue('L' . $row, $susut);
+                $sheet->setCellValue('M' . $row, $data->rupiah);
+                $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
+                $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
+                $sheet->setCellValue('P' . $row, $data->kategori);
+
+                $ttlRp += $data->rupiah;
+                $row++;
+            }
+
+            // sortir
+            $rowSortir = $row;
+            $sortir = Sortir::queryRekap($d->id_pengawas);
+            foreach ($sortir as $data) {
+                $sheet->setCellValue('A' . $rowSortir, $data->no_box);
+                $sheet->setCellValue('B' . $rowSortir, $data->pcs_bk);
+                $sheet->setCellValue('C' . $rowSortir, $data->gr_bk);
+                $sheet->setCellValue('D' . $rowSortir, date('M y', strtotime($data->tgl)));
+                $sheet->setCellValue('E' . $rowSortir, $data->pengawas);
+                $sheet->setCellValue('F' . $rowSortir, $data->pcs_awal);
+                $sheet->setCellValue('G' . $rowSortir, $data->gr_awal);
+                $sheet->setCellValue('H' . $rowSortir, $data->pcs_akhir);
+                $sheet->setCellValue('I' . $rowSortir, $data->gr_akhir);
+                $sheet->setCellValue('J' . $rowSortir, 0);
+                $sheet->setCellValue('K' . $rowSortir, 0);
+                $susut = empty($data->gr_awal) ? 0 : (1 - $data->gr_akhir / $data->gr_awal) * 100;
+                $sheet->setCellValue('L' . $rowSortir, $susut);
+                $sheet->setCellValue('M' . $rowSortir, $data->rupiah);
+                $sheet->setCellValue('N' . $rowSortir, $data->pcs_bk - $data->pcs_awal);
+                $sheet->setCellValue('O' . $rowSortir, $data->gr_bk - $data->gr_awal);
+                $sheet->setCellValue('P' . $rowSortir, $data->kategori);
+                $ttlRp += $data->rupiah;
+                $rowSortir++;
+            }
+
+            // dll
+            $rowDll = $rowSortir;
+            $dll = DB::selectOne("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, SUM(rupiah) AS total_rupiah
+            FROM tb_hariandll as a
+            LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
+            LEFT JOIN users as c on c.id = b.id_pengawas
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND a.ditutup = 'T' AND b.id_pengawas = '$d->id_pengawas'
+            GROUP BY b.id_pengawas");
+            $rupiahDll = $dll->total_rupiah ?? 0;
+            $sheet->setCellValue('A' . $rowDll, 'Dll');
+            $sheet->setCellValue('M' . $rowDll, $rupiahDll);
+            $ttlRp += $rupiahDll;
+
+
+            $rowTotal = $rowDll + 1;
+            $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('M' . $rowTotal, $ttlRp);
+            $sheet->getStyle("A$rowTotal:P$rowTotal")->applyFromArray($styleBold);
+
+            $rowDenda = $rowTotal + 1;
+            $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda`
+            WHERE bulan_dibayar = '11' AND YEAR(tgl) = '2023' AND admin = '$d->name'
+            GROUP BY admin");
+            $rupiahDenda = $denda->rupiah ?? 0;
+            $sheet->setCellValue('A' . $rowDenda, 'Denda');
+            $sheet->setCellValue('M' . $rowDenda, $rupiahDenda);
+
+            $rowGrandTotal = $rowDenda + 1;
+            $grandTotal = $ttlRp - $rupiahDenda;
+            $sheet->setCellValue('A' . $rowGrandTotal, 'GRAND TOTAL');
+            $sheet->setCellValue('M' . $rowGrandTotal, $grandTotal);
+            $sheet->getStyle("A$rowGrandTotal:P$rowGrandTotal")->applyFromArray($styleBold);
+
+            $baris = $rowGrandTotal;
+            $sheet->getStyle('A2:P' . $baris)->applyFromArray($styleBaris);
+        }
+
+        // Membuat objek writer untuk menulis spreadsheet ke file
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="Gaji Sarang Kasih Ibu Linda.xlsx"',
+            ]
+        );
+    }
+
     public function cabut_ok(Request $r)
     {
         $cabut = Cabut::getCabut();
-        foreach($cabut as $d)
-        {
+        foreach ($cabut as $d) {
             $hasil = rumusTotalRp($d);
             DB::table('cabut')->where('id_cabut', $d->id_cabut)->update([
                 'ttl_rp' => $hasil->ttl_rp

@@ -51,4 +51,22 @@ class Sortir extends Model
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
+
+    public static function queryRekap($id_pengawas = null)
+    {
+        $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
+
+        return DB::select("SELECT c.kategori,max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
+        SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
+        SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_bk, c.gr_bk,
+         sum(a.rp_target) as rp_target,sum(a.ttl_rp) as rupiah,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
+        FROM sortir as a
+        left join users as b on b.id = a.id_pengawas
+        LEFT JOIN (
+            SELECT no_box,penerima, kategori, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk GROUP BY no_box,penerima
+        ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
+        WHERE  a.no_box != 9999 AND a.penutup = 'T' $where
+        GROUP by a.no_box,a.id_pengawas
+        ");
+    }
 }

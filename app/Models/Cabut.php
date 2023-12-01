@@ -183,6 +183,7 @@ class Cabut extends Model
             ->where([['a.id_cabut', $id_cabut]])
             ->first();
     }
+    
     public static function queryRekap($id_pengawas = null)
     {
         
@@ -190,6 +191,7 @@ class Cabut extends Model
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
         a.no_box, 
+        c.kategori, 
         SUM(a.pcs_awal) as pcs_awal , 
         sum(a.gr_awal) as gr_awal,
         SUM(a.pcs_akhir) as pcs_akhir, 
@@ -387,7 +389,7 @@ class Cabut extends Model
             sum((1 - gr_akhir / gr_awal) * 100) as susut
             FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
-        JOIN (
+        LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
             WHERE a.tgl BETWEEN '$whrAbsen1' AND '$whrAbsen2'
              group BY a.id_anak
