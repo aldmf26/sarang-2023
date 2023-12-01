@@ -493,8 +493,12 @@ class CabutController extends Controller
                 $row++;
             }
 
+            // eo
+            $rowEo = $row;
+            $eo = 
+
             // sortir
-            $rowSortir = $row;
+            $rowSortir = $rowEo;
             $sortir = Sortir::queryRekap($d->id_pengawas);
             foreach ($sortir as $data) {
                 $sheet->setCellValue('A' . $rowSortir, $data->no_box);
