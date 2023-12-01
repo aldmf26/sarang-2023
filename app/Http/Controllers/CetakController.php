@@ -779,7 +779,7 @@ class CetakController extends Controller
         $tgl2 = date('Y-m-26', strtotime($tgl_awal));
 
 
-        $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr, e.rp_eo, e.gr_eo_awal, e.gr_eo_akhir, f.rp_harian, g.rp_denda, c.rp_harian_cetak
+        $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr, e.rp_eo, e.gr_eo_awal, e.gr_eo_akhir, f.rp_harian, g.rp_denda, c.rp_harian_cetak, f.pcs_harian, f.gr_harian
         FROM tb_anak as a
         left join (
             SELECT b.id_anak, count(b.id_absen) as total_absen
@@ -819,7 +819,7 @@ class CetakController extends Controller
             group by e.id_anak
         ) as e on e.id_anak = a.id_anak
         left join (
-            SELECT f.id_anak, sum(if(f.rupiah is null ,0,f.rupiah)) as rp_harian
+            SELECT f.id_anak, sum(if(f.rupiah is null ,0,f.rupiah)) as rp_harian, sum(f.pcs) as pcs_harian, sum(f.gr) as gr_harian
 			FROM tb_hariandll as f
             where f.tgl BETWEEN '$tgl' and '$tgl2'
             group by f.id_anak
