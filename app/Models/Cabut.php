@@ -389,11 +389,11 @@ class Cabut extends Model
             sum((1 - gr_akhir / gr_awal) * 100) as susut
             FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
-        JOIN (
+        LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
             WHERE a.tgl BETWEEN '$whrAbsen1' AND '$whrAbsen2'
              group BY a.id_anak
-        ) as absen on absen.id_anak = cabut.id_anak 
+        ) as absen on absen.id_anak = a.id_anak 
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
