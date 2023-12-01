@@ -852,10 +852,10 @@ class CetakController extends Controller
             $sheet1->setCellValue('B' . $kolom, $c->total_absen);
             $sheet1->setCellValue('C' . $kolom, $c->nama);
             $sheet1->setCellValue('D' . $kolom, $c->id_kelas);
-            $sheet1->setCellValue('E' . $kolom, $c->pcs_awal_cetak);
-            $sheet1->setCellValue('F' . $kolom, $c->gr_awal_cetak);
-            $sheet1->setCellValue('G' . $kolom, $c->pcs_akhir);
-            $sheet1->setCellValue('H' . $kolom, $c->gr_akhir);
+            $sheet1->setCellValue('E' . $kolom, $c->pcs_awal_cetak + $c->pcs_harian);
+            $sheet1->setCellValue('F' . $kolom, $c->gr_awal_cetak + $c->gr_harian);
+            $sheet1->setCellValue('G' . $kolom, $c->pcs_akhir + $c->pcs_harian);
+            $sheet1->setCellValue('H' . $kolom, $c->gr_akhir + $c->gr_harian);
             $sheet1->setCellValue('I' . $kolom, '');
             $sheet1->setCellValue('J' . $kolom, $c->total_rp + $c->rp_harian_cetak);
             $sheet1->setCellValue('K' . $kolom, $c->gr_eo_awal);
@@ -868,10 +868,10 @@ class CetakController extends Controller
 
             $kolom++;
 
-            $pcs_awal_ctk += $c->pcs_awal_cetak;
-            $gr_awal_ctk += $c->gr_awal_cetak;
-            $pcs_akhir += $c->pcs_akhir;
-            $gr_akhir += $c->gr_akhir;
+            $pcs_awal_ctk += $c->pcs_awal_cetak + $c->pcs_harian;
+            $gr_awal_ctk += $c->gr_awal_cetak + $c->gr_harian;
+            $pcs_akhir += $c->pcs_akhir + +$c->pcs_harian;
+            $gr_akhir += $c->gr_akhir + $c->gr_harian;
             $ttl_rp += $c->total_rp + $c->rp_harian_cetak;
             $rp_denda += $c->denda_hcr + $c->denda_susut + $c->rp_denda;
             $rata2 += ($c->total_rp + $c->rp_harian_cetak + $c->rp_eo + $c->rp_harian - $c->denda_hcr - $c->denda_susut - $c->rp_denda) / $c->total_absen;
