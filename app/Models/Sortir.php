@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Sortir extends Model
 {
-    public static function queryRekapGroup($tgl1, $tgl2)
+    public static function queryRekapGroup($bulan, $tahun)
     {
         $cabutGroup = DB::select("SELECT 
                         max(b.name) as pengawas, 

@@ -18,38 +18,8 @@
                     <i class="fas fa-file-excel"></i> Export
                 </a> --}}
                 @include('home.cabut.btn_export_global')
-                <x-theme.button modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
-                    teks="View" />
-                <form action="">
-                    <x-theme.modal title="View Rekap" idModal="view">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label for="">Bulan dibayar</label>
-                                <select name="bulan" class="form-control selectView" id="">
-                                    <option value="">- Pilih Bulan -</option>
-                                    @php
-                                        $bulan = DB::table('bulan')->get();
-                                    @endphp
-                                    @foreach ($bulan as $b)
-                                        <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="">Tahun</label>
-                                <select name="tahun" class="form-control selectView" id="">
-                                    <option value="">- Pilih Tahun -</option>
-                                    @php
-                                        $tahun = [2022,2023];
-                                    @endphp
-                                    @foreach ($tahun as $b)
-                                        <option value="{{ $b }}">{{ strtoupper($b) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </x-theme.modal>
-                </form>
+                @include('home.cabut.view_bulandibayar')
+                
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
@@ -156,7 +126,7 @@
                                                 SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
                                             ) as rp ON rp.no_box = a.no_box
                                             left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box 
+                                            left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
                                             WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
                                             GROUP by a.no_box");
                             @endphp
