@@ -202,6 +202,7 @@ class HariandllController extends Controller
                                 'gr' => $rowData[6],
                                 'lokasi' => $rowData[7],
                                 'rupiah' => $rowData[8],
+                                'kategori' => 'cetak'
                             ]);
                         } else {
                             DB::table('tb_hariandll')->insert([
@@ -210,6 +211,7 @@ class HariandllController extends Controller
                                 'ket' => $rowData[4],
                                 'lokasi' => $rowData[5],
                                 'rupiah' => $rowData[6],
+                                'kategori' => 'biasa'
                             ]);
                         }
                     } else {
@@ -222,6 +224,7 @@ class HariandllController extends Controller
                                 'gr' => $rowData[6],
                                 'lokasi' => $rowData[7],
                                 'rupiah' => $rowData[8],
+                                'kategori' => 'cetak'
                             ]);
                         } else {
                             DB::table('tb_hariandll')->where('id_hariandll', $rowData[0])->update([
@@ -230,6 +233,7 @@ class HariandllController extends Controller
                                 'ket' => $rowData[4],
                                 'lokasi' => $rowData[5],
                                 'rupiah' => $rowData[6],
+                                'kategori' => 'biasa'
                             ]);
                         }
                     }
