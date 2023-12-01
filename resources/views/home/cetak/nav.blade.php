@@ -34,7 +34,7 @@
     @foreach ($navMenu as $d)
         <li class="nav-item">
             <a class="nav-link {{ $rot == $d['rot'] ? 'active' : '' }}" aria-current="page"
-                href="{{ route($d['rot']) }}">{{ $d['nama'] }}</a>
+                href="{{ route($d['rot'], ['bulan' => request()->get('bulan'), 'tahun' => request()->get('tahun')]) }}">{{ $d['nama'] }}</a>
         </li>
     @endforeach
 </ul>

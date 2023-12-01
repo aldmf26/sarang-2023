@@ -466,7 +466,7 @@ class CabutController extends Controller
             ];
             $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
             $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
-
+            $ttlRp = 0;
             // cabut
             $row = 2;
             $cabut = Cabut::queryRekap($d->id_pengawas);
@@ -488,6 +488,8 @@ class CabutController extends Controller
                 $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $row, $data->kategori);
+
+                $ttlRp += $data->rupiah;
                 $row++;
             }
 
@@ -512,9 +514,10 @@ class CabutController extends Controller
                 $sheet->setCellValue('N' . $rowSortir, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $rowSortir, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $rowSortir, $data->kategori);
+                $ttlRp += $data->rupiah;
                 $rowSortir++;
             }
-            
+
             // dll
             $rowDll = $rowSortir;
             $dll = DB::selectOne("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, SUM(rupiah) AS total_rupiah
@@ -523,11 +526,32 @@ class CabutController extends Controller
             LEFT JOIN users as c on c.id = b.id_pengawas
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND a.ditutup = 'T' AND b.id_pengawas = '$d->id_pengawas'
             GROUP BY b.id_pengawas");
-            $sheet->setCellValue('M' . $rowDll, $dll->total_rupiah);
+            $rupiahDll = $dll->total_rupiah ?? 0;
+            $sheet->setCellValue('A' . $rowDll, 'Dll');
+            $sheet->setCellValue('M' . $rowDll, $rupiahDll);
+            $ttlRp += $rupiahDll;
 
-            
 
-            $baris = $rowDll - 1;
+            $rowTotal = $rowDll + 1;
+            $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('M' . $rowTotal, $ttlRp);
+            $sheet->getStyle("A$rowTotal:P$rowTotal")->applyFromArray($styleBold);
+
+            $rowDenda = $rowTotal + 1;
+            $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda`
+            WHERE bulan_dibayar = '11' AND YEAR(tgl) = '2023' AND admin = '$d->name'
+            GROUP BY admin");
+            $rupiahDenda = $denda->rupiah ?? 0;
+            $sheet->setCellValue('A' . $rowDenda, 'Denda');
+            $sheet->setCellValue('M' . $rowDenda, $rupiahDenda);
+
+            $rowGrandTotal = $rowDenda + 1;
+            $grandTotal = $ttlRp - $rupiahDenda;
+            $sheet->setCellValue('A' . $rowGrandTotal, 'GRAND TOTAL');
+            $sheet->setCellValue('M' . $rowGrandTotal, $grandTotal);
+            $sheet->getStyle("A$rowGrandTotal:P$rowGrandTotal")->applyFromArray($styleBold);
+
+            $baris = $rowGrandTotal;
             $sheet->getStyle('A2:P' . $baris)->applyFromArray($styleBaris);
         }
 
