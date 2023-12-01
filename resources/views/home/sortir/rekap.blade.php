@@ -15,7 +15,6 @@
                 @include('home.cabut.btn_export_global')
                 @include('home.cabut.view_bulandibayar')
 
-                <x-theme.btn_filter />
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
