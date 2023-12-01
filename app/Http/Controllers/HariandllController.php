@@ -92,13 +92,13 @@ class HariandllController extends Controller
             DB::table('tb_hariandll')->where('id_hariandll', $r->id[$i])->update(['ditutup' => 'Y']);
         }
     }
-    public function getQuery($tgl1, $tgl2)
+    public function getQuery($bulan, $tahun)
     {
         return DB::select("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, GROUP_CONCAT(DISTINCT ket, ',') AS ket,GROUP_CONCAT(DISTINCT lokasi, ',') AS lokasi, SUM(rupiah) AS total_rupiah
         FROM tb_hariandll as a
         LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
         LEFT JOIN users as c on c.id = b.id_pengawas
-        WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
+        WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun'
         GROUP BY a.id_anak;");
     }
     public function export(Request $r)
@@ -119,15 +119,14 @@ class HariandllController extends Controller
     public function rekap(Request $r)
     {
 
-        $tgl = tanggalFilter($r);
-        $tgl1 =  $tgl['tgl1'];
-        $tgl2 =  $tgl['tgl2'];
-        $datas = $this->getQuery($tgl1, $tgl2);
+        $bulan = $r->bulan ?? date('m');
+        $tahun = $r->tahun ?? date('Y');
+        $datas = $this->getQuery($bulan, $tahun);
 
         $data = [
             'title' => 'Rekap Summary Cetak',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
             'datas' => $datas,
         ];
 
@@ -137,10 +136,10 @@ class HariandllController extends Controller
     public function export_rekap(Request $r)
     {
         $id_user = auth()->user()->id;
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
+        $bulan =  $r->bulan;
+        $tahun =  $r->tahun;
         $view = 'home.hariandll.export_rekap';
-        $tbl = $this->getQuery($tgl1, $tgl2);
+        $tbl = $this->getQuery($bulan, $tahun);
 
         return Excel::download(new HariandllExport($tbl, $view), 'Export REKAP HARIAN DLL.xlsx');
     }

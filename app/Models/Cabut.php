@@ -197,7 +197,7 @@ class Cabut extends Model
         sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah, sum(a.gr_flx) as gr_flx
         FROM cabut as a
         left join users as b on b.id = a.id_pengawas
-        left JOIN bk as c on c.no_box = a.no_box 
+        left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
         WHERE a.penutup = 'T' AND a.no_box != 9999 $where
         GROUP by a.no_box;");
     }

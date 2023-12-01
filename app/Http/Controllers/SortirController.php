@@ -408,9 +408,8 @@ class SortirController extends Controller
 
     public function rekap(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 =  $tgl['tgl1'];
-        $tgl2 =  $tgl['tgl2'];
+        $bulan = $r->bulan ?? date('m');
+        $tahun = $r->tahun ?? date('Y');
 
         $ttlPcsBk = 0;
         $ttlGrBk = 0;
@@ -419,7 +418,7 @@ class SortirController extends Controller
         $ttlPcsAkhir = 0;
         $ttlGrAkhir = 0;
         $ttlRp = 0;
-        $sortirGroup = Sortir::queryRekapGroup($tgl1, $tgl2);
+        $sortirGroup = Sortir::queryRekapGroup($bulan, $tahun);
 
         foreach ($sortirGroup as $d) {
             $ttlPcsBk += $d->pcs_bk;
@@ -433,8 +432,8 @@ class SortirController extends Controller
 
         $data = [
             'title' => 'Rekap Summary Sortir',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
             'ttlPcsBk' => $ttlPcsBk,
             'ttlGrBk' => $ttlGrBk,
             'ttlPcsAwal' => $ttlPcsAwal,
@@ -449,10 +448,10 @@ class SortirController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
+        $bulan =  $r->bulan;
+        $tahun =  $r->tahun;
         $view = 'home.sortir.export_rekap';
-        $tbl = $this->queryRekap($tgl1, $tgl2);
+        $tbl = $this->queryRekap($bulan, $tahun);
         return Excel::download(new SortirRekapExport($tbl, $view), 'Export REKAP SORTIR.xlsx');
     }
 }

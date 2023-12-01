@@ -2,11 +2,13 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }} {{ tanggal($tgl1) }} ~ {{ tanggal($tgl2) }}</h6>
+                <h6 class="float-start mt-1">{{ $title }} 
+                    {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
+                </h6>
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('sortir.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('sortir.export_rekap', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>

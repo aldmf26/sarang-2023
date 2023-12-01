@@ -2,16 +2,17 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
+                <h6 class="float-start mt-1">{{ $title }} {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}</h6>
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('hariandll.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('hariandll.export_rekap', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
                 @include('home.cabut.btn_export_global')
-                <x-theme.btn_filter />
+                @include('home.cabut.view_bulandibayar')
+
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
