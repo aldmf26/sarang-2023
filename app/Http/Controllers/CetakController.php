@@ -776,7 +776,7 @@ class CetakController extends Controller
         $tgl_awal = '01-' . $bulan . '-' . $tahun;
 
         $tgl = date('Y-m-27', strtotime('-1 month', strtotime($tgl_awal)));
-        $tgl2 = date('Y-m-27', strtotime($tgl_awal));
+        $tgl2 = date('Y-m-26', strtotime($tgl_awal));
 
 
         $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr, e.rp_eo, e.gr_eo_awal, e.gr_eo_akhir, f.rp_harian
