@@ -6,6 +6,7 @@ use App\Exports\CabutExport;
 use App\Exports\CabutGlobalExport;
 use App\Exports\CabutRekapExport;
 use App\Models\Cabut;
+use App\Models\Eo;
 use App\Models\Sortir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -468,13 +469,14 @@ class CabutController extends Controller
             $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
             $ttlRp = 0;
             // cabut
+            $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 2;
             $cabut = Cabut::queryRekap($d->id_pengawas);
             foreach ($cabut as $data) {
                 $sheet->setCellValue('A' . $row, $data->no_box);
                 $sheet->setCellValue('B' . $row, $data->pcs_bk);
                 $sheet->setCellValue('C' . $row, $data->gr_bk);
-                $sheet->setCellValue('D' . $row, date('M y', strtotime($data->tgl)));
+                $sheet->setCellValue('D' . $row, $bulanDibayar);
                 $sheet->setCellValue('E' . $row, $data->pengawas);
                 $sheet->setCellValue('F' . $row, $data->pcs_awal);
                 $sheet->setCellValue('G' . $row, $data->gr_awal);
@@ -495,7 +497,28 @@ class CabutController extends Controller
 
             // eo
             $rowEo = $row;
-            $eo = 
+            $eo = Eo::queryRekap($d->id_pengawas);
+            foreach ($eo as $data) {
+                $sheet->setCellValue('A' . $rowEo, $data->no_box);
+                $sheet->setCellValue('B' . $rowEo, 0);
+                $sheet->setCellValue('C' . $rowEo, $data->gr_bk);
+                $sheet->setCellValue('D' . $rowEo, $bulanDibayar);
+                $sheet->setCellValue('E' . $rowEo, $d->name);
+                $sheet->setCellValue('F' . $rowEo, 0);
+                $sheet->setCellValue('G' . $rowEo, $data->gr_eo_awal);
+                $sheet->setCellValue('H' . $rowEo, 0);
+                $sheet->setCellValue('I' . $rowEo, $data->gr_eo_akhir);
+                $sheet->setCellValue('J' . $rowEo, 0);
+                $sheet->setCellValue('K' . $rowEo, 0);
+                $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
+                $sheet->setCellValue('L' . $rowEo, $susut);
+                $sheet->setCellValue('M' . $rowEo, $data->rupiah);
+                $sheet->setCellValue('N' . $rowEo, 0);
+                $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
+                $sheet->setCellValue('P' . $rowEo, 'Eo');
+                $ttlRp += $data->rupiah;
+                $rowEo++;
+            }
 
             // sortir
             $rowSortir = $rowEo;
@@ -504,7 +527,7 @@ class CabutController extends Controller
                 $sheet->setCellValue('A' . $rowSortir, $data->no_box);
                 $sheet->setCellValue('B' . $rowSortir, $data->pcs_bk);
                 $sheet->setCellValue('C' . $rowSortir, $data->gr_bk);
-                $sheet->setCellValue('D' . $rowSortir, date('M y', strtotime($data->tgl)));
+                $sheet->setCellValue('D' . $rowSortir, $bulanDibayar);
                 $sheet->setCellValue('E' . $rowSortir, $data->pengawas);
                 $sheet->setCellValue('F' . $rowSortir, $data->pcs_awal);
                 $sheet->setCellValue('G' . $rowSortir, $data->gr_awal);
