@@ -100,6 +100,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('cabut.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/', 'create')->name('create');
             Route::get('/add', 'add')->name('add');
             Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
             Route::get('/load_tambah_cabut', 'load_tambah_cabut')->name('load_tambah_cabut');
@@ -120,7 +121,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create_anak', 'create_anak')->name('create_anak');
             Route::get('/selesai_cabut', 'selesai_cabut')->name('selesai_cabut');
             Route::get('/cabut_ok', 'cabut_ok')->name('cabut_ok');
-            Route::post('/', 'create')->name('create');
+            Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/ditutup', 'ditutup')->name('ditutup');

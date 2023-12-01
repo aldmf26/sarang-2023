@@ -13,7 +13,6 @@
                     <i class="fas fa-file-excel"></i> Export
                 </a>
                 @include('home.cabut.btn_export_global')
-                @include('home.cabut.view_bulandibayar')
 
             </div>
             <div class="col-lg-12">
