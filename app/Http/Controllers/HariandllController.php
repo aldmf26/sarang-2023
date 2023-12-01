@@ -144,13 +144,13 @@ class HariandllController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $id_user = auth()->user()->id;
-        $bulan =  $r->bulan;
-        $tahun =  $r->tahun;
-        $view = 'home.hariandll.export_rekap';
-        $tbl = $this->getQuery($bulan, $tahun);
+        // $id_user = auth()->user()->id;
+        // $bulan =  $r->bulan;
+        // $tahun =  $r->tahun;
+        // $view = 'home.hariandll.export_rekap';
+        // $tbl = $this->getQuery($bulan, $tahun);
 
-        return Excel::download(new HariandllExport($tbl, $view), 'Export REKAP HARIAN DLL.xlsx');
+        // return Excel::download(new HariandllExport($tbl, $view), 'Export REKAP HARIAN DLL.xlsx');
     }
 
     function import(Request $r)
@@ -193,23 +193,45 @@ class HariandllController extends Controller
                     }
                     $id = auth()->user()->id;
                     if (empty($rowData[0])) {
-
-                        DB::table('tb_hariandll')->insert([
-                            'tgl' => $tanggalFormatted,
-                            'id_anak' => $rowData[2],
-                            'ket' => $rowData[4],
-                            'lokasi' => $rowData[5],
-                            'rupiah' => $rowData[6],
-                        ]);
+                        if ($r->kategori == 'cetak') {
+                            DB::table('tb_hariandll')->insert([
+                                'tgl' => $tanggalFormatted,
+                                'id_anak' => $rowData[2],
+                                'ket' => $rowData[4],
+                                'pcs' => $rowData[5],
+                                'gr' => $rowData[6],
+                                'lokasi' => $rowData[7],
+                                'rupiah' => $rowData[8],
+                            ]);
+                        } else {
+                            DB::table('tb_hariandll')->insert([
+                                'tgl' => $tanggalFormatted,
+                                'id_anak' => $rowData[2],
+                                'ket' => $rowData[4],
+                                'lokasi' => $rowData[5],
+                                'rupiah' => $rowData[6],
+                            ]);
+                        }
                     } else {
-
-                        DB::table('tb_hariandll')->where('id_hariandll', $rowData[0])->update([
-                            'tgl' => $tanggalFormatted,
-                            'id_anak' => $rowData[2],
-                            'ket' => $rowData[4],
-                            'lokasi' => $rowData[5],
-                            'rupiah' => $rowData[6],
-                        ]);
+                        if ($r->kategori == 'cetak') {
+                            DB::table('tb_hariandll')->where('id_hariandll', $rowData[0])->update([
+                                'tgl' => $tanggalFormatted,
+                                'id_anak' => $rowData[2],
+                                'ket' => $rowData[4],
+                                'pcs' => $rowData[5],
+                                'gr' => $rowData[6],
+                                'lokasi' => $rowData[7],
+                                'rupiah' => $rowData[8],
+                            ]);
+                        } else {
+                            DB::table('tb_hariandll')->where('id_hariandll', $rowData[0])->update([
+                                'tgl' => $tanggalFormatted,
+                                'id_anak' => $rowData[2],
+                                'ket' => $rowData[4],
+                                'lokasi' => $rowData[5],
+                                'rupiah' => $rowData[6],
+                            ]);
+                        }
                     }
                 }
                 DB::commit(); // Konfirmasi transaksi jika berhasil

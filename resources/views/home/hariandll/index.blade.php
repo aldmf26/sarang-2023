@@ -30,6 +30,7 @@
                     <div class="col-lg-12">
                         <label for="">File</label>
                         <input type="file" class="form-control" name="file">
+                        <input type="hidden" name="kategori" value="{{ $kategori }}">
                     </div>
                 </div>
 

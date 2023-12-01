@@ -27,6 +27,7 @@ class HariandllExport  implements FromView, WithEvents
     {
         return view($this->view, [
             'datas' => $this->tbl,
+            'kategori' =>  $this->kategori
         ]);
     }
 
@@ -35,8 +36,14 @@ class HariandllExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:G1';
-                $cellRangeLoop = 'A1:G' . $this->totalrow;
+                if ($this->kategori == 'cetak') {
+                    $cellRange = 'A1:I1';
+                    $cellRangeLoop = 'A1:I' . $this->totalrow;
+                } else {
+                    $cellRange = 'A1:G1';
+                    $cellRangeLoop = 'A1:G' . $this->totalrow;
+                }
+
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
