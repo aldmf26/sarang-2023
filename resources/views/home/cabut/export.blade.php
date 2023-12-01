@@ -15,6 +15,7 @@
             <th>Susut</th>
             <th>Rp Target</th>
             <th>Ttl Gaji</th>
+            <th>Selesai</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,7 @@
                 <td>{{  number_format($hasil->susut,0) }}%</td>
                 <td>{{ $d->rupiah }}</td>
                 <td>{{ $hasil->ttl_rp }}</td>
+                <td>{{ $d->selesai }}</td>
             </tr>
         @endforeach
     </tbody>

@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     <th class="dhead">Tgl Trma</th>
-                    <th class="dhead" width="90">No Box</th>
+                    <th class="dhead" width="60">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="85">Pcs Awal</th>
                     <th class="dhead text-end" width="85">Gr Awal</th>
@@ -108,8 +108,9 @@
                                 type="text" class="form-control text-end pcsHcrKeyup"
                                 count="{{ $i + 1 }}">
                         </td>
+                        
                         <td class="susut{{ $i + 1 }} text-end">
-
+                            {{ number_format($hasil->susut == 100 ? 0 : $hasil->susut, 0) }} %
                         </td>
 
 
@@ -133,7 +134,7 @@
                         <td>
 
                             <button style="font-size: 12px"
-                                class="btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
+                                class="btn{{$i+1}} btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
 
                                 @php
@@ -142,8 +143,7 @@
                             {{-- @if ($eot >= rumusTotalRp($d)->batas_eot)
                             @endif --}}
                             <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
-                                id_cabut="{{ $d->id_cabut }}" href="#" data-bs-toggle="modal"
-                                data-bs-target="#selesai">Selesai </a>
+                                id_cabut="{{ $d->id_cabut }}" href="#" >Selesai </a>
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>

@@ -49,18 +49,7 @@ class Cabut extends Model
             ->get();
     }
 
-    public static function getCabutSum()
-    {
-        $id_user = auth()->user()->id;
-        return DB::selectOne("SELECT 
-                    sum(a.rupiah) as sumRpTarget,
-                    
-                FROM cabut AS a
-                WHERE a.no_box != '9999'
-                    AND a.penutup = 'T'
-                    AND a.id_pengawas = $id_user
-                GROUP BY a.id_pengawas;");
-    }
+    
     public static function getCabutAkhir($orderBy)
     {
         $datas =  DB::table('cabut as a')
@@ -99,7 +88,7 @@ class Cabut extends Model
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
+            ->where([['a.no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]]);
         switch ($orderBy) {
             case 'nobox':
                 $datas->orderBy('a.no_box', 'ASC');
@@ -194,12 +183,10 @@ class Cabut extends Model
             ->where([['a.id_cabut', $id_cabut]])
             ->first();
     }
-    public static function queryRekap()
+    public static function queryRekap($id_pengawas = null)
     {
-        $id = auth()->user()->id;
-        $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
-
+        
+        $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
         a.no_box, 
@@ -211,7 +198,7 @@ class Cabut extends Model
         FROM cabut as a
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box 
-        WHERE a.penutup = 'T'
+        WHERE a.penutup = 'T' AND a.no_box != 9999 $where
         GROUP by a.no_box;");
     }
     public static function queryRekapGroup($tgl1, $tgl2)
@@ -247,9 +234,12 @@ class Cabut extends Model
                                 FROM cabut WHERE no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
-                            SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM `bk`  as a
-INNER join cabut as b on a.no_box = b.no_box
-GROUP BY a.penerima
+                            SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
+                            JOIN (
+                                SELECT no_box FROM cabut GROUP BY no_box
+                            ) as b on a.no_box = b.no_box
+                            WHERE a.kategori LIKE '%cabut%'
+                            GROUP by a.penerima
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
@@ -366,9 +356,9 @@ GROUP BY a.penerima
                     sum(gr_flx) as gr_flx, 
                     SUM(rupiah) as rupiah, 
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
-                    SUM(ttl_rp) as ttl_rp 
+                    SUM(ttl_rp) as ttl_rp
                   FROM `cabut` 
-                  WHERE penutup = 'T' 
+                  WHERE penutup = 'T' AND no_box != 9999
                   GROUP BY id_anak
         ) as cabut on a.id_anak = cabut.id_anak
         LEFT join (
@@ -379,7 +369,7 @@ GROUP BY a.penerima
             sum(ttl_rp) as ttl_rp,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
-            WHERE penutup = 'T' 
+            WHERE penutup = 'T' AND no_box != 9999
             GROUP by id_anak
         ) as eo on eo.id_anak = a.id_anak
         LEFT join (
@@ -391,7 +381,7 @@ GROUP BY a.penerima
             sum(gr_akhir) as gr_akhir, 
             sum(ttl_rp) as ttl_rp,
             sum((1 - gr_akhir / gr_awal) * 100) as susut
-            FROM `sortir` WHERE penutup = 'T' GROUP BY id_anak
+            FROM `sortir` WHERE penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
         JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
@@ -401,7 +391,7 @@ GROUP BY a.penerima
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
-            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' GROUP by id_anak
+            WHERE tgl BETWEEN '$tgl1' AND '$tgl2' AND ditutup = 'T' GROUP by id_anak
         ) as dll on a.id_anak = dll.id_anak
         LEFT JOIN (
             SELECT id_anak, sum(nominal) as ttl_rp_denda 
@@ -518,7 +508,7 @@ GROUP BY a.penerima
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
-            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
+            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` where penutup = 'T' GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%'");
     }
 }

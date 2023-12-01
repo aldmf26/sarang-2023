@@ -44,7 +44,7 @@
 
         <form action="{{ route('sortir.input_akhir') }}" method="post">
             @csrf
-            <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-lg-max">
+            <x-theme.modal idModal="inputAkhir" title="tambah sortir akhir" btnSave="T" size="modal-lg-max">
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
@@ -342,19 +342,28 @@
                         var grAwal = parseFloat($('.grAwalVal' + count).val())
 
                         var total = (1 - nilai / grAwal) * 100
-                        $(".susut" + count).text(total.toFixed(0) + ' %')
+                        total = total.toFixed(0)
+                        $(".susut" + count).text(total + ' %')
 
-                        var rpTarget = $(`.rpTarget${count}`).val()
-                        var bts_denda_sst = $(`.bts_denda_sst${count}`).val()
-                        var batas_denda_rp = $(`.batas_denda_rp${count}`).val()
-                        var denda_susut = $(`.denda_susut${count}`).val()
-                        var dendaKelas = $(`.dendaKelas${count}`).val()
+                        var rpTarget = parseFloat($(`.rpTarget${count}`).val())
+                        var bts_denda_sst = parseFloat($(`.bts_denda_sst${count}`).val())
+                        var batas_denda_rp = parseFloat($(`.batas_denda_rp${count}`).val())
+                        var denda_susut = parseFloat($(`.denda_susut${count}`).val())
+                        var dendaKelas = parseFloat($(`.dendaKelas${count}`).val())
                         var denda = 0
                         if (total > denda_susut) {
                             denda = total > bts_denda_sst ? batas_denda_rp : (total - denda_susut) * dendaKelas
                             rpTarget = rpTarget - denda
                         }
-
+                        console.log(`
+                            total = ${total} 
+                            denda = ${denda} 
+                            rpTarget = ${rpTarget} 
+                            dendaSusut = ${denda_susut} 
+                            btsDendaSusut = ${bts_denda_sst} 
+                            btsDendaRp = ${batas_denda_rp} 
+                            dendaKelas = ${dendaKelas}
+                        `)
                         var setRupiah = rpTarget.toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         });
@@ -368,6 +377,7 @@
                         var row = $(this).closest("tr");
                         var data = {
                             id_anak: row.find(`input[name='id_anak${count}[]']`).val(),
+                            tgl: row.find(`input[name='tgl${count}[]']`).val(),
                             id_sortir: row.find(`input[name='id_sortir${count}[]']`).val(),
                             no_box: row.find(`input[name='no_box${count}[]']`).val(),
                             gr_akhir: row.find(`input[name='gr_akhir${count}[]']`).val(),
@@ -385,6 +395,10 @@
                             success: function(r) {
                                 alertToast(r.tipe, r.pesan)
                                 loadHalaman()
+                                if(r.tipe == 'sukses')  {
+                                    $(".btn" + count).removeClass('btn-warning');
+                                    $(".btn" + count).addClass('btn-primary');
+                                }
                             }
                         });
 

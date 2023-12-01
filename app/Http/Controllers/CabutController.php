@@ -27,7 +27,7 @@ class CabutController extends Controller
     }
     public function updateAnakBelum()
     {
-        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id]])->get());
+        $anakBelum = count(DB::table('cabut')->where([['no_box', 9999], ['id_pengawas', auth()->user()->id],['tgl_terima', date('Y-m-d')]])->get());
         return response()->json(['anakBelum' => $anakBelum]);
     }
     public function load_halaman(Request $r)
@@ -37,13 +37,11 @@ class CabutController extends Controller
         $id = auth()->user()->id;
 
         $cabut = Cabut::getCabut();
-        $cabutSum = Cabut::getCabutSum()->sumRpTarget;
 
         $data = [
             'title' => 'Divisi Cabut',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'rpTargetSum' =>$cabutSum,
             'cabut' => $cabut,
         ];
         return view('home.cabut.load_halaman', $data);
@@ -342,7 +340,7 @@ class CabutController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cabut.export';
-        $tbl = Cabut::getQueryExport();
+        $tbl = Cabut::getCabut();
         return Excel::download(new CabutExport($tbl, $view), 'Export CABUT.xlsx');
     }
 
@@ -395,13 +393,14 @@ class CabutController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $tgl1 =  $r->tgl1;
-        $tgl2 =  $r->tgl2;
+        $id_pengawas =  $r->id_pengawas;
         $view = 'home.cabut.export_rekap';
-        $tbl = Cabut::queryRekap($tgl1, $tgl2);
+        $tbl = Cabut::queryRekap($id_pengawas);
 
         return Excel::download(new CabutRekapExport($tbl, $view), 'Export REKAP CABUT.xlsx');
     }
+
+    
 
     public function export_global(Request $r)
     {

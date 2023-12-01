@@ -18,8 +18,8 @@ class SortirController extends Controller
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
         return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
         LEFT JOIN (
-            SELECT max(no_box) as no_box,id_pengawas,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box AND b.id_pengawas = a.penerima WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori = 'sortir'");
+            SELECT max(no_box) as no_box,id_pengawas,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` where penutup = 'T' GROUP BY no_box,id_pengawas
+        ) as b ON a.no_box = b.no_box AND b.id_pengawas = a.penerima WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%sortir%'");
     }
 
     public function getAnak($id = null)
@@ -132,6 +132,28 @@ class SortirController extends Controller
     public function load_modal_akhir(Request $r)
     {
         $detail = DB::table('sortir as a')
+            ->select(
+                    'a.id_anak',
+                    'a.no_box',
+                    'a.id_sortir',
+                    'a.rp_target',
+                    'a.ttl_rp',
+                    'a.tgl',
+                    'a.pcs_awal',
+                    'a.pcs_akhir',
+                    'a.gr_awal',
+                    'a.gr_akhir',
+                    'a.pcus',
+                    'a.bulan',
+                    'b.id_kelas',
+                    'b.nama',
+                    'c.kelas',
+                    'c.denda_susut',
+                    'c.bts_denda_sst',
+                    'c.batas_denda_rp',
+                    'c.denda_susut',
+                    'c.denda'
+             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'c.id_kelas', 'a.id_kelas')
             ->where([['selesai', 'T'], ['no_box', '!=', 9999], ['a.id_pengawas', auth()->user()->id]])
@@ -163,6 +185,7 @@ class SortirController extends Controller
     {
         $id_anak = $r->id_anak;
         $no_box = $r->no_box;
+        $tgl = $r->tgl;
         $gr_akhir = $r->gr_akhir;
         $pcs_akhir = $r->pcs_akhir;
         $pcus = $r->pcus;
@@ -195,6 +218,7 @@ class SortirController extends Controller
             'gr_akhir' => $gr_akhir,
             'bulan' => $bulan,
             'ttl_rp' => $rupiah,
+            'tgl' => $tgl,
             'denda_sp' => $denda,
         ]);
         return [
@@ -218,7 +242,7 @@ class SortirController extends Controller
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('b.id_pengawas', auth()->user()->id)
+                ->where('a.id_pengawas', auth()->user()->id)
                 ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
                 ->orderBY('a.selesai', 'ASC')
                 ->get()
@@ -371,7 +395,7 @@ class SortirController extends Controller
         return DB::select("SELECT max(b.name) as pengawas, max(a.tgl) as tgl, a.no_box, 
         SUM(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,
         SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, c.pcs_bk, c.gr_bk,
-         sum(a.rp_target) as rupiah,sum(a.ttl_rp) as ttl_rp,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
+         sum(a.rp_target) as rp_target,sum(a.ttl_rp) as rupiah,sum((1 - a.gr_akhir / a.gr_awal) * 100) as susut
         FROM sortir as a
         left join users as b on b.id = a.id_pengawas
         LEFT JOIN (
@@ -404,7 +428,7 @@ class SortirController extends Controller
             $ttlGrAwal += $d->gr_awal;
             $ttlPcsAkhir += $d->pcs_akhir;
             $ttlGrAkhir += $d->gr_akhir;
-            $ttlRp += $d->rp_target;
+            $ttlRp += $d->ttl_rp;
         }
 
         $data = [
