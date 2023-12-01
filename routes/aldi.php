@@ -233,6 +233,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/update', 'update')->name('update');
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
+            Route::post('/import', 'import')->name('import');
         });
     Route::controller(KelasController::class)
         ->prefix('data_master/kelas')

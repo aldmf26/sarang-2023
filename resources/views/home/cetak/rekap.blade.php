@@ -76,20 +76,21 @@
                             <th colspan="2" class="text-center dhead">BK Awal</th>
                             <th colspan="4" class="text-center dhead"> Kerja Awal</th>
                             <th colspan="5" class="text-center dhead"> Kerja Akhir</th>
-                            <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br> (-)</th>
+                            <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br>
+                                ({{ number_format($ttl_rp, 0) }})</th>
                             <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
                         </tr>
                         <tr>
-                            <th class="dhead text-center">Pcs <br> (-)</th>
-                            <th class="dhead text-center">Gr <br> (-)</th>
-                            <th class="dhead text-center">Pcs tdk ctk <br> (-)</th>
-                            <th class="dhead text-center">Gr tdk ctk<br> (-)</th>
-                            <th class="dhead text-center">Pcs <br> (-)</th>
-                            <th class="dhead text-center">Gr<br> (-)</th>
-                            <th class="dhead text-center">Pcs <br> (-)</th>
-                            <th class="dhead text-center">Gr <br> (-)</th>
-                            <th class="dhead text-center">Pcs Cu <br> (-)</th>
-                            <th class="dhead text-center">Gr Cu <br> (-)</th>
+                            <th class="dhead text-center">Pcs <br> ({{ $pcs_bk }})</th>
+                            <th class="dhead text-center">Gr <br> ({{ $gr_bk }})</th>
+                            <th class="dhead text-center">Pcs tdk ctk <br> ({{ $pcs_tdk_ctk }})</th>
+                            <th class="dhead text-center">Gr tdk ctk<br> ({{ $gr_tdk_ctk }})</th>
+                            <th class="dhead text-center">Pcs <br> ({{ $pcs_awal }})</th>
+                            <th class="dhead text-center">Gr<br> ({{ $gr_awal }})</th>
+                            <th class="dhead text-center">Pcs <br> ({{ $pcs_akhir }})</th>
+                            <th class="dhead text-center">Gr <br> ({{ $gr_akhir }})</th>
+                            <th class="dhead text-center">Pcs Cu <br> ({{ $pcs_cu }})</th>
+                            <th class="dhead text-center">Gr Cu <br> ({{ $gr_cu }})</th>
                             <th class="dhead text-center">Susut </th>
                             <th class="dhead text-center">Pcs </th>
                             <th class="dhead text-center">Gr</th>
@@ -102,7 +103,7 @@
                                 <th>{{ $c->name }} <span class="badge bg-primary float-end"
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
                                         <i class="fas fa-caret-down"></i></span></th>
-                                <th>Ttl Box :{{ $c->total_bk }}</th>
+                                <th>Ttl Box : {{ $c->total_bk }}</th>
                                 <th class="text-end">{{ $c->pcs_bk }}</th>
                                 <th class="text-end">{{ $c->gr_bk }}</th>
                                 <th class="text-end">{{ $c->pcs_tdk_ctk }}</th>

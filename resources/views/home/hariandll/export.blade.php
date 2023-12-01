@@ -3,6 +3,7 @@
         <tr>
             <th>#</th>
             <th>Tanggal</th>
+            <th>Id Anak</th>
             <th>Nama Anak</th>
             <th>Keterangan</th>
             <th>Lokasi</th>
@@ -12,12 +13,13 @@
     <tbody>
         @foreach ($datas as $no => $d)
             <tr>
-                <td>{{ $no + 1 }}</td>
+                <td>{{ $d->id_hariandll }}</td>
                 <td>{{ tanggal($d->tgl) }}</td>
+                <td>{{ $d->id_anak }}</td>
                 <td>{{ $d->nama }}</td>
                 <td>{{ $d->ket }}</td>
                 <td>{{ $d->lokasi }}</td>
-                <td class="text-end">{{ $d->rupiah}}</td>
+                <td class="text-end">{{ $d->rupiah }}</td>
 
             </tr>
         @endforeach

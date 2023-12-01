@@ -33,8 +33,8 @@ class HariandllExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:F1';
-                $cellRangeLoop = 'A1:F' . $this->totalrow;
+                $cellRange = 'A1:G1';
+                $cellRangeLoop = 'A1:G' . $this->totalrow;
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
