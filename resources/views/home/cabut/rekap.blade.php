@@ -156,7 +156,7 @@
                                                 SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
                                             ) as rp ON rp.no_box = a.no_box
                                             left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box 
+                                            left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
                                             WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
                                             GROUP by a.no_box");
                             @endphp
