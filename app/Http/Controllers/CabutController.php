@@ -486,7 +486,7 @@ class CabutController extends Controller
                 $sheet->setCellValue('K' . $row, $data->eot);
                 $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
                 $sheet->setCellValue('L' . $row, $susut);
-                $sheet->setCellValue('M' . $row, $data->rupiah);
+                $sheet->setCellValue('M' . $row, $data->ttl_rp);
                 $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $row, $data->kategori);

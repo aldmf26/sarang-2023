@@ -196,8 +196,11 @@ class Cabut extends Model
         sum(a.gr_awal) as gr_awal,
         SUM(a.pcs_akhir) as pcs_akhir, 
         SUM(a.gr_akhir) as gr_akhir, c.pcs_awal as pcs_bk, c.gr_awal as gr_bk,
-        sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah, sum(a.gr_flx) as gr_flx
+        sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah,rp.ttl_rp, sum(a.gr_flx) as gr_flx
         FROM cabut as a
+        JOIN (
+            SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
+        ) as rp ON rp.no_box = a.no_box
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
         WHERE a.penutup = 'T' AND a.no_box != 9999 $where
