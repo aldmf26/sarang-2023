@@ -17,7 +17,9 @@
             <th class="dhead text-end">Gr Cuc</th>
             <th class="dhead text-end">Pcs Hcr</th>
             <th class="dhead text-end">Susut</th>
-            <th class="dhead text-end">Ttl Gaji</th>
+            <th class="dhead text-end">Rp</th>
+            <th class="dhead text-end">Harian</th>
+            <th class="dhead text-end">Total Rp</th>
             <th class="dhead">Selesai</th>
             <th class="dhead text-center"><input style="text-align: center" type="checkbox" class="form-check"
                     id="cekSemuaTutup">
@@ -58,6 +60,8 @@
                 <td class="text-end">{{ $c->pcs_hcr }}</td>
                 <td class="text-end">{{ round($susut) }}%</td>
                 <td class="text-end">{{ number_format($ttl_rp - $denda - $denda_hcr, 0) }}</td>
+                <td class="text-end">{{ number_format($c->rp_harian, 0) }}</td>
+                <td class="text-end">{{ number_format($ttl_rp + $c->rp_harian - $denda - $denda_hcr, 0) }}</td>
                 <td class="text-end">
                     @if ($c->selesai == 'Y')
                         <span class="badge bg-primary">SELESAI</span>
