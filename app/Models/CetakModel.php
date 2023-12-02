@@ -68,7 +68,7 @@ class CetakModel extends Model
     }
     public static function cetak_export()
     {
-        $result = DB::select("SELECT a.id_bk, a.no_box, a.tgl, b.name, count(a.id_bk) as total_bk, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, c.pcs_awal, c.gr_awal, c.pcs_tdk_ctk, c.gr_tidak_ctk, c.pcs_akhir, c.gr_akhir, c.pcs_cu, c.gr_cu, c.ttl_rp,c.denda_susut,c.denda_hcr
+        $result = DB::select("SELECT a.id_bk, a.no_box, a.tgl, b.name, count(a.id_bk) as total_bk, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, c.pcs_awal, c.gr_awal, c.pcs_tdk_ctk, c.gr_tidak_ctk, c.pcs_akhir, c.gr_akhir, c.pcs_cu, c.gr_cu, c.ttl_rp,c.denda_susut,c.denda_hcr, c.rp_harian
         FROM bk as a 
         LEFT join users as b on b.id = a.penerima
         left join (
@@ -83,7 +83,7 @@ class CetakModel extends Model
                     round(((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100)) * d.denda_susut,0
                 )
             ) AS denda_susut,
-            sum(c.pcs_hcr * d.denda_hcr) as denda_hcr
+            sum(c.pcs_hcr * d.denda_hcr) as denda_hcr, sum(c.rp_harian) as rp_harian
             FROM cetak as c
             left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas
             group by c.no_box
