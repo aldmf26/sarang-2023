@@ -467,7 +467,23 @@ class CabutController extends Controller
             ];
             $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
             $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
+
+            $ttlPcsBk = 0;
+            $ttlGrBk = 0;
+
+            $ttlPcsAwal = 0;
+            $ttlGrAwal = 0;
+            $ttlPcsAkhir = 0;
+            $ttlGrAkhir = 0;
+
+            $ttlFlx = 0;
+            $ttlEot = 0;
+            $ttlSusut = 0;
+
             $ttlRp = 0;
+
+            $ttlPcsSisa = 0;
+            $ttlGrSisa = 0;
             // cabut
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 2;
@@ -482,8 +498,8 @@ class CabutController extends Controller
                 $sheet->setCellValue('G' . $row, $data->gr_awal);
                 $sheet->setCellValue('H' . $row, $data->pcs_akhir);
                 $sheet->setCellValue('I' . $row, $data->gr_akhir);
-                $sheet->setCellValue('J' . $row, $data->gr_flx);
-                $sheet->setCellValue('K' . $row, $data->eot);
+                $sheet->setCellValue('J' . $row, $data->eot);
+                $sheet->setCellValue('K' . $row, $data->gr_flx);
                 $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
                 $sheet->setCellValue('L' . $row, $susut);
                 $sheet->setCellValue('M' . $row, $data->ttl_rp);
@@ -491,7 +507,23 @@ class CabutController extends Controller
                 $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $row, $data->kategori);
 
+
+                $ttlPcsBk += $data->pcs_bk;
+                $ttlGrBk += $data->gr_bk;
+
+                $ttlPcsAwal += $data->pcs_awal;
+                $ttlGrAwal += $data->gr_awal;
+                $ttlPcsAkhir += $data->pcs_akhir;
+                $ttlGrAkhir += $data->gr_akhir;
+
+                $ttlFlx += $data->gr_flx;
+                $ttlEot += $data->eot;
+                $ttlSusut += $susut;
+
                 $ttlRp += $data->rupiah;
+
+                $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
+                $ttlGrSisa += $data->gr_bk - $data->gr_awal;
                 $row++;
             }
 
@@ -516,7 +548,23 @@ class CabutController extends Controller
                 $sheet->setCellValue('N' . $rowEo, 0);
                 $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
                 $sheet->setCellValue('P' . $rowEo, 'Eo');
+
+                $ttlPcsBk += 0;
+                $ttlGrBk += $data->gr_bk;
+
+                $ttlPcsAwal += 0;
+                $ttlGrAwal += $data->gr_eo_awal;
+                $ttlPcsAkhir += 0;
+                $ttlGrAkhir += $data->gr_eo_akhir;
+
+                $ttlFlx += 0;
+                $ttlEot += 0;
+                $ttlSusut += $susut;
+
                 $ttlRp += $data->rupiah;
+
+                $ttlPcsSisa += 0;
+                $ttlGrSisa += $data->gr_bk - $data->gr_eo_awal;
                 $rowEo++;
             }
 
@@ -541,7 +589,24 @@ class CabutController extends Controller
                 $sheet->setCellValue('N' . $rowSortir, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $rowSortir, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $rowSortir, $data->kategori);
+
+                $ttlPcsBk += $data->pcs_bk;
+                $ttlGrBk += $data->gr_bk;
+
+                $ttlPcsAwal += $data->pcs_awal;
+                $ttlGrAwal += $data->gr_awal;
+                $ttlPcsAkhir += $data->pcs_akhir;
+                $ttlGrAkhir += $data->gr_akhir;
+
+                $ttlFlx += 0;
+                $ttlEot += 0;
+                $ttlSusut += $susut;
+
                 $ttlRp += $data->rupiah;
+
+                $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
+                $ttlGrSisa += $data->gr_bk - $data->gr_awal;
+
                 $rowSortir++;
             }
 
@@ -555,13 +620,28 @@ class CabutController extends Controller
             GROUP BY b.id_pengawas");
             $rupiahDll = $dll->total_rupiah ?? 0;
             $sheet->setCellValue('A' . $rowDll, 'Dll');
+            $sheet->setCellValue('D' . $rowDll, $bulanDibayar);
+            $sheet->setCellValue('E' . $rowDll, $d->name);
             $sheet->setCellValue('M' . $rowDll, $rupiahDll);
             $ttlRp += $rupiahDll;
 
 
             $rowTotal = $rowDll + 1;
             $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
+            $sheet->setCellValue('C' . $rowTotal, $ttlGrBk);
+            $sheet->setCellValue('D' . $rowTotal, $bulanDibayar);
+            $sheet->setCellValue('E' . $rowTotal, $d->name);
+            $sheet->setCellValue('F' . $rowTotal, $ttlPcsAwal);
+            $sheet->setCellValue('G' . $rowTotal, $ttlGrAwal);
+            $sheet->setCellValue('H' . $rowTotal, $ttlPcsAkhir);
+            $sheet->setCellValue('I' . $rowTotal, $ttlGrAkhir);
+            $sheet->setCellValue('J' . $rowTotal, $ttlEot);
+            $sheet->setCellValue('K' . $rowTotal, $ttlFlx);
+            $sheet->setCellValue('L' . $rowTotal, $ttlSusut);
             $sheet->setCellValue('M' . $rowTotal, $ttlRp);
+            $sheet->setCellValue('N' . $rowTotal, $ttlPcsSisa);
+            $sheet->setCellValue('O' . $rowTotal, $ttlGrSisa);
             $sheet->getStyle("A$rowTotal:P$rowTotal")->applyFromArray($styleBold);
 
             $rowDenda = $rowTotal + 1;
