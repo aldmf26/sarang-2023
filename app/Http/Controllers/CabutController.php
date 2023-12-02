@@ -524,7 +524,6 @@ class CabutController extends Controller
 
                 $ttlFlx += $data->gr_flx;
                 $ttlEot += $data->eot;
-                $ttlSusut += $susut;
 
                 $ttlRp += $data->rupiah;
 
@@ -565,7 +564,6 @@ class CabutController extends Controller
 
                 $ttlFlx += 0;
                 $ttlEot += 0;
-                $ttlSusut += $susut;
 
                 $ttlRp += $data->rupiah;
 
@@ -606,7 +604,6 @@ class CabutController extends Controller
 
                 $ttlFlx += 0;
                 $ttlEot += 0;
-                $ttlSusut += $susut;
 
                 $ttlRp += $data->rupiah;
 
@@ -632,6 +629,7 @@ class CabutController extends Controller
             $ttlRp += $rupiahDll;
 
 
+            $ttlSusut = (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
             $rowTotal = $rowDll + 1;
             $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
             $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
