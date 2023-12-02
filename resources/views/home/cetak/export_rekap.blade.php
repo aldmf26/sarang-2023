@@ -47,8 +47,8 @@
                 <td>{{ $d->gr_cu }}</td>
                 <td>{{ round((1 - ($d->gr_akhir + $d->gr_cu) / $d->gr_awal) * 100, 0) }} %</td>
                 <td>{{ round($d->ttl_rp + $d->rp_harian - $d->denda_susut - $d->denda_hcr, 0) }}</td>
-                <td>{{ $d->pcs_awal - $d->pcs_awal - $d->pcs_tdk_ctk }}</td>
-                <td>{{ $d->gr_awal - $d->gr_awal - $d->gr_tidak_ctk }}</td>
+                <td>{{ $d->pcs_awal + $d->pcs_tdk_ctk - $d->pcs_awal - $d->pcs_tdk_ctk }}</td>
+                <td>{{ $d->gr_awal + $d->gr_tidak_ctk - $d->gr_awal - $d->gr_tidak_ctk }}</td>
             </tr>
             @php
                 $pcs_bk += $d->pcs_awal;
@@ -60,8 +60,8 @@
                 $pcs_cu += $d->pcs_cu;
                 $gr_cu += $d->gr_cu;
                 $ttl_rp += $d->ttl_rp + $d->rp_harian - $d->denda_susut - $d->denda_hcr;
-                $pcs_sisa += $d->pcs_awal - $d->pcs_awal - $d->pcs_tdk_ctk;
-                $gr_sisa += $d->gr_awal - $d->gr_awal - $d->gr_tidak_ctk;
+                $pcs_sisa += $d->pcs_awal + $d->pcs_tdk_ctk - $d->pcs_awal - $d->pcs_tdk_ctk;
+                $gr_sisa += $d->gr_awal + $d->gr_tidak_ctk - $d->gr_awal - $d->gr_tidak_ctk;
             @endphp
         @endforeach
     </tbody>
