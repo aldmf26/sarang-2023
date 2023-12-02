@@ -666,6 +666,7 @@ class CabutController extends Controller
         $writer = new Xlsx($spreadsheet);
 
         // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Gaji Sarang $bulanDibayar $tahun Kasih Ibu Linda";
         return response()->stream(
             function () use ($writer) {
                 $writer->save('php://output');
@@ -673,7 +674,7 @@ class CabutController extends Controller
             200,
             [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'attachment; filename="Gaji Sarang Kasih Ibu Linda.xlsx"',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
             ]
         );
     }
