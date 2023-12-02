@@ -365,7 +365,7 @@ class CetakController extends Controller
         $sheet1->setTitle('Cetak');
 
 
-        $sheet1->getStyle("A1:V1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:W1")->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'Bulan');
@@ -387,8 +387,9 @@ class CetakController extends Controller
         $sheet1->setCellValue('R1', 'Harga/pcs');
         $sheet1->setCellValue('S1', 'Pcs Hcr');
         $sheet1->setCellValue('T1', 'Susut');
-        $sheet1->setCellValue('U1', 'Ttl Gaji');
-        $sheet1->setCellValue('V1', 'Status');
+        $sheet1->setCellValue('U1', 'Harian');
+        $sheet1->setCellValue('V1', 'Ttl Gaji');
+        $sheet1->setCellValue('W1', 'Status');
 
 
         $kolom = 2;
@@ -431,13 +432,14 @@ class CetakController extends Controller
             $sheet1->setCellValue('R' . $kolom, $c->rp_per_pcs);
             $sheet1->setCellValue('S' . $kolom, $c->pcs_hcr);
             $sheet1->setCellValue('T' . $kolom, round($susut) . '%');
-            $sheet1->setCellValue('U' . $kolom, $ttl_rp - $denda - $denda_hcr);
-            $sheet1->setCellValue('V' . $kolom, $c->selesai == 'Y' ? 'Selesai' : 'Akhir');
+            $sheet1->setCellValue('U' . $kolom, $c->rp_harian);
+            $sheet1->setCellValue('V' . $kolom, $ttl_rp + $c->rp_harian - $denda - $denda_hcr);
+            $sheet1->setCellValue('W' . $kolom, $c->selesai == 'Y' ? 'Selesai' : 'Akhir');
 
 
             $kolom++;
         }
-        $sheet1->getStyle('A2:V' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:W' . $kolom - 1)->applyFromArray($style);
 
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(1);
