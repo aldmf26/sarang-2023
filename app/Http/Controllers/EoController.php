@@ -250,6 +250,7 @@ class EoController extends Controller
     {
         DB::table('eo')->where('id_eo', $r->id_cabut)->update([
             'no_box' => 9999,
+            'tgl_ambil' => date('Y-m-d')
         ]);
     }
 
