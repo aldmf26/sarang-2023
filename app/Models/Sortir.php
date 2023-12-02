@@ -63,7 +63,7 @@ class Sortir extends Model
         FROM sortir as a
         left join users as b on b.id = a.id_pengawas
         LEFT JOIN (
-            SELECT no_box,penerima, kategori, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk GROUP BY no_box,penerima
+            SELECT no_box,penerima, kategori, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk WHERE kategori LIKE '%sortir%' GROUP BY no_box,penerima
         ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
         WHERE  a.no_box != 9999 AND a.penutup = 'T' $where
         GROUP by a.no_box,a.id_pengawas
