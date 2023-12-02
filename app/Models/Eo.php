@@ -16,7 +16,7 @@ class Eo extends Model
         JOIN (
             SELECT no_box,penerima, sum(gr_awal) as gr_bk FROM bk GROUP BY no_box,penerima
         ) as b on a.id_pengawas = b.penerima AND a.no_box = b.no_box
-        WHERE a.id_pengawas = '$id_pengawas' AND a.no_box != 9999 GROUP BY a.no_box;");
+        WHERE a.id_pengawas = '$id_pengawas' AND a.no_box != 9999 AND a.penutup = 'T' GROUP BY a.no_box;");
     }
     
 }
