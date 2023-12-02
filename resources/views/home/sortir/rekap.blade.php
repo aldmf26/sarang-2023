@@ -2,9 +2,10 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }} 
+                <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
-                </h6>
+                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu !</em></span>
+                </h6>   
             </div>
 
             <div class="col-lg-6">

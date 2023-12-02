@@ -20,6 +20,7 @@ class SortirController extends Controller
         LEFT JOIN (
             SELECT max(no_box) as no_box,id_pengawas,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` where penutup = 'T' GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box AND b.id_pengawas = a.penerima WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%sortir%'");
+        
     }
 
     public function getAnak($id = null)

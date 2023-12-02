@@ -65,39 +65,23 @@
             </x-theme.modal>
         </form> --}}
 
-        <form action="{{ route('eo.selesai') }}" method="get">
+        <form action="{{ route('sortir.create_anak') }}" method="post">
             @csrf
-            <x-theme.modal idModal="selesai" title="Selesai" btnSave="Y" color_header="modal-success">
+            <x-theme.modal idModal="anak" title="tambah Anak" btnSave="Y">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <p class="text-center">Apakah anda yakin ingin menyelesaikannya ?</p>
-                        <p class="text-center fw-bold">Note : </p>
-                        <p class="text-center fw-bold fst-italic">Data yang sudah diselesaikan tidak dapat di edit
-                            maupun dihapus
-                        </p>
-                        <input type="hidden" name="id_cabut" class="cetak">
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <label for="">Tambah Anak</label>
+                            <div id="load_anak_nopengawas"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Aksi</label><br>
+                        <button class="btn btn-sm btn-primary" type="button" id="add_anak">Edit/Save</button>
                     </div>
                 </div>
+                <div id="load_anak"></div>
             </x-theme.modal>
-
-            <form action="{{ route('sortir.create_anak') }}" method="post">
-                @csrf
-                <x-theme.modal idModal="anak" title="tambah Anak" btnSave="Y">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="form-group">
-                                <label for="">Tambah Anak</label>
-                                <div id="load_anak_nopengawas"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <label for="">Aksi</label><br>
-                            <button class="btn btn-sm btn-primary" type="button" id="add_anak">Edit/Save</button>
-                        </div>
-                    </div>
-                    <div id="load_anak"></div>
-                </x-theme.modal>
-            </form>
         </form>
     </x-slot>
     @section('scripts')
@@ -262,6 +246,15 @@
                 var id_cabut = $(this).attr('id_cabut');
 
                 $('.cetak').val(id_cabut);
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('eo.selesai')}}?id_cabut="+id_cabut,
+                    success: function (r) {
+                        load_akhir()
+                        loadHalaman()
+                    }
+                });
             });
 
             load_anak()

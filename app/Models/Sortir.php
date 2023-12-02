@@ -32,7 +32,7 @@ class Sortir extends Model
                                 sum(gr_akhir) as gr_akhir, sum(pcs_akhir) as pcs_akhir,
                                 SUM(rp_target) as rp_target,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM sortir WHERE no_box != 9999 GROUP BY id_pengawas
+                                FROM sortir WHERE no_box != 9999 AND penutup = 'T' GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
@@ -44,7 +44,7 @@ class Sortir extends Model
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM sortir WHERE no_box != 9999
+                            FROM sortir WHERE no_box != 9999 AND penutup = 'T'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
                         WHERE  a.no_box != 9999 AND a.penutup = 'T' 

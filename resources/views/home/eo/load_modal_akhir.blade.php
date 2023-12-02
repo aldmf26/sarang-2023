@@ -69,8 +69,7 @@
                                 class="btn btn-sm btn-{{ empty($x->gr_eo_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
                             <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
-                                id_cabut="{{ $x->id_eo }}" href="#" data-bs-toggle="modal"
-                                data-bs-target="#selesai">Selesai</a>
+                                id_cabut="{{ $x->id_eo }}" href="#">Selesai</a>
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $x->id_eo }}">Cancel</button>

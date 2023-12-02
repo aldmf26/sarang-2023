@@ -236,7 +236,7 @@ class Cabut extends Model
                                 sum(gr_flx) as gr_flx,
                                 SUM(rupiah) as rupiah,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' AND no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
+                                FROM cabut WHERE no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
@@ -251,7 +251,7 @@ class Cabut extends Model
                             FROM cabut WHERE no_box != 9999 AND penutup = 'T'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE  a.no_box != 9999 AND a.penutup = 'T'  AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
+                        WHERE  a.no_box != 9999 AND a.penutup = 'T'
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }

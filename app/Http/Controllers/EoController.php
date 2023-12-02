@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\EoExport;
+use App\Models\Eo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,8 +16,16 @@ class EoController extends Controller
         $query = !empty($no_box) ? "selectOne" : 'select';
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
 
-        return DB::$query("SELECT a.no_box, a.pcs_awal,a.gr_awal FROM `bk` as a
-            WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.no_box NOT IN (select no_box FROM cabut_spesial) AND a.penerima = '$id_user'");
+        // return DB::$query("SELECT a.no_box, a.pcs_awal,a.gr_awal FROM `bk` as a
+        //     WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.penerima = '$id_user'");
+        return DB::$query("SELECT 
+        a.no_box, a.gr_awal,b.gr_eo_awal as gr_cabut 
+        FROM `bk` as a
+        LEFT JOIN (
+            SELECT 
+            max(no_box) as no_box,sum(gr_eo_awal) as gr_eo_awal  FROM `eo` 
+            where penutup = 'T' GROUP BY no_box,id_pengawas
+        ) as b ON a.no_box = b.no_box WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.penerima = '$id_user' AND a.kategori LIKE '%cabut%';");
     }
 
     public function getAnak($id = null)
@@ -120,8 +129,8 @@ class EoController extends Controller
         $bk = $this->getStokBk($r->no_box);
 
         $data = [
-            'pcs_awal' => $bk->pcs_awal,
-            'gr_awal' => $bk->gr_awal,
+            'pcs_awal' => $bk->pcs_awal ?? 0,
+            'gr_awal' => $bk->gr_awal ?? 0,
         ];
         return json_encode($data);
     }
@@ -354,24 +363,41 @@ class EoController extends Controller
 
     public function rekap(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 = $tgl['tgl1'];
-        $tgl2 = $tgl['tgl2'];
-        $id = auth()->user()->id;
-        $posisi = auth()->user()->posisi_id;
-        $pengawas = $posisi == 13 ? "AND a.id_pengawas = '$id'" : '';
+        $bulan = $r->bulan ?? date('m');
+        $tahun = $r->tahun ?? date('Y');
 
+        $ttlPcsBk = 0;
+        $ttlGrBk = 0;
+        $ttlPcsAwal = 0;
+        $ttlGrAwal = 0;
+        $ttlPcsAkhir = 0;
+        $ttlGrAkhir = 0;
+        $ttlRp = 0;
+
+        $eoGroup = Eo::queryRekapGroup($bulan, $tahun);
+
+        foreach ($eoGroup as $d) {
+            $ttlPcsBk += $d->pcs_bk ?? 0;
+            $ttlGrBk += $d->gr_bk;
+            $ttlPcsAwal += $d->pcs_awal ?? 0;
+            $ttlGrAwal += $d->gr_awal;
+            $ttlPcsAkhir += $d->pcs_akhir ?? 0;
+            $ttlGrAkhir += $d->gr_akhir;
+            $ttlRp += $d->ttl_rp;
+        }
         $data = [
             'title' => 'Divisi Cabut',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
-            'eo' => DB::select("SELECT max(b.name) as pengawas, max(a.tgl_ambil) as tgl, a.no_box, sum(a.gr_eo_awal) as gr_awal , sum(a.gr_eo_akhir) as gr_akhir, sum(a.ttl_rp) as rupiah, sum(c.gr
-            FROM eo as a
-            left join users as b on b.id = a.id_pengawas
-            left JOIN bk as c on c.no_box = a.no_box 
-            WHERE a.tgl_ambil BETWEEN '$tgl1' and '$tgl2' $pengawas
-            GROUP by a.no_box;
-            "),
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'eo' => '',
+            'ttlPcsBk' => $ttlPcsBk,
+            'ttlGrBk' => $ttlGrBk,
+            'ttlPcsAwal' => $ttlPcsAwal,
+            'ttlGrAwal' => $ttlGrAwal,
+            'ttlPcsAkhir' => $ttlPcsAkhir,
+            'ttlGrAkhir' => $ttlGrAkhir,
+            'ttlRp' => $ttlRp,
+            'eoGroup' => $eoGroup
         ];
         return view('home.eo.rekap', $data);
     }

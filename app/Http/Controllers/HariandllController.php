@@ -133,7 +133,7 @@ class HariandllController extends Controller
         $datas = $this->getQuery($bulan, $tahun);
 
         $data = [
-            'title' => 'Rekap Summary Cetak',
+            'title' => 'Rekap Summary Dll',
             'bulan' => $bulan,
             'tahun' => $tahun,
             'datas' => $datas,
