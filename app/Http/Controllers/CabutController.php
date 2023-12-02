@@ -413,7 +413,14 @@ class CabutController extends Controller
         $fileName = "Export Rekap Global " . auth()->user()->name;
         return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
     }
-
+    public function cekBgSisa($sheet, $data, $row)
+    {
+        $cekSisaPcs = $data->pcs_bk - $data->pcs_awal > 0 ? true : false;
+        $cekSisaGr = $data->gr_bk - $data->gr_awal > 0 ? true : false;
+        if ($cekSisaGr || $cekSisaPcs) {
+            return $sheet->getStyle("A$row:P$row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('92D050');
+        }
+    }
     public function export_ibu(Request $r)
     {
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
@@ -467,7 +474,6 @@ class CabutController extends Controller
             ];
             $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
             $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
-
             $ttlPcsBk = 0;
             $ttlGrBk = 0;
 
@@ -501,12 +507,12 @@ class CabutController extends Controller
                 $sheet->setCellValue('J' . $row, $data->eot);
                 $sheet->setCellValue('K' . $row, $data->gr_flx);
                 $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
-                $sheet->setCellValue('L' . $row, number_format($susut,0));
+                $sheet->setCellValue('L' . $row, number_format($susut, 0));
                 $sheet->setCellValue('M' . $row, $data->ttl_rp);
                 $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
+                $this->cekBgSisa($sheet,$data,$row);
                 $sheet->setCellValue('P' . $row, $data->kategori);
-
 
                 $ttlPcsBk += $data->pcs_bk;
                 $ttlGrBk += $data->gr_bk;
@@ -543,7 +549,7 @@ class CabutController extends Controller
                 $sheet->setCellValue('J' . $rowEo, 0);
                 $sheet->setCellValue('K' . $rowEo, 0);
                 $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
-                $sheet->setCellValue('L' . $rowEo, number_format($susut,0));
+                $sheet->setCellValue('L' . $rowEo, number_format($susut, 0));
                 $sheet->setCellValue('M' . $rowEo, $data->rupiah);
                 $sheet->setCellValue('N' . $rowEo, 0);
                 $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
@@ -584,7 +590,7 @@ class CabutController extends Controller
                 $sheet->setCellValue('J' . $rowSortir, 0);
                 $sheet->setCellValue('K' . $rowSortir, 0);
                 $susut = empty($data->gr_awal) ? 0 : (1 - $data->gr_akhir / $data->gr_awal) * 100;
-                $sheet->setCellValue('L' . $rowSortir, number_format($susut,0));
+                $sheet->setCellValue('L' . $rowSortir, number_format($susut, 0));
                 $sheet->setCellValue('M' . $rowSortir, $data->rupiah);
                 $sheet->setCellValue('N' . $rowSortir, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $rowSortir, $data->gr_bk - $data->gr_awal);
@@ -638,7 +644,7 @@ class CabutController extends Controller
             $sheet->setCellValue('I' . $rowTotal, $ttlGrAkhir);
             $sheet->setCellValue('J' . $rowTotal, $ttlEot);
             $sheet->setCellValue('K' . $rowTotal, $ttlFlx);
-            $sheet->setCellValue('L' . $rowTotal, number_format($ttlSusut,0));
+            $sheet->setCellValue('L' . $rowTotal, number_format($ttlSusut, 0));
             $sheet->setCellValue('M' . $rowTotal, $ttlRp);
             $sheet->setCellValue('N' . $rowTotal, $ttlPcsSisa);
             $sheet->setCellValue('O' . $rowTotal, $ttlGrSisa);
