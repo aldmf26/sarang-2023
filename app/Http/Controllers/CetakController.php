@@ -792,7 +792,7 @@ class CetakController extends Controller
             c.id_anak,
             SUM(c.pcs_awal_ctk) AS pcs_awal_cetak,
             SUM(c.gr_awal_ctk) AS gr_awal_cetak,
-            SUM(c.pcs_akhir + c.pcs_cu) AS pcs_akhir,
+            SUM(c.pcs_akhir) AS pcs_akhir,
             SUM(c.gr_akhir + c.gr_cu) AS gr_akhir,
             SUM(
                 IF(
