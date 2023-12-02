@@ -413,10 +413,11 @@ class CabutController extends Controller
         $fileName = "Export Rekap Global " . auth()->user()->name;
         return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
     }
-    public function cekBgSisa($sheet, $data, $row)
+    public function cekBgSisa($sheet, $pcsBk, $pcsAwal, $grBk, $grAwal, $row)
     {
-        $cekSisaPcs = $data->pcs_bk - $data->pcs_awal > 0 ? true : false;
-        $cekSisaGr = $data->gr_bk - $data->gr_awal > 0 ? true : false;
+        $cekSisaPcs = $pcsBk - $pcsAwal > 0 ? true : false;
+        $cekSisaGr = $grBk - $grAwal > 0 ? true : false;
+
         if ($cekSisaGr || $cekSisaPcs) {
             return $sheet->getStyle("A$row:P$row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('92D050');
         }
@@ -511,7 +512,7 @@ class CabutController extends Controller
                 $sheet->setCellValue('M' . $row, $data->ttl_rp);
                 $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
-                $this->cekBgSisa($sheet,$data,$row);
+                $this->cekBgSisa($sheet, $data->pcs_bk, $data->pcs_awal, $data->gr_bk, $data->gr_awal,  $row);
                 $sheet->setCellValue('P' . $row, $data->kategori);
 
                 $ttlPcsBk += $data->pcs_bk;
@@ -552,6 +553,16 @@ class CabutController extends Controller
                 $sheet->setCellValue('M' . $rowEo, $data->rupiah);
                 $sheet->setCellValue('N' . $rowEo, 0);
                 $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
+
+                $this->cekBgSisa(
+                    $sheet,
+                    0,
+                    0,
+                    $data->gr_bk,
+                    $data->gr_eo_awal,
+                    $rowEo
+                );
+
                 $sheet->setCellValue('P' . $rowEo, 'Eo');
 
                 $ttlPcsBk += 0;
@@ -593,7 +604,14 @@ class CabutController extends Controller
                 $sheet->setCellValue('N' . $rowSortir, $data->pcs_bk - $data->pcs_awal);
                 $sheet->setCellValue('O' . $rowSortir, $data->gr_bk - $data->gr_awal);
                 $sheet->setCellValue('P' . $rowSortir, $data->kategori);
-
+                $this->cekBgSisa(
+                    $sheet,
+                    $data->pcs_bk,
+                    $data->pcs_awal,
+                    $data->gr_bk,
+                    $data->gr_awal,
+                    $rowEo
+                );
                 $ttlPcsBk += $data->pcs_bk;
                 $ttlGrBk += $data->gr_bk;
 
