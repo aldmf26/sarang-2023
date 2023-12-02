@@ -345,6 +345,7 @@ class EoController extends Controller
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
             ->join('users as d', 'd.id', 'a.id_pengawas')
             ->whereBetween('a.tgl_input', [$tgl1, $tgl2])
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
             ->orderBy('a.id_eo', 'DESC')->get();
 
         return Excel::download(new EoExport($tbl, $view), 'Export EO.xlsx');
