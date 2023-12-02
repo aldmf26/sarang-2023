@@ -793,7 +793,7 @@ class CetakController extends Controller
             SUM(c.pcs_awal_ctk) AS pcs_awal_cetak,
             SUM(c.gr_awal_ctk) AS gr_awal_cetak,
             SUM(c.pcs_akhir) AS pcs_akhir,
-            SUM(c.gr_akhir + c.gr_cu) AS gr_akhir,
+            SUM(c.gr_akhir) AS gr_akhir,
             SUM(
                 IF(
                     round((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100) >= d.batas_susut,
