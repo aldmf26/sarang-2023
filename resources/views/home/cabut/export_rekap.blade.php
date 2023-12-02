@@ -57,7 +57,7 @@
                 @endphp
                 <td align="right">{{ number_format($susut, 0) }} %</td>
 
-                <td align="right">{{ $c->rupiah }}
+                <td align="right">{{ $c->ttl_rp }}
                 </td>
                 <td align="right">{{ $c->pcs_bk - $c->pcs_awal }}</td>
                 <td align="right">{{ $c->gr_bk - $c->gr_awal }}</td>
@@ -76,7 +76,7 @@
                 $ttlEot += $c->eot;
                 $ttlSusut += $susut;
 
-                $ttlRp += $c->rupiah;
+                $ttlRp += $c->ttl_rp;
 
                 $ttlPcsSisa += $c->pcs_bk - $c->pcs_awal;
                 $ttlGrSisa += $c->gr_bk - $c->gr_awal;
