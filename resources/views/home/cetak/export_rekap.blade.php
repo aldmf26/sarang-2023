@@ -35,8 +35,8 @@
         @foreach ($datas as $n => $d)
             <tr>
                 <td>{{ $d->no_box }}</td>
-                <td>{{ $d->pcs_bk }}</td>
-                <td>{{ $d->gr_bk }}</td>
+                <td>{{ $d->pcs_awal }}</td>
+                <td>{{ $d->gr_awal }}</td>
                 <td>{{ date('M Y', strtotime($d->tgl)) }}</td>
                 <td>{{ $d->name }}</td>
                 <td>{{ $d->pcs_awal }}</td>
@@ -47,12 +47,12 @@
                 <td>{{ $d->gr_cu }}</td>
                 <td>{{ round((1 - ($d->gr_akhir + $d->gr_cu) / $d->gr_awal) * 100, 0) }} %</td>
                 <td>{{ round($d->ttl_rp + $d->rp_harian - $d->denda_susut - $d->denda_hcr, 0) }}</td>
-                <td>{{ $d->pcs_bk - $d->pcs_awal - $d->pcs_tdk_ctk }}</td>
-                <td>{{ $d->gr_bk - $d->gr_awal - $d->gr_tidak_ctk }}</td>
+                <td>{{ $d->pcs_awal - $d->pcs_awal - $d->pcs_tdk_ctk }}</td>
+                <td>{{ $d->gr_awal - $d->gr_awal - $d->gr_tidak_ctk }}</td>
             </tr>
             @php
-                $pcs_bk += $d->pcs_bk;
-                $gr_bk += $d->gr_bk;
+                $pcs_bk += $d->pcs_awal;
+                $gr_bk += $d->gr_awal;
                 $pcs_awal += $d->pcs_awal;
                 $gr_awal += $d->gr_awal;
                 $pcs_akhir += $d->pcs_akhir;
@@ -60,8 +60,8 @@
                 $pcs_cu += $d->pcs_cu;
                 $gr_cu += $d->gr_cu;
                 $ttl_rp += $d->ttl_rp + $d->rp_harian - $d->denda_susut - $d->denda_hcr;
-                $pcs_sisa += $d->pcs_bk - $d->pcs_awal - $d->pcs_tdk_ctk;
-                $gr_sisa += $d->gr_bk - $d->gr_awal - $d->gr_tidak_ctk;
+                $pcs_sisa += $d->pcs_awal - $d->pcs_awal - $d->pcs_tdk_ctk;
+                $gr_sisa += $d->gr_awal - $d->gr_awal - $d->gr_tidak_ctk;
             @endphp
         @endforeach
     </tbody>

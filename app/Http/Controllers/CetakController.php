@@ -602,7 +602,7 @@ class CetakController extends Controller
         $tgl1 =  $r->tgl1;
         $tgl2 =  $r->tgl2;
         $view = 'home.cetak.export_rekap';
-        $tbl = CetakModel::cetak_export();
+        $tbl = CetakModel::cetak_export2();
 
         return Excel::download(new CetakRekapExport($tbl, $view), 'Export REKAP CETAK.xlsx');
     }

@@ -94,4 +94,27 @@ class CetakModel extends Model
 
         return $result;
     }
+
+    public static function cetak_export2()
+    {
+        $result = DB::select("SELECT c.no_box, sum(c.pcs_awal_ctk) as pcs_awal , sum(c.gr_awal_ctk) as gr_awal, sum(c.pcs_tidak_ctk) as pcs_tdk_ctk, 
+        sum(c.gr_tidak_ctk) as gr_tidak_ctk, sum(c.pcs_akhir) as pcs_akhir, sum(c.gr_akhir) as gr_akhir, sum(c.pcs_cu) as pcs_cu, sum(c.gr_cu) as gr_cu,
+        sum(
+            if(c.pcs_akhir = 0, c.pcs_awal_ctk * d.rp_pcs, c.pcs_akhir * c.rp_pcs )
+        ) as ttl_rp,
+        SUM(
+            IF(
+                round((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100) >= d.batas_susut,
+                round(((1 - ((c.gr_akhir + c.gr_cu) / c.gr_awal_ctk)) * 100)) * d.denda_susut,0
+            )
+        ) AS denda_susut,
+        sum(c.pcs_hcr * d.denda_hcr) as denda_hcr, sum(c.rp_harian) as rp_harian, c.tgl, e.name
+        FROM cetak as c
+        left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas
+        left join users as e on e.id = c.id_pengawas
+        group by c.no_box;
+        ");
+
+        return $result;
+    }
 }
