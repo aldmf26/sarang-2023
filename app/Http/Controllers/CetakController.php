@@ -433,7 +433,7 @@ class CetakController extends Controller
             $sheet1->setCellValue('S' . $kolom, $c->pcs_hcr);
             $sheet1->setCellValue('T' . $kolom, round($susut) . '%');
             $sheet1->setCellValue('U' . $kolom, $c->rp_harian);
-            $sheet1->setCellValue('V' . $kolom, $ttl_rp - $denda - $denda_hcr);
+            $sheet1->setCellValue('V' . $kolom, $ttl_rp + $c->rp_harian - $denda - $denda_hcr);
             $sheet1->setCellValue('W' . $kolom, $c->selesai == 'Y' ? 'Selesai' : 'Akhir');
 
 
