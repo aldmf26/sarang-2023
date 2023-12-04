@@ -25,9 +25,6 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
-
-
-
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
@@ -43,15 +40,16 @@ class BkController extends Controller
 
     public function add(Request $r)
     {
-        // $response = Http::get("http://127.0.0.1:8000/api/apibk");
-        // $gudang = $response['data']['gudang'];
-        // $gudangBk = json_decode(json_encode($gudang));
+        $response = Http::get("https://jurnals.ptagafood.com/api/apibk");
+        $gudang = $response['data']['gudang'];
+        $gudangBk = json_decode(json_encode($gudang));
+
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori,
-            // 'gudangBk' => $gudangBk
+            'gudangBk' => $gudangBk
         ];
         return view('home.bk.create', $data);
     }

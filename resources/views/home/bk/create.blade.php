@@ -70,9 +70,9 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>
-                                        <input name="no_lot[]" type="text" class="form-control nolot"
-                                            count="{{ $i }}">
-                                        {{-- <select name="no_lot[]" id=""
+                                        {{-- <input name="no_lot[]" type="text" class="form-control nolot"
+                                            count="{{ $i }}"> --}}
+                                        <select name="no_lot[]" id=""
                                             class="select2_add nolot nomor_lot{{ $i }}"
                                             count="{{ $i }}">
                                             <option value="">--Pilih data--</option>
@@ -80,7 +80,7 @@
                                                 <option value="{{ $g->no_lot }}-{{ $g->ket }}">
                                                     {{ $g->no_lot }}-{{ $g->ket }}</option>
                                             @endforeach
-                                        </select> --}}
+                                        </select>
                                     </td>
                                     <td>
                                         <input name="no_box[]" count="{{ $i }}" type="text"
@@ -302,28 +302,28 @@
                         alertToast('sukses', 'Berhasil  tambah data')
                     }
                 });
-            })
+            });
 
 
-            // $('.selectPengawas').on('change', function() {
-            //     var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
+            $('.selectPengawas').on('change', function() {
+                var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
 
-            //     // Memperbarui semua elemen dengan kelas .selectPengawas
-            //     $('.selectPengawas').not(this).each(function() {
-            //         $(this).val(nilaiselect).trigger(
-            //             'change.select2'); // Update nilai Select2 dan trigger event change
-            //     });
-            // });
-            // $(document).on('change', '.nolot', function() {
-            //     var nolot = $(this).val();
-            //     var count = $(this).attr('count');
-            //     var no = count;
-            //     $('.nolot').each(function() {
-            //         no++;
-            //         $('.nomor_lot' + no).val(nolot).trigger(
-            //             'change.select2');
-            //     });
-            // });
+                //     // Memperbarui semua elemen dengan kelas .selectPengawas
+                $('.selectPengawas').not(this).each(function() {
+                    $(this).val(nilaiselect).trigger(
+                        'change.select2'); // Update nilai Select2 dan trigger event change
+                });
+            });
+            $(document).on('change', '.nolot', function() {
+                var nolot = $(this).val();
+                var count = $(this).attr('count');
+                var no = count;
+                $('.nolot').each(function() {
+                    no++;
+                    $('.nomor_lot' + no).val(nolot).trigger(
+                        'change.select2');
+                });
+            });
         </script>
     @endsection
 </x-theme.app>
