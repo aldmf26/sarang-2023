@@ -63,7 +63,7 @@
             <td>{{ $d->eot }}</td>
             <td>{{ $d->gr_flx }}</td>
             @php
-                $susutCbt = (1 - (($d->gr_akhir + $d->gr_flx) / $d->gr_awal)) * 100;
+                $susutCbt = empty($d->gr_akhir) ? 0 : (1 - (($d->gr_akhir + $d->gr_flx) / $d->gr_awal)) * 100;
             @endphp
             <td>{{ number_format($susutCbt, 0) }}</td>
             <td>{{ $d->ttl_rp }}</td>
