@@ -72,7 +72,7 @@
             <td>{{ $d->eo_awal }}</td>
             <td>{{ $d->eo_akhir }}</td>
             @php
-                $susutEo =  (1 - ($d->eo_akhir / $d->eo_awal)) * 100;
+                $susutEo =  empty($d->eo_akhir) ? 0 : (1 - ($d->eo_akhir / $d->eo_awal)) * 100;
             @endphp
             <td>{{ number_format($susutEo, 0) }}</td>
             <td>{{ $d->eo_ttl_rp }}</td>
