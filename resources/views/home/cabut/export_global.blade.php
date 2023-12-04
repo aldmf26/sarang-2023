@@ -62,13 +62,19 @@
             <td>{{ $d->gr_akhir }}</td>
             <td>{{ $d->eot }}</td>
             <td>{{ $d->gr_flx }}</td>
-            <td>{{ number_format($d->susut, 0) }}</td>
+            @php
+                $susutCbt = empty($d->gr_akhir) ? 0 : (1 - (($d->gr_akhir + $d->gr_flx) / $d->gr_awal)) * 100;
+            @endphp
+            <td>{{ number_format($susutCbt, 0) }}</td>
             <td>{{ $d->ttl_rp }}</td>
 
             <td></td>
             <td>{{ $d->eo_awal }}</td>
             <td>{{ $d->eo_akhir }}</td>
-            <td>{{ number_format($d->eo_susut, 0) }}</td>
+            @php
+                $susutEo =  empty($d->eo_akhir) ? 0 : (1 - ($d->eo_akhir / $d->eo_awal)) * 100;
+            @endphp
+            <td>{{ number_format($susutEo, 0) }}</td>
             <td>{{ $d->eo_ttl_rp }}</td>
 
             <td></td>
@@ -76,6 +82,9 @@
             <td>{{ $d->sortir_gr_awal }}</td>
             <td>{{ $d->sortir_pcs_akhir }}</td>
             <td>{{ $d->sortir_gr_akhir }}</td>
+            @php
+                $susutSortir = empty($d->sortir_gr_akhir) ? 0 : (1 - $d->sortir_gr_akhir / $d->sortir_gr_awal) * 100;
+            @endphp
             <td>{{ number_format($d->sortir_susut, 0) }}</td>
             <td>{{ $d->sortir_ttl_rp }}</td>
 
@@ -124,7 +133,7 @@
         <td style="{{ $bold }}">{{ $dendaTtlRp }}</td>
 
         <td style="{{ $bold }}">{{ $ttlTtlRp }}</td>
-        <td style="{{ $bold }}">{{ $rataTtlRp }}</td>
+        <td style="{{ $bold }}">0</td>
 
     </tr>
 </table>
