@@ -454,6 +454,7 @@ class CabutController extends Controller
                 'Y2' => 'ttl gaji',
                 'Z2' => 'rata2',
             ];
+
             foreach ($koloms as $kolom => $isiKolom) {
                 $sheet->setCellValue($kolom, ucwords($isiKolom));
             }
@@ -482,6 +483,7 @@ class CabutController extends Controller
                 'W2' => 'FF0000',
                 'Y2' => 'FF0000',
             ];
+            
             foreach ($warnaBg as $b => $i) {
                 $sheet->getStyle($b)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($i);
             }
