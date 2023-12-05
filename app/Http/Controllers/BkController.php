@@ -25,9 +25,6 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
-
-
-
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
@@ -43,15 +40,16 @@ class BkController extends Controller
 
     public function add(Request $r)
     {
-        // $response = Http::get("http://127.0.0.1:8000/api/apibk");
-        // $gudang = $response['data']['gudang'];
-        // $gudangBk = json_decode(json_encode($gudang));
+        $response = Http::get("https://jurnals.ptagafood.com/api/apibk");
+        $gudang = $response['data']['gudang'];
+        $gudangBk = json_decode(json_encode($gudang));
+
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori,
-            // 'gudangBk' => $gudangBk
+            'gudangBk' => $gudangBk
         ];
         return view('home.bk.create', $data);
     }
@@ -117,12 +115,11 @@ class BkController extends Controller
                 $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
                 $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
 
-                // $selectedValue = $r->no_lot[$x];
-                // list($noLot, $ket) = explode('-', $selectedValue);
-
+                $selectedValue = $r->no_lot[$x];
+                list($noLot, $ket) = explode('-', $selectedValue);
                 $data = [
-                    'no_lot' => $r->no_lot[$x],
-                    // 'nm_partai' => $ket,
+                    'no_lot' => $noLot,
+                    'nm_partai' => $ket,
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
                     'ket' => $r->ket[$x],
