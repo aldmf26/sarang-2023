@@ -408,10 +408,169 @@ class CabutController extends Controller
         $tahun =  $r->tahun;
         $id_pengawas = auth()->user()->id;
 
-        $view = 'home.cabut.export_global';
-        $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
-        $fileName = "Export Rekap Global " . auth()->user()->name;
-        return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        JOIN users as b on a.penerima = b.id
+        WHERE a.kategori != 'cetak'
+        group by b.id");
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+        foreach ($pengawas as $i => $d) {
+            $sheet = $spreadsheet->createSheet($i);
+            $sheet->setTitle(strtoupper($d->name));
+
+            $koloms = [
+                'A1' => 'cabut',
+                'M1' => 'cabut eo',
+                'Q1' => 'sortir',
+                'X1' => 'gajih',
+                'A2' => 'pgws',
+                'B2' => 'hari masuk',
+                'C2' => 'kelas',
+                'D2' => 'bulan',
+                'E2' => 'pcs awal',
+                'F2' => 'gr awal',
+                'G2' => 'pcs akhir',
+                'H2' => 'gr akhir',
+                'I2' => 'eot gr',
+                'J2' => 'gr flx',
+                'K2' => 'susut',
+                'L2' => 'ttl rp',
+
+                'M2' => 'gr eo awal',
+                'N2' => 'gr eo akhir',
+                'O2' => 'susut',
+                'P2' => 'ttl rp',
+
+                'Q2' => 'pcs awal',
+                'R2' => 'gr akhir',
+                'S2' => 'pcs awal',
+                'T2' => 'gr eo akhir',
+                'U2' => 'susut',
+                'V2' => 'ttl rp',
+
+                'W2' => 'kerja dll',
+                'X2' => 'rp denda',
+
+                'Y2' => 'ttl gaji',
+                'Z2' => 'rata2',
+            ];
+            foreach ($koloms as $kolom => $isiKolom) {
+                $sheet->setCellValue($kolom, ucwords($isiKolom));
+            }
+
+            $styleBold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+            $styleBaris = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $warnaBg = [
+                'A1:L1' => 'D9D9D9',
+                'M1:P1' => 'F79646',
+                'Q1:V1' => '8DB4E2',
+
+                'L2' => 'FF0000',
+                'P2' => 'FF0000',
+                'V2' => 'FF0000',
+                'W2' => 'FF0000',
+                'Y2' => 'FF0000',
+            ];
+            foreach ($warnaBg as $b => $i) {
+                $sheet->getStyle($b)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($i);
+            }
+
+            $sheet->mergeCells('A1:L1');
+            $sheet->mergeCells('M1:P1');
+            $sheet->mergeCells('Q1:V1');
+            $sheet->mergeCells('X1:Z1');
+
+            $style = $sheet->getStyle('A1:X1');
+            $style->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $style->getFont()->setBold(true);
+            $sheet->getStyle('A2:Z2')->applyFromArray($styleBold);
+
+            $TtlRp = 0;
+            $eoTtlRp = 0;
+            $sortirTtlRp = 0;
+            $dllTtlRp = 0;
+            $dendaTtlRp = 0;
+            $ttlTtlRp = 0;
+
+            $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+            $row = 3;
+            $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
+            foreach ($tbl as $data) {
+                $sheet->setCellValue('A' . $row, $data->pgws)
+                    ->setCellValue('B' . $row, $data->hariMasuk)
+                    ->setCellValue('C' . $row, $data->nm_anak)
+                    ->setCellValue('D' . $row, $data->kelas)
+                    ->setCellValue('E' . $row, $data->pcs_awal)
+                    ->setCellValue('F' . $row, $data->gr_awal)
+                    ->setCellValue('G' . $row, $data->pcs_akhir)
+                    ->setCellValue('H' . $row, $data->gr_akhir)
+                    ->setCellValue('I' . $row, $data->eot)
+                    ->setCellValue('J' . $row, $data->gr_flx);
+                $susutCbt = empty($data->gr_akhir) ? 0 : (1 - (($data->gr_akhir + $data->gr_flx) / $data->gr_awal)) * 100;
+                $sheet->setCellValue('K' . $row, $susutCbt)
+                    ->setCellValue('L' . $row, $data->ttl_rp)
+                    ->setCellValue('M' . $row, $data->eo_awal)
+                    ->setCellValue('N' . $row, $data->eo_akhir);
+                $susutEo =  empty($data->eo_akhir) ? 0 : (1 - ($data->eo_akhir / $data->eo_awal)) * 100;
+
+                $sheet->setCellValue('O' . $row, $susutEo)
+                    ->setCellValue('P' . $row, $data->eo_ttl_rp)
+                    ->setCellValue('Q' . $row, $data->sortir_pcs_awal)
+                    ->setCellValue('R' . $row, $data->sortir_gr_awal)
+                    ->setCellValue('S' . $row, $data->sortir_pcs_akhir)
+                    ->setCellValue('T' . $row, $data->sortir_gr_akhir);
+                $susutSortir = empty($data->sortir_gr_akhir) ? 0 : (1 - ($data->sortir_gr_akhir / $data->sortir_gr_awal)) * 100;
+
+                $sheet->setCellValue('U' . $row, $susutSortir)
+                    ->setCellValue('V' . $row, $data->sortir_ttl_rp)
+                    ->setCellValue('W' . $row, $data->ttl_rp_dll)
+                    ->setCellValue('X' . $row, $data->ttl_rp_denda);
+                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll - $data->ttl_rp_denda;
+                $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
+                $sheet->setCellValue('Y' . $row, $ttl)
+                    ->setCellValue('Z' . $row, $rata);
+
+                $TtlRp += $data->ttl_rp;
+                $eoTtlRp += $data->eo_ttl_rp;
+                $sortirTtlRp += $data->sortir_ttl_rp;
+                $dllTtlRp += $data->ttl_rp_dll;
+                $dendaTtlRp += $data->ttl_rp_denda;
+                $ttlTtlRp += $ttl;
+                $row++;
+            }
+            $baris = $row - 1;
+            $sheet->getStyle('A2:Z' . $baris)->applyFromArray($styleBaris);
+        }
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Gaji Export Global $bulanDibayar $tahun";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+
+        // $view = 'home.cabut.export_global';
+        // $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
+        // $fileName = "Export Rekap Global " . auth()->user()->name;
+        // return Excel::download(new CabutGlobalExport($tbl, $view), "$fileName.xlsx");
     }
     public function cekBgSisa($sheet, $pcsBk, $pcsAwal, $grBk, $grAwal, $row)
     {
@@ -428,6 +587,7 @@ class CabutController extends Controller
         JOIN users as b on a.penerima = b.id
         WHERE a.kategori != 'cetak'
         group by b.id");
+
         $bulan = $r->bulan;
         $tahun = $r->tahun;
 

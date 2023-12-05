@@ -83,9 +83,9 @@
             <td>{{ $d->sortir_pcs_akhir }}</td>
             <td>{{ $d->sortir_gr_akhir }}</td>
             @php
-                $susutSortir = empty($d->sortir_gr_akhir) ? 0 : (1 - $d->sortir_gr_akhir / $d->sortir_gr_awal) * 100;
+                $susutSortir = empty($d->sortir_gr_akhir) ? 0 : (1-($d->sortir_gr_akhir/$d->sortir_gr_awal))*100;
             @endphp
-            <td>{{ number_format($d->sortir_susut, 0) }}</td>
+            <td>{{ number_format($susutSortir, 0) }}</td>
             <td>{{ $d->sortir_ttl_rp }}</td>
 
             <td>{{ $d->ttl_rp_dll }}</td>

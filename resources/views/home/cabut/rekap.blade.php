@@ -104,10 +104,10 @@
                                 <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_flx, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->eot, 0) }}</th>
-                                {{-- @php
+                                @php
                                     $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_flx + $d->gr_akhir) / $d->gr_awal) * 100;
-                                @endphp --}}
-                                <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
+                                @endphp
+                                <th class="text-end">{{ number_format($susut, 0) }} %</th>
                                 <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
@@ -147,11 +147,11 @@
                             <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
                             <td align="right">{{ number_format($x->gr_flx, 0) }}</td>
                             <td align="right">{{ number_format($x->eot, 0) }}</td>
-                            {{-- @php
+                            @php
                                 $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
 
-                            @endphp --}}
-                            <td align="right">{{ number_format($x->susut, 0) }} %</td>
+                            @endphp
+                            <td align="right">{{ number_format($susut, 0) }} %</td>
 
                             <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
                             <td align="right">{{ number_format($x->pcs_bk - $x->pcs_awal, 0) }}</td>
