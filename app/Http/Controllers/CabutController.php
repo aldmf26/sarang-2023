@@ -503,6 +503,28 @@ class CabutController extends Controller
             $dendaTtlRp = 0;
             $ttlTtlRp = 0;
 
+            $ttlCbtPcsAwal = 0;
+            $ttlCbtGrAwal = 0;
+            $ttlCbtPcsAkhir = 0;
+            $ttlCbtGrAkhir = 0;
+            $ttlCbtEotGr = 0;
+            $ttlCbtGrFlx = 0;
+            $ttlCbtTtlRp = 0;
+
+            $ttlSoritrPcsAwal = 0;
+            $ttlSoritrGrAwal = 0;
+            $ttlSoritrPcsAkhir = 0;
+            $ttlSoritrGrAkhir = 0;
+            $ttlSortirRp = 0;
+
+            $ttlEoGrAwal  = 0;
+            $ttlEoGrAkhir  = 0;
+            $ttlEoRp  = 0;
+
+            $ttlDll  = 0;
+            $ttlDenda  = 0;
+            $ttlGaji  = 0;
+
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
@@ -520,6 +542,7 @@ class CabutController extends Controller
                 $susutCbt = empty($data->gr_akhir) ? 0 : (1 - (($data->gr_akhir + $data->gr_flx) / $data->gr_awal)) * 100;
                 $sheet->setCellValue('K' . $row, $susutCbt)
                     ->setCellValue('L' . $row, $data->ttl_rp)
+
                     ->setCellValue('M' . $row, $data->eo_awal)
                     ->setCellValue('N' . $row, $data->eo_akhir);
                 $susutEo =  empty($data->eo_akhir) ? 0 : (1 - ($data->eo_akhir / $data->eo_awal)) * 100;
@@ -541,15 +564,65 @@ class CabutController extends Controller
                 $sheet->setCellValue('Y' . $row, $ttl)
                     ->setCellValue('Z' . $row, $rata);
 
+                $ttlCbtPcsAwal += $data->pcs_awal;
+                $ttlCbtGrAwal += $data->gr_awal;
+                $ttlCbtPcsAkhir += $data->pcs_akhir;
+                $ttlCbtGrAkhir += $data->gr_akhir;
+                $ttlCbtEotGr += $data->eot;
+                $ttlCbtGrFlx += $data->gr_flx;
+                $ttlCbtTtlRp += $data->ttl_rp;
+
+                $ttlEoGrAwal  += $data->eo_awal;
+                $ttlEoGrAkhir  += $data->eo_akhir;
+                $ttlEoRp  += $data->eo_ttl_rp;
+
+                $ttlSoritrPcsAwal += $data->sortir_pcs_awal;
+                $ttlSoritrGrAwal += $data->sortir_gr_awal;
+                $ttlSoritrPcsAkhir += $data->sortir_pcs_akhir;
+                $ttlSoritrGrAkhir += $data->sortir_gr_akhir;
+                $ttlSortirRp += $data->sortir_ttl_rp;
+
                 $TtlRp += $data->ttl_rp;
                 $eoTtlRp += $data->eo_ttl_rp;
                 $sortirTtlRp += $data->sortir_ttl_rp;
                 $dllTtlRp += $data->ttl_rp_dll;
                 $dendaTtlRp += $data->ttl_rp_denda;
                 $ttlTtlRp += $ttl;
+
                 $row++;
             }
-            $baris = $row - 1;
+
+            $rowTotal = $row;
+
+
+            $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('E' . $rowTotal, $ttlCbtPcsAwal);
+            $sheet->setCellValue('F' . $rowTotal, $ttlCbtGrAwal);
+            $sheet->setCellValue('G' . $rowTotal, $ttlCbtPcsAkhir);
+            $sheet->setCellValue('H' . $rowTotal, $ttlCbtGrAkhir);
+            $sheet->setCellValue('I' . $rowTotal, $ttlCbtEotGr);
+            $sheet->setCellValue('J' . $rowTotal, $ttlCbtGrFlx);
+            $sheet->setCellValue('L' . $rowTotal, $ttlCbtTtlRp);
+
+            $sheet->setCellValue('M' . $rowTotal, $ttlEoGrAwal);
+            $sheet->setCellValue('N' . $rowTotal, $ttlEoGrAkhir);
+            $sheet->setCellValue('P' . $rowTotal, $ttlEoRp);
+
+
+
+            $sheet->setCellValue('Q' . $rowTotal, $ttlSoritrPcsAwal);
+            $sheet->setCellValue('R' . $rowTotal, $ttlSoritrGrAwal);
+            $sheet->setCellValue('S' . $rowTotal, $ttlSoritrPcsAkhir);
+            $sheet->setCellValue('T' . $rowTotal, $ttlSoritrGrAkhir);
+            $sheet->setCellValue('V' . $rowTotal, $ttlSortirRp);
+
+            $sheet->setCellValue('W' . $rowTotal, $dllTtlRp);
+            $sheet->setCellValue('X' . $rowTotal, $dendaTtlRp);
+            $sheet->setCellValue('Y' . $rowTotal, $ttlTtlRp);
+
+            $sheet->getStyle("A$rowTotal:Z$rowTotal")->applyFromArray($styleBold);
+
+            $baris = $rowTotal - 1;
             $sheet->getStyle('A2:Z' . $baris)->applyFromArray($styleBaris);
         }
         $writer = new Xlsx($spreadsheet);
