@@ -83,7 +83,7 @@
                             </tr>
                         </thead>
 
-                         <tbody>
+                        <tbody>
                             @foreach ($eoGroup as $i => $d)
                                 <tr>
                                     <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
@@ -96,13 +96,16 @@
                                     <th class="text-end">{{ number_format($d->gr_awal, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_akhir ?? 0, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
+                                    @php
+                                        $susut = empty($d->gr_awal) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
 
-                                    <th class="text-end">{{ number_format($d->susut, 0) }} %</th>
+                                    @endphp
+                                    <th class="text-end">{{ number_format($susut, 0) }} %</th>
                                     <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk ?? 0 - 0, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_bk - $d->gr_awal, 0) }}</th>
                                 </tr>
-                                
+
                                 @php
                                     $id = $d->id_pengawas;
                                     $query = DB::select("SELECT 
@@ -137,11 +140,14 @@
                                 <td align="right">{{ number_format($x->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($x->pcs_akhir ?? 0, 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
+                                @php
+                                    $susut = empty($d->gr_awal) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
 
-                                <td align="right">{{ number_format($x->susut, 0) }} %</td>
+                                @endphp
+                                <td align="right">{{ number_format($susut, 0) }} %</td>
 
                                 <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
-                                <td align="right">{{ number_format($x->pcs_bk ?? 0 - $x->pcs_awal ?? 0, 0) }}</td>
+                                <td align="right">{{ number_format($x->pcs_bk ?? (0 - $x->pcs_awal ?? 0), 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_bk - $x->gr_awal, 0) }}</td>
                             </tr>
                         </tbody>
