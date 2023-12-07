@@ -3,7 +3,7 @@
         <div class="logo">
             <a href="dashboard">
                 <center>
-                    <img src="https://kerja-sarang-new.putrirembulan.com/uploads/buku_kerja.png" alt="Logo">
+                    <img src="https://putrirembulan.com/assets/img/portfolio/swallow.png" alt="Logo">
                 </center>
             </a>
             <h5>KERJA SARANG</h5>
