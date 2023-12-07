@@ -52,11 +52,11 @@
                                 @endphp
                                 @if (!empty($adaDitutup))
                                 @endif --}}
-                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                                {{-- <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
                                 <br>
                                 <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
                                         class="fas fa-check"></i> Tutup </span>
-                               
+                                --}}
                                 {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
                                 teks="Tutup" /> --}}
                             </center>
@@ -86,13 +86,18 @@
                                     <span class="badge bg-primary">SELESAI</span>
                                 @endif
                             </td>
-                            <td align="center"><input type="checkbox" penerima="{{ $b->penerima }}"
-                                    no_nota="{{ $b->id_bk }}" class="cek_bayar" name="" id=""></td>
-                            
+                            <td align="center">
+                                @if ($b->selesai == 'T')
+                                <input type="checkbox" penerima="{{ $b->penerima }}" no_nota="{{ $b->id_bk }}"
+                                    class="cek_bayar" name="" id="">
+                                @endif
+                            </td>
+
                             <td>
                                 <span style="cursor: pointer" class="badge bg-primary selesai"><i
                                         class="fas fa-check"></i></span>
-                                <span style="cursor: pointer" class="badge bg-warning edit_bk"><i class="fas fa-edit"></i></span>
+                                <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
+                                        class="fas fa-edit"></i></span>
                                 <span style="cursor: pointer" class="badge bg-danger delete"><i
                                         class="fas fa-trash-alt"></i></span>
                             </td>
