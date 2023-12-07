@@ -273,15 +273,22 @@ class CabutController extends Controller
         for ($i = 0; $i < count($r->no_box); $i++) {
             $no_box = $r->no_box[$i];
             $box = Cabut::getStokBk($no_box);
-
-            DB::table('cabut')->where('id_cabut', $r->id_cabut[$i])->update([
+            $id_cabut = $r->id_cabut[$i];
+            $data = [
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'pcs_awal' => $r->pcs_awal[$i],
                 'gr_awal' => $r->gr_awal[$i],
+                'id_anak' => $r->id_anak[$i],
+                'id_pengawas' => $r->id_pengawas[$i],
                 'rupiah' => $r->rupiah[$i],
                 'id_kelas' => $r->id_paket[$i],
                 'tgl_terima' => $r->tgl_terima[$i],
-            ]);
+            ];
+            if($id_cabut == 9999) {
+                DB::table('cabut')->insert($data);
+            } else {
+                DB::table('cabut')->where('id_cabut', $id_cabut)->update($data);
+            }
         }
         // return redirect()->route('cabut.index')->with('sukses', 'Berhasil tambah Data');
         return json_encode([
@@ -523,11 +530,7 @@ class CabutController extends Controller
             $ttlEoGrAkhir  = 0;
             $ttlEoRp  = 0;
 
-            $ttlDll  = 0;
-            $ttlDenda  = 0;
-            $ttlGaji  = 0;
-
-            $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
             foreach ($tbl as $data) {

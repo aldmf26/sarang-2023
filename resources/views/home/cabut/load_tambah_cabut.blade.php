@@ -103,16 +103,16 @@
             </tbody>
             <tbody id="tbh_baris">
             </tbody>
-            {{-- <tfoot>
+            <tfoot>
                 <tr>
-                    <th colspan="9">
+                    <th colspan="10">
                         <button type="button" class="btn btn-block btn-lg tbh_baris"
                             style="background-color: #F4F7F9; color: #435EBE; font-size: 14px; padding: 13px;">
                             <i class="fas fa-plus"></i> Tambah Baris Baru
                         </button>
                     </th>
                 </tr>
-            </tfoot> --}}
+            </tfoot>
         </table>
         {{-- <button class="btn btn-primary btn-md saveCabut" type="button">Simpan</button> --}}
     </div>

@@ -110,7 +110,28 @@
         @section('scripts')
             <script>
                 $(".select3").select2()
+                function plusCabut(count, classPlus, url) {
+                        $(document).on("click", "." + classPlus, function() {
+                            count = count + 1;
+                            $.ajax({
+                                url: `${url}?count=` + count,
+                                type: "GET",
+                                success: function(data) {
+                                    $("#" + classPlus).append(data);
+                                    $(".select2-tambah").select2({
+                                        dropdownParent: $(`#tambah2 .modal-content`)
+                                    });
+                                },
+                            });
+                        });
 
+                        $(document).on('click', '.remove_baris', function() {
+                            var delete_row = $(this).attr("count");
+                            $(".baris" + delete_row).remove();
+
+                        })
+                    }
+                plusCabut(1, 'tbh_baris', "cabut/tbh_baris")
                 function updateAnakBelum() {
                     $.ajax({
                         type: 'GET',
