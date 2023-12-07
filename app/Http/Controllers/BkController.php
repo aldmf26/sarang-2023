@@ -225,7 +225,6 @@ class BkController extends Controller
 
     public function selesai(Request $r)
     {
-        dd($r->all());
         for ($i=0; $i < count($r->no_nota); $i++) { 
             DB::table('bk')->where([
                 ['no_box', $r->no_nota[$i]],
