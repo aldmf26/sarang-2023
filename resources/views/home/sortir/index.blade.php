@@ -489,6 +489,16 @@
                         });
                     })
                 });
+
+                var inputNya = ['.grFlexKeyup',
+                    '.pcsAwalKeyup',
+                    '.grAwalKeyup',
+                    '.pcucKeyup',
+                    '.grAkhirKeyup',
+                    '.pcsAkhirKeyup',
+                    '.pcucAkhirKeyup',
+                ]
+                clickSelectInput(inputNya)
             </script>
         @endsection
     </x-slot>

@@ -52,11 +52,11 @@
                                 @endphp
                                 @if (!empty($adaDitutup))
                                 @endif --}}
-                                {{-- <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
                                 <br>
                                 <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
                                         class="fas fa-check"></i> Tutup </span>
-                                --}}
+
                                 {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
                                 teks="Tutup" /> --}}
                             </center>
@@ -88,8 +88,8 @@
                             </td>
                             <td align="center">
                                 @if ($b->selesai == 'T')
-                                <input type="checkbox" penerima="{{ $b->penerima }}" no_nota="{{ $b->id_bk }}"
-                                    class="cek_bayar" name="" id="">
+                                    <input type="checkbox" penerima="{{ $b->penerima }}"
+                                        no_nota="{{ $b->id_bk }}" class="cek_bayar" name="" id="">
                                 @endif
                             </td>
 
@@ -107,6 +107,14 @@
 
             </table>
         </section>
+        <x-theme.modal idModal="loading" btnSave="T" disabled="true" title="Tunggu loading">
+            mohon tunggu loading...
+            <br>
+            <div class="row justify-content-center">
+                <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='38'%20height='38'%20stroke='%235d79d3'%20viewBox='0%200%2038%2038'%3e%3cg%20fill='none'%20fill-rule='evenodd'%3e%3cg%20stroke-width='2'%20transform='translate(1%201)'%3e%3ccircle%20cx='18'%20cy='18'%20r='18'%20stroke-opacity='.5'/%3e%3cpath%20d='M36%2018c0-9.94-8.06-18-18-18'%3e%3canimateTransform%20attributeName='transform'%20dur='1s'%20from='0%2018%2018'%20repeatCount='indefinite'%20to='360%2018%2018'%20type='rotate'/%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e"
+                    class="me-4" style="width: 100px" alt="audio">
+            </div>
+        </x-theme.modal>
         <form action="{{ route('bk.import') }}" enctype="multipart/form-data" method="post">
             @csrf
             <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">
@@ -154,6 +162,7 @@
         <script>
             $(document).ready(function() {
 
+                inputChecked('cekSemuaTutup', 'cek_bayar')
                 pencarian('pencarian', 'tablealdi')
                 // $(document).on("click", ".detail_nota", function() {
                 //     var no_nota = $(this).attr('no_nota');
@@ -181,28 +190,36 @@
                         });
                         var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
 
-                        var penerima = [];
-                        $('.cek_bayar:checked').each(function() {
-                            var id_pengawas = $(this).attr('penerima');
-                            penerima.push(id_pengawas);
-                        });
-                        var params = new URLSearchParams();
-                        penerima.forEach(function(orderNumber) {
-                            params.append('id_pengawas', orderNumber);
-                        });
-                        var queryStringId = 'id_pengawas[]=' + penerima.join('&id_pengawas[]=');
                         var kategori = "{{ request()->get('kategori') ?? 'cabut' }}"
-                        var targetUrl = `/home/bk/${link}?kategori=${kategori}&${queryString}&${queryStringId}`
-                        if (formDelete === null) {
+                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        var postData = {
+                            _token: csrfToken,
+                            no_nota: dipilih,
+                            kategori: kategori,
+                        };
+                        var targetUrl = `/home/bk/${link}?kategori=${kategori}&${queryString}`
+
+                        if(formDelete === null) {
                             window.location.assign(targetUrl)
                         } else {
                             if (confirm(formDelete)) {
-                                window.location.assign(targetUrl)
-                                // window.open(targetUrl);
+                                $.ajax({
+                                    type: "POST",
+                                    url: `/home/bk/${link}`,
+                                    data: postData,
+                                    beforeSend:function(){
+                                        $("#loading").modal('show')
+                                    },
+                                    success: function(r) {
+                                        window.location.reload()
+                                    },
+                                    error: function(error) {
+                                        // Handle error if needed
+                                        console.error(error);
+                                    }
+                                });
                             }
-
                         }
-
                     });
                 }
                 clickCekKirim('.btn_bayar', 'print')
@@ -216,7 +233,7 @@
                 $(".edit_bk").hide();
                 $(".selesai").hide();
 
-                $(document).on('change', '.cek_bayar', function() {
+                $(document).on('change', '.cek_bayar, #cekSemuaTutup', function() {
                     var totalPiutang = 0
                     $('.cek_bayar:checked').each(function() {
                         var piutang = $(this).attr('piutang');

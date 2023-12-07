@@ -7,27 +7,27 @@
             </div>
             <div class="col-lg-6">
                 @php
-                $id_pengawas = auth()->user()->id;
+                    $id_pengawas = auth()->user()->id;
                     $cekBtn = DB::selectOne("SELECT 
                             CASE WHEN COUNT(*) = SUM(CASE WHEN selesai = 'y' THEN 1 ELSE 0 END) AND COUNT(*) > 0 THEN 'true' ELSE 'false' END AS hasil
                             FROM 
                             `cabut`
                             WHERE 
-                            id_pengawas = '$id_pengawas' AND no_box != 9999;")
-                @endphp 
-                <a  href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end {{$cekBtn->hasil == 'true' ? '' : 'disabled' }} btn btn-sm btn-success me-2">
+                            id_pengawas = '$id_pengawas' AND no_box != 9999;");
+                @endphp
+                <a href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="float-end {{ $cekBtn->hasil == 'true' ? '' : 'disabled' }} btn btn-sm btn-success me-2">
                     <i class="fas fa-check"></i> Cabut Ok
                 </a>
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
-                
+
                 {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
                 teks="List anak sisa" /> --}}
-                
-                    
+
+
                 <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
                     class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cabut <span
                         class="badge bg-danger" id="anakBelum"></span>
@@ -110,28 +110,30 @@
         @section('scripts')
             <script>
                 $(".select3").select2()
+
                 function plusCabut(count, classPlus, url) {
-                        $(document).on("click", "." + classPlus, function() {
-                            count = count + 1;
-                            $.ajax({
-                                url: `${url}?count=` + count,
-                                type: "GET",
-                                success: function(data) {
-                                    $("#" + classPlus).append(data);
-                                    $(".select2-tambah").select2({
-                                        dropdownParent: $(`#tambah2 .modal-content`)
-                                    });
-                                },
-                            });
+                    $(document).on("click", "." + classPlus, function() {
+                        count = count + 1;
+                        $.ajax({
+                            url: `${url}?count=` + count,
+                            type: "GET",
+                            success: function(data) {
+                                $("#" + classPlus).append(data);
+                                $(".select2-tambah").select2({
+                                    dropdownParent: $(`#tambah2 .modal-content`)
+                                });
+                            },
                         });
+                    });
 
-                        $(document).on('click', '.remove_baris', function() {
-                            var delete_row = $(this).attr("count");
-                            $(".baris" + delete_row).remove();
+                    $(document).on('click', '.remove_baris', function() {
+                        var delete_row = $(this).attr("count");
+                        $(".baris" + delete_row).remove();
 
-                        })
-                    }
+                    })
+                }
                 plusCabut(1, 'tbh_baris', "cabut/tbh_baris")
+
                 function updateAnakBelum() {
                     $.ajax({
                         type: 'GET',
@@ -438,12 +440,12 @@
                         var susutH = (1 - (data.gr_flx + data.gr_akhir) / data.gr_awal) * 100
                         susutH = susutH.toFixed(0)
                         $('.susut' + count).text(susutH + '%')
-                        
+
                         setRupiah = rulesCabut(data).toLocaleString('id-ID', {
                             maximumFractionDigits: 0
                         })
                         $('.ttlRpKeyup' + data.count).text(setRupiah)
-                        
+
                         $('.ttlRpSet' + data.count).val(rulesCabut(data))
                     })
                 }
@@ -676,8 +678,8 @@
                             // $('#inputAkhir').modal('hide')
                             // load_input_akhir()
                             loadHalaman()
-                            $(".btn"+count).removeClass('btn-warning');
-                            $(".btn"+count).addClass('btn-primary');
+                            $(".btn" + count).removeClass('btn-warning');
+                            $(".btn" + count).addClass('btn-primary');
                         }
                     });
 
@@ -701,7 +703,7 @@
 
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cabut.selesai_cabut') }}?id_cabut="+id_cabut,
+                        url: "{{ route('cabut.selesai_cabut') }}?id_cabut=" + id_cabut,
                         success: function(r) {
                             alertToast('sukses', 'Berhasil menyelesaikan')
                             loadHalaman()
@@ -724,6 +726,15 @@
                         }
                     });
                 })
+                var inputNya = ['.grFlexKeyup',
+                    '.pcsAkhirKeyup',
+                    '.grAkhirKeyup',
+                    '.eotKeyup',
+                    '.pcsHcrKeyup',
+                    '.setPcs',
+                    '.setGr'
+                ]
+                clickSelectInput(inputNya)
             </script>
         @endsection
     </x-slot>

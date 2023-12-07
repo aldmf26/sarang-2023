@@ -203,7 +203,7 @@
             // Jika yang diklik adalah sel yang bukan kotak centang
             if (!$(event.target).is('.' + itemClass)) {
                 // Mengebalikan status kotak centang (ceklis jika sebelumnya tidak terceklis, dan sebaliknya)
-                checkbox.prop('checked', !checkbox.prop('checked'));
+                // checkbox.prop('checked', !checkbox.prop('checked'));
 
                 // Memeriksa apakah semua kotak centang di seluruh tabel terceklis atau tidak
                 var semuaTerceklis = true;
@@ -220,6 +220,13 @@
             }
         });
 
+    }
+
+    function clickSelectInput(classes) {
+        $(document).on('click', classes.join(', '), function() {
+            // Menyeleksi seluruh teks dalam input field saat diklik
+            $(this).select();
+        });
     }
 
     function pencarian(inputId, tblId) {
@@ -331,7 +338,7 @@
             Toastify({
                 text: "{{ session()->get('sukses') }}",
                 duration: 3000,
-                position:'center',
+                position: 'center',
                 style: {
                     background: "#EAF7EE",
                     color: "#7F8B8B"
@@ -348,7 +355,7 @@
             Toastify({
                 text: "{{ session()->get('error') }}",
                 duration: 3000,
-                position:'center',
+                position: 'center',
                 style: {
                     background: "#FCEDE9",
                     color: "#7F8B8B"
