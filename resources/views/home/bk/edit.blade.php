@@ -13,11 +13,13 @@
             @csrf
             <section class="row">
                 <div class="col-lg-12">
+                    <input type="hidden" name="kategori" value="{{ request()->get('kategori') }}">
                     <table class="table table-striped" width="100%">
                         <thead>
                             <tr>
                                 <th class="dhead">No</th>
                                 <th class="dhead">No Lot</th>
+                                <th class="dhead">Nama Partai</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
                                 <th class="dhead">Ket</th>
@@ -32,7 +34,7 @@
                         @foreach ($no_nota as $i => $n)
                             @php
                                 $detail = DB::table('bk as a')
-                                    ->where([['no_box', $n],['kategori', $kategori],['penerima', $id_pengawas[$i]]])
+                                    ->where('id_bk', $n)
                                     ->first();
                             @endphp
                             <input type="hidden" name="id_bk[]" value="{{ $detail->id_bk }}">
@@ -41,6 +43,10 @@
                                     <td>{{ $i+1 }}</td>
                                     <td>
                                         <input name="no_lot[]" value="{{ $detail->no_lot }}" type="text"
+                                            class="form-control">
+                                    </td>
+                                    <td>
+                                        <input name="nm_partai[]" value="{{ $detail->nm_partai }}" type="text"
                                             class="form-control">
                                     </td>
                                     <td>

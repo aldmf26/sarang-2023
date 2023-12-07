@@ -233,6 +233,7 @@
                     url: "eo/load_modal_akhir",
                     success: function(r) {
                         $("#load_modal_akhir").html(r);
+                        pencarian('pencarian2', 'tablealdi2')
                     }
                 });
             }

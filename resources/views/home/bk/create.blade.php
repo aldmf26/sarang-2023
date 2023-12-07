@@ -54,6 +54,7 @@
 
                                 <th class="dhead">No</th>
                                 <th class="dhead">No Lot</th>
+                                <th class="dhead">Nama Partai</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
                                 <th class="dhead">Ket</th>
@@ -81,6 +82,10 @@
                                                     {{ $g->no_lot }}-{{ $g->ket }}</option>
                                             @endforeach
                                         </select> --}}
+                                    </td>
+                                    <td>
+                                        <input name="nm_partai[]" count="{{ $i }}" type="text"
+                                            class="form-control namaPartai">
                                     </td>
                                     <td>
                                         <input name="no_box[]" count="{{ $i }}" type="text"
@@ -236,27 +241,10 @@
             keyupBp('tipe')
             keyupBp('warna')
             keyupBp('nolot')
+            keyupBp('namaPartai')
             // keyupBp('pcsAwal')
             // keyupBp('grAwal')
             keyupBp('nobox', true)
-
-            function loadSelect(elemen, baris) {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('bk.load_select') }}",
-                    data: {
-                        elemen: elemen,
-                        count: baris
-                    },
-                    success: function(r) {
-                        $('.load_' + elemen).html(r);
-                        $(".select2-tipe").select2()
-                    }
-                });
-            }
-            loadSelect('tipe');
-            loadSelect('ket');
-            loadSelect('warna');
 
             function selectBerubah(tipe) {
                 $(document).on('change', `.selectTipe[pilihan=${tipe}]`, function() {
@@ -305,15 +293,15 @@
             });
 
 
-            $('.selectPengawas').on('change', function() {
-                var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
+            // $('.selectPengawas').on('change', function() {
+            //     var nilaiselect = $(this).val(); // Nilai terpilih dari select yang diubah
 
-                //     // Memperbarui semua elemen dengan kelas .selectPengawas
-                $('.selectPengawas').not(this).each(function() {
-                    $(this).val(nilaiselect).trigger(
-                        'change.select2'); // Update nilai Select2 dan trigger event change
-                });
-            });
+            //     //     // Memperbarui semua elemen dengan kelas .selectPengawas
+            //     $('.selectPengawas').not(this).each(function() {
+            //         $(this).val(nilaiselect).trigger(
+            //             'change.select2'); // Update nilai Select2 dan trigger event change
+            //     });
+            // });
             $(document).on('change', '.nolot', function() {
                 var nolot = $(this).val();
                 var count = $(this).attr('count');

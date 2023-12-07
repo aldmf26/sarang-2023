@@ -1,9 +1,14 @@
-<div class="row justify-content-center">
+<div class="row">
     {{-- <input type="hidden" name="id_eo" value="{{ $detail->id_eo }}">
     <input type="hidden" name="id_anak" value="{{ $detail->id_anak }}">
     <input type="hidden" name="no_box" value="{{ $detail->no_box }}"> --}}
+    <div class="col-lg-3 mb-2">
+        <label for="">Pencarian :</label>
+        <input autofocus type="text" id="pencarian2" class="form-control">
+    </div>
+
     <div class="col-lg-12">
-        <table class="table table-striped">
+        <table class="table table-striped" id="tablealdi2">
             <thead>
                 <tr>
                     <th class="dhead">Tgl Terima</th>

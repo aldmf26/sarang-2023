@@ -42,15 +42,33 @@
                         <th class="text-end">Pcs Awal</th>
                         <th class="text-end">Gr Awal</th>
                         <th>Status</th>
-                        <th>Cek</th>
-                        <th width="700">Aksi</th>
+                        <th>
+                            Cek
+                            <center>
+                                {{-- @php
+                                    $adaDitutup = DB::table('bk')
+                                        ->where([['selesai', 'Y'], ['kategori', 'like', "%$kategori%"]])
+                                        ->first();
+                                @endphp
+                                @if (!empty($adaDitutup))
+                                @endif --}}
+                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
+                                <br>
+                                <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
+                                        class="fas fa-check"></i> Tutup </span>
+                               
+                                {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
+                                teks="Tutup" /> --}}
+                            </center>
+                        </th>
+                        <th width="100">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($bk as $no => $b)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ $b->no_lot }} </td>
+                            <td>{{ $b->no_lot }} - {{ $b->nm_partai }} </td>
                             <td>{{ $b->no_box }}</td>
                             <td>{{ $b->tipe }}</td>
                             <td>{{ $b->ket }}</td>

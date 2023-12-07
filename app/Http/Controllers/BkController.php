@@ -30,7 +30,7 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            'bk' => DB::select("SELECT a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
 
@@ -120,7 +120,7 @@ class BkController extends Controller
 
                 $data = [
                     'no_lot' => $selectedValue,
-                    // 'nm_partai' => $ket,
+                    'nm_partai' => $r->nm_partai[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
                     'ket' => $r->ket[$x],
@@ -191,9 +191,10 @@ class BkController extends Controller
     public function update(Request $r)
     {
         for ($x = 0; $x < count($r->no_lot); $x++) {
-            if (!empty($r->no_lot[$x])) {
+            if (!empty($r->no_box[$x])) {
                 $data = [
                     'no_lot' => $r->no_lot[$x],
+                    'nm_partai' => $r->nm_partai[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
                     'ket' => $r->ket[$x],
@@ -207,7 +208,7 @@ class BkController extends Controller
                 DB::table('bk')->where('id_bk', $r->id_bk[$x])->update($data);
             }
         }
-        return redirect('home/bk')->with('sukses', 'Data berhasil ditambahkan');
+        return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
     }
 
     public function delete(Request $r)
@@ -216,7 +217,7 @@ class BkController extends Controller
             DB::table('bk')->where('id_bk', $r->no_nota[$i])->delete();
         }
         
-        return redirect('home/bk')->with('sukses', 'Data berhasil dihapus');
+        return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil dihapus');
     }
 
     public function selesai(Request $r)
@@ -225,7 +226,7 @@ class BkController extends Controller
             DB::table('bk')->where('id_bk', $r->no_nota[$i])->update(['selesai' => 'Y']);
         }
         
-        return redirect('home/bk')->with('sukses', 'Data berhasil diselesaikan');
+        return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil diselesaikan');
     }
 
 
