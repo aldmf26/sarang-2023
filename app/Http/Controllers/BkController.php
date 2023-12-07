@@ -116,10 +116,11 @@ class BkController extends Controller
                 $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
 
                 $selectedValue = $r->no_lot[$x];
-                list($noLot, $ket) = explode('-', $selectedValue);
+                // list($noLot, $ket) = explode('-', $selectedValue);
+
                 $data = [
-                    'no_lot' => $noLot,
-                    'nm_partai' => $ket,
+                    'no_lot' => $selectedValue,
+                    // 'nm_partai' => $ket,
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
                     'ket' => $r->ket[$x],
