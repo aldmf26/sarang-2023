@@ -69,7 +69,7 @@
                                 @endif
                             </td>
                             <td align="center"><input type="checkbox" penerima="{{ $b->penerima }}"
-                                    no_nota="{{ $b->no_box }}" class="cek_bayar" name="" id=""></td>
+                                    no_nota="{{ $b->id_bk }}" class="cek_bayar" name="" id=""></td>
                             
                             <td>
                                 <span style="cursor: pointer" class="badge bg-primary selesai"><i
