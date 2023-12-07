@@ -30,7 +30,7 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            'bk' => DB::select("SELECT a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.kategori LIKE '%$kategori%' ORDER BY a.id_bk DESC"),
 
@@ -211,10 +211,29 @@ class BkController extends Controller
 
     public function delete(Request $r)
     {
-        foreach ($r->no_nota as $n) {
-            DB::table('bk')->where('no_box', $n)->delete();
+        for ($i=0; $i < count($r->no_nota); $i++) { 
+            DB::table('bk')->where([
+                ['no_box', $r->no_nota[$i]],
+                ['kategori', 'like', "%$r->kategori%"],
+                ['penerima', $r->id_pengawas],
+            ])->delete();
         }
-        return redirect('home/bk')->with('sukses', 'Data berhasil ditambahkan');
+        
+        return redirect('home/bk')->with('sukses', 'Data berhasil dihapus');
+    }
+
+    public function selesai(Request $r)
+    {
+        dd($r->all());
+        for ($i=0; $i < count($r->no_nota); $i++) { 
+            DB::table('bk')->where([
+                ['no_box', $r->no_nota[$i]],
+                ['kategori', 'like', "%$r->kategori%"],
+                ['penerima', $r->id_pengawas],
+            ])->update(['selesai' => 'Y']);
+        }
+        
+        return redirect('home/bk')->with('sukses', 'Data berhasil diselesaikan');
     }
 
 

@@ -41,8 +41,9 @@
                         <th>Penerima</th>
                         <th class="text-end">Pcs Awal</th>
                         <th class="text-end">Gr Awal</th>
+                        <th>Status</th>
                         <th>Cek</th>
-                        <th>Aksi</th>
+                        <th width="700">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,13 +61,22 @@
                             </td>
                             <td class="text-end">{{ $b->pcs_awal }}</td>
                             <td class="text-end">{{ $b->gr_awal }}</td>
-                            <td align="center"><input type="checkbox" penerima="{{ $b->penerima }}" no_nota="{{ $b->no_box }}" class="cek_bayar"
-                                    name="" id=""></td>
+                            <td align="center">
+                                @if ($b->selesai == 'T')
+                                    <span class="badge bg-warning">BELUM</span>
+                                @else
+                                    <span class="badge bg-primary">SELESAI</span>
+                                @endif
+                            </td>
+                            <td align="center"><input type="checkbox" penerima="{{ $b->penerima }}"
+                                    no_nota="{{ $b->no_box }}" class="cek_bayar" name="" id=""></td>
+                            
                             <td>
-                                <a href="" class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i></a>
-                                <a href="" class="btn btn-sm btn-danger delete"><i
-                                        class="fas fa-trash-alt"></i></a>
-
+                                <span style="cursor: pointer" class="badge bg-primary selesai"><i
+                                        class="fas fa-check"></i></span>
+                                <span style="cursor: pointer" class="badge bg-warning edit_bk"><i class="fas fa-edit"></i></span>
+                                <span style="cursor: pointer" class="badge bg-danger delete"><i
+                                        class="fas fa-trash-alt"></i></span>
                             </td>
                         </tr>
                     @endforeach
@@ -158,12 +168,12 @@
                             params.append('id_pengawas', orderNumber);
                         });
                         var queryStringId = 'id_pengawas[]=' + penerima.join('&id_pengawas[]=');
-                        var kategori = "{{request()->get('kategori') ?? 'cabut'}}"
+                        var kategori = "{{ request()->get('kategori') ?? 'cabut' }}"
                         var targetUrl = `/home/bk/${link}?kategori=${kategori}&${queryString}&${queryStringId}`
                         if (formDelete === null) {
                             window.location.assign(targetUrl)
                         } else {
-                            if (confirm('Yakin ingin dihapus ? ')) {
+                            if (confirm(formDelete)) {
                                 window.location.assign(targetUrl)
                                 // window.open(targetUrl);
                             }
@@ -174,12 +184,14 @@
                 }
                 clickCekKirim('.btn_bayar', 'print')
                 clickCekKirim('.edit_bk', 'edit')
-                clickCekKirim('.delete', 'delete', 'formDelete')
+                clickCekKirim('.delete', 'delete', 'Yakin ingin dihapus ?')
+                clickCekKirim('.selesai', 'selesai', 'Yakin ingin diselesaikan ?')
 
                 $(".btn_bayar").hide();
                 $(".piutang_cek").hide();
                 $(".delete").hide();
                 $(".edit_bk").hide();
+                $(".selesai").hide();
 
                 $(document).on('change', '.cek_bayar', function() {
                     var totalPiutang = 0
@@ -192,6 +204,7 @@
                     $(".piutang_cek").toggle(anyChecked);
                     $('.delete').toggle(anyChecked);
                     $(".edit_bk").toggle(anyChecked);
+                    $(".selesai").toggle(anyChecked);
                     $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
                 });
 
