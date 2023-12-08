@@ -245,7 +245,7 @@
 
             $(document).on('click', '.selesai', function() {
                 var id_cabut = $(this).attr('id_cabut');
-
+                $(this).closest('tr').hide();
                 $('.cetak').val(id_cabut);
 
                 $.ajax({

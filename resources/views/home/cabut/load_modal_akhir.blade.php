@@ -86,7 +86,7 @@
                                 type="text" class="form-control text-end">
                         </td>
                         <td>
-                            <input name="gr_flx{{ $i + 1 }}[]" value="{{ $d->gr_flx ?? 0 }}" type="text"
+                            <input name="gr_flx{{ $i + 1 }}[]" value="{{ $d->gr_flx }}" type="text"
                                 class="form-control text-end grFlexKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
@@ -95,16 +95,16 @@
                                 count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->gr_akhir ?? '' }}" required name="gr_akhir{{ $i + 1 }}[]"
+                            <input value="{{ $d->gr_akhir }}" required name="gr_akhir{{ $i + 1 }}[]"
                                 type="text" class="form-control text-end grAkhirKeyup"
                                 count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->eot ?? 0 }}" name="eot{{ $i + 1 }}[]" type="text"
+                            <input value="{{ $d->eot }}" name="eot{{ $i + 1 }}[]" type="text"
                                 class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->pcs_hcr ?? 0 }}" name="pcs_hcr{{ $i + 1 }}[]"
+                            <input value="{{ $d->pcs_hcr }}" name="pcs_hcr{{ $i + 1 }}[]"
                                 type="text" class="form-control text-end pcsHcrKeyup"
                                 count="{{ $i + 1 }}">
                         </td>

@@ -68,7 +68,7 @@
                                 type="text" class="form-control text-end grAkhirKeyup" count="{{ $i }}">
                         </td>
                         <td>
-                            <input value="{{ $v->pcus ?? 0 }}" required name="pcus{{ $i }}[]"
+                            <input value="{{ $v->pcus }}" required name="pcus{{ $i }}[]"
                                 type="text" class="form-control pcucAkhirKeyup text-end">
                         </td>
                         @php

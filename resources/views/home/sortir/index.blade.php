@@ -321,8 +321,10 @@
                         var id_anak = $(this).attr('id_anak')
                         loadInputAkhir()
                     })
-                    $(document).on('click', '.selesai', function() {
+                    $(document).on('click', '.selesai', function(e) {
+                        e.preventDefault()
                         var id_sortir = $(this).attr('id_sortir')
+                        $(this).closest('tr').hide();
                         $.ajax({
                             type: "GET",
                             url: "{{ route('sortir.selesai_sortir') }}",
@@ -332,7 +334,7 @@
                             success: function(r) {
                                 alertToast('sukses', 'Berhasil menyelesaikan')
                                 loadHalaman()
-                                loadInputAkhir()
+                                // loadInputAkhir()
                             }
                         });
                     });

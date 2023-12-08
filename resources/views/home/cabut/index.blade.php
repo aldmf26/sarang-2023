@@ -700,6 +700,7 @@
                 })
                 $(document).on('click', '.selesai', function() {
                     var id_cabut = $(this).attr('id_cabut');
+                    $(this).closest('tr').hide();
 
                     $.ajax({
                         type: "GET",
