@@ -95,7 +95,7 @@
                                 count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->gr_akhir ?? 0 }}" required name="gr_akhir{{ $i + 1 }}[]"
+                            <input value="{{ $d->gr_akhir ?? '' }}" required name="gr_akhir{{ $i + 1 }}[]"
                                 type="text" class="form-control text-end grAkhirKeyup"
                                 count="{{ $i + 1 }}">
                         </td>
