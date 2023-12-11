@@ -83,16 +83,16 @@
                                     name="tgl_terima[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control text-end pcsAwalKeyup" value="0" id="pcsInput"
+                                <input type="text" class="form-control text-end pcsAwalKeyup" value="" id="pcsInput"
                                     name="pcs_awal[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control text-end pcucKeyup" value="0" id="pcuc"
+                                <input type="text" class="form-control text-end pcucKeyup" value="" id="pcuc"
                                     name="pcuc[]">
                             </td>
                             <td>
                                 <input type="text" class="form-control text-end grAwalKeyup setGr" count="{{ $i }}"
-                                    value="0" id="grInput" name="gr_awal[]">
+                                    value="" id="grInput" name="gr_awal[]">
                             </td>
                             <td>
                                 <input readonly type="text"

@@ -29,7 +29,7 @@
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
     </td>
     <td>
-        <input type="text" class="form-control text-end setPcs{{ $count }}" value="0" id="pcsInput"
+        <input type="text" class="form-control text-end setPcs{{ $count }}" value="" id="pcsInput"
             name="pcs_awal[]">
     </td>
     <td>
@@ -38,7 +38,7 @@
     </td>
     <td>
         <input type="text" class="form-control text-end setGr setGr{{ $count }}" count="{{ $count }}"
-            value="0" id="grInput" name="gr_awal[]">
+            value="" id="grInput" name="gr_awal[]">
     </td>
     <td>
         <input readonly type="text" class="form-control text-end rupiahInput setRupiah{{ $count }}"

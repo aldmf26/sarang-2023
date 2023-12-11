@@ -324,19 +324,26 @@
                     $(document).on('click', '.selesai', function(e) {
                         e.preventDefault()
                         var id_sortir = $(this).attr('id_sortir')
-                        $(this).closest('tr').hide();
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('sortir.selesai_sortir') }}",
-                            data: {
-                                id_sortir: id_sortir
-                            },
-                            success: function(r) {
-                                alertToast('sukses', 'Berhasil menyelesaikan')
-                                loadHalaman()
-                                // loadInputAkhir()
-                            }
-                        });
+                        var row = $(this).closest('tr');
+                        var grAkhirValue = row.find('.grAkhirKeyup').val();
+                        if(grAkhirValue == 0 || grAkhirValue == '') {
+                            alertToast('error', 'Gagal Selesai')
+                            
+                        } else {
+                            row.hide();
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ route('sortir.selesai_sortir') }}",
+                                data: {
+                                    id_sortir: id_sortir
+                                },
+                                success: function(r) {
+                                    alertToast('sukses', 'Berhasil menyelesaikan')
+                                    loadHalaman()
+                                    // loadInputAkhir()
+                                }
+                            });
+                        }
                     });
                     $(document).on('keyup', '.grAkhirKeyup', function() {
                         var count = $(this).attr('count')
