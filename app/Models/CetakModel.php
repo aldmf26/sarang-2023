@@ -32,7 +32,7 @@ class CetakModel extends Model
             left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas
             group by c.id_pengawas
         ) as c on c.id_pengawas = a.penerima 
-        where a.kategori = 'cetak' AND c.penutup != 'Y'
+        where a.kategori = 'cetak' AND a.selesai = 'T'
         group by a.penerima;
         ");
 
