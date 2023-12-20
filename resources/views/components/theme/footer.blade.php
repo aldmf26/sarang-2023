@@ -230,12 +230,14 @@
     }
 
     function pencarian(inputId, tblId) {
+
         $(document).on('keyup', "#" + inputId, function() {
-            var value = $(this).val().toLowerCase();
+            var value = $(this).val().toLowerCase() ;
             $(`#${tblId} tbody tr`).filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         })
+
     }
 
     function aksiBtn(idForm) {

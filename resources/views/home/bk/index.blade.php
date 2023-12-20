@@ -155,7 +155,7 @@
 
                 </div>
             </x-theme.modal>
-
+        </form>
 
     </x-slot>
     @section('scripts')
@@ -199,7 +199,7 @@
                         };
                         var targetUrl = `/home/bk/${link}?kategori=${kategori}&${queryString}`
 
-                        if(formDelete === null) {
+                        if (formDelete === null) {
                             window.location.assign(targetUrl)
                         } else {
                             if (confirm(formDelete)) {
@@ -207,7 +207,7 @@
                                     type: "POST",
                                     url: `/home/bk/${link}`,
                                     data: postData,
-                                    beforeSend:function(){
+                                    beforeSend: function() {
                                         $("#loading").modal('show')
                                     },
                                     success: function(r) {
