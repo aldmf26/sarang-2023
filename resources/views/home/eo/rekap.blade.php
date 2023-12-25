@@ -97,7 +97,7 @@
                                     <th class="text-end">{{ number_format($d->pcs_akhir ?? 0, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                     @php
-                                        $susut = empty($d->gr_awal) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                        $susut = empty($d->gr_awal) ? 0 : (1 - ($d->gr_akhir / $d->gr_awal)) * 100;
 
                                     @endphp
                                     <th class="text-end">{{ number_format($susut, 0) }} %</th>
