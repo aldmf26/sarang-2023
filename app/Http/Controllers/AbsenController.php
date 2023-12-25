@@ -117,35 +117,7 @@ class AbsenController extends Controller
             ]);
         }
     }
-    // public function index(Request $r)
-    // {
-    //     $tgl = tanggalFilter($r);
-    //     $tgl1 = $tgl['tgl1'];
-    //     $tgl2 = $tgl['tgl2'];
-    //     session(['tgl1' => $tgl1, 'tgl2' => $tgl2]);
-
-    //         $absen = DB::select("SELECT f.countStgh,a.id_anak,b.count,c.ttl_absen,d.nama,e.kelas,(c.ttl_absen - f.countStgh) as ttlBub FROM `absen` as a
-    //         JOIN tb_anak as d ON a.id_anak = d.id_anak
-    //         JOIN tb_kelas as e ON d.id_kelas = e.id_kelas
-    //         LEFT JOIN (
-    //             SELECT id_anak,count(*) as count FROM `absen` GROUP BY id_anak,tgl
-    //         ) as b ON a.id_anak = b.id_anak
-    //         LEFT JOIN (
-    //             SELECT id_anak,count(*) as ttl_absen FROM `absen` WHERE ket != 'stgh hari' GROUP BY id_anak
-    //         ) as c ON a.id_anak = c.id_anak
-    //         LEFT JOIN (
-    //             SELECT id_anak,count(*) / 2 as countStgh FROM `absen` WHERE ket = 'stgh hari' GROUP BY id_anak
-    //         ) as f ON f.id_anak = a.id_anak
-    //         WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' GROUP BY a.id_anak ORDER BY e.kelas DESC, d.nama;");
-    //     $data = [
-    //         'title' => 'Rekap Absensi',
-    //         'anak' => $this->getAnak(),
-    //         'tgl1' => $tgl1,
-    //         'tgl2' => $tgl2,
-    //         'absen' => $absen
-    //     ];
-    //     return view('home.absen.rekap', $data);
-    // }
+    
 
     public function detail($id_anak)
     {
