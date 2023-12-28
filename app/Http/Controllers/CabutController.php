@@ -906,7 +906,7 @@ class CabutController extends Controller
 
             $rowDenda = $rowTotal + 1;
             $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda`
-            WHERE bulan_dibayar = '11' AND YEAR(tgl) = '2023' AND admin = '$d->name'
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND admin = '$d->name'
             GROUP BY admin");
             $rupiahDenda = $denda->rupiah ?? 0;
             $sheet->setCellValue('A' . $rowDenda, 'Denda');
