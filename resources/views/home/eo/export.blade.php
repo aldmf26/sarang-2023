@@ -26,7 +26,7 @@
                 <td>{{ $d->gr_eo_awal }}</td>
                 <td>{{ $d->gr_eo_akhir }}</td>
                 @php
-                    $susut = empty($d->gr_eo_akhir) ? 0 : (1 - $d->gr_eo_akhir / $d->gr_eo_awal) * 100;
+                    $susut = empty($d->gr_eo_akhir) ? 0 : (1 - ($d->gr_eo_akhir / $d->gr_eo_awal)) * 100;
                     @endphp
                 <td>{{ $susut }}</td>
                 <td>{{ $d->ttl_rp}} </td>

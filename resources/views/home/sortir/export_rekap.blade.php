@@ -46,7 +46,7 @@
                 <td align="right">{{ $c->gr_akhir }}</td>
 
                 @php
-                    $susut = empty($c->gr_awal) ? 0 : (1 - $c->gr_akhir / $c->gr_awal) * 100;
+                    $susut = empty($c->gr_awal) ? 0 : (1 - ($c->gr_akhir / $c->gr_awal)) * 100;
 
                 @endphp
                 <td align="right">{{ number_format($susut, 0) }} %</td>

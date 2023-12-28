@@ -31,7 +31,7 @@
                 <td>{{ $d->pcs_akhir ?? 0 }}</td>
                 <td>{{ $d->gr_akhir ?? 0 }}</td>
                 @php
-                    $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                    $susut = empty($d->gr_akhir) ? 0 : (1 - ($d->gr_akhir / $d->gr_awal)) * 100;
                 @endphp
                 <td>{{ $susut }}%</td>
                 <td>{{ $d->rp_target ?? 0 }}</td>
