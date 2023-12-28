@@ -885,7 +885,7 @@ class CabutController extends Controller
             $ttlRp += $rupiahDll;
 
 
-            $ttlSusut = (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
+            $ttlSusut = empty($ttlGrAwal) ? 0 : (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
             $rowTotal = $rowDll + 1;
             $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
             $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
