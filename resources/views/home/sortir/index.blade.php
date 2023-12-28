@@ -474,10 +474,14 @@
                             url: "{{ route('sortir.create') }}",
                             data: datas,
                             success: function(r) {
-                                alertToast('sukses', 'Berhasil tambah data sortir')
-                                $('#tambah2').modal('hide')
-                                loadHalaman()
-                                loadTambahsortir()
+                                if(r === 'berhasil') {
+                                    alertToast('sukses', 'Berhasil tambah kerja')
+                                    $('#tambah2').modal('hide')
+                                    loadHalaman()
+                                    loadTambahsortir()
+                                } else {
+                                    alertToast('error', r)
+                                }
 
                             }
                         });

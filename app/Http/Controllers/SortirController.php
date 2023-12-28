@@ -95,27 +95,35 @@ class SortirController extends Controller
 
     public function create(Request $r)
     {
-
-        for ($i = 0; $i < count($r->rupiah); $i++) {
-            $rupiah = str()->remove('.', $r->rupiah[$i]);
-            $id_sortir = $r->id_sortir[$i];
-            $data = [
-                'no_box' => $r->no_box,
-                'tgl' => $r->tgl_terima[$i],
-                'id_pengawas' => $r->id_pengawas,
-                'id_anak' => $r->id_anak[$i],
-                'id_kelas' => $r->tipe[$i],
-                'pcuc' => $r->pcuc[$i],
-                'pcs_awal' => $r->pcs_awal[$i],
-                'gr_awal' => $r->gr_awal[$i],
-                'rp_target' => $rupiah,
-            ];
-            if ($id_sortir == 9999) {
-                DB::table('sortir')->insert($data);
-            } else {
-                DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
+        $ttlPcs = array_sum($r->pcs_awal);
+        $ttlGr = array_sum($r->gr_awal);
+        $cekStok = DB::selectOne("SELECT sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `bk` WHERE no_box = '$r->no_box' AND kategori LIKE '%sortir%';");
+        if($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr){
+            for ($i = 0; $i < count($r->rupiah); $i++) {
+                $rupiah = str()->remove('.', $r->rupiah[$i]);
+                $id_sortir = $r->id_sortir[$i];
+                $data = [
+                    'no_box' => $r->no_box,
+                    'tgl' => $r->tgl_terima[$i],
+                    'id_pengawas' => $r->id_pengawas,
+                    'id_anak' => $r->id_anak[$i],
+                    'id_kelas' => $r->tipe[$i],
+                    'pcuc' => $r->pcuc[$i],
+                    'pcs_awal' => $r->pcs_awal[$i],
+                    'gr_awal' => $r->gr_awal[$i],
+                    'rp_target' => $rupiah,
+                ];
+                if ($id_sortir == 9999) {
+                    DB::table('sortir')->insert($data);
+                } else {
+                    DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
+                }
             }
+            return 'berhasil';
+        } else {
+            return 'Stok pcs / gr melebihi Bk';
         }
+        
 
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
