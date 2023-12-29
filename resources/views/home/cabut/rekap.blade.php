@@ -72,7 +72,7 @@
                             <th width="110" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
                             <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
-                        </tr>
+                        </tr>   
 
                         <tr class="sticky-header">
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
