@@ -354,16 +354,16 @@ class Cabut extends Model
         denda.ttl_rp_denda
         FROM 
             (
-                SELECT id_anak
+                SELECT id_anak,id_pengawas
                 FROM absen
                 WHERE id_pengawas = '$id_pengawas'
                 AND MONTH(tgl) = '$bulan'
                 AND YEAR(tgl) = '$tahun'
                 GROUP BY id_anak
-            ) AS absen
+            ) AS absenGet
         JOIN 
-            tb_anak as a ON absen.id_anak = a.id_anak
-        JOIN users as b on a.id_pengawas = b.id
+            tb_anak as a ON absenGet.id_anak = a.id_anak
+        JOIN users as b on absenGet.id_pengawas = b.id
         LEFT JOIN (
                   SELECT 
                     id_anak, 
