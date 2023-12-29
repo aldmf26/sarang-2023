@@ -190,6 +190,7 @@ class Cabut extends Model
         $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
+        max(a.bulan_dibayar) as bulan_dibayar, 
         a.no_box, 
         c.kategori, 
         SUM(a.pcs_awal) as pcs_awal , 
