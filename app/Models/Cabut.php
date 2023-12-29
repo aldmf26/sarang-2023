@@ -49,7 +49,7 @@ class Cabut extends Model
             ->get();
     }
 
-    
+
     public static function getCabutAkhir($orderBy)
     {
         $datas =  DB::table('cabut as a')
@@ -183,10 +183,10 @@ class Cabut extends Model
             ->where([['a.id_cabut', $id_cabut]])
             ->first();
     }
-    
-    public static function queryRekap($id_pengawas = null)
+
+    public static function queryRekap($id_pengawas = null, $bulan = null, $tahun = null)
     {
-        
+
         $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
@@ -352,7 +352,17 @@ class Cabut extends Model
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
         denda.ttl_rp_denda
-        FROM tb_anak as a
+        FROM 
+            (
+                SELECT id_anak
+                FROM absen
+                WHERE id_pengawas = '$id_pengawas'
+                AND MONTH(tgl) = '$bulan'
+                AND YEAR(tgl) = '$tahun'
+                GROUP BY id_anak
+            ) AS absen
+        JOIN 
+            tb_anak as a ON absen.id_anak = a.id_anak
         JOIN users as b on a.id_pengawas = b.id
         LEFT JOIN (
                   SELECT 
@@ -409,7 +419,6 @@ class Cabut extends Model
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as denda ON a.id_anak = denda.id_anak
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
-        
     }
     public static function getPengawasRekap($bulan, $tahun)
     {
