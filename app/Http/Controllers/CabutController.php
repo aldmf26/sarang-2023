@@ -729,10 +729,14 @@ class CabutController extends Controller
 
             $ttlPcsSisa = 0;
             $ttlGrSisa = 0;
+
+            $ttlRpCabut = 0;
+            $ttlRpEo = 0;
+            $ttlRpSortir = 0;
             // cabut
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 2;
-            $cabut = Cabut::queryRekap($d->id_pengawas, $bulan, $tahun);
+            $cabut = Cabut::queryRekap(458, $bulan, $tahun);
             foreach ($cabut as $data) {
                 $sheet->setCellValue('A' . $row, $data->no_box);
                 $sheet->setCellValue('B' . $row, $data->pcs_bk);
@@ -764,8 +768,8 @@ class CabutController extends Controller
                 $ttlFlx += $data->gr_flx;
                 $ttlEot += $data->eot;
 
-                $ttlRp += $data->rupiah;
-                $ttlRpCabut = $data->rupiah;
+                $ttlRp += $data->ttl_rp;
+                $ttlRpCabut += $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -816,7 +820,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
-                $ttlRpEo = $data->rupiah;
+                $ttlRpEo += $data->rupiah;
 
                 $ttlPcsSisa += 0;
                 $ttlGrSisa += $data->gr_bk - $data->gr_eo_awal;
@@ -864,7 +868,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
-                $ttlRpSortir = $data->rupiah;
+                $ttlRpSortir += $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -893,12 +897,7 @@ class CabutController extends Controller
 
             $ttlSusut = empty($ttlGrAwal) ? 0 : (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
             $rowTotal = $rowDll + 1;
-            $sheet->setCellValue('A' . $rowTotal, "TOTAL : 
-                                                    cbt = $ttlRpCabut 
-                                                    sortir = $ttlRpSortir
-                                                    eo = $ttlRpEo
-                                                    dll = $ttlRpDll
-                                                    ");
+            $sheet->setCellValue('A' . $rowTotal, "TOTAL");
             $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
             $sheet->setCellValue('C' . $rowTotal, $ttlGrBk);
             $sheet->setCellValue('D' . $rowTotal, $bulanDibayar);
