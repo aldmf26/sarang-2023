@@ -736,7 +736,7 @@ class CabutController extends Controller
             // cabut
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 2;
-            $cabut = Cabut::queryRekap(458, $bulan, $tahun);
+            $cabut = Cabut::queryRekap($d->id_pengawas, $bulan, $tahun);
             foreach ($cabut as $data) {
                 $sheet->setCellValue('A' . $row, $data->no_box);
                 $sheet->setCellValue('B' . $row, $data->pcs_bk);
