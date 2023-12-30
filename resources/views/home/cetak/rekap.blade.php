@@ -144,7 +144,9 @@
                                     <td class="text-end">{{ $c->pcs_cu }}</td>
                                     <td class="text-end">{{ $c->gr_cu }}</td>
                                     <td class="text-end">
-                                        {{ number_format((1 - ($c->gr_akhir + $c->gr_cu) / $c->gr_awal) * 100, 0) }} %
+                                        {{-- {{ number_format((1 - ($c->gr_akhir + $c->gr_cu) / $c->gr_awal) * 100, 0) }} % --}}
+
+                                        {{ $c->gr_akhir + $c->gr_cu }} / {{ $c->gr_awal }}
                                     </td>
                                     <td class="text-end">
                                         Rp {{ number_format($c->ttl_rp - $c->denda_susut - $c->denda_hcr, 0) }}
