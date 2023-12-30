@@ -72,7 +72,7 @@
                             <th width="110" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
                             <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
-                        </tr>
+                        </tr>   
 
                         <tr class="sticky-header">
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
@@ -122,12 +122,12 @@
 
                                             FROM cabut as a
                                             JOIN (
-                                                SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
+                                                SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` where bulan_dibayar = '$bulan' GROUP BY no_box
                                             ) as rp ON rp.no_box = a.no_box
                                             left join users as b on b.id = a.id_pengawas
-                                            left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999
-                                            GROUP by a.no_box");
+                                            left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%' and c.selesai = 'T'
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_serah) = '$tahun'
+                                            GROUP by a.no_box;");
                             @endphp
                             @foreach ($query as $x)
                     <tbody x-show="openRows.includes({{ $i }})">

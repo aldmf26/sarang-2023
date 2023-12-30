@@ -49,7 +49,7 @@ class Cabut extends Model
             ->get();
     }
 
-    
+
     public static function getCabutAkhir($orderBy)
     {
         $datas =  DB::table('cabut as a')
@@ -183,13 +183,14 @@ class Cabut extends Model
             ->where([['a.id_cabut', $id_cabut]])
             ->first();
     }
-    
-    public static function queryRekap($id_pengawas = null)
+
+    public static function queryRekap($id_pengawas = null, $bulan = null, $tahun = null)
     {
-        
+
         $where = $id_pengawas == 'all' ? '' : "AND a.id_pengawas = $id_pengawas";
         return DB::select("SELECT max(b.name) as pengawas, 
         max(a.tgl_terima) as tgl, 
+        max(a.bulan_dibayar) as bulan_dibayar, 
         a.no_box, 
         c.kategori, 
         SUM(a.pcs_awal) as pcs_awal , 
@@ -199,11 +200,11 @@ class Cabut extends Model
         sum(a.pcs_hcr) as pcs_hcr, sum(a.eot) as eot, sum(a.ttl_rp) as rupiah,rp.ttl_rp, sum(a.gr_flx) as gr_flx
         FROM cabut as a
         JOIN (
-            SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` GROUP BY no_box
+            SELECT no_box,sum(ttl_rp) as ttl_rp FROM `cabut` where bulan_dibayar = '$bulan' GROUP BY no_box
         ) as rp ON rp.no_box = a.no_box
         left join users as b on b.id = a.id_pengawas
-        left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%'
-        WHERE a.penutup = 'T' AND a.no_box != 9999 $where
+        left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%' and c.selesai = 'T'
+        WHERE a.penutup = 'T' AND a.no_box != 9999 $where AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_serah) = '$tahun'
         GROUP by a.no_box;");
     }
     public static function queryRekapGroup($bulan, $tahun)
@@ -236,22 +237,22 @@ class Cabut extends Model
                                 sum(gr_flx) as gr_flx,
                                 SUM(rupiah) as rupiah,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE no_box != 9999 AND penutup = 'T'  GROUP BY id_pengawas
+                                FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
                             JOIN (
-                                SELECT no_box FROM cabut GROUP BY no_box
+                                SELECT no_box FROM cabut WHERE bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' GROUP BY no_box
                             ) as b on a.no_box = b.no_box
                             WHERE a.kategori LIKE '%cabut%'
                             GROUP by a.penerima
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut WHERE no_box != 9999 AND penutup = 'T'
+                            FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE  a.no_box != 9999 AND a.penutup = 'T'
+                        WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
@@ -351,8 +352,18 @@ class Cabut extends Model
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
         denda.ttl_rp_denda
-        FROM tb_anak as a
-        JOIN users as b on a.id_pengawas = b.id
+        FROM 
+            (
+                SELECT id_anak,id_pengawas
+                FROM absen
+                WHERE id_pengawas = '$id_pengawas'
+                AND MONTH(tgl) = '$bulan'
+                AND YEAR(tgl) = '$tahun'
+                GROUP BY id_anak
+            ) AS absenGet
+        JOIN 
+            tb_anak as a ON absenGet.id_anak = a.id_anak
+        JOIN users as b on absenGet.id_pengawas = b.id
         LEFT JOIN (
                   SELECT 
                     id_anak, 
@@ -408,7 +419,6 @@ class Cabut extends Model
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as denda ON a.id_anak = denda.id_anak
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
-        
     }
     public static function getPengawasRekap($bulan, $tahun)
     {

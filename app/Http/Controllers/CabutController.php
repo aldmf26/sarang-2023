@@ -432,8 +432,8 @@ class CabutController extends Controller
                 'X1' => 'gajih',
                 'A2' => 'pgws',
                 'B2' => 'hari masuk',
-                'C2' => 'kelas',
-                'D2' => 'bulan',
+                'C2' => 'nama',
+                'D2' => 'Kelas',
                 'E2' => 'pcs awal',
                 'F2' => 'gr awal',
                 'G2' => 'pcs akhir',
@@ -663,7 +663,7 @@ class CabutController extends Controller
     {
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
+        WHERE a.kategori != 'cetak' AND a.selesai = 'T'
         group by b.id");
 
         $bulan = $r->bulan;
@@ -729,10 +729,14 @@ class CabutController extends Controller
 
             $ttlPcsSisa = 0;
             $ttlGrSisa = 0;
+
+            $ttlRpCabut = 0;
+            $ttlRpEo = 0;
+            $ttlRpSortir = 0;
             // cabut
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 2;
-            $cabut = Cabut::queryRekap($d->id_pengawas);
+            $cabut = Cabut::queryRekap(458, $bulan, $tahun);
             foreach ($cabut as $data) {
                 $sheet->setCellValue('A' . $row, $data->no_box);
                 $sheet->setCellValue('B' . $row, $data->pcs_bk);
@@ -764,7 +768,8 @@ class CabutController extends Controller
                 $ttlFlx += $data->gr_flx;
                 $ttlEot += $data->eot;
 
-                $ttlRp += $data->rupiah;
+                $ttlRp += $data->ttl_rp;
+                $ttlRpCabut += $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -773,7 +778,7 @@ class CabutController extends Controller
 
             // eo
             $rowEo = $row;
-            $eo = Eo::queryRekap($d->id_pengawas);
+            $eo = Eo::queryRekap($d->id_pengawas,$bulan,$tahun);
             foreach ($eo as $data) {
                 $sheet->setCellValue('A' . $rowEo, $data->no_box);
                 $sheet->setCellValue('B' . $rowEo, 0);
@@ -815,6 +820,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
+                $ttlRpEo += $data->rupiah;
 
                 $ttlPcsSisa += 0;
                 $ttlGrSisa += $data->gr_bk - $data->gr_eo_awal;
@@ -823,7 +829,7 @@ class CabutController extends Controller
 
             // sortir
             $rowSortir = $rowEo;
-            $sortir = Sortir::queryRekap($d->id_pengawas);
+            $sortir = Sortir::queryRekap($d->id_pengawas,$bulan,$tahun);
             foreach ($sortir as $data) {
                 $sheet->setCellValue('A' . $rowSortir, $data->no_box);
                 $sheet->setCellValue('B' . $rowSortir, $data->pcs_bk);
@@ -862,6 +868,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
+                $ttlRpSortir += $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -883,11 +890,14 @@ class CabutController extends Controller
             $sheet->setCellValue('E' . $rowDll, $d->name);
             $sheet->setCellValue('M' . $rowDll, $rupiahDll);
             $ttlRp += $rupiahDll;
+            $ttlRpDll = $rupiahDll;
+
+            
 
 
             $ttlSusut = empty($ttlGrAwal) ? 0 : (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
             $rowTotal = $rowDll + 1;
-            $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('A' . $rowTotal, "TOTAL");
             $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
             $sheet->setCellValue('C' . $rowTotal, $ttlGrBk);
             $sheet->setCellValue('D' . $rowTotal, $bulanDibayar);

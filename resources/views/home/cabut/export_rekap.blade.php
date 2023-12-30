@@ -42,7 +42,7 @@
                 <td>{{ $c->no_box }}</td>
                 <td align="right">{{ $c->pcs_bk }}</td>
                 <td align="right">{{ $c->gr_bk }}</td>
-                <td>{{ date('M y', strtotime($c->tgl)) }}</td>
+                <td>{{ $c->bulan_dibayar }}</td>
                 <td>{{ $c->pengawas }}</td>
                 <td align="right">{{ $c->pcs_awal }}</td>
                 <td align="right">{{ $c->gr_awal }}</td>
