@@ -765,6 +765,7 @@ class CabutController extends Controller
                 $ttlEot += $data->eot;
 
                 $ttlRp += $data->rupiah;
+                $ttlRpCabut = $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -815,6 +816,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
+                $ttlRpEo = $data->rupiah;
 
                 $ttlPcsSisa += 0;
                 $ttlGrSisa += $data->gr_bk - $data->gr_eo_awal;
@@ -862,6 +864,7 @@ class CabutController extends Controller
                 $ttlEot += 0;
 
                 $ttlRp += $data->rupiah;
+                $ttlRpSortir = $data->rupiah;
 
                 $ttlPcsSisa += $data->pcs_bk - $data->pcs_awal;
                 $ttlGrSisa += $data->gr_bk - $data->gr_awal;
@@ -883,11 +886,19 @@ class CabutController extends Controller
             $sheet->setCellValue('E' . $rowDll, $d->name);
             $sheet->setCellValue('M' . $rowDll, $rupiahDll);
             $ttlRp += $rupiahDll;
+            $ttlRpDll = $rupiahDll;
+
+            
 
 
             $ttlSusut = empty($ttlGrAwal) ? 0 : (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
             $rowTotal = $rowDll + 1;
-            $sheet->setCellValue('A' . $rowTotal, 'TOTAL');
+            $sheet->setCellValue('A' . $rowTotal, "TOTAL : 
+                                                    cbt = $ttlRpCabut 
+                                                    sortir = $ttlRpSortir
+                                                    eo = $ttlRpEo
+                                                    dll = $ttlRpDll
+                                                    ");
             $sheet->setCellValue('B' . $rowTotal, $ttlPcsBk);
             $sheet->setCellValue('C' . $rowTotal, $ttlGrBk);
             $sheet->setCellValue('D' . $rowTotal, $bulanDibayar);
