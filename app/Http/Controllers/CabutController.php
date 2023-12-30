@@ -663,7 +663,7 @@ class CabutController extends Controller
     {
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
+        WHERE a.kategori != 'cetak' AND a.selesai = 'T'
         group by b.id");
 
         $bulan = $r->bulan;
