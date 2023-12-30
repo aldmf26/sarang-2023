@@ -204,7 +204,7 @@ class Cabut extends Model
         ) as rp ON rp.no_box = a.no_box
         left join users as b on b.id = a.id_pengawas
         left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%' and c.selesai = 'T'
-        WHERE a.penutup = 'T' AND a.no_box != 9999 $where
+        WHERE a.penutup = 'T' AND a.no_box != 9999 $where AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_serah) = '$tahun'
         GROUP by a.no_box;");
     }
     public static function queryRekapGroup($bulan, $tahun)
