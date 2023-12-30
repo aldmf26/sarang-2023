@@ -773,7 +773,7 @@ class CabutController extends Controller
 
             // eo
             $rowEo = $row;
-            $eo = Eo::queryRekap($d->id_pengawas);
+            $eo = Eo::queryRekap($d->id_pengawas,$bulan,$tahun);
             foreach ($eo as $data) {
                 $sheet->setCellValue('A' . $rowEo, $data->no_box);
                 $sheet->setCellValue('B' . $rowEo, 0);
@@ -823,7 +823,7 @@ class CabutController extends Controller
 
             // sortir
             $rowSortir = $rowEo;
-            $sortir = Sortir::queryRekap($d->id_pengawas);
+            $sortir = Sortir::queryRekap($d->id_pengawas,$bulan,$tahun);
             foreach ($sortir as $data) {
                 $sheet->setCellValue('A' . $rowSortir, $data->no_box);
                 $sheet->setCellValue('B' . $rowSortir, $data->pcs_bk);
