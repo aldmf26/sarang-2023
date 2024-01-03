@@ -72,7 +72,6 @@
                                     </td>
                                     <td>
                                         <select name="nama[]" id="" class="select3">
-
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
                                                 <option {{ $p->id == $detail->penerima ? 'selected' : '' }}

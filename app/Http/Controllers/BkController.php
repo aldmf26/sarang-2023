@@ -110,6 +110,7 @@ class BkController extends Controller
 
     public function create(Request $r)
     {
+        dd(1);
         for ($x = 0; $x < count($r->pcs_awal); $x++) {
             if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
                 $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);

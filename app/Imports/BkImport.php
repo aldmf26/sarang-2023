@@ -14,7 +14,6 @@ class BkImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-
         $tgl = $row['tgl'];
         if (is_numeric($tgl)) {
             // Jika nilai berupa angka, konversi ke format tanggal
@@ -31,6 +30,7 @@ class BkImport implements ToModel, WithHeadingRow
         }
         DB::table('bk')->insert([
             'no_lot' => $row['nolot'],
+            'nm_partai' => $row['nama_partai'],
             'no_box' => $row['nobox'],
             'tipe' => $row['tipe'],
             'ket' => $row['ket'],
