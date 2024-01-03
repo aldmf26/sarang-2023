@@ -960,35 +960,37 @@ class CabutController extends Controller
         }
         return redirect()->route('cabut.index')->with('sukses', 'Data Tercek');
     }
+
     public function export_sinta(Request $r)
     {
         $bulan = $r->bulan;
         $tahun = $r->tahun;
+        $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->createSheet(0);
+        $sheet = $spreadsheet->getActiveSheet();;
         $sheet->setTitle('Summary Box');
 
-        // $koloms = [
-        //     'A1' => 'no box',
-        //     'B1' => 'pcs awal bk',
-        //     'C1' => 'gr awal bk',
-        //     'D1' => 'bulan',
-        //     'E1' => 'pgws',
-        //     'F1' => 'pcs awal kerja',
-        //     'G1' => 'gr awal kerja',
-        //     'H1' => 'pcs akhir kerja',
-        //     'I1' => 'gr akhir kerja',
-        //     'J1' => 'eot',
-        //     'K1' => 'flx',
-        //     'L1' => 'susut',
-        //     'M1' => 'ttl rp',
-        //     'N1' => 'pcs sisa bk',
-        //     'O1' => 'gr sisa bk',
-        //     'P1' => 'kategori',
-        // ];
-        // foreach ($koloms as $koCabut::queryRekap('all',$bulan, $tahun)lom => $isiKolom) {
-        //     $sheet->setCellValue($kolom, ucwords($isiKolom));
-        // }
+        $koloms = [
+            'A1' => 'no box',
+            'B1' => 'pcs awal bk',
+            'C1' => 'gr awal bk',
+            'D1' => 'bulan',
+            'E1' => 'pgws',
+            'F1' => 'pcs awal kerja',
+            'G1' => 'gr awal kerja',
+            'H1' => 'pcs akhir kerja',
+            'I1' => 'gr akhir kerja',
+            'J1' => 'eot',
+            'K1' => 'flx',
+            'L1' => 'susut',
+            'M1' => 'ttl rp',
+            'N1' => 'pcs sisa bk',
+            'O1' => 'gr sisa bk',
+            'P1' => 'kategori',
+        ];
+        foreach ($koloms as $kolom => $isiKolom) {
+            $sheet->setCellValue($kolom, ucwords($isiKolom));
+        }
         $styleBold = [
             'font' => [
                 'bold' => true,
@@ -1015,29 +1017,28 @@ class CabutController extends Controller
             DATE_FORMAT(a.tgl_serah, '%b'), ' ', 
             DATE_FORMAT(a.tgl_serah, '%Y')
         ) AS bulan_dibayar_format ,
-        b.name,
-        a.pcs_awal,
-        a.gr_awal,
-        a.pcs_akhir,
-        a.gr_akhir,
-        a.eot,
-        a.gr_flx,
-        a.ttl_rp
+        b.name as pengawas,
+        sum(a.pcs_awal) as pcs_awal,
+        sum(a.gr_awal) as gr_awal,
+        sum(a.pcs_akhir) as pcs_akhir,
+        sum(a.gr_akhir) as gr_akhir,
+        sum(a.eot) as eot,
+        sum(a.gr_flx) as gr_flx,
+        sum(a.ttl_rp) as ttl_rp,
+        bk.kategori
         FROM `cabut`as a
         join users as b on a.id_pengawas = b.id
         left join (
-            SELECT no_box,pcs_awal,gr_awal,penerima from bk GROUP BY no_box,penerima
+            SELECT no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
         ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
-        WHERE a.no_box != 9999;");
+        WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar");
         foreach ($cabut as $data) {
-            $bulanN = date('m', strtotime($data->tgl_serah));
-            $tahunN = date('Y', strtotime($data->tgl_serah));
-            dd($bulanN);
-            $bulanDibayar = date('M Y', strtotime('01-' . $bulanN . '-' . date('Y', strtotime($tahunN))));
+            
             $sheet->setCellValue('A' . $row, $data->no_box);
-            $sheet->setCellValue('B' . $row, $data->pcs_bk);
-            $sheet->setCellValue('C' . $row, $data->gr_bk);
-            $sheet->setCellValue('D' . $row, $bulanDibayar);
+            
+            $sheet->setCellValue('B' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->pcs_bk);
+            $sheet->setCellValue('C' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->gr_bk);
+            $sheet->setCellValue('D' . $row, $data->bulan_dibayar_format);
             $sheet->setCellValue('E' . $row, $data->pengawas);
             $sheet->setCellValue('F' . $row, $data->pcs_awal);
             $sheet->setCellValue('G' . $row, $data->gr_awal);
@@ -1055,13 +1056,31 @@ class CabutController extends Controller
             $row++;
         }
         $rowEo = $row;
-        $eo = Eo::queryRekap('all',$bulan, $tahun);
+        $eo = DB::select("SELECT 
+        a.no_box,
+        a.bulan_dibayar,
+        bk.gr_awal as gr_bk,
+        year(a.tgl_serah) as tahun_dibayar,
+        CONCAT(
+            DATE_FORMAT(a.tgl_serah, '%b'), ' ', 
+            DATE_FORMAT(a.tgl_serah, '%Y')
+        ) AS bulan_dibayar_format,
+        b.name as pengawas,
+        sum(a.gr_eo_awal) as gr_eo_awal,
+        sum(a.gr_eo_akhir) as gr_eo_akhir,
+        sum(a.ttl_rp) as rupiah
+        FROM `eo` as a
+        JOIN users as b on a.id_pengawas = b.id
+        left join (
+            SELECT no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
+        ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
+        WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar;");
         foreach ($eo as $data) {
             $sheet->setCellValue('A' . $rowEo, $data->no_box);
             $sheet->setCellValue('B' . $rowEo, 0);
             $sheet->setCellValue('C' . $rowEo, $data->gr_bk);
-            $sheet->setCellValue('D' . $rowEo, $bulanDibayar);
-            $sheet->setCellValue('E' . $rowEo, $d->name);
+            $sheet->setCellValue('D' . $rowEo, $data->bulan_dibayar_format);
+            $sheet->setCellValue('E' . $rowEo, $data->pengawas);
             $sheet->setCellValue('F' . $rowEo, 0);
             $sheet->setCellValue('G' . $rowEo, $data->gr_eo_awal);
             $sheet->setCellValue('H' . $rowEo, 0);
@@ -1073,16 +1092,17 @@ class CabutController extends Controller
             $sheet->setCellValue('M' . $rowEo, $data->rupiah);
             $sheet->setCellValue('N' . $rowEo, 0);
             $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
-            $this->cekBgSisa(
-                $sheet,
-                0,
-                0,
-                $data->gr_bk,
-                $data->gr_eo_awal,
-                $rowEo
-            );
+            // $this->cekBgSisa(
+            //     $sheet,
+            //     0,
+            //     0,
+            //     $data->gr_bk,
+            //     $data->gr_eo_awal,
+            //     $rowEo
+            // );
 
             $sheet->setCellValue('P' . $rowEo, 'Eo');
+           $rowEo++;
             
         }
         $baris = $rowEo + 1;
