@@ -968,27 +968,27 @@ class CabutController extends Controller
         $sheet = $spreadsheet->createSheet(0);
         $sheet->setTitle('Summary Box');
 
-        $koloms = [
-            'A1' => 'no box',
-            'B1' => 'pcs awal bk',
-            'C1' => 'gr awal bk',
-            'D1' => 'bulan',
-            'E1' => 'pgws',
-            'F1' => 'pcs awal kerja',
-            'G1' => 'gr awal kerja',
-            'H1' => 'pcs akhir kerja',
-            'I1' => 'gr akhir kerja',
-            'J1' => 'eot',
-            'K1' => 'flx',
-            'L1' => 'susut',
-            'M1' => 'ttl rp',
-            'N1' => 'pcs sisa bk',
-            'O1' => 'gr sisa bk',
-            'P1' => 'kategori',
-        ];
-        foreach ($koloms as $koCabut::queryRekap('all',$bulan, $tahun)lom => $isiKolom) {
-            $sheet->setCellValue($kolom, ucwords($isiKolom));
-        }
+        // $koloms = [
+        //     'A1' => 'no box',
+        //     'B1' => 'pcs awal bk',
+        //     'C1' => 'gr awal bk',
+        //     'D1' => 'bulan',
+        //     'E1' => 'pgws',
+        //     'F1' => 'pcs awal kerja',
+        //     'G1' => 'gr awal kerja',
+        //     'H1' => 'pcs akhir kerja',
+        //     'I1' => 'gr akhir kerja',
+        //     'J1' => 'eot',
+        //     'K1' => 'flx',
+        //     'L1' => 'susut',
+        //     'M1' => 'ttl rp',
+        //     'N1' => 'pcs sisa bk',
+        //     'O1' => 'gr sisa bk',
+        //     'P1' => 'kategori',
+        // ];
+        // foreach ($koloms as $koCabut::queryRekap('all',$bulan, $tahun)lom => $isiKolom) {
+        //     $sheet->setCellValue($kolom, ucwords($isiKolom));
+        // }
         $styleBold = [
             'font' => [
                 'bold' => true,
@@ -1005,7 +1005,30 @@ class CabutController extends Controller
         $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
 
         $row = 2;
-        $cabut = ;
+        $cabut = DB::select("SELECT 
+        a.bulan_dibayar,
+        year(a.tgl_serah) as tahun_dibayar,
+        a.no_box,
+        bk.pcs_awal as pcs_bk,
+        bk.gr_awal as gr_bk,
+        CONCAT(
+            DATE_FORMAT(a.tgl_serah, '%b'), ' ', 
+            DATE_FORMAT(a.tgl_serah, '%Y')
+        ) AS bulan_dibayar_format ,
+        b.name,
+        a.pcs_awal,
+        a.gr_awal,
+        a.pcs_akhir,
+        a.gr_akhir,
+        a.eot,
+        a.gr_flx,
+        a.ttl_rp
+        FROM `cabut`as a
+        join users as b on a.id_pengawas = b.id
+        left join (
+            SELECT no_box,pcs_awal,gr_awal,penerima from bk GROUP BY no_box,penerima
+        ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
+        WHERE a.no_box != 9999;");
         foreach ($cabut as $data) {
             $bulanN = date('m', strtotime($data->tgl_serah));
             $tahunN = date('Y', strtotime($data->tgl_serah));
