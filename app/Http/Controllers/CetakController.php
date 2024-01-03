@@ -675,7 +675,7 @@ class CetakController extends Controller
                             'pcs_hcr' => $rowData[18],
                             'id_pengawas' => $id,
                             'status' => empty($rowData[11]) ? 'awal' : 'akhir',
-                            'selesai' => $rowData[21] == 'Selesai' ? 'Y' : 'T'
+                            'selesai' => $rowData[22] == 'Selesai' ? 'Y' : 'T'
                         ]);
                     } else {
 
@@ -700,7 +700,7 @@ class CetakController extends Controller
                             'pcs_hcr' => $rowData[18],
                             'id_pengawas' => $id,
                             'status' => empty($rowData[11]) ? 'awal' : 'akhir',
-                            'selesai' => $rowData[21] == 'Selesai' ? 'Y' : 'T'
+                            'selesai' => $rowData[22] == 'Selesai' ? 'Y' : 'T'
                         ]);
                     }
                 }
