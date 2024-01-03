@@ -31,7 +31,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>No Lot</th>
+                        <th>No Lot - Partai</th>
                         <th>No Box</th>
                         <th>Tipe</th>
                         <th>Ket</th>
