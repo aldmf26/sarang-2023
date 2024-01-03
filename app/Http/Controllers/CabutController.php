@@ -284,7 +284,7 @@ class CabutController extends Controller
                 'id_kelas' => $r->id_paket[$i],
                 'tgl_terima' => $r->tgl_terima[$i],
             ];
-            if($id_cabut == 9999) {
+            if ($id_cabut == 9999) {
                 DB::table('cabut')->insert($data);
             } else {
                 DB::table('cabut')->where('id_cabut', $id_cabut)->update($data);
@@ -490,7 +490,7 @@ class CabutController extends Controller
                 'W2' => 'FF0000',
                 'Y2' => 'FF0000',
             ];
-            
+
             foreach ($warnaBg as $b => $i) {
                 $sheet->getStyle($b)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($i);
             }
@@ -530,7 +530,7 @@ class CabutController extends Controller
             $ttlEoGrAkhir  = 0;
             $ttlEoRp  = 0;
 
-             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+            $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
             foreach ($tbl as $data) {
@@ -778,7 +778,7 @@ class CabutController extends Controller
 
             // eo
             $rowEo = $row;
-            $eo = Eo::queryRekap($d->id_pengawas,$bulan,$tahun);
+            $eo = Eo::queryRekap($d->id_pengawas, $bulan, $tahun);
             foreach ($eo as $data) {
                 $sheet->setCellValue('A' . $rowEo, $data->no_box);
                 $sheet->setCellValue('B' . $rowEo, 0);
@@ -829,7 +829,7 @@ class CabutController extends Controller
 
             // sortir
             $rowSortir = $rowEo;
-            $sortir = Sortir::queryRekap($d->id_pengawas,$bulan,$tahun);
+            $sortir = Sortir::queryRekap($d->id_pengawas, $bulan, $tahun);
             foreach ($sortir as $data) {
                 $sheet->setCellValue('A' . $rowSortir, $data->no_box);
                 $sheet->setCellValue('B' . $rowSortir, $data->pcs_bk);
@@ -892,7 +892,7 @@ class CabutController extends Controller
             $ttlRp += $rupiahDll;
             $ttlRpDll = $rupiahDll;
 
-            
+
 
 
             $ttlSusut = empty($ttlGrAwal) ? 0 : (1 - ($ttlFlx + $ttlGrAkhir) / $ttlGrAwal) * 100;
@@ -959,5 +959,123 @@ class CabutController extends Controller
             ]);
         }
         return redirect()->route('cabut.index')->with('sukses', 'Data Tercek');
+    }
+    public function export_sinta(Request $r)
+    {
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->createSheet(0);
+        $sheet->setTitle('Summary Box');
+
+        $koloms = [
+            'A1' => 'no box',
+            'B1' => 'pcs awal bk',
+            'C1' => 'gr awal bk',
+            'D1' => 'bulan',
+            'E1' => 'pgws',
+            'F1' => 'pcs awal kerja',
+            'G1' => 'gr awal kerja',
+            'H1' => 'pcs akhir kerja',
+            'I1' => 'gr akhir kerja',
+            'J1' => 'eot',
+            'K1' => 'flx',
+            'L1' => 'susut',
+            'M1' => 'ttl rp',
+            'N1' => 'pcs sisa bk',
+            'O1' => 'gr sisa bk',
+            'P1' => 'kategori',
+        ];
+        foreach ($koloms as $koCabut::queryRekap('all',$bulan, $tahun)lom => $isiKolom) {
+            $sheet->setCellValue($kolom, ucwords($isiKolom));
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
+
+        $row = 2;
+        $cabut = ;
+        foreach ($cabut as $data) {
+            $bulanN = date('m', strtotime($data->tgl_serah));
+            $tahunN = date('Y', strtotime($data->tgl_serah));
+            dd($bulanN);
+            $bulanDibayar = date('M Y', strtotime('01-' . $bulanN . '-' . date('Y', strtotime($tahunN))));
+            $sheet->setCellValue('A' . $row, $data->no_box);
+            $sheet->setCellValue('B' . $row, $data->pcs_bk);
+            $sheet->setCellValue('C' . $row, $data->gr_bk);
+            $sheet->setCellValue('D' . $row, $bulanDibayar);
+            $sheet->setCellValue('E' . $row, $data->pengawas);
+            $sheet->setCellValue('F' . $row, $data->pcs_awal);
+            $sheet->setCellValue('G' . $row, $data->gr_awal);
+            $sheet->setCellValue('H' . $row, $data->pcs_akhir);
+            $sheet->setCellValue('I' . $row, $data->gr_akhir);
+            $sheet->setCellValue('J' . $row, $data->eot);
+            $sheet->setCellValue('K' . $row, $data->gr_flx);
+            $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
+            $sheet->setCellValue('L' . $row, number_format($susut, 0));
+            $sheet->setCellValue('M' . $row, $data->ttl_rp);
+            $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
+            $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
+            $this->cekBgSisa($sheet, $data->pcs_bk, $data->pcs_awal, $data->gr_bk, $data->gr_awal,  $row);
+            $sheet->setCellValue('P' . $row, $data->kategori);
+            $row++;
+        }
+        $rowEo = $row;
+        $eo = Eo::queryRekap('all',$bulan, $tahun);
+        foreach ($eo as $data) {
+            $sheet->setCellValue('A' . $rowEo, $data->no_box);
+            $sheet->setCellValue('B' . $rowEo, 0);
+            $sheet->setCellValue('C' . $rowEo, $data->gr_bk);
+            $sheet->setCellValue('D' . $rowEo, $bulanDibayar);
+            $sheet->setCellValue('E' . $rowEo, $d->name);
+            $sheet->setCellValue('F' . $rowEo, 0);
+            $sheet->setCellValue('G' . $rowEo, $data->gr_eo_awal);
+            $sheet->setCellValue('H' . $rowEo, 0);
+            $sheet->setCellValue('I' . $rowEo, $data->gr_eo_akhir);
+            $sheet->setCellValue('J' . $rowEo, 0);
+            $sheet->setCellValue('K' . $rowEo, 0);
+            $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
+            $sheet->setCellValue('L' . $rowEo, number_format($susut, 0));
+            $sheet->setCellValue('M' . $rowEo, $data->rupiah);
+            $sheet->setCellValue('N' . $rowEo, 0);
+            $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
+            $this->cekBgSisa(
+                $sheet,
+                0,
+                0,
+                $data->gr_bk,
+                $data->gr_eo_awal,
+                $rowEo
+            );
+
+            $sheet->setCellValue('P' . $rowEo, 'Eo');
+            
+        }
+        $baris = $rowEo + 1;
+        $sheet->getStyle('A2:P' . $baris)->applyFromArray($styleBaris);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Summary Box Cabut Eo $bulanDibayar $tahun";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 }

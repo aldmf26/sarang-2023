@@ -9,16 +9,7 @@
             </div>
 
             <div class="col-lg-6">
-                <a data-bs-toggle="modal" data-bs-target="#tambah" href="#"
-                    class="float-end btn btn-sm btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export
-                </a>
-                {{-- <a  href="{{ route('cabut.export_rekap', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export
-                </a> --}}
                 @include('home.cabut.btn_export_global')
-                
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">

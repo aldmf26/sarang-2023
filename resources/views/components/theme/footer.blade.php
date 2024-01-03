@@ -339,11 +339,12 @@
         $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('sukses') }}",
-                duration: 3000,
+                duration: 5000,
                 position: 'center',
                 style: {
                     background: "#EAF7EE",
-                    color: "#7F8B8B"
+                    color: "#7F8B8B",
+                    fontSize: "15px", // Menyesuaikan ukuran teks
                 },
                 close: true,
                 avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
@@ -356,11 +357,12 @@
         $(document).ready(function() {
             Toastify({
                 text: "{{ session()->get('error') }}",
-                duration: 3000,
+                duration: 5000,
                 position: 'center',
                 style: {
                     background: "#FCEDE9",
-                    color: "#7F8B8B"
+                    color: "#7F8B8B",
+                    fontSize: "15px", // Menyesuaikan ukuran teks
                 },
                 close: true,
                 avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"

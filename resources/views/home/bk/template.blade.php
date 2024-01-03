@@ -3,7 +3,7 @@
         <tr>
             <!-- Table 1 headers -->
             <th>Nolot</th>
-            <th>nm partai</th>
+            <th>nama partai</th>
             <th>Nobox</th>
             <th>Tipe</th>
             <th>Ket</th>

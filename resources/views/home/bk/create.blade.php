@@ -71,7 +71,7 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>
-                                        <input name="no_lot[]" type="text" class="form-control nolot"
+                                        <input required name="no_lot[]" type="text" class="form-control nolot"
                                             count="{{ $i }}">
                                         {{-- <select name="no_lot[]" id=""
                                             class="select2_add nolot nomor_lot{{ $i }}"
@@ -84,11 +84,11 @@
                                         </select> --}}
                                     </td>
                                     <td>
-                                        <input name="nm_partai[]" count="{{ $i }}" type="text"
+                                        <input required name="nm_partai[]" count="{{ $i }}" type="text"
                                             class="form-control namaPartai">
                                     </td>
                                     <td>
-                                        <input name="no_box[]" count="{{ $i }}" type="text"
+                                        <input required name="no_box[]" count="{{ $i }}" type="text"
                                             class="form-control nobox">
                                     </td>
                                     <td>

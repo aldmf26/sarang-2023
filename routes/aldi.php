@@ -132,6 +132,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
             Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
+            Route::get('/export_sinta', 'export_sinta')->name('export_sinta');
         });
     Route::controller(GlobalController::class)
         ->prefix('home/global')

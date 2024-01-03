@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpParser\Node\Stmt\TryCatch;
 
 class BkController extends Controller
 {
@@ -40,16 +41,16 @@ class BkController extends Controller
 
     public function add(Request $r)
     {
-        $response = Http::get("https://jurnals.ptagafood.com/api/apibk");
-        $gudang = $response['data']['gudang'];
-        $gudangBk = json_decode(json_encode($gudang));
+        // $response = Http::get("https://jurnals.ptagafood.com/api/apibk");
+        // $gudang = $response['data']['gudang'];
+        // $gudangBk = json_decode(json_encode($gudang));
 
         $data = [
             'title' => 'Tambah Divisi BK',
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori,
-            'gudangBk' => $gudangBk
+            // 'gudangBk' => $gudangBk
         ];
         return view('home.bk.create', $data);
     }
@@ -110,33 +111,45 @@ class BkController extends Controller
 
     public function create(Request $r)
     {
-        dd(1);
-        for ($x = 0; $x < count($r->pcs_awal); $x++) {
-            if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
-                $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
-                $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
+        DB::beginTransaction();
+        try {
+            for ($x = 0; $x < count($r->pcs_awal); $x++) {
+                if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
+                    $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
+                    $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
+                    $nobox = $r->no_box[$x];
+                    $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
 
-                $selectedValue = $r->no_lot[$x];
-                // list($noLot, $ket) = explode('-', $selectedValue);
+                    $selectedValue = $r->no_lot[$x];
+                    // list($noLot, $ket) = explode('-', $selectedValue);
 
-                $data = [
-                    'no_lot' => $selectedValue,
-                    'nm_partai' => $r->nm_partai[$x],
-                    'no_box' => $r->no_box[$x],
-                    'tipe' => $r->tipe[$x],
-                    'ket' => $r->ket[$x],
-                    'warna' => $r->warna[$x],
-                    'pengawas' => $r->pgws[$x],
-                    'penerima' => $r->nama[$x],
-                    'pcs_awal' => $pcs_awal,
-                    'gr_awal' => $gr_awal,
-                    'tgl' => $r->tgl_terima[$x],
-                    'kategori' => $r->kategori
-                ];
-                DB::table('bk')->insert($data);
+                    $data = [
+                        'no_lot' => $selectedValue,
+                        'nm_partai' => $r->nm_partai[$x],
+                        'no_box' => $nobox,
+                        'tipe' => $r->tipe[$x],
+                        'ket' => $r->ket[$x],
+                        'warna' => $r->warna[$x],
+                        'pengawas' => $r->pgws[$x],
+                        'penerima' => $r->nama[$x],
+                        'pcs_awal' => $pcs_awal,
+                        'gr_awal' => $gr_awal,
+                        'tgl' => $r->tgl_terima[$x],
+                        'kategori' => $r->kategori
+                    ];
+                    if ($cekBox) {
+                        return redirect("home/bk?kategori=$r->kategori")->with('error', "No box : $nobox SUDAH ADA DI BK CABUT");
+                    } else {
+                        DB::table('bk')->insert($data);
+                    }
+                }
             }
+            DB::commit();
+            return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
+        } catch (\Exception  $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
     }
 
     public function template()
@@ -148,8 +161,82 @@ class BkController extends Controller
 
     public function import(Request $r)
     {
-        Excel::import(new BkImport, $r->file('file'));
-        return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+        $file = $r->file('file');
+        $spreadsheet = IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+        DB::beginTransaction();
+        try {
+            foreach (array_slice($sheetData, 1) as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
+                $nobox = $row[2];
+                $tgl = $row[6];
+
+                $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+                if (
+                    $cekBox || 
+                    empty($row[0]) || 
+                    empty($row[1]) || 
+                    empty($row[6]) || 
+                    empty($row[8]) || 
+                    empty($row[9]) || 
+                    empty($row[10])
+                ) {
+                    $pesan = [
+                        empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
+                        empty($row[1]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
+                        empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
+                        empty($row[8]) => "PCS TIDAK BOLEH KOSONG",
+                        empty($row[9]) => "GR TIDAK BOLEH KOSONG",
+                        empty($row[10]) => "KATEGORI TIDAK BOLEH KOSONG",
+                        $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
+                    ];
+                    DB::rollBack();
+                    return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
+                } else {
+                    if (is_numeric($tgl)) {
+                        // Jika nilai berupa angka, konversi ke format tanggal
+                        $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                        $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                    } else {
+                        // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                        $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                    }
+
+                    DB::table('bk')->insert([
+                        'no_lot' => $row[0],
+                        'nm_partai' => $row[1],
+                        'no_box' => $nobox,
+                        'tipe' => $row[3],
+                        'ket' => $row[4],
+                        'warna' => $row[5],
+                        'tgl' => $tanggalFormatted,
+                        'pengawas' => auth()->user()->name,
+                        'penerima' => $row[6],
+                        'pcs_awal' => $row[8],
+                        'gr_awal' => $row[9],
+                        'kategori' => $row[10],
+                    ]);
+                }
+            }
+            DB::commit();
+            return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        // try {
+        //     DB::beginTransaction();
+        //     Excel::import(new BkImport, $r->file('file'));
+        //     DB::commit();
+        //     return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return redirect()->back()->with('error', $e->getMessage());
+
+        // }
     }
 
     public function print(Request $r)
@@ -214,19 +301,19 @@ class BkController extends Controller
 
     public function delete(Request $r)
     {
-        for ($i=0; $i < count($r->no_nota); $i++) { 
+        for ($i = 0; $i < count($r->no_nota); $i++) {
             DB::table('bk')->where('id_bk', $r->no_nota[$i])->delete();
         }
-        
+
         return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil dihapus');
     }
 
     public function selesai(Request $r)
     {
-        for ($i=0; $i < count($r->no_nota); $i++) { 
+        for ($i = 0; $i < count($r->no_nota); $i++) {
             DB::table('bk')->where('id_bk', $r->no_nota[$i])->update(['selesai' => 'Y']);
         }
-        
+
         return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil diselesaikan');
     }
 

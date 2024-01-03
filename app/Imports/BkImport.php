@@ -9,11 +9,10 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class BkImport implements ToModel, WithHeadingRow
 {
-    /**
-     * @param Collection $collection
-     */
+
     public function model(array $row)
     {
+
         $tgl = $row['tgl'];
         if (is_numeric($tgl)) {
             // Jika nilai berupa angka, konversi ke format tanggal
@@ -28,10 +27,14 @@ class BkImport implements ToModel, WithHeadingRow
             // Jika semua elemen kosong, lewati ke iterasi berikutnya
             return null;
         }
+        $nobox = $row['nobox'];
+        $kategori = $row['kategori'];
+        $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+       
         DB::table('bk')->insert([
             'no_lot' => $row['nolot'],
             'nm_partai' => $row['nama_partai'],
-            'no_box' => $row['nobox'],
+            'no_box' => $nobox,
             'tipe' => $row['tipe'],
             'ket' => $row['ket'],
             'warna' => $row['warna'],
