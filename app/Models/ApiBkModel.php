@@ -13,12 +13,25 @@ class ApiBkModel extends Model
     {
         $result = DB::select("SELECT 
         a.pcs_awal, a.gr_awal, a.gr_flx , a.gr_akhir, c.eot as eot_rp, a.pcs_akhir,
-        c.batas_eot, a.rupiah, c.batas_susut,c.bonus_susut,c.rp_bonus,a.pcs_hcr,c.denda_hcr, a.eot, c.gr as gr_kelas, a.selesai
+        c.batas_eot, a.rupiah, a.ttl_rp, c.batas_susut,c.bonus_susut,c.rp_bonus,a.pcs_hcr,c.denda_hcr, a.eot, c.gr as gr_kelas, a.selesai
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
         left join tb_kelas as c on c.id_kelas = a.id_kelas 
         where b.no_lot =? and b.nm_partai=? 
         ;", [$no_lot, $nm_partai]);
+
+        return $result;
+    }
+    public static function datacabutsum($nm_partai)
+    {
+        $result = DB::select("SELECT 
+        a.pcs_awal, a.gr_awal, a.gr_flx , a.gr_akhir, c.eot as eot_rp, a.pcs_akhir,
+        c.batas_eot, a.rupiah, c.batas_susut,c.bonus_susut,c.rp_bonus,a.pcs_hcr,c.denda_hcr, a.eot, c.gr as gr_kelas, a.selesai
+        FROM cabut as a
+        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join tb_kelas as c on c.id_kelas = a.id_kelas 
+        where b.nm_partai=? 
+        ;", [$nm_partai]);
 
         return $result;
     }
@@ -62,7 +75,7 @@ class ApiBkModel extends Model
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
         FROM bk as a
         WHERE a.nm_partai = ? AND a.kategori ='cabut'
-        GROUP BY a.no_lot, a.nm_partai;", [$nm_partai]);
+        GROUP BY a.nm_partai;", [$nm_partai]);
         return $result;
     }
 

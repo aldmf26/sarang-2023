@@ -12,6 +12,62 @@ class ApiBkController extends Controller
     {
         $cabut = ApiBkModel::datacabut($r->no_lot, $r->nm_partai);
 
+
+
+        // Tambahkan pengecekan apakah $cabut tidak kosong
+        if (empty($cabut)) {
+            $ttl_rp_cbt = 0;
+            $pcs_awal_cbt = 0;
+            $pcs_akhir_cbt = 0;
+            $gr_awal_cbt =  0;
+            $gr_akhir_cbt = 0;
+            $gr_flx_cbt = 0;
+        } else {
+            $pcs_awal_cbt = 0;
+            $gr_awal_cbt = 0;
+            $pcs_akhir_cbt = 0;
+            $gr_akhir_cbt = 0;
+            $gr_flx_cbt = 0;
+            $ttl_rp_cbt = 0;
+
+            foreach ($cabut as $c) {
+                $ttl_rp_cbt += $c->selesai == 'Y' ? $c->ttl_rp : $c->rupiah;
+                $pcs_awal_cbt += $c->pcs_awal;
+                $pcs_akhir_cbt += $c->selesai == 'Y' ? $c->pcs_akhir : '0';
+                $gr_awal_cbt +=  $c->gr_awal;
+                $gr_akhir_cbt += $c->selesai == 'Y' ?  $c->gr_akhir : '0';
+                $gr_flx_cbt += $c->selesai == 'Y' ? $c->gr_flx : '0';
+            }
+        }
+
+
+
+        $bk_cabut = ApiBkModel::bk_cabut_tes($r->no_lot, $r->nm_partai);
+
+        // Perbarui respons untuk mencakup data BK cabut
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Sarang berhasil diambil',
+            'data' => [
+                'bk_cabut' => $bk_cabut,  // Ini adalah bagian yang ditambahkan
+                'cabut' => [
+                    'pcs_awal' => $pcs_awal_cbt,
+                    'pcs_akhir' => $pcs_akhir_cbt,
+                    'gr_awal' => $gr_awal_cbt,
+                    'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
+                    'susut' => $gr_akhir_cbt == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
+                    'ttl_rp' =>  $ttl_rp_cbt,
+                ],
+            ],
+        ];
+
+        return response()->json($response);
+    }
+
+    public function sarang_sum(Request $r)
+    {
+        $cabut = ApiBkModel::datacabutsum($r->nm_partai);
+
         $pcs_awal_cbt = 0;
         $pcs_akhir_cbt = 0;
         $gr_awal_cbt = 0;
@@ -37,7 +93,7 @@ class ApiBkController extends Controller
             $eot_bonus = ($c->eot - $c->gr_awal * $c->batas_eot) * $c->eot_rp;
 
             $ttl_rp_cbt +=  $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
-            $ttl_rp_cbt_hilang += $c->selesai == 'Y' ?  '0' : ($c->eot == 0 ? $c->rupiah : $rupiah - $denda_hcr + $eot_bonus + $bonus_susut);
+            $ttl_rp_cbt_hilang +=  $c->selesai == 'T' ? $rupiah : $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
 
             $pcs_awal_cbt += $c->pcs_awal;
             $pcs_akhir_cbt += $c->selesai == 'Y' ? $c->pcs_akhir : '0';
@@ -48,62 +104,10 @@ class ApiBkController extends Controller
 
             $gr_flx_cbt += $c->selesai == 'Y' ? $c->gr_flx : '0';
         }
-
-
-        $cetak = ApiBkModel::datacetak($r->no_lot, $r->nm_partai);
-
-        $pcs_awal_ctk = 0;
-        $pcs_awal_ctk_dibawa = 0;
-        $pcs_akhir_ctk = 0;
-        $gr_awal_ctk = 0;
-        $gr_akhir_ctk = 0;
-        $gr_awal_ctk_dibawa = 0;
-        $ttl_rp_all_ctk = 0;
-        $ttl_rp_all_ctk_dibawa = 0;
-        foreach ($cetak as $c) {
-            $susut = empty($c->gr_akhir) ? '0' : (1 - ($c->gr_akhir + $c->gr_cu) / ($c->gr_awal_ctk)) * 100;
-            $denda = round($susut, 0) >= $c->batas_susut ? round($susut) * $c->denda_susut : 0;
-            $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
-            $ttl_rp = $c->pcs_akhir == '0' ? $c->pcs_awal_ctk * $c->rp_pcs : $c->pcs_akhir * $c->rp_pcs;
-
-            $ttl_rp_all_ctk +=  $c->selesai == 'Y' ? '0' :  $ttl_rp - $denda - $denda_hcr;
-            $ttl_rp_all_ctk_dibawa += $ttl_rp - $denda - $denda_hcr;
-            $pcs_awal_ctk += $c->pcs_awal_ctk;
-            $pcs_awal_ctk_dibawa +=  $c->selesai == 'Y' ? '0' : $c->pcs_awal_ctk - $c->pcs_akhir;
-            $gr_awal_ctk_dibawa +=  $c->selesai == 'Y' ? '0' : $c->gr_awal_ctk - $c->gr_akhir + $c->gr_cu;
-            $pcs_akhir_ctk +=  $c->selesai == 'T' ? '0' : $c->pcs_akhir + $c->pcs_cu;
-            $gr_awal_ctk +=   $c->gr_awal_ctk;
-            $gr_akhir_ctk += $c->gr_akhir + $c->gr_cu;
-        }
-
-
-        // $sortir = ApiBkModel::datasortir($r->no_lot, $r->nm_partai);
-
-        // $pcs_awal_str = 0;
-        // $pcs_akhir_str = 0;
-        // $gr_akhir_str = 0;
-        // $ttl_str = 0;
-        // $ttl_str_dibawa = 0;
-        // $gr_awal_str = 0;
-        // foreach ($sortir as $s) {
-
-        //     $pcs_awal_str += $s->pcs_awal;
-        //     $pcs_akhir_str += $s->selesai == 'T' ? 0 : $s->pcs_akhir;
-        //     $gr_awal_str +=  $s->gr_awal;
-        //     $gr_akhir_str += $s->selesai == 'T' ? 0 : $s->gr_akhir;
-        //     $ttl_str += $s->selesai == 'Y' ? '0' : $s->ttl_rp;
-        //     $ttl_str_dibawa +=  $s->ttl_rp;
-        // }
-
-
-        $bk_cabut = ApiBkModel::bk_cabut_tes($r->no_lot, $r->nm_partai);
-
-
         $response = [
             'status' => 'success',
             'message' => 'Data Sarang berhasil diambil',
             'data' => [
-                'bk_cabut' => $bk_cabut,
                 'cabut' => [
                     'pcs_awal' => $pcs_awal_cbt,
                     'pcs_akhir' => $pcs_akhir_cbt,
@@ -115,18 +119,19 @@ class ApiBkController extends Controller
                     'ttl_rp' =>  $ttl_rp_cbt_hilang,
                     'ttl_rp_dibawa' =>  $ttl_rp_cbt,
                 ],
-                'cetak' => [
-                    'pcs_awal' => $pcs_awal_ctk,
-                    'pcs_awal_ctk_dibawa' => $pcs_awal_ctk_dibawa,
-                    'pcs_akhir' => $pcs_akhir_ctk,
-                    'gr_awal' => $gr_awal_ctk,
-                    'gr_akhir' => $gr_akhir_ctk,
-                    'gr_awal_ctk_dibawa' => $gr_awal_ctk_dibawa,
-                    'rp_c' => $ttl_rp_all_ctk,
-                    'rp_c_dibawa' => $ttl_rp_all_ctk_dibawa,
-                    'rp_gram' => empty($gr_akhir_ctk) ? '0' : ($ttl_rp_all_ctk) / $gr_akhir_ctk,
-                    'susut' => $ttl_rp_all_ctk == 0 ? '0' : (empty($gr_akhir_ctk) ? '0' : (1 - ($gr_akhir_ctk / $gr_awal_ctk)) * 100),
-                ],
+            ],
+        ];
+        return response()->json($response);
+    }
+
+    function bk_sum(Request $r)
+    {
+        $cabut = ApiBkModel::bk_cabut_sum($r->nm_partai);
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Bk Perpartai',
+            'data' => [
+                'bk_cabut' => $cabut,
             ],
         ];
         return response()->json($response);
