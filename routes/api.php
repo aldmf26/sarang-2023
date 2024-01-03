@@ -25,4 +25,6 @@ Route::controller(ApiBkController::class)
         Route::get('/sarang', 'sarang')->name('sarang');
         Route::get('/export_sarang', 'export_sarang')->name('export_sarang');
         Route::get('/cabut_export', 'cabut_export')->name('cabut_export');
+        Route::get('/bk_sum', 'bk_sum')->name('bk_sum');
+        Route::get('/sarang_sum', 'sarang_sum')->name('sarang_sum');
     });
