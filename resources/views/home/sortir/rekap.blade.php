@@ -1,13 +1,7 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
-            <div x-data="{ open: false }">
-                <button @click="open = ! open">Toggle</button>
-             
-                <div x-show="open" @click.outside="open = false">
-                    Contents...
-                </div>
-            </div>
+           
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
