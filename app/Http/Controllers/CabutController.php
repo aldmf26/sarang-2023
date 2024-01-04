@@ -1073,7 +1073,9 @@ class CabutController extends Controller
         b.name as pengawas,
         sum(a.gr_eo_awal) as gr_eo_awal,
         sum(a.gr_eo_akhir) as gr_eo_akhir,
-        sum(a.ttl_rp) as rupiah
+        sum(a.ttl_rp) as rupiah,
+        bk.no_lot,
+        bk.nm_partai
         FROM `eo` as a
         JOIN users as b on a.id_pengawas = b.id
         left join (
