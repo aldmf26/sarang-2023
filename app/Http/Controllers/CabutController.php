@@ -971,22 +971,24 @@ class CabutController extends Controller
         $sheet->setTitle('Summary Box');
 
         $koloms = [
-            'A1' => 'no box',
-            'B1' => 'pcs awal bk',
-            'C1' => 'gr awal bk',
-            'D1' => 'bulan',
-            'E1' => 'pgws',
-            'F1' => 'pcs awal kerja',
-            'G1' => 'gr awal kerja',
-            'H1' => 'pcs akhir kerja',
-            'I1' => 'gr akhir kerja',
-            'J1' => 'eot',
-            'K1' => 'flx',
-            'L1' => 'susut',
-            'M1' => 'ttl rp',
-            'N1' => 'pcs sisa bk',
-            'O1' => 'gr sisa bk',
-            'P1' => 'kategori',
+            'A1' => 'no lot',
+            'B1' => 'partai herry',
+            'C1' => 'no box',
+            'D1' => 'pcs awal bk',
+            'E1' => 'gr awal bk',
+            'F1' => 'bulan',
+            'G1' => 'pgws',
+            'H1' => 'pcs awal kerja',
+            'I1' => 'gr awal kerja',
+            'J1' => 'pcs akhir kerja',
+            'K1' => 'gr akhir kerja',
+            'L1' => 'eot',
+            'M1' => 'flx',
+            'N1' => 'susut',
+            'O1' => 'ttl rp',
+            'P1' => 'pcs sisa bk',
+            'Q1' => 'gr sisa bk',
+            'R1' => 'kategori',
         ];
         foreach ($koloms as $kolom => $isiKolom) {
             $sheet->setCellValue($kolom, ucwords($isiKolom));
@@ -1003,8 +1005,8 @@ class CabutController extends Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A1:P1')->applyFromArray($styleBold);
-        $sheet->getStyle('A1:P1')->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:R1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
 
         $row = 2;
         $cabut = DB::select("SELECT 
@@ -1025,34 +1027,37 @@ class CabutController extends Controller
         sum(a.eot) as eot,
         sum(a.gr_flx) as gr_flx,
         sum(a.ttl_rp) as ttl_rp,
-        bk.kategori
+        bk.kategori,
+        bk.no_lot,
+        bk.nm_partai
         FROM `cabut`as a
         join users as b on a.id_pengawas = b.id
         left join (
-            SELECT no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
+            SELECT no_lot,nm_partai,no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
         ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
         WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar");
         foreach ($cabut as $data) {
             
-            $sheet->setCellValue('A' . $row, $data->no_box);
-            
-            $sheet->setCellValue('B' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->pcs_bk);
-            $sheet->setCellValue('C' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->gr_bk);
-            $sheet->setCellValue('D' . $row, $data->bulan_dibayar_format);
-            $sheet->setCellValue('E' . $row, $data->pengawas);
-            $sheet->setCellValue('F' . $row, $data->pcs_awal);
-            $sheet->setCellValue('G' . $row, $data->gr_awal);
-            $sheet->setCellValue('H' . $row, $data->pcs_akhir);
-            $sheet->setCellValue('I' . $row, $data->gr_akhir);
-            $sheet->setCellValue('J' . $row, $data->eot);
-            $sheet->setCellValue('K' . $row, $data->gr_flx);
+            $sheet->setCellValue('A' . $row, $data->no_lot);
+            $sheet->setCellValue('B' . $row, $data->nm_partai);
+            $sheet->setCellValue('C' . $row, $data->no_box);
+            $sheet->setCellValue('D' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->pcs_bk);
+            $sheet->setCellValue('E' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->gr_bk);
+            $sheet->setCellValue('F' . $row, $data->bulan_dibayar_format);
+            $sheet->setCellValue('G' . $row, $data->pengawas);
+            $sheet->setCellValue('H' . $row, $data->pcs_awal);
+            $sheet->setCellValue('I' . $row, $data->gr_awal);
+            $sheet->setCellValue('J' . $row, $data->pcs_akhir);
+            $sheet->setCellValue('K' . $row, $data->gr_akhir);
+            $sheet->setCellValue('L' . $row, $data->eot);
+            $sheet->setCellValue('M' . $row, $data->gr_flx);
             $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
-            $sheet->setCellValue('L' . $row, number_format($susut, 0));
-            $sheet->setCellValue('M' . $row, $data->ttl_rp);
-            $sheet->setCellValue('N' . $row, $data->pcs_bk - $data->pcs_awal);
-            $sheet->setCellValue('O' . $row, $data->gr_bk - $data->gr_awal);
+            $sheet->setCellValue('N' . $row, number_format($susut, 0));
+            $sheet->setCellValue('O' . $row, $data->ttl_rp);
+            $sheet->setCellValue('P' . $row, $data->pcs_bk - $data->pcs_awal);
+            $sheet->setCellValue('Q' . $row, $data->gr_bk - $data->gr_awal);
             $this->cekBgSisa($sheet, $data->pcs_bk, $data->pcs_awal, $data->gr_bk, $data->gr_awal,  $row);
-            $sheet->setCellValue('P' . $row, $data->kategori);
+            $sheet->setCellValue('R' . $row, $data->kategori);
             $row++;
         }
         $rowEo = $row;
@@ -1072,26 +1077,28 @@ class CabutController extends Controller
         FROM `eo` as a
         JOIN users as b on a.id_pengawas = b.id
         left join (
-            SELECT no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
+            SELECT no_lot,nm_partai,no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
         ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
         WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar;");
         foreach ($eo as $data) {
-            $sheet->setCellValue('A' . $rowEo, $data->no_box);
-            $sheet->setCellValue('B' . $rowEo, 0);
-            $sheet->setCellValue('C' . $rowEo, $data->gr_bk);
-            $sheet->setCellValue('D' . $rowEo, $data->bulan_dibayar_format);
-            $sheet->setCellValue('E' . $rowEo, $data->pengawas);
-            $sheet->setCellValue('F' . $rowEo, 0);
-            $sheet->setCellValue('G' . $rowEo, $data->gr_eo_awal);
+            $sheet->setCellValue('A' . $row, $data->no_lot);
+            $sheet->setCellValue('B' . $row, $data->nm_partai);
+            $sheet->setCellValue('C' . $rowEo, $data->no_box);
+            $sheet->setCellValue('D' . $rowEo, 0);
+            $sheet->setCellValue('E' . $rowEo, $data->gr_bk);
+            $sheet->setCellValue('F' . $rowEo, $data->bulan_dibayar_format);
+            $sheet->setCellValue('G' . $rowEo, $data->pengawas);
             $sheet->setCellValue('H' . $rowEo, 0);
-            $sheet->setCellValue('I' . $rowEo, $data->gr_eo_akhir);
+            $sheet->setCellValue('I' . $rowEo, $data->gr_eo_awal);
             $sheet->setCellValue('J' . $rowEo, 0);
-            $sheet->setCellValue('K' . $rowEo, 0);
+            $sheet->setCellValue('K' . $rowEo, $data->gr_eo_akhir);
+            $sheet->setCellValue('L' . $rowEo, 0);
+            $sheet->setCellValue('M' . $rowEo, 0);
             $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
-            $sheet->setCellValue('L' . $rowEo, number_format($susut, 0));
-            $sheet->setCellValue('M' . $rowEo, $data->rupiah);
-            $sheet->setCellValue('N' . $rowEo, 0);
-            $sheet->setCellValue('O' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
+            $sheet->setCellValue('N' . $rowEo, number_format($susut, 0));
+            $sheet->setCellValue('O' . $rowEo, $data->rupiah);
+            $sheet->setCellValue('P' . $rowEo, 0);
+            $sheet->setCellValue('Q' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
             // $this->cekBgSisa(
             //     $sheet,
             //     0,
@@ -1101,12 +1108,12 @@ class CabutController extends Controller
             //     $rowEo
             // );
 
-            $sheet->setCellValue('P' . $rowEo, 'Eo');
+            $sheet->setCellValue('R' . $rowEo, 'Eo');
            $rowEo++;
             
         }
         $baris = $rowEo + 1;
-        $sheet->getStyle('A2:P' . $baris)->applyFromArray($styleBaris);
+        $sheet->getStyle('A2:R' . $baris)->applyFromArray($styleBaris);
 
         $writer = new Xlsx($spreadsheet);
         $fileName = "Summary Box Cabut Eo $bulanDibayar $tahun";
