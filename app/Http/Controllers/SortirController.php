@@ -112,6 +112,7 @@ class SortirController extends Controller
                     'pcs_awal' => $r->pcs_awal[$i],
                     'gr_awal' => $r->gr_awal[$i],
                     'rp_target' => $rupiah,
+                'tgl_input' => date('Y-m-d')
                 ];
                 if ($id_sortir == 9999) {
                     DB::table('sortir')->insert($data);
@@ -374,7 +375,8 @@ class SortirController extends Controller
                 'no_box' => 9999,
                 'id_pengawas' => $id_pengawas,
                 'id_anak' => $d,
-                'tgl' => $tgl
+                'tgl' => $tgl,
+                'tgl_input' => date('Y-m-d')
             ]);
         }
         return 'Berhasil tambah anak';
@@ -407,7 +409,7 @@ class SortirController extends Controller
         $ttlPcsAkhir = 0;
         $ttlGrAkhir = 0;
         $ttlRp = 0;
-        $sortirGroup = Sortir::queryRekapGroup($bulan, 2023);
+        $sortirGroup = Sortir::queryRekapGroup($bulan, $tahun);
 
         foreach ($sortirGroup as $d) {
             $ttlPcsBk += $d->pcs_bk;
