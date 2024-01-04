@@ -1,6 +1,13 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
+            <div x-data="{ open: false }">
+                <button @click="open = ! open">Toggle</button>
+             
+                <div x-show="open" @click.outside="open = false">
+                    Contents...
+                </div>
+            </div>
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
@@ -101,7 +108,7 @@
                                             LEFT JOIN (
                                                 SELECT no_box,penerima, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk where selesai = 'T' and kategori LIKE '%sortir%' GROUP BY no_box,penerima
                                             ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T' AND a.bulan = '$bulan' AND YEAR(a.tgl) = '$tahun'
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T' AND a.bulan = '$bulan' AND YEAR(a.tgl_input) = '$tahun'
                                             GROUP by a.no_box");
                                 @endphp
                                 @foreach ($query as $x)
