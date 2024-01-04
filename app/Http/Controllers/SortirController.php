@@ -407,7 +407,7 @@ class SortirController extends Controller
         $ttlPcsAkhir = 0;
         $ttlGrAkhir = 0;
         $ttlRp = 0;
-        $sortirGroup = Sortir::queryRekapGroup($bulan, $tahun);
+        $sortirGroup = Sortir::queryRekapGroup($bulan, 2023);
 
         foreach ($sortirGroup as $d) {
             $ttlPcsBk += $d->pcs_bk;
