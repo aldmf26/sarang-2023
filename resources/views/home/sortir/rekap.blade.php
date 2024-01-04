@@ -9,10 +9,10 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('sortir.export_rekap', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
+                {{-- <a href="{{ route('sortir.export_rekap', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
-                </a>
+                </a> --}}
                 @include('home.cabut.btn_export_global')
 
             </div>
