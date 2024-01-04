@@ -374,7 +374,7 @@ class EoController extends Controller
         $ttlGrAkhir = 0;
         $ttlRp = 0;
 
-        $eoGroup = Eo::queryRekapGroup($bulan, $tahun);
+        $eoGroup = Eo::queryRekapGroup($bulan, 2023);
 
         foreach ($eoGroup as $d) {
             $ttlPcsBk += $d->pcs_bk ?? 0;
