@@ -75,7 +75,7 @@ class ApiBkModel extends Model
     {
         $result = DB::table('bk as a')
             ->leftJoin('users as b', 'b.id', '=', 'a.penerima')
-            ->select('a.no_lot', 'a.nm_partai', 'a.no_box', DB::raw('sum(a.pcs_awal) as pcs_awal'), DB::raw('sum(a.gr_awal) as gr_awal'), 'b.name')
+            ->select('a.no_lot', 'a.nm_partai', 'a.no_box', DB::raw('SUM(a.pcs_awal) as pcs_awal'), DB::raw('SUM(a.gr_awal) as gr_awal'), 'b.name')
             ->where('a.no_lot', $no_lot)
             ->where('a.nm_partai', $nm_partai)
             ->where('a.kategori', 'cabut')
