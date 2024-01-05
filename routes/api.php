@@ -27,4 +27,6 @@ Route::controller(ApiBkController::class)
         Route::get('/cabut_export', 'cabut_export')->name('cabut_export');
         Route::get('/bk_sum', 'bk_sum')->name('bk_sum');
         Route::get('/sarang_sum', 'sarang_sum')->name('sarang_sum');
+        Route::get('/show_box', 'show_box')->name('show_box');
+        Route::get('/cabut_perbox', 'cabut_perbox')->name('cabut_perbox');
     });
