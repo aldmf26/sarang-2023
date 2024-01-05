@@ -71,7 +71,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabut($no_lot, $nm_partai, $page = 10)
+    public static function bk_cabut_cabut($no_lot, $nm_partai)
     {
         $result = DB::table('bk as a')
             ->leftJoin('users as b', 'b.id', '=', 'a.penerima')
@@ -80,7 +80,7 @@ class ApiBkModel extends Model
             ->where('a.nm_partai', $nm_partai)
             ->where('a.kategori', 'cabut')
             ->groupBy('a.no_box')
-            ->paginate($page); // Sesuaikan jumlah data per halaman sesuai kebutuhan
+            ->paginate(10); // Sesuaikan jumlah data per halaman sesuai kebutuhan
 
         return $result;
     }
