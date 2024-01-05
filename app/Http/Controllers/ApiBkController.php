@@ -225,4 +225,29 @@ class ApiBkController extends Controller
         ];
         return response()->json($response);
     }
+
+    function show_box(Request $r)
+    {
+        $bk_cabut = ApiBkModel::bk_cabut_cabut($r->no_lot, $r->nm_partai);
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Sarang berhasil diambil',
+            'data' => [
+                'bk_cabut' => $bk_cabut,
+            ],
+        ];
+        return response()->json($response);
+    }
+    function cabut_perbox(Request $r)
+    {
+        $cabut = ApiBkModel::datacabutperbox($r->no_box);
+        $response = [
+            'status' => 'success',
+            'message' => 'Data Sarang berhasil diambil',
+            'data' => [
+                'cabut' => $cabut,
+            ],
+        ];
+        return response()->json($response);
+    }
 }
