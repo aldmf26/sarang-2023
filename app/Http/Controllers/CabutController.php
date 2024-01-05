@@ -1036,13 +1036,14 @@ class CabutController extends Controller
             SELECT no_lot,nm_partai,no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
         ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
         WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar");
+
         foreach ($cabut as $data) {
-            
+ 
             $sheet->setCellValue('A' . $row, $data->no_lot);
             $sheet->setCellValue('B' . $row, $data->nm_partai);
             $sheet->setCellValue('C' . $row, $data->no_box);
-            $sheet->setCellValue('D' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->pcs_bk);
-            $sheet->setCellValue('E' . $row, $bulan == $data->bulan_dibayar ? 0 : $data->gr_bk);
+            $sheet->setCellValue('D' . $row, $data->pcs_bk);
+            $sheet->setCellValue('E' . $row, $data->gr_bk);
             $sheet->setCellValue('F' . $row, $data->bulan_dibayar_format);
             $sheet->setCellValue('G' . $row, $data->pengawas);
             $sheet->setCellValue('H' . $row, $data->pcs_awal);
@@ -1058,6 +1059,7 @@ class CabutController extends Controller
             $sheet->setCellValue('Q' . $row, $data->gr_bk - $data->gr_awal);
             $this->cekBgSisa($sheet, $data->pcs_bk, $data->pcs_awal, $data->gr_bk, $data->gr_awal,  $row);
             $sheet->setCellValue('R' . $row, $data->kategori);
+
             $row++;
         }
         $rowEo = $row;
@@ -1111,8 +1113,7 @@ class CabutController extends Controller
             // );
 
             $sheet->setCellValue('R' . $rowEo, 'Eo');
-           $rowEo++;
-            
+            $rowEo++;
         }
         $baris = $rowEo + 1;
         $sheet->getStyle('A2:R' . $baris)->applyFromArray($styleBaris);
