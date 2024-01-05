@@ -228,7 +228,7 @@ class ApiBkController extends Controller
 
     function show_box(Request $r)
     {
-        $bk_cabut = ApiBkModel::bk_cabut_cabut($r->no_lot, $r->nm_partai);
+        $bk_cabut = ApiBkModel::bk_cabut_cabut($r->no_lot, $r->nm_partai, $r->limit);
         $response = [
             'status' => 'success',
             'message' => 'Data Sarang berhasil diambil',
