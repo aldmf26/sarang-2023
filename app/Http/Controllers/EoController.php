@@ -142,8 +142,9 @@ class EoController extends Controller
         $data = [
             'nobox' => $this->getStokBk(),
             'anak' => $this->getAnak(),
-            'kelas' => DB::table('tb_kelas_eo')->get(),
             'count' => $r->count,
+            'kelas' => DB::table('tb_kelas')->where([['nonaktif', 'T'], ['id_kategori', 3]])->get()
+
         ];
         return view('home.eo.tbh_baris', $data);
     }
@@ -151,22 +152,24 @@ class EoController extends Controller
     public function create(Request $r)
     {
         for ($i = 0; $i < count($r->no_box); $i++) {
-            $no_box = $r->no_box[$i];
-
-            // if ($box->pcs_awal - $box->pcs_cabut - $r->pcs_awal[$i] < 0 || $box->gr_awal - $box->gr_cabut - $r->gr_awal[$i] < 0) {
-            //     // return redirect()->route('cabut.add')->with('error', 'Total Pcs / Gr Melebihi Ambil Bk');
-            // } else {
-            // }
-            DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
-                'tgl' => $r->tgl_ambil[$i]
-            ]);
-            DB::table('eo')->where('id_eo', $r->id_eo[$i])->update([
+            $id = $r->id_eo[$i];
+            // DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
+            //     'tgl' => $r->tgl_ambil[$i]
+            // ]);
+            $data = [
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'gr_eo_awal' => $r->gr_eo_awal[$i],
                 'id_kelas' => $r->id_kelas[$i],
                 'tgl_ambil' => $r->tgl_ambil[$i],
+                'id_anak' => $r->id_anak[$i],
+                'id_pengawas' => $r->id_pengawas[$i],
                 'tgl_input' => date('Y-m-d'),
-            ]);
+            ];
+            if($id == '9999') {
+                DB::table('eo')->insert($data);
+            } else {
+                DB::table('eo')->where('id_eo', $r->id_eo[$i])->update($data);
+            }
         }
         return json_encode([
             'pesan' => "Berhasil tambah data cabut"

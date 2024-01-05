@@ -86,6 +86,28 @@
     </x-slot>
     @section('scripts')
         <script>
+            function plusCabut(count, classPlus, url) {
+                $(document).on("click", "." + classPlus, function() {
+                    count = count + 1;
+                    $.ajax({
+                        url: `${url}?count=` + count,
+                        type: "GET",
+                        success: function(data) {
+                            $("#" + classPlus).append(data);
+                            $(".select2-tambah").select2({
+                                dropdownParent: $(`#tambah2 .modal-content`)
+                            });
+                        },
+                    });
+                });
+
+                $(document).on('click', '.remove_baris', function() {
+                    var delete_row = $(this).attr("count");
+                    $(".baris" + delete_row).remove();
+
+                })
+            }
+            plusCabut(1, 'tbh_baris', "eo/tbh_baris")
             loadHalaman()
             loadTambahAnak()
             loadTambahcabut()
@@ -250,8 +272,8 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{route('eo.selesai')}}?id_cabut="+id_cabut,
-                    success: function (r) {
+                    url: "{{ route('eo.selesai') }}?id_cabut=" + id_cabut,
+                    success: function(r) {
                         load_akhir()
                         loadHalaman()
                     }
