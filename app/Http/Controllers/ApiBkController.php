@@ -11,9 +11,6 @@ class ApiBkController extends Controller
     public function sarang(Request $r)
     {
         $cabut = ApiBkModel::datacabut($r->no_lot, $r->nm_partai);
-
-
-
         // Tambahkan pengecekan apakah $cabut tidak kosong
         if (empty($cabut)) {
             $ttl_rp_cbt = 0;
@@ -92,8 +89,8 @@ class ApiBkController extends Controller
             $denda_hcr = $c->pcs_hcr * $c->denda_hcr;
             $eot_bonus = ($c->eot - $c->gr_awal * $c->batas_eot) * $c->eot_rp;
 
-            $ttl_rp_cbt +=  $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
-            $ttl_rp_cbt_hilang +=  $c->selesai == 'T' ? $rupiah : $rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
+            $ttl_rp_cbt +=  $c->rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
+            $ttl_rp_cbt_hilang +=  $c->selesai == 'T' ? $c->rupiah : $c->rupiah - $denda_hcr + $eot_bonus + $bonus_susut;
 
             $pcs_awal_cbt += $c->pcs_awal;
             $pcs_akhir_cbt += $c->selesai == 'Y' ? $c->pcs_akhir : '0';
