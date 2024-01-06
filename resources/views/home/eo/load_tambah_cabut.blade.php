@@ -69,11 +69,23 @@
             </tr>
         @empty
             <tr>
-                <td class="h6 text-warning text-center" colspan="8">Data anak kerja tidak ada</td>
+                {{-- <td class="h6 text-warning text-center" colspan="8">Data anak kerja tidak ada</td> --}}
             </tr>
         @endforelse
         @foreach ($getAnak as $i => $x)
         @endforeach
     </tbody>
+    <tbody id="tbh_baris">
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="10">
+                <button type="button" class="btn btn-block btn-lg tbh_baris"
+                    style="background-color: #F4F7F9; color: #435EBE; font-size: 14px; padding: 13px;">
+                    <i class="fas fa-plus"></i> Tambah Baris Baru
+                </button>
+            </th>
+        </tr>
+    </tfoot>
 
 </table>

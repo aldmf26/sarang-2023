@@ -34,22 +34,22 @@ class Eo extends Model
         JOIN users as b on a.id_pengawas = b.id
         LEFT JOIN (
             select id_pengawas,sum(gr_eo_awal) as gr_awal, sum(gr_eo_akhir) as gr_akhir, sum(ttl_rp) as ttl_rp 
-            from eo where no_box != 9999 and penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_serah) = '$tahun' GROUP BY id_pengawas
+            from eo where no_box != 9999 and penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun' GROUP BY id_pengawas
         ) as c on a.id_pengawas = c.id_pengawas
         LEFT JOIN (
             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
             JOIN (
-                SELECT no_box FROM eo where bulan_dibayar = '$bulan' AND YEAR(tgl_ambil) = '$tahun' GROUP BY no_box
+                SELECT no_box FROM eo where bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun' GROUP BY no_box
             ) as b on a.no_box = b.no_box
             WHERE a.kategori LIKE '%cabut%'
             GROUP by a.penerima
         ) as d on a.id_pengawas = d.penerima
         LEFT JOIN (
             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-            FROM eo WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_ambil) = '$tahun'
+            FROM eo WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'
             GROUP BY id_pengawas
         ) as e ON e.id_pengawas = a.id_pengawas
-        WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_ambil) = '$tahun'
+        WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_input) = '$tahun'
         GROUP BY a.id_pengawas;");
         return $cabutGroup;
     }

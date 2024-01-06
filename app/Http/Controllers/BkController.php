@@ -180,7 +180,6 @@ class BkController extends Controller
                     empty($row[0]) || 
                     empty($row[1]) || 
                     empty($row[6]) || 
-                    empty($row[8]) || 
                     empty($row[9]) || 
                     empty($row[10])
                 ) {
@@ -188,7 +187,6 @@ class BkController extends Controller
                         empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
                         empty($row[1]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
                         empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                        empty($row[8]) => "PCS TIDAK BOLEH KOSONG",
                         empty($row[9]) => "GR TIDAK BOLEH KOSONG",
                         empty($row[10]) => "KATEGORI TIDAK BOLEH KOSONG",
                         $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,

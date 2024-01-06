@@ -71,13 +71,14 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabut($no_lot, $nm_partai)
+    public static function bk_cabut_cabut($no_lot, $nm_partai,$limit = 10)
     {
+        $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name
         FROM bk as a
         left join users as b on b.id = a.penerima
         WHERE a.no_lot = ? AND a.nm_partai = ? AND a.kategori ='cabut'
-        GROUP BY a.no_box", [$no_lot, $nm_partai]);
+        GROUP BY a.no_box $whereLimit", [$no_lot, $nm_partai]);
         return $result;
     }
     public static function datacabutperbox($no_box)
