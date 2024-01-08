@@ -214,14 +214,8 @@ class ApiBkController extends Controller
     function show_box(Request $r)
     {
         $bk_cabut = ApiBkModel::bk_cabut_cabut($r->no_lot, $r->nm_partai, $r->limit);
-        $response = [
-            'status' => 'success',
-            'message' => 'Data Sarang berhasil diambil',
-            'data' => [
-                'bk_cabut' => $bk_cabut,
-            ],
-        ];
-        return response()->json($response);
+
+        return response()->json($bk_cabut);
     }
     function cabut_perbox(Request $r)
     {
