@@ -128,11 +128,7 @@ class ApiBkController extends Controller
     {
         $cabut = ApiBkModel::bk_cabut_sum($r->nm_partai);
         $response = [
-            'status' => 'success',
-            'message' => 'Data Bk Perpartai',
-            'data' => [
-                'bk_cabut' => $cabut,
-            ],
+            'data' => $cabut
         ];
         return response()->json($response);
     }

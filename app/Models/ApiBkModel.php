@@ -99,8 +99,9 @@ class ApiBkModel extends Model
     {
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
         FROM bk as a
-        WHERE a.nm_partai = ? AND a.kategori ='cabut'
-        GROUP BY a.nm_partai;", [$nm_partai]);
+        WHERE a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        GROUP BY a.nm_partai;");
+        
         return $result;
     }
 
