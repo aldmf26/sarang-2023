@@ -102,21 +102,15 @@ class ApiBkController extends Controller
             $gr_flx_cbt += $c->selesai == 'Y' ? $c->gr_flx : '0';
         }
         $response = [
-            'status' => 'success',
-            'message' => 'Data Sarang berhasil diambil',
-            'data' => [
-                'cabut' => [
-                    'pcs_awal' => $pcs_awal_cbt,
-                    'pcs_akhir' => $pcs_akhir_cbt,
-                    'gr_awal' => $gr_awal_cbt,
-                    'gr_awal_cbt_hilang' => $gr_awal_cbt_hilang,
-                    'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
-                    'susut' => $ttl_rp_cbt_hilang == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
-                    'rp_gram' => empty($gr_awal_cbt) ? '0' : $ttl_rp_cbt_hilang / $gr_awal_cbt,
-                    'ttl_rp' =>  $ttl_rp_cbt_hilang,
-                    'ttl_rp_dibawa' =>  $ttl_rp_cbt,
-                ],
-            ],
+            'pcs_awal' => $pcs_awal_cbt,
+            'pcs_akhir' => $pcs_akhir_cbt,
+            'gr_awal' => $gr_awal_cbt,
+            'gr_awal_cbt_hilang' => $gr_awal_cbt_hilang,
+            'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
+            'susut' => $ttl_rp_cbt_hilang == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
+            'rp_gram' => empty($gr_awal_cbt) ? '0' : $ttl_rp_cbt_hilang / $gr_awal_cbt,
+            'ttl_rp' =>  $ttl_rp_cbt_hilang,
+            'ttl_rp_dibawa' =>  $ttl_rp_cbt,
         ];
         return response()->json($response);
     }
