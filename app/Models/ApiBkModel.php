@@ -31,8 +31,8 @@ class ApiBkModel extends Model
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
         left join tb_kelas as c on c.id_kelas = a.id_kelas 
-        where b.nm_partai=? 
-        ;", [$nm_partai]);
+        where b.nm_partai= LIKE '%$nm_partai%'
+        ;");
 
         return $result;
     }
@@ -120,7 +120,7 @@ class ApiBkModel extends Model
     {
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
         FROM bk as a
-        WHERE a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        WHERE a.nm_partai LIKE '%$nm_partai%' AND a.kategori ='cabut'
         GROUP BY a.nm_partai;");
         
         return $result;
