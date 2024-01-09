@@ -87,7 +87,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.gr_flx) as gr_flx , a.no_box,  c.eot as eot_rp, 
         c.batas_eot, sum(a.rupiah) as rupiah, sum(a.ttl_rp) as ttl_rp
         FROM cabut as a
-        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join bk as b on b.no_box = a.no_box and b.kategori LIKE '%cabut%'
         left join tb_kelas as c on c.id_kelas = a.id_kelas
         where a.no_box = ?
         group by a.no_box

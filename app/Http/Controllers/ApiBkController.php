@@ -220,13 +220,7 @@ class ApiBkController extends Controller
     function cabut_perbox(Request $r)
     {
         $cabut = ApiBkModel::datacabutperbox($r->no_box);
-        $response = [
-            'status' => 'success',
-            'message' => 'Data Sarang berhasil diambil',
-            'data' => [
-                'cabut' => $cabut,
-            ],
-        ];
-        return response()->json($response);
+
+        return response()->json($cabut);
     }
 }
