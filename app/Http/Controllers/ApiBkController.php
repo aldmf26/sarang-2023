@@ -101,7 +101,7 @@ class ApiBkController extends Controller
             $gr_akhir_cbt += $c->selesai == 'Y' ?  $c->gr_akhir : '0';
 
             $gr_flx_cbt += $c->selesai == 'Y' ? $c->gr_flx : '0';
-            $eot += $c->selesai == 'Y' ? $c->eot_rp : '0';
+            $eot += $c->selesai == 'Y' ? $c->eot : '0';
         }
         $response = [
             'pcs_awal' => $pcs_awal_cbt,
