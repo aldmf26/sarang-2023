@@ -43,18 +43,14 @@ class ApiBkController extends Controller
 
         // Perbarui respons untuk mencakup data BK cabut
         $response = [
-            'status' => 'success',
-            'message' => 'Data Sarang berhasil diambil',
-            'data' => [
-                'bk_cabut' => $bk_cabut,  // Ini adalah bagian yang ditambahkan
-                'cabut' => [
-                    'pcs_awal' => $pcs_awal_cbt,
-                    'pcs_akhir' => $pcs_akhir_cbt,
-                    'gr_awal' => $gr_awal_cbt,
-                    'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
-                    'susut' => $gr_akhir_cbt == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
-                    'ttl_rp' =>  $ttl_rp_cbt,
-                ],
+            'bk_cabut' => $bk_cabut,
+            'cabut' => [
+                'pcs_awal' => $pcs_awal_cbt,
+                'pcs_akhir' => $pcs_akhir_cbt,
+                'gr_awal' => $gr_awal_cbt,
+                'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
+                'susut' => $gr_akhir_cbt == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
+                'ttl_rp' =>  $ttl_rp_cbt,
             ],
         ];
 
