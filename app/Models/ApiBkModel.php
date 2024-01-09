@@ -71,7 +71,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabut($no_lot, $nm_partai,$limit = 10)
+    public static function bk_cabut_cabutLama($no_lot, $nm_partai,$limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name
@@ -79,6 +79,27 @@ class ApiBkModel extends Model
         left join users as b on b.id = a.penerima
         WHERE a.no_lot = ? AND a.nm_partai = ? AND a.kategori ='cabut'
         GROUP BY a.no_box $whereLimit", [$no_lot, $nm_partai]);
+        return $result;
+    }
+    public static function bk_cabut_cabut($no_lot, $nm_partai,$limit = 10)
+    {
+        $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
+        $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
+        c.pcs_awal,c.gr_awal,c.pcs_akhir,c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp
+        FROM bk as a
+        left join users as b on b.id = a.penerima
+        LEFT JOIN (
+            SELECT 
+                sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.gr_flx) as gr_flx , a.no_box,  c.eot as eot_rp, 
+                c.batas_eot, sum(a.rupiah) as rupiah, sum(a.ttl_rp) as ttl_rp
+                FROM cabut as a
+                left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                left join tb_kelas as c on c.id_kelas = a.id_kelas
+                group by a.no_box
+        ) as c on c.no_box = a.no_box
+        WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        GROUP BY a.no_box $whereLimit");
+        
         return $result;
     }
     public static function datacabutperbox($no_box)
