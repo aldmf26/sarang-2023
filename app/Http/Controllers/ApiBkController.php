@@ -73,6 +73,7 @@ class ApiBkController extends Controller
         $ttl_rp_cbt = 0;
         $ttl_rp_cbt_hilang = 0;
         $gr_awal_cbt_hilang = 0;
+        $eot = 0;
         foreach ($cabut as $c) {
             $susut = empty($c->gr_awal) ? 0 : (1 - ($c->gr_flx + $c->gr_akhir) / $c->gr_awal) * 100;
             $batas_eot = empty($c->gr_awal) ? 0 : $c->gr_awal * $c->batas_eot;
@@ -100,6 +101,7 @@ class ApiBkController extends Controller
             $gr_akhir_cbt += $c->selesai == 'Y' ?  $c->gr_akhir : '0';
 
             $gr_flx_cbt += $c->selesai == 'Y' ? $c->gr_flx : '0';
+            $eot += $c->selesai == 'Y' ? $c->eot_rp : '0';
         }
         $response = [
             'pcs_awal' => $pcs_awal_cbt,
@@ -107,6 +109,8 @@ class ApiBkController extends Controller
             'gr_awal' => $gr_awal_cbt,
             'gr_awal_cbt_hilang' => $gr_awal_cbt_hilang,
             'gr_akhir' => $gr_akhir_cbt + $gr_flx_cbt,
+            'gr_flx' => $gr_flx_cbt,
+            'eot' => $eot,
             'susut' => $ttl_rp_cbt_hilang == '0' ? '0' : (1 - (($gr_akhir_cbt + $gr_flx_cbt) / $gr_awal_cbt)) * 100,
             'rp_gram' => empty($gr_awal_cbt) ? '0' : $ttl_rp_cbt_hilang / $gr_awal_cbt,
             'ttl_rp' =>  $ttl_rp_cbt_hilang,
