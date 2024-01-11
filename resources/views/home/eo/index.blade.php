@@ -302,7 +302,8 @@
                 load_akhir()
             })
 
-            $(document).on('click', '.selesai', function() {
+            $(document).on('click', '.selesai', function(e) {
+                e.preventDefault()
                 var id_cabut = $(this).attr('id_cabut');
                 $(this).closest('tr').hide();
                 $('.cetak').val(id_cabut);

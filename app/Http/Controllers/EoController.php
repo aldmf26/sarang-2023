@@ -364,7 +364,7 @@ class EoController extends Controller
         return Excel::download(new EoExport($tbl, $view), 'Export EO.xlsx');
     }
     public function ditutup(Request $r)
-    {
+    {  
 
         $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
         foreach ($r->datas as $d) {
