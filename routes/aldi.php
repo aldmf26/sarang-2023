@@ -189,7 +189,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_anak_nopengawas', 'load_anak_nopengawas')->name('load_anak_nopengawas');
             Route::get('/add_delete_anak', 'add_delete_anak')->name('add_delete_anak');
             Route::get('/rekap', 'rekap')->name('rekap');
-
+            Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/load_tambah_anak', 'load_tambah_anak')->name('load_tambah_anak');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/createTambahAnakCabut', 'createTambahAnakCabut')->name('createTambahAnakCabut');

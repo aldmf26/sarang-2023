@@ -363,6 +363,15 @@ class EoController extends Controller
 
         return Excel::download(new EoExport($tbl, $view), 'Export EO.xlsx');
     }
+    public function ditutup(Request $r)
+    {
+
+        $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
+        foreach ($r->datas as $d) {
+            DB::table('eo')->where('id_eo', $d)->update($data);
+        }
+    }
+
 
     public function rekap(Request $r)
     {
@@ -371,6 +380,7 @@ class EoController extends Controller
 
         $ttlPcsBk = 0;
         $ttlGrBk = 0;
+     
         $ttlPcsAwal = 0;
         $ttlGrAwal = 0;
         $ttlPcsAkhir = 0;

@@ -136,7 +136,7 @@
                     success: function(r) {
                         $("#load_tambah_anak").html(r);
                         pencarian('pencarian', 'tablealdi')
-                        inputChecked('cekSemua', 'cek')
+                        inputChecked('cekSemuaTutup', 'cekTutup')
                     }
                 });
             }
@@ -192,12 +192,49 @@
                             "paging": false,
                             "ordering": false
                         });
-                        // inputChecked('cekSemuaTutup', 'cekTutup')
+                        inputChecked('cekSemuaTutup', 'cekTutup')
                     }
                 });
 
 
             }
+            $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
+                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                    $('.btn_tutup').removeClass('d-none');
+
+                    $('.btn_tutup').toggle(this.checked);
+                })
+
+                $(document).on('click', '.btn_tutup', function() {
+                    var tipe = $(this).attr('tipe')
+                    var selectedRows = [];
+                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                    $('input[name="cekTutup[]"]:checked').each(function() {
+                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+
+                        // Mengambil ID dari kolom pertama (kolom #)
+                        var anakId = $(this).attr('id_cabut');
+
+                        // Tambahkan ID anak ke dalam array
+                        selectedRows.push(anakId);
+                    });
+                    if (confirm('Apakah anda yakin ?')) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('eo.ditutup') }}",
+                            data: {
+                                datas: selectedRows,
+                                tipe: tipe
+                            },
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil save')
+                                loadHalaman()
+                                $('.btn_tutup').hide();
+                            }
+                        });
+                    }
+
+                })
 
             function loadTambahcabut() {
                 updateAnakBelum();
