@@ -199,42 +199,42 @@
 
             }
             $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
-                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
-                    $('.btn_tutup').removeClass('d-none');
+            $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
+                $('.btn_tutup').removeClass('d-none');
 
-                    $('.btn_tutup').toggle(this.checked);
-                })
+                $('.btn_tutup').toggle(this.checked);
+            })
 
-                $(document).on('click', '.btn_tutup', function() {
-                    var tipe = $(this).attr('tipe')
-                    var selectedRows = [];
-                    // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
-                    $('input[name="cekTutup[]"]:checked').each(function() {
-                        // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
+            $(document).on('click', '.btn_tutup', function() {
+                var tipe = $(this).attr('tipe')
+                var selectedRows = [];
+                // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
+                $('input[name="cekTutup[]"]:checked').each(function() {
+                    // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
 
-                        // Mengambil ID dari kolom pertama (kolom #)
-                        var anakId = $(this).attr('id_cabut');
+                    // Mengambil ID dari kolom pertama (kolom #)
+                    var anakId = $(this).attr('id_cabut');
 
-                        // Tambahkan ID anak ke dalam array
-                        selectedRows.push(anakId);
+                    // Tambahkan ID anak ke dalam array
+                    selectedRows.push(anakId);
+                });
+                if (confirm('Apakah anda yakin ?')) {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('eo.ditutup') }}",
+                        data: {
+                            datas: selectedRows,
+                            tipe: tipe
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil save')
+                            loadHalaman()
+                            $('.btn_tutup').hide();
+                        }
                     });
-                    if (confirm('Apakah anda yakin ?')) {
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('eo.ditutup') }}",
-                            data: {
-                                datas: selectedRows,
-                                tipe: tipe
-                            },
-                            success: function(r) {
-                                alertToast('sukses', 'Berhasil save')
-                                loadHalaman()
-                                $('.btn_tutup').hide();
-                            }
-                        });
-                    }
+                }
 
-                })
+            })
 
             function loadTambahcabut() {
                 updateAnakBelum();
@@ -343,9 +343,9 @@
                     var floatFields = ['gr_eo_akhir', 'gr_eo_awal', 'rupiah', 'ttl_rp', 'id_eo', 'tgl_serah', 'bulan'];
 
                     floatFields.forEach((fieldName) => {
-                        data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) ||
-                            0;
+                        data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) || 0;
                     })
+                    
                     var ttl_rp = data.rupiah == 0 ? 50000 : data.rupiah * data.gr_eo_akhir
 
                     var setRupiah = ttl_rp.toLocaleString('id-ID', {
