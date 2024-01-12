@@ -346,7 +346,7 @@
                         data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) ||
                             0;
                     })
-                    var ttl_rp = data.rupiah * data.gr_eo_akhir
+                    var ttl_rp = data.rupiah == 0 ? 50000 : data.rupiah * data.gr_eo_akhir
 
                     var setRupiah = ttl_rp.toLocaleString('id-ID', {
                         maximumFractionDigits: 0
