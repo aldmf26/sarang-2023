@@ -174,9 +174,9 @@ class BkController extends Controller
                 $nobox = $row[2];
                 $tgl = $row[6];
 
-                $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+                // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
                 if (
-                    $cekBox || 
+                    // $cekBox || 
                     empty($row[0]) || 
                     empty($row[1]) || 
                     empty($row[6]) || 
@@ -189,7 +189,7 @@ class BkController extends Controller
                         empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
                         empty($row[9]) => "GR TIDAK BOLEH KOSONG",
                         empty($row[10]) => "KATEGORI TIDAK BOLEH KOSONG",
-                        $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
+                        // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
                     ];
                     DB::rollBack();
                     return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
