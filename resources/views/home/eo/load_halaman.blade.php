@@ -43,7 +43,7 @@
                         <td align="right">
                             {{ number_format($d->gr_eo_awal, 0) . ' ~ ' . number_format($d->gr_eo_akhir, 0) }}</td>
                         @php
-                            $susut = (1 - $d->gr_eo_akhir / $d->gr_eo_awal) * 100;
+                            $susut = empty($d->gr_eo_awal) ? 0 : (1 - $d->gr_eo_akhir / $d->gr_eo_awal) * 100;
                         @endphp
                         <td align="right">{{ number_format($susut, 0) }}%</td>
                         <td align="right">{{ number_format($d->ttl_rp, 0) }}
