@@ -137,11 +137,11 @@ class BkController extends Controller
                         'tgl' => $r->tgl_terima[$x],
                         'kategori' => $r->kategori
                     ];
-                    if ($cekBox) {
-                        return redirect("home/bk?kategori=$r->kategori")->with('error', "No box : $nobox SUDAH ADA DI BK CABUT");
-                    } else {
-                        DB::table('bk')->insert($data);
-                    }
+                    // if ($cekBox) {
+                    //     return redirect("home/bk?kategori=$r->kategori")->with('error', "No box : $nobox SUDAH ADA DI BK CABUT");
+                    // } else {
+                    // }
+                    DB::table('bk')->insert($data);
                 }
             }
             DB::commit();
