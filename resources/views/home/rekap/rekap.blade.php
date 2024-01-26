@@ -22,6 +22,7 @@
             .badge {
                 cursor: pointer;
             }
+            
         </style>
         <form id="formAbsen" method="POST">
             @csrf
