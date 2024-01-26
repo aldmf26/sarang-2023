@@ -1243,7 +1243,7 @@ class CabutController extends Controller
             FROM `eo` as a
             WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar
         ) as eo ON eo.no_box = bk.no_box and eo.id_pengawas = bk.penerima
-        WHERE bk.kategori LIKE '%cabut%';");
+        WHERE bk.pengawas = 'sinta' AND bk.kategori LIKE '%cabut%';");
 
         foreach ($cabut as $data) {
  
@@ -1252,7 +1252,7 @@ class CabutController extends Controller
             $sheet->setCellValue('C' . $row, $data->no_box);
             $sheet->setCellValue('D' . $row, $data->pcs_bk);
             $sheet->setCellValue('E' . $row, $data->gr_bk);
-            $sheet->setCellValue('F' . $row, $data->bulan_dibayar_format);
+            $sheet->setCellValue('F' . $row, $data->bulan_dibayar_format ?? $data->eo_bulan_dibayar_format);
             $sheet->setCellValue('G' . $row, $data->pengawas);
             $sheet->setCellValue('H' . $row, $data->pcs_awal);
             $sheet->setCellValue('I' . $row, $data->gr_awal + $data->gr_eo_awal);
