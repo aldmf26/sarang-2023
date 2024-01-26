@@ -961,7 +961,7 @@ class CabutController extends Controller
         return redirect()->route('cabut.index')->with('sukses', 'Data Tercek');
     }
 
-    public function export_sinta(Request $r)
+    public function export_sintaFromCabut(Request $r)
     {
         $bulan = $r->bulan;
         $tahun = $r->tahun;
@@ -1131,4 +1131,187 @@ class CabutController extends Controller
             ]
         );
     }
+
+    public function export_sinta(Request $r)
+    {
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();;
+        $sheet->setTitle('Summary Box');
+
+        $koloms = [
+            'A1' => 'no lot',
+            'B1' => 'partai herry',
+            'C1' => 'no box',
+            'D1' => 'pcs awal bk',
+            'E1' => 'gr awal bk',
+            'F1' => 'bulan',
+            'G1' => 'pgws',
+            'H1' => 'pcs awal kerja',
+            'I1' => 'gr awal kerja',
+            'J1' => 'pcs akhir kerja',
+            'K1' => 'gr akhir kerja',
+            'L1' => 'eot',
+            'M1' => 'flx',
+            'N1' => 'susut',
+            'O1' => 'ttl rp',
+            'P1' => 'pcs sisa bk',
+            'Q1' => 'gr sisa bk',
+            'R1' => 'kategori',
+        ];
+        foreach ($koloms as $kolom => $isiKolom) {
+            $sheet->setCellValue($kolom, ucwords($isiKolom));
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:R1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
+
+        $row = 2;
+        $cabut = DB::select("SELECT 
+        b.name as pengawas,
+         bk.pcs_awal as pcs_bk,
+         bk.gr_awal as gr_bk,
+         bk.kategori,
+         bk.no_lot,
+         bk.nm_partai,
+         cbt.pcs_awal,
+         cbt.gr_awal,
+         cbt.pcs_akhir,
+         cbt.gr_akhir,
+         cbt.eot,
+         cbt.gr_flx,
+         cbt.ttl_rp,
+         cbt.bulan_dibayar_format,
+         cbt.bulan_dibayar,
+         cbt.tahun_dibayar,
+         bk.no_box 
+         FROM bk 
+         join users as b on bk.penerima = b.id 
+         LEFT JOIN ( 
+            select a.bulan_dibayar,
+             year(a.tgl_serah) as tahun_dibayar,
+             CONCAT( DATE_FORMAT(a.tgl_serah, '%b'), ' ', DATE_FORMAT(a.tgl_serah, '%Y') ) AS bulan_dibayar_format,
+              sum(a.pcs_awal) as pcs_awal,
+              sum(a.gr_awal) as gr_awal,
+              sum(a.pcs_akhir) as pcs_akhir,
+              sum(a.gr_akhir) as gr_akhir,
+              sum(a.eot) as eot,
+              sum(a.gr_flx) as gr_flx,
+              sum(a.ttl_rp) as ttl_rp,
+              a.id_pengawas,
+              a.no_box 
+              from cabut as a 
+              WHERE a.no_box != 9999 AND a.bulan_dibayar != '' 
+              group by a.no_box, a.bulan_dibayar 
+            ) as cbt on bk.no_box = cbt.no_box and cbt.id_pengawas = bk.penerima
+        WHERE bk.kategori LIKE '%cabut%';");
+
+        foreach ($cabut as $data) {
+ 
+            $sheet->setCellValue('A' . $row, $data->no_lot);
+            $sheet->setCellValue('B' . $row, $data->nm_partai);
+            $sheet->setCellValue('C' . $row, $data->no_box);
+            $sheet->setCellValue('D' . $row, $data->pcs_bk);
+            $sheet->setCellValue('E' . $row, $data->gr_bk);
+            $sheet->setCellValue('F' . $row, $data->bulan_dibayar_format);
+            $sheet->setCellValue('G' . $row, $data->pengawas);
+            $sheet->setCellValue('H' . $row, $data->pcs_awal);
+            $sheet->setCellValue('I' . $row, $data->gr_awal);
+            $sheet->setCellValue('J' . $row, $data->pcs_akhir);
+            $sheet->setCellValue('K' . $row, $data->gr_akhir);
+            $sheet->setCellValue('L' . $row, $data->eot);
+            $sheet->setCellValue('M' . $row, $data->gr_flx);
+            $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
+            $sheet->setCellValue('N' . $row, number_format($susut, 0));
+            $sheet->setCellValue('O' . $row, $data->ttl_rp);
+            $sheet->setCellValue('P' . $row, $data->pcs_bk - $data->pcs_awal);
+            $sheet->setCellValue('Q' . $row, $data->gr_bk - $data->gr_awal);
+            $this->cekBgSisa($sheet, $data->pcs_bk, $data->pcs_awal, $data->gr_bk, $data->gr_awal,  $row);
+            $sheet->setCellValue('R' . $row, $data->kategori);
+
+            $row++;
+        }
+        $rowEo = $row;
+        $eo = DB::select("SELECT 
+        a.no_box,
+        a.bulan_dibayar,
+        bk.gr_awal as gr_bk,
+        year(a.tgl_serah) as tahun_dibayar,
+        CONCAT(
+            DATE_FORMAT(a.tgl_serah, '%b'), ' ', 
+            DATE_FORMAT(a.tgl_serah, '%Y')
+        ) AS bulan_dibayar_format,
+        b.name as pengawas,
+        sum(a.gr_eo_awal) as gr_eo_awal,
+        sum(a.gr_eo_akhir) as gr_eo_akhir,
+        sum(a.ttl_rp) as rupiah,
+        bk.no_lot,
+        bk.nm_partai
+        FROM `eo` as a
+        JOIN users as b on a.id_pengawas = b.id
+        left join (
+            SELECT no_lot,nm_partai,no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
+        ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
+        WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar;");
+        foreach ($eo as $data) {
+            $sheet->setCellValue('A' . $row, $data->no_lot);
+            $sheet->setCellValue('B' . $row, $data->nm_partai);
+            $sheet->setCellValue('C' . $rowEo, $data->no_box);
+            $sheet->setCellValue('D' . $rowEo, 0);
+            $sheet->setCellValue('E' . $rowEo, $data->gr_bk);
+            $sheet->setCellValue('F' . $rowEo, $data->bulan_dibayar_format);
+            $sheet->setCellValue('G' . $rowEo, $data->pengawas);
+            $sheet->setCellValue('H' . $rowEo, 0);
+            $sheet->setCellValue('I' . $rowEo, $data->gr_eo_awal);
+            $sheet->setCellValue('J' . $rowEo, 0);
+            $sheet->setCellValue('K' . $rowEo, $data->gr_eo_akhir);
+            $sheet->setCellValue('L' . $rowEo, 0);
+            $sheet->setCellValue('M' . $rowEo, 0);
+            $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
+            $sheet->setCellValue('N' . $rowEo, number_format($susut, 0));
+            $sheet->setCellValue('O' . $rowEo, $data->rupiah);
+            $sheet->setCellValue('P' . $rowEo, 0);
+            $sheet->setCellValue('Q' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
+            // $this->cekBgSisa(
+            //     $sheet,
+            //     0,
+            //     0,
+            //     $data->gr_bk,
+            //     $data->gr_eo_awal,
+            //     $rowEo
+            // );
+
+            $sheet->setCellValue('R' . $rowEo, 'Eo');
+            $rowEo++;
+        }
+        $baris = $rowEo + 1;
+        $sheet->getStyle('A2:R' . $baris)->applyFromArray($styleBaris);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Summary Box Cabut Eo $bulanDibayar $tahun";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+
 }
