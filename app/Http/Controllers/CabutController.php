@@ -656,7 +656,7 @@ class CabutController extends Controller
         $cekSisaGr = $grBk - $grAwal > 0 ? true : false;
 
         if ($cekSisaGr || $cekSisaPcs) {
-            return $sheet->getStyle("A$row:P$row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('92D050');
+            return $sheet->getStyle("A$row:T$row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('92D050');
         }
     }
     public function export_ibu(Request $r)
