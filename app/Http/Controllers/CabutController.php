@@ -1244,60 +1244,8 @@ class CabutController extends Controller
 
             $row++;
         }
-        $rowEo = $row;
-        $eo = DB::select("SELECT 
-        a.no_box,
-        a.bulan_dibayar,
-        bk.gr_awal as gr_bk,
-        year(a.tgl_serah) as tahun_dibayar,
-        CONCAT(
-            DATE_FORMAT(a.tgl_serah, '%b'), ' ', 
-            DATE_FORMAT(a.tgl_serah, '%Y')
-        ) AS bulan_dibayar_format,
-        b.name as pengawas,
-        sum(a.gr_eo_awal) as gr_eo_awal,
-        sum(a.gr_eo_akhir) as gr_eo_akhir,
-        sum(a.ttl_rp) as rupiah,
-        bk.no_lot,
-        bk.nm_partai
-        FROM `eo` as a
-        JOIN users as b on a.id_pengawas = b.id
-        left join (
-            SELECT no_lot,nm_partai,no_box,pcs_awal,gr_awal,penerima,kategori from bk GROUP BY no_box,penerima
-        ) as bk on a.no_box = bk.no_box and a.id_pengawas = bk.penerima
-        WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar;");
-        foreach ($eo as $data) {
-            $sheet->setCellValue('A' . $row, $data->no_lot);
-            $sheet->setCellValue('B' . $row, $data->nm_partai);
-            $sheet->setCellValue('C' . $rowEo, $data->no_box);
-            $sheet->setCellValue('D' . $rowEo, 0);
-            $sheet->setCellValue('E' . $rowEo, $data->gr_bk);
-            $sheet->setCellValue('F' . $rowEo, $data->bulan_dibayar_format);
-            $sheet->setCellValue('G' . $rowEo, $data->pengawas);
-            $sheet->setCellValue('H' . $rowEo, 0);
-            $sheet->setCellValue('I' . $rowEo, $data->gr_eo_awal);
-            $sheet->setCellValue('J' . $rowEo, 0);
-            $sheet->setCellValue('K' . $rowEo, $data->gr_eo_akhir);
-            $sheet->setCellValue('L' . $rowEo, 0);
-            $sheet->setCellValue('M' . $rowEo, 0);
-            $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
-            $sheet->setCellValue('N' . $rowEo, number_format($susut, 0));
-            $sheet->setCellValue('O' . $rowEo, $data->rupiah);
-            $sheet->setCellValue('P' . $rowEo, 0);
-            $sheet->setCellValue('Q' . $rowEo, $data->gr_bk - $data->gr_eo_awal);
-            // $this->cekBgSisa(
-            //     $sheet,
-            //     0,
-            //     0,
-            //     $data->gr_bk,
-            //     $data->gr_eo_awal,
-            //     $rowEo
-            // );
-
-            $sheet->setCellValue('R' . $rowEo, 'Eo');
-            $rowEo++;
-        }
-        $baris = $rowEo + 1;
+        
+        $baris = $row + 1;
         $sheet->getStyle('A2:R' . $baris)->applyFromArray($styleBaris);
 
         $writer = new Xlsx($spreadsheet);
