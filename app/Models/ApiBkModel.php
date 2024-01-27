@@ -116,6 +116,19 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function datacabutsum2($nm_partai)
+    {
+        $result = DB::select("SELECT 
+        sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
+                FROM cabut as a
+                left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+                left join tb_kelas as c on c.id_kelas = a.id_kelas 
+                where b.nm_partai= ?
+                group by b.nm_partai
+        ;", [$nm_partai]);
+
+        return $result;
+    }
     public static function bk_cabut_sum($nm_partai)
     {
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
