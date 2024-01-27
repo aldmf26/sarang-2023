@@ -120,7 +120,13 @@ class ApiBkController extends Controller
 
 
         $response = [
-            'cabut' => $cabut
+            "pcs_awal" => $cabut->pcs_awal,
+            "gr_awal" =>  $cabut->gr_awal,
+            "eot" => $cabut->eot,
+            "gr_flx" => $cabut->gr_flx,
+            "pcs_akhir" => $cabut->pcs_akhir,
+            "gr_akhir" => $cabut->gr_akhir,
+            "ttl_rp" => $cabut->ttl_rp
         ];
         return response()->json($response);
     }
