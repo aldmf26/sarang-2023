@@ -96,7 +96,7 @@
                             @foreach ($eoGroup as $i => $d)
                                 <tr x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
                                     <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
-                                            x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
+                                            >Buka
                                             <i class="fas fa-caret-down"></i></span></th>
                                     <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk ?? 0, 0) }}</th>
