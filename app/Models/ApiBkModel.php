@@ -71,7 +71,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabutLama($no_lot, $nm_partai,$limit = 10)
+    public static function bk_cabut_cabutLama($no_lot, $nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name
@@ -81,7 +81,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_box $whereLimit", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabut($no_lot, $nm_partai,$limit = 10)
+    public static function bk_cabut_cabut($no_lot, $nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
@@ -97,9 +97,9 @@ class ApiBkModel extends Model
                 left join tb_kelas as c on c.id_kelas = a.id_kelas
                 group by a.no_box
         ) as c on c.no_box = a.no_box
-        WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.no_box $whereLimit");
-        
+
         return $result;
     }
     public static function datacabutperbox($no_box)
@@ -116,13 +116,39 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function datacabutsum2($nm_partai)
+    {
+        $result = DB::selectOne("SELECT b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo
+        FROM bk as a 
+        left join (
+        SELECT b.nm_partai,
+        sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
+                FROM cabut as a
+                left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+                group by b.nm_partai
+        ) as b on b.nm_partai = a.nm_partai
+        
+        left join (
+        SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
+        FROM eo as c 
+        left join bk as d on d.no_box = c.no_box
+        GROUP by d.nm_partai
+        ) as c on c.nm_partai = a.nm_partai
+        
+        
+        where a.kategori in ('cabut','eo') and a.nm_partai = ?
+        group by a.nm_partai;
+        ;", [$nm_partai]);
+
+        return $result;
+    }
     public static function bk_cabut_sum($nm_partai)
     {
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
         FROM bk as a
-        WHERE a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        WHERE a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.nm_partai;");
-        
+
         return $result;
     }
 
