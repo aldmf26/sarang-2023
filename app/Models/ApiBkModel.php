@@ -71,7 +71,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_lot, a.nm_partai;", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabutLama($no_lot, $nm_partai,$limit = 10)
+    public static function bk_cabut_cabutLama($no_lot, $nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name
@@ -81,7 +81,7 @@ class ApiBkModel extends Model
         GROUP BY a.no_box $whereLimit", [$no_lot, $nm_partai]);
         return $result;
     }
-    public static function bk_cabut_cabut($no_lot, $nm_partai,$limit = 10)
+    public static function bk_cabut_cabut($no_lot, $nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
@@ -99,7 +99,7 @@ class ApiBkModel extends Model
         ) as c on c.no_box = a.no_box
         WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
         GROUP BY a.no_box $whereLimit");
-        
+
         return $result;
     }
     public static function datacabutperbox($no_box)
@@ -120,9 +120,9 @@ class ApiBkModel extends Model
     {
         $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal
         FROM bk as a
-        WHERE a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        WHERE a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.nm_partai;");
-        
+
         return $result;
     }
 
