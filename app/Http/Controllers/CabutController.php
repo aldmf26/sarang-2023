@@ -1038,7 +1038,7 @@ class CabutController extends Controller
         WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar");
 
         foreach ($cabut as $data) {
- 
+
             $sheet->setCellValue('A' . $row, $data->no_lot);
             $sheet->setCellValue('B' . $row, $data->nm_partai);
             $sheet->setCellValue('C' . $row, $data->no_box);
@@ -1246,7 +1246,7 @@ class CabutController extends Controller
         WHERE bk.pengawas = 'sinta' AND bk.kategori LIKE '%cabut%';");
 
         foreach ($cabut as $data) {
- 
+
             $sheet->setCellValue('A' . $row, $data->no_lot);
             $sheet->setCellValue('B' . $row, $data->nm_partai);
             $sheet->setCellValue('C' . $row, $data->no_box);
@@ -1275,7 +1275,7 @@ class CabutController extends Controller
 
             $row++;
         }
-        
+
         $baris = $row + 1;
         $sheet->getStyle('A2:T' . $baris)->applyFromArray($styleBaris);
 
@@ -1292,5 +1292,4 @@ class CabutController extends Controller
             ]
         );
     }
-
 }
