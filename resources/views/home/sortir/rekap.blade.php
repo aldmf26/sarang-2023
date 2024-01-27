@@ -1,12 +1,13 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
-           
+
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
-                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu !</em></span>
-                </h6>   
+                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu
+                            !</em></span>
+                </h6>
             </div>
 
             <div class="col-lg-6">
@@ -23,12 +24,12 @@
             @include('home.cetak.nav')
             <style>
                 thead {
-                position: sticky;
-                top: 0;
-                background-color: #f1f1f1;
-                /* Warna latar belakang header yang tetap */
-                z-index: 1;
-            }
+                    position: sticky;
+                    top: 0;
+                    background-color: #f1f1f1;
+                    /* Warna latar belakang header yang tetap */
+                    z-index: 1;
+                }
             </style>
         </div>
 
@@ -48,7 +49,7 @@
                 </table>
             </div>
             <div class="col-lg-12">
-              
+
                 <section class="row">
                     <table style="border:1px solid #97a1c3" class="table table-bordered" id="tblAld2"
                         x-data="{
@@ -81,10 +82,13 @@
 
                         <tbody>
                             @foreach ($sortirGroup as $i => $d)
-                                <tr x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
-                                    <th>{{ $d->pengawas }} <span class="badge bg-primary float-end"
+                                <tr
+                                    x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                    <th>{{ $d->pengawas }}
+                                        <span class="badge bg-primary float-end"
                                             x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
-                                            <i class="fas fa-caret-down"></i></span></th>
+                                            <i class="fas fa-caret-down"></i></span>
+                                    </th>
                                     <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
@@ -93,7 +97,7 @@
                                     <th class="text-end">{{ number_format($d->pcs_akhir, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
                                     @php
-                                       $susut =  empty($d->gr_awal) ? 0 : (1 - ($d->gr_akhir / $d->gr_awal)) * 100
+                                        $susut = empty($d->gr_awal) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
                                     @endphp
                                     <th class="text-end">{{ number_format($susut, 0) }} %</th>
                                     <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
@@ -131,8 +135,8 @@
                                 <td align="right">{{ number_format($x->pcs_akhir, 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_akhir, 0) }}</td>
                                 @php
-                                $susut =  empty($x->gr_awal) ? 0 : (1 - ($x->gr_akhir / $x->gr_awal)) * 100
-                             @endphp
+                                    $susut = empty($x->gr_awal) ? 0 : (1 - $x->gr_akhir / $x->gr_awal) * 100;
+                                @endphp
                                 <td align="right">{{ number_format($susut, 0) }} %</td>
 
                                 <td align="right">{{ number_format($x->ttl_rp, 0) }}</td>
