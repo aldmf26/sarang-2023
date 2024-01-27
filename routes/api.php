@@ -29,4 +29,5 @@ Route::controller(ApiBkController::class)
         Route::get('/sarang_sum', 'sarang_sum')->name('sarang_sum');
         Route::get('/show_box', 'show_box')->name('show_box');
         Route::get('/cabut_perbox', 'cabut_perbox')->name('cabut_perbox');
+        Route::get('/datacabutsum2', 'datacabutsum2')->name('datacabutsum2');
     });
