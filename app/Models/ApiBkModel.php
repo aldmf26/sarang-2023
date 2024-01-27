@@ -97,7 +97,7 @@ class ApiBkModel extends Model
                 left join tb_kelas as c on c.id_kelas = a.id_kelas
                 group by a.no_box
         ) as c on c.no_box = a.no_box
-        WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori ='cabut'
+        WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.no_box $whereLimit");
 
         return $result;
