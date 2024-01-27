@@ -66,7 +66,7 @@ class Sortir extends Model
             SELECT no_box,penerima, kategori, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk WHERE kategori LIKE '%sortir%' AND selesai = 'T' GROUP BY no_box,penerima
         ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
         WHERE  a.no_box != 9999 AND a.penutup = 'T' $where AND a.bulan = '$bulan' AND YEAR(a.tgl_input) = '$tahun'
-        GROUP by a.no_box,a.id_pengawas
+        GROUP by a.no_box
         ");
     }
 }
