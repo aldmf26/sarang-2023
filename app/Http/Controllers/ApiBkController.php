@@ -114,6 +114,16 @@ class ApiBkController extends Controller
         ];
         return response()->json($response);
     }
+    public function datacabutsum2(Request $r)
+    {
+        $cabut = ApiBkModel::datacabutsum2($r->nm_partai);
+
+
+        $response = [
+            'cabut' => $cabut
+        ];
+        return response()->json($response);
+    }
 
     function bk_sum(Request $r)
     {
