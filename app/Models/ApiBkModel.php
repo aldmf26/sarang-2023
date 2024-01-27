@@ -84,8 +84,9 @@ class ApiBkModel extends Model
     public static function bk_cabut_cabut($no_lot, $nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
-        $result = DB::select("SELECT a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
-        c.pcs_awal,c.gr_awal,c.pcs_akhir,c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp
+        $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
+        c.pcs_awal, c.gr_awal,c.pcs_akhir, c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp, 
+        d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo
         FROM bk as a
         left join users as b on b.id = a.penerima
         LEFT JOIN (
@@ -97,6 +98,13 @@ class ApiBkModel extends Model
                 left join tb_kelas as c on c.id_kelas = a.id_kelas
                 group by a.no_box
         ) as c on c.no_box = a.no_box
+        
+left join (
+SELECT d.no_box, sum(d.gr_eo_awal) as gr_eo_awal, sum(d.gr_eo_akhir) as gr_eo_akhir, sum(d.ttl_rp) as ttl_rp_eo 
+    FROM eo as d 
+    group by d.no_box
+) as d on d.no_box = a.no_box
+
         WHERE a.no_lot = '$no_lot' AND a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.no_box $whereLimit");
 
