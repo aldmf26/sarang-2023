@@ -406,7 +406,7 @@ class Cabut extends Model
         ) as sortir on a.id_anak = sortir.id_anak
         LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
-            WHERE a.tgl BETWEEN '$whrAbsen1' AND '$whrAbsen2'
+            WHERE a.bulan_dibayar = 1 AND a.tahun_dibayar = 2024
              group BY a.id_anak
         ) as absen on absen.id_anak = a.id_anak 
         LEFT JOIN (
