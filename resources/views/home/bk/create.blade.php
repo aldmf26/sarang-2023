@@ -53,7 +53,7 @@
                                 {{-- <th class="dhead" width="70">Tipe</th> --}}
 
                                 <th class="dhead">No</th>
-                                <th class="dhead">No Lot</th>
+                                {{-- <th class="dhead">No Lot</th> --}}
                                 <th class="dhead">Nama Partai</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
@@ -70,19 +70,11 @@
                             @for ($i = 1; $i <= $baris; $i++)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <input required name="no_lot[]" type="text" class="form-control nolot"
                                             count="{{ $i }}">
-                                        {{-- <select name="no_lot[]" id=""
-                                            class="select2_add nolot nomor_lot{{ $i }}"
-                                            count="{{ $i }}">
-                                            <option value="">--Pilih data--</option>
-                                            @foreach ($gudangBk as $g)
-                                                <option value="{{ $g->no_lot }}-{{ $g->ket }}">
-                                                    {{ $g->no_lot }}-{{ $g->ket }}</option>
-                                            @endforeach
-                                        </select> --}}
-                                    </td>
+                                   
+                                    </td> --}}
                                     <td>
                                         <input required name="nm_partai[]" count="{{ $i }}" type="text"
                                             class="form-control namaPartai">

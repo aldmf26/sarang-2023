@@ -124,7 +124,7 @@ class BkController extends Controller
                     // list($noLot, $ket) = explode('-', $selectedValue);
 
                     $data = [
-                        'no_lot' => $selectedValue,
+                        // 'no_lot' => $selectedValue,
                         'nm_partai' => $r->nm_partai[$x],
                         'no_box' => $nobox,
                         'tipe' => $r->tipe[$x],
