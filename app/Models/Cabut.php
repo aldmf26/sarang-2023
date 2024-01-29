@@ -412,7 +412,7 @@ class Cabut extends Model
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
-            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND ditutup = 'T' GROUP by id_anak
+            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '2024' AND ditutup = 'T' GROUP by id_anak
         ) as dll on a.id_anak = dll.id_anak
         LEFT JOIN (
             SELECT id_anak, sum(nominal) as ttl_rp_denda 
