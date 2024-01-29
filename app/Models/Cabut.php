@@ -390,7 +390,7 @@ class Cabut extends Model
             sum(ttl_rp) as ttl_rp,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
-            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_ambil) = '$tahun'
+            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'
             GROUP by id_anak
         ) as eo on eo.id_anak = a.id_anak
         LEFT join (
