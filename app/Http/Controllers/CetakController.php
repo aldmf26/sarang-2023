@@ -783,12 +783,8 @@ class CetakController extends Controller
 
 
         $tbl = DB::select("SELECT a.*, b.total_absen, c.pcs_awal_cetak, c.gr_awal_cetak, c.pcs_akhir, c.gr_akhir,c.total_rp,c.denda_susut,c.denda_hcr, e.rp_eo, e.gr_eo_awal, e.gr_eo_akhir, f.rp_harian, g.rp_denda, c.rp_harian_cetak, f.pcs_harian, f.gr_harian
-        FROM (
-            SELECT
-            from absen as h 
-            where h.tgl between '$tgl' and '$tgl2'
-        )F
-        left join tb_anak as a
+    
+        FROM tb_anak as a
         left join (
             SELECT b.id_anak, count(b.id_absen) as total_absen
             FROM absen as b
