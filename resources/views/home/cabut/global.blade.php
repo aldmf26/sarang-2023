@@ -118,7 +118,7 @@
                             <th x-show="sortir" class="dhead">Pcs Awal Srt</th>
                             <th x-show="sortir" class="dhead">Gr Awal</th>
                             <th x-show="sortir" class="dhead">Pcs Akhir</th>
-                            <th x-show="sortir" class="dhead">Gr Awal</th>
+                            <th x-show="sortir" class="dhead">Gr Akhir</th>
                             <th x-show="sortir" class="dhead">Susut</th>
                             <th x-show="sortir" class="{{ $bgDanger }}">Ttl Rp</th>
 
