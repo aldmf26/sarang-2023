@@ -358,8 +358,8 @@ class Cabut extends Model
                 SELECT id_anak,id_pengawas
                 FROM absen
                 WHERE id_pengawas = '$id_pengawas'
-                AND MONTH(tgl) = '$bulan'
-                AND YEAR(tgl) = '$tahun'
+                AND bulan_dibayar = '$bulan'
+                AND tahun_dibayar = '$tahun'
                 GROUP BY id_anak
             ) AS absenGet
         JOIN 
@@ -406,13 +406,13 @@ class Cabut extends Model
         ) as sortir on a.id_anak = sortir.id_anak
         LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
-            WHERE a.bulan_dibayar = 1 AND a.tahun_dibayar = 2024
+            WHERE a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'
              group BY a.id_anak
         ) as absen on absen.id_anak = a.id_anak 
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
-            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '2024' AND ditutup = 'T' GROUP by id_anak
+            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND ditutup = 'T' GROUP by id_anak
         ) as dll on a.id_anak = dll.id_anak
         LEFT JOIN (
             SELECT id_anak, sum(nominal) as ttl_rp_denda 
