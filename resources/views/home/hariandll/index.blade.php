@@ -74,7 +74,7 @@
                             @endif
                             <br>
                             <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
-                                    class="fas fa-check"></i> Tutup </span>
+                                    class="fas fa-check"></i> Hapus </span>
                             <span class="badge bg-danger btn_tutup d-none mt-3" tipe="edit"
                                 style="cursor: pointer">Edit</span>
                             {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
