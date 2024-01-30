@@ -230,7 +230,7 @@ class ApiBkController extends Controller
     function show_box(Request $r)
     {
         $bk_cabut = ApiBkModel::bk_cabut_cabut($r->nm_partai, $r->limit);
-        dd($bk_cabut);
+
 
         return response()->json($bk_cabut);
     }
