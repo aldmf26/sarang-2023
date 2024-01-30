@@ -28,6 +28,10 @@
                 'rot' => 'hariandll.rekap',
                 'nama' => 'DLL',
             ],
+            [
+                'rot' => 'cabut.global',
+                'nama' => 'Global',
+            ],
         ];
 
     @endphp

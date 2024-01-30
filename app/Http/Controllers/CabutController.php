@@ -409,6 +409,29 @@ class CabutController extends Controller
         return Excel::download(new CabutRekapExport($tbl, $view), "$fileName.xlsx");
     }
 
+    public function global(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        JOIN users as b on a.penerima = b.id
+        WHERE a.kategori != 'cetak'
+        group by b.id");
+        $id_pengawas = $r->id_pengawas ?? 90;
+        $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
+
+
+        $data = [
+            'title' => 'Global Rekap',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'pengawas' => $pengawas,
+            'id_pengawas' => $id_pengawas,
+            'tbl' => $tbl,
+        ];
+        return view('home.cabut.global', $data);
+    }
+
     public function export_global(Request $r)
     {
         $bulan =  $r->bulan;
