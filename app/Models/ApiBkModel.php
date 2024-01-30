@@ -84,7 +84,7 @@ class ApiBkModel extends Model
     public static function bk_cabut_cabut($nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
-        $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, b.name,
+        $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal_bk, sum(a.gr_awal) as gr_awal_bk, b.name,
         c.pcs_awal, c.gr_awal,c.pcs_akhir, c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp, 
         d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo
         FROM bk as a
