@@ -379,7 +379,7 @@ class Cabut extends Model
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
                     SUM(ttl_rp) as ttl_rp
                   FROM `cabut` 
-                  WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun'
+                  WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                   GROUP BY id_anak 
         ) as cabut on a.id_anak = cabut.id_anak
         LEFT join (
