@@ -101,7 +101,7 @@
                             <th class="dhead">Nama</th>
                             <th class="dhead">Kelas</th>
 
-                            <th x-show="cabut" class="dhead">Pcs Awal</th>
+                            <th x-show="cabut" class="dhead">Pcs Awal Cbt</th>
                             <th x-show="cabut" class="dhead">Gr Awal</th>
                             <th x-show="cabut" class="dhead">Pcs Akhir</th>
                             <th x-show="cabut" class="dhead">Gr Akhir</th>
@@ -115,7 +115,7 @@
                             <th x-show="eo" class="dhead">Susut</th>
                             <th x-show="eo" class="{{ $bgDanger }}">Ttl Rp</th>
 
-                            <th x-show="sortir" class="dhead">Pcs Awal</th>
+                            <th x-show="sortir" class="dhead">Pcs Awal Srt</th>
                             <th x-show="sortir" class="dhead">Gr Awal</th>
                             <th x-show="sortir" class="dhead">Pcs Akhir</th>
                             <th x-show="sortir" class="dhead">Gr Awal</th>
