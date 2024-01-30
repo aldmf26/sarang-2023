@@ -160,9 +160,3 @@ Route::middleware('auth')->group(function () {
     //         Route::get('/export', 'export')->name('export');
     //     });
 });
-
-
-Route::controller(Laporan_layerController::class)->group(function () {
-    Route::get('/laporan_layer', 'index')->name('laporan_layer');
-    Route::get('/rumus_layer', 'rumus_layer')->name('rumus_layer');
-});
