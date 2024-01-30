@@ -58,7 +58,7 @@ class DendaController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'ttlNominal' => $ttlNominal,
-            'anak' => DB::table('tb_anak')->get(),
+            'anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
             'denda' => $denda,
         ];
         return view('home.denda.index', $data);

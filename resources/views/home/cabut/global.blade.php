@@ -118,7 +118,7 @@
                             <th x-show="sortir" class="dhead">Pcs Awal Srt</th>
                             <th x-show="sortir" class="dhead">Gr Awal</th>
                             <th x-show="sortir" class="dhead">Pcs Akhir</th>
-                            <th x-show="sortir" class="dhead">Gr Awal</th>
+                            <th x-show="sortir" class="dhead">Gr Akhir</th>
                             <th x-show="sortir" class="dhead">Susut</th>
                             <th x-show="sortir" class="{{ $bgDanger }}">Ttl Rp</th>
 
@@ -242,25 +242,25 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>{{ number_format($ttlCbtPcsAwal, 0) }}</th>
-                            <th>{{ number_format($ttlCbtGrAwal, 0) }}</th>
-                            <th>{{ number_format($ttlCbtPcsAkhir, 0) }}</th>
-                            <th>{{ number_format($ttlCbtGrAkhir, 0) }}</th>
-                            <th>{{ number_format($ttlCbtEotGr, 0) }}</th>
-                            <th>{{ number_format($ttlCbtGrFlx, 0) }}</th>
-                            <th></th>
-                            <th>{{ number_format($ttlCbtTtlRp, 0) }}</th>
-                            <th>{{ number_format($ttlEoGrAwal, 0) }}</th>
-                            <th>{{ number_format($ttlEoGrAkhir, 0) }}</th>
-                            <th></th>
-                            <th>{{ number_format($ttlEoRp, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtPcsAwal, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtGrAwal, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtPcsAkhir, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtGrAkhir, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtEotGr, 0) }}</th>
+                            <th x-show="cabut">{{ number_format($ttlCbtGrFlx, 0) }}</th>
+                            <th x-show="cabut"></th>
+                            <th x-show="cabut">{{ number_format($ttlCbtTtlRp, 0) }}</th>
+                            <th x-show="eo">{{ number_format($ttlEoGrAwal, 0) }}</th>
+                            <th x-show="eo">{{ number_format($ttlEoGrAkhir, 0) }}</th>
+                            <th x-show="eo"></th>
+                            <th x-show="eo">{{ number_format($ttlEoRp, 0) }}</th>
 
-                            <th>{{ number_format($ttlSoritrPcsAwal, 0) }}</th>
-                            <th>{{ number_format($ttlSoritrGrAwal, 0) }}</th>
-                            <th>{{ number_format($ttlSoritrPcsAkhir, 0) }}</th>
-                            <th>{{ number_format($ttlSoritrGrAkhir, 0) }}</th>
-                            <th></th>
-                            <th>{{ number_format($ttlSortirRp, 0) }}</th>
+                            <th x-show="sortir">{{ number_format($ttlSoritrPcsAwal, 0) }}</th>
+                            <th x-show="sortir">{{ number_format($ttlSoritrGrAwal, 0) }}</th>
+                            <th x-show="sortir">{{ number_format($ttlSoritrPcsAkhir, 0) }}</th>
+                            <th x-show="sortir">{{ number_format($ttlSoritrGrAkhir, 0) }}</th>
+                            <th x-show="sortir"></th>
+                            <th x-show="sortir">{{ number_format($ttlSortirRp, 0) }}</th>
 
                             <th>{{ number_format($dllTtlRp, 0) }}</th>
                             <th>{{ number_format($dendaTtlRp, 0) }}</th>

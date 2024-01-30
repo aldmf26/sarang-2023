@@ -417,7 +417,7 @@ class CabutController extends Controller
         JOIN users as b on a.penerima = b.id
         WHERE a.kategori != 'cetak'
         group by b.id");
-        $id_pengawas = $r->id_pengawas ?? 90;
+        $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
 

@@ -408,7 +408,7 @@ class Cabut extends Model
             SELECT *, count(*) as ttl FROM absen AS a 
             WHERE a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'
              group BY a.id_anak
-        ) as absen on absen.id_anak = a.id_anak 
+        ) as absen on absen.id_anak = a.id_anak  
         LEFT JOIN (
             SELECT id_anak,sum(rupiah) as ttl_rp_dll 
             FROM `tb_hariandll` 
