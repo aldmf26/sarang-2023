@@ -32,4 +32,10 @@ Route::controller(ApiBkController::class)
         Route::get('/datacabutsum2', 'datacabutsum2')->name('datacabutsum2');
 
         Route::get('/bk_sum_sortir', 'bk_sum_sortir')->name('bk_sum_sortir');
+        Route::get('/datasortirsum', 'datasortirsum')->name('datasortirsum');
+
+        Route::get('/bk_sum_cetak', 'bk_sum_cetak')->name('bk_sum_cetak');
+        Route::get('/datacetak', 'datacetak')->name('datacetak');
+
+        Route::get('/bk_sum_all', 'bk_sum_all')->name('bk_sum_all');
     });

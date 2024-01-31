@@ -43,7 +43,7 @@
                                 count="{{ $i + 1 }}" required>
                                 <option value="">Pilih Box</option>
                                 @foreach ($bk as $d)
-                                    @if ($d->pcs_awal - $d->pcs_cabut > 1)
+                                    @if ($d->gr_awal - $d->gr_cabut > 1)
                                         <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }} ~ pcs
                                             {{ $d->pcs_awal - $d->pcs_cabut }} gr {{ $d->gr_awal - $d->gr_cabut }}
                                         </option>

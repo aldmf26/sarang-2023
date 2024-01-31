@@ -130,6 +130,18 @@ class ApiBkController extends Controller
         ];
         return response()->json($response);
     }
+    public function datasortirsum(Request $r)
+    {
+        $sortir = ApiBkModel::data_sortir_sum($r->nm_partai);
+
+        return response()->json($sortir);
+    }
+    public function datacetak(Request $r)
+    {
+        $cetak = ApiBkModel::data_cetak_sum($r->nm_partai);
+
+        return response()->json($cetak);
+    }
 
     function bk_sum(Request $r)
     {
@@ -139,7 +151,13 @@ class ApiBkController extends Controller
     }
     function bk_sum_sortir(Request $r)
     {
-        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai);
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai, 'sortir');
+
+        return response()->json($cabut);
+    }
+    function bk_sum_cetak(Request $r)
+    {
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai, 'cetak');
 
         return response()->json($cabut);
     }
@@ -243,6 +261,13 @@ class ApiBkController extends Controller
     function cabut_perbox(Request $r)
     {
         $cabut = ApiBkModel::datacabutperbox($r->no_box);
+
+        return response()->json($cabut);
+    }
+
+    function bk_sum_all(Request $r)
+    {
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai, $r->kategori);
 
         return response()->json($cabut);
     }
