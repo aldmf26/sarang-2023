@@ -215,4 +215,15 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function data_cetak_sum($nm_partai)
+    {
+        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal_ctk) as pcs_awal, sum(a.gr_awal_ctk) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', 0, 1 - ((a.gr_akhir + a.gr_cu) / a.gr_awal_ctk))) as susut,
+        sum(if(a.selesai = 'T', 0, a.pcs_akhir * a.rp_pcs)) as ttl_rp
+        FROM cetak as a 
+        left join bk as b on b.no_box = a.no_box
+        where b.nm_partai = '$nm_partai'
+        group by b.nm_partai;");
+
+        return $result;
+    }
 }
