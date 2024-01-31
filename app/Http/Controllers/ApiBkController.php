@@ -136,6 +136,12 @@ class ApiBkController extends Controller
 
         return response()->json($sortir);
     }
+    public function datacetak(Request $r)
+    {
+        $cetak = ApiBkModel::datacetak_export($r->no_box);
+
+        return response()->json($cetak);
+    }
 
     function bk_sum(Request $r)
     {
