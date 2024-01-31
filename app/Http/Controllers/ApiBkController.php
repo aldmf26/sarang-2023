@@ -130,6 +130,12 @@ class ApiBkController extends Controller
         ];
         return response()->json($response);
     }
+    public function datasortirsum(Request $r)
+    {
+        $sortir = ApiBkModel::data_sortir_sum($r->nm_partai);
+
+        return response()->json($sortir);
+    }
 
     function bk_sum(Request $r)
     {

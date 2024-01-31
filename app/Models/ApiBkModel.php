@@ -210,7 +210,7 @@ class ApiBkModel extends Model
         $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'sortir'
-        where b.nm_partai = ?
+        where b.nm_partai = '$nm_partai'
         group by b.nm_partai;");
 
         return $result;
