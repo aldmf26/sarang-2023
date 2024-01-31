@@ -145,7 +145,13 @@ class ApiBkController extends Controller
     }
     function bk_sum_sortir(Request $r)
     {
-        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai);
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai, 'sortir');
+
+        return response()->json($cabut);
+    }
+    function bk_sum_cetak(Request $r)
+    {
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai, 'cetak');
 
         return response()->json($cabut);
     }
