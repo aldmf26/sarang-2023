@@ -4,7 +4,8 @@
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
-                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu !</em></span>
+                    <span class="text-warning" style="font-size: 12px"><em>jika data tidak ada silahkan view dulu
+                            !</em></span>
                 </h6>
             </div>
 
@@ -25,6 +26,7 @@
             .badge {
                 cursor: pointer;
             }
+
             thead {
                 position: sticky;
                 top: 0;
@@ -70,7 +72,7 @@
                             <th width="110" rowspan="2" class="text-center dhead">Ttl Rp <br> (
                                 {{ number_format($ttlRp, 0) }})</th>
                             <th width="2%" class="text-center dhead" colspan="2">BK Sisa</th>
-                        </tr>   
+                        </tr>
 
                         <tr class="sticky-header">
                             <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
@@ -89,11 +91,12 @@
 
                     <tbody>
                         @foreach ($cabutGroup as $i => $d)
-                            <tr x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
-                                <th>{{ $d->pengawas }} 
-                                    <span class="badge bg-primary float-end"
-                                        >Buka
-                                        <i class="fas fa-caret-down"></i></span></th>
+                            <tr
+                                x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
+                                <th>{{ $d->pengawas }}
+                                    <span class="badge bg-primary float-end">Buka
+                                        <i class="fas fa-caret-down"></i></span>
+                                </th>
                                 <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->pcs_bk, 0) }}</th>
                                 <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
@@ -184,10 +187,39 @@
                     </div>
                 </div>
             </x-theme.modal>
+            <a href="" class="diclick">diclick</a>
+            <h6 id="tes">Coutner</h6>
         </form>
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tblAld')
+
+                var count = 1;
+
+                function withoutClosure() {
+                    console.log(globalVar); // Error: globalVar is not defined
+                }
+
+                function createIncrementFunction() {
+
+                    return function(e) {
+                        e.preventDefault();
+                        count++;
+                        $('#tes').text('Counter: ' + count);
+                        console.log('countdi closure : ', count)
+
+                    };
+                }
+                var cls = createIncrementFunction()
+
+                $(document).on('click', '.diclick', (e) => {
+                    e.preventDefault()
+                    count++;
+                    $('#tes').text('Counter: ' + count);
+                    console.log('count di click : ', count)
+
+                })
+                $(document).on('click', '.diclick', cls)
             </script>
         @endsection
     </x-slot>

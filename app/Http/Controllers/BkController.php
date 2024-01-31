@@ -111,6 +111,7 @@ class BkController extends Controller
 
     public function create(Request $r)
     {
+        dd($r->all());
         DB::beginTransaction();
         try {
             for ($x = 0; $x < count($r->pcs_awal); $x++) {
