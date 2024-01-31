@@ -41,7 +41,7 @@
                     <thead>
                         <tr>
                             <th class="">Nama</th>
-                            <th class="text-center" width="350">Home</th>
+                            <th class="text-center">Home</th>
                             <th class="text-center">Data Master</th>
                         </tr>
                     </thead>
@@ -68,6 +68,7 @@
                                             id="home_{{ $i }}_{{ $loop->index }}">
                                         <label class="form-check-label"
                                             for="home_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
+                                        
                                     @endforeach
                                 </td>
                                 <td>
@@ -81,6 +82,7 @@
                                             id="data_{{ $i }}_{{ $loop->index }}">
                                         <label class="form-check-label"
                                             for="data_{{ $i }}_{{ $loop->index }}">{{ strtoupper($h->judul) }}</label>
+                                        
                                     @endforeach
                                 </td>
                             </tr>

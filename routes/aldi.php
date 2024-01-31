@@ -12,6 +12,7 @@ use App\Http\Controllers\EoController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -318,5 +319,16 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'create')->name('create');
+        });
+    Route::controller(PengirimanController::class)
+        ->prefix('home/pengiriman')
+        ->name('pengiriman.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/create', 'create')->name('create');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
         });
 });

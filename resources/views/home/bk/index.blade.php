@@ -164,17 +164,7 @@
 
                 inputChecked('cekSemuaTutup', 'cek_bayar')
                 pencarian('pencarian', 'tablealdi')
-                // $(document).on("click", ".detail_nota", function() {
-                //     var no_nota = $(this).attr('no_nota');
-                //     $.ajax({
-                //         type: "get",
-                //         url: "/detail_invoice_telur?no_nota=" + no_nota,
-                //         success: function(data) {
-                //             $("#detail_invoice").html(data);
-                //         }
-                //     });
-
-                // });
+              
                 function clickCekKirim(kelas, link, formDelete = null) {
                     $(document).on('click', `${kelas}`, function(e) {
                         e.preventDefault();

@@ -14,7 +14,7 @@
 </div>
 </div>
 <script src="{{ asset('theme') }}/assets/js/bootstrap.js"></script>
-<script src="{{ asset('theme') }}/assets/js/app.js"></script>
+{{-- <script src="{{ asset('theme') }}/assets/js/app.js"></script> --}}
 <script src="{{ asset('theme') }}/assets/extensions/jquery/jquery.min.js"></script>
 <script src="{{ asset('theme') }}/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
 
@@ -232,7 +232,7 @@
     function pencarian(inputId, tblId) {
 
         $(document).on('keyup', "#" + inputId, function() {
-            var value = $(this).val().toLowerCase() ;
+            var value = $(this).val().toLowerCase();
             $(`#${tblId} tbody tr`).filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
@@ -246,6 +246,10 @@
             $(".btn_save_loading").removeAttr("hidden");
         })
     }
+
+    $(document).on('click', '.selectAll', function() {
+        this.select()
+    })
 
     function loadTable(namaTable) {
         $('#' + namaTable).DataTable({
