@@ -120,7 +120,7 @@ class BkController extends Controller
                     $nobox = $r->no_box[$x];
                     $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
 
-                    $selectedValue = $r->no_lot[$x];
+                    // $selectedValue = $r->no_lot[$x];
                     // list($noLot, $ket) = explode('-', $selectedValue);
 
                     $data = [
