@@ -1,5 +1,25 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
+        <form action="">
+            <div class="row" x-data="{
+                username:$persist(0),
+                password:$persist(0),
+            }">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="">Usad</label>
+                        <input x-model="username" type="text" name="usern" class="form-control">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="">asd</label>
+                        <input x-model="password" type="text" name="pas" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary">save</button>
+        </form>
         <div class="row justify-content-end">
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
@@ -157,7 +177,7 @@
                             $ttlEoRp = 0;
 
                         @endphp
-                          @foreach ($tbl as $data)
+                            @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
@@ -250,6 +270,7 @@
                             <th x-show="cabut">{{ number_format($ttlCbtGrFlx, 0) }}</th>
                             <th x-show="cabut"></th>
                             <th x-show="cabut">{{ number_format($ttlCbtTtlRp, 0) }}</th>
+
                             <th x-show="eo">{{ number_format($ttlEoGrAwal, 0) }}</th>
                             <th x-show="eo">{{ number_format($ttlEoGrAkhir, 0) }}</th>
                             <th x-show="eo"></th>
