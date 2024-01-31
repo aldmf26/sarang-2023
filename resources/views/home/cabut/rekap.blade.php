@@ -190,36 +190,10 @@
             <a href="" class="diclick">diclick</a>
             <h6 id="tes">Coutner</h6>
         </form>
+
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tblAld')
-
-                var count = 1;
-
-                function withoutClosure() {
-                    console.log(globalVar); // Error: globalVar is not defined
-                }
-
-                function createIncrementFunction() {
-
-                    return function(e) {
-                        e.preventDefault();
-                        count++;
-                        $('#tes').text('Counter: ' + count);
-                        console.log('countdi closure : ', count)
-
-                    };
-                }
-                var cls = createIncrementFunction()
-
-                $(document).on('click', '.diclick', (e) => {
-                    e.preventDefault()
-                    count++;
-                    $('#tes').text('Counter: ' + count);
-                    console.log('count di click : ', count)
-
-                })
-                $(document).on('click', '.diclick', cls)
             </script>
         @endsection
     </x-slot>
