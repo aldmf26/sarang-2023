@@ -1247,7 +1247,7 @@ class CabutController extends Controller
               a.id_pengawas,
               a.no_box 
               from cabut as a 
-              WHERE a.no_box != 9999 AND a.bulan_dibayar != '' 
+              WHERE a.no_box != 9999 AND a.bulan_dibayar= '$bulan'  and a.tahun_dibayar = '$tahun'
               group by a.no_box, a.bulan_dibayar 
             ) as cbt on bk.no_box = cbt.no_box and cbt.id_pengawas = bk.penerima
         LEFT JOIN (
@@ -1264,7 +1264,7 @@ class CabutController extends Controller
             sum(a.ttl_rp) as rupiah,
             a.id_pengawas
             FROM `eo` as a
-            WHERE a.no_box != 9999 AND a.bulan_dibayar != '' group by a.no_box,a.bulan_dibayar
+            WHERE a.no_box != 9999 AND a.bulan_dibayar = '$bulan' and YEAR(a.tgl_input) = '$tahun' group by a.no_box,a.bulan_dibayar,YEAR(a.tgl_input)
         ) as eo ON eo.no_box = bk.no_box and eo.id_pengawas = bk.penerima
         WHERE bk.pengawas = 'sinta' AND bk.kategori LIKE '%cabut%';");
 
