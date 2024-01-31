@@ -137,6 +137,12 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function bk_sum_sortir(Request $r)
+    {
+        $cabut = ApiBkModel::bk_sortir_sum($r->nm_partai);
+
+        return response()->json($cabut);
+    }
 
     function export_sarang(Request $r)
     {
