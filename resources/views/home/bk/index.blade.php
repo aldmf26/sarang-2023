@@ -27,85 +27,91 @@
                     <td><input type="text" id="pencarian" class="form-control float-end"></td>
                 </table>
             </div>
-            <table class="table" id="tablealdi">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>No Lot - Partai</th>
-                        <th>No Box</th>
-                        <th>Tipe</th>
-                        <th>Ket</th>
-                        <th>Warna</th>
-                        <th>Tgl terima</th>
-                        <th>Pengawas</th>
-                        <th>Penerima</th>
-                        <th class="text-end">Pcs Awal</th>
-                        <th class="text-end">Gr Awal</th>
-                        <th>Status</th>
-                        <th>
-                            Cek
-                            <center>
-                                {{-- @php
-                                    $adaDitutup = DB::table('bk')
-                                        ->where([['selesai', 'Y'], ['kategori', 'like', "%$kategori%"]])
-                                        ->first();
-                                @endphp
-                                @if (!empty($adaDitutup))
-                                @endif --}}
-                                <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
-                                <br>
-                                <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
-                                        class="fas fa-check"></i> Tutup </span>
-
-                                {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
-                                teks="Tutup" /> --}}
-                            </center>
-                        </th>
-                        <th width="100">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($bk as $no => $b)
+            <div class="col-lg-12">
+                <table class="table" id="tablealdi">
+                    <thead>
                         <tr>
-                            <td>{{ $no + 1 }}</td>
-                            <td>{{ $b->no_lot }} - {{ $b->nm_partai }} </td>
-                            <td>{{ $b->no_box }}</td>
-                            <td>{{ $b->tipe }}</td>
-                            <td>{{ $b->ket }}</td>
-                            <td>{{ $b->warna }}</td>
-                            <td>{{ tanggal($b->tgl) }}</td>
-                            <td>{{ $b->pengawas }}</td>
-                            <td>{{ $b->name }}
-                            </td>
-                            <td class="text-end">{{ $b->pcs_awal }}</td>
-                            <td class="text-end">{{ $b->gr_awal }}</td>
-                            <td align="center">
-                                @if ($b->selesai == 'T')
-                                    <span class="badge bg-warning">BELUM</span>
-                                @else
-                                    <span class="badge bg-primary">SELESAI</span>
-                                @endif
-                            </td>
-                            <td align="center">
-                                @if ($b->selesai == 'T')
-                                    <input type="checkbox" penerima="{{ $b->penerima }}"
-                                        no_nota="{{ $b->id_bk }}" class="cek_bayar" name="" id="">
-                                @endif
-                            </td>
+                            <th>#</th>
+                            <th>Partai</th>
+                            <th>No Box</th>
+                            <th>Tipe</th>
+                            <th>Ket</th>
+                            <th>Warna</th>
+                            <th>Tgl terima</th>
+                            <th>Pengawas</th>
+                            <th>Penerima</th>
+                            <th class="text-end">Pcs Awal</th>
+                            <th class="text-end">Gr Awal</th>
+                            <th class="text-end">Susut</th>
+                            <th>Status</th>
+                            <th>
+                                Cek
+                                <center>
+                                    {{-- @php
+                                        $adaDitutup = DB::table('bk')
+                                            ->where([['selesai', 'Y'], ['kategori', 'like', "%$kategori%"]])
+                                            ->first();
+                                    @endphp
+                                    @if (!empty($adaDitutup))
+                                    @endif --}}
+                                    <input style="text-align: center" type="checkbox" class="form-check"
+                                        id="cekSemuaTutup">
+                                    <br>
+                                    <span class="badge bg-danger btn_tutup d-none" tipe="tutup"
+                                        style="cursor: pointer"><i class="fas fa-check"></i> Tutup </span>
 
-                            <td>
-                                <span style="cursor: pointer" class="badge bg-primary selesai"><i
-                                        class="fas fa-check"></i></span>
-                                <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
-                                        class="fas fa-edit"></i></span>
-                                <span style="cursor: pointer" class="badge bg-danger delete"><i
-                                        class="fas fa-trash-alt"></i></span>
-                            </td>
+                                    {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
+                                    teks="Tutup" /> --}}
+                                </center>
+                            </th>
+                            <th width="100">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
+                    </thead>
+                    <tbody>
+                        @foreach ($bk as $no => $b)
+                            <tr>
+                                <td>{{ $no + 1 }}</td>
+                                <td>{{ $b->nm_partai }} </td>
+                                <td>{{ $b->no_box }}</td>
+                                <td>{{ $b->tipe }}</td>
+                                <td>{{ $b->ket }}</td>
+                                <td>{{ $b->warna }}</td>
+                                <td>{{ tanggal($b->tgl) }}</td>
+                                <td>{{ $b->pengawas }}</td>
+                                <td>{{ $b->name }}
+                                </td>
+                                <td class="text-end">{{ $b->pcs_awal }}</td>
+                                <td class="text-end">{{ $b->gr_awal }}</td>
+                                <td class="text-end">{{ $b->susut }}</td>
+                                <td align="center">
+                                    @if ($b->selesai == 'T')
+                                        <span class="badge bg-warning">BELUM</span>
+                                    @else
+                                        <span class="badge bg-primary">SELESAI</span>
+                                    @endif
+                                </td>
+                                <td align="center">
+                                    @if ($b->selesai == 'T')
+                                        <input type="checkbox" penerima="{{ $b->penerima }}"
+                                            no_nota="{{ $b->id_bk }}" class="cek_bayar" name=""
+                                            id="">
+                                    @endif
+                                </td>
 
-            </table>
+                                <td>
+                                    <span style="cursor: pointer" class="badge bg-primary selesai"><i
+                                            class="fas fa-check"></i></span>
+                                    <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
+                                            class="fas fa-edit"></i></span>
+                                    <span style="cursor: pointer" class="badge bg-danger delete"><i
+                                            class="fas fa-trash-alt"></i></span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+
+                </table>
+            </div>
         </section>
         <x-theme.modal idModal="loading" btnSave="T" disabled="true" title="Tunggu loading">
             mohon tunggu loading...
@@ -164,7 +170,7 @@
 
                 inputChecked('cekSemuaTutup', 'cek_bayar')
                 pencarian('pencarian', 'tablealdi')
-              
+
                 function clickCekKirim(kelas, link, formDelete = null) {
                     $(document).on('click', `${kelas}`, function(e) {
                         e.preventDefault();

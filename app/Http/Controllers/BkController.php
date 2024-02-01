@@ -31,7 +31,7 @@ class BkController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            'bk' => DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' ORDER BY a.id_bk DESC"),
 
@@ -177,10 +177,10 @@ class BkController extends Controller
                 // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
                 if (
                     // $cekBox || 
-                    empty($row[0]) || 
-                    empty($row[1]) || 
-                    empty($row[6]) || 
-                    empty($row[9]) || 
+                    empty($row[0]) ||
+                    empty($row[1]) ||
+                    empty($row[6]) ||
+                    empty($row[9]) ||
                     empty($row[10])
                 ) {
                     $pesan = [
@@ -276,10 +276,9 @@ class BkController extends Controller
 
     public function update(Request $r)
     {
-        for ($x = 0; $x < count($r->no_lot); $x++) {
+        for ($x = 0; $x < count($r->nm_partai); $x++) {
             if (!empty($r->no_box[$x])) {
                 $data = [
-                    'no_lot' => $r->no_lot[$x],
                     'nm_partai' => $r->nm_partai[$x],
                     'no_box' => $r->no_box[$x],
                     'tipe' => $r->tipe[$x],
@@ -290,6 +289,7 @@ class BkController extends Controller
                     'pcs_awal' => $r->pcs_awal[$x],
                     'gr_awal' => $r->gr_awal[$x],
                     'tgl' => $r->tgl_terima[$x],
+                    'susut' => $r->susut[$x]
                 ];
                 DB::table('bk')->where('id_bk', $r->id_bk[$x])->update($data);
             }

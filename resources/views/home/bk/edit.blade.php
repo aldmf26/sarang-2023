@@ -18,7 +18,7 @@
                         <thead>
                             <tr>
                                 <th class="dhead">No</th>
-                                <th class="dhead">No Lot</th>
+
                                 <th class="dhead">Nama Partai</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
@@ -29,6 +29,7 @@
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
                                 <th class="dhead text-end">Gr Awal</th>
+                                <th class="dhead text-end">Susut</th>
                             </tr>
                         </thead>
                         @foreach ($no_nota as $i => $n)
@@ -40,11 +41,8 @@
                             <input type="hidden" name="id_bk[]" value="{{ $detail->id_bk }}">
                             <tbody>
                                 <tr>
-                                    <td>{{ $i+1 }}</td>
-                                    <td>
-                                        <input name="no_lot[]" value="{{ $detail->no_lot }}" type="text"
-                                            class="form-control">
-                                    </td>
+                                    <td>{{ $i + 1 }}</td>
+
                                     <td>
                                         <input name="nm_partai[]" value="{{ $detail->nm_partai }}" type="text"
                                             class="form-control">
@@ -64,7 +62,7 @@
                                     <td>
                                         <input name="warna[]" value="{{ $detail->warna }}" type="text"
                                             class="form-control">
-                                    
+
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" readonly
@@ -90,6 +88,10 @@
                                     <td>
                                         <input type="text" value="{{ $detail->gr_awal }}"
                                             class="form-control text-end gr_awal" name="gr_awal[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" value="{{ $detail->susut }}"
+                                            class="form-control text-end " name="susut[]">
                                     </td>
 
                                 </tr>
