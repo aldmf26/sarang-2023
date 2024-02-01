@@ -20,7 +20,7 @@
                                 <select name="tahun" class="form-control selectView" id="">
                                     <option value="">- Pilih Tahun -</option>
                                     @php
-                                        $tahun = [2022,2023];
+                                        $tahun = [2022,2023,2024];
                                     @endphp
                                     @foreach ($tahun as $b)
                                         <option value="{{ $b }}">{{ strtoupper($b) }}</option>

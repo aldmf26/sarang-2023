@@ -18,7 +18,7 @@ class PengirimanController extends Controller
             'title' => 'Pengiriman',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'pengiriman' => DB::table('pengiriman')->whereBetween('tgl_pengiriman', [$tgl1,$tgl2])->get()
+            'pengiriman' => DB::table('pengiriman')->whereBetween('tgl_pengiriman', [$tgl1,$tgl2])->orderBy('id_pengiriman', 'DESC')->get()
         ];
         return view('home.pengiriman.index', $data);
     }
