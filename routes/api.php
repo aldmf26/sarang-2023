@@ -38,5 +38,5 @@ Route::controller(ApiBkController::class)
         Route::get('/datacetak', 'datacetak')->name('datacetak');
 
         Route::get('/bk_sum_all', 'bk_sum_all')->name('bk_sum_all');
-        Route::get('/datasortirsum', 'datasortirsum')->name('datasortirsum');
+        Route::get('/show_box_sortir', 'show_box_sortir')->name('show_box_sortir');
     });
