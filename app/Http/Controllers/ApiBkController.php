@@ -260,7 +260,7 @@ class ApiBkController extends Controller
     }
     function show_box_sortir(Request $r)
     {
-        $bk_cabut = ApiBkModel::bk_cabut_cabut($r->nm_partai, $r->limit);
+        $bk_cabut = ApiBkModel::bk_sortir_box($r->nm_partai, $r->limit);
 
 
         return response()->json($bk_cabut);
