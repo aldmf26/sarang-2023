@@ -209,10 +209,18 @@ class ApiBkModel extends Model
     public static function data_sortir_sum($nm_partai)
     {
         $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T' , 0,a.ttl_rp)) as ttl_rp, sum(if(a.selesai = 'T' , 0 , 1 - (a.gr_akhir / a.gr_awal))) as susut
-        FROM sortir as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'sortir'
+        FROM (
+        SELECT a.selesai, a.no_box, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T' , 0,a.ttl_rp)) as ttl_rp, sum(if(a.selesai = 'T' , 0 , 1 - (a.gr_akhir / a.gr_awal))) as susut
+            FROM sortir as a 
+        group by a.no_box
+        ) as a
+        left join (
+            SELECT b.no_box, b.nm_partai
+            FROM bk as b 
+            group by b.no_box
+        ) as b on b.no_box = a.no_box
         where b.nm_partai = '$nm_partai'
-        group by b.nm_partai;");
+                group by b.nm_partai;");
 
         return $result;
     }
@@ -224,6 +232,27 @@ class ApiBkModel extends Model
         left join bk as b on b.no_box = a.no_box
         where b.nm_partai = '$nm_partai'
         group by b.nm_partai;");
+
+        return $result;
+    }
+
+
+    public static function bk_sortir_box($nm_partai, $limit = 10)
+    {
+        $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
+        $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal_bk, sum(a.gr_awal) as gr_awal_bk, b.name,
+        c.pcs_awal, c.gr_awal,c.pcs_akhir, c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp, 
+        d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo
+        FROM bk as a
+        left join users as b on b.id = a.penerima
+        LEFT JOIN (
+            SELECT a.no_box, sum(a.pcs_awal) as pcs_awal_sortir, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir , sum(a.ttl_rp) as ttl_rp
+            FROM sortir as a
+            left join tb_kelas as c on c.id_kelas = a.id_kelas
+            group by a.no_box
+        ) as c on c.no_box = a.no_box
+        WHERE  a.nm_partai = '$nm_partai' AND a.kategori = 'sortir'
+        GROUP BY a.no_box $whereLimit");
 
         return $result;
     }
