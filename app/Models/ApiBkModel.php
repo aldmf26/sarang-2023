@@ -240,13 +240,11 @@ class ApiBkModel extends Model
     public static function bk_sortir_box($nm_partai, $limit = 10)
     {
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
-        $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal_bk, sum(a.gr_awal) as gr_awal_bk, b.name,
-        c.pcs_awal, c.gr_awal,c.pcs_akhir, c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp, 
-        d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo
+        $result = DB::select("SELECT a.nm_partai, a.tipe, a.no_box, b.name, a.pcs_awal, a.gr_awal, c.pcs_awal_sortir, c.gr_awal_sortir, c.pcs_akhir_sortir, c.gr_akhir_sortir, c.ttl_rp
         FROM bk as a
         left join users as b on b.id = a.penerima
         LEFT JOIN (
-            SELECT a.no_box, sum(a.pcs_awal) as pcs_awal_sortir, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir , sum(a.ttl_rp) as ttl_rp
+            SELECT a.no_box, sum(a.pcs_awal) as pcs_awal_sortir, sum(a.gr_awal) as gr_awal_sortir, sum(a.pcs_akhir) as 				pcs_akhir_sortir, sum(a.gr_akhir) as gr_akhir_sortir , sum(a.ttl_rp) as ttl_rp
             FROM sortir as a
             left join tb_kelas as c on c.id_kelas = a.id_kelas
             group by a.no_box
