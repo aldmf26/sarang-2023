@@ -119,16 +119,16 @@ class ApiBkController extends Controller
         $cabut = ApiBkModel::datacabutsum2($r->nm_partai);
 
 
-        $response = [
-            "pcs_awal" => $cabut->pcs_awal,
-            "gr_awal" =>  $cabut->gr_awal + $cabut->gr_awal_eo,
-            "eot" => $cabut->eot,
-            "gr_flx" => $cabut->gr_flx,
-            "pcs_akhir" => $cabut->pcs_akhir,
-            "gr_akhir" => $cabut->gr_akhir + $cabut->gr_eo_akhir,
-            "ttl_rp" => $cabut->ttl_rp + $cabut->ttl_rp_eo
-        ];
-        return response()->json($response);
+        // $response = [
+        //     "pcs_awal" => $cabut->pcs_awal,
+        //     "gr_awal" =>  $cabut->gr_awal + $cabut->gr_awal_eo,
+        //     "eot" => $cabut->eot,
+        //     "gr_flx" => $cabut->gr_flx,
+        //     "pcs_akhir" => $cabut->pcs_akhir,
+        //     "gr_akhir" => $cabut->gr_akhir + $cabut->gr_eo_akhir,
+        //     "ttl_rp" => $cabut->ttl_rp + $cabut->ttl_rp_eo
+        // ];
+        return response()->json($cabut);
     }
     public function datasortirsum(Request $r)
     {
