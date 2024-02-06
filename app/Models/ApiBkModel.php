@@ -128,7 +128,7 @@ class ApiBkModel extends Model
     public static function datacabutsum2($nm_partai)
     {
         $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
-        b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo
+        b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo, a.selesai
         FROM bk as a 
         left join (
         SELECT b.nm_partai,
