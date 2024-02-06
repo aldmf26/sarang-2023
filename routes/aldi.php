@@ -15,6 +15,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PackingListController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
 
 
     Route::get('/db', function (Request $r) {
-        if($r->password == 'Takemor.') {
+        if ($r->password == 'Takemor.') {
             return view('db');
         }
         return view('db.login');
@@ -67,7 +68,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         }
         // Mendapatkan nama database setelah perubahan
         // Mendapatkan daftar semua tabel pada database
-        
+
     })->name('dbcreate');
 
     Route::controller(UserController::class)
@@ -327,8 +328,22 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/edit', 'edit')->name('edit');
+            Route::get('/template', 'template')->name('template');
             Route::post('/create', 'create')->name('create');
+            Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
+        });
+
+    Route::controller(PackingListController::class)
+        ->prefix('home/packinglist')
+        ->name('packinglist.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
+            Route::get('/detail', 'detail')->name('detail');
+            Route::get('/print/{no_nota}', 'print')->name('print');
+            Route::get('/delete/{no_nota}', 'delete')->name('delete');
+            Route::post('/create', 'create')->name('create');
         });
 });

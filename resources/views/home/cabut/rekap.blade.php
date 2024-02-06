@@ -187,8 +187,7 @@
                     </div>
                 </div>
             </x-theme.modal>
-            <a href="" class="diclick">diclick</a>
-            <h6 id="tes">Coutner</h6>
+         
         </form>
 
         @section('scripts')

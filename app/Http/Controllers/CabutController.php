@@ -938,9 +938,10 @@ class CabutController extends Controller
             $sheet->getStyle("A$rowTotal:P$rowTotal")->applyFromArray($styleBold);
 
             $rowDenda = $rowTotal + 1;
-            $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda`
-            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND admin = '$d->name'
-            GROUP BY admin");
+            $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda` as a
+            join tb_anak as b on a.id_anak = b.id_anak
+            WHERE a.bulan_dibayar = '$bulan' AND YEAR(a.tgl) = '$tahun' AND a.admin = '$d->name'
+            GROUP BY a.admin");
             $rupiahDenda = $denda->rupiah ?? 0;
             $sheet->setCellValue('A' . $rowDenda, 'Denda');
             $sheet->setCellValue('M' . $rowDenda, $rupiahDenda);

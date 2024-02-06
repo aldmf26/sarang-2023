@@ -4,7 +4,49 @@
             <h6 class="float-start mt-1">{{ $title }}</h6>
         </div>
         <x-theme.button href="{{ route('pengiriman.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
+            teks="Import" />
+        <form action="{{ route('pengiriman.import') }}" enctype="multipart/form-data" method="post">
+            @csrf
+            <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <td width="100" class="pl-2">
+                                <img width="80px" src="{{ asset('/img/1.png') }}" alt="">
+                            </td>
+                            <td>
+                                <span style="font-size: 20px;"><b> Download Excel template</b></span><br>
+                                File ini memiliki kolom header dan isi yang sesuai dengan data menu
+                            </td>
+                            <td>
+                                <a href="{{ route('pengiriman.template') }}" class="btn btn-primary btn-sm"><i
+                                        class="fa fa-download"></i> DOWNLOAD
+                                    TEMPLATE</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="pl-2">
+                                <img width="80px" src="{{ asset('/img/2.png') }}" alt="">
+                            </td>
+                            <td>
+                                <span style="font-size: 20px;"><b> Upload Excel template</b></span><br>
+                                Setelah mengubah, silahkan upload file.
+                            </td>
+                            <td>
+                                <input type="file" name="file" class="form-control">
+                            </td>
+                        </tr>
+                    </table>
 
+                </div>
+            </x-theme.modal>
+        </form>
         <x-theme.btn_filter />
     </x-slot>
 
@@ -23,12 +65,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Tgl</th>
                             <th>Partai</th>
-                            <th>Tipe</th>
                             <th>Grade</th>
+                            <th>Tipe</th>
                             <th>Pcs</th>
                             <th>Gr</th>
+                            <th>Pcs Akhir</th>
+                            <th>Gr Akhir</th>
                             <th>No Box Cfm</th>
                             <th>Cek Akhir</th>
                             <th>Ket</th>
@@ -49,12 +92,13 @@
                         @foreach ($pengiriman as $i => $d)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
-                                <td>{{ tanggal($d->tgl_pengiriman) }}</td>
                                 <td>{{ $d->partai }}</td>
-                                <td>{{ $d->tipe }}</td>
                                 <td>{{ $d->grade }}</td>
+                                <td>{{ $d->tipe }}</td>
                                 <td>{{ number_format($d->pcs, 0) }}</td>
                                 <td>{{ number_format($d->gr, 0) }}</td>
+                                <td>{{ number_format($d->pcs_akhir, 0) }}</td>
+                                <td>{{ number_format($d->gr_akhir, 0) }}</td>
                                 <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->cek_akhir }}</td>
                                 <td>{{ $d->ket }}</td>
