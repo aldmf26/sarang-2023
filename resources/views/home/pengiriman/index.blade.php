@@ -8,7 +8,7 @@
             teks="Import" />
         <form action="{{ route('pengiriman.import') }}" enctype="multipart/form-data" method="post">
             @csrf
-            <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">
+            <x-theme.modal size="modal-lg" idModal="import" title="Import Pengiriman">
                 <div class="row">
                     <table>
                         <tr>

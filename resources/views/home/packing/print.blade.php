@@ -12,7 +12,7 @@
 <body class="container">
     <div class="row">
         <div class="col-lg-12">
-            <table class="table table-bordered" style="border: 1px solid black">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
                 @php
                     $color = "style='background-color: #C8C6C4'";
                 @endphp
@@ -71,7 +71,6 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script>
-        window.print()
     </script>
 </body>
 

@@ -22,7 +22,7 @@ class PengirimanController extends Controller
             'title' => 'Siap Sortir',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'pengiriman' => DB::table('pengiriman')->whereBetween('tgl_pengiriman', [$tgl1, $tgl2])->orderBy('id_pengiriman', 'DESC')->get()
+            'pengiriman' => DB::table('pengiriman')->whereBetween('tgl_pengiriman', [$tgl1, $tgl2])->orderBy('no_box', 'DESC')->get()
         ];
         return view('home.pengiriman.index', $data);
     }

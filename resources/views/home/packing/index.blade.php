@@ -5,7 +5,7 @@
         </div>
         <a href="#" data-bs-toggle="modal" data-bs-target="#tambahPack" class="float-end btn btn-sm btn-primary"><i
                 class="fas fa-plus"></i>Tambah</a>
-        
+
         <x-theme.btn_filter />
     </x-slot>
 
@@ -46,10 +46,11 @@
                                         type="button"><i class="fas fa-eye"></i></button>
                                     <a href="{{ route('packinglist.print', $d->no_nota) }}"
                                         class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-print"></i></a>
-                                        
-                                    <a onclick="return confirm('Yakin dihapus ?')" href="{{ route('packinglist.delete', $d->no_nota) }}"
+
+                                    <a onclick="return confirm('Yakin dihapus ?')"
+                                        href="{{ route('packinglist.delete', $d->no_nota) }}"
                                         class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-                                        
+
                                 </td>
                             </tr>
                         @endforeach
@@ -95,10 +96,7 @@
                         idPengirimanGrade: [],
                         tambahPengiriman: function(id_pengiriman, grade, pcs, gr, no_box) {
                             this.idPengiriman.push(id_pengiriman)
-                            this.idPengirimanGrade.push({
-                                grade: grade,
-                                id_pengiriman: id_pengiriman
-                            })
+                    
                             console.log(this.idPengirimanGrade)
                             let pengiriman = this.pengiriman
                             let selectedItem = this.selectedItem
@@ -141,7 +139,7 @@
                     
                             const index = this.selectedItem.findIndex(item => item.grade === grade);
                             this.selectedItem.splice(index, 1);
-                    
+                            const selectedPengiriman = this.selectedPengiriman
                             for (let i = this.selectedPengiriman.length - 1; i >= 0; i--) {
                                 if (this.selectedPengiriman[i].grade === grade) {
                                     this.pengiriman.push({

@@ -20,7 +20,7 @@ class PackingListController extends Controller
             'pengiriman' => DB::table('pengiriman as a')
                 ->select('a.*')
                 ->leftJoin('pengiriman_packing_list as b', 'b.id_pengiriman', 'a.id_pengiriman')
-                ->whereNull('b.id_pengiriman')
+                ->whereNotNull('a.no_box')
                 ->orderBy('a.id_pengiriman', 'DESC')->get(),
             'packing' => DB::select("SELECT a.no_nota,a.tgl,a.nm_packing,a.pgws_cek,count(*) as ttl_box, b.pcs, b.gr
             FROM `pengiriman_packing_list` as a
