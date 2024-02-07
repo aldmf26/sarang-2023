@@ -108,6 +108,9 @@
                                     adaGrade.box += 1;
                                     adaGrade.pcs += parseFloat(pcs);
                                     adaGrade.gr += parseFloat(gr);
+                                    if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
+                                        adaGrade.id_pengiriman += `,${id_pengiriman}`;
+                                    }
                                     {{-- adaGrade.id_pengiriman += `,${id_pengiriman}`; --}}
                                 } else {
                     
