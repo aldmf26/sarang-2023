@@ -106,8 +106,8 @@
                                 let adaGrade = selectedItem.find(item => item.grade === grade);
                                 if (adaGrade) {
                                     adaGrade.box += 1;
-                                    adaGrade.pcs += pcs;
-                                    adaGrade.gr += gr;
+                                    adaGrade.pcs += parseFloat(pcs);
+                                    adaGrade.gr += parseFloat(gr);
                                     adaGrade.id_pengiriman += `,${id_pengiriman}`;
                                 } else {
                     
