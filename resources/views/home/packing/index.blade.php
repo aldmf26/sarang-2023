@@ -108,14 +108,14 @@
                                     adaGrade.box += 1;
                                     adaGrade.pcs += parseFloat(pcs);
                                     adaGrade.gr += parseFloat(gr);
-                                    adaGrade.id_pengiriman += `,${id_pengiriman}`;
+                                    {{-- adaGrade.id_pengiriman += `,${id_pengiriman}`; --}}
                                 } else {
                     
                                     selectedItem.push({
                                         grade: grade,
                                         box: 1,
-                                        pcs: pcs,
-                                        gr: gr,
+                                        pcs: parseFloat(pcs),
+                                        gr: parseFloat(gr),
                                         id_pengiriman: id_pengiriman
                                     });
                                 }
@@ -123,8 +123,8 @@
                                 selectedPengiriman.push({
                                     id_pengiriman: id_pengiriman,
                                     grade: grade,
-                                    pcs: pcs,
-                                    gr: gr,
+                                    pcs: parseFloat(pcs),
+                                    gr: parseFloat(gr),
                                     no_box: no_box,
                                 })
                                 pengiriman.splice(index, 1);
