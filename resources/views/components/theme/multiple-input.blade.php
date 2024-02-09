@@ -2,7 +2,7 @@
     <div x-data="{
         rows: []
     }">
-        <template x-for="(row, index) in 10" :key="index">
+        <template x-for="(row, index) in 20" :key="index">
             <div class="row">
                 {{ $slot }}
                 <div class="col-lg-3">
