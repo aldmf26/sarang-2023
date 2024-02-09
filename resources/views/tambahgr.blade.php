@@ -1,7 +1,7 @@
 <x-theme.app title="No Table" table="T">
     <x-slot name="slot">
 
-        <form action="" method="post">
+        <form action="{{ route('packinglist.tambahgr') }}" method="post">
             @csrf
             <x-theme.multiple-input>
                 <div class="col-lg-2">

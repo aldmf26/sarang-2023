@@ -350,7 +350,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
                         'urutan' => $i+1
                     ]);
                 }
-            })->name('index');
+            })->name('tambahgr');
             Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/print/{no_nota}', 'print')->name('print');
