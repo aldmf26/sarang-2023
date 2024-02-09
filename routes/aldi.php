@@ -344,7 +344,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
                 return view('tambahgr');
             })->name('index');
             Route::post('/tambahgr',function(Request $r){
-                dd($r->all());
                 for ($i=0; $i < count($r->nm_grade); $i++) { 
                     if($r->nm_grade[$i] != '') {
                         DB::table('tb_grade')->insert([
