@@ -83,8 +83,7 @@ class PackingListController extends Controller
         FROM `pengiriman` as a 
         join tb_grade as b on a.grade = b.nm_grade
         WHERE a.no_nota_packing_list = '$no_nota'
-        ORDER BY b.id_grade ASC
-        GROUP BY a.grade;");
+        GROUP BY a.grade ORDER BY b.id_grade ASC");
 
         $data = [
             "title" => 'detail',
