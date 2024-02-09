@@ -81,9 +81,9 @@ class PackingListController extends Controller
 
         $detail = DB::select("SELECT a.grade,sum(a.pcs_akhir) as pcs, sum(a.gr_akhir)  as gr,sum(a.gr_naik)as gr_naik, count(*) as box
         FROM `pengiriman` as a 
-        join tb_grade as b on a.grade = b.nm_grade
+        LEFT join tb_grade as b on a.grade = b.nm_grade
         WHERE a.no_nota_packing_list = '$no_nota'
-        GROUP BY a.grade ORDER BY b.id_grade ASC");
+        GROUP BY a.grade ORDER BY b.urutan ASC");
 
         $data = [
             "title" => 'detail',
