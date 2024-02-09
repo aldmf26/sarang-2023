@@ -10,6 +10,15 @@
     </x-slot>
 
     <x-slot name="cardBody">
+        <style>
+            thead {
+                position: sticky;
+                top: 0;
+                background-color: #f1f1f1;
+                /* Warna latar belakang header yang tetap */
+                z-index: 1;
+            }
+        </style>
         <section class="row">
             <div class="col-lg-4 mb-2 ">
                 <table>
@@ -64,7 +73,6 @@
         <form action="{{ route('packinglist.create') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambahPack" title="Tambah Packing List" size="modal-lg-max">
-                {{-- <div id="load_tbh"></div> --}}
                 <div>
                     <div class="row">
                         <div class="col-lg-3">
@@ -94,6 +102,12 @@
                         selectedPengiriman: [],
                         idPengiriman: [],
                         idPengirimanGrade: [],
+                        allPengiriman: function() {
+                            this.pengiriman.forEach(item => {
+                                console.log(item)
+                                this.tambahPengiriman(item.id_pengiriman, item.grade, item.pcs_akhir, item.gr_akhir, item.no_box);
+                            });
+                        },
                         tambahPengiriman: function(id_pengiriman, grade, pcs, gr, no_box) {
                             this.idPengiriman.push(id_pengiriman)
                     
@@ -108,15 +122,15 @@
                                     adaGrade.box += 1;
                                     adaGrade.pcs += parseFloat(pcs);
                                     adaGrade.gr += parseFloat(gr);
-
+                    
                                     if (!Array.isArray(adaGrade.id_pengiriman)) {
                                         adaGrade.id_pengiriman = []; // Initialize as an array if not already
                                     }
-                        
+                    
                                     if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
                                         adaGrade.id_pengiriman.push(id_pengiriman);
                                     }
-
+                    
                                     {{-- if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
                                         adaGrade.id_pengiriman += `,${id_pengiriman}`;
                                     } --}}
@@ -175,13 +189,14 @@
                                         <th class="dhead">Grade</th>
                                         <th class="dhead">Pcs</th>
                                         <th class="dhead">Gr</th>
-                                        <th class="dhead">No Barcode</th>
+                                        <th class="dhead">No Barcode <span @click="allPengiriman" class="badge bg-danger">All</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <template x-for="(p,i) in pengiriman" :key="p.id_pengiriman">
                                         <tr style="cursor: pointer"
-                                            @click="tambahPengiriman(p.id_pengiriman,p.grade,p.pcs_akhir,p.gr_akhir, p.no_box)">
+                                            @click="tambahPengiriman(p.id_pengiriman,p.grade,p.pcs_akhir,p.gr_akhir, p.no_box)"
+                                            >
                                             <td x-text="p.grade"></td>
                                             <td x-text="p.pcs_akhir"></td>
                                             <td x-text="p.gr_akhir"></td>
@@ -257,7 +272,7 @@
                                     </template>
 
                                 </tbody>
-                                
+
                             </table>
                         </div>
                     </div>
@@ -265,7 +280,7 @@
             </x-theme.modal>
         </form>
 
-        <x-theme.modal btnSave="T" idModal="detail" title="Detail Packing list">
+        <x-theme.modal btnSave="T" size="modal-lg" idModal="detail" title="Detail Packing list">
             <div id="loadDetail"></div>
         </x-theme.modal>
     </x-slot>
@@ -275,18 +290,6 @@
             pencarian('pencarianTbh', 'tbl-aldi')
             pencarian('pencarianDipilih', 'tbl-dipilih')
 
-            function loadTbh() {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('packinglist.load_tbh') }}",
-                    success: function(r) {
-                        $('#load_tbh').html(r);
-                        pencarian('pencarianTbh', 'tbl-aldi')
-                    }
-                });
-            }
-
-            loadTbh()
             $(document).on('click', '.detail', function(e) {
                 e.preventDefault();
 
@@ -297,6 +300,8 @@
                     success: function(r) {
                         $("#loadDetail").html(r);
                         $('#detail').modal('show')
+                        pencarian('pencarianSum', 'tbl-sum')
+                        pencarian('pencarianList', 'tbl-list')
                     }
                 });
             })

@@ -71,7 +71,7 @@
                                     <input count="{{ $i }}" value="{{ $d->gr }}" type="text" required name="gr_akhir[]" class="form-control selectAll gr">
                                 </td>
                                 <td>
-                                    <input count="{{ $i }}" value="{{ $d->no_box }}" type="text" required name="no_box[]" class="form-control selectAll no_box">
+                                    <input count="{{ $i }}" value="{{ $d->no_box }}" type="text" name="no_box[]" class="form-control selectAll no_box">
                                 </td>
                                 <td>
                                     <input count="{{$i}}" value="{{ $d->cek_akhir }}" type="text" name="cek_akhir[]" class="form-control selectAll admin">
@@ -160,8 +160,9 @@
             keyupBp('partai')
             keyupBp('tipe')
             keyupBp('grade')
+            keyupBp('no_box', true)
             keyupBp('gr')
-            keyupBp('gr')
+            keyupBp('admin')
             keyupBp('ket')
 
         </script>

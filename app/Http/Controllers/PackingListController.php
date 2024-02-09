@@ -20,7 +20,7 @@ class PackingListController extends Controller
             'pengiriman' => DB::table('pengiriman as a')
                 ->select('a.*')
                 ->leftJoin('pengiriman_packing_list as b', 'b.id_pengiriman', 'a.id_pengiriman')
-                ->whereNotNull('a.no_box')
+                ->where([['a.no_box', '!=', ''],['a.no_nota_packing_list', '']])
                 ->orderBy('a.id_pengiriman', 'DESC')->get(),
             'packing' => DB::select("SELECT a.no_nota,a.tgl,a.nm_packing,a.pgws_cek,count(*) as ttl_box, b.pcs, b.gr
             FROM `pengiriman_packing_list` as a
@@ -85,11 +85,26 @@ class PackingListController extends Controller
         WHERE a.no_nota_packing_list = '$no_nota'
         GROUP BY a.grade ORDER BY b.urutan ASC");
 
+        $pengirimanBox = DB::select("SELECT 
+        a.partai,
+        a.tipe,
+        b.nm_grade as grade,
+        a.pcs_akhir,
+        a.gr_akhir,
+        a.no_box,
+        a.cek_akhir,
+        a.admin
+        FROM `pengiriman` as a
+        LEFT JOIN tb_grade as b on a.grade = b.nm_grade
+        WHERE a.no_nota_packing_list  = '$no_nota'
+        ORDER by b.urutan ASC");
+
         $data = [
             "title" => 'detail',
             'no_nota' => $no_nota,
             'detail' => $detail,
             'detailPacking' => $detailPacking,
+            'pengirimanBox' => $pengirimanBox,
         ];
         return $data;
     }
