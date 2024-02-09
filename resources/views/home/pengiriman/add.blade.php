@@ -53,7 +53,7 @@
                                 <th class="dhead">Pcs</th>
                                 <th class="dhead">Gr</th>
                                 <th class="dhead">No Box CFM</th>
-                                <th class="dhead">Cek Akhir</th>
+                                <th class="dhead">Cek QC</th>
                                 <th class="dhead">Ket</th>
                             </tr>
                         </thead>

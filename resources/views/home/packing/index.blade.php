@@ -63,7 +63,7 @@
 
         <form action="{{ route('packinglist.create') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambahPack" title="Tambah Packing List" size="modal-lg">
+            <x-theme.modal idModal="tambahPack" title="Tambah Packing List" size="modal-lg-max">
                 {{-- <div id="load_tbh"></div> --}}
                 <div>
                     <div class="row">
@@ -108,9 +108,18 @@
                                     adaGrade.box += 1;
                                     adaGrade.pcs += parseFloat(pcs);
                                     adaGrade.gr += parseFloat(gr);
-                                    if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
-                                        adaGrade.id_pengiriman += `,${id_pengiriman}`;
+
+                                    if (!Array.isArray(adaGrade.id_pengiriman)) {
+                                        adaGrade.id_pengiriman = []; // Initialize as an array if not already
                                     }
+                        
+                                    if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
+                                        adaGrade.id_pengiriman.push(id_pengiriman);
+                                    }
+
+                                    {{-- if (!adaGrade.id_pengiriman.includes(id_pengiriman)) {
+                                        adaGrade.id_pengiriman += `,${id_pengiriman}`;
+                                    } --}}
                                     {{-- adaGrade.id_pengiriman += `,${id_pengiriman}`; --}}
                                 } else {
                     
@@ -157,7 +166,7 @@
                             }
                         },
                     }">
-                        <div class="col-lg-5">
+                        <div class="col-lg-3">
                             <input id="pencarianTbh" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
                             <table id="tbl-aldi" class="table table-hover table-stripped">
@@ -183,7 +192,37 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-lg-7">
+                        <div class="col-lg-3">
+                            <input id="pencarianDipilih" type="text" class="form-control form-control-sm mb-2"
+                                placeholder="cari">
+                            <table id="tbl-dipilih" class="table table-hover table-stripped">
+                                <thead class="bg-success">
+                                    <tr>
+                                        <th class="text-white">Grade</th>
+                                        <th class="text-white">Pcs</th>
+                                        <th class="text-white">Gr</th>
+                                        <th class="text-white">No Barcode</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="(item,index) in selectedPengiriman" :key="index">
+
+                                        <tr>
+                                            <td class="d-none">
+                                                <input type="text" name="id_pengiriman[]"
+                                                    :value="item.id_pengiriman">
+                                            </td>
+                                            <td x-text="item.grade"></td>
+                                            <td x-text="item.pcs"></td>
+                                            <td x-text="item.gr"></td>
+                                            <td x-text="item.no_box"></td>
+                                        </tr>
+                                    </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-6">
                             <h6 class="mb-3 pb-1 float-start">Pengiriman</h6>
                             {{-- <input type="text" name="id_pengiriman" :value="idPengiriman"> --}}
 
@@ -218,6 +257,7 @@
                                     </template>
 
                                 </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -233,6 +273,7 @@
         <script>
             pencarian('pencarian', 'tablealdi')
             pencarian('pencarianTbh', 'tbl-aldi')
+            pencarian('pencarianDipilih', 'tbl-dipilih')
 
             function loadTbh() {
                 $.ajax({
