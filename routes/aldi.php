@@ -346,10 +346,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/tambahgr',function(Request $r){
                 dd($r->all());
                 for ($i=0; $i < count($r->nm_grade); $i++) { 
-                    DB::table('tb_grade')->insert([
-                        'nm_grade' => $r->nm_grade[$i],
-                        'urutan' => $i+1
-                    ]);
+                    if($r->nm_grade[$i] != '') {
+                        DB::table('tb_grade')->insert([
+                            'nm_grade' => $r->nm_grade[$i],
+                            'urutan' => $i+1
+                        ]);
+                    }
                 }
             })->name('tambahgr');
             Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
