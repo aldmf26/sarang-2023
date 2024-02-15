@@ -29,14 +29,15 @@
                     <table class="table table-stripped table-hover">
                         <thead>
                             <tr>
-                                <th class="dhead">Tgl</th>
                                 <th class="dhead">Partai</th>
                                 <th class="dhead">Tipe</th>
                                 <th class="dhead">Grade</th>
-                                <th class="dhead">Pcs</th>
-                                <th class="dhead">Gr</th>
+                                <th class="dhead">Pcs Awal</th>
+                                <th class="dhead">Gr Awal</th>
+                                <th class="dhead">Pcs Akhir</th>
+                                <th class="dhead">Gr Akhir</th>
                                 <th class="dhead">No Box CFM</th>
-                                <th class="dhead">Cek Akhir</th>
+                                <th class="dhead">Cek QC</th>
                                 <th class="dhead">Ket</th>
                             </tr>
                         </thead>
@@ -44,7 +45,7 @@
                            
                             @foreach ($tbl as $i => $d)
                             <tr>
-                                <td>
+                                <td class="d-none">
                                     <input type="hidden" name="id_pengiriman[]" value="{{ $d->id_pengiriman }}">
                                     <input count="{{ $i }}" type="date" value="{{ $d->tgl_pengiriman }}" required name="tgl[]" class="form-control selectAll">
                                 </td>
@@ -64,15 +65,18 @@
                                     <input count="{{ $i }}" value="{{ $d->gr }}" type="text" required name="gr[]" class="form-control selectAll gr">
                                 </td>
                                 <td>
-                                    <input count="{{ $i }}" value="{{ $d->no_box }}" type="text" required name="no_box[]" class="form-control selectAll no_box">
+                                    <input count="{{ $i }}" value="{{ $d->pcs }}" type="text" required name="pcs_akhir[]" class="form-control selectAll pcs">
                                 </td>
                                 <td>
-                                    <select count="{{$i}}" required name="cek_akhir[]" class="select2cek admin" id="">
-                                        <option value="">Pilih Admin Cek</option>
-                                        @foreach ($pengawas as $p)
-                                            <option {{$p->id == $d->cek_akhir ? 'selected' : ''}} value="{{ $p->id }}">{{ strtoupper($p->name) }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input count="{{ $i }}" value="{{ $d->gr }}" type="text" required name="gr_akhir[]" class="form-control selectAll gr">
+                                </td>
+                                <td>
+                                    <input count="{{ $i }}" value="{{ $d->no_box }}" type="text" name="no_box[]" class="form-control selectAll no_box">
+                                </td>
+                                <td>
+                                    <input count="{{$i}}" value="{{ $d->cek_akhir }}" type="text" name="cek_akhir[]" class="form-control selectAll admin">
+
+                                   
                                 </td>
                                 <td>
                                     <input count="{{$i}}" value="{{ $d->tipe }}" type="text" name="ket[]" class="form-control selectAll ket">
@@ -156,8 +160,9 @@
             keyupBp('partai')
             keyupBp('tipe')
             keyupBp('grade')
+            keyupBp('no_box', true)
             keyupBp('gr')
-            keyupBp('gr')
+            keyupBp('admin')
             keyupBp('ket')
 
         </script>

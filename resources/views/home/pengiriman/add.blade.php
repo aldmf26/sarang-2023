@@ -47,21 +47,20 @@
                     <table class="table table-stripped table-hover">
                         <thead>
                             <tr>
-                                <th class="dhead">Tgl</th>
                                 <th class="dhead">Partai</th>
-                                <th class="dhead">Tipe</th>
                                 <th class="dhead">Grade</th>
+                                <th class="dhead">Tipe</th>
                                 <th class="dhead">Pcs</th>
                                 <th class="dhead">Gr</th>
                                 <th class="dhead">No Box CFM</th>
-                                <th class="dhead">Cek Akhir</th>
+                                <th class="dhead">Cek QC</th>
                                 <th class="dhead">Ket</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for ($i = 0; $i < $baris; $i++)
                                 <tr>
-                                    <td>
+                                    <td class="d-none">
                                         <input count="{{ $i }}" type="date" value="{{ date('Y-m-d') }}"
                                             required name="tgl[]" class="form-control">
                                     </td>
@@ -70,15 +69,16 @@
                                             class="form-control partai">
                                     </td>
                                     <td>
-                                        <input count="{{ $i }}" type="text" required name="tipe[]"
-                                            class="form-control tipe">
-                                    </td>
-                                    <td>
+
                                         <input count="{{ $i }}" type="text" required name="grade[]"
                                             class="form-control grade">
                                     </td>
                                     <td>
-                                        <input count="{{ $i }}" type="text" required name="pcs[]"
+                                        <input count="{{ $i }}" type="text" required name="tipe[]"
+                                            class="form-control tipe">
+                                    </td>
+                                    <td>
+                                        <input count="{{ $i }}" type="text" name="pcs[]"
                                             class="form-control pcs">
                                     </td>
                                     <td>
@@ -86,18 +86,20 @@
                                             class="form-control gr">
                                     </td>
                                     <td>
-                                        <input count="{{ $i }}" type="text" required name="no_box[]"
+                                        <input count="{{ $i }}" type="text" name="no_box[]"
                                             class="form-control no_box">
                                     </td>
                                     <td>
-                                        <select count="{{ $i }}" required name="cek_akhir[]"
+                                        <input count="{{ $i }}" type="text" required name="cek_akhir[]"
+                                            class="form-control cek_akhir">
+                                        {{-- <select count="{{ $i }}" required name="cek_akhir[]"
                                             class="select2cek admin" id="">
                                             <option value="">Pilih Admin Cek</option>
                                             @foreach ($pengawas as $p)
                                                 <option value="{{ $p->id }}">{{ strtoupper($p->name) }}
                                                 </option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </td>
                                     <td>
                                         <input count="{{ $i }}" type="text" name="ket[]"
@@ -185,6 +187,7 @@
             keyupBp('gr')
             keyupBp('no_box', true)
             keyupBp('ket')
+            keyupBp('cek_akhir')
         </script>
     @endsection
 </x-theme.app>
