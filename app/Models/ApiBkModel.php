@@ -253,4 +253,14 @@ class ApiBkModel extends Model
 
         return $result;
     }
+
+    public static function cabut_selesai()
+    {
+        $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, a.pcs_akhir, a.gr_akhir, a.ttl_rp
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box
+        where a.selesai = 'Y'
+        group by a.no_box;");
+        return $result;
+    }
 }
