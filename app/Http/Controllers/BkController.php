@@ -52,6 +52,9 @@ class BkController extends Controller
             'kategori' => $r->kategori,
             // 'gudangBk' => $gudangBk
         ];
+        if ($r->kategori == 'cetak') {
+            return view('home.bk.ambil_cetak', $data);
+        }
         return view('home.bk.create', $data);
     }
     public function load_select(Request $r)
@@ -152,6 +155,7 @@ class BkController extends Controller
         }
     }
 
+
     public function template()
     {
         $tbl = DB::select("SELECT * FROM users as a where a.posisi_id = '13'");
@@ -210,7 +214,7 @@ class BkController extends Controller
                         'tipe' => $row[3],
                         'ket' => $row[4],
                         'warna' => $row[5],
-                        'tgl' => $tanggalFormatted,
+                        'tgl' => date('Y-m-d'),
                         'pengawas' => auth()->user()->name,
                         'penerima' => $row[6],
                         'pcs_awal' => $row[8],
@@ -225,16 +229,6 @@ class BkController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
-        // try {
-        //     DB::beginTransaction();
-        //     Excel::import(new BkImport, $r->file('file'));
-        //     DB::commit();
-        //     return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return redirect()->back()->with('error', $e->getMessage());
-
-        // }
     }
 
     public function print(Request $r)
@@ -332,5 +326,33 @@ class BkController extends Controller
             WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2' and a.kategori = 'cetak'")
         ];
         return view('home.bk.index', $data);
+    }
+
+    public function create_ambil_cetak(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $datas = [];
+            for ($x = 0; $x < count($r->gr_akhir); $x++) {
+                $datas[] = [
+                    'nm_partai' => $r->partai_h[$x],
+                    'no_box' => $r->no_box[$x],
+                    'tipe' => $r->tipe[$x],
+                    'pengawas' => $r->admin,
+                    'penerima' => $r->penerima,
+                    'pcs_awal' => $r->pcs_akhir[$x],
+                    'gr_awal' => $r->gr_akhir[$x],
+                    'tgl' => $r->tgl,
+                    'kategori' => 'cetak',
+                    'pengawas' => $r->admin
+                ];
+            }
+            DB::table('bk')->insert($datas);
+            DB::commit();
+            return redirect("home/bk?kategori=cetak")->with('sukses', 'Data berhasil ditambahkan');
+        } catch (\Exception  $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

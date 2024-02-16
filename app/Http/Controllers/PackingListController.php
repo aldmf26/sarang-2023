@@ -22,7 +22,7 @@ class PackingListController extends Controller
                 ->leftJoin('pengiriman_packing_list as b', 'b.id_pengiriman', 'a.id_pengiriman')
                 ->where([['a.no_box', '!=', ''],['a.no_nota_packing_list', '']])
                 ->orderBy('a.id_pengiriman', 'DESC')->get(),
-            'packing' => DB::select("SELECT a.no_nota,a.tgl,a.nm_packing,a.pgws_cek,count(*) as ttl_box, b.pcs, b.gr
+            'packing' => DB::select("SELECT a.no_invoice_manual as no_invoice,a.no_nota,a.tgl,a.nm_packing,a.pgws_cek,count(*) as ttl_box, b.pcs, b.gr
             FROM `pengiriman_packing_list` as a
             JOIN (
                 SELECT no_nota_packing_list as nota_packing,sum(pcs_akhir) as pcs,sum(gr_akhir) + sum(gr_naik) as gr 
@@ -73,6 +73,13 @@ class PackingListController extends Controller
         return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil dimasukan');
     }
 
+    public function tbh_invoice(Request $r)
+    {
+        for ($i=0; $i < count($r->no_nota); $i++) { 
+            DB::table('pengiriman_packing_list')->where('no_nota', $r->no_nota[$i])->update(['no_invoice_manual' => $r->no_invoice[$i]]);
+        }
+        return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil diubah');
+    }
     public function getDetailPrint($no_nota)
     {
         $no_nota = $no_nota;

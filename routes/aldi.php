@@ -10,6 +10,7 @@ use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
 use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PengirimanController;
@@ -143,6 +144,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/print', 'print')->name('print');
             Route::get('/export', 'export')->name('export');
             Route::get('/template', 'template')->name('template');
+            Route::post('/create_ambil_cetak', 'create_ambil_cetak')->name('create_ambil_cetak');
             Route::post('/import', 'import')->name('import');
             Route::get('/export', 'export')->name('export');
         });
@@ -328,11 +330,24 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/edit', 'edit')->name('edit');
-            Route::get('/template', 'template')->name('template');
             Route::post('/create', 'create')->name('create');
+            Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
+        });
+    Route::controller(GradingBjController::class)
+        ->prefix('home/gradingbj')
+        ->name('gradingbj.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/create', 'create')->name('create');
+            Route::post('/create_grading', 'create_grading')->name('create_grading');
+            Route::get('/load_grading', 'load_grading')->name('load_grading');
+            Route::get('/load_detail', 'load_detail')->name('load_detail');
+            Route::get('/template', 'template')->name('template');
+            Route::post('/import', 'import')->name('import');
         });
 
     Route::controller(PackingListController::class)
@@ -358,5 +373,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/print/{no_nota}', 'print')->name('print');
             Route::get('/delete/{no_nota}', 'delete')->name('delete');
             Route::post('/create', 'create')->name('create');
+            Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
         });
 });

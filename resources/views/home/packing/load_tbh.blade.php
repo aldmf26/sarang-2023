@@ -68,7 +68,7 @@
         <table class="table table-stripped table-hover" id="tbl-aldi">
             <thead>
                 <tr>
-                    <th class="dhead">No Box Cfm</th>
+                    <th class="dhead">No Box SP</th>
                     <th class="dhead">Grade</th>
                     <th class="dhead">Pcs</th>
                     <th class="dhead">Gram</th>

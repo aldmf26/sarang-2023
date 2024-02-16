@@ -1,4 +1,4 @@
-<table id="tbl-sum"  class="table text-black table-bordered table-sm" style="border: 1px solid black;">
+<table id="tbl-sum"  class="table text-black table-bordered table-sm" style="border: 1px solid #6779bc;">
     @php
         $color = "style='background-color: #C8C6C4'";
     @endphp

@@ -17,6 +17,7 @@ class NavbarController extends Controller
                 ['a.navbar', $jenis],
                 ['b.id_user', $id_user],
             ])
+            ->orderBy('a.urutan', 'ASC')
             ->get();
         return $data;
     }

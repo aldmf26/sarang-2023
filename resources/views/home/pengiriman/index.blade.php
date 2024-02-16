@@ -65,14 +65,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Partai</th>
+                            <th>No Box SP</th>
                             <th>Grade</th>
                             <th>Tipe</th>
                             <th>Pcs</th>
                             <th>Gr</th>
                             <th>Pcs Akhir</th>
                             <th>Gr Akhir</th>
-                            <th>No Box Cfm</th>
+                            <th>xxx</th>
                             <th>Cek Akhir</th>
                             <th>Ket</th>
                             <th>

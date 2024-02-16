@@ -36,7 +36,7 @@
                                 <th class="dhead">Gr Awal</th>
                                 <th class="dhead">Pcs Akhir</th>
                                 <th class="dhead">Gr Akhir</th>
-                                <th class="dhead">No Box CFM</th>
+                                <th class="dhead">No Box SP</th>
                                 <th class="dhead">Cek QC</th>
                                 <th class="dhead">Ket</th>
                             </tr>

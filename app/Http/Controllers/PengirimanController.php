@@ -35,7 +35,7 @@ class PengirimanController extends Controller
     {
 
         $data = [
-            'title' => 'Tambah Siap Sortir',
+            'title' => 'Buat Box Kirim',
             'pengawas' => User::where('posisi_id', 13)->get(),
         ];
         return view('home.pengiriman.add', $data);

@@ -47,14 +47,14 @@
                     <table class="table table-stripped table-hover">
                         <thead>
                             <tr>
-                                <th class="dhead">Partai</th>
-                                <th class="dhead">Grade</th>
+                                <th class="dhead">Partai Ratna</th>
                                 <th class="dhead">Tipe</th>
+                                <th class="dhead">Grade</th>
                                 <th class="dhead">Pcs</th>
                                 <th class="dhead">Gr</th>
-                                <th class="dhead">No Box CFM</th>
+                                <th class="dhead">No Barcode</th>
                                 <th class="dhead">Cek QC</th>
-                                <th class="dhead">Ket</th>
+                                <th class="dhead">Ket Kirim</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,14 +68,15 @@
                                         <input count="{{ $i }}" type="text" required name="partai[]"
                                             class="form-control partai">
                                     </td>
+                                    
+                                    <td>
+                                        <input count="{{ $i }}" type="text" required name="tipe[]"
+                                            class="form-control tipe">
+                                    </td>
                                     <td>
 
                                         <input count="{{ $i }}" type="text" required name="grade[]"
                                             class="form-control grade">
-                                    </td>
-                                    <td>
-                                        <input count="{{ $i }}" type="text" required name="tipe[]"
-                                            class="form-control tipe">
                                     </td>
                                     <td>
                                         <input count="{{ $i }}" type="text" name="pcs[]"
