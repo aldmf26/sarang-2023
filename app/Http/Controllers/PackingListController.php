@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,15 +13,16 @@ class PackingListController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
-
+        $kategori = $r->kategori;
         $data = [
             'title' => 'Packing list',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+            'kategori' => $kategori,
             'pengiriman' => DB::table('pengiriman as a')
                 ->select('a.*')
                 ->leftJoin('pengiriman_packing_list as b', 'b.id_pengiriman', 'a.id_pengiriman')
-                ->where([['a.no_box', '!=', ''],['a.no_nota_packing_list', '']])
+                ->where([['a.no_nota_packing_list', '']])
                 ->orderBy('a.id_pengiriman', 'DESC')->get(),
             'packing' => DB::select("SELECT a.no_invoice_manual as no_invoice,a.no_nota,a.tgl,a.nm_packing,a.pgws_cek,count(*) as ttl_box, b.pcs, b.gr
             FROM `pengiriman_packing_list` as a
@@ -30,9 +32,15 @@ class PackingListController extends Controller
             ) as b on a.no_nota = b.nota_packing
             WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
             GROUP BY a.no_nota
-            ORDER BY a.no_nota DESC;")
+            ORDER BY a.no_nota DESC;"),
+            'box_kirim' => DB::select("SELECT a.* FROM `pengiriman`as a
+            LEFT JOIN tb_grade as b on a.grade = b.nm_grade
+            LEFT JOIN pengiriman_packing_list as c on a.no_nota_packing_list = c.no_nota
+            WHERE a.tgl_pengiriman BETWEEN '$tgl1' and '$tgl2' AND a.no_nota_packing_list = ''
+            ORDER BY b.urutan asc;")
         ];
-        return view('home.packing.index', $data);
+            
+            return view('home.packing.index', $data);
     }
 
     public function load_tbh()
@@ -70,7 +78,7 @@ class PackingListController extends Controller
                 'no_nota' => $no_nota
             ]);
         }
-        return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil dimasukan');
+        return redirect()->route('packinglist.index', ['kategori' => 'packing'])->with('sukses', 'Data Berhasil dimasukan');
     }
 
     public function tbh_invoice(Request $r)
@@ -132,8 +140,102 @@ class PackingListController extends Controller
         DB::table('pengiriman')->where('no_nota_packing_list', $no_nota)->update([
             'no_nota_packing_list' => ''
         ]);
-        return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil dihapus');
+        return redirect()->route('packinglist.index', ['kategori' => 'packing'])->with('sukses', 'Data Berhasil dihapus');
 
         
+    }
+
+    public function add_box_kirim(Request $r)
+    {
+        $data = [
+            'title' => 'Tambah Box Kirim'
+        ];
+        return view('home.packing.add_box_kirim',$data);
+    }
+
+    public function create_box_kirim(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $admin = auth()->user()->name;
+            $tgl_input = date('Y-m-d');
+            $no_nota = DB::table('pengiriman')->orderBy('id_pengiriman', 'DESC')->first();
+            $no_nota = empty($no_nota) ? 1001 : $no_nota->no_nota + 1;
+
+            $dataToInsert = [];
+            for ($i = 0; $i < count($r->gr); $i++) {
+                if ($r->pcs[$i] != 0) {
+                    $dataToInsert[] = [
+                        'tgl_pengiriman' => $r->tgl[$i],
+                        'partai' => $r->partai[$i],
+                        'tipe' => $r->tipe[$i],
+                        'grade' => $r->grade[$i],
+                        'pcs' => $r->pcs[$i],
+                        'gr' => $r->gr[$i],
+                        'gr_naik' => $r->gr[$i] * 0.10,
+                        'no_box' => $r->no_box[$i],
+                        'cek_akhir' => $r->cek_akhir[$i],
+                        'ket' => $r->ket[$i],
+                        'admin' => $admin,
+                        'tgl_input' => $tgl_input,
+                        'no_nota' => $no_nota,
+                    ];
+                }
+            }
+
+            DB::table('pengiriman')->insert($dataToInsert);
+
+            DB::commit();
+            return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil ditambahkan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('packinglist.add_box_kirim')->with('error', 'Data Gagal input ulang');
+        }
+    }
+    public function edit(Request $r)
+    {
+        $tbl = DB::table('pengiriman')->whereIn('id_pengiriman', $r->no_nota)->get();
+        $data = [
+            'title' => 'Edit Pengiriman',
+            'pengawas' => User::where('posisi_id', 13)->get(),
+            'tbl' => $tbl,
+        ];
+        return view('home.packing.edit', $data);
+    }
+
+    public function update(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $admin = auth()->user()->name;
+            $tgl_input = date('Y-m-d');
+            for ($i = 0; $i < count($r->id_pengiriman); $i++) {
+                $dataToInsert = [
+                    'tgl_pengiriman' => $r->tgl[$i],
+                    'partai' => $r->partai[$i],
+                    'tipe' => $r->tipe[$i],
+                    'grade' => $r->grade[$i],
+                    'pcs' => $r->pcs[$i],
+                    'gr' => $r->gr[$i],
+                    'pcs_akhir' => $r->pcs_akhir[$i],
+                    'gr_akhir' => $r->gr_akhir[$i],
+                    'gr_naik' => $r->gr_akhir[$i] * 0.10,
+                    'no_box' => $r->no_box[$i],
+                    'cek_akhir' => $r->cek_akhir[$i],
+                    'ket' => $r->ket[$i],
+                    'admin' => $admin,
+                    'tgl_input' => $tgl_input,
+                ];
+
+                DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($dataToInsert);
+            }
+
+
+            DB::commit();
+            return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil diupdatekan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('packinglist.index')->with('error', 'Data Gagal input ulang');
+        }
     }
 }

@@ -4,8 +4,9 @@
             <h6 class="float-start mt-1">{{ $title }}</h6>
         </div>
         <a href="#" data-bs-toggle="modal" data-bs-target="#tambahPack" class="float-end btn btn-sm btn-primary"><i
-                class="fas fa-plus"></i>Tambah</a>
-
+                class="fas fa-plus"></i>Tambah Packinglist</a>
+        <a href="{{ route('packinglist.add_box_kirim') }}" class="float-end btn btn-sm btn-primary me-2"><i
+                class="fas fa-plus"></i>Tambah Box Kirim</a>
         <x-theme.btn_filter />
     </x-slot>
 
@@ -20,79 +21,21 @@
             }
         </style>
         <section class="row">
+            <div class="col-lg-8">
+                @include('home.packing.nav', ['name' => 'index'])
+            </div>
             <div class="col-lg-4 mb-2 ">
                 <table>
                     <td>Pencarian :</td>
                     <td><input type="text" id="pencarian" class="form-control float-end"></td>
                 </table>
             </div>
-            <form action="{{ route('packinglist.tbh_invoice') }}" method="post">
-
-            <div class="col-lg-12" x-data="{
-                tbhInvoice: false
-            }">
-                <table class="table table-stripped" id="tablealdi">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tgl Kirim</th>
-                            <th>No Packinglist</th>
-                            <th>No Invoice</th>
-                            <th>Nama Packing List</th>
-                            <th class="text-end">Box</th>
-                            <th class="text-end">Pcs</th>
-                            <th class="text-end">Gr</th>
-                            <th width="100" class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @foreach ($packing as $i => $d)
-                            <tr>
-                                <td>{{ $i + 1 }}</td>
-                                <td>{{ tanggal($d->tgl) }}</td>
-                                <td>{{ $d->no_nota }}</td>
-                                <td class="tambah_invoice" no_invoice="{{ $d->no_nota }}">
-                                    @if (!$d->no_invoice)
-                                            @csrf
-                                            <span @click="tbhInvoice = !tbhInvoice"
-                                                class="badge bg-primary">Tambah</span>
-                                            <div x-show="tbhInvoice">
-                                                <input style="width:80px;" type="text" name="no_invoice[]"
-                                                    class="mt-1 form-control form-control-sm">
-                                                    <input type="hidden" name="no_nota[]" value="{{ $d->no_nota }}">
-                                                <button class="mt-1 btn btn-sm btn-primary" type="submit">Save</button>
-                                            </div>
-                                    @else
-                                        {{ $d->no_invoice }}
-                                    @endif
-
-                                </td>
-                                <td>{{ ucwords($d->nm_packing) }}</td>
-                                <td align="right">{{ $d->ttl_box }}</td>
-                                <td align="right">{{ number_format($d->pcs, 0) }}</td>
-                                <td align="right">{{ number_format($d->gr, 0) }}</td>
-                                <td align="center">
-                                    <button class="btn btn-sm btn-primary detail" no_nota="{{ $d->no_nota }}"
-                                        type="button"><i class="fas fa-eye"></i></button>
-                                    <a href="{{ route('packinglist.print', $d->no_nota) }}"
-                                        class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-print"></i></a>
-                                    <a onclick="return confirm('Yakin dihapus ?')"
-                                        href="{{ route('packinglist.delete', $d->no_nota) }}"
-                                        class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-
-                </table>
-            </div>
-        </form>
-
+            @if ($kategori == 'packing')
+                @include('home.packing.tbl_index_packing')
+            @else
+                @include('home.packing.tbl_index_pengiriman')
+            @endif
         </section>
-
 
         <form action="{{ route('packinglist.create') }}" method="post">
             @csrf
@@ -205,6 +148,7 @@
                         },
                     }">
                         <div class="col-lg-3">
+                            <img width="80" src="{{ asset('img/kulkas.png') }}" alt="">
                             <input id="pencarianTbh" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
                             <table id="tbl-aldi" class="table table-hover table-stripped">
@@ -232,6 +176,8 @@
                             </table>
                         </div>
                         <div class="col-lg-3">
+                            <img width="80" src="{{ asset('img/meja.png') }}" alt="">
+
                             <input id="pencarianDipilih" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
                             <table id="tbl-dipilih" class="table table-hover table-stripped">
@@ -262,7 +208,9 @@
                             </table>
                         </div>
                         <div class="col-lg-6">
-                            <h6 class="mb-3 pb-1 float-start">Pengiriman</h6>
+                            <img width="80" src="{{ asset('img/box.png') }}" alt="">
+
+                            <h6 class="mb-3 pb-1">Pengiriman</h6>
                             {{-- <input type="text" name="id_pengiriman" :value="idPengiriman"> --}}
 
                             <table class="table table-hover table-stripped">

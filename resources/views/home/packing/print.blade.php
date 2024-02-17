@@ -12,13 +12,12 @@
 <body class="container">
     <style>
         @media print {
-           
+
 
             .page {
                 page-break-before: always;
             }
         }
-
     </style>
     <div class="row page">
         <div class="col-lg-12 content">
@@ -28,8 +27,7 @@
     <div class="row page">
         <div class="content fixed-on-next-page">
             <div class="col-lg-12 content">
-            @include('home.packing.tbl_list_pengiriman')
-                
+                @include('home.packing.tbl_list_pengiriman')
             </div>
         </div>
     </div>
