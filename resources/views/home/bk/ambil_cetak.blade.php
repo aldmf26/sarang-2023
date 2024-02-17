@@ -38,6 +38,7 @@
                 font-size: 12px;
                 width: 120px !important;
             }
+
             .scrollable-table {
                 max-height: 300px;
                 /* Atur tinggi maksimum tabel */
@@ -51,6 +52,7 @@
             .scrollable-table table {
                 max-width: 100%;
             }
+
             thead {
                 position: sticky;
                 top: 0;
