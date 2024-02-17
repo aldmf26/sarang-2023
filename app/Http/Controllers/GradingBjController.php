@@ -15,7 +15,8 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Grading BJ',
-            'datas' => DB::select("SELECT a.no_grading,sum(pcs_awal) as pcs_awal, sum(gr_awal) as gr_awal,a.tgl,a.partai,a.ket,count(a.no_box) as ttl_box FROM `pengiriman_gradingbj` as a
+            'datas' => DB::select("SELECT a.no_grading,sum(pcs_awal) as pcs_awal, sum(gr_awal) as gr_awal,a.tgl,a.partai,a.ket,count(a.no_box) as ttl_box , sum(a.ttl_rp + a.cost_cabut + a.cost_cetak) as ttl_rp
+            FROM `pengiriman_gradingbj` as a
             GROUP BY no_grading ORDER BY a.no_grading DESC;")
         ];
         return view('home.gradingbj.index', $data);
@@ -23,9 +24,15 @@ class GradingBjController extends Controller
 
     public function add()
     {
-        $cetak = DB::select("SELECT b.tipe,a.id_cetak,a.no_box,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
+        $cetak = DB::select("SELECT b.tipe,a.id_cetak,a.no_box,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, b.ttl_rp, c.cost_cabut, ((a.pcs_akhir * a.rp_pcs) + a.rp_harian - (a.pcs_hcr * d.denda_hcr )) as cost_cetak
         FROM `cetak` as a
-        join bk as b on a.no_box = b.no_box
+        join bk as b on a.no_box = b.no_box and b.kategori = 'cetak'
+        left join (
+        	SELECT c.no_box , sum(c.ttl_rp) as cost_cabut
+            FROM cabut as c
+            GROUP by c.no_box
+        ) as c on c.no_box = a.no_box
+        left join kelas_cetak as d on d.id_kelas_cetak = a.id_kelas
         LEFT JOIN `pengiriman_gradingbj` AS p ON a.no_box = p.no_box
         WHERE a.selesai = 'Y'  AND p.no_box IS NULL GROUP BY no_box ORDER BY b.tipe ASC;");
 
@@ -59,6 +66,9 @@ class GradingBjController extends Controller
                 'admin' => $admin,
                 'tgl' => $tgl,
                 'no_grading' => $no_nota,
+                'ttl_rp' => $r->ttl_rp[$i],
+                'cost_cabut' => $r->cost_cabut[$i],
+                'cost_cetak' => $r->cost_cetak[$i],
             ];
         }
 
@@ -72,7 +82,7 @@ class GradingBjController extends Controller
             DB::beginTransaction();
             $datas = [];
             for ($i = 0; $i < count($r->gr); $i++) {
-                if($r->gr[$i] != 0 || !empty($r->gr[$i])) {
+                if ($r->gr[$i] != 0 || !empty($r->gr[$i])) {
                     $datas[] = [
                         'grade' => $r->grade[$i],
                         'pcs' => $r->pcs[$i],
@@ -86,7 +96,6 @@ class GradingBjController extends Controller
             DB::table('pengiriman_list_gradingbj')->insert($datas);
             DB::commit();
             return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil tambah grading');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('gradingbj.index')->with('error', $e->getMessage());

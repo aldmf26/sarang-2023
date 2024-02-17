@@ -344,7 +344,8 @@ class BkController extends Controller
                     'gr_awal' => $r->gr_akhir[$x],
                     'tgl' => $r->tgl,
                     'kategori' => 'cetak',
-                    'pengawas' => $r->admin
+                    'pengawas' => $r->admin,
+                    'ttl_rp' => $r->ttl_rp[$x]
                 ];
             }
             DB::table('bk')->insert($datas);

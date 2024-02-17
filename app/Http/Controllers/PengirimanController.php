@@ -155,7 +155,7 @@ class PengirimanController extends Controller
                     continue;
                 }
 
-               
+
                 $no_nota = DB::table('pengiriman')->orderBy('id_pengiriman', 'DESC')->first();
                 $no_nota = empty($no_nota) ? 1001 : $no_nota->no_nota + 1;
 
