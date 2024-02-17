@@ -369,7 +369,11 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
                 }
             })->name('tambahgr');
             Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
+            Route::get('/add_box_kirim', 'add_box_kirim')->name('add_box_kirim');
+            Route::post('/create_box_kirim', 'create_box_kirim')->name('create_box_kirim');
             Route::get('/detail', 'detail')->name('detail');
+            Route::post('/update', 'update')->name('update');
+            Route::get('/edit', 'edit')->name('edit');
             Route::get('/print/{no_nota}', 'print')->name('print');
             Route::get('/delete/{no_nota}', 'delete')->name('delete');
             Route::post('/create', 'create')->name('create');
