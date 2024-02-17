@@ -41,7 +41,7 @@
         <form action="{{ route('bk.create_ambil_cetak') }}" method="post">
             @csrf
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <table class="table">
                         <tr>
                             <th class="dhead">Tanggal</th>
@@ -71,14 +71,21 @@
                 </div>
             </div>
 
+
+
             <div class="row" x-data="{
                 cetak: {{ $result }},
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
-                tambah(id_gudang_ctk, partai_h, tipe, pcs, gr, no_box) {
+                ttlRp: 0,
+                numberFormat(value) {
+                    return parseFloat(value).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+                },
+                tambah(id_gudang_ctk, partai_h, tipe, pcs, gr, no_box, ttl_rp) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
+            
                     selectedItem.push({
                         id_gudang_ctk: id_gudang_ctk,
                         no_box: no_box,
@@ -86,6 +93,7 @@
                         tipe: tipe,
                         pcs_timbang_ulang: parseFloat(pcs),
                         gr_timbang_ulang: parseFloat(gr),
+                        ttl_rp: parseFloat(ttl_rp),
                     });
             
                     const index = cetak.findIndex(item => item.id_gudang_ctk === id_gudang_ctk);
@@ -93,6 +101,7 @@
             
                     this.ttlPcs += parseFloat(pcs)
                     this.ttlGr += parseFloat(gr)
+                    this.ttlRp += parseFloat(ttl_rp)
             
                 },
                 hapus(id_gudang_ctk) {
@@ -108,19 +117,21 @@
                                 tipe: e.tipe,
                                 pcs_timbang_ulang: parseFloat(e.pcs_timbang_ulang),
                                 gr_timbang_ulang: parseFloat(e.gr_timbang_ulang),
+                                ttl_rp: parseFloat(e.ttl_rp),
                             });
                             const index = selectedItem.findIndex(item => item.id_gudang_ctk === e.id_gudang_ctk);
                             selectedItem.splice(index, 1);
             
                             this.ttlPcs -= parseFloat(e.pcs_timbang_ulang)
                             this.ttlGr -= parseFloat(e.gr_timbang_ulang)
+                            this.ttlRp -= parseFloat(e.ttl_rp)
                         }
                     })
-        
+            
             
                 }
             }">
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="scrollable-table">
                         <table class="table table-hover table-bordered">
                             <thead>
@@ -130,6 +141,7 @@
                                     <th class="dhead">Tipe</th>
                                     <th class="dhead text-end">Pcs Tmbng Ulng</th>
                                     <th class="dhead text-end">Gr Tmbng Ulng</th>
+                                    <th class="dhead text-end">Ttl Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,7 +153,8 @@
                                             ctk.tipe,
                                             ctk.pcs_timbang_ulang,
                                             ctk.gr_timbang_ulang,
-                                            ctk.no_box
+                                            ctk.no_box,
+                                            ctk.ttl_rp
                                         )
                                         ">
                                         <td x-text="ctk.partai_h"></td>
@@ -149,6 +162,7 @@
                                         <td x-text="ctk.tipe"></td>
                                         <td align="right" x-text="ctk.pcs_timbang_ulang"></td>
                                         <td align="right" x-text="ctk.gr_timbang_ulang"></td>
+                                        <td align="right" x-text="numberFormat(ctk.ttl_rp)"></td>
                                     </tr>
                                 </template>
 
@@ -156,8 +170,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="scrollable-table">
 
                         <table class="table table-hover table-bordered">
@@ -168,6 +181,7 @@
                                     <th class=" text-white">Tipe</th>
                                     <th class=" text-white text-end">Pcs Tmbng Ulng</th>
                                     <th class=" text-white text-end">Gr Tmbng Ulng</th>
+                                    <th class=" text-white text-end">Ttl Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -179,19 +193,31 @@
                                             <input type="text" name="no_box[]" :value="item.no_box">
                                             <input type="text" name="pcs_akhir[]" :value="item.pcs_timbang_ulang">
                                             <input type="text" name="gr_akhir[]" :value="item.gr_timbang_ulang">
+                                            <input type="text" name="ttl_rp[]" :value="item.ttl_rp">
                                         </td>
                                         <td x-text="item.partai_h"></td>
                                         <td x-text="item.no_box"></td>
                                         <td x-text="item.tipe"></td>
                                         <td align="right" x-text="item.pcs_timbang_ulang"></td>
                                         <td align="right" x-text="item.gr_timbang_ulang"></td>
+                                        <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
                                     </tr>
                                 </template>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-end" x-text="ttlPcs"></th>
+                                    <th class="text-end" x-text="ttlGr"></th>
+                                    <th class="text-end" x-text="numberFormat(ttlRp)"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                {{-- <div class="col-lg-2">
                     <table class="table">
                         <tr>
                             <td width="70" align="left">
@@ -216,7 +242,7 @@
                             </td>
                         </tr>
                     </table>
-                </div>
+                </div> --}}
             </div>
 
 

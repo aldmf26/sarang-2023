@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10" cont="container-fluid">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
         <div class="col-lg-6">
@@ -13,19 +13,22 @@
 
 
     <x-slot name="cardBody">
-        
-<style>
-    .scrollable-table {
-        max-height: 300px; /* Atur tinggi maksimum tabel */
-        overflow-y: auto; /* Tampilkan scrollbar vertikal jika terlalu banyak baris */
-        overflow-x: hidden; /* Sembunyikan scrollbar horizontal */
-    }
 
-    /* Optional: Atur lebar maksimum tabel jika ingin mengaktifkan scrollbar horizontal */
-    .scrollable-table table {
-        max-width: 100%;
-    }
-</style>
+        <style>
+            .scrollable-table {
+                max-height: 300px;
+                /* Atur tinggi maksimum tabel */
+                overflow-y: auto;
+                /* Tampilkan scrollbar vertikal jika terlalu banyak baris */
+                overflow-x: hidden;
+                /* Sembunyikan scrollbar horizontal */
+            }
+
+            /* Optional: Atur lebar maksimum tabel jika ingin mengaktifkan scrollbar horizontal */
+            .scrollable-table table {
+                max-width: 100%;
+            }
+        </style>
         <form action="{{ route('gradingbj.create') }}" method="post">
             @csrf
             <section class="row">
@@ -42,11 +45,11 @@
                             </td>
                             <td>
                                 <input name="ket" type="text" value="" placeholder="ket"
-                                    class="form-control">
+                                    class="form-control" required>
                             </td>
                             <td>
                                 <input name="partai" type="text" value="" placeholder="partai bj"
-                                    class="form-control">
+                                    class="form-control" required>
                             </td>
 
                         </tr>
@@ -58,15 +61,25 @@
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
-                tambah(id_cetak, tipe, pcs, gr, no_box) {
+                ttlRp: 0,
+                ttlCostCabut: 0,
+                ttlCostCetak: 0,
+                numberFormat(value) {
+                    return parseFloat(value).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                },
+                tambah(id_cetak, tipe, pcs, gr, no_box, ttl_rp, cost_cabut, cost_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
+            
                     selectedItem.push({
                         id_cetak: id_cetak,
                         no_box: no_box,
                         tipe: tipe,
                         pcs_akhir: parseFloat(pcs),
                         gr_akhir: parseFloat(gr),
+                        ttl_rp: parseFloat(ttl_rp),
+                        cost_cabut: parseFloat(cost_cabut),
+                        cost_cetak: parseFloat(cost_cetak),
                     });
             
                     const index = cetak.findIndex(item => item.id_cetak === id_cetak);
@@ -74,6 +87,9 @@
             
                     this.ttlPcs += pcs
                     this.ttlGr += gr
+                    this.ttlRp += ttl_rp
+                    this.ttlCostCabut += cost_cabut
+                    this.ttlCostCetak += cost_cetak
             
                 },
                 hapus(id_cetak) {
@@ -88,76 +104,108 @@
                                 tipe: e.tipe,
                                 pcs_akhir: parseFloat(e.pcs_akhir),
                                 gr_akhir: parseFloat(e.gr_akhir),
+                                ttl_rp: parseFloat(e.ttl_rp),
+                                cost_cabut: parseFloat(e.cost_cabut),
+                                cost_cetak: parseFloat(e.cost_cetak),
                             });
                             const index = selectedItem.findIndex(item => item.id_cetak === e.id_cetak);
                             selectedItem.splice(index, 1);
             
                             this.ttlPcs -= e.pcs_akhir
                             this.ttlGr -= e.gr_akhir
+                            this.ttlRp -= e.ttl_rp
+                            this.ttlCostCabut -= e.cost_cabut
+                            this.ttlCostCetak -= e.cost_cetak
                         }
                     })
             
             
                 }
             }">
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="scrollable-table">
-                    <table class="table table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="dhead">Tipe</th>
-                                <th class="dhead">No Box</th>
-                                <th class="dhead text-end">Pcs</th>
-                                <th class="dhead text-end">Gr</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template x-for="(ctk, i) in cetak" :key="ctk.no_box">
-                                <tr style="cursor: pointer"
-                                    @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box)">
-                                    <td x-text="ctk.tipe"></td>
-                                    <td x-text="ctk.no_box"></td>
-                                    <td align="right" x-text="ctk.pcs_akhir"></td>
-                                    <td align="right" x-text="ctk.gr_akhir"></td>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="dhead">Tipe</th>
+                                    <th class="dhead">No Box</th>
+                                    <th class="dhead text-end">Pcs</th>
+                                    <th class="dhead text-end">Gr</th>
+                                    <th class="dhead text-end">Ttl Rp</th>
+                                    <th class="dhead text-end">Cost Cabut</th>
+                                    <th class="dhead text-end">Cost Cetak</th>
                                 </tr>
-                            </template>
+                            </thead>
+                            <tbody>
+                                <template x-for="(ctk, i) in cetak" :key="ctk.no_box">
+                                    <tr style="cursor: pointer"
+                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_cabut,ctk.cost_cetak)">
+                                        <td x-text="ctk.tipe"></td>
+                                        <td x-text="ctk.no_box"></td>
+                                        <td align="right" x-text="ctk.pcs_akhir"></td>
+                                        <td align="right" x-text="ctk.gr_akhir"></td>
+                                        <td align="right" x-text="numberFormat(ctk.ttl_rp)"></td>
+                                        <td align="right" x-text="numberFormat(ctk.cost_cabut)"></td>
+                                        <td align="right" x-text="numberFormat(ctk.cost_cetak)"></td>
+                                    </tr>
+                                </template>
 
-                        </tbody>
-                    </table>
-                </div>
-                </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4">
-                    <div class="scrollable-table">
-                    
-                    <table class="table table-hover table-bordered">
-                        <thead class="bg-success">
-                            <tr>
-                                <th class=" text-white">Ket</th>
-                                <th class=" text-white">No Box</th>
-                                <th class=" text-white text-end">Pcs</th>
-                                <th class=" text-white text-end">Gr</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template x-for="(item, i) in selectedItem" :key="item.no_box">
-                                <tr @click="hapus(item.id_cetak)" style="cursor: pointer">
-                                    <td class="d-none">
-                                        <input type="text" name="no_box[]" :value="item.no_box">
-                                        <input type="text" name="pcs_akhir[]" :value="item.pcs_akhir">
-                                        <input type="text" name="gr_akhir[]" :value="item.gr_akhir">
-                                    </td>
-                                    <td x-text="item.tipe"></td>
-                                    <td x-text="item.no_box"></td>
-                                    <td align="right" x-text="item.pcs_akhir"></td>
-                                    <td align="right" x-text="item.gr_akhir"></td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-6">
+                    <div class="scrollable-table">
+
+                        <table class="table table-hover table-bordered">
+                            <thead class="bg-success">
+                                <tr>
+                                    <th class=" text-white">Ket</th>
+                                    <th class=" text-white">No Box</th>
+                                    <th class=" text-white text-end">Pcs</th>
+                                    <th class=" text-white text-end">Gr</th>
+                                    <th class=" text-white text-end">Ttl Rp</th>
+                                    <th class=" text-white text-end">Cost Cabut</th>
+                                    <th class=" text-white text-end">Cost Cetak</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(item, i) in selectedItem" :key="item.no_box">
+                                    <tr @click="hapus(item.id_cetak)" style="cursor: pointer">
+                                        <td class="d-none">
+                                            <input type="text" name="no_box[]" :value="item.no_box">
+                                            <input type="text" name="pcs_akhir[]" :value="item.pcs_akhir">
+                                            <input type="text" name="gr_akhir[]" :value="item.gr_akhir">
+                                            <input type="text" name="ttl_rp[]" :value="item.ttl_rp">
+                                            <input type="text" name="cost_cabut[]" :value="item.cost_cabut">
+                                            <input type="text" name="cost_cetak[]" :value="item.cost_cetak">
+                                        </td>
+                                        <td x-text="item.tipe"></td>
+                                        <td x-text="item.no_box"></td>
+                                        <td align="right" x-text="item.pcs_akhir"></td>
+                                        <td align="right" x-text="item.gr_akhir"></td>
+                                        <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_cetak)"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+
+                                    <th class="text-end" x-text="ttlPcs"></th>
+                                    <th class="text-end" x-text="ttlGr"></th>
+                                    <th class="text-end" x-text="numberFormat(ttlRp)"></th>
+                                    <th class="text-end" x-text="numberFormat(ttlCostCabut)"></th>
+                                    <th class="text-end" x-text="numberFormat(ttlCostCetak)"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                {{-- <div class="col-lg-2">
                     <table class="table">
                         <tr>
                             <td width="70" align="left">
@@ -182,7 +230,7 @@
                             </td>
                         </tr>
                     </table>
-                </div>
+                </div> --}}
             </div>
 
     </x-slot>
