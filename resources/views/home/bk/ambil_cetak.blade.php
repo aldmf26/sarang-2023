@@ -17,16 +17,18 @@
         @php
             $tblBk = DB::table('bk')->where('kategori', 'cetak')->pluck('no_box')->toArray();
             $get = Http::get('https://gudangsarang.ptagafood.com/api/apibk/bkCetakApi');
-            $data = json_decode($get, true); // Convert JSON to associative arrays
+            $data = json_decode($get->getBody()); // Convert JSON to stdClass objects
 
             // Filter the results based on "no_box" values from $tblBk
-            $data = array_filter($data, function ($item) use ($tblBk) {
-                return !in_array($item['no_box'], $tblBk);
+            $filteredData = array_filter((array) $data, function ($item) use ($tblBk) {
+                return !in_array($item->no_box, $tblBk);
             });
 
-            // Convert the filtered data to JSON
-            $result = json_encode($data);
+            // Reindex the array to remove string keys
+            $filteredData = array_values($filteredData);
 
+            // Convert the filtered data to JSON
+            $result = json_encode($filteredData);
         @endphp
 
         <style>
@@ -96,7 +98,6 @@
                     });
             
                     const index = cetak.findIndex(item => item.id_gudang_ctk === id_gudang_ctk);
-            
                     cetak.splice(index, 1);
             
                     this.ttlPcs += parseFloat(pcs)
