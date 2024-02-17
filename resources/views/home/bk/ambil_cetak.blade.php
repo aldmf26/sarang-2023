@@ -85,7 +85,6 @@
                 tambah(id_gudang_ctk, partai_h, tipe, pcs, gr, no_box, ttl_rp) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
-            
                     selectedItem.push({
                         id_gudang_ctk: id_gudang_ctk,
                         no_box: no_box,
@@ -97,6 +96,7 @@
                     });
             
                     const index = cetak.findIndex(item => item.id_gudang_ctk === id_gudang_ctk);
+            
                     cetak.splice(index, 1);
             
                     this.ttlPcs += parseFloat(pcs)
@@ -154,7 +154,7 @@
                                             ctk.pcs_timbang_ulang,
                                             ctk.gr_timbang_ulang,
                                             ctk.no_box,
-                                            ctk.ttl_rp
+                                            ctk.ttl_rp,
                                         )
                                         ">
                                         <td x-text="ctk.partai_h"></td>
