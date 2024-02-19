@@ -121,7 +121,7 @@
                             <th>Grand Total</th>
                             <th class="text-end">{{ number_format($pcs, 0) }}</th>
                             <th class="text-end">{{ number_format($gr, 0) }}</th>
-                            <th class="text-end">{{ number_format($ttl_rp / $gr, 0) }}</th>
+                            <th class="text-end">{{ number_format(empty($gr) ? 0 : $ttl_rp / $gr, 0) }}</th>
                             <th class="text-end">{{ number_format($ttl_rp, 0) }}</th>
                         </tr>
                     </tfoot>
