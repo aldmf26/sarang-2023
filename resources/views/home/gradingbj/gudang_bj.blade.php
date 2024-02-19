@@ -73,8 +73,10 @@
                                 <td>{{ $g->grade }}</td>
                                 <td class="text-end">{{ $g->pcs - $g->pcs_kredit }}</td>
                                 <td class="text-end">{{ $g->gr - $g->gr_kredit }}</td>
-                                <td class="text-end">{{ number_format($g->ttl_rp / $g->gr, 0) }}</td>
-                                <td class="text-end">{{ number_format($g->ttl_rp, 0) }}</td>
+                                <td class="text-end">
+                                    {{ number_format(($g->ttl_rp - $g->ttl_rp_kredit) / ($g->gr - $g->gr_kredit), 0) }}
+                                </td>
+                                <td class="text-end">{{ number_format($g->ttl_rp - $g->ttl_rp_kredit, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
