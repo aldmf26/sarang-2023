@@ -221,7 +221,7 @@ class GradingBjController extends Controller
     public function get_select_grade(Request $r)
     {
         $grade = $r->grade;
-        $cek = DB::selectOne("SELECT grade,sum(pcs - pcs_kredit) as pcs, sum(gr - gr_kredit) as gr, sum(gr * rp_gram) as ttl_rp
+        $cek = DB::selectOne("SELECT grade,sum(pcs - pcs_kredit) as pcs, sum(gr - gr_kredit) as gr, sum((gr * rp_gram) - (gr_kredit * rp_gram_kredit)) as ttl_rp
                     FROM `pengiriman_list_gradingbj` 
                     WHERE grade = '$grade'
                     GROUP BY grade HAVING pcs <> 0 OR gr <> 0");
@@ -245,6 +245,7 @@ class GradingBjController extends Controller
 
             $rpGram = $ttlrpTtlAmbil / $grTtlAmbil;
             $datas = [];
+            $datasBk = [];
             $noGrading = DB::table('pengiriman_list_gradingbj')->orderBy('id_list_grading', 'DESC')->first();
             $noGrading = empty($noGrading) ? 1 : $noGrading->no_grading + 1;
             for ($i = 0; $i < count($r->gr); $i++) {
@@ -253,16 +254,33 @@ class GradingBjController extends Controller
                     'tgl_grading' => $tgl,
                     'grade' => $grade,
                     'pcs_kredit' => $r->pcs[$i],
+                    'no_box' => $r->no_box[$i],
                     'gr_kredit' => $r->gr[$i],
                     'admin' => auth()->user()->name,
-                    'rp_gram' => $rpGram,
+                    'rp_gram_kredit' => $rpGram,
                     'pengawas' => $r->pengawas[$i]
                 ];
-            }
+                $id_pengws = DB::table('users')->where('name', $r->pengawas[$i])->first()->id;
 
+                $datasBk[] = [
+                    'nm_partai' => '1',
+                    'no_box' => $r->no_box[$i],
+                    'tipe' =>'1',
+                    'ket' => '1',
+                    'warna' => '1',
+                    'pengawas' => auth()->user()->name,
+                    'penerima' => $id_pengws,
+                    'pcs_awal' => $r->pcs[$i],
+                    'gr_awal' => $r->gr[$i],
+                    'tgl' => $tgl,
+                    'kategori' => 'sortir'
+                ];
+            }
             DB::table('pengiriman_list_gradingbj')->insert($datas);
+            DB::table('bk')->insert($datasBk);
+
             DB::commit();
-            return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil di tambahkan');
+            return redirect()->route('gradingbj.history_box_kecil')->with('sukses', 'Berhasil di tambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('gradingbj.index')->with('error', $e->getMessage());
@@ -271,7 +289,9 @@ class GradingBjController extends Controller
 
     public function history_box_kecil()
     {
-        $boxKecil = DB::select("SELECT * FROM pengiriman_list_gradingbj");
+        $boxKecil = DB::select("SELECT no_box,grade,pcs_kredit as pcs, gr_kredit as gr,rp_gram_kredit as rp_gram,pengawas,no_grading 
+                    FROM `pengiriman_list_gradingbj` 
+                    WHERE no_box is not null ");
         $data = [
             'title' => 'History Box Kecil',
             'box_kecil' => $boxKecil
