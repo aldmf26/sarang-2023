@@ -87,15 +87,15 @@
                         <th></th>
                         <th class="text-end" x-text="numberFormat(ttlSum('pcs') + ttlSum2('pcs'))"></th>
                         <th class="text-end" x-text="numberFormat(ttlSum('gr') + ttlSum2('gr'))"></th>
+                        <th class="text-end"></th>
+                        <th class="text-end"> </th>
                     </tr>
                 </tfoot>
             </table>
-
         </div>
         <div class="col-lg-4">
             <h6 class="">Grade D </h6>
             <table class="mb-2">
-
                 <tr>
                     <td>Baris</td>
                     <td>
@@ -120,6 +120,7 @@
 
                 .input_grade {
                     font-size: 12px;
+
                 }
             </style>
             <div class="scrollable-table">
@@ -151,17 +152,24 @@
                             <tr>
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
-                                    <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        class="form-control grade input_grade" name="grade[]" required>
+                                    <select autocomplete="off" :count="indexBaris + 1" name="grade[]"
+                                        class="selectGrade" required>
+                                        <option value="">Pilih grade</option>
+                                        @foreach ($tbGradeBentuk as $b)
+                                            <option value="{{ $b->nm_grade }}">{{ $b->nm_grade }}</option>
+                                        @endforeach
+                                    </select>
+                                    {{-- <input autocomplete="off" :count="indexBaris + 1" type="text"
+                                                class="form-control grade input_grade" name="grade[]" required> --}}
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        x-model="pcs[indexBaris]" name="pcs[]" class="form-control pcs input_grade"
-                                        required>
+                                        x-model="pcs[indexBaris]" name="pcs[]"
+                                        class="form-control pcs input_grade text-end" required>
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"name="gr[]"
-                                        x-model="gr[indexBaris]" class="form-control gr input_grade" required>
+                                        x-model="gr[indexBaris]" class="form-control gr input_grade text-end" required>
 
                                 </td>
                             </tr>
@@ -211,15 +219,16 @@
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        class="form-control grade input_grade" name="grade[]">
+                                        class="form-control grade input_grade" name="grade[]" required>
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        x-model="pcs2[indexBaris]" name="pcs[]" class="form-control pcs input_grade">
+                                        x-model="pcs2[indexBaris]" name="pcs[]"
+                                        class="form-control pcs input_grade text-end" required>
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"name="gr[]"
-                                        x-model="gr2[indexBaris]" class="form-control gr input_grade">
+                                        x-model="gr2[indexBaris]" class="form-control gr input_grade text-end" required>
 
                                 </td>
                             </tr>

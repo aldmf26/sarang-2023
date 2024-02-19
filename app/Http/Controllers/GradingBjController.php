@@ -108,7 +108,8 @@ class GradingBjController extends Controller
     {
         return $data = [
             'no_grading' => $no_grading,
-            'tbGrade' => DB::table('tb_grade')->get(),
+            'tbGradeBentuk' => DB::table('tb_grade')->where('status', 'bentuk')->get(),
+            'tbGradeTurun' => DB::table('tb_grade')->where('status', 'turun')->get(),
             'listGrading' => DB::table('pengiriman_list_gradingbj')->where('no_grading', $no_grading)->get(),
             'box' => DB::table($this->nmTbl)->where('no_grading', $no_grading)->get()
         ];
