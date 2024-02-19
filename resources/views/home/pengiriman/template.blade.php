@@ -2,14 +2,14 @@
     <thead>
         <tr>
             <!-- Table 1 headers -->
-            <th>Partai</th>
+            <th>Partai Ratna</th>
             <th>Grade</th>
             <th>Tipe</th>
             <th>Pcs Awal</th>
             <th>Gr Awal</th>
             <th>Pcs Akhir</th>
             <th>Gr Akhir</th>
-            <th>No Box</th>
+            <th>No Barcode</th>
             <th>Cek Akhir</th>
             <th>Ket</th>
         </tr>
