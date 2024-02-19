@@ -27,6 +27,8 @@
             // Convert the filtered data to JSON
             $result = json_encode($data);
 
+            dd($result);
+
         @endphp
 
         <style>

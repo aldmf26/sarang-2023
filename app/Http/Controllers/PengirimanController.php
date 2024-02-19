@@ -22,11 +22,10 @@ class PengirimanController extends Controller
             'title' => 'Siap Sortir',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'pengiriman' => DB::select("SELECT a.* FROM `pengiriman`as a
-            LEFT JOIN tb_grade as b on a.grade = b.nm_grade
-            LEFT JOIN pengiriman_packing_list as c on a.no_nota_packing_list = c.no_nota
-            WHERE a.tgl_pengiriman BETWEEN '$tgl1' and '$tgl2' AND a.no_nota_packing_list = ''
-            ORDER BY b.urutan asc;")
+            'pengiriman' => DB::select("SELECT 
+             FROM bk as a 
+             
+             ")
         ];
         return view('home.pengiriman.index', $data);
     }

@@ -355,15 +355,15 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('packinglist.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/tambahgr',function(){
+            Route::get('/tambahgr', function () {
                 return view('tambahgr');
             });
-            Route::post('/tambahgr',function(Request $r){
-                for ($i=0; $i < count($r->nm_grade); $i++) { 
-                    if($r->nm_grade[$i] != '') {
+            Route::post('/tambahgr', function (Request $r) {
+                for ($i = 0; $i < count($r->nm_grade); $i++) {
+                    if ($r->nm_grade[$i] != '') {
                         DB::table('tb_grade')->insert([
                             'nm_grade' => $r->nm_grade[$i],
-                            'urutan' => $i+1
+                            'urutan' => $i + 1
                         ]);
                     }
                 }

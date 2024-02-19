@@ -32,7 +32,7 @@
                                 <input readonly type="text" value="{{ $box[0]->partai }}" placeholder="partai bj"
                                     class="form-control">
                             </td>
-    
+
                         </tr>
                     </table>
                     <table class="table table-hover table-bordered">
@@ -83,43 +83,43 @@
         </div>
     </div>
     <div class="tab-pane fade show" id="grade" role="tabpanel" aria-labelledby="grade-tab">
-            <div class="row">
-                <div class="col-lg-12">
-                    <table class="table table-hover table-bordered">
-                        <thead class="">
-                            <tr>
-                                <th class="dhead ">Grade</th>
-                                <th class="dhead  text-end">Pcs </th>
-                                <th class="dhead  text-end">Gr </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-hover table-bordered">
+                    <thead class="">
+                        <tr>
+                            <th class="dhead ">Grade</th>
+                            <th class="dhead  text-end">Pcs </th>
+                            <th class="dhead  text-end">Gr </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $pcs = 0;
+                            $gr = 0;
+                        @endphp
+                        @foreach ($listGrading as $no => $d)
                             @php
-                                $pcs = 0;
-                                $gr = 0;
+                                $pcs += $d->pcs;
+                                $gr += $d->gr;
                             @endphp
-                            @foreach ($listGrading as $no => $d)
-                                @php
-                                    $pcs += $d->pcs;
-                                    $gr += $d->gr;
-                                @endphp
-                                <tr>
-                                    <td>{{ $d->grade }}</td>
-                                    <td align="right">{{ number_format($d->pcs, 0) }}</td>
-                                    <td align="right">{{ number_format($d->gr, 0) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
                             <tr>
-                                <th class="text-end">Grand Total</th>
-                                <th class="text-end">{{ number_format($pcs, 0) }}</th>
-                                <th class="text-end">{{ number_format($gr, 0) }}</th>
+                                <td>{{ $d->grade }}</td>
+                                <td align="right">{{ number_format($d->pcs, 0) }}</td>
+                                <td align="right">{{ number_format($d->gr, 0) }}</td>
                             </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-end">Grand Total</th>
+                            <th class="text-end">{{ number_format($pcs, 0) }}</th>
+                            <th class="text-end">{{ number_format($gr, 0) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
+        </div>
     </div>
 
 </div>

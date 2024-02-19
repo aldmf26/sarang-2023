@@ -160,7 +160,7 @@
                         <table class="table table-hover table-bordered">
                             <thead class="bg-success">
                                 <tr>
-                                    <th class=" text-white">Ket</th>
+                                    <th class=" text-white">Tipe</th>
                                     <th class=" text-white">No Box</th>
                                     <th class=" text-white text-end">Pcs</th>
                                     <th class=" text-white text-end">Gr</th>
@@ -179,6 +179,7 @@
                                             <input type="text" name="ttl_rp[]" :value="item.ttl_rp">
                                             <input type="text" name="cost_cabut[]" :value="item.cost_cabut">
                                             <input type="text" name="cost_cetak[]" :value="item.cost_cetak">
+                                            <input type="text" name="tipe[]" :value="item.tipe">
                                         </td>
                                         <td x-text="item.tipe"></td>
                                         <td x-text="item.no_box"></td>

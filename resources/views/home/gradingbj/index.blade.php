@@ -93,7 +93,7 @@
         </section>
         <style>
             .modal-lg-max {
-                max-width: 1000px
+                max-width: 1500px
             }
         </style>
         <form action="{{ route('gradingbj.create_grading') }}" method="post">

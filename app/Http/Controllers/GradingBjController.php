@@ -69,6 +69,7 @@ class GradingBjController extends Controller
                 'ttl_rp' => $r->ttl_rp[$i],
                 'cost_cabut' => $r->cost_cabut[$i],
                 'cost_cetak' => $r->cost_cetak[$i],
+                'tipe' => $r->tipe[$i]
             ];
         }
 

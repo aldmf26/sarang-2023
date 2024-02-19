@@ -12,10 +12,13 @@
     ttlSum2: function(type) {
         const array = type === 'pcs' ? this.pcs2 : this.gr2;
         return array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
-    }
+    },
+    numberFormat(value) {
+        return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
+    },
 }" class="tab-pane fade show {{ $form == 'dForm' ? 'active' : '' }}" id="{{ $form }}"
     role="tabpanel" aria-labelledby="sum-tab">
-    <div class="row mb-1">
+    {{-- <div class="row mb-1">
         <div class="col-lg-2 d-flex align-items-center">
             <h6>Form Input {{ $form == 'dForm' ? 'D' : 'V' }}</h6>
         </div>
@@ -23,8 +26,8 @@
             <h6>Ttl Pcs : <span x-text="ttlSum('pcs') + ttlSum2('pcs')">0</span></h6>
             <h6>Ttl Gr : <span x-text="ttlSum('gr') + ttlSum2('gr')">0</span></h6>
         </div>
-    </div>
-    <hr>
+    </div> --}}
+    {{-- <hr> --}}
 
     <div class="row">
         <div class="col-lg-4">
@@ -36,35 +39,54 @@
                 <thead class="">
                     <tr>
                         <th class="dhead ">No Box</th>
+                        <th class="dhead ">Tipe</th>
                         <th class="dhead  text-end">Pcs Akhir</th>
                         <th class="dhead  text-end">Gr Akhir</th>
+                        <th class="dhead  text-end">Rp/gram</th>
+                        <th class="dhead  text-end">Ttl Rp</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $pcs_akhir = 0;
                         $gr_akhir = 0;
+                        $ttl_rp = 0;
                     @endphp
                     @foreach ($box as $d)
                         @php
-                            $pcs = $d->pcs_akhir == 0 ?  $d->pcs_awal : $d->pcs_akhir;
-                            $gr = $d->gr_akhir == 0 ?  $d->gr_awal : $d->gr_akhir;
+                            $pcs = $d->pcs_akhir == 0 ? $d->pcs_awal : $d->pcs_akhir;
+                            $gr = $d->gr_akhir == 0 ? $d->gr_awal : $d->gr_akhir;
 
                             $pcs_akhir += $pcs;
                             $gr_akhir += $gr;
+                            $ttl_rp += $d->ttl_rp + $d->cost_cabut + $d->cost_cetak;
                         @endphp
                         <tr>
                             <td>{{ $d->no_box }}</td>
+                            <td>{{ $d->tipe }}</td>
                             <td align="right">{{ number_format($pcs, 0) }}</td>
                             <td align="right">{{ number_format($gr, 0) }}</td>
+                            <td align="right">
+                                {{ number_format(($d->ttl_rp + $d->cost_cabut + $d->cost_cetak) / $gr, 0) }}</td>
+                            <td align="right">
+                                {{ number_format($d->ttl_rp + $d->cost_cabut + $d->cost_cetak, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>{{ count($box) }}</th>
+                        <th></th>
                         <th class="text-end">{{ number_format($pcs_akhir, 0) }}</th>
                         <th class="text-end">{{ number_format($gr_akhir, 0) }}</th>
+                        <th class="text-end">{{ number_format($ttl_rp / $gr_akhir, 0) }}</th>
+                        <th class="text-end">{{ number_format($ttl_rp, 0) }}</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th class="text-end" x-text="numberFormat(ttlSum('pcs') + ttlSum2('pcs'))"></th>
+                        <th class="text-end" x-text="numberFormat(ttlSum('gr') + ttlSum2('gr'))"></th>
                     </tr>
                 </tfoot>
             </table>
@@ -95,19 +117,23 @@
                 .scrollable-table table {
                     max-width: 100%;
                 }
+
+                .input_grade {
+                    font-size: 12px;
+                }
             </style>
             <div class="scrollable-table">
-                <table class="table">
+                <table class="table table-bordered">
                     <tr>
                         <td></td>
                         <td>
                             <h6>Total</h6>
                         </td>
-                        <td>
-                            <h6 x-text="ttlSum('pcs')">0</h6>
+                        <td class="text-end">
+                            <h6 x-text="numberFormat(ttlSum('pcs'))">0</h6>
                         </td>
-                        <td>
-                            <h6 x-text="ttlSum('gr')">0</h6>
+                        <td class="text-end">
+                            <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                         </td>
                     </tr>
                     <thead>
@@ -126,15 +152,16 @@
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        class="form-control grade" name="grade[]">
+                                        class="form-control grade input_grade" name="grade[]" required>
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        x-model="pcs[indexBaris]" name="pcs[]" class="form-control pcs">
+                                        x-model="pcs[indexBaris]" name="pcs[]" class="form-control pcs input_grade"
+                                        required>
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"name="gr[]"
-                                        x-model="gr[indexBaris]" class="form-control gr">
+                                        x-model="gr[indexBaris]" class="form-control gr input_grade" required>
 
                                 </td>
                             </tr>
@@ -156,17 +183,17 @@
                         </td>
                     </tr>
                 </table>
-                <table class="table">
+                <table class="table table-bordered">
                     <tr>
                         <td></td>
                         <td>
                             <h6>Total</h6>
                         </td>
-                        <td>
-                            <h6 x-text="ttlSum2('pcs')">0</h6>
+                        <td class="text-end">
+                            <h6 x-text="numberFormat(ttlSum2('pcs'))">0</h6>
                         </td>
-                        <td>
-                            <h6 x-text="ttlSum2('gr')">0</h6>
+                        <td class="text-end">
+                            <h6 x-text="numberFormat(ttlSum2('gr'))">0</h6>
                         </td>
                     </tr>
                     <thead>
@@ -184,15 +211,15 @@
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        class="form-control grade" name="grade[]">
+                                        class="form-control grade input_grade" name="grade[]">
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        x-model="pcs2[indexBaris]" name="pcs[]" class="form-control pcs">
+                                        x-model="pcs2[indexBaris]" name="pcs[]" class="form-control pcs input_grade">
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"name="gr[]"
-                                        x-model="gr2[indexBaris]" class="form-control gr">
+                                        x-model="gr2[indexBaris]" class="form-control gr input_grade">
 
                                 </td>
                             </tr>
