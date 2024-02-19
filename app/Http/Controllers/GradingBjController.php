@@ -217,14 +217,50 @@ class GradingBjController extends Controller
     public function get_select_grade(Request $r)
     {
         $grade = $r->grade;
-        $cek = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp
+        $cek = DB::selectOne("SELECT grade,sum(pcs - pcs_kredit) as pcs, sum(gr - gr_kredit) as gr, sum(gr * rp_gram) as ttl_rp
                     FROM `pengiriman_list_gradingbj` 
                     WHERE grade = '$grade'
-                    GROUP BY grade");
+                    GROUP BY grade HAVING pcs <> 0 OR gr <> 0");
         return json_encode([
             'pcs' => $cek->pcs,
             'gr' => $cek->gr,
             'ttl_rp' => $cek->ttl_rp
         ]);
+    }
+
+    public function create_ambil_box_kecil(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $tgl = $r->tgl;
+            $grade = $r->grade;
+            $pcsTtlAmbil = $r->pcsTtlAmbil;
+            $grTtlAmbil = $r->grTtlAmbil;
+            $ttlrpTtlAmbil = str()->remove('.', $r->ttlrpTtlAmbil);
+
+            $rpGram = $ttlrpTtlAmbil / $grTtlAmbil;
+            $datas = [];
+            $noGrading = DB::table('pengiriman_list_gradingbj')->orderBy('id_list_grading', 'DESC')->first();
+            $noGrading = empty($noGrading) ? 1 : $noGrading->no_grading + 1;
+            for ($i = 0; $i < count($r->gr); $i++) {
+                $datas[] = [
+                    'no_grading' => $noGrading,
+                    'tgl_grading' => $tgl,
+                    'grade' => $grade,
+                    'pcs_kredit' => $r->pcs[$i],
+                    'gr_kredit' => $r->gr[$i],
+                    'admin' => auth()->user()->name,
+                    'rp_gram' => $rpGram * $r->gr[$i],
+                    'pengawas' => $r->pengawas[$i]
+                ];
+            }
+
+            DB::table('pengiriman_list_gradingbj')->insert($datas);
+            DB::commit();
+            return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil di tambahkan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('gradingbj.index')->with('error', $e->getMessage());
+        }
     }
 }

@@ -117,9 +117,12 @@
         {{-- <x-theme.modal idModal="gudang" btnSave="T" title="Gudang Bahan Jadi">
             @include('home.gradingbj.gudang_bj')
         </x-theme.modal> --}}
-        <x-theme.modal idModal="ambil_box_kecil" size="modal-lg" title="Ambil Box Kecil">
-            <div id="load_ambil_box_kecil"></div>
-        </x-theme.modal>
+        <form action="{{ route('gradingbj.create_ambil_box_kecil') }}" method="post">
+            @csrf
+            <x-theme.modal idModal="ambil_box_kecil" size="modal-lg" title="Ambil Box Kecil">
+                <div id="load_ambil_box_kecil"></div>
+            </x-theme.modal>
+        </form>
         @section('scripts')
             <script>
                 pencarian('pencarianGudang', 'gudang')
@@ -212,12 +215,30 @@
                         },
                         dataType: "json",
                         success: function(r) {
-                            $('.pcs_ambil').val(r.pcs)
-                            $('.gr_ambil').val(r.gr)
-                            $('.ttlrp_ambil').val(r.ttl_rp.toLocaleString('id-ID'))
+                            $('.pcsTtl_ambil').val(r.pcs)
+                            $('.grTtl_ambil').val(r.gr)
+                            $('.ttlrpTtl_ambil').val(r.ttl_rp.toLocaleString('id-ID'))
                         }
                     });
                 })
+
+                function validasiAmbil(inputClass, totalInputName) {
+                    $(document).on('keyup', '.'+inputClass, function() {
+                        let totalPcs = 0;
+                        $('.'+inputClass).each(function() {
+                            let pcsValue = parseInt($(this).val()) || 0;
+                            totalPcs += pcsValue;
+                        });
+                        const ttlPcsGrade = $('.'+totalInputName).val()
+                        if (totalPcs > ttlPcsGrade) {
+                            alert('Ambil Melebihi stok gudang bj')
+                        }
+                    });
+                }
+                validasiAmbil('pcsAmbil', 'pcsTtl_ambil')
+                validasiAmbil('grAmbil', 'grTtl_ambil')
+                // Event listener untuk input pcsAmbil
+               
             </script>
         @endsection
     </x-slot>

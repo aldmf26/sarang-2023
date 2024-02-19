@@ -345,6 +345,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/gudang_bj', 'gudang_bj')->name('gudang_bj');
             Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
             Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
+            Route::post('/create_ambil_box_kecil', 'create_ambil_box_kecil')->name('create_ambil_box_kecil');
             Route::post('/create', 'create')->name('create');
             Route::post('/create_grading', 'create_grading')->name('create_grading');
             Route::get('/load_grading', 'load_grading')->name('load_grading');
