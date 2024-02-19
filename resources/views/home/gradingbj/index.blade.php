@@ -161,9 +161,6 @@
                             $("#load_grading").html(r);
                             $('#grading').modal('show')
                             tekanBawah()
-                            $('.selectGrade').select2({
-                                dropdownParent: $('#grading .modal-content')
-                            })
 
                         }
                     });
