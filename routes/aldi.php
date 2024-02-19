@@ -342,6 +342,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
             Route::post('/create', 'create')->name('create');
             Route::post('/create_grading', 'create_grading')->name('create_grading');
             Route::get('/load_grading', 'load_grading')->name('load_grading');

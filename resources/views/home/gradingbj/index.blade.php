@@ -1,7 +1,10 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <h6 class="float-start">{{ $title }}</h6>
-        <x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Tambah" />
+        <x-theme.button href="#" idModal="gudang" modal="Y" icon="fa-warehouse" addClass="float-end"
+            teks="Gudang Sudah Grade" />
+        <x-theme.button href="#" icon="fa-plus" addClass="float-end ambil_box_kecil" teks="Ambil Box Kecil" />
+        <x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Ambil dari ctk" />
         <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
             teks="Import" />
         <form action="{{ route('gradingbj.import') }}" enctype="multipart/form-data" method="post">
@@ -105,8 +108,16 @@
         <x-theme.modal idModal="detail" btnSave="T" title="Detail">
             <div id="load_detail"></div>
         </x-theme.modal>
+        <x-theme.modal idModal="gudang" btnSave="T" title="Gudang Bahan Jadi">
+            @include('home.gradingbj.gudang_bj')
+        </x-theme.modal>
+        <x-theme.modal idModal="ambil_box_kecil" size="modal-lg" title="Ambil Box Kecil">
+            <div id="load_ambil_box_kecil"></div>
+        </x-theme.modal>
         @section('scripts')
             <script>
+                pencarian('pencarianGudang', 'gudang')
+
                 function tekanBawah() {
                     function navigateInputs(className, e) {
                         if (e.keyCode === 40 || e.keyCode === 38) {
@@ -150,7 +161,9 @@
                             $("#load_grading").html(r);
                             $('#grading').modal('show')
                             tekanBawah()
-
+                            $('.selectGrade').select2({
+                                dropdownParent: $('#grading .modal-content')
+                            })
 
                         }
                     });
@@ -172,6 +185,18 @@
                         }
                     });
                 })
+
+                $(".ambil_box_kecil").click(function(e) {
+                    e.preventDefault();
+                    $('#ambil_box_kecil').modal('show')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('gradingbj.load_ambil_box_kecil') }}",
+                        success: function(r) {
+                            $("#load_ambil_box_kecil").html(r);
+                        }
+                    });
+                });
             </script>
         @endsection
     </x-slot>

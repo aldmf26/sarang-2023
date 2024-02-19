@@ -17,7 +17,8 @@ class GradingBjController extends Controller
             'title' => 'Grading BJ',
             'datas' => DB::select("SELECT a.no_grading,sum(pcs_awal) as pcs_awal, sum(gr_awal) as gr_awal,a.tgl,a.partai,a.ket,count(a.no_box) as ttl_box , sum(a.ttl_rp + a.cost_cabut + a.cost_cetak) as ttl_rp
             FROM `pengiriman_gradingbj` as a
-            GROUP BY no_grading ORDER BY a.no_grading DESC;")
+            GROUP BY no_grading ORDER BY a.no_grading DESC;"),
+            'gudangbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade")
         ];
         return view('home.gradingbj.index', $data);
     }
