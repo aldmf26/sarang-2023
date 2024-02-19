@@ -254,7 +254,7 @@ class GradingBjController extends Controller
                     'pcs_kredit' => $r->pcs[$i],
                     'gr_kredit' => $r->gr[$i],
                     'admin' => auth()->user()->name,
-                    'rp_gram' => $rpGram * $r->gr[$i],
+                    'rp_gram' => $rpGram,
                     'pengawas' => $r->pengawas[$i]
                 ];
             }
@@ -266,5 +266,15 @@ class GradingBjController extends Controller
             DB::rollBack();
             return redirect()->route('gradingbj.index')->with('error', $e->getMessage());
         }
+    }
+
+    public function history_box_kecil()
+    {
+        $boxKecil = DB::select("SELECT * FROM pengiriman_list_gradingbj");
+        $data = [
+            'title' =>'History Box Kecil',
+            'box_kecil' => $boxKecil
+        ];
+        return view('home.gradingbj.history_box_kecil',$data);
     }
 }

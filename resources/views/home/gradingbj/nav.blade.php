@@ -12,5 +12,9 @@
         <a class="nav-link {{$route == 'gradingbj.index' ? 'active' : ''}}" aria-current="page"
             href="{{ route("gradingbj.index") }}">History Ambil Cetak</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{$route == 'gradingbj.history_box_kecil' ? 'active' : ''}}" aria-current="page"
+            href="{{ route("gradingbj.history_box_kecil") }}">History Ambil Box Kecil</a>
+    </li>
  
 </ul>
