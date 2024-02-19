@@ -1,8 +1,8 @@
-<x-theme.app>
+<x-theme.app sizeCard="10">
     <x-slot name="cardHeader">
         <h6 class="float-start">{{ $title }}</h6>
-        <x-theme.button href="#" idModal="gudang" modal="Y" icon="fa-warehouse" addClass="float-end"
-            teks="Gudang Sudah Grade" />
+        {{-- <x-theme.button href="#" idModal="gudang" modal="Y" icon="fa-warehouse" addClass="float-end"
+            teks="Gudang Sudah Grade" /> --}}
         <x-theme.button href="#" icon="fa-plus" addClass="float-end ambil_box_kecil" teks="Ambil Box Kecil" />
         <x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Ambil dari ctk" />
         <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
@@ -53,6 +53,32 @@
         <section class="row">
             <div class="col-lg-8 mb-3">
                 @include('home.gradingbj.nav')
+            </div>
+            <div class="col-lg-12">
+                <table class="table table-bordered" id="table1">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Grade</th>
+                            <th class="text-end">Pcs</th>
+                            <th class="text-end">Gram</th>
+                            <th class="text-end">Rp Gram</th>
+                            <th class="text-end">Ttl Rp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($gudangbj as $no => $g)
+                            <tr>
+                                <td>{{ $no + 1 }}</td>
+                                <td>{{ $g->grade }}</td>
+                                <td class="text-end">{{ $g->pcs - $g->pcs_kredit }}</td>
+                                <td class="text-end">{{ $g->gr - $g->gr_kredit }}</td>
+                                <td class="text-end">{{ number_format($g->ttl_rp / $g->gr, 0) }}</td>
+                                <td class="text-end">{{ number_format($g->ttl_rp, 0) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
         </section>

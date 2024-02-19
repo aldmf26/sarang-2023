@@ -114,9 +114,9 @@
         <x-theme.modal idModal="detail" btnSave="T" title="Detail">
             <div id="load_detail"></div>
         </x-theme.modal>
-        <x-theme.modal idModal="gudang" btnSave="T" title="Gudang Bahan Jadi">
+        {{-- <x-theme.modal idModal="gudang" btnSave="T" title="Gudang Bahan Jadi">
             @include('home.gradingbj.gudang_bj')
-        </x-theme.modal>
+        </x-theme.modal> --}}
         <x-theme.modal idModal="ambil_box_kecil" size="modal-lg" title="Ambil Box Kecil">
             <div id="load_ambil_box_kecil"></div>
         </x-theme.modal>

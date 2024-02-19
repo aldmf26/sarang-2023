@@ -14,7 +14,7 @@ class GradingBjController extends Controller
     public function getDataMaster($jenis)
     {
         $arr = [
-            'gradingbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade"),
+            'gradingbj' => DB::select("SELECT grade, sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp, sum(pcs) as pcs_kredit, sum(gr_kredit) as gr_kredit FROM `pengiriman_list_gradingbj` GROUP BY grade"),
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];
