@@ -229,7 +229,7 @@
                                     <select autocomplete="off" :count="indexBaris + 1" name="grade[]"
                                         class="selectGrade" required x-init="initSelect2">
                                         <option value="">Pilih grade</option>
-                                        @foreach ($tbGradeBentuk as $b)
+                                        @foreach ($tbGradeTurun as $b)
                                             <option value="{{ $b->nm_grade }}">{{ $b->nm_grade }}</option>
                                         @endforeach
                                     </select>
