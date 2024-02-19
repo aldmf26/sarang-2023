@@ -17,18 +17,18 @@
         @php
             $tblBk = DB::table('bk')->where('kategori', 'cetak')->pluck('no_box')->toArray();
             $get = Http::get('https://gudangsarang.ptagafood.com/api/apibk/bkCetakApi');
-            $data = json_decode($get, true); // Convert JSON to associative arrays
+            $data = json_decode($get->getBody()); // Convert JSON to stdClass objects
 
             // Filter the results based on "no_box" values from $tblBk
-            $data = array_filter($data, function ($item) use ($tblBk) {
-                return !in_array($item['no_box'], $tblBk);
+            $filteredData = array_filter((array) $data, function ($item) use ($tblBk) {
+                return !in_array($item->no_box, $tblBk);
             });
 
+            // Reindex the array to remove string keys
+            $filteredData = array_values($filteredData);
+
             // Convert the filtered data to JSON
-            $result = json_encode($data);
-
-            dd($result);
-
+            $result = json_encode($filteredData);
         @endphp
 
         <style>
@@ -37,6 +37,28 @@
                 line-height: 36px;
                 font-size: 12px;
                 width: 120px !important;
+            }
+
+            .scrollable-table {
+                max-height: 300px;
+                /* Atur tinggi maksimum tabel */
+                overflow-y: auto;
+                /* Tampilkan scrollbar vertikal jika terlalu banyak baris */
+                overflow-x: hidden;
+                /* Sembunyikan scrollbar horizontal */
+            }
+
+            /* Optional: Atur lebar maksimum tabel jika ingin mengaktifkan scrollbar horizontal */
+            .scrollable-table table {
+                max-width: 100%;
+            }
+
+            thead {
+                position: sticky;
+                top: 0;
+                background-color: #f1f1f1;
+                /* Warna latar belakang header yang tetap */
+                z-index: 1;
             }
         </style>
 
@@ -98,7 +120,6 @@
                     });
             
                     const index = cetak.findIndex(item => item.id_gudang_ctk === id_gudang_ctk);
-            
                     cetak.splice(index, 1);
             
                     this.ttlPcs += parseFloat(pcs)

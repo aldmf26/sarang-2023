@@ -168,7 +168,7 @@ class PengirimanController extends Controller
                     'gr' => $row[4],
                     'pcs_akhir' => $row[5],
                     'gr_akhir' => $row[6],
-                    'gr_naik' => $row[6] * 0.10,
+                    'gr_naik' => $row[6] * 0.10,            
                     'no_box' => $row[7],
                     'cek_akhir' => $row[8],
                     'ket' => $row[9],
@@ -177,7 +177,7 @@ class PengirimanController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()->route('pengiriman.index')->with('sukses', 'Data berhasil import');
+            return redirect()->route('packinglist.index')->with('sukses', 'Data berhasil import');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());

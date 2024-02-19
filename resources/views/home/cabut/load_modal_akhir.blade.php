@@ -104,19 +104,17 @@
                                 class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->pcs_hcr }}" name="pcs_hcr{{ $i + 1 }}[]"
-                                type="text" class="form-control text-end pcsHcrKeyup"
-                                count="{{ $i + 1 }}">
+                            <input value="{{ $d->pcs_hcr }}" name="pcs_hcr{{ $i + 1 }}[]" type="text"
+                                class="form-control text-end pcsHcrKeyup" count="{{ $i + 1 }}">
                         </td>
-                        
+
                         <td class="susut{{ $i + 1 }} text-end">
                             {{ number_format($hasil->susut == 100 ? 0 : $hasil->susut, 0) }} %
                         </td>
 
 
                         <td align="right" class="h6">
-                            <span
-                                class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
+                            <span class="ttlRpKeyup{{ $i + 1 }}">{{ number_format($hasil->ttl_rp, 0) }}</span>
                         </td>
                         <td>
                             <select name="bulan{{ $i + 1 }}[]" class="form-control">
@@ -134,16 +132,16 @@
                         <td>
 
                             <button style="font-size: 12px"
-                                class="btn{{$i+1}} btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
+                                class="btn{{ $i + 1 }} btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
 
-                                @php
-                                    $eot = $d->eot ?? 0;
-                                @endphp
-                            {{-- @if ($eot >= rumusTotalRp($d)->batas_eot)
-                            @endif --}}
-                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
-                                id_cabut="{{ $d->id_cabut }}" href="#" >Selesai </a>
+                            @php
+                                $eot = $d->eot ?? 0;
+                            @endphp
+                            @if ($eot >= rumusTotalRp($d)->batas_eot || !empty($d->gr_akhir))
+                                <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
+                                    id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
+                            @endif
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>

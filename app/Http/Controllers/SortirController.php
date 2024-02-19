@@ -439,7 +439,7 @@ class SortirController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $bulan =  $r->bulan;
+        $bulan =  $r->bulan;    
         $tahun =  $r->tahun;
         $view = 'home.sortir.export_rekap';
         $tbl = Sortir::queryRekap($bulan, $tahun);
