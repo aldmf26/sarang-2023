@@ -101,6 +101,7 @@ class GradingBjController extends Controller
             DB::beginTransaction();
             $datas = [];
             for ($i = 0; $i < count($r->gr); $i++) {
+                $rp_gram = $r->ttl_rp / $r->ttl_gr;
                 if ($r->gr[$i] != 0 || !empty($r->gr[$i])) {
                     $datas[] = [
                         'grade' => $r->grade[$i],
@@ -109,6 +110,7 @@ class GradingBjController extends Controller
                         'no_grading' => $r->no_grading,
                         'admin' => auth()->user()->name,
                         'tgl_grading' => date('Y-m-d'),
+                        'rp_gram' => $rp_gram
                     ];
                 }
             }
