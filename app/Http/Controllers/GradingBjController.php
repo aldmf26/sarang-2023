@@ -11,16 +11,33 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class GradingBjController extends Controller
 {
     protected $nmTbl = 'pengiriman_gradingbj';
-    public function index()
+    public function getDataMaster($jenis)
+    {
+        $arr = [
+            'gradingbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade")
+        ];
+        return $arr[$jenis];
+    }
+    public function index(Request $r)
     {
         $data = [
             'title' => 'Grading BJ',
             'datas' => DB::select("SELECT a.no_grading,sum(pcs_awal) as pcs_awal, sum(gr_awal) as gr_awal,a.tgl,a.partai,a.ket,count(a.no_box) as ttl_box , sum(a.ttl_rp + a.cost_cabut + a.cost_cetak) as ttl_rp
             FROM `pengiriman_gradingbj` as a
             GROUP BY no_grading ORDER BY a.no_grading DESC;"),
-            'gudangbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade")
+            'gudangbj' => $this->getDataMaster('gradingbj'),
+            // 'kategori' => $kategori
         ];
+        
         return view('home.gradingbj.index', $data);
+    }
+
+    public function gudang_bj()
+    {
+        $data = [
+            'title'  => 'Grading Bj'
+        ];
+        return view('home.gradingbj.gudang_bj',$data);
     }
 
     public function add()
@@ -185,7 +202,9 @@ class GradingBjController extends Controller
     public function load_ambil_box_kecil()
     {
         $data = [
-            'title' => 'Tambah Box Kecil'
+            'title' => 'Tambah Box Kecil',
+            'gudangbj' => $this->getDataMaster('gradingbj')
+
         ];
         return view('home.gradingbj.load_ambil_box_kecil', $data);
     }
