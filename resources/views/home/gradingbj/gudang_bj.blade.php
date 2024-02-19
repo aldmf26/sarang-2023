@@ -1,8 +1,8 @@
 <x-theme.app sizeCard="10">
     <x-slot name="cardHeader">
         <h6 class="float-start">{{ $title }}</h6>
-        <x-theme.button href="#" idModal="gudang" modal="Y" icon="fa-warehouse" addClass="float-end"
-            teks="Gudang Sudah Grade" />
+        {{-- <x-theme.button href="#" idModal="gudang" modal="Y" icon="fa-warehouse" addClass="float-end"
+            teks="Gudang Sudah Grade" /> --}}
         <x-theme.button href="#" icon="fa-plus" addClass="float-end ambil_box_kecil" teks="Ambil Box Kecil" />
         <x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Ambil dari ctk" />
         <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"

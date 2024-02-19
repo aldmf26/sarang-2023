@@ -93,8 +93,7 @@
                         <th class="text-end" x-text="numberFormat(ttlSum('pcs') + ttlSum2('pcs'))"></th>
                         <th class="text-end" x-text="numberFormat(ttlSum('gr') + ttlSum2('gr'))"></th>
                         <th class="text-end">
-                            <input type="hidden" name="ttl_gr" x-model="totalGr"
-                                x-bind:value="ttlSum('gr') + ttlSum2('gr')">
+                            <input type="hidden" name="ttl_gr" x-bind:value="ttlSum('gr') + ttlSum2('gr')">
                             <input type="hidden" name="ttl_rp" value="{{ round($ttl_rp) }}">
                         </th>
                         <th class="text-end"> </th>
@@ -169,7 +168,7 @@
                                         @endforeach
                                     </select>
                                     {{-- <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                                class="form-control grade input_grade" name="grade[]" required> --}}
+                                        class="form-control grade input_grade" name="grade[]" required> --}}
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
@@ -230,7 +229,7 @@
                                     <select autocomplete="off" :count="indexBaris + 1" name="grade[]"
                                         class="selectGrade" required x-init="initSelect2">
                                         <option value="">Pilih grade</option>
-                                        @foreach ($tbGradeTurun as $b)
+                                        @foreach ($tbGradeBentuk as $b)
                                             <option value="{{ $b->nm_grade }}">{{ $b->nm_grade }}</option>
                                         @endforeach
                                     </select>

@@ -73,9 +73,7 @@
     $('.selectView').select2({
         dropdownParent: $('#view .modal-content')
     });
-    $('.selectgrading').select2({
-        dropdownParent: $('#grading .modal-content')
-    });
+
 
     $('.costume_muncul').hide();
     $('.bulan_muncul').hide();
