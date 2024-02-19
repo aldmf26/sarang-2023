@@ -28,16 +28,17 @@ class GradingBjController extends Controller
             'gudangbj' => $this->getDataMaster('gradingbj'),
             // 'kategori' => $kategori
         ];
-        
+
         return view('home.gradingbj.index', $data);
     }
 
     public function gudang_bj()
     {
         $data = [
-            'title'  => 'Grading Bj'
+            'title'  => 'Grading Bj',
+            'gudangbj' => $this->getDataMaster('gradingbj'),
         ];
-        return view('home.gradingbj.gudang_bj',$data);
+        return view('home.gradingbj.gudang_bj', $data);
     }
 
     public function add()
