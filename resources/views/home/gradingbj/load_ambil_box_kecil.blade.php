@@ -65,10 +65,8 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- <template x-for="(item, index) in Array.from({ length: baris })" :key="index + '-' + 1">
-                    
-                </template> --}}
-                <tr>
+                <template x-for="(item, index) in Array.from({ length: baris })" :key="index + '-' + 1">
+                    <tr>
                     <td>
                         <span x-text="index"></span>
                         <input type="text" class="form-control" name="no_box[]">
@@ -88,6 +86,9 @@
                         </select>
                     </td>
                 </tr>
+                </template>
+          
+                
             </tbody>
         </table>
     </div>
