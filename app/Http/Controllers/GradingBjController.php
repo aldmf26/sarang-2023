@@ -14,7 +14,8 @@ class GradingBjController extends Controller
     public function getDataMaster($jenis)
     {
         $arr = [
-            'gradingbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade")
+            'gradingbj' => DB::select("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `pengiriman_list_gradingbj` GROUP BY grade"),
+            'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];
     }
@@ -206,9 +207,24 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Tambah Box Kecil',
-            'gudangbj' => $this->getDataMaster('gradingbj')
+            'gudangbj' => $this->getDataMaster('gradingbj'),
+            'pengawas' => $this->getDataMaster('pengawas')
 
         ];
         return view('home.gradingbj.load_ambil_box_kecil', $data);
+    }
+
+    public function get_select_grade(Request $r)
+    {
+        $grade = $r->grade;
+        $cek = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp
+                    FROM `pengiriman_list_gradingbj` 
+                    WHERE grade = '$grade'
+                    GROUP BY grade");
+        return json_encode([
+            'pcs' => $cek->pcs,
+            'gr' => $cek->gr,
+            'ttl_rp' => $cek->ttl_rp
+        ]);
     }
 }

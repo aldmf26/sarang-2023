@@ -53,7 +53,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-8 mb-3">
-                @include('home.packing.nav', ['name' => 'index'])
+                @include('home.gradingbj.nav', ['name' => 'index'])
             </div>
             <div class="col-lg-12">
                 <table class="table" id="table1">
@@ -198,9 +198,6 @@
                         url: "{{ route('gradingbj.load_ambil_box_kecil') }}",
                         success: function(r) {
                             $("#load_ambil_box_kecil").html(r);
-                            $('.selectGrade').select2({
-                                dropdownParent: $('#ambil_box_kecil .modal-content')
-                            })
                         }
                     });
                 });
@@ -209,15 +206,17 @@
                     const grade = $(this).val()
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('gradingbj.index') }}",
-                        data: "data",
-                        dataType: "dataType",
-                        success: function(response) {
-
+                        url: "{{ route('gradingbj.get_select_grade') }}",
+                        data: {
+                            grade: grade
+                        },
+                        dataType: "json",
+                        success: function(r) {
+                            $('.pcs_ambil').val(r.pcs)
+                            $('.gr_ambil').val(r.gr)
+                            $('.ttlrp_ambil').val(r.ttl_rp.toLocaleString('id-ID'))
                         }
                     });
-                    $('.pcs_ambil').val(1)
-                    $('.gr_ambil').val(100)
                 })
             </script>
         @endsection

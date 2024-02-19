@@ -52,7 +52,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-8 mb-3">
-                @include('home.packing.nav')
+                @include('home.gradingbj.nav')
             </div>
 
         </section>
