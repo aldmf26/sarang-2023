@@ -7,11 +7,7 @@
         <div class="col-lg-12"><br>
             <hr style="border: 2px solid #435EBE">
         </div>
-
-
     </x-slot>
-
-
     <x-slot name="cardBody">
 
         <style>
