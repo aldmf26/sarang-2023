@@ -163,7 +163,7 @@
                             tekanBawah()
                             $('.selectGrade').select2({
                                 dropdownParent: $('#grading .modal-content')
-                            });
+                            })
 
                         }
                     });
