@@ -16,8 +16,13 @@
     numberFormat(value) {
         return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
     },
-}" class="tab-pane fade show {{ $form == 'dForm' ? 'active' : '' }}" id="{{ $form }}"
-    role="tabpanel" aria-labelledby="sum-tab">
+    initSelect2: function() {
+        $('.selectGrade').select2({
+            dropdownParent: $('#grading .modal-content')
+        });
+    }
+}" x-init="initSelect2()" class="tab-pane fade show {{ $form == 'dForm' ? 'active' : '' }}"
+    id="{{ $form }}" role="tabpanel" aria-labelledby="sum-tab">
     {{-- <div class="row mb-1">
         <div class="col-lg-2 d-flex align-items-center">
             <h6>Form Input {{ $form == 'dForm' ? 'D' : 'V' }}</h6>
@@ -87,7 +92,11 @@
                         <th></th>
                         <th class="text-end" x-text="numberFormat(ttlSum('pcs') + ttlSum2('pcs'))"></th>
                         <th class="text-end" x-text="numberFormat(ttlSum('gr') + ttlSum2('gr'))"></th>
-                        <th class="text-end"></th>
+                        <th class="text-end">
+                            <input type="hidden" name="ttl_gr" x-model="totalGr"
+                                x-bind:value="ttlSum('gr') + ttlSum2('gr')">
+                            <input type="hidden" name="ttl_rp" value="{{ round($ttl_rp) }}">
+                        </th>
                         <th class="text-end"> </th>
                     </tr>
                 </tfoot>
@@ -153,7 +162,7 @@
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
                                     <select autocomplete="off" :count="indexBaris + 1" name="grade[]"
-                                        class="selectGrade" required>
+                                        class="selectGrade" required x-init="initSelect2">
                                         <option value="">Pilih grade</option>
                                         @foreach ($tbGradeBentuk as $b)
                                             <option value="{{ $b->nm_grade }}">{{ $b->nm_grade }}</option>
@@ -218,8 +227,15 @@
                             <tr>
                                 <td x-text="indexBaris + 1"></td>
                                 <td>
-                                    <input autocomplete="off" :count="indexBaris + 1" type="text"
-                                        class="form-control grade input_grade" name="grade[]" required>
+                                    <select autocomplete="off" :count="indexBaris + 1" name="grade[]"
+                                        class="selectGrade" required x-init="initSelect2">
+                                        <option value="">Pilih grade</option>
+                                        @foreach ($tbGradeTurun as $b)
+                                            <option value="{{ $b->nm_grade }}">{{ $b->nm_grade }}</option>
+                                        @endforeach
+                                    </select>
+                                    {{-- <input autocomplete="off" :count="indexBaris + 1" type="text"
+                                        class="form-control grade input_grade" name="grade[]" required> --}}
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"
@@ -228,7 +244,8 @@
                                 </td>
                                 <td>
                                     <input autocomplete="off" :count="indexBaris + 1" type="text"name="gr[]"
-                                        x-model="gr2[indexBaris]" class="form-control gr input_grade text-end" required>
+                                        x-model="gr2[indexBaris]" class="form-control gr input_grade text-end"
+                                        required>
 
                                 </td>
                             </tr>
