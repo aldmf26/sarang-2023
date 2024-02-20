@@ -15,8 +15,8 @@
             href="{{ route('gradingbj.history_box_kecil') }}">History Ambil Box Kecil</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gradingbj.history_box_kecil' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('gradingbj.history_box_kecil') }}">Gudang bahan jadi</a>
+        <a class="nav-link {{ $route == 'gradingbj.gudang_bahan_jadi' ? 'active' : '' }}" aria-current="page"
+            href="{{ route('gradingbj.gudang_bahan_jadi') }}">Gudang bahan jadi</a>
     </li>
 
 </ul>
