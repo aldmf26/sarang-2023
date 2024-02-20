@@ -10,21 +10,6 @@
     </x-slot>
     <x-slot name="cardBody">
 
-        <style>
-            .scrollable-table {
-                max-height: 300px;
-                /* Atur tinggi maksimum tabel */
-                overflow-y: auto;
-                /* Tampilkan scrollbar vertikal jika terlalu banyak baris */
-                overflow-x: hidden;
-                /* Sembunyikan scrollbar horizontal */
-            }
-
-            /* Optional: Atur lebar maksimum tabel jika ingin mengaktifkan scrollbar horizontal */
-            .scrollable-table table {
-                max-width: 100%;
-            }
-        </style>
         <form action="{{ route('gradingbj.create') }}" method="post">
             @csrf
             <section class="row">

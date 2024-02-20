@@ -7,7 +7,7 @@
                 class="fas fa-plus"></i>Tambah Packinglist</a>
         <a href="{{ route('packinglist.add_box_kirim') }}" class="float-end btn btn-sm btn-primary me-2"><i
                 class="fas fa-plus"></i>Tambah Box Kirim</a>
-                <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
+        <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
             teks="Import" />
         <form action="{{ route('pengiriman.import') }}" enctype="multipart/form-data" method="post">
             @csrf
@@ -62,6 +62,8 @@
                 /* Warna latar belakang header yang tetap */
                 z-index: 1;
             }
+
+            
         </style>
         <section class="row">
             <div class="col-lg-8">
@@ -194,35 +196,38 @@
                             <img width="80" src="{{ asset('img/kulkas.png') }}" alt="">
                             <input id="pencarianTbh" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
-                            <table id="tbl-aldi" class="table table-hover table-stripped">
-                                <thead>
-                                    <tr>
-                                        <th class="dhead">Grade</th>
-                                        <th class="dhead">Pcs</th>
-                                        <th class="dhead">Gr</th>
-                                        <th class="dhead">No Barcode <span @click="allPengiriman"
-                                                class="badge bg-danger">All</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for="(p,i) in pengiriman" :key="p.id_pengiriman">
-                                        <tr style="cursor: pointer"
-                                            @click="tambahPengiriman(p.id_pengiriman,p.grade,p.pcs_akhir,p.gr_akhir, p.no_box)">
-                                            <td x-text="p.grade"></td>
-                                            <td x-text="p.pcs_akhir"></td>
-                                            <td x-text="p.gr_akhir"></td>
-                                            <td x-text="p.no_box"></td>
+                            <div class="scrollable-table">
+                                <table id="tbl-aldi" class="table table-hover table-stripped">
+                                    <thead>
+                                        <tr>
+                                            <th class="dhead">Grade</th>
+                                            <th class="dhead">Pcs</th>
+                                            <th class="dhead">Gr</th>
+                                            <th class="dhead">No Barcode <span @click="allPengiriman"
+                                                    class="badge bg-danger">All</span></th>
                                         </tr>
-                                    </template>
+                                    </thead>
+                                    <tbody>
+                                        <template x-for="(p,i) in pengiriman" :key="p.id_pengiriman">
+                                            <tr style="cursor: pointer"
+                                                @click="tambahPengiriman(p.id_pengiriman,p.grade,p.pcs_akhir,p.gr_akhir, p.no_box)">
+                                                <td x-text="p.grade"></td>
+                                                <td x-text="p.pcs_akhir"></td>
+                                                <td x-text="p.gr_akhir"></td>
+                                                <td x-text="p.no_box"></td>
+                                            </tr>
+                                        </template>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-lg-3">
                             <img width="80" src="{{ asset('img/meja.png') }}" alt="">
 
                             <input id="pencarianDipilih" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
+                                <div class="scrollable-table">
                             <table id="tbl-dipilih" class="table table-hover table-stripped">
                                 <thead class="bg-success">
                                     <tr>
@@ -249,6 +254,7 @@
 
                                 </tbody>
                             </table>
+                                </div>
                         </div>
                         <div class="col-lg-6">
                             <img width="80" src="{{ asset('img/box.png') }}" alt="">

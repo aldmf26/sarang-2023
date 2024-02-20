@@ -38,21 +38,6 @@
                 font-size: 12px;
                 width: 120px !important;
             }
-
-            .scrollable-table {
-                max-height: 300px;
-                /* Atur tinggi maksimum tabel */
-                overflow-y: auto;
-                /* Tampilkan scrollbar vertikal jika terlalu banyak baris */
-                overflow-x: hidden;
-                /* Sembunyikan scrollbar horizontal */
-            }
-
-            /* Optional: Atur lebar maksimum tabel jika ingin mengaktifkan scrollbar horizontal */
-            .scrollable-table table {
-                max-width: 100%;
-            }
-
             thead {
                 position: sticky;
                 top: 0;
