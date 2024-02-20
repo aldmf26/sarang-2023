@@ -316,5 +316,18 @@ class GradingBjController extends Controller
 
     public function gudang_bahan_jadi(Request $r)
     {
+        $data = [
+            'title'  => 'Grading Bj',
+            'gudangbj' => DB::select("SELECT a.grade, a.no_box, sum(a.pcs_kredit) as pcs_awal, sum(a.gr_kredit) as gr_awal, sum(a.gr_kredit * a.rp_gram_kredit) as ttl_rp, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp_sortir) as ttl_rp_sortir
+            FROM pengiriman_list_gradingbj as a
+            left join (
+             SELECT b.no_box, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp) as ttl_rp_sortir
+                FROM sortir as b 
+                GROUP by b.no_box
+            ) as b on b.no_box = a.no_box
+            where a.no_box is not null
+            GROUP by a.grade;"),
+        ];
+        return view('home.gradingbj.gudang_bhn_jadi', $data);
     }
 }
