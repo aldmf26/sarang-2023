@@ -17,8 +17,8 @@
                             <th>Grade</th>
                             <th class="text-end">Pcs</th>
                             <th class="text-end">Gram</th>
-                            <th class="text-end">Rp Gram</th>
                             <th class="text-end">Ttl Rp</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -26,14 +26,11 @@
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ $g->grade }}</td>
-                                <td class="text-end">{{ $g->pcs - $g->pcs_kredit }}</td>
-                                <td class="text-end">{{ $g->gr - $g->gr_kredit }}</td>
+                                <td class="text-end">{{ $g->pcs_akhir }}</td>
+                                <td class="text-end">{{ $g->gr_akhir }}</td>
                                 <td class="text-end">
-                                    {{ number_format(($g->ttl_rp - $g->ttl_rp_kredit) / ($g->gr - $g->gr_kredit), 0) }}
-                                    {{-- {{ $g->ttl_rp - $g->ttl_rp_kredit }}
-                                    {{ $g->gr - $g->gr_kredit }} --}}
+                                    {{ number_format($g->ttl_rp + $g->ttl_rp_sortir, 0) }}
                                 </td>
-                                <td class="text-end">{{ number_format($g->ttl_rp - $g->ttl_rp_kredit, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
