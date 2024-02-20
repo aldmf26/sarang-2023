@@ -38,9 +38,9 @@
                                 @endphp
                                 <td class="text-end">{{ number_format($g->rp_gram, 0) }}</td>
                                 <td class="text-end">{{ number_format($ttlRp, 0) }}</td>
-                                <td class="text-end">{{ 0 }}</td>
-                                <td class="text-end">{{ 0 }}</td>
-                                <td class="text-end">{{ 0 }}</td>
+                                <td class="text-end">{{ number_format($g->pcs_sortir, 0) }}</td>
+                                <td class="text-end">{{ number_format($g->gr_sortir, 0) }}</td>
+                                <td class="text-end">{{ number_format($g->ttlrp_sortir, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
