@@ -224,7 +224,7 @@ class GradingBjController extends Controller
         $cek = DB::selectOne("SELECT grade,sum(pcs - pcs_kredit) as pcs, sum(gr - gr_kredit) as gr, sum((gr * rp_gram) - (gr_kredit * rp_gram_kredit)) as ttl_rp FROM `pengiriman_list_gradingbj` 
         WHERE grade = '$grade'
         GROUP BY grade HAVING pcs <> 0 OR gr <> 0");
-                    
+
         return json_encode([
             'pcs' => $cek->pcs,
             'gr' => $cek->gr,
@@ -265,7 +265,7 @@ class GradingBjController extends Controller
                 $datasBk[] = [
                     'nm_partai' => '1',
                     'no_box' => $r->no_box[$i],
-                    'tipe' =>'1',
+                    'tipe' => '1',
                     'ket' => '1',
                     'warna' => '1',
                     'pengawas' => auth()->user()->name,
@@ -297,5 +297,9 @@ class GradingBjController extends Controller
             'box_kecil' => $boxKecil
         ];
         return view('home.gradingbj.history_box_kecil', $data);
+    }
+
+    public function gudang_bahan_jadi(Request $r)
+    {
     }
 }

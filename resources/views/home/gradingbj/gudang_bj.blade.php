@@ -2,6 +2,7 @@
     <x-slot name="cardHeader">
         @include('home.gradingbj.button_nav')
 
+
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
@@ -29,6 +30,8 @@
                                 <td class="text-end">{{ $g->gr - $g->gr_kredit }}</td>
                                 <td class="text-end">
                                     {{ number_format(($g->ttl_rp - $g->ttl_rp_kredit) / ($g->gr - $g->gr_kredit), 0) }}
+                                    {{-- {{ $g->ttl_rp - $g->ttl_rp_kredit }}
+                                    {{ $g->gr - $g->gr_kredit }} --}}
                                 </td>
                                 <td class="text-end">{{ number_format($g->ttl_rp - $g->ttl_rp_kredit, 0) }}</td>
                             </tr>
