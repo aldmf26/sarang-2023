@@ -343,7 +343,15 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('siapkirim.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
             Route::get('/gudang', 'gudang')->name('gudang');
+            Route::post('/create', 'create')->name('create');
+            Route::post('/create_grading', 'create_grading')->name('create_grading');
+            Route::get('/load_grading', 'load_grading')->name('load_grading');
+            Route::get('/load_detail', 'load_detail')->name('load_detail');
+            Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
+            Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
+
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')

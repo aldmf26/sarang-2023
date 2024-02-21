@@ -62,8 +62,6 @@
                 /* Warna latar belakang header yang tetap */
                 z-index: 1;
             }
-
-            
         </style>
         <section class="row">
             <div class="col-lg-8">
