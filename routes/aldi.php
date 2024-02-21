@@ -328,7 +328,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('home/pengiriman')
         ->name('pengiriman.')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/', 'hal_awal')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');

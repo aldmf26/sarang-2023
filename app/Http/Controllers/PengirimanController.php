@@ -12,6 +12,13 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PengirimanController extends Controller
 {
+    public function hal_awal()
+    {
+        $data = [
+            'title' => 'Siap Sortir'
+        ];
+        return view('home.pengiriman.hal_awal',$data);
+    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
