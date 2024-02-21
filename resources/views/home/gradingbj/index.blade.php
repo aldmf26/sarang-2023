@@ -39,7 +39,6 @@
                                     @php
                                         $cekGrading = DB::table('pengiriman_list_gradingbj')
                                             ->where('no_grading', $d->no_grading)
-                                            ->where()
                                             ->first();
                                     @endphp
                                     @if (!$cekGrading)
