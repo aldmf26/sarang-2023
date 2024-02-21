@@ -67,7 +67,6 @@ class PackingListController extends Controller
 
     public function create(Request $r)
     {
-        dd($r->all());
         $id_pengiriman = $r->id_pengiriman;
 
         $new_array = [];
