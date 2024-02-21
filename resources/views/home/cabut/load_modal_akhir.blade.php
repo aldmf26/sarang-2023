@@ -138,10 +138,10 @@
                             @php
                                 $eot = $d->eot ?? 0;
                             @endphp
-                            @if ($eot >= rumusTotalRp($d)->batas_eot || !empty($d->gr_akhir))
-                                <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
-                                    id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
-                            @endif
+                            {{-- @if ($eot >= rumusTotalRp($d)->batas_eot || !empty($d->gr_akhir))
+                            @endif --}}
+                            <a style="font-size: 12px" class="btn btn-success btn-sm selesai" href="#"
+                                id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>
