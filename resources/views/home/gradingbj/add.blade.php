@@ -1,12 +1,18 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
 
     <x-slot name="cardHeader">
-        <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }} </h6>
+        <div class="row">
+            <div class="col-lg-12 mb-3">
+                @include('home.gradingbj.navsiapgrade', ['name' => 'index'])
+            </div>
+            <div class="col-lg-6">
+                <h6 class="float-start mt-1">{{ $title }} </h6>
+            </div>
+            <div class="col-lg-12"><br>
+                <hr style="border: 2px solid #435EBE">
+            </div>
         </div>
-        <div class="col-lg-12"><br>
-            <hr style="border: 2px solid #435EBE">
-        </div>
+
     </x-slot>
     <x-slot name="cardBody">
 
@@ -25,9 +31,11 @@
                 max-width: 100%;
             }
         </style>
+
         <form action="{{ route('gradingbj.create') }}" method="post">
             @csrf
             <section class="row">
+
                 <div class="col-lg-5">
                     <table class="table">
                         <tr>

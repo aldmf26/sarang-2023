@@ -1,8 +1,8 @@
 <h6 class="float-start">{{ $title }}</h6>
 
 <x-theme.button href="#" icon="fa-plus" addClass="float-end ambil_box_kecil" teks="Ambil Box Kecil" />
-<x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Ambil dari ctk" />
-<x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end" teks="Import" />
+{{-- <x-theme.button href="{{ route('gradingbj.add') }}" icon="fa-plus" addClass="float-end" teks="Ambil dari ctk" /> --}}
+{{-- <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end" teks="Import" /> --}}
 <form action="{{ route('gradingbj.import') }}" enctype="multipart/form-data" method="post">
     @csrf
     <x-theme.modal size="modal-lg" idModal="import" title="Import Pengiriman">

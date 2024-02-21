@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PengirimanModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,8 +40,8 @@ class PackingListController extends Controller
             WHERE a.tgl_pengiriman BETWEEN '$tgl1' and '$tgl2' AND a.no_nota_packing_list = ''
             ORDER BY b.urutan asc;")
         ];
-            
-            return view('home.packing.index', $data);
+
+        return view('home.packing.index', $data);
     }
 
     public function load_tbh()
@@ -83,7 +84,7 @@ class PackingListController extends Controller
 
     public function tbh_invoice(Request $r)
     {
-        for ($i=0; $i < count($r->no_nota); $i++) { 
+        for ($i = 0; $i < count($r->no_nota); $i++) {
             DB::table('pengiriman_packing_list')->where('no_nota', $r->no_nota[$i])->update(['no_invoice_manual' => $r->no_invoice[$i]]);
         }
         return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil diubah');
@@ -141,16 +142,15 @@ class PackingListController extends Controller
             'no_nota_packing_list' => ''
         ]);
         return redirect()->route('packinglist.index', ['kategori' => 'packing'])->with('sukses', 'Data Berhasil dihapus');
-
-        
     }
 
     public function add_box_kirim(Request $r)
     {
         $data = [
-            'title' => 'Tambah Box Kirim'
+            'title' => 'Tambah Box Kirim',
+            'pengiriman' => PengirimanModel::Pengiriman()
         ];
-        return view('home.packing.add_box_kirim',$data);
+        return view('home.packing.add_box_kirim', $data);
     }
 
     public function create_box_kirim(Request $r)

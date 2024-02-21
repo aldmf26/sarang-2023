@@ -36,6 +36,10 @@
 
     <div class="row">
         <div class="col-lg-4">
+            <h6>Partai : {{ $boxJudul->partai }}</h6>
+        </div>
+        <div class="col-lg-12"></div>
+        <div class="col-lg-4">
             <input type="hidden" name="no_grading" value="{{ $no_grading }}">
             <h6>Box diambil dari cetak</h6>
             <br><br>

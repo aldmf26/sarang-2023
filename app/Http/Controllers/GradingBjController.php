@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GradingbjTemplateExport;
+use App\Models\PengirimanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -61,7 +62,7 @@ class GradingBjController extends Controller
         WHERE a.selesai = 'Y'  AND p.no_box IS NULL GROUP BY no_box ORDER BY b.tipe ASC;");
 
         if (!$cetak) {
-            return redirect()->route('gradingbj.index')->with('error', 'Data Cetak Masih tidak ada !');
+            return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');
         }
 
         $data = [
@@ -98,7 +99,7 @@ class GradingBjController extends Controller
         }
 
         $db->insert($datas);
-        return redirect()->route('gradingbj.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('gradingbj.history_ambil')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function create_grading(Request $r)
@@ -136,7 +137,8 @@ class GradingBjController extends Controller
             'tbGradeBentuk' => DB::table('tb_grade')->where('status', 'bentuk')->get(),
             'tbGradeTurun' => DB::table('tb_grade')->where('status', 'turun')->get(),
             'listGrading' => DB::table('pengiriman_list_gradingbj')->where('no_grading', $no_grading)->get(),
-            'box' => DB::table($this->nmTbl)->where('no_grading', $no_grading)->get()
+            'box' => DB::table($this->nmTbl)->where('no_grading', $no_grading)->get(),
+            'boxJudul' => DB::table($this->nmTbl)->where('no_grading', $no_grading)->first()
         ];
     }
 
@@ -318,16 +320,16 @@ class GradingBjController extends Controller
     {
         $data = [
             'title'  => 'Grading Bj',
-            'gudangbj' => DB::select("SELECT a.grade, a.no_box, sum(a.pcs_kredit) as pcs_awal, sum(a.gr_kredit) as gr_awal, sum(a.gr_kredit * a.rp_gram_kredit) as ttl_rp, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp_sortir) as ttl_rp_sortir
-            FROM pengiriman_list_gradingbj as a
-            left join (
-             SELECT b.no_box, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp) as ttl_rp_sortir
-                FROM sortir as b 
-                GROUP by b.no_box
-            ) as b on b.no_box = a.no_box
-            where a.no_box is not null
-            GROUP by a.grade;"),
+            'gudangbj' => PengirimanModel::Pengiriman(),
         ];
         return view('home.gradingbj.gudang_bhn_jadi', $data);
+    }
+
+    public function halAwal()
+    {
+        $data = [
+            'title'  => 'Grading Bj',
+        ];
+        return view('home.gradingbj.halawal', $data);
     }
 }

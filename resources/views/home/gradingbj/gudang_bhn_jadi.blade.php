@@ -26,8 +26,8 @@
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ $g->grade }}</td>
-                                <td class="text-end">{{ $g->pcs_akhir }}</td>
-                                <td class="text-end">{{ $g->gr_akhir }}</td>
+                                <td class="text-end">{{ $g->pcs_akhir - $g->pcs_ambil }}</td>
+                                <td class="text-end">{{ $g->gr_akhir - $g->gr_ambil }}</td>
                                 <td class="text-end">
                                     {{ number_format($g->ttl_rp + $g->ttl_rp_sortir, 0) }}
                                 </td>

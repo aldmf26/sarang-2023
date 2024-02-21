@@ -340,7 +340,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('home/gradingbj')
         ->name('gradingbj.')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/history_ambil', 'index')->name('history_ambil');
             Route::get('/add', 'add')->name('add');
             Route::get('/gudang_bj', 'gudang_bj')->name('gudang_bj');
             Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
@@ -354,6 +354,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_detail', 'load_detail')->name('load_detail');
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
+            Route::get('/', 'halAwal')->name('index');
         });
 
     Route::controller(PackingListController::class)

@@ -68,15 +68,21 @@
                                         <input count="{{ $i }}" type="text" required name="partai[]"
                                             class="form-control partai">
                                     </td>
-                                    
+
                                     <td>
                                         <input count="{{ $i }}" type="text" required name="tipe[]"
                                             class="form-control tipe">
                                     </td>
                                     <td>
-
-                                        <input count="{{ $i }}" type="text" required name="grade[]"
-                                            class="form-control grade">
+                                        <select count="{{ $i }}" name="grade[]" id=""
+                                            class="select2_add">
+                                            <option value="">Pilih Grade</option>
+                                            @foreach ($pengiriman as $p)
+                                                <option value="{{ $p->grade }}">{{ $p->grade }}</option>
+                                            @endforeach
+                                        </select>
+                                        {{-- <input count="{{ $i }}" type="text" required name="grade[]"
+                                            class="form-control grade"> --}}
                                     </td>
                                     <td>
                                         <input count="{{ $i }}" type="text" name="pcs[]"
