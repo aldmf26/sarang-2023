@@ -64,7 +64,7 @@
 
 <form action="{{ route('gradingbj.create_ambil_box_kecil') }}" method="post">
     @csrf
-    <x-theme.modal idModal="ambil_box_kecil" size="modal-lg" title="Ambil Box Kecil">
+    <x-theme.modal idModal="ambil_box_kecil" size="modal-md" title="Ambil Box Kecil">
         <div id="load_ambil_box_kecil"></div>
     </x-theme.modal>
 </form>
@@ -153,6 +153,7 @@
 
         $(document).on('change', '.selectGrade', function() {
             const grade = $(this).val()
+            $('.gradeInput').text(grade);
             $.ajax({
                 type: "GET",
                 url: "{{ route('gradingbj.get_select_grade') }}",

@@ -21,6 +21,8 @@
 
             <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
                 teks="kry baru" />
+            <x-theme.button href="#" modal="Y" idModal="ambil_box" icon="fa-plus" addClass="float-end"
+                teks="Ambil Box Bk" />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -65,6 +67,98 @@
                     </div>
                 </div>
                 <div id="load_anak"></div>
+            </x-theme.modal>
+        </form>
+
+        <form action="{{ route('sortir.ambil_box_bk') }}" method="post">
+            @csrf
+            <x-theme.modal idModal="ambil_box" title="Ambil Box BK" btnSave="Y">
+                @php
+                    
+                    $bk = DB::table('bk')
+                        ->where([['kategori', 'sortir'], ['penerima', '0']])
+                        ->get();
+                  
+                @endphp
+                <div class="row" x-data="{
+                    bk: {{ $bk }},
+                    selectedBk: [],
+                    tambah(no_box, pcs, gr) {
+                        this.selectedBk.push({
+                            no_box: no_box,
+                            pcs: pcs,
+                            gr: gr
+                        })
+                        const index = this.bk.findIndex((e) => e.no_box === no_box)
+                        this.bk.splice(index, 1)
+                    },
+                    hapus(index) {
+                        const item = this.selectedBk[index];
+                        this.selectedBk.splice(index, 1);
+                
+                        this.bk.push({
+                            no_box: item.no_box,
+                            pcs_awal: item.pcs,
+                            gr_awal: item.gr
+                        });
+                    }
+                }">
+                    <div class="col-lg-6">
+                        <h6>Gudang BK</h6>
+                        <div class="scrollable-table">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="dhead">No Box</th>
+                                        <th class="dhead">Pcs</th>
+                                        <th class="dhead">Gr</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="d in bk">
+                                        <tr
+                                            @click="tambah(
+                                            d.no_box,
+                                            d.pcs_awal,
+                                            d.gr_awal
+                                         )">
+                                            
+                                            <td x-text="d.no_box"></td>
+                                            <td x-text="d.pcs_awal"></td>
+                                            <td x-text="d.gr_awal"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6>Diambil dari BK</h6>
+
+                        <div class="scrollable-table">
+                            <table class="table table-bordered">
+                                <thead class="bg-success text-white">
+                                    <tr>
+                                        <th class="">No Box</th>
+                                        <th class="">Pcs</th>
+                                        <th class="">Gr</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="(d,i) in selectedBk">
+                                        <tr @click="hapus(i)">
+                                            <td class="d-none"><input type="hidden" name="no_box[]" :value="d.no_box"></td>
+                                            <td x-text="d.no_box"></td>
+                                            <td x-text="d.pcs"></td>
+                                            <td x-text="d.gr"></td>
+                                        </tr>
+                                    </template>
+                                  
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </x-theme.modal>
         </form>
 
@@ -326,9 +420,9 @@
                         var id_sortir = $(this).attr('id_sortir')
                         var row = $(this).closest('tr');
                         var grAkhirValue = row.find('.grAkhirKeyup').val();
-                        if(grAkhirValue == 0 || grAkhirValue == '') {
+                        if (grAkhirValue == 0 || grAkhirValue == '') {
                             alertToast('error', 'Gagal Selesai')
-                            
+
                         } else {
                             row.hide();
                             $.ajax({
@@ -404,7 +498,7 @@
                             success: function(r) {
                                 alertToast(r.tipe, r.pesan)
                                 loadHalaman()
-                                if(r.tipe == 'sukses')  {
+                                if (r.tipe == 'sukses') {
                                     $(".btn" + count).removeClass('btn-warning');
                                     $(".btn" + count).addClass('btn-primary');
                                 }
@@ -474,7 +568,7 @@
                             url: "{{ route('sortir.create') }}",
                             data: datas,
                             success: function(r) {
-                                if(r === 'berhasil') {
+                                if (r === 'berhasil') {
                                     alertToast('sukses', 'Berhasil tambah kerja')
                                     $('#tambah2').modal('hide')
                                     loadHalaman()

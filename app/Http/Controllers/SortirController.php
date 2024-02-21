@@ -20,7 +20,6 @@ class SortirController extends Controller
         LEFT JOIN (
             SELECT max(no_box) as no_box,id_pengawas,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `sortir` where penutup = 'T'  GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box AND b.id_pengawas = a.penerima WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%sortir%' AND a.selesai = 'T'");
-        
     }
 
     public function getAnak($id = null)
@@ -58,6 +57,19 @@ class SortirController extends Controller
         ];
 
         return view('home.sortir.index', $data);
+    }
+
+    public function ambil_box_bk(Request $r)
+    {
+        $idPengwas = auth()->user()->id;
+        DB::table('bk')->where('kategori', 'sortir')->whereIn('no_box', $r->no_box)->update([
+            'penerima' => $idPengwas
+        ]);
+        DB::table('pengiriman_list_gradingbj')->whereIn('no_box', $r->no_box)->update([
+            'pengawas' => $idPengwas
+        ]);
+        
+        return redirect()->route('sortir.index')->with('sukses', 'Box berhasil diambil');
     }
 
     public function add()
@@ -98,7 +110,7 @@ class SortirController extends Controller
         $ttlPcs = array_sum($r->pcs_awal);
         $ttlGr = array_sum($r->gr_awal);
         $cekStok = DB::selectOne("SELECT sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `bk` WHERE no_box = '$r->no_box' AND kategori LIKE '%sortir%';");
-        if($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr){
+        if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
             for ($i = 0; $i < count($r->rupiah); $i++) {
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $id_sortir = $r->id_sortir[$i];
@@ -112,7 +124,7 @@ class SortirController extends Controller
                     'pcs_awal' => $r->pcs_awal[$i],
                     'gr_awal' => $r->gr_awal[$i],
                     'rp_target' => $rupiah,
-                'tgl_input' => date('Y-m-d')
+                    'tgl_input' => date('Y-m-d')
                 ];
                 if ($id_sortir == 9999) {
                     DB::table('sortir')->insert($data);
@@ -124,7 +136,7 @@ class SortirController extends Controller
         } else {
             return 'Stok pcs / gr melebihi Bk';
         }
-        
+
 
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
@@ -143,27 +155,27 @@ class SortirController extends Controller
     {
         $detail = DB::table('sortir as a')
             ->select(
-                    'a.id_anak',
-                    'a.no_box',
-                    'a.id_sortir',
-                    'a.rp_target',
-                    'a.ttl_rp',
-                    'a.tgl',
-                    'a.pcs_awal',
-                    'a.pcs_akhir',
-                    'a.gr_awal',
-                    'a.gr_akhir',
-                    'a.pcus',
-                    'a.bulan',
-                    'b.id_kelas',
-                    'b.nama',
-                    'c.kelas',
-                    'c.denda_susut',
-                    'c.bts_denda_sst',
-                    'c.batas_denda_rp',
-                    'c.denda_susut',
-                    'c.denda'
-             )
+                'a.id_anak',
+                'a.no_box',
+                'a.id_sortir',
+                'a.rp_target',
+                'a.ttl_rp',
+                'a.tgl',
+                'a.pcs_awal',
+                'a.pcs_akhir',
+                'a.gr_awal',
+                'a.gr_akhir',
+                'a.pcus',
+                'a.bulan',
+                'b.id_kelas',
+                'b.nama',
+                'c.kelas',
+                'c.denda_susut',
+                'c.bts_denda_sst',
+                'c.batas_denda_rp',
+                'c.denda_susut',
+                'c.denda'
+            )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'c.id_kelas', 'a.id_kelas')
             ->where([['selesai', 'T'], ['no_box', '!=', 9999], ['a.id_pengawas', auth()->user()->id]])
@@ -201,13 +213,13 @@ class SortirController extends Controller
         $pcus = $r->pcus;
         $id_sortir = $r->id_sortir;
         $bulan = $r->bulan;
-        if($gr_akhir == 0 ) {
+        if ($gr_akhir == 0) {
             return [
                 'tipe' => 'error',
                 'pesan' => 'Gr Akhir kosong'
             ];
-        } 
-        
+        }
+
 
         $getSortir = DB::table('sortir')->where('id_sortir', $id_sortir);
         $get = $getSortir->first();
@@ -439,7 +451,7 @@ class SortirController extends Controller
 
     public function export_rekap(Request $r)
     {
-        $bulan =  $r->bulan;    
+        $bulan =  $r->bulan;
         $tahun =  $r->tahun;
         $view = 'home.sortir.export_rekap';
         $tbl = Sortir::queryRekap($bulan, $tahun);

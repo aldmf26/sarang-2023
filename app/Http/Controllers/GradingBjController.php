@@ -260,9 +260,9 @@ class GradingBjController extends Controller
                     'gr_kredit' => $r->gr[$i],
                     'admin' => auth()->user()->name,
                     'rp_gram_kredit' => $rpGram,
-                    'pengawas' => $r->pengawas[$i]
+                    'pengawas' => $r->pengawas[$i] ?? 0
                 ];
-                $id_pengws = DB::table('users')->where('name', $r->pengawas[$i])->first()->id;
+                // $id_pengws = DB::table('users')->where('name', $r->pengawas[$i])->first()->id;
 
                 $datasBk[] = [
                     'nm_partai' => '1',
@@ -271,7 +271,7 @@ class GradingBjController extends Controller
                     'ket' => '1',
                     'warna' => '1',
                     'pengawas' => auth()->user()->name,
-                    'penerima' => $id_pengws,
+                    'penerima' => $id_pengws ?? 0,
                     'pcs_awal' => $r->pcs[$i],
                     'gr_awal' => $r->gr[$i],
                     'tgl' => $tgl,
@@ -306,6 +306,7 @@ class GradingBjController extends Controller
                     LEFT JOIN (
                         SELECT no_box,sum(pcs_akhir) as pcs, sum(gr_akhir) as gr, sum(ttl_rp) as ttl_rp 
                         FROM `sortir` 
+                        WHERE selesai = 'Y'
                         GROUP BY no_box
                     ) as b on a.no_box = b.no_box
                     WHERE a.no_box is not null ");
