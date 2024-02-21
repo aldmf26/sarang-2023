@@ -9,7 +9,7 @@
                     ],
                     [
                         'name' => 'Gudang Siap Kirim',
-                        'url' => 'siapkirim.gudang',
+                        'url' => 'packinglist.gudangKirim',
                     ],
                 ];
 

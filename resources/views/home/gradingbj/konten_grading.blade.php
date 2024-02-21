@@ -116,7 +116,6 @@
                 </tr>
             </table>
             <style>
-
                 .input_grade {
                     font-size: 12px;
 

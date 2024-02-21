@@ -10,35 +10,26 @@ class PengirimanModel extends Model
 {
     public static function Pengiriman()
     {
-        $result = DB::select("SELECT a.grade, a.no_box, sum(a.pcs_kredit) as pcs_awal, sum(a.gr_kredit) as gr_awal, sum(a.gr_kredit * a.rp_gram_kredit) as ttl_rp, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp_sortir) as ttl_rp_sortir, c.pcs_ambil, c.gr_ambil
-        FROM pengiriman_list_gradingbj as a
+        $result = DB::select("SELECT a.grade, a.no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.gr * a.rp_gram) as ttl_rp, if(c.pcs_ambil is null,0,c.pcs_ambil) as pcs_ambil, if(c.gr_ambil is null,0,c.gr_ambil) as gr_ambil, if(c.ttl_rp_ambil is null,0,c.ttl_rp_ambil) as ttl_rp_ambil
+        FROM siapkirim_list_grading as a
         left join (
-             SELECT b.no_box, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp) as 		ttl_rp_sortir
-            FROM sortir as b 
-            GROUP by b.no_box
-         ) as b on b.no_box = a.no_box
-        left join (
-        SELECT c.grade, sum(c.pcs) as pcs_ambil, sum(c.gr) as gr_ambil
+        SELECT c.grade, sum(c.pcs) as pcs_ambil, sum(c.gr) as gr_ambil, sum(c.gr * c.rp_gram) as ttl_rp_ambil
             FROM pengiriman as c 
             GROUP by c.grade
         ) as c on c.grade = a.grade
-        where a.no_box is not null
-        GROUP by a.grade;
+        where a.no_box is not null 
+        GROUP by a.grade
+        HAVING pcs - pcs_ambil <> 0 OR gr - gr_ambil <> 0
         ");
 
         return $result;
     }
     public static function pengirimanPerGrade($grade)
     {
-        $result = DB::select("SELECT a.grade, a.no_box, sum(a.pcs_kredit) as pcs_awal, sum(a.gr_kredit) as gr_awal, sum(a.gr_kredit * a.rp_gram_kredit) as ttl_rp, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp_sortir) as ttl_rp_sortir, c.pcs_ambil, c.gr_ambil
-        FROM pengiriman_list_gradingbj as a
+        $result = DB::selectOne("SELECT a.grade, a.no_box, sum(a.pcs) as pcs_awal, sum(a.gr) as gr_awal, sum(a.gr * a.rp_gram) as ttl_rp, if(c.pcs_ambil is null,0,c.pcs_ambil) as pcs_ambil, if(c.gr_ambil is null,0,c.gr_ambil) as gr_ambil, if(c.ttl_rp_ambil is null,0,c.ttl_rp_ambil) as ttl_rp_ambil
+        FROM siapkirim_list_grading as a
         left join (
-             SELECT b.no_box, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.ttl_rp) as ttl_rp_sortir
-            FROM sortir as b 
-            GROUP by b.no_box
-         ) as b on b.no_box = a.no_box
-        left join (
-        SELECT c.grade, sum(c.pcs) as pcs_ambil, sum(c.gr) as gr_ambil
+        SELECT c.grade, sum(c.pcs) as pcs_ambil, sum(c.gr) as gr_ambil, sum(c.gr * c.rp_gram) as ttl_rp_ambil
             FROM pengiriman as c 
             GROUP by c.grade
         ) as c on c.grade = a.grade

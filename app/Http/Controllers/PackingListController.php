@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\DB;
 
 class PackingListController extends Controller
 {
+    public function getDataMaster($jenis)
+    {
+
+        $arr = [
+            'gudangkirim' => DB::select("SELECT grade, sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp, sum(pcs_kredit) as pcs_kredit, sum(gr_kredit) as gr_kredit, sum(gr_kredit * rp_gram_kredit) as ttl_rp_kredit
+                        FROM `siapkirim_list_grading` 
+                        GROUP BY grade 
+                        HAVING pcs - pcs_kredit <> 0 OR gr - gr_kredit <> 0"),
+            'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
+        ];
+        return $arr[$jenis];
+    }
     public function index(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -148,7 +160,7 @@ class PackingListController extends Controller
     {
         $data = [
             'title' => 'Tambah Box Kirim',
-            'pengiriman' => PengirimanModel::Pengiriman()
+            'pengiriman' => $this->getDataMaster('gudangkirim')
         ];
         return view('home.packing.add_box_kirim', $data);
     }
@@ -165,6 +177,9 @@ class PackingListController extends Controller
             $dataToInsert = [];
             for ($i = 0; $i < count($r->gr); $i++) {
                 if ($r->pcs[$i] != 0) {
+                    $rp_gram = PengirimanModel::pengirimanPerGrade($r->grade[$i]);
+
+
                     $dataToInsert[] = [
                         'tgl_pengiriman' => $r->tgl[$i],
                         'partai' => $r->partai[$i],
@@ -179,6 +194,7 @@ class PackingListController extends Controller
                         'admin' => $admin,
                         'tgl_input' => $tgl_input,
                         'no_nota' => $no_nota,
+                        'rp_gram' => ($rp_gram->ttl_rp - $rp_gram->ttl_rp_ambil) / ($rp_gram->gr_awal - $rp_gram->gr_ambil)
                     ];
                 }
             }
@@ -186,10 +202,10 @@ class PackingListController extends Controller
             DB::table('pengiriman')->insert($dataToInsert);
 
             DB::commit();
-            return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil ditambahkan');
+            return redirect()->route('packinglist.index', ['kategori' => 'box'])->with('sukses', 'Data Berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('packinglist.add_box_kirim')->with('error', 'Data Gagal input ulang');
+            return redirect()->route('packinglist.add_box_kirim')->with('error', "Data Gagal input ulang");
         }
     }
     public function edit(Request $r)
@@ -232,10 +248,20 @@ class PackingListController extends Controller
 
 
             DB::commit();
-            return redirect()->route('packinglist.index')->with('sukses', 'Data Berhasil diupdatekan');
+            return redirect()->route('packinglist.index', ['kategori' => 'box'])->with('sukses', 'Data Berhasil diupdatekan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('packinglist.index')->with('error', 'Data Gagal input ulang');
         }
+    }
+
+    public function gudangKirim(Request $r)
+    {
+        $data = [
+            'title'  => 'Grading Bj Siap kirim',
+            'gudangkirim' => PengirimanModel::Pengiriman(),
+            'kategori' => 'gudang'
+        ];
+        return view('home.siapkirim.gudangkirim', $data);
     }
 }

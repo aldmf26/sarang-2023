@@ -10,17 +10,17 @@
                 <th>Gr</th>
                 <th>Pcs Akhir</th>
                 <th>Gr Akhir</th>
+                <th>Ttl Rp</th>
                 <th>No Barcode</th>
                 <th>Cek Akhir</th>
                 <th>Ket</th>
                 <th>
                     Cek
                     <center>
-                        <input style="text-align: center" type="checkbox" class="form-check"
-                            id="cekSemuaTutup">
+                        <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
                         <br>
-                        <span class="badge bg-danger btn_tutup d-none" tipe="tutup"
-                            style="cursor: pointer"><i class="fas fa-check"></i> Tutup </span>
+                        <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
+                                class="fas fa-check"></i> Tutup </span>
                     </center>
                 </th>
                 <th width="80" class="text-center">Aksi</th>
@@ -37,13 +37,13 @@
                     <td>{{ number_format($d->gr, 0) }}</td>
                     <td>{{ number_format($d->pcs_akhir, 0) }}</td>
                     <td>{{ number_format($d->gr_akhir, 0) }}</td>
+                    <td>{{ number_format($d->rp_gram * $d->gr_akhir, 0) }}</td>
                     <td>{{ $d->no_box }}</td>
                     <td>{{ $d->cek_akhir }}</td>
                     <td>{{ $d->ket }}</td>
                     <td align="center">
-                        <input type="checkbox" penerima="{{ $d->admin }}"
-                            no_nota="{{ $d->id_pengiriman }}" class="cek_bayar" name=""
-                            id="">
+                        <input type="checkbox" penerima="{{ $d->admin }}" no_nota="{{ $d->id_pengiriman }}"
+                            class="cek_bayar" name="" id="">
                     </td>
                     <td align="center">
 
@@ -58,81 +58,81 @@
 
     </table>
     @section('scripts')
-    <script>
-        inputChecked('cekSemuaTutup', 'cek_bayar')
-        pencarian('pencarian', 'tablealdi')
+        <script>
+            inputChecked('cekSemuaTutup', 'cek_bayar')
+            pencarian('pencarian', 'tablealdi')
 
-        function clickCekKirim(kelas, link, formDelete = null) {
-            $(document).on('click', `${kelas}`, function(e) {
-                e.preventDefault();
+            function clickCekKirim(kelas, link, formDelete = null) {
+                $(document).on('click', `${kelas}`, function(e) {
+                    e.preventDefault();
 
-                var dipilih = [];
-                $('.cek_bayar:checked').each(function() {
-                    var no_nota = $(this).attr('no_nota');
-                    dipilih.push(no_nota);
-                });
-                var params = new URLSearchParams();
-                dipilih.forEach(function(orderNumber) {
-                    params.append('no_nota', orderNumber);
-                });
-                var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
+                    var dipilih = [];
+                    $('.cek_bayar:checked').each(function() {
+                        var no_nota = $(this).attr('no_nota');
+                        dipilih.push(no_nota);
+                    });
+                    var params = new URLSearchParams();
+                    dipilih.forEach(function(orderNumber) {
+                        params.append('no_nota', orderNumber);
+                    });
+                    var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
 
-                var kategori = "{{ request()->get('kategori') ?? 'cabut' }}"
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                var postData = {
-                    _token: csrfToken,
-                    no_nota: dipilih,
-                };
-                var targetUrl = `/home/packinglist/${link}?${queryString}`
+                    var kategori = "{{ request()->get('kategori') ?? 'cabut' }}"
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var postData = {
+                        _token: csrfToken,
+                        no_nota: dipilih,
+                    };
+                    var targetUrl = `/home/packinglist/${link}?${queryString}`
 
-                if (formDelete === null) {
-                    window.location.assign(targetUrl)
-                } else {
-                    if (confirm(formDelete)) {
-                        $.ajax({
-                            type: "POST",
-                            url: `/home/packinglist/${link}`,
-                            data: postData,
-                            beforeSend: function() {
-                                $("#loading").modal('show')
-                            },
-                            success: function(r) {
-                                window.location.reload()
-                            },
-                            error: function(error) {
-                                // Handle error if needed
-                                console.error(error);
-                            }
-                        });
+                    if (formDelete === null) {
+                        window.location.assign(targetUrl)
+                    } else {
+                        if (confirm(formDelete)) {
+                            $.ajax({
+                                type: "POST",
+                                url: `/home/packinglist/${link}`,
+                                data: postData,
+                                beforeSend: function() {
+                                    $("#loading").modal('show')
+                                },
+                                success: function(r) {
+                                    window.location.reload()
+                                },
+                                error: function(error) {
+                                    // Handle error if needed
+                                    console.error(error);
+                                }
+                            });
+                        }
                     }
-                }
-            });
-        }
-        clickCekKirim('.btn_bayar', 'print')
-        clickCekKirim('.edit_bk', 'edit')
-        clickCekKirim('.delete', 'delete', 'Yakin ingin dihapus ?')
-        clickCekKirim('.selesai', 'selesai', 'Yakin ingin diselesaikan ?')
+                });
+            }
+            clickCekKirim('.btn_bayar', 'print')
+            clickCekKirim('.edit_bk', 'edit')
+            clickCekKirim('.delete', 'delete', 'Yakin ingin dihapus ?')
+            clickCekKirim('.selesai', 'selesai', 'Yakin ingin diselesaikan ?')
 
-        $(".btn_bayar").hide();
-        $(".piutang_cek").hide();
-        $(".delete").hide();
-        $(".edit_bk").hide();
-        $(".selesai").hide();
+            $(".btn_bayar").hide();
+            $(".piutang_cek").hide();
+            $(".delete").hide();
+            $(".edit_bk").hide();
+            $(".selesai").hide();
 
-        $(document).on('change', '.cek_bayar, #cekSemuaTutup', function() {
-            var totalPiutang = 0
-            $('.cek_bayar:checked').each(function() {
-                var piutang = $(this).attr('piutang');
-                totalPiutang += parseInt(piutang);
+            $(document).on('change', '.cek_bayar, #cekSemuaTutup', function() {
+                var totalPiutang = 0
+                $('.cek_bayar:checked').each(function() {
+                    var piutang = $(this).attr('piutang');
+                    totalPiutang += parseInt(piutang);
+                });
+                var anyChecked = $('.cek_bayar:checked').length > 0;
+                $('.btn_bayar').toggle(anyChecked);
+                $(".piutang_cek").toggle(anyChecked);
+                $('.delete').toggle(anyChecked);
+                $(".edit_bk").toggle(anyChecked);
+                $(".selesai").toggle(anyChecked);
+                $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
             });
-            var anyChecked = $('.cek_bayar:checked').length > 0;
-            $('.btn_bayar').toggle(anyChecked);
-            $(".piutang_cek").toggle(anyChecked);
-            $('.delete').toggle(anyChecked);
-            $(".edit_bk").toggle(anyChecked);
-            $(".selesai").toggle(anyChecked);
-            $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
-        });
-    </script>
+        </script>
     @endsection
 </div>

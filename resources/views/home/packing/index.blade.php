@@ -62,8 +62,6 @@
                 /* Warna latar belakang header yang tetap */
                 z-index: 1;
             }
-
-            
         </style>
         <section class="row">
             <div class="col-lg-8">
@@ -227,34 +225,34 @@
 
                             <input id="pencarianDipilih" type="text" class="form-control form-control-sm mb-2"
                                 placeholder="cari">
-                                <div class="scrollable-table">
-                            <table id="tbl-dipilih" class="table table-hover table-stripped">
-                                <thead class="bg-success">
-                                    <tr>
-                                        <th class="text-white">Grade</th>
-                                        <th class="text-white">Pcs</th>
-                                        <th class="text-white">Gr</th>
-                                        <th class="text-white">No Barcode</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for="(item,index) in selectedPengiriman" :key="index">
-
+                            <div class="scrollable-table">
+                                <table id="tbl-dipilih" class="table table-hover table-stripped">
+                                    <thead class="bg-success">
                                         <tr>
-                                            <td class="d-none">
-                                                <input type="text" name="id_pengiriman[]"
-                                                    :value="item.id_pengiriman">
-                                            </td>
-                                            <td x-text="item.grade"></td>
-                                            <td x-text="item.pcs"></td>
-                                            <td x-text="item.gr"></td>
-                                            <td x-text="item.no_box"></td>
+                                            <th class="text-white">Grade</th>
+                                            <th class="text-white">Pcs</th>
+                                            <th class="text-white">Gr</th>
+                                            <th class="text-white">No Barcode</th>
                                         </tr>
-                                    </template>
+                                    </thead>
+                                    <tbody>
+                                        <template x-for="(item,index) in selectedPengiriman" :key="index">
 
-                                </tbody>
-                            </table>
-                                </div>
+                                            <tr>
+                                                <td class="d-none">
+                                                    <input type="text" name="id_pengiriman[]"
+                                                        :value="item.id_pengiriman">
+                                                </td>
+                                                <td x-text="item.grade"></td>
+                                                <td x-text="item.pcs"></td>
+                                                <td x-text="item.gr"></td>
+                                                <td x-text="item.no_box"></td>
+                                            </tr>
+                                        </template>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <img width="80" src="{{ asset('img/box.png') }}" alt="">

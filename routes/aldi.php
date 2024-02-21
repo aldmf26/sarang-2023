@@ -343,7 +343,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('siapkirim.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/gudang', 'gudang')->name('gudang');
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
@@ -394,5 +393,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/delete/{no_nota}', 'delete')->name('delete');
             Route::post('/create', 'create')->name('create');
             Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
+            Route::get('/gudangKirim', 'gudangKirim')->name('gudangKirim');
         });
 });

@@ -12,12 +12,13 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PengirimanController extends Controller
 {
+
     public function hal_awal()
     {
         $data = [
             'title' => 'Siap Sortir'
         ];
-        return view('home.pengiriman.hal_awal',$data);
+        return view('home.pengiriman.hal_awal', $data);
     }
     public function index(Request $r)
     {
@@ -176,7 +177,7 @@ class PengirimanController extends Controller
                     'gr' => $row[4],
                     'pcs_akhir' => $row[5],
                     'gr_akhir' => $row[6],
-                    'gr_naik' => $row[6] * 0.10,            
+                    'gr_naik' => $row[6] * 0.10,
                     'no_box' => $row[7],
                     'cek_akhir' => $row[8],
                     'ket' => $row[9],

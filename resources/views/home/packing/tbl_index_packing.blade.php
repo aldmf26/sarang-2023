@@ -14,6 +14,7 @@
                     <th class="text-end">Box</th>
                     <th class="text-end">Pcs</th>
                     <th class="text-end">Gr</th>
+                    {{-- <th class="text-end">Ttl Rp</th> --}}
                     <th width="100" class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -28,8 +29,7 @@
                         <td class="tambah_invoice" no_invoice="{{ $d->no_nota }}">
                             @if (!$d->no_invoice)
                                 @csrf
-                                <span @click="tbhInvoice = !tbhInvoice"
-                                    class="badge bg-primary">Tambah</span>
+                                <span @click="tbhInvoice = !tbhInvoice" class="badge bg-primary">Tambah</span>
                                 <div x-show="tbhInvoice">
                                     <input style="width:80px;" type="text" name="no_invoice[]"
                                         class="mt-1 form-control form-control-sm">
@@ -45,15 +45,15 @@
                         <td align="right">{{ $d->ttl_box }}</td>
                         <td align="right">{{ number_format($d->pcs, 0) }}</td>
                         <td align="right">{{ number_format($d->gr, 0) }}</td>
+                        {{-- <td align="right">{{ number_format($d->rp_gram * $d->gr, 0) }}</td> --}}
                         <td align="center">
                             <button class="btn btn-sm btn-primary detail" no_nota="{{ $d->no_nota }}"
                                 type="button"><i class="fas fa-eye"></i></button>
-                            <a href="{{ route('packinglist.print', $d->no_nota) }}"
-                                class="btn btn-sm btn-primary" target="_blank"><i
-                                    class="fas fa-print"></i></a>
+                            <a href="{{ route('packinglist.print', $d->no_nota) }}" class="btn btn-sm btn-primary"
+                                target="_blank"><i class="fas fa-print"></i></a>
                             <a onclick="return confirm('Yakin dihapus ?')"
-                                href="{{ route('packinglist.delete', $d->no_nota) }}"
-                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                href="{{ route('packinglist.delete', $d->no_nota) }}" class="btn btn-sm btn-danger"><i
+                                    class="fas fa-trash"></i></a>
 
                         </td>
                     </tr>
