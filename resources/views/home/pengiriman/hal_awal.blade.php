@@ -4,11 +4,11 @@
             @php
                 $gudang = [
                     [
-                        'name' => 'Siap Sortir',
+                        'name' => 'Siap Kirim',
                         'url' => 'gradingbj.history_ambil',
                     ],
                     [
-                        'name' => 'Gudang selesai grade',
+                        'name' => 'Gudang Siap Kirim',
                         'url' => 'gradingbj.gudang_bj',
                     ],
                 ];

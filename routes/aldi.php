@@ -17,6 +17,7 @@ use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PackingListController;
+use App\Http\Controllers\SiapKirimController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -336,6 +337,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
+        });
+    Route::controller(SiapKirimController::class)
+        ->prefix('home/siapkirim')
+        ->name('siapkirim.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
