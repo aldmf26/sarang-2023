@@ -343,6 +343,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('siapkirim.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/gudang', 'gudang')->name('gudang');
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')

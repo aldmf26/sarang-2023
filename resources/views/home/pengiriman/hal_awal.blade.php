@@ -5,11 +5,11 @@
                 $gudang = [
                     [
                         'name' => 'Siap Kirim',
-                        'url' => 'gradingbj.history_ambil',
+                        'url' => 'siapkirim.index',
                     ],
                     [
                         'name' => 'Gudang Siap Kirim',
-                        'url' => 'gradingbj.gudang_bj',
+                        'url' => 'siapkirim.gudang',
                     ],
                 ];
 
