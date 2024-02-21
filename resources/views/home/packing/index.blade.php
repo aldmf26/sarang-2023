@@ -46,7 +46,6 @@
                             </td>
                         </tr>
                     </table>
-
                 </div>
             </x-theme.modal>
         </form>
@@ -239,7 +238,7 @@
                                         <template x-for="(item,index) in selectedPengiriman" :key="index">
 
                                             <tr>
-                                                <td >
+                                                <td>
                                                     <input type="text" name="id_pengiriman[]"
                                                         :value="item.id_pengiriman">
                                                 </td>
@@ -274,7 +273,7 @@
                                     <template x-for="(item,index) in selectedItem" :key="index">
 
                                         <tr>
-                                           
+
                                             <td x-text="item.grade"></td>
                                             <td x-text="item.box"></td>
                                             <td x-text="item.pcs"></td>
