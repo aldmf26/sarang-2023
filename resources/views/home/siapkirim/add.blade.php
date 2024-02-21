@@ -3,7 +3,7 @@
     <x-slot name="cardHeader">
         <div class="row">
             <div class="col-lg-12 mb-3">
-                @include('home.grapemgdingbj.navsiapgrade', ['name' => 'index'])
+                @include('home.siapkirim.nav', ['name' => 'index'])
             </div>
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }} </h6>
@@ -16,7 +16,7 @@
     </x-slot>
     <x-slot name="cardBody">
 
-        <form action="{{ route('gradingbj.create') }}" method="post">
+        <form action="{{ route('siapkirim.create') }}" method="post">
             @csrf
             <section class="row">
 
@@ -25,7 +25,7 @@
                         <tr>
                             <th class="dhead">Tanggal</th>
                             <th class="dhead">Tipe</th>
-                            <th class="dhead">Partai BJ</th>
+                            <th class="dhead">Partai Siap Kirim</th>
                         </tr>
                         <tr>
                             <td>
@@ -36,7 +36,7 @@
                                     class="form-control" required>
                             </td>
                             <td>
-                                <input name="partai" type="text" value="" placeholder="partai bj"
+                                <input name="partai" type="text" value="" placeholder="partai siap kirim"
                                     class="form-control" required>
                             </td>
 
@@ -45,17 +45,17 @@
                 </div>
             </section>
             <div class="row" x-data="{
-                cetak: {{ json_encode($cetak) }},
+                cetak: {{ json_encode($sortir) }},
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
                 ttlRp: 0,
-                ttlCostCabut: 0,
+                ttlCostSortir: 0,
                 ttlCostCetak: 0,
                 numberFormat(value) {
                     return parseFloat(value).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 },
-                tambah(id_cetak, tipe, pcs, gr, no_box, ttl_rp, cost_cabut, cost_cetak) {
+                tambah(id_cetak, tipe, pcs, gr, no_box, ttl_rp, cost_sortir, cost_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
             
@@ -66,7 +66,7 @@
                         pcs_akhir: parseFloat(pcs),
                         gr_akhir: parseFloat(gr),
                         ttl_rp: parseFloat(ttl_rp),
-                        cost_cabut: parseFloat(cost_cabut),
+                        cost_sortir: parseFloat(cost_sortir),
                         cost_cetak: parseFloat(cost_cetak),
                     });
             
@@ -76,7 +76,7 @@
                     this.ttlPcs += pcs
                     this.ttlGr += gr
                     this.ttlRp += ttl_rp
-                    this.ttlCostCabut += cost_cabut
+                    this.ttlCostSortir += cost_sortir
                     this.ttlCostCetak += cost_cetak
             
                 },
@@ -93,7 +93,7 @@
                                 pcs_akhir: parseFloat(e.pcs_akhir),
                                 gr_akhir: parseFloat(e.gr_akhir),
                                 ttl_rp: parseFloat(e.ttl_rp),
-                                cost_cabut: parseFloat(e.cost_cabut),
+                                cost_sortir: parseFloat(e.cost_sortir),
                                 cost_cetak: parseFloat(e.cost_cetak),
                             });
                             const index = selectedItem.findIndex(item => item.id_cetak === e.id_cetak);
@@ -102,7 +102,7 @@
                             this.ttlPcs -= e.pcs_akhir
                             this.ttlGr -= e.gr_akhir
                             this.ttlRp -= e.ttl_rp
-                            this.ttlCostCabut -= e.cost_cabut
+                            this.ttlCostSortir -= e.cost_sortir
                             this.ttlCostCetak -= e.cost_cetak
                         }
                     })
@@ -120,21 +120,19 @@
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-end">Ttl Rp</th>
-                                    <th class="dhead text-end">Cost Cabut</th>
-                                    <th class="dhead text-end">Cost Cetak</th>
+                                    <th class="dhead text-end">Cost Sortir</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <template x-for="(ctk, i) in cetak" :key="ctk.no_box">
                                     <tr style="cursor: pointer"
-                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_cabut,ctk.cost_cetak)">
+                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_sortir,ctk.cost_cetak)">
                                         <td x-text="ctk.tipe"></td>
                                         <td x-text="ctk.no_box"></td>
                                         <td align="right" x-text="ctk.pcs_akhir"></td>
                                         <td align="right" x-text="ctk.gr_akhir"></td>
                                         <td align="right" x-text="numberFormat(ctk.ttl_rp)"></td>
-                                        <td align="right" x-text="numberFormat(ctk.cost_cabut)"></td>
-                                        <td align="right" x-text="numberFormat(ctk.cost_cetak)"></td>
+                                        <td align="right" x-text="numberFormat(ctk.cost_sortir)"></td>
                                     </tr>
                                 </template>
 
@@ -153,8 +151,7 @@
                                     <th class=" text-white text-end">Pcs</th>
                                     <th class=" text-white text-end">Gr</th>
                                     <th class=" text-white text-end">Ttl Rp</th>
-                                    <th class=" text-white text-end">Cost Cabut</th>
-                                    <th class=" text-white text-end">Cost Cetak</th>
+                                    <th class=" text-white text-end">Cost Sortir</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,7 +162,7 @@
                                             <input type="text" name="pcs_akhir[]" :value="item.pcs_akhir">
                                             <input type="text" name="gr_akhir[]" :value="item.gr_akhir">
                                             <input type="text" name="ttl_rp[]" :value="item.ttl_rp">
-                                            <input type="text" name="cost_cabut[]" :value="item.cost_cabut">
+                                            <input type="text" name="cost_sortir[]" :value="item.cost_sortir">
                                             <input type="text" name="cost_cetak[]" :value="item.cost_cetak">
                                             <input type="text" name="tipe[]" :value="item.tipe">
                                         </td>
@@ -174,8 +171,7 @@
                                         <td align="right" x-text="item.pcs_akhir"></td>
                                         <td align="right" x-text="item.gr_akhir"></td>
                                         <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
-                                        <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
-                                        <td align="right" x-text="numberFormat(item.cost_cetak)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_sortir)"></td>
                                     </tr>
                                 </template>
                             </tbody>
@@ -187,8 +183,7 @@
                                     <th class="text-end" x-text="ttlPcs"></th>
                                     <th class="text-end" x-text="ttlGr"></th>
                                     <th class="text-end" x-text="numberFormat(ttlRp)"></th>
-                                    <th class="text-end" x-text="numberFormat(ttlCostCabut)"></th>
-                                    <th class="text-end" x-text="numberFormat(ttlCostCetak)"></th>
+                                    <th class="text-end" x-text="numberFormat(ttlCostSortir)"></th>
                                 </tr>
                             </tfoot>
                         </table>
