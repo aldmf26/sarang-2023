@@ -20,6 +20,7 @@
                             <th class="text-end">Gr</th>
                             <th class="text-end">Rp Gr</th>
                             <th class="text-end">Ttl Rp</th>
+                            <th class="text-end">Pengawas</th>
                             <th class="text-end">Pcs Akhir</th>
                             <th class="text-end">Gr Akhir</th>
                             <th class="text-end">Cost Sortir</th>
@@ -34,10 +35,11 @@
                                 <td class="text-end">{{ $g->pcs }}</td>
                                 <td class="text-end">{{ $g->gr }}</td>
                                 @php
-                                    $ttlRp= $g->rp_gram * $g->gr;
+                                    $ttlRp = $g->rp_gram * $g->gr;
                                 @endphp
                                 <td class="text-end">{{ number_format($g->rp_gram, 0) }}</td>
                                 <td class="text-end">{{ number_format($ttlRp, 0) }}</td>
+                                <td>{{ $g->name }}</td>
                                 <td class="text-end">{{ number_format($g->pcs_sortir, 0) }}</td>
                                 <td class="text-end">{{ number_format($g->gr_sortir, 0) }}</td>
                                 <td class="text-end">{{ number_format($g->ttlrp_sortir, 0) }}</td>

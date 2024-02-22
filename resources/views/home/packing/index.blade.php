@@ -238,8 +238,8 @@
                                         <template x-for="(item,index) in selectedPengiriman" :key="index">
 
                                             <tr>
-                                                <td>
-                                                    <input type="text" name="id_pengiriman[]"
+                                                <td style="display: none">
+                                                    <input type="hidden" name="id_pengiriman[]"
                                                         :value="item.id_pengiriman">
                                                 </td>
                                                 <td x-text="item.grade"></td>

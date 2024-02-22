@@ -17,7 +17,7 @@ class PengirimanModel extends Model
             FROM pengiriman as c 
             GROUP by c.grade
         ) as c on c.grade = a.grade
-        where a.no_box is not null 
+        -- where a.no_box is not null 
         GROUP by a.grade
         HAVING pcs - pcs_ambil <> 0 OR gr - gr_ambil <> 0
         ");
@@ -33,7 +33,7 @@ class PengirimanModel extends Model
             FROM pengiriman as c 
             GROUP by c.grade
         ) as c on c.grade = a.grade
-        where a.no_box is not null and a.grade = '$grade'
+        where  a.grade = '$grade'
         GROUP by a.grade;
         ");
 

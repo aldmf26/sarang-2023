@@ -3,7 +3,7 @@
     <x-slot name="cardHeader">
         <div class="row">
             <div class="col-lg-12 mb-3">
-                @include('home.grapemgdingbj.navsiapgrade', ['name' => 'index'])
+                @include('home.gradingbj.navsiapgrade', ['name' => 'index'])
             </div>
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }} </h6>

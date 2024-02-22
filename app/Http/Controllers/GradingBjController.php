@@ -301,11 +301,12 @@ class GradingBjController extends Controller
                     a.no_grading,
                     b.pcs as pcs_sortir,
                     b.gr as gr_sortir,
-                    b.ttl_rp as ttlrp_sortir
+                    b.ttl_rp as ttlrp_sortir, b.name
                     FROM `pengiriman_list_gradingbj` as a 
                     LEFT JOIN (
-                        SELECT no_box,sum(pcs_akhir) as pcs, sum(gr_akhir) as gr, sum(ttl_rp) as ttl_rp 
+                        SELECT no_box,sum(pcs_akhir) as pcs, sum(gr_akhir) as gr, sum(ttl_rp) as ttl_rp, b.name
                         FROM `sortir` 
+                        left join users as b on b.id = sortir.id_pengawas 
                         WHERE selesai = 'Y'
                         GROUP BY no_box
                     ) as b on a.no_box = b.no_box
