@@ -13,6 +13,7 @@ use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
@@ -371,6 +372,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::get('/', 'halAwal')->name('index');
+        });
+    Route::controller(OpnameController::class)
+        ->prefix('home/opname')
+        ->name('opname.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 
     Route::controller(PackingListController::class)

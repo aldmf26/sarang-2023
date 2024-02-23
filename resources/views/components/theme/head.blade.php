@@ -42,6 +42,14 @@
     {{--
     <link rel="stylesheet" href="{{ asset('mycss.css') }}"> --}}
     <style>
+        .pointer {
+            cursor: pointer;
+        }
+
+        .cardHover:hover {
+            background-color: #e4e5e9;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 13px;
