@@ -58,7 +58,7 @@
                 tambah(id_cetak, tipe, pcs, gr, no_box, ttl_rp, cost_sortir, cost_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
-            
+                    console.log(id_cetak)
                     selectedItem.push({
                         id_cetak: id_cetak,
                         no_box: no_box,
@@ -70,7 +70,7 @@
                         cost_cetak: parseFloat(cost_cetak),
                     });
             
-                    const index = cetak.findIndex(item => item.id_cetak === id_cetak);
+                    const index = cetak.findIndex(item => item.id_sortir === id_cetak);
                     cetak.splice(index, 1);
             
                     this.ttlPcs += pcs
@@ -126,7 +126,7 @@
                             <tbody>
                                 <template x-for="(ctk, i) in cetak" :key="ctk.no_box">
                                     <tr style="cursor: pointer"
-                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_sortir,ctk.cost_cetak)">
+                                        @click="tambah(ctk.id_sortir,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_sortir,ctk.cost_cetak)">
                                         <td x-text="ctk.tipe"></td>
                                         <td x-text="ctk.no_box"></td>
                                         <td align="right" x-text="ctk.pcs_akhir"></td>
