@@ -7,6 +7,15 @@
 
     <x-slot name="cardBody">
         <section class="row">
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.bjSortirProses')
+            </div>
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.bjSortirSelesai')
+            </div>
+            <div class="col-lg-12">
+                <hr>
+            </div>
             <div class="col-lg-8 mb-3">
                 @include('home.siapkirim.nav', ['name' => 'index'])
             </div>

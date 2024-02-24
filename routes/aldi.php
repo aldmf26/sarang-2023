@@ -343,7 +343,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('home/siapkirim')
         ->name('siapkirim.')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/ambilsortir', 'index')->name('ambilsortir');
             Route::get('/add', 'add')->name('add');
             Route::get('/gudang', 'gudang')->name('gudang');
             Route::post('/create', 'create')->name('create');
@@ -352,6 +352,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_detail', 'load_detail')->name('load_detail');
             Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
             Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
+            Route::get('/', 'hal_awal')->name('index');
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
