@@ -6,6 +6,7 @@
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
+
             <div class="col-lg-12 mb-3">
                 @include('home.packing.nav', ['name' => 'index'])
             </div>

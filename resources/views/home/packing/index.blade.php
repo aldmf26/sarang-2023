@@ -63,6 +63,15 @@
             }
         </style>
         <section class="row">
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.bjSiapKirim')
+            </div>
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.gudangSiapKirim')
+            </div>
+            <div class="col-lg-12">
+                <hr>
+            </div>
             <div class="col-lg-8">
                 @include('home.packing.nav', ['name' => 'index'])
             </div>

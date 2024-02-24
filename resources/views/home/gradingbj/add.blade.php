@@ -122,6 +122,7 @@
                                     <th class="dhead text-end">Ttl Rp</th>
                                     <th class="dhead text-end">Cost Cabut</th>
                                     <th class="dhead text-end">Cost Cetak</th>
+                                    <th class="dhead text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,6 +136,9 @@
                                         <td align="right" x-text="numberFormat(ctk.ttl_rp)"></td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cabut)"></td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cetak)"></td>
+                                        <td class="text-center"><a href="javascript:void(0)"
+                                                class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
+                                        </td>
                                     </tr>
                                 </template>
 
@@ -155,6 +159,7 @@
                                     <th class=" text-white text-end">Ttl Rp</th>
                                     <th class=" text-white text-end">Cost Cabut</th>
                                     <th class=" text-white text-end">Cost Cetak</th>
+                                    <th class=" text-white">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -176,6 +181,9 @@
                                         <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
                                         <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
                                         <td align="right" x-text="numberFormat(item.cost_cetak)"></td>
+                                        <td class="text-center"><a href="javascript:void(0)"
+                                                class="btn btn-danger btn-sm"><i class="fas fa-minus"></i></a>
+                                        </td>
                                     </tr>
                                 </template>
                             </tbody>

@@ -123,10 +123,10 @@ class GradingBjController extends Controller
             }
             DB::table('pengiriman_list_gradingbj')->insert($datas);
             DB::commit();
-            return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil tambah grading');
+            return redirect()->route('gradingbj.history_ambil')->with('sukses', 'Berhasil tambah grading');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('gradingbj.index')->with('error', $e->getMessage());
+            return redirect()->route('gradingbj.history_ambil')->with('error', $e->getMessage());
         }
     }
 

@@ -42,7 +42,7 @@ class SiapKirimController extends Controller
         WHERE a.selesai = 'Y'  AND p.no_box IS NULL GROUP BY a.no_box ORDER BY b.tipe ASC;");
 
         if (!$sortir) {
-            return redirect()->route('siapkirim.index')->with('error', 'Data Sortir Masih tidak ada !');
+            return redirect()->route('siapkirim.ambilsortir')->with('error', 'Data Sortir Masih tidak ada !');
         }
 
         $data = [
@@ -80,7 +80,7 @@ class SiapKirimController extends Controller
             $db->insert($datas);
             DB::commit();
 
-            return redirect()->route('siapkirim.index')->with('sukses', 'Data Berhasil ditambahkan');
+            return redirect()->route('siapkirim.ambilsortir')->with('sukses', 'Data Berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('siapkirim.add')->with('error', $e->getMessage());
@@ -125,15 +125,23 @@ class SiapKirimController extends Controller
             }
             DB::table('siapkirim_list_grading')->insert($datas);
             DB::commit();
-            return redirect()->route('siapkirim.index')->with('sukses', 'Berhasil tambah grading');
+            return redirect()->route('siapkirim.ambilsortir')->with('sukses', 'Berhasil tambah grading');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('siapkirim.index')->with('error', $e->getMessage());
+            return redirect()->route('siapkirim.ambilsortir')->with('error', $e->getMessage());
         }
     }
 
     public function load_detail(Request $r)
     {
         return view('home.siapkirim.detail', $this->getDetail($r->no_grading));
+    }
+
+    public function hal_awal()
+    {
+        $data = [
+            'title' => 'Siap Sortir'
+        ];
+        return view('home.siapkirim.hal_awal', $data);
     }
 }

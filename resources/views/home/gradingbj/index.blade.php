@@ -1,11 +1,21 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         {{-- @include('home.gradingbj.button_nav') --}}
+        <a href=""></a>
 
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.gudangCetakSelesai')
+            </div>
+            <div class="col-lg-5 mb-2">
+                @include('home.gudang_tampilan.bjGradingAwal')
+            </div>
+            <div class="col-lg-12">
+                <hr>
+            </div>
             <div class="col-lg-8 mb-3">
                 @include('home.gradingbj.navsiapgrade', ['name' => 'index'])
             </div>
