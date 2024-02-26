@@ -12,6 +12,7 @@
             @php
                 $pcs = $d['body']['pcs'] ?? 0;
                 $gr = $d['body']['gr'] ?? 0;
+                $ttl_rp = $d['body']['ttl_rp'] ?? 0;
             @endphp
                 <div class="col-lg-3 ">
                     <div class="card cardHover pointer text-center border border-secondary">
@@ -33,7 +34,7 @@
                                 <tr>
                                     <th class="text-start">Ttl Rp</th>
                                     <th>:</th>
-                                    <th>25,000,000</th>
+                                    <th>{{ number_format($ttl_rp,0) }}</th>
                                 </tr>
                             </table>
                         </div>
