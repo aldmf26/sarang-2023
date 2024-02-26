@@ -256,7 +256,7 @@ class ApiBkModel extends Model
 
     public static function cabut_selesai()
     {
-        $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, a.pcs_akhir, a.gr_akhir, a.ttl_rp
+        $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box
         where a.selesai = 'Y'
