@@ -445,4 +445,23 @@ class OpnameController extends Controller
         $blog = DB::table('blog')->where('judul', $slug)->first();
         return response()->json($blog);
     }
+    public function blog_lainnya($slug)
+    {
+        // Ambil ID artikel saat ini
+        $currentBlogId = DB::table('blog')->where('judul', $slug)->value('id');
+
+        // Ambil ID semua artikel selain artikel saat ini
+        $otherBlogIds = DB::table('blog')->where('id', '!=', $currentBlogId)->pluck('id')->toArray();
+
+        // Acak urutan ID artikel selain artikel saat ini
+        shuffle($otherBlogIds);
+
+        // Ambil 3 ID pertama
+        $randomBlogIds = array_slice($otherBlogIds, 0, 3);
+
+        // Ambil data blog berdasarkan ID yang sudah diacak
+        $blogs = DB::table('blog')->whereIn('id', $randomBlogIds)->get();
+
+        return response()->json($blogs);
+    }
 }
