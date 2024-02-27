@@ -440,4 +440,9 @@ class OpnameController extends Controller
         $blog = DB::table('blog')->get();
         return response()->json($blog);
     }
+    public function blog_detail($slug)
+    {
+        $blog = DB::table('blog')->where('judul', $slug)->first();
+        return response()->json($blog);
+    }
 }

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/blog', [OpnameController::class, 'blog']);
+Route::get('/blog/${slug}', [OpnameController::class, 'blog_detail']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
