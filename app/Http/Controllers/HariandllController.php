@@ -130,7 +130,7 @@ class HariandllController extends Controller
 
         $bulan = $r->bulan ?? date('m');
         $tahun = $r->tahun ?? date('Y');
-        $datas = $this->getQuery($bulan, 2023);
+        $datas = $this->getQuery($bulan, $tahun);
 
         $data = [
             'title' => 'Rekap Summary Dll',

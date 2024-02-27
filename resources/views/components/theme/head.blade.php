@@ -200,7 +200,13 @@
         .modal-dialog-centered {
             justify-content: center;
         }
-
+        thead {
+                position: sticky;
+                top: 0;
+                background-color: #f1f1f1;
+                /* Warna latar belakang header yang tetap */
+                z-index: 1;
+            }
         .img-detail {
             width: 50%;
             height: 350px;
