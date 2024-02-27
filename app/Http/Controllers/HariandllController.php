@@ -106,7 +106,7 @@ class HariandllController extends Controller
         FROM tb_hariandll as a
         LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
         LEFT JOIN users as c on c.id = b.id_pengawas
-        WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' AND a.ditutup = 'T'
+        WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND a.ditutup = 'T'
         GROUP BY b.id_pengawas;");
     }
     public function export(Request $r)
