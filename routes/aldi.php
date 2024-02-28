@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
+
 Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/403', function () {
         view('error.403');
@@ -379,6 +380,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('opname.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/detail', 'detail')->name('detail');
         });
 
     Route::controller(PackingListController::class)
