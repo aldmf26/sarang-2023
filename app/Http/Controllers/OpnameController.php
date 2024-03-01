@@ -79,7 +79,7 @@ class OpnameController extends Controller
           sum(pcs - pcs_kredit) as pcs,
           sum(gr - gr_kredit) as gr,
           (SUM(gr * rp_gram) - SUM(gr_kredit * rp_gram_kredit)) as ttl_rp
-         FROM `pengiriman_list_gradingbj`");
+         FROM `pengiriman_list_gradingbj` WHERE no_box is null");
 
         $boxSp = DB::selectOne("SELECT sum(a.pcs_kredit) as pcs,
          sum(a.gr_kredit) as gr,
@@ -89,7 +89,8 @@ class OpnameController extends Controller
 
         $bjSpProses = DB::selectOne("SELECT sum(a.pcs_awal - pcs_akhir) as pcs,sum(a.gr_awal - gr_akhir) as gr
          FROM `sortir` as a 
-         JOIN bk as b on a.no_box = b.no_box AND b.kategori = 'sortir';");
+         JOIN bk as b on a.no_box = b.no_box AND b.kategori = 'sortir'
+         WHERE a.selesai = 'T' AND a.no_box != 9999");
 
         $gdgSpSelesai = DB::selectOne("SELECT sum(pcs_akhir) as pcs,sum(gr_akhir) as gr,sum(a.ttl_rp) as ttl_rp
          FROM `sortir` as a 
@@ -356,6 +357,54 @@ class OpnameController extends Controller
          ) as c on a.no_box = c.no_box
          where a.kategori = 'cetak';");
 
+$bjGradeAwal = DB::select("SELECT grade,
+          pcs - pcs_kredit as pcs_awal,
+          grade,
+          gr - gr_kredit as gr_awal,
+          (gr * rp_gram - gr_kredit * rp_gram_kredit) as ttl_rp
+         FROM `pengiriman_list_gradingbj` WHERE no_box is null");
+
+$boxSp = DB::select("SELECT b.no_box,b.nm_partai,b.tipe,a.pcs_kredit as pcs_awal,
+a.gr_kredit as gr_awal,
+(a.gr_kredit * a.rp_gram_kredit) as ttl_rp
+FROM `pengiriman_list_gradingbj` as a
+JOIN bk as b on a.no_box = b.no_box
+WHERE a.pengawas != 0;");
+
+$bjSpProses = DB::select("SELECT b.no_box,b.nm_partai,b.tipe,sum(a.pcs_awal - a.pcs_akhir) as pcs_awal,sum(a.gr_awal - a.gr_akhir) as gr_awal
+         FROM `sortir` as a 
+         JOIN bk as b on a.no_box = b.no_box AND b.kategori = 'sortir'
+         WHERE a.selesai = 'T' AND a.no_box != 9999 group by b.no_box");
+
+$gdgSpSelesai = DB::select("SELECT b.nm_partai,b.no_box,b.tipe,sum(pcs_akhir) as pcs_awal,sum(gr_akhir) as gr_awal,sum(a.ttl_rp) as ttl_rp
+         FROM `sortir` as a 
+         JOIN bk as b on a.no_box = b.no_box AND b.kategori = 'sortir'
+         WHERE a.selesai = 'Y' group by a.no_box");
+
+$pengiriman = DB::select("SELECT a.grade, a.no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.gr * a.rp_gram) as ttl_rp, if(c.pcs_ambil is null,0,c.pcs_ambil) as pcs_ambil, if(c.gr_ambil is null,0,c.gr_ambil) as gr_ambil, if(c.ttl_rp_ambil is null,0,c.ttl_rp_ambil) as ttl_rp_ambil
+        FROM siapkirim_list_grading as a
+        left join (
+        SELECT c.grade, sum(c.pcs) as pcs_ambil, sum(c.gr) as gr_ambil, sum(c.gr * c.rp_gram) as ttl_rp_ambil
+            FROM pengiriman as c 
+            GROUP by c.grade
+        ) as c on c.grade = a.grade
+        -- where a.no_box is not null 
+        GROUP by a.grade
+        HAVING pcs - pcs_ambil <> 0 OR gr - gr_ambil <> 0
+        ");
+
+$box_kirim = DB::select("SELECT a.partai as nm_partai, a.tipe,a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal, (a.gr_akhir * a.rp_gram) as ttl_rp FROM `pengiriman`as a
+LEFT JOIN tb_grade as b on a.grade = b.nm_grade
+LEFT JOIN pengiriman_packing_list as c on a.no_nota_packing_list = c.no_nota
+WHERE a.no_nota_packing_list = ''
+ORDER BY b.urutan asc;");
+        
+$packingList = DB::select("SELECT a.partai as nm_partai,a.no_box,a.grade,a.pcs_akhir as pcs_awal, a.gr_akhir + a.gr_naik as gr_awal, (a.rp_gram * (a.gr_akhir + a.gr_naik)) as ttl_rp FROM `pengiriman` as a
+WHERE a.no_nota_packing_list is not null;");
+$boxBarcode = DB::select("SELECT a.partai as nm_partai,a.no_box,a.grade,a.pcs_akhir as pcs_awal, a.gr_akhir + a.gr_naik as gr_awal, (a.rp_gram * (a.gr_akhir + a.gr_naik)) as ttl_rp FROM `pengiriman` as a
+WHERE a.no_box is not null;");
+        
+        
         $arr = [
             [
                 'title' => 'bk cbt awal',
@@ -391,35 +440,35 @@ class OpnameController extends Controller
             ],
             [
                 'title' => 'bj grading awal',
-                'query' => ''
+                'query' => $bjGradeAwal
             ],
             [
                 'title' => 'box sp',
-                'query' => ''
+                'query' => $boxSp
             ],
             [
                 'title' => 'bj sp proses',
-                'query' => ''
+                'query' => $bjSpProses 
             ],
             [
                 'title' => 'gdg sp selesai',
-                'query' => ''
+                'query' => $gdgSpSelesai
             ],
             [
                 'title' => 'bj siap kirim',
-                'query' => ''
+                'query' => $pengiriman
             ],
             [
                 'title' => 'gdg siap kirim',
-                'query' => ''
+                'query' => $box_kirim
             ],
             [
                 'title' => 'packing list',
-                'query' => ''
+                'query' => $packingList
             ],
             [
                 'title' => 'box barcode',
-                'query' => ''
+                'query' => $boxBarcode
             ],
         ];
 

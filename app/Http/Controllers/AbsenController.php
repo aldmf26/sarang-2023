@@ -117,7 +117,7 @@ class AbsenController extends Controller
             ]);
         }
     }
-    
+
 
     public function detail($id_anak)
     {
