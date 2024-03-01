@@ -258,7 +258,7 @@ class ApiBkModel extends Model
     {
         $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp
         FROM cabut as a 
-        left join bk as b on b.no_box = a.no_box
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         where a.selesai = 'Y'
         group by a.no_box;");
         return $result;
