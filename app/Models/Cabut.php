@@ -527,8 +527,8 @@ class Cabut extends Model
         $id_user = auth()->user()->id;
         $query = !empty($no_box) ? "selectOne" : 'select';
         $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
-        
-        return DB::$query("SELECT a.no_box, a.pcs_awal,b.pcs_awal as pcs_cabut,a.gr_awal,b.gr_awal as gr_cabut FROM `bk` as a
+
+        return DB::$query("SELECT a.no_box, a.pcs_awal,COALESCE(b.pcs_awal, 0) as pcs_cabut,a.gr_awal,COALESCE(b.gr_awal, 0) as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' and a.selesai = 'T'");
