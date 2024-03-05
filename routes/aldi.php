@@ -158,6 +158,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'create')->name('create');
             Route::get('/add', 'add')->name('add');
+            Route::get('/clear', 'clear')->name('clear');
+            Route::post('/clearSave', 'clearSave')->name('clearSave');
             Route::get('/global', 'global')->name('global');
             Route::get('/load_halaman', 'load_halaman')->name('load_halaman');
             Route::get('/load_tambah_cabut', 'load_tambah_cabut')->name('load_tambah_cabut');

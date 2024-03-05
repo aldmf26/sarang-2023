@@ -1316,4 +1316,200 @@ class CabutController extends Controller
             ]
         );
     }
+
+    public function clear(Request $r)
+    {
+        return view('home.cabut.clear');
+    }
+
+    public function clearSave(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+
+            if ($r->password == 'Takemor.') {
+                $admin = auth()->user()->name;
+                $datas = [];
+                $bulan = $r->bulan;
+                $tahun = $r->tahun;
+                $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+
+                $cek = DB::table('cabut')->where([['bulan_dibayar', $bulan], ['tahun_dibayar', $tahun]])->first();
+                if (!$cek) {
+                    return redirect()->route('cabut.clear')->with('error', 'Data Cabut tidak ada')->withInput();
+                }
+                DB::table('clear_perbox')->where('bulan', $bulanDibayar)->delete();
+                $lokasiId = [
+                    93 => 'bjm',
+                    90 => 'bjm',
+                    457 => 'bjm',
+                    458 => 'bjm',
+                    85 => 'bjm',
+                    460 => 'bjm',
+                    421 => 'sby',
+                    100 => 'sby',
+                    101 => 'sby',
+                    99 => 'sby',
+                    104 => 'mtd',
+                ];
+
+                $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+                JOIN users as b on a.penerima = b.id
+                WHERE a.kategori != 'cetak' AND a.selesai = 'T'
+                group by b.id");
+
+                foreach ($pengawas as $d) {
+                    $lokasi = $lokasiId[$d->id_pengawas] ?? 'tiyah';
+                    $cabut = Cabut::queryRekap($d->id_pengawas, $bulan, $tahun);
+                    foreach ($cabut as $data) {
+                        $susut = empty($data->gr_awal) ? 0 : (1 - ($data->gr_flx + $data->gr_akhir) / $data->gr_awal) * 100;
+                        $datas[] = [
+                            'no_box' => $data->no_box,
+                            'pcs_awal_bk' => $data->pcs_bk,
+                            'gr_awal_bk' => $data->gr_bk,
+                            'bulan' => $bulanDibayar,
+                            'pgws' => $d->name,
+                            'pcs_awal_kerja' => $data->pcs_awal,
+                            'gr_awal_kerja' => $data->gr_awal,
+                            'pcs_akhir_kerja' => $data->pcs_akhir,
+                            'gr_akhir_kerja' => $data->gr_akhir,
+                            'eot' => $data->eot,
+                            'flx' => $data->flx ?? 0,
+                            'susut' => number_format($susut, 0),
+                            'ttl_rp' => $data->ttl_rp,
+                            'denda' => '',
+                            'pcs_sisa_bk' => $data->pcs_bk - $data->pcs_awal,
+                            'gr_sisa_bk' => $data->gr_bk - $data->gr_awal,
+                            'kategori' => $data->kategori,
+                            'admin' => $admin,
+                            'tanggal' => now(),
+                            'lokasi' => $lokasi
+                        ];
+                    }
+
+                    $eo = Eo::queryRekap($d->id_pengawas, $bulan, $tahun);
+                    foreach ($eo as $data) {
+                        $susut = empty($data->gr_eo_awal) ? 0 : (1 - ($data->gr_eo_akhir / $data->gr_eo_awal)) * 100;
+                        $datas[] = [
+                            'no_box' => $data->no_box,
+                            'pcs_awal_bk' => 0,
+                            'gr_awal_bk' => $data->gr_bk,
+                            'bulan' => $bulanDibayar,
+                            'pgws' => $d->name,
+                            'pcs_awal_kerja' => 0,
+                            'gr_awal_kerja' => $data->gr_eo_awal,
+                            'pcs_akhir_kerja' => 0,
+                            'gr_akhir_kerja' => $data->gr_eo_akhir,
+                            'eot' => 0,
+                            'flx' => 0,
+                            'susut' => number_format($susut, 0),
+                            'ttl_rp' => $data->rupiah,
+                            'denda' => '',
+                            'pcs_sisa_bk' => 0,
+                            'gr_sisa_bk' => $data->gr_bk - $data->gr_eo_awal,
+                            'kategori' => 'Eo',
+                            'admin' => $admin,
+                            'tanggal' => now(),
+                            'lokasi' => $lokasi
+                        ];
+                    }
+                    $sortir = Sortir::queryRekap($d->id_pengawas, $bulan, $tahun);
+                    foreach ($sortir as $data) {
+                        $susut = empty($data->gr_awal) ? 0 : (1 - $data->gr_akhir / $data->gr_awal) * 100;
+
+                        $datas[] = [
+                            'no_box' => $data->no_box,
+                            'pcs_awal_bk' => $data->pcs_bk,
+                            'gr_awal_bk' => $data->gr_bk,
+                            'bulan' => $bulanDibayar,
+                            'pgws' => $data->pengawas,
+                            'pcs_awal_kerja' => $data->pcs_awal,
+                            'gr_awal_kerja' => $data->gr_awal,
+                            'pcs_akhir_kerja' => $data->pcs_akhir,
+                            'gr_akhir_kerja' => $data->gr_akhir,
+                            'eot' => 0,
+                            'flx' => 0,
+                            'susut' => number_format($susut, 0),
+                            'ttl_rp' => $data->rupiah,
+                            'denda' => '',
+                            'pcs_sisa_bk' => $data->pcs_bk - $data->pcs_awal,
+                            'gr_sisa_bk' => $data->gr_bk - $data->gr_awal,
+                            'kategori' => $data->kategori,
+                            'admin' => $admin,
+                            'tanggal' => now(),
+                            'lokasi' => $lokasi
+                        ];
+                    }
+                    $dll = DB::selectOne("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, SUM(rupiah) AS total_rupiah
+                    FROM tb_hariandll as a
+                    LEFT JOIN tb_anak as b on a.id_anak = b.id_anak
+                    LEFT JOIN users as c on c.id = b.id_pengawas
+                    WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND a.ditutup = 'T' AND b.id_pengawas = '$d->id_pengawas'
+                    GROUP BY b.id_pengawas");
+
+                    $datas[] = [
+                        'no_box' => 'dll',
+                        'pcs_awal_bk' => 0,
+                        'gr_awal_bk' => 0,
+                        'bulan' => $bulanDibayar,
+                        'pgws' => $d->name,
+                        'pcs_awal_kerja' => 0,
+                        'gr_awal_kerja' => 0,
+                        'pcs_akhir_kerja' => 0,
+                        'gr_akhir_kerja' => 0,
+                        'eot' => 0,
+                        'flx' => 0,
+                        'susut' => 0,
+                        'ttl_rp' => $dll->total_rupiah ?? 0,
+                        'denda' => '',
+                        'pcs_sisa_bk' => 0,
+                        'gr_sisa_bk' => 0,
+                        'kategori' => 'dll',
+                        'admin' => $admin,
+                        'tanggal' => now(),
+                        'lokasi' => $lokasi
+                    ];
+
+                    $denda = DB::selectOne("SELECT sum(nominal) as rupiah FROM `tb_denda` as a
+                    join tb_anak as b on a.id_anak = b.id_anak
+                    WHERE a.bulan_dibayar = '$bulan' AND YEAR(a.tgl) = '$tahun' AND a.admin = '$d->name'
+                    GROUP BY a.admin");
+
+                    $datas[] = [
+                        'no_box' => 'denda',
+                        'pcs_awal_bk' => 0,
+                        'gr_awal_bk' => 0,
+                        'bulan' => $bulanDibayar,
+                        'pgws' => $d->name,
+                        'pcs_awal_kerja' => 0,
+                        'gr_awal_kerja' => 0,
+                        'pcs_akhir_kerja' => 0,
+                        'gr_akhir_kerja' => 0,
+                        'eot' => 0,
+                        'flx' => 0,
+                        'susut' => 0,
+                        'ttl_rp' => 0,
+                        'denda' => $denda->rupiah ?? 0,
+                        'pcs_sisa_bk' => 0,
+                        'gr_sisa_bk' => 0,
+                        'kategori' => 'denda',
+                        'admin' => $admin,
+                        'tanggal' => now(),
+                        'lokasi' => $lokasi
+                    ];
+                }
+                DB::table('clear_perbox')->insert($datas);
+                DB::commit();
+                $data = [
+                    'sum' => DB::select("SELECT lokasi,sum(ttl_rp - denda) as ttl_rp FROM `clear_perbox` WHERE lokasi != 'tiyah' GROUP BY lokasi;"),
+                    'sumPgws' => DB::select("SELECT pgws,sum(ttl_rp - denda) as ttl_rp FROM `clear_perbox` WHERE lokasi != 'tiyah' GROUP BY pgws;")
+                ];
+                return view('home.cabut.clear_nota', $data);
+            }
+            return redirect()->route('cabut.clear')->with('error', 'Password salah !');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('cabut.clear')->with('error', $e->getMessage())->withInput();
+        }
+    }
 }

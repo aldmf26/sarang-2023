@@ -24,7 +24,7 @@ class EoController extends Controller
         LEFT JOIN (
             SELECT 
             max(no_box) as no_box,sum(gr_eo_awal) as gr_eo_awal  FROM `eo` 
-            where penutup = 'T' and selesai = 'T' GROUP BY no_box,id_pengawas
+             GROUP BY no_box,id_pengawas
         ) as b ON a.no_box = b.no_box WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' AND a.selesai = 'T';");
     }
 
