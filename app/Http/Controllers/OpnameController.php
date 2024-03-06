@@ -19,7 +19,7 @@ class OpnameController extends Controller
         c.gr_eo,
         sum(b.ttl_rp) as ttl_rp,
          sum(b.pcs_akhir) as pcs_akhir,
-         sum(b.gr_akhir) as gr_akhir
+         (sum(b.gr_akhir) + sum(c.gr_eo_akhir)) as gr_akhir
         FROM bk as a
         LEFT JOIN (
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
@@ -28,7 +28,7 @@ class OpnameController extends Controller
             GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
-            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo 
+            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir 
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
             GROUP BY a.no_box
@@ -226,8 +226,8 @@ class OpnameController extends Controller
                 'no' => 1,
                 'title' => 'bk cbt awal',
                 'body' => [
-                    'pcs' => $bkCbtPgws->pcs_bk,
-                    'gr' => $bkCbtPgws->gr_bk,
+                    'pcs' => $bkCbtPgws->pcs_bk + $bkHerry->pcs_susut,
+                    'gr' => $bkCbtPgws->gr_bk + $bkHerry->gr_susut,
                     'ttl_rp' => $bkCbtPgws->gr_bk * $hrgaModalSatuan,
                 ],
             ],
@@ -235,8 +235,8 @@ class OpnameController extends Controller
                 'no' => 1,
                 'title' => 'bk sisa sinta',
                 'body' => [
-                    'pcs' => $bkHerry->pcs - $bkCbtPgws->pcs_bk,
-                    'gr' => $bkHerry->gr - $bkCbtPgws->gr_bk,
+                    'pcs' => $bkHerry->pcs - ($bkCbtPgws->pcs_bk + $bkHerry->pcs_susut),
+                    'gr' => $bkHerry->gr - ($bkCbtPgws->gr_bk + $bkHerry->gr_susut),
                 ],
             ],
             [

@@ -23,7 +23,7 @@
                             @endphp
                             <div class="col-md-4">
                                 <div no="{{ $i + 1 }}"
-                                    class=" card cardHover pointer text-center border border-secondary">
+                                    class=" position-relative card cardHover pointer text-center border border-secondary">
                                     <div class="card-body">
                                         <h5>{{ $i + 1 }}</h5>
                                         <h6>{{ strtoupper($d['title']) }}</h6>
@@ -45,6 +45,13 @@
                                             </tr>
                                         </table>
                                     </div>
+                                    @if (str_contains(strtolower($d['title']), 'sisa'))
+                                        <div
+                                            class="position-absolute top-50 start-50 translate-middle p-2 bg-transparent">
+                                            <h6 style="transform: rotate(-15deg);" class="text-muted mb-0"
+                                                style="font-style: italic;">Diopname</h6>
+                                        </div>
+                                    @endif
                                 </div>
 
                             </div>
@@ -76,7 +83,7 @@
                         @endphp
                         <div class="col-md-4">
                             <div no="{{ $i }}"
-                                class=" card cardHover pointer text-center border border-secondary">
+                                class="position-relative card cardHover pointer text-center border border-secondary">
                                 <div class="card-body">
                                     <h5>{{ $i }}</h5>
                                     <h6>{{ strtoupper($d['title']) }}</h6>
@@ -98,6 +105,13 @@
                                         </tr>
                                     </table>
                                 </div>
+                                @if (str_contains(strtolower($d['title']), 'sisa'))
+                                        <div
+                                            class="position-absolute top-50 start-50 translate-middle p-2 bg-transparent">
+                                            <h6 style="transform: rotate(-15deg);" class="text-muted mb-0"
+                                                style="font-style: italic;">Diopname</h6>
+                                        </div>
+                                    @endif
                             </div>
 
                         </div>
