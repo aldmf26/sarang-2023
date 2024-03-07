@@ -6,6 +6,7 @@ use App\Exports\GradingbjTemplateExport;
 use App\Models\PengirimanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -49,25 +50,40 @@ class GradingBjController extends Controller
 
     public function add()
     {
-        $cetak = DB::select("SELECT b.tipe,a.id_cetak,a.no_box,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, b.ttl_rp, c.cost_cabut, ((a.pcs_akhir * a.rp_pcs) + a.rp_harian - (a.pcs_hcr * d.denda_hcr )) as cost_cetak
-        FROM `cetak` as a
-        join bk as b on a.no_box = b.no_box and b.kategori = 'cetak'
-        left join (
-        	SELECT c.no_box , sum(c.ttl_rp) as cost_cabut
-            FROM cabut as c
-            GROUP by c.no_box
-        ) as c on c.no_box = a.no_box
-        left join kelas_cetak as d on d.id_kelas_cetak = a.id_kelas
-        LEFT JOIN `pengiriman_gradingbj` AS p ON a.no_box = p.no_box
-        WHERE a.selesai = 'Y'  AND p.no_box IS NULL GROUP BY no_box ORDER BY b.tipe ASC;");
+        $queryResult = DB::table('cetak as a')
+            ->selectRaw('b.tipe, a.id_cetak, a.no_box, SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, b.ttl_rp as total_rp, c.cost_cabut, ((a.pcs_akhir * a.rp_pcs) + a.rp_harian - (a.pcs_hcr * d.denda_hcr )) as cost_cetak')
+            ->join('bk as b', function ($join) {
+                $join->on('a.no_box', '=', 'b.no_box')
+                    ->where('b.kategori', '=', 'cetak');
+            })
+            ->leftJoin(DB::raw('(SELECT c.no_box, SUM(c.ttl_rp) as cost_cabut FROM cabut as c GROUP BY c.no_box) as c'), 'c.no_box', '=', 'a.no_box')
+            ->leftJoin('kelas_cetak as d', 'd.id_kelas_cetak', '=', 'a.id_kelas')
+            ->leftJoin('pengiriman_gradingbj as p', 'a.no_box', '=', 'p.no_box')
+            ->where('a.selesai', '=', 'Y')
+            ->whereNull('p.no_box')
+            ->groupBy('a.no_box')
+            ->orderBy('b.tipe', 'ASC')
+            ->get();
 
-        if (!$cetak) {
-            return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');
-        }
+
+        $response = Http::get("https://gudangsarang.ptagafood.com/api/apibk/bkSortirApi");
+        $cabut_selesai = $response->object();
+
+        $cetak = array_merge($queryResult->toArray(), $cabut_selesai);
+
+
+
+
+
+
+        // if (!$cetak && !$cabut_selesai) {
+        //     return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');
+        // }
 
         $data = [
             'title' => 'Tambah Grading BJ',
-            'cetak' => $cetak
+            'cetak' => $cetak,
+
         ];
         return view('home.gradingbj.add', $data);
     }

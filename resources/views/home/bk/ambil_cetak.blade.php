@@ -38,6 +38,7 @@
                 font-size: 12px;
                 width: 120px !important;
             }
+
             thead {
                 position: sticky;
                 top: 0;

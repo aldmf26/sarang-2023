@@ -127,7 +127,7 @@ class ApiBkModel extends Model
     }
     public static function datacabutsum2($nm_partai)
     {
-        $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
+        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
         b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo, a.selesai
         FROM bk as a 
         left join (
@@ -135,6 +135,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+        where a.bulan_dibayar = 2
         group by b.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         
@@ -256,11 +257,20 @@ class ApiBkModel extends Model
 
     public static function cabut_selesai()
     {
-        $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp
-        FROM cabut as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-        where a.selesai = 'Y'
-        group by a.no_box;");
+        $result = DB::select("SELECT * FROM (
+            SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, 'cabut' as ket
+            FROM cabut AS a 
+            LEFT JOIN bk AS b ON b.no_box = a.no_box AND b.kategori = 'cabut'
+            WHERE a.selesai = 'Y'
+            group by a.no_box
+            UNION ALL
+        
+            SELECT b.nm_partai, c.no_box, b.tipe, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, sum(c.ttl_rp) as ttl_rp, 'eo' as ket
+            FROM eo as c
+            LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
+            WHERE c.selesai = 'Y'
+            group by c.no_box
+        ) AS combined_result;");
         return $result;
     }
 }

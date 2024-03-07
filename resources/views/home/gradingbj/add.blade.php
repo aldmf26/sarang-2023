@@ -55,7 +55,7 @@
                 numberFormat(value) {
                     return parseFloat(value).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 },
-                tambah(id_cetak, tipe, pcs, gr, no_box, ttl_rp, cost_cabut, cost_cetak) {
+                tambah(id_cetak, tipe, pcs, gr, no_box, total_rp, cost_cabut, cost_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
             
@@ -65,7 +65,7 @@
                         tipe: tipe,
                         pcs_akhir: parseFloat(pcs),
                         gr_akhir: parseFloat(gr),
-                        ttl_rp: parseFloat(ttl_rp),
+                        ttl_rp: parseFloat(total_rp),
                         cost_cabut: parseFloat(cost_cabut),
                         cost_cetak: parseFloat(cost_cetak),
                     });
@@ -75,7 +75,7 @@
             
                     this.ttlPcs += pcs
                     this.ttlGr += gr
-                    this.ttlRp += ttl_rp
+                    this.ttlRp += total_rp
                     this.ttlCostCabut += cost_cabut
                     this.ttlCostCetak += cost_cetak
             
@@ -92,7 +92,7 @@
                                 tipe: e.tipe,
                                 pcs_akhir: parseFloat(e.pcs_akhir),
                                 gr_akhir: parseFloat(e.gr_akhir),
-                                ttl_rp: parseFloat(e.ttl_rp),
+                                ttl_rp: parseFloat(e.total_rp),
                                 cost_cabut: parseFloat(e.cost_cabut),
                                 cost_cetak: parseFloat(e.cost_cetak),
                             });
@@ -128,12 +128,18 @@
                             <tbody>
                                 <template x-for="(ctk, i) in cetak" :key="ctk.no_box">
                                     <tr style="cursor: pointer"
-                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.ttl_rp,ctk.cost_cabut,ctk.cost_cetak)">
+                                        @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.total_rp,ctk.cost_cabut,ctk.cost_cetak)">
                                         <td x-text="ctk.tipe"></td>
                                         <td x-text="ctk.no_box"></td>
-                                        <td align="right" x-text="ctk.pcs_akhir"></td>
-                                        <td align="right" x-text="ctk.gr_akhir"></td>
-                                        <td align="right" x-text="numberFormat(ctk.ttl_rp)"></td>
+                                        <td align="right"
+                                            x-text="(parseInt(ctk.pcs_akhir) || 0) + (parseInt(ctk.pcs_cabut) || 0)">
+                                        </td>
+                                        <td align="right"
+                                            x-text="(parseInt(ctk.gr_akhir) || 0) + (parseInt(ctk.gr_cabut) || 0)">
+                                        </td>
+                                        <td align="right"
+                                            x-text="numberFormat((parseInt(ctk.total_rp) || 0) + (parseInt(ctk.ttl_rp) || 0))">
+                                        </td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cabut)"></td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cetak)"></td>
                                         <td class="text-center"><a href="javascript:void(0)"
