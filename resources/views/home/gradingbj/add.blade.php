@@ -46,6 +46,7 @@
             </section>
             <div class="row" x-data="{
                 cetak: {{ json_encode($cetak) }},
+                cabut: {{ json_encode($cabut_selesai) }}
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
@@ -131,14 +132,11 @@
                                         @click="tambah(ctk.id_cetak,ctk.tipe,ctk.pcs_akhir,ctk.gr_akhir, ctk.no_box,ctk.total_rp,ctk.cost_cabut,ctk.cost_cetak)">
                                         <td x-text="ctk.tipe"></td>
                                         <td x-text="ctk.no_box"></td>
-                                        <td align="right"
-                                            x-text="(parseInt(ctk.pcs_akhir) || 0) + (parseInt(ctk.pcs_cabut) || 0)">
+                                        <td align="right" x-text="(parseInt(ctk.pcs_akhir) || 0) ">
                                         </td>
-                                        <td align="right"
-                                            x-text="(parseInt(ctk.gr_akhir) || 0) + (parseInt(ctk.gr_cabut) || 0)">
+                                        <td align="right" x-text="(parseInt(ctk.gr_akhir) || 0) ">
                                         </td>
-                                        <td align="right"
-                                            x-text="numberFormat((parseInt(ctk.total_rp) || 0) + (parseInt(ctk.ttl_rp) || 0))">
+                                        <td align="right" x-text="numberFormat((parseInt(ctk.total_rp) || 0))">
                                         </td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cabut)"></td>
                                         <td align="right" x-text="numberFormat(ctk.cost_cetak)"></td>
@@ -147,6 +145,20 @@
                                         </td>
                                     </tr>
                                 </template>
+                                @foreach ($cabut_selesai as $cbt)
+                                    <tr>
+                                        <td>{{ $cbt->tipe }}</td>
+                                        <td>{{ $cbt->no_box }}</td>
+                                        <td align="right"> {{ $cbt->pcs_cabut }}</td>
+                                        <td align="right">{{ $cbt->gr_cabut }}</td>
+                                        <td align="right"> {{ $cbt->ttl_rp }}</td>
+                                        <td align="right">{{ $cbt->cost_cabut }}</td>
+                                        <td align="right">0</td>
+                                        <td class="text-center"><a href="javascript:void(0)"
+                                                class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
                             </tbody>
                         </table>
@@ -182,8 +194,12 @@
                                         </td>
                                         <td x-text="item.tipe"></td>
                                         <td x-text="item.no_box"></td>
-                                        <td align="right" x-text="item.pcs_akhir"></td>
-                                        <td align="right" x-text="item.gr_akhir"></td>
+                                        <td align="right"
+                                            x-text="(parseInt(item.pcs_akhir) || 0) + (parseInt(item.pcs_cabut) || 0)">
+                                        </td>
+                                        <td align="right"
+                                            x-text="(parseInt(item.gr_akhir)|| 0) + (parseInt(item.gr_cabut) || 0)">
+                                        </td>
                                         <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
                                         <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
                                         <td align="right" x-text="numberFormat(item.cost_cetak)"></td>

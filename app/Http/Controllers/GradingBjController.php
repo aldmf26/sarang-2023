@@ -50,7 +50,7 @@ class GradingBjController extends Controller
 
     public function add()
     {
-        $queryResult = DB::table('cetak as a')
+        $cetak = DB::table('cetak as a')
             ->selectRaw('b.tipe, a.id_cetak, a.no_box, SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir, b.ttl_rp as total_rp, c.cost_cabut, ((a.pcs_akhir * a.rp_pcs) + a.rp_harian - (a.pcs_hcr * d.denda_hcr )) as cost_cetak')
             ->join('bk as b', function ($join) {
                 $join->on('a.no_box', '=', 'b.no_box')
@@ -69,12 +69,6 @@ class GradingBjController extends Controller
         $response = Http::get("https://gudangsarang.ptagafood.com/api/apibk/bkSortirApi");
         $cabut_selesai = $response->object();
 
-        $cetak = array_merge($queryResult->toArray(), $cabut_selesai);
-
-
-
-
-
 
         // if (!$cetak && !$cabut_selesai) {
         //     return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');
@@ -83,6 +77,7 @@ class GradingBjController extends Controller
         $data = [
             'title' => 'Tambah Grading BJ',
             'cetak' => $cetak,
+            'cabut_selesai' => $cabut_selesai
 
         ];
         return view('home.gradingbj.add', $data);
