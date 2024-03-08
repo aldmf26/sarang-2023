@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::get('/blog', [OpnameController::class, 'blog']);
 Route::get('/blog/{slug}', [OpnameController::class, 'blog_detail']);
 Route::get('/blog/lainnya/{slug}', [OpnameController::class, 'blog_lainnya']);
@@ -43,4 +44,5 @@ Route::controller(ApiBkController::class)
         Route::get('/bk_sum_all', 'bk_sum_all')->name('bk_sum_all');
         Route::get('/show_box_sortir', 'show_box_sortir')->name('show_box_sortir');
         Route::get('/cabut_selesai', 'cabut_selesai')->name('cabut_selesai');
+        Route::get('/datacabutsum2backup', 'datacabutsum2backup')->name('datacabutsum2backup');
     });
