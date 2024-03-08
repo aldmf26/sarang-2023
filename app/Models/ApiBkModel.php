@@ -301,4 +301,22 @@ class ApiBkModel extends Model
         ) AS combined_result;");
         return $result;
     }
+
+    public static function cetak_sum_selesai($nm_partai)
+    {
+        $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal,
+        b.pcs_awal_ctk, b.gr_awal_ctk, b.pcs_akhir_ctk, b.gr_akhir_ctk, b.pcs_cu, b.gr_cu, b.ttl_rp_cetak
+        FROM bk as a
+        left join (
+        SELECT c.nm_partai, sum(b.pcs_awal) as pcs_awal_ctk, sum(b.gr_awal) as gr_awal_ctk,
+            sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu,
+            sum(b.pcs_akhir) as pcs_akhir_ctk, sum(b.gr_akhir) as gr_akhir_ctk,
+            sum((b.pcs_akhir * b.rp_pcs) + b.rp_harian) as ttl_rp_cetak
+            FROM cetak as b
+            left join bk as c on c.no_box = b.no_box and c.kategori = 'cetak'
+            GROUP by c.nm_partai
+        ) as b on b.nm_partai = a.nm_partai
+        WHERE a.nm_partai = '$nm_partai' and a.kategori = 'cetak'
+        GROUP BY a.nm_partai;");
+    }
 }

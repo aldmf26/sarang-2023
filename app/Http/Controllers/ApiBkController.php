@@ -134,7 +134,7 @@ class ApiBkController extends Controller
     }
     public function datacetak(Request $r)
     {
-        $cetak = ApiBkModel::data_cetak_sum($r->nm_partai);
+        $cetak = ApiBkModel::cetak_sum_selesai($r->nm_partai);
 
         return response()->json($cetak);
     }
