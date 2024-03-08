@@ -127,7 +127,7 @@ class ApiBkModel extends Model
     }
     public static function datacabutsum2($nm_partai)
     {
-        $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
+        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
         b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo, a.selesai
         FROM bk as a 
         left join (
@@ -135,6 +135,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+        where  a.bulan_dibayar !='0'
         group by b.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         
@@ -142,6 +143,34 @@ class ApiBkModel extends Model
          SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
          FROM eo as c 
          left join bk as d on d.no_box = c.no_box
+         where  c.bulan_dibayar != '0'
+         GROUP by d.nm_partai
+        ) as c on c.nm_partai = a.nm_partai
+                
+        where a.kategori in ('cabut','eo') and a.nm_partai = ?
+        group by a.nm_partai;", [$nm_partai]);
+
+        return $result;
+    }
+    public static function datacabutsum2backup($nm_partai, $bulan, $tahun)
+    {
+        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
+        b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo, a.selesai
+        FROM bk as a 
+        left join (
+        SELECT b.nm_partai,
+        sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
+        FROM cabut as a
+        left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+        where a.bulan_dibayar = '$bulan' and YEAR(a.tgl_terima) = '$tahun'
+        group by b.nm_partai
+        ) as b on b.nm_partai = a.nm_partai
+        
+        left join (
+         SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
+         FROM eo as c 
+         left join bk as d on d.no_box = c.no_box
+         where c.bulan_dibayar = '$bulan' and YEAR(c.tgl_ambil) = '$tahun'
          GROUP by d.nm_partai
         ) as c on c.nm_partai = a.nm_partai
                 
@@ -256,11 +285,39 @@ class ApiBkModel extends Model
 
     public static function cabut_selesai()
     {
-        $result = DB::select("SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp
-        FROM cabut as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-        where a.selesai = 'Y'
-        group by a.no_box;");
+        $result = DB::select("SELECT * FROM (
+            SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, 'cabut' as ket
+            FROM cabut AS a 
+            LEFT JOIN bk AS b ON b.no_box = a.no_box AND b.kategori = 'cabut'
+            WHERE a.selesai = 'Y'
+            group by a.no_box
+            UNION ALL
+        
+            SELECT b.nm_partai, c.no_box, b.tipe, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, sum(c.ttl_rp) as ttl_rp, 'eo' as ket
+            FROM eo as c
+            LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
+            WHERE c.selesai = 'Y'
+            group by c.no_box
+        ) AS combined_result;");
+        return $result;
+    }
+
+    public static function cetak_sum_selesai($nm_partai)
+    {
+        $result = DB::selectOne("SELECT a.no_lot, a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal,
+        b.pcs_awal_ctk, b.gr_awal_ctk, b.pcs_akhir_ctk, b.gr_akhir_ctk, b.pcs_cu, b.gr_cu, b.ttl_rp_cetak
+        FROM bk as a
+        left join (
+        SELECT c.nm_partai, sum(b.pcs_awal) as pcs_awal_ctk, sum(b.gr_awal) as gr_awal_ctk,
+            sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu,
+            sum(b.pcs_akhir) as pcs_akhir_ctk, sum(b.gr_akhir) as gr_akhir_ctk,
+            sum((b.pcs_akhir * b.rp_pcs) + b.rp_harian) as ttl_rp_cetak
+            FROM cetak as b
+            left join bk as c on c.no_box = b.no_box and c.kategori = 'cetak'
+            GROUP by c.nm_partai
+        ) as b on b.nm_partai = a.nm_partai
+        WHERE a.nm_partai = '$nm_partai' and a.kategori = 'cetak'
+        GROUP BY a.nm_partai;");
         return $result;
     }
 }

@@ -118,16 +118,12 @@ class ApiBkController extends Controller
     {
         $cabut = ApiBkModel::datacabutsum2($r->nm_partai);
 
+        return response()->json($cabut);
+    }
+    public function datacabutsum2backup(Request $r)
+    {
+        $cabut = ApiBkModel::datacabutsum2backup($r->nm_partai, $r->tgl1, $r->tgl2);
 
-        // $response = [
-        //     "pcs_awal" => $cabut->pcs_awal,
-        //     "gr_awal" =>  $cabut->gr_awal + $cabut->gr_awal_eo,
-        //     "eot" => $cabut->eot,
-        //     "gr_flx" => $cabut->gr_flx,
-        //     "pcs_akhir" => $cabut->pcs_akhir,
-        //     "gr_akhir" => $cabut->gr_akhir + $cabut->gr_eo_akhir,
-        //     "ttl_rp" => $cabut->ttl_rp + $cabut->ttl_rp_eo
-        // ];
         return response()->json($cabut);
     }
     public function datasortirsum(Request $r)
@@ -138,7 +134,7 @@ class ApiBkController extends Controller
     }
     public function datacetak(Request $r)
     {
-        $cetak = ApiBkModel::data_cetak_sum($r->nm_partai);
+        $cetak = ApiBkModel::cetak_sum_selesai($r->nm_partai);
 
         return response()->json($cetak);
     }
