@@ -135,7 +135,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
-        where  a.bulan_dibayar ='2'
+        where  a.bulan_dibayar !='0'
         group by b.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         
@@ -143,7 +143,7 @@ class ApiBkModel extends Model
          SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
          FROM eo as c 
          left join bk as d on d.no_box = c.no_box
-         where  c.bulan_dibayar = '2'
+         where  c.bulan_dibayar != '0'
          GROUP by d.nm_partai
         ) as c on c.nm_partai = a.nm_partai
                 
@@ -152,7 +152,7 @@ class ApiBkModel extends Model
 
         return $result;
     }
-    public static function datacabutsum2backup($nm_partai, $tgl1, $tgl2)
+    public static function datacabutsum2backup($nm_partai, $bulan, $tahun)
     {
         $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,
         b.pcs_awal, b.gr_awal, b.eot, b.gr_flx, b.pcs_akhir, b.gr_akhir, b.ttl_rp, c.gr_awal_eo, c.gr_eo_akhir, c.ttl_rp_eo, a.selesai
@@ -162,7 +162,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
-        where a.tgl_terima between '$tgl1' and '$tgl2' and a.bulan_dibayar != '0'
+        where a.bulan_dibayar = '$bulan' and YEAR(a.tgl_terima) = '$tahun'
         group by b.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         
@@ -170,7 +170,7 @@ class ApiBkModel extends Model
          SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
          FROM eo as c 
          left join bk as d on d.no_box = c.no_box
-         where c.tgl_ambil between '$tgl1' and '$tgl2' and c.bulan_dibayar != '0'
+         where c.bulan_dibayar = '$bulan' and YEAR(c.tgl_ambil) = '$tahun'
          GROUP by d.nm_partai
         ) as c on c.nm_partai = a.nm_partai
                 
