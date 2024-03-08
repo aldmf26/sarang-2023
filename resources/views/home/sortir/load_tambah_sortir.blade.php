@@ -4,7 +4,7 @@
     <section class="row">
         <x-theme.alert pesan="{{ session()->get('error') }}" />
         <div class="col-lg-8">
-            <table class="table table-striped">
+            {{-- <table class="table table-striped">
                 <thead>
                     <tr>
                         <th class="dhead">No Box</th>
@@ -16,7 +16,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select name="no_box" id="" required class="select3 pilihBox" count="1">
+                            <select name="no_box" id="" required class="select32 pilihBox" count="1">
                                 <option value="">Pilih Box</option>
                                 @foreach ($boxBk as $d)
                                     @if ($d->gr_awal - $d->gr_cabut > 1)
@@ -39,7 +39,9 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
+            <input type="hidden" class="form-control" name="id_pengawas" readonly
+                                value="{{ auth()->user()->id }}">
         </div>
         <div class="col-lg-12">
             <table class="table table-striped">
@@ -47,6 +49,7 @@
                     <tr>
                         <th class="dhead" width="100">Nama Anak</th>
                         <th class="dhead" width="100">Tipe</th>
+                        <th class="dhead" width="100">No Box</th>
                         <th class="dhead" >Tgl Terima</th>
                         <th class="dhead text-end" width="110">Pcs Awal</th>
                         <th class="dhead text-end" width="110">Pcuc</th>
@@ -79,11 +82,22 @@
                                 </select>
                             </td>
                             <td>
+                                <select name="no_box" id="" required class="select3 pilihBox" count="{{$i}}">
+                                    <option value="">Pilih Box</option>
+                                    @foreach ($boxBk as $b)
+                                        @if ($b->gr_awal - $b->gr_cabut > 1)
+                                            <option value="{{ $b->no_box }}">{{ ucwords($b->no_box) }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
                                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
                                     name="tgl_terima[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control text-end pcsAwalKeyup" value="" id="pcsInput"
+                                <input type="text" class="form-control text-end pcsAwalKeyup setPcs{{ $i }}" value="" id="pcsInput"
                                     name="pcs_awal[]">
                             </td>
                             <td>
@@ -91,7 +105,7 @@
                                     name="pcuc[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control text-end grAwalKeyup setGr" count="{{ $i }}"
+                                <input type="text" class="form-control text-end grAwalKeyup setGr setGr{{ $i }}" count="{{ $i }}"
                                     value="" id="grInput" name="gr_awal[]">
                             </td>
                             <td>

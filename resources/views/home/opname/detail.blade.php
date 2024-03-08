@@ -27,43 +27,22 @@
                     @foreach ($query as $i => $d)
                     @php
                             switch ($no) {
-                                case 0:
-                                case 5:
-                                case 1:
-                                    $pcs = $d->pcs_bk ?? 0;
-                                    $gr = $d->gr_bk ?? 0;
-                                    $ttl_rp = $d->ttl_rp ?? 0;
-                                    break;
-                                case 2:
-                                case 6:
-                                case 9:
-                                case 10:
-                                case 11:
-                                case 12:
-                                case 14:
-                                case 15:
-                                case 16:
+                                case 4:
                                     $pcs = $d->pcs_awal ?? 0;
                                     $gr = $d->gr_awal ?? 0;
                                     $ttl_rp = $d->ttl_rp ?? 0;
                                     break;
-                                case 3:
-                                case 7:
+                                case 5:
                                     $pcs = $d->pcs_awal - $d->pcs_akhir ?? 0;
                                     $gr = $d->gr_awal - $d->gr_akhir ?? 0;
                                     $ttl_rp = $d->ttl_rp ?? 0;
                                     break;
-                                case 4:
-                                case 8:
-                                    $pcs = $d->pcs_akhir_selesai ?? 0;
-                                    $gr = $d->gr_akhir_selesai ?? 0;
-                                    $ttl_rp = $d->ttl_rp_akhir_selesai ?? 0;
+                                case 6:
+                                    $pcs = $d->pcs_akhir;
+                                    $gr = $d->gr_akhir;
+                                    $ttl_rp = $d->ttl_rp ?? 0;
                                     break;
-                                case 13:
-                                    $pcs = $p->pcs - $p->pcs_ambil;
-                                    $gr = $p->gr - $p->gr_ambil;
-                                    $ttl_rp = $p->ttl_rp_ambil;
-                                    break;
+                                
                           
                                 
                                 default:

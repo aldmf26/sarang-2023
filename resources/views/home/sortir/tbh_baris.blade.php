@@ -26,6 +26,17 @@
         </select>
     </td>
     <td>
+        <select name="no_box" id="" required class="select2-tambah pilihBox" count="{{$count}}">
+            <option value="">Pilih Box</option>
+            @foreach ($boxBk as $d)
+                @if ($d->gr_awal - $d->gr_cabut > 1)
+                    <option value="{{ $d->no_box }}">{{ ucwords($d->no_box) }}
+                    </option>
+                @endif
+            @endforeach
+        </select>
+    </td>
+    <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
     </td>
     <td>

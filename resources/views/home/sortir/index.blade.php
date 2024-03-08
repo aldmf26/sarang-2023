@@ -74,11 +74,11 @@
             @csrf
             <x-theme.modal idModal="ambil_box" title="Ambil Box BK" btnSave="Y">
                 @php
-                    
+
                     $bk = DB::table('bk')
                         ->where([['kategori', 'sortir'], ['penerima', '0']])
                         ->get();
-                  
+
                 @endphp
                 <div class="row" x-data="{
                     bk: {{ $bk }},
@@ -122,7 +122,7 @@
                                             d.pcs_awal,
                                             d.gr_awal
                                          )">
-                                            
+
                                             <td x-text="d.no_box"></td>
                                             <td x-text="d.pcs_awal"></td>
                                             <td x-text="d.gr_awal"></td>
@@ -147,13 +147,14 @@
                                 <tbody>
                                     <template x-for="(d,i) in selectedBk">
                                         <tr @click="hapus(i)">
-                                            <td class="d-none"><input type="hidden" name="no_box[]" :value="d.no_box"></td>
+                                            <td class="d-none"><input type="hidden" name="no_box[]"
+                                                    :value="d.no_box"></td>
                                             <td x-text="d.no_box"></td>
                                             <td x-text="d.pcs"></td>
                                             <td x-text="d.gr"></td>
                                         </tr>
                                     </template>
-                                  
+
                                 </tbody>
                             </table>
                         </div>
@@ -208,6 +209,13 @@
                                 console.log(r)
                                 $(".setGr" + count).val(r.gr_awal - r.gr_cabut)
                                 $(".setPcs" + count).val(r.pcs_awal - r.pcs_cabut)
+
+                                var hasil = $('.setGr' + count).val()
+                                var rupiah = (120000 / 500) * parseFloat(hasil)
+                                rupiah = rupiah.toLocaleString('id-ID', {
+                                    maximumFractionDigits: 0
+                                })
+                                $(".setRupiah" + count).val(rupiah)
                             }
                         });
                     })

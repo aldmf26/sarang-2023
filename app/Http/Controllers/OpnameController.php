@@ -2,24 +2,112 @@
 
 namespace App\Http\Controllers;
 
+use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class OpnameController extends Controller
 {
+    public function index(Request $r)
+    {
+        $cabut = [
+            [
+                'title' => 'BK'
+            ],
+            [
+                'title' => 'BK CBT AWAL'
+            ],
+            [
+                'title' => 'BK SISA SINTA'
+            ],
+            [
+                'title' => 'BK CBT PGWS',
+                'query' => $this->bkCbtPgws()
+            ],
+            [
+                'title' => 'BK CBT SISA PGWS',
+                'query' => $this->bkCbtPgws()
+            ],
+            [
+                'title' => 'GDG CBT SELESAI',
+                'query' => $this->bkCbtPgwsSelesai()
+            ],
+        ];
+        $data = [
+            'title' => 'Opname Semua Barang',
+            'cabut' => $cabut
+        ];
+        return view('home.opname.index', $data);
+    }
+    
+    public function detail(Request $r)
+    {
+        $bkCbt = $this->bkCbt();
+        $bkCtk = $this->bkCtkDetail();
+        $bjGradeAwal = $this->bjGradeAwalDetail();
+        $boxSp = $this->boxSpDetail();
+        $bjSpProses = $this->bjSpProsesDetail();
+        $gdgSpSelesai = $this->gdgSpSelesaiDetail();
+        $pengiriman = $this->pengirimanDetail();
+        $box_kirim = $this->boxKirimDetail();
+        $packingList = $this->packingListDetail();
+        $boxBarcode = $this->boxBarcodeDetail();
+
+
+        $arr = [
+            [
+                'title' => 'bk',
+                'query' => $bkCbt
+            ],
+            [
+                'title' => 'bk cbt awal',
+                'query' => $bkCbt
+            ],
+            [
+                'title' => 'bk sisa Sinta',
+                'query' => $bkCbt
+            ],
+            [
+                'title' => 'bk cbt pgws',
+                'query' => $bkCbt
+            ],
+            [
+                'title' => 'bk cbt sisa pgws',
+                'query' => $bkCbt
+            ],
+            [
+                'title' => 'gdg cbt selesai',
+                'query' => $this->bkCbtSelesai()
+            ]
+
+        ];
+
+        $no = $r->no;
+        $title = $arr[$no - 1]['title'];
+        $query = $arr[$no - 1]['query'];
+
+        $data = [
+            'no' => $no,
+            'title' => $title,
+            'query' => $query
+        ];
+        return view('home.opname.detail', $data);
+    }
+
     public function bkCbtPgws()
     {
-        return DB::selectOne("SELECT a.nm_partai,
+        return DB::select("SELECT a.tipe,
         a.no_box,
         sum(a.pcs_awal) as pcs_bk,
         sum(a.gr_awal) as gr_bk,
         sum(b.pcs) as pcs_awal,
-        (sum(b.gr) + sum(c.gr_eo)) as gr_awal,
-        c.gr_eo,
+        sum(b.gr) as gr_awal,
+        sum(c.gr_eo) as gr_eoeo,
+        sum(c.gr_eo_akhir) as gr_eoeo_akhir,
         sum(b.ttl_rp) as ttl_rp,
          sum(b.pcs_akhir) as pcs_akhir,
-         (sum(b.gr_akhir) + sum(c.gr_eo_akhir)) as gr_akhir
+         sum(b.gr_akhir) as gr_akhir
         FROM bk as a
         LEFT JOIN (
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
@@ -33,7 +121,38 @@ class OpnameController extends Controller
             JOIN bk on bk.no_box = a.no_box
             GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
-        where a.kategori in ('cabut','eo');");
+        where a.kategori in ('cabut','eo')
+        group by a.tipe");
+    }
+    public function bkCbtPgwsSelesai()
+    {
+        return DB::select("SELECT a.tipe,
+        a.no_box,
+        sum(a.pcs_awal) as pcs_bk,
+        sum(a.gr_awal) as gr_bk,
+        sum(b.pcs) as pcs_awal,
+        sum(b.gr) as gr_awal,
+        sum(c.gr_eo) as gr_eoeo,
+        sum(c.gr_eo_akhir) as gr_eoeo_akhir,
+        sum(b.ttl_rp) as ttl_rp,
+        sum(c.eo_ttl_rp) as eo_ttl_rp,
+         sum(b.pcs_akhir) as pcs_akhir,
+         sum(b.gr_akhir) as gr_akhir
+        FROM bk as a
+        LEFT JOIN (
+            SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
+            FROM cabut  as a
+            left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+            WHERE a.selesai = 'Y' GROUP BY a.no_box
+        ) as b on a.no_box = b.no_box
+        left JOIN (
+            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir, sum(a.ttl_rp)  as eo_ttl_rp
+            FROM eo  as a
+            JOIN bk on bk.no_box = a.no_box
+            WHERE a.selesai = 'Y' GROUP BY a.no_box
+        ) as c on a.no_box = c.no_box
+        where a.kategori in ('cabut','eo')
+        group by a.tipe");
     }
 
     public function bkCtk()
@@ -186,8 +305,10 @@ class OpnameController extends Controller
         return json_decode($get);
     }
 
-    public function index(Request $r)
+
+    public function index2(Request $r)
     {
+
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
@@ -244,7 +365,7 @@ class OpnameController extends Controller
                 'title' => 'bk cbt pgws',
                 'body' => [
                     'pcs' => $bkCbtPgws->pcs_awal,
-                    'gr' => $bkCbtPgws->gr_awal,
+                    'gr' => $bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo,
                 ],
             ],
             [
@@ -447,9 +568,9 @@ class OpnameController extends Controller
         a.gr_awal as gr_bk,
         b.pcs as pcs_awal,
         COALESCE(b.gr, 0) + COALESCE(c.gr_eo, 0) as gr_awal,
+        COALESCE(b.gr_akhir, 0) + COALESCE(c.gr_eo_akhir, 0) as gr_akhir,
         b.ttl_rp as ttl_rp,
-         b.pcs_akhir as pcs_akhir,
-         b.gr_akhir as gr_akhir
+         b.pcs_akhir as pcs_akhir
         FROM bk as a
         LEFT JOIN (
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
@@ -458,10 +579,38 @@ class OpnameController extends Controller
             GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
-            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo 
+            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir 
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
             GROUP BY a.no_box
+        ) as c on a.no_box = c.no_box
+        where a.kategori in ('cabut','eo');");
+    }
+    public function bkCbtSelesai()
+    {
+        return DB::select("SELECT a.nm_partai,
+        a.tipe,
+        a.no_box,
+        a.pcs_awal as pcs_bk,
+        a.gr_awal as gr_bk,
+        b.pcs as pcs_awal,
+        COALESCE(b.gr, 0) + COALESCE(c.gr_eo, 0) as gr_awal,
+        COALESCE(b.gr_akhir, 0) + COALESCE(c.gr_eo_akhir, 0) as gr_akhir,
+        COALESCE(b.ttl_rp, 0) + COALESCE(c.eo_ttl_rp, 0) as ttl_rp,
+         b.pcs_akhir as pcs_akhir
+        FROM bk as a
+        LEFT JOIN (
+            SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
+            FROM cabut  as a
+            left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+            WHERE a.selesai = 'Y' GROUP BY a.no_box
+        ) as b on a.no_box = b.no_box
+        left JOIN (
+            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir,
+            sum(a.ttl_rp) as eo_ttl_rp
+            FROM eo  as a
+            JOIN bk on bk.no_box = a.no_box
+            WHERE a.selesai = 'Y' GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
         where a.kategori in ('cabut','eo');");
     }
@@ -564,7 +713,10 @@ class OpnameController extends Controller
         return DB::select("SELECT a.partai as nm_partai,a.no_box,a.grade,a.pcs_akhir as pcs_awal, a.gr_akhir + a.gr_naik as gr_awal, (a.rp_gram * (a.gr_akhir + a.gr_naik)) as ttl_rp FROM `pengiriman` as a
         WHERE a.no_box is not null;");
     }
-    public function detail(Request $r)
+
+
+
+    public function detail2(Request $r)
     {
         $bkCbt = $this->bkCbt();
         $bkCtk = $this->bkCtkDetail();
