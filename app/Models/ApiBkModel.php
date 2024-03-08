@@ -318,5 +318,6 @@ class ApiBkModel extends Model
         ) as b on b.nm_partai = a.nm_partai
         WHERE a.nm_partai = '$nm_partai' and a.kategori = 'cetak'
         GROUP BY a.nm_partai;");
+        return $result;
     }
 }
