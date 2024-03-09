@@ -115,7 +115,7 @@ class SortirController extends Controller
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $id_sortir = $r->id_sortir[$i];
                 $data = [
-                    'no_box' => $r->no_box,
+                    'no_box' => $r->no_box[$i],
                     'tgl' => $r->tgl_terima[$i],
                     'id_pengawas' => $r->id_pengawas,
                     'id_anak' => $r->id_anak[$i],

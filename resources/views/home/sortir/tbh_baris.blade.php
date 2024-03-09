@@ -26,7 +26,7 @@
         </select>
     </td>
     <td>
-        <select name="no_box" id="" required class="select2-tambah pilihBox" count="{{$count}}">
+        <select name="no_box[]" id="" required class="select2-tambah pilihBox" count="{{$count}}">
             <option value="">Pilih Box</option>
             @foreach ($boxBk as $d)
                 @if ($d->gr_awal - $d->gr_cabut > 1)
