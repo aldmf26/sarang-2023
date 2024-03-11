@@ -19,6 +19,8 @@
                             @php
                                 $pcs = $d['body']['pcs'] ?? 0;
                                 $gr = $d['body']['gr'] ?? 0;
+                                $pcs_sst = $d['body']['pcs_sst'] ?? 0;
+                                $gr_sst = $d['body']['gr_sst'] ?? 0;
                                 $ttl_rp = $d['body']['ttl_rp'] ?? 0;
                             @endphp
                             <div class="col-md-4">
@@ -33,11 +35,25 @@
                                                 <th>:</th>
                                                 <th>{{ number_format($pcs, 0) }}</th>
                                             </tr>
+                                            @if ($i+1 == 2)
+                                            <tr>
+                                                <th class="text-start">Pcs Sst</th>
+                                                <th>:</th>
+                                                <th>{{ number_format($pcs_sst, 0) }}</th>
+                                            </tr>
+                                            @endif
                                             <tr>
                                                 <th class="text-start">Gr</th>
                                                 <th>:</th>
                                                 <th>{{ number_format($gr, 0) }}</th>
                                             </tr>
+                                            @if ($i+1 == 2)
+                                            <tr>
+                                                <th class="text-start">Gr Sst</th>
+                                                <th>:</th>
+                                                <th>{{ number_format($gr_sst, 0) }}</th>
+                                            </tr>
+                                            @endif
                                             <tr>
                                                 <th class="text-start">Ttl Rp</th>
                                                 <th>:</th>

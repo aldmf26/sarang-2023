@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 class OpnameController extends Controller
 {
     // $linkap = "https://gudangsarang.ptagafood.com";
-    public $linkApi = "https://gudangsarang.ptagafood.com";
+    public $linkApi = "http://127.0.0.1:8000";
     public function index222(Request $r)
     {
         $cabut = [
@@ -120,12 +120,14 @@ class OpnameController extends Controller
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
             FROM cabut  as a
             left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+            WHERE a.bulan_dibayar != 0
             GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
             SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir, sum(a.ttl_rp)  as ttl_rp
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
+            WHERE a.bulan_dibayar != 0
             GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
         where a.kategori in ('cabut','eo')");
@@ -369,6 +371,8 @@ class OpnameController extends Controller
                 'body' => [
                     'pcs' => $bkCbtAwal->pcs,
                     'gr' => $bkCbtAwal->gr,
+                    'pcs_sst' => $bkCbtAwal->pcs_susut,
+                    'gr_sst' => $bkCbtAwal->gr_susut,
                     'ttl_rp' => $bkCbtAwal->ttl_rp,
                 ],
             ],
