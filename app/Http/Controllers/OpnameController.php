@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class OpnameController extends Controller
 {
-    public function index(Request $r)
+    public function index222(Request $r)
     {
         $cabut = [
             [
@@ -301,7 +301,7 @@ class OpnameController extends Controller
     {
         $linkap = "https://gudangsarang.ptagafood.com";
         $link = "http://127.0.0.1:8000";
-        $get = Http::get("$linkap/api/apibk/sumWip");
+        $get = Http::get("$link/api/apibk/sumWip");
         return json_decode($get);
     }
 
@@ -310,7 +310,7 @@ class OpnameController extends Controller
         $linkap = "https://gudangsarang.ptagafood.com";
         $link = "http://127.0.0.1:8000";
 
-        $get = Http::get("$linkap/api/apibk/detailSumWip");
+        $get = Http::get("$link/api/apibk/detailSumWip");
         return json_decode($get);
     }
 
@@ -329,7 +329,7 @@ class OpnameController extends Controller
     }
 
 
-    public function index2(Request $r)
+    public function index(Request $r)
     {
 
         $tgl = tanggalFilter($r);

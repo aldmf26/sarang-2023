@@ -111,7 +111,7 @@ class SortirController extends Controller
         $ttlGr = array_sum($r->gr_awal);
         for ($i = 0; $i < count($r->rupiah); $i++) {
             $nobox = $r->no_box[$i];
-            $admin = 90;
+            $admin = auth()->user()->id;
             $cekStok = DB::selectOne("SELECT 
             sum(a.pcs_awal) - sum(b.pcs) as pcs, 
             sum(a.gr_awal) - sum(b.gr) as gr 
@@ -140,15 +140,15 @@ class SortirController extends Controller
                 } else {
                     DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
                 }
-                return 'berhasil';
             // } else {
             //     return 'Stok pcs / gr melebihi Bk';
             // }
         }
 
+        return 'berhasil';
 
 
-        return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
+        // return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function cancel(Request $r)
