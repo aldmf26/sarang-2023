@@ -4,7 +4,32 @@
     </x-slot>
 
     <x-slot name="cardBody">
+        <div class="loading">
+            <div class="mb-2">
+                <div class="modal fade text-left show" id="backdrop" tabindex="-1" aria-labelledby="myModalLabel4" data-bs-backdrop="false" style="display: block; padding-right: 17px;" aria-modal="true" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel4">Harap Tunggu</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="progress" style="display:none;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                  </div>
+                                <button class="btn-block btn btn-primary" type="button" disabled="">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Loading...
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
         <div class="row">
+            <h5>Cabut</h5>
             @foreach ($cabut as $i => $d)
                 @php
                     $title = $d['title'];
@@ -37,7 +62,7 @@
                                         $ttlGr = 0;
                                         $ttlTtlRp = 0;
                                     @endphp
-                                    @foreach ($query as $q)
+                                    @foreach ($query as $no => $q)
                                         @php
                                             switch ($i) {
                                                 case 0:
@@ -46,9 +71,14 @@
                                                     $ttlRp = $q->total_rp;
                                                     break;
                                                 case 1:
-                                                    $pcs = $q->pcs_susut;
-                                                    $gr = $q->gr_susut;
-                                                    $ttlRp = 0;
+                                                    $pcs = $q->pcs;
+                                                    $gr = $q->gr;
+                                                    $ttlRp = $q->ttl_rp;
+                                                    break;
+                                                case 2:
+                                                    $pcs = $q->pcs_sisa;
+                                                    $gr = $q->gr_sisa;
+                                                    $ttlRp = empty($q->gr_sisa) ? 0 : $q->ttl_rp_sisa;
                                                     break;
                                                 case 3:
                                                     $pcs = $q->pcs_awal;
@@ -76,7 +106,7 @@
                                             $ttlTtlRp += $ttlRp ?? 0;
                                         @endphp
                                         <tr>
-                                            <td class="text-start">{{ $q->tipe }}</td>
+                                            <td class="text-start">{{ $q->tipe }} </td>
                                             <td align="right">{{ number_format($pcs, 0) }}</td>
                                             <td align="right">{{ number_format($gr, 0) }}</td>
                                             <td align="right">{{ number_format(empty($ttlRp) ? 0 : $ttlRp / $gr, 0) }}
@@ -108,7 +138,7 @@
                 </div>
             @endforeach
         </div>
-       
+
         <hr>
         {{-- <div class="row">
             <div class="col-md-4 bg-light">
@@ -255,12 +285,19 @@
                 </div>
             @endforeach
         </div> --}}
-
+        
         <x-theme.modal title="Detail Barang Opname" btnSave="T" size="modal-lg" idModal="detail">
             <div id="load_detail"></div>
         </x-theme.modal>
         @section('scripts')
             <script>
+                    $('.loading').hide()
+
+                $(window).on('beforeunload', function() {
+                    // Tambahkan kode Anda di sini, seperti menampilkan pesan loading
+                    $('.loading').show()
+                    
+                });
                 $(document).on('click', '.detail', function() {
                     const no = $(this).attr('no')
                     $('#detail').modal('show')

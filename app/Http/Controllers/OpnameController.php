@@ -19,10 +19,11 @@ class OpnameController extends Controller
             ],
             [
                 'title' => 'BK CBT AWAL',
-                'query' => $this->bkHerry()
+                'query' => $this->bkCbtAwal()
             ],
             [
-                'title' => 'BK SISA SINTA'
+                'title' => 'BK SISA SINTA',
+                'query' => $this->bkCbtAwal()
             ],
             [
                 'title' => 'BK CBT PGWS',
@@ -288,11 +289,19 @@ class OpnameController extends Controller
         WHERE a.no_box is not null;");
     }
 
+    public function bkCbtAwal()
+    {
+        $linkap = "https://gudangsarang.ptagafood.com";
+        $link = "http://127.0.0.1:8000";
+        $get = Http::get("$linkap/api/apibk/bkCbtAwal");
+        return json_decode($get);
+    }
+    
     public function bkHerry()
     {
         $linkap = "https://gudangsarang.ptagafood.com";
         $link = "http://127.0.0.1:8000";
-        $get = Http::get("$link/api/apibk/sumWip");
+        $get = Http::get("$linkap/api/apibk/sumWip");
         return json_decode($get);
     }
 
@@ -301,7 +310,7 @@ class OpnameController extends Controller
         $linkap = "https://gudangsarang.ptagafood.com";
         $link = "http://127.0.0.1:8000";
 
-        $get = Http::get("$link/api/apibk/detailSumWip");
+        $get = Http::get("$linkap/api/apibk/detailSumWip");
         return json_decode($get);
     }
 
