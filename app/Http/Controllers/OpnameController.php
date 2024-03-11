@@ -101,7 +101,7 @@ class OpnameController extends Controller
 
     public function bkCbtPgws()
     {
-        return DB::select("SELECT a.tipe,
+        return DB::selectOne("SELECT a.tipe,
         a.no_box,
         sum(a.pcs_awal) as pcs_bk,
         sum(a.gr_awal) as gr_bk,
@@ -125,8 +125,7 @@ class OpnameController extends Controller
             JOIN bk on bk.no_box = a.no_box
             GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
-        where a.kategori in ('cabut','eo')
-        group by a.tipe");
+        where a.kategori in ('cabut','eo')");
     }
     public function bkCbtPgwsSelesai()
     {
@@ -293,7 +292,7 @@ class OpnameController extends Controller
     {
         $linkap = "https://gudangsarang.ptagafood.com";
         $link = "http://127.0.0.1:8000";
-        $get = Http::get("$linkap/api/apibk/bkCbtAwal");
+        $get = Http::get("$link/api/apibk/bkCbtAwal");
         return json_decode($get);
     }
     
@@ -338,6 +337,7 @@ class OpnameController extends Controller
 
         $bkHerry = $this->bkHerry();
         $bkCbtPgws = $this->bkCbtPgws();
+        $bkCbtAwal = $this->bkCbtAwal();
         $bkCtk = $this->bkCtk();
         $bjCtk = $this->bjCtk();
         $sumCtk = $this->sumCtk();
@@ -370,17 +370,18 @@ class OpnameController extends Controller
                 'no' => 1,
                 'title' => 'bk cbt awal',
                 'body' => [
-                    'pcs' => $bkCbtPgws->pcs_bk + $bkHerry->pcs_susut,
-                    'gr' => $bkCbtPgws->gr_bk + $bkHerry->gr_susut,
-                    'ttl_rp' => $bkCbtPgws->gr_bk * $hrgaModalSatuan,
+                    'pcs' => $bkCbtAwal->pcs,
+                    'gr' => $bkCbtAwal->gr,
+                    'ttl_rp' => $bkCbtAwal->ttl_rp,
                 ],
             ],
             [
                 'no' => 1,
                 'title' => 'bk sisa sinta',
                 'body' => [
-                    'pcs' => $bkHerry->pcs - ($bkCbtPgws->pcs_bk + $bkHerry->pcs_susut),
-                    'gr' => $bkHerry->gr - ($bkCbtPgws->gr_bk + $bkHerry->gr_susut),
+                    'pcs' => $bkCbtAwal->pcs_sisa,
+                    'gr' => $bkCbtAwal->gr_sisa,
+                    'ttl_rp' => $bkCbtAwal->ttl_rp_sisa,
                 ],
             ],
             [
@@ -396,7 +397,7 @@ class OpnameController extends Controller
                 'title' => 'bk cbt sisa pgws',
                 'body' => [
                     'pcs' => $bkCbtPgws->pcs_awal - $bkCbtPgws->pcs_akhir,
-                    'gr' => $bkCbtPgws->gr_awal - $bkCbtPgws->gr_akhir,
+                    'gr' => ($bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo) - ($bkCbtPgws->gr_akhir + $bkCbtPgws->gr_eoeo_akhir),
                 ],
             ],
             [

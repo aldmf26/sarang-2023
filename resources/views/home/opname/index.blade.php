@@ -23,7 +23,7 @@
                             @endphp
                             <div class="col-md-4">
                                 <div no="{{ $i + 1 }}"
-                                    class=" position-relative card cardHover pointer text-center border border-secondary">
+                                    class="detail position-relative card cardHover pointer text-center border border-secondary">
                                     <div class="card-body">
                                         <h5>{{ $i + 1 }}</h5>
                                         <h6>{{ strtoupper($d['title']) }}</h6>
@@ -106,12 +106,11 @@
                                     </table>
                                 </div>
                                 @if (str_contains(strtolower($d['title']), 'sisa'))
-                                        <div
-                                            class="position-absolute top-50 start-50 translate-middle p-2 bg-transparent">
-                                            <h6 style="transform: rotate(-15deg);" class="text-muted mb-0"
-                                                style="font-style: italic;">Diopname</h6>
-                                        </div>
-                                    @endif
+                                    <div class="position-absolute top-50 start-50 translate-middle p-2 bg-transparent">
+                                        <h6 style="transform: rotate(-15deg);" class="text-muted mb-0"
+                                            style="font-style: italic;">Diopname</h6>
+                                    </div>
+                                @endif
                             </div>
 
                         </div>
@@ -212,8 +211,44 @@
         <x-theme.modal title="Detail Barang Opname" size="modal-lg" idModal="detail">
             <div id="load_detail"></div>
         </x-theme.modal>
+
+        <div class="loading">
+            <div class="mb-2">
+                <div class="modal fade text-left show" id="backdrop" tabindex="-1" aria-labelledby="myModalLabel4"
+                    data-bs-backdrop="false" style="display: block; padding-right: 17px;" aria-modal="true"
+                    role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel4">Harap Tunggu</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="progress" style="display:none;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                        style="width: 0%"></div>
+                                </div>
+                                <button class="btn-block btn btn-primary" type="button" disabled="">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    Loading...
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         @section('scripts')
             <script>
+                $('.loading').hide()
+                $(window).on('beforeunload', function() {
+                    $('.loading').show()
+
+                });
                 $(document).on('click', '.detail', function() {
                     const no = $(this).attr('no')
                     $('#detail').modal('show')
