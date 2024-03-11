@@ -398,8 +398,8 @@ class OpnameController extends Controller
                 'no' => 3,
                 'title' => 'bk cbt sisa pgws',
                 'body' => [
-                    'pcs' => $bkCbtPgws->pcs_awal - $bkCbtPgws->pcs_akhir,
-                    'gr' => ($bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo) - ($bkCbtPgws->gr_akhir + $bkCbtPgws->gr_eoeo_akhir),
+                    'pcs' => $bkCbtAwal->pcs - $bkCbtPgws->pcs_awal,
+                    'gr' => $bkCbtAwal->gr - ($bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo) - ($bkCbtPgws->gr_akhir + $bkCbtPgws->gr_eoeo_akhir),
                 ],
             ],
             [
@@ -602,12 +602,14 @@ class OpnameController extends Controller
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
             FROM cabut  as a
             left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
+            WHERE a.bulan_dibayar != 0 
             GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
             SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir 
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
+            WHERE a.bulan_dibayar != 0 
             GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
         where a.kategori in ('cabut','eo');");
@@ -629,14 +631,14 @@ class OpnameController extends Controller
             SELECT a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
             FROM cabut  as a
             left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
-            WHERE a.selesai = 'Y' GROUP BY a.no_box
+            WHERE a.selesai = 'Y' AND a.bulan_dibayar != 0 GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
             SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir,
             sum(a.ttl_rp) as eo_ttl_rp
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
-            WHERE a.selesai = 'Y' GROUP BY a.no_box
+            WHERE a.selesai = 'Y' AND a.bulan_dibayar != 0 GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
         where a.kategori in ('cabut','eo');");
     }
