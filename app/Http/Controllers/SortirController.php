@@ -111,14 +111,22 @@ class SortirController extends Controller
         $ttlGr = array_sum($r->gr_awal);
         for ($i = 0; $i < count($r->rupiah); $i++) {
             $nobox = $r->no_box[$i];
-            $cekStok = DB::selectOne("SELECT sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `bk` WHERE no_box = '$nobox' AND kategori LIKE '%sortir%';");
+            $admin = 90;
+            $cekStok = DB::selectOne("SELECT 
+            sum(a.pcs_awal) - sum(b.pcs) as pcs, 
+            sum(a.gr_awal) - sum(b.gr) as gr 
+            FROM `bk`  as a
+            JOIN (
+                SELECT no_box,id_pengawas,sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `sortir` GROUP BY no_box,id_pengawas
+            ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
+            WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
             if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $id_sortir = $r->id_sortir[$i];
                 $data = [
                     'no_box' => $r->no_box[$i],
                     'tgl' => $r->tgl_terima[$i],
-                    'id_pengawas' => $r->id_pengawas,
+                    'id_pengawas' =>$admin,
                     'id_anak' => $r->id_anak[$i],
                     'id_kelas' => $r->tipe[$i],
                     'pcuc' => $r->pcuc[$i],
@@ -132,8 +140,7 @@ class SortirController extends Controller
                 } else {
                     DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
                 }
-        return 'berhasil';
-
+                return 'berhasil';
             } else {
                 return 'Stok pcs / gr melebihi Bk';
             }
