@@ -120,7 +120,7 @@ class SortirController extends Controller
                 SELECT no_box,id_pengawas,sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `sortir` GROUP BY no_box,id_pengawas
             ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
             WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
-            if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
+            // if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $id_sortir = $r->id_sortir[$i];
                 $data = [
@@ -141,9 +141,9 @@ class SortirController extends Controller
                     DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
                 }
                 return 'berhasil';
-            } else {
-                return 'Stok pcs / gr melebihi Bk';
-            }
+            // } else {
+            //     return 'Stok pcs / gr melebihi Bk';
+            // }
         }
 
 
