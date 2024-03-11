@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Http;
 
 class OpnameController extends Controller
 {
+    // $linkap = "https://gudangsarang.ptagafood.com";
+    public $linkApi = "http://127.0.0.1:8000";
     public function index222(Request $r)
     {
         $cabut = [
@@ -110,6 +112,7 @@ class OpnameController extends Controller
         sum(c.gr_eo) as gr_eoeo,
         sum(c.gr_eo_akhir) as gr_eoeo_akhir,
         sum(b.ttl_rp) as ttl_rp,
+        sum(c.ttl_rp) as ttl_rp_eo,
          sum(b.pcs_akhir) as pcs_akhir,
          sum(b.gr_akhir) as gr_akhir
         FROM bk as a
@@ -120,7 +123,7 @@ class OpnameController extends Controller
             GROUP BY a.no_box
         ) as b on a.no_box = b.no_box
         left JOIN (
-            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir 
+            SELECT a.no_box,sum(a.gr_eo_awal) as gr_eo, sum(a.gr_eo_akhir) as gr_eo_akhir, sum(a.ttl_rp)  as ttl_rp
             FROM eo  as a
             JOIN bk on bk.no_box = a.no_box
             GROUP BY a.no_box
@@ -129,7 +132,7 @@ class OpnameController extends Controller
     }
     public function bkCbtPgwsSelesai()
     {
-        return DB::select("SELECT a.tipe,
+        return DB::selectOne("SELECT a.tipe,
         a.no_box,
         sum(a.pcs_awal) as pcs_bk,
         sum(a.gr_awal) as gr_bk,
@@ -154,8 +157,7 @@ class OpnameController extends Controller
             JOIN bk on bk.no_box = a.no_box
             WHERE a.selesai = 'Y' GROUP BY a.no_box
         ) as c on a.no_box = c.no_box
-        where a.kategori in ('cabut','eo')
-        group by a.tipe");
+        where a.kategori in ('cabut','eo')");
     }
 
     public function bkCtk()
@@ -290,26 +292,20 @@ class OpnameController extends Controller
 
     public function bkCbtAwal()
     {
-        $linkap = "https://gudangsarang.ptagafood.com";
-        $link = "http://127.0.0.1:8000";
-        $get = Http::get("$link/api/apibk/bkCbtAwal");
+        $get = Http::get("$this->linkApi/api/apibk/bkCbtAwal");
         return json_decode($get);
     }
     
     public function bkHerry()
     {
-        $linkap = "https://gudangsarang.ptagafood.com";
-        $link = "http://127.0.0.1:8000";
-        $get = Http::get("$link/api/apibk/sumWip");
+        $get = Http::get("$this->linkApi/api/apibk/sumWip");
         return json_decode($get);
     }
 
     public function detailBkHerry()
     {
-        $linkap = "https://gudangsarang.ptagafood.com";
-        $link = "http://127.0.0.1:8000";
-
-        $get = Http::get("$link/api/apibk/detailSumWip");
+  
+        $get = Http::get("$this->linkApi/api/apibk/detailSumWip");
         return json_decode($get);
     }
 
@@ -337,6 +333,7 @@ class OpnameController extends Controller
 
         $bkHerry = $this->bkHerry();
         $bkCbtPgws = $this->bkCbtPgws();
+        $bkCbtPgwsSelesai = $this->bkCbtPgwsSelesai();
         $bkCbtAwal = $this->bkCbtAwal();
         $bkCtk = $this->bkCtk();
         $bjCtk = $this->bjCtk();
@@ -404,9 +401,9 @@ class OpnameController extends Controller
                 'no' => 4,
                 'title' => 'gdg cbt selesai',
                 'body' => [
-                    'pcs' => $bkCbtPgws->pcs_akhir,
-                    'gr' => $bkCbtPgws->gr_akhir,
-                    'ttl_rp' => $bkCbtPgws->ttl_rp,
+                    'pcs' => $bkCbtPgwsSelesai->pcs_akhir,
+                    'gr' => $bkCbtPgwsSelesai->gr_akhir + $bkCbtPgwsSelesai->gr_eoeo_akhir,
+                    'ttl_rp' => $bkCbtPgwsSelesai->ttl_rp + $bkCbtPgwsSelesai->eo_ttl_rp,
                 ],
             ],
             [

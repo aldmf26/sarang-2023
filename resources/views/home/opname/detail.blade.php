@@ -40,7 +40,7 @@
                                 case 5:
                                     $pcs = $d->pcs_awal - $d->pcs_akhir ?? 0;
                                     $gr = $d->gr_awal - $d->gr_akhir ?? 0;
-                                    $ttl_rp = $d->ttl_rp ?? 0;
+                                    $ttl_rp = 0;
                                     break;
                                 case 6:
                                     $pcs = $d->pcs_akhir;
