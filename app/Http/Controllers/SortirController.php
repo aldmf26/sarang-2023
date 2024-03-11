@@ -68,7 +68,7 @@ class SortirController extends Controller
         DB::table('pengiriman_list_gradingbj')->whereIn('no_box', $r->no_box)->update([
             'pengawas' => $idPengwas
         ]);
-        
+
         return redirect()->route('sortir.index')->with('sukses', 'Box berhasil diambil');
     }
 
@@ -109,9 +109,10 @@ class SortirController extends Controller
     {
         $ttlPcs = array_sum($r->pcs_awal);
         $ttlGr = array_sum($r->gr_awal);
-        $cekStok = DB::selectOne("SELECT sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `bk` WHERE no_box = '$r->no_box' AND kategori LIKE '%sortir%';");
-        if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
-            for ($i = 0; $i < count($r->rupiah); $i++) {
+        for ($i = 0; $i < count($r->rupiah); $i++) {
+            $nobox = $r->no_box[$i];
+            $cekStok = DB::selectOne("SELECT sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `bk` WHERE no_box = '$nobox' AND kategori LIKE '%sortir%';");
+            if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $id_sortir = $r->id_sortir[$i];
                 $data = [
@@ -131,11 +132,13 @@ class SortirController extends Controller
                 } else {
                     DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
                 }
+        return 'berhasil';
+
+            } else {
+                return 'Stok pcs / gr melebihi Bk';
             }
-            return 'berhasil';
-        } else {
-            return 'Stok pcs / gr melebihi Bk';
         }
+
 
 
         return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil ditambahkan');

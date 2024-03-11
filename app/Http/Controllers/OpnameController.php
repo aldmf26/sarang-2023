@@ -13,10 +13,13 @@ class OpnameController extends Controller
     {
         $cabut = [
             [
-                'title' => 'BK'
+                'title' => 'BK',
+                'query' => $this->bkHerry()
+
             ],
             [
-                'title' => 'BK CBT AWAL'
+                'title' => 'BK CBT AWAL',
+                'query' => $this->bkHerry()
             ],
             [
                 'title' => 'BK SISA SINTA'
@@ -53,12 +56,12 @@ class OpnameController extends Controller
         $box_kirim = $this->boxKirimDetail();
         $packingList = $this->packingListDetail();
         $boxBarcode = $this->boxBarcodeDetail();
-
+        $detailBkHerry = $this->detailBkHerry();
 
         $arr = [
             [
                 'title' => 'bk',
-                'query' => $bkCbt
+                'query' => $detailBkHerry
             ],
             [
                 'title' => 'bk cbt awal',
@@ -287,7 +290,18 @@ class OpnameController extends Controller
 
     public function bkHerry()
     {
-        $get = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sumWip");
+        $linkap = "https://gudangsarang.ptagafood.com";
+        $link = "http://127.0.0.1:8000";
+        $get = Http::get("$link/api/apibk/sumWip");
+        return json_decode($get);
+    }
+
+    public function detailBkHerry()
+    {
+        $linkap = "https://gudangsarang.ptagafood.com";
+        $link = "http://127.0.0.1:8000";
+
+        $get = Http::get("$link/api/apibk/detailSumWip");
         return json_decode($get);
     }
 

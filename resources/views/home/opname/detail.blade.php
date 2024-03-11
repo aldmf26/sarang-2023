@@ -27,6 +27,11 @@
                     @foreach ($query as $i => $d)
                     @php
                             switch ($no) {
+                                case 1:
+                                    $pcs = $d->pcs ?? 0;
+                                    $gr = $d->gr ?? 0;
+                                    $ttl_rp = $d->total_rp ?? 0;
+                                    break;
                                 case 4:
                                     $pcs = $d->pcs_awal ?? 0;
                                     $gr = $d->gr_awal ?? 0;
@@ -42,9 +47,6 @@
                                     $gr = $d->gr_akhir;
                                     $ttl_rp = $d->ttl_rp ?? 0;
                                     break;
-                                
-                          
-                                
                                 default:
                                     break;
                             }

@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <h5>{{ $i + 1 }}</h5>
                             <h6>{{ $title }}</h6>
-                            <table class="table text-end">
+                            <table class="table text-end" style="font-size: 10.5px">
                                 <thead>
                                     <tr>
                                         <th class="dhead">Grade</th>
@@ -40,6 +40,16 @@
                                     @foreach ($query as $q)
                                         @php
                                             switch ($i) {
+                                                case 0:
+                                                    $pcs = $q->pcs;
+                                                    $gr = $q->gr;
+                                                    $ttlRp = $q->total_rp;
+                                                    break;
+                                                case 1:
+                                                    $pcs = $q->pcs_susut;
+                                                    $gr = $q->gr_susut;
+                                                    $ttlRp = 0;
+                                                    break;
                                                 case 3:
                                                     $pcs = $q->pcs_awal;
                                                     $gr = $q->gr_awal + $q->gr_eoeo;
@@ -47,11 +57,12 @@
                                                     break;
                                                 case 4:
                                                     $pcs = $q->pcs_awal - $q->pcs_akhir;
-                                                    $gr = ($q->gr_awal + $q->gr_eoeo) - ($q->gr_akhir + $q->gr_eoeo_akhir);
+                                                    $gr =
+                                                        $q->gr_awal + $q->gr_eoeo - ($q->gr_akhir + $q->gr_eoeo_akhir);
                                                     break;
                                                 case 5:
                                                     $pcs = $q->pcs_akhir;
-                                                    $gr = ($q->gr_akhir + $q->gr_eoeo_akhir);
+                                                    $gr = $q->gr_akhir + $q->gr_eoeo_akhir;
                                                     $ttlRp = $q->ttl_rp + $q->eo_ttl_rp;
 
                                                     break;
@@ -61,14 +72,15 @@
                                                     break;
                                             }
                                             $ttlPcs += $pcs;
-                                                    $ttlGr += $gr;
-                                                    $ttlTtlRp += $ttlRp ?? 0;
+                                            $ttlGr += $gr;
+                                            $ttlTtlRp += $ttlRp ?? 0;
                                         @endphp
                                         <tr>
                                             <td class="text-start">{{ $q->tipe }}</td>
                                             <td align="right">{{ number_format($pcs, 0) }}</td>
                                             <td align="right">{{ number_format($gr, 0) }}</td>
-                                            <td align="right">{{ number_format(empty($ttlRp) ? 0 : $ttlRp / $gr, 0) }}</td>
+                                            <td align="right">{{ number_format(empty($ttlRp) ? 0 : $ttlRp / $gr, 0) }}
+                                            </td>
                                             <td align="right">{{ number_format($ttlRp ?? 0, 0) }}</td>
                                         </tr>
                                     @endforeach
@@ -78,7 +90,8 @@
                                         <th class="dhead">TOTAL</th>
                                         <th class="dhead">{{ number_format($ttlPcs, 0) }}</th>
                                         <th class="dhead">{{ number_format($ttlGr, 0) }}</th>
-                                        <th class="dhead">{{ number_format(empty($ttlGr) ? 0 : $ttlTtlRp / $ttlGr, 0) }}</th>
+                                        <th class="dhead">
+                                            {{ number_format(empty($ttlGr) ? 0 : $ttlTtlRp / $ttlGr, 0) }}</th>
                                         <th class="dhead">{{ number_format($ttlTtlRp, 0) }}</th>
                                     </tr>
                                 </tfoot>
@@ -95,71 +108,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="row">
-            <div class="col-md-4 bg-light">
-                <div class="card sticky-top cardHover pointer bg-info">
-                    <div class="card-body">
-                        <h5 class="text-white ">Cabut</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="row">
-
-                    @foreach ($cabut as $i => $d)
-                        @php
-                            $title = $d['title'];
-                            $query = $d['query'] ?? [];
-
-                            // $pcs = $d['body']['pcs'] ?? 0;
-                            // $gr = $d['body']['gr'] ?? 0;
-                            // $ttl_rp = $d['body']['ttl_rp'] ?? 0;
-
-                        @endphp
-                        <div class="col-md-12">
-                            <div no="{{ $i + 1 }}"
-                                class=" position-relative card cardHover pointer text-center border border-secondary">
-                                <div class="card-body">
-                                    <h5>{{ $i + 1 }}</h5>
-                                    <h6>{{ $title }}</h6>
-                                    <table class="table text-end">
-                                        <thead>
-                                            <tr>
-                                                <th>Grade</th>
-                                                <th>Pcs</th>
-                                                <th>Gr</th>
-                                                <th>Rp/gr</th>
-                                                <th>Ttl Rp</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($query as $q)
-                                                <tr>
-                                                    <th class="text-start">{{ $q->tipe }}</th>
-                                                    <th>{{ number_format($q->pcs_awal, 0) }}</th>
-                                                    <th>{{ number_format($q->gr_awal + $q->gr_eoeo, 0) }}</th>
-                                                    <th>{{ number_format(9999, 0) }}</th>
-                                                    <th>{{ number_format(9999, 0) }}</th>
-                                                    <th>{{ number_format(9999, 0) }}</th>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                @if (str_contains(strtolower($d['title']), 'sisa'))
-                                    <div class="position-absolute top-50 start-50 translate-middle p-2 bg-transparent">
-                                        <h6 style="transform: rotate(-15deg);" class="text-muted mb-0"
-                                            style="font-style: italic;">Diopname</h6>
-                                    </div>
-                                @endif
-                            </div>
-
-                        </div>
-                    @endforeach
-                </div>
-
-            </div>
-        </div>
+       
         <hr>
         {{-- <div class="row">
             <div class="col-md-4 bg-light">
