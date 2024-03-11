@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 class OpnameController extends Controller
 {
     // $linkap = "https://gudangsarang.ptagafood.com";
-    public $linkApi = "https://gudangsarang.ptagafood.com"";
+    public $linkApi = "https://gudangsarang.ptagafood.com";
     public function index222(Request $r)
     {
         $cabut = [
