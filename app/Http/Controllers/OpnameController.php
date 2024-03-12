@@ -406,7 +406,7 @@ class OpnameController extends Controller
                 'title' => 'gdg cbt selesai',
                 'body' => [
                     'pcs' => $bkCbtPgwsSelesai->pcs_akhir,
-                    'gr' => $bkCbtPgwsSelesai->gr_akhir + $bkCbtPgwsSelesai->gr_eoeo_akhir,
+                    'gr' => $bkCbtAwal->ttl_gr_selesai,
                     'ttl_rp' => $bkCbtAwal->ttl_rp_elesai,
                 ],
             ],
