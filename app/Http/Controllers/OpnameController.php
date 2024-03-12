@@ -390,7 +390,7 @@ class OpnameController extends Controller
                 'title' => 'bk cbt pgws',
                 'body' => [
                     'pcs' => $bkCbtPgws->pcs_awal,
-                    'gr' => $bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo + 9000,
+                    'gr' => $bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo,
                 ],
             ],
             [
@@ -398,7 +398,7 @@ class OpnameController extends Controller
                 'title' => 'bk cbt sisa pgws',
                 'body' => [
                     'pcs' => $bkCbtAwal->pcs - $bkCbtPgws->pcs_awal,
-                    'gr' => $bkCbtAwal->gr - ($bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo + 9000),
+                    'gr' => $bkCbtAwal->gr - ($bkCbtPgws->gr_awal + $bkCbtPgws->gr_eoeo),
                 ],
             ],
             [
