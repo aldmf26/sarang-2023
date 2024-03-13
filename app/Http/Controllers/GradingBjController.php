@@ -66,9 +66,19 @@ class GradingBjController extends Controller
             ->get();
 
 
-        $response = Http::get("https://gudangsarang.ptagafood.com/api/apibk/bkSortirApi");
-        $cabut_selesai = $response->object();
 
+
+
+        $tblBk = DB::table('pengiriman_gradingbj')->pluck('no_box')->toArray();
+        $response = Http::get("https://gudangsarang.ptagafood.com/api/apibk/bkSortirApi");
+        $data = json_decode($response->getBody());
+
+        $data = array_filter($data, function ($item) use ($tblBk) {
+            // Mengembalikan false jika no_box ada di dalam $tblBk
+            return !in_array($item->no_box, $tblBk);
+        });
+
+        $cabut_selesai = array_values($data);
 
         // if (!$cetak && !$cabut_selesai) {
         //     return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');

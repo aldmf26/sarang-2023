@@ -46,7 +46,7 @@
             </section>
             <div class="row" x-data="{
                 cetak: {{ json_encode($cetak) }},
-                cabut: {{ json_encode($cabut_selesai) }}
+                cabut: {{ json_encode($cabut_selesai) }},
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
@@ -59,6 +59,7 @@
                 tambah(id_cetak, tipe, pcs, gr, no_box, total_rp, cost_cabut, cost_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
+                    const cabut = this.cabut
             
                     selectedItem.push({
                         id_cetak: id_cetak,
@@ -73,17 +74,20 @@
             
                     const index = cetak.findIndex(item => item.id_cetak === id_cetak);
                     cetak.splice(index, 1);
+                    const index2 = cabut.findIndex(item => item.id_gudang_ctk === id_cetak);
+                    cabut.splice(index2, 1);
             
-                    this.ttlPcs += pcs
-                    this.ttlGr += gr
-                    this.ttlRp += total_rp
-                    this.ttlCostCabut += cost_cabut
-                    this.ttlCostCetak += cost_cetak
+                    this.ttlPcs += parseFloat(pcs)
+                    this.ttlGr += parseFloat(gr)
+                    this.ttlRp += parseFloat(total_rp)
+                    this.ttlCostCabut += parseFloat(cost_cabut)
+                    this.ttlCostCetak += parseFloat(cost_cetak)
             
                 },
                 hapus(id_cetak) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
+                    const cabut = this.cabut
             
                     selectedItem.forEach((e) => {
                         if (e.id_cetak === id_cetak) {
@@ -99,6 +103,8 @@
                             });
                             const index = selectedItem.findIndex(item => item.id_cetak === e.id_cetak);
                             selectedItem.splice(index, 1);
+            
+            
             
                             this.ttlPcs -= e.pcs_akhir
                             this.ttlGr -= e.gr_akhir
@@ -145,20 +151,24 @@
                                         </td>
                                     </tr>
                                 </template>
-                                @foreach ($cabut_selesai as $cbt)
-                                    <tr>
-                                        <td>{{ $cbt->tipe }}</td>
-                                        <td>{{ $cbt->no_box }}</td>
-                                        <td align="right"> {{ $cbt->pcs_cabut }}</td>
-                                        <td align="right">{{ $cbt->gr_cabut }}</td>
-                                        <td align="right"> {{ $cbt->ttl_rp }}</td>
-                                        <td align="right">{{ $cbt->cost_cabut }}</td>
+                                <template x-for="(item, index) in cabut" :key="index">
+                                    <tr style="cursor: pointer"
+                                        @click="tambah(item.id_gudang_ctk,item.tipe,item.pcs_cabut,item.gr_cabut,item.no_box,item.ttl_rp,item.cost_cabut,0)">
+                                        >
+                                        <td x-text="item.tipe"></td>
+                                        <td x-text="item.no_box"></td>
+                                        <td align="right" x-text="item.pcs_cabut"></td>
+                                        <td align="right" x-text="item.gr_cabut"></td>
+                                        <td align="right" x-text="item.ttl_rp"></td>
+                                        <td align="right" x-text="item.cost_cabut"></td>
                                         <td align="right">0</td>
                                         <td class="text-center"><a href="javascript:void(0)"
                                                 class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
                                         </td>
                                     </tr>
-                                @endforeach
+
+                                </template>
+
 
                             </tbody>
                         </table>
