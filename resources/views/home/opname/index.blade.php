@@ -35,24 +35,24 @@
                                                 <th>:</th>
                                                 <th>{{ number_format($pcs, 0) }}</th>
                                             </tr>
-                                            @if ($i+1 == 2)
-                                            <tr>
-                                                <th class="text-start">Pcs Sst</th>
-                                                <th>:</th>
-                                                <th>{{ number_format($pcs_sst, 0) }}</th>
-                                            </tr>
+                                            @if ($i + 1 == 2)
+                                                <tr>
+                                                    <th class="text-start">Pcs Sst</th>
+                                                    <th>:</th>
+                                                    <th>{{ number_format($pcs_sst, 0) }}</th>
+                                                </tr>
                                             @endif
                                             <tr>
                                                 <th class="text-start">Gr</th>
                                                 <th>:</th>
                                                 <th>{{ number_format($gr, 0) }}</th>
                                             </tr>
-                                            @if ($i+1 == 2)
-                                            <tr>
-                                                <th class="text-start">Gr Sst</th>
-                                                <th>:</th>
-                                                <th>{{ number_format($gr_sst, 0) }}</th>
-                                            </tr>
+                                            @if ($i + 1 == 2)
+                                                <tr>
+                                                    <th class="text-start">Gr Sst</th>
+                                                    <th>:</th>
+                                                    <th>{{ number_format($gr_sst, 0) }}</th>
+                                                </tr>
                                             @endif
                                             <tr>
                                                 <th class="text-start">Ttl Rp</th>
@@ -224,7 +224,7 @@
             @endforeach
         </div> --}}
 
-        <x-theme.modal title="Detail Barang Opname" size="modal-lg" idModal="detail">
+        <x-theme.modal title="Detail Barang Opname" btnSave="T" size="modal-lg" idModal="detail">
             <div id="load_detail"></div>
         </x-theme.modal>
 
@@ -271,9 +271,14 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('opname.detail') }}?no=" + no,
+                        beforeSend: function() {
+                            $('.loading').show()
+                        },
                         success: function(r) {
                             $("#load_detail").html(r);
                             loadTable('tblOpname')
+                            $('.loading').hide()
+
                         }
                     });
                 })

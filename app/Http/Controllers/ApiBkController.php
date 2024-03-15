@@ -280,4 +280,51 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+
+    public function wipSortir()
+    {
+        $gradingbj = DB::select("SELECT 
+        a.grade,
+         sum(a.pcs) as pcs,
+         sum(a.gr) as gr,
+         sum(a.gr * a.rp_gram) as ttl_rp,
+         sum(a.pcs_kredit) as pcs_kredit,
+         sum(a.gr_kredit) as gr_kredit,
+         sum(a.gr_kredit * a.rp_gram_kredit) as ttl_rp_kredit,
+
+         b.pcs_bk,
+         b.gr_bk,
+         b.ttl_rp_bk,
+         c.pcs_awal as pcs_awal,
+         c.pcs_akhir as pcs_akhir,
+         c.gr_awal as gr_awal,
+         c.gr_akhir as gr_akhir,
+         c.cost_sortir
+        FROM `pengiriman_list_gradingbj` as a
+        JOIN (
+            SELECT grade, 
+                sum(pcs_kredit) as pcs_bk, 
+                sum(gr_kredit) as gr_bk,
+                sum(gr_kredit * rp_gram_kredit) as ttl_rp_bk
+            FROM pengiriman_list_gradingbj GROUP BY grade
+        ) as b on a.grade = b.grade
+        LEFT JOIN (
+            SELECT 
+            b.tipe,
+            b.no_box,
+            sum(a.pcs_awal) as pcs_awal,
+            sum(a.pcs_akhir) as pcs_akhir,
+            sum(a.gr_awal) as gr_awal,
+            sum(a.gr_akhir) as gr_akhir ,
+            sum(a.ttl_rp) as cost_sortir
+            FROM `sortir` as a 
+            JOIN bk as b on a.no_box = b.no_box
+            WHERE a.selesai = 'Y' 
+            GROUP BY b.tipe
+        ) as c on c.tipe = a.grade
+        GROUP BY grade 
+        ");
+        
+        return response()->json($gradingbj);
+    }
 }

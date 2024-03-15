@@ -27,6 +27,7 @@ Route::controller(ApiBkController::class)
     ->name('apibk.')
     ->group(function () {
         Route::get('/sarang', 'sarang')->name('sarang');
+        Route::get('/wipSortir', 'wipSortir')->name('wipSortir');
         Route::get('/export_sarang', 'export_sarang')->name('export_sarang');
         Route::get('/cabut_export', 'cabut_export')->name('cabut_export');
         Route::get('/bk_sum', 'bk_sum')->name('bk_sum');

@@ -15,7 +15,67 @@
 
     </x-slot>
     <x-slot name="cardBody">
+        <div class="row" x-data="{ tbhSuntik: false, baris: 1 }">
+            <h6 @click.prevent="tbhSuntik = ! tbhSuntik"><a href="#">Tmbh Suntikan <i class="fas fa-plus"></i></a>
+            </h6>
 
+            <div class="col-lg-8" x-show="!tbhSuntik">
+                <div class="d-flex mb-3 flex-row align-items-center">
+                    <label for="">Baris</label>
+                    <input x-model="baris" type="text" class="form-control ms-2" style="width: 60px">
+                </div>
+                <form action="{{ route('gradingbj.create_suntikan') }}" method="post">
+                    @csrf
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="dhead">Partai</th>
+                                <th class="dhead">Tipe</th>
+                                <th class="dhead">No Box</th>
+                                <th class="dhead" width="80">Pcs</th>
+                                <th class="dhead" width="80">Gr</th>
+                                <th class="dhead">Ttl Rp</th>
+                                <th class="dhead">Cost Cabut</th>
+                                <th class="dhead">Cost Cetak</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="d in Array.from({length:baris})">
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" name="nm_partai[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="tipe[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="no_box[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="pcs[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="gr[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ttl_rp[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="cost_cabut[]">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="cost_cetak[]">
+                                    </td>
+                                </tr>
+                            </template>
+
+                        </tbody>
+                    </table>
+                    <button class="btn btn-sm btn-primary btn-block">Simpan</button>
+                </form>
+            </div>
+        </div>
+        <hr>
         <form action="{{ route('gradingbj.create') }}" method="post">
             @csrf
             <section class="row">
@@ -47,6 +107,7 @@
             <div class="row" x-data="{
                 cetak: {{ json_encode($cetak) }},
                 cabut: {{ json_encode($cabut_selesai) }},
+                suntikan: {{ json_encode($suntikan) }},
                 selectedItem: [],
                 ttlPcs: 0,
                 ttlGr: 0,
@@ -60,6 +121,7 @@
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
                     const cabut = this.cabut
+                    const suntikan = this.suntikan
             
                     selectedItem.push({
                         id_cetak: id_cetak,
@@ -74,8 +136,12 @@
             
                     const index = cetak.findIndex(item => item.id_cetak === id_cetak);
                     cetak.splice(index, 1);
+            
                     const index2 = cabut.findIndex(item => item.id_gudang_ctk === id_cetak);
                     cabut.splice(index2, 1);
+            
+                    const index3 = suntikan.findIndex(item => item.id_suntikan === id_cetak);
+                    suntikan.splice(index3, 1);
             
                     this.ttlPcs += parseFloat(pcs)
                     this.ttlGr += parseFloat(gr)
@@ -118,8 +184,9 @@
                 }
             }">
                 <div class="col-lg-6">
+                    <input id="inputPencarian" type="text" class="form-control form-control-sm mb-1" placeholder="pencarian...">
                     <div class="scrollable-table">
-                        <table class="table table-hover table-bordered">
+                        <table class="table table-hover table-bordered" id="tblPencarian">
                             <thead>
                                 <tr>
                                     <th class="dhead">Tipe</th>
@@ -157,11 +224,37 @@
                                         >
                                         <td x-text="item.tipe"></td>
                                         <td x-text="item.no_box"></td>
-                                        <td align="right" x-text="item.pcs_cabut"></td>
-                                        <td align="right" x-text="item.gr_cabut"></td>
-                                        <td align="right" x-text="item.ttl_rp"></td>
-                                        <td align="right" x-text="item.cost_cabut"></td>
+                                        <td align="right" x-text="numberFormat(item.pcs_cabut)"></td>
+                                        <td align="right" x-text="numberFormat(item.gr_cabut)"></td>
+                                        <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
                                         <td align="right">0</td>
+                                        <td class="text-center"><a href="javascript:void(0)"
+                                                class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </template>
+                                <template x-for="(item, index) in suntikan" :key="index">
+                                    <tr style="cursor: pointer"
+                                        @click="tambah(
+                                            item.id_suntikan,
+                                            item.tipe,
+                                            item.pcs,
+                                            item.gr,
+                                            item.no_box,
+                                            item.ttl_rp,
+                                            item.cost_cabut,
+                                            item.cost_cetak
+                                        )">
+                                        >
+                                        <td x-text="item.tipe"></td>
+                                        <td x-text="item.no_box"></td>
+                                        <td align="right" x-text="numberFormat(item.pcs)"></td>
+                                        <td align="right" x-text="numberFormat(item.gr)"></td>
+                                        <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
+                                        <td align="right" x-text="numberFormat(item.cost_cetak)"></td>
                                         <td class="text-center"><a href="javascript:void(0)"
                                                 class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
                                         </td>
@@ -234,32 +327,7 @@
                         </table>
                     </div>
                 </div>
-                {{-- <div class="col-lg-2">
-                    <table class="table">
-                        <tr>
-                            <td width="70" align="left">
-                                <h6>Ttl Pcs</h6>
-                            </td>
-                            <td>
-                                <h6>:</h6>
-                            </td>
-                            <td>
-                                <h6 x-text="ttlPcs">0</h6>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="70" align="left">
-                                <h6>Ttl Gr</h6>
-                            </td>
-                            <td>
-                                <h6>:</h6>
-                            </td>
-                            <td>
-                                <h6 x-text="ttlGr">0</h6>
-                            </td>
-                        </tr>
-                    </table>
-                </div> --}}
+                
             </div>
 
     </x-slot>
@@ -273,6 +341,7 @@
     </x-slot>
     @section('scripts')
         <script>
+            pencarian('inputPencarian','tblPencarian')
             $('.select2cek').select2()
 
             function tekanBawah() {
