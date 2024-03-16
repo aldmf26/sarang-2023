@@ -142,8 +142,8 @@ class ApiBkModel extends Model
         left join (
          SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
          FROM eo as c 
-         left join bk as d on d.no_box = c.no_box 
-         where  c.bulan_dibayar = '2' and d.kategori in('cabut','eo')
+         left join bk as d on d.no_box = c.no_box and d.kategori in('cabut','eo')
+         where  c.bulan_dibayar = '2'
          GROUP by d.nm_partai
         ) as c on c.nm_partai = a.nm_partai
                 
