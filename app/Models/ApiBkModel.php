@@ -314,6 +314,7 @@ class ApiBkModel extends Model
             sum((b.pcs_akhir * b.rp_pcs) + b.rp_harian) as ttl_rp_cetak
             FROM cetak as b
             left join bk as c on c.no_box = b.no_box and c.kategori = 'cetak'
+            where b.bulan_dibayar ='2'
             GROUP by c.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         WHERE a.nm_partai = '$nm_partai' and a.kategori = 'cetak'
