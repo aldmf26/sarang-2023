@@ -74,7 +74,7 @@ class GradingBjController extends Controller
         $data = json_decode($response->getBody());
 
         $data = array_filter($data, function ($item) use ($tblBk) {
-            // Mengembalikan false jika no_box ada di dalam $tblBk
+            // Mengembalikan false jika no_box ada di dalam $tblBk 
             return !in_array($item->no_box, $tblBk);
         });
 
@@ -84,10 +84,21 @@ class GradingBjController extends Controller
         //     return redirect()->route('gradingbj.history_ambil')->with('error', 'Data Cetak Masih tidak ada !');
         // }
 
+        $suntikan = DB::select("SELECT a.id_suntikan,a.tipe,a.no_box,a.pcs,a.gr,a.ttl_rp,a.cost_cabut,a.cost_cetak 
+                                FROM grading_suntikan as a
+                                WHERE NOT EXISTS (
+                                    SELECT 1 
+                                    FROM pengiriman_gradingbj AS b 
+                                    WHERE b.no_box = a.no_box 
+                                        AND b.pcs_awal = a.pcs 
+                                        AND b.gr_awal = a.gr
+                                );");
+
         $data = [
             'title' => 'Tambah Grading BJ',
             'cetak' => $cetak,
-            'cabut_selesai' => $cabut_selesai
+            'cabut_selesai' => $cabut_selesai,
+            'suntikan' => $suntikan
 
         ];
         return view('home.gradingbj.add', $data);
@@ -288,7 +299,7 @@ class GradingBjController extends Controller
                 $datasBk[] = [
                     'nm_partai' => '1',
                     'no_box' => $r->no_box[$i],
-                    'tipe' => '1',
+                    'tipe' =>  $grade,
                     'ket' => '1',
                     'warna' => '1',
                     'pengawas' => auth()->user()->name,
@@ -354,5 +365,26 @@ class GradingBjController extends Controller
             'title'  => 'Grading Bj',
         ];
         return view('home.gradingbj.halawal', $data);
+    }
+
+    public function create_suntikan(Request $r)
+    {
+        for ($i=0; $i < count($r->gr); $i++) { 
+            $datas[] = [
+                'nm_partai' => $r->nm_partai[$i],
+                'tipe' => $r->tipe[$i],
+                'no_box' => $r->no_box[$i],
+                'pcs' => $r->pcs[$i],
+                'gr' => $r->gr[$i],
+                'ttl_rp' => $r->ttl_rp[$i],
+                'cost_cabut' => $r->cost_cabut[$i],
+                'cost_cetak' => $r->cost_cetak[$i],
+                'tgl' => date('Y-m-d'),
+                'admin' => auth()->user()->name
+            ];
+        }
+        
+        DB::table('grading_suntikan')->insert($datas);
+        return redirect()->route('gradingbj.add')->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

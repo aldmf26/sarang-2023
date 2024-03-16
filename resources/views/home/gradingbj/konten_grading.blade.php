@@ -41,7 +41,7 @@
         <div class="col-lg-12"></div>
         <div class="col-lg-4">
             <input type="hidden" name="no_grading" value="{{ $no_grading }}">
-            <h6>Box diambil dari cetak</h6>
+            <h6>Box diambil dari cetak dan suntikan</h6>
             <br><br>
             <table class="mt-2 table table-hover table-bordered">
 

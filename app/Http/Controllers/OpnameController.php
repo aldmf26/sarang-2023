@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Http;
 
 class OpnameController extends Controller
 {
-    // public $linkApi = "http://127.0.0.1:8000";
-    public $linkApi = "https://gudangsarang.ptagafood.com";
+    public $linkApi = "http://127.0.0.1:8000";
+    // public $linkApi = "https://gudangsarang.ptagafood.com";
     public function index222(Request $r)
     {
         $cabut = [
@@ -46,21 +46,14 @@ class OpnameController extends Controller
         ];
         return view('home.opname.index', $data);
     }
-    
+
     public function detail(Request $r)
     {
         $bkCbt = $this->bkCbt();
-        $bkCtk = $this->bkCtkDetail();
-        $bjGradeAwal = $this->bjGradeAwalDetail();
-        $boxSp = $this->boxSpDetail();
-        $bjSpProses = $this->bjSpProsesDetail();
-        $gdgSpSelesai = $this->gdgSpSelesaiDetail();
-        $pengiriman = $this->pengirimanDetail();
-        $box_kirim = $this->boxKirimDetail();
-        $packingList = $this->packingListDetail();
-        $boxBarcode = $this->boxBarcodeDetail();
         $detailBkHerry = $this->detailBkHerry();
 
+        $no = $r->no;
+        $get = json_decode(Http::get("$this->linkApi/api/apibk/detailOpname/$no"));
         $arr = [
             [
                 'title' => 'bk',
@@ -68,7 +61,7 @@ class OpnameController extends Controller
             ],
             [
                 'title' => 'bk cbt awal',
-                'query' => $bkCbt
+                'query' => $get
             ],
             [
                 'title' => 'bk sisa Sinta',
@@ -88,8 +81,6 @@ class OpnameController extends Controller
             ]
 
         ];
-
-        $no = $r->no;
         $title = $arr[$no - 1]['title'];
         $query = $arr[$no - 1]['query'];
 
@@ -297,7 +288,7 @@ class OpnameController extends Controller
         $get = Http::get("$this->linkApi/api/apibk/bkCbtAwal");
         return json_decode($get);
     }
-    
+
     public function bkHerry()
     {
         $get = Http::get("$this->linkApi/api/apibk/sumWip");
@@ -306,7 +297,7 @@ class OpnameController extends Controller
 
     public function detailBkHerry()
     {
-  
+
         $get = Http::get("$this->linkApi/api/apibk/detailSumWip");
         return json_decode($get);
     }
