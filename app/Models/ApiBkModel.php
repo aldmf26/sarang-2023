@@ -135,7 +135,7 @@ class ApiBkModel extends Model
         sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.eot) as eot , sum(a.gr_flx) as gr_flx, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(if(a.selesai = 'T', a.rupiah, a.ttl_rp)) as ttl_rp
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori in('cabut','eo')
-        where  a.bulan_dibayar !='0'
+        where  a.bulan_dibayar ='2'
         group by b.nm_partai
         ) as b on b.nm_partai = a.nm_partai
         
@@ -143,7 +143,7 @@ class ApiBkModel extends Model
          SELECT d.nm_partai, sum(c.gr_eo_awal) as gr_awal_eo, sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as ttl_rp_eo
          FROM eo as c 
          left join bk as d on d.no_box = c.no_box
-         where  c.bulan_dibayar != '0'
+         where  c.bulan_dibayar = '2'
          GROUP by d.nm_partai
         ) as c on c.nm_partai = a.nm_partai
                 
