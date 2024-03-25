@@ -299,7 +299,10 @@ class ApiBkController extends Controller
          c.pcs_akhir as pcs_akhir,
          c.gr_awal as gr_awal,
          c.gr_akhir as gr_akhir,
-         c.cost_sortir
+         c.cost_sortir,
+         d.pcs_sisa,
+         d.gr_sisa,
+         d.ttl_rp_sisa
         FROM `pengiriman_list_gradingbj` as a
         JOIN (
             SELECT grade, 
@@ -322,7 +325,14 @@ class ApiBkController extends Controller
             WHERE a.selesai = 'Y' 
             GROUP BY b.tipe
         ) as c on c.tipe = a.grade
-        GROUP BY grade 
+        left JOIN (
+            SELECT grade, 
+                sum(pcs_kredit) as pcs_sisa, 
+                sum(gr_kredit) as gr_sisa,
+                sum(gr_kredit * rp_gram_kredit) as ttl_rp_sisa
+            FROM pengiriman_list_gradingbj WHERE pengawas = 0 GROUP BY grade
+        ) as d on a.grade = d.grade
+        GROUP BY grade;
         ");
         
         return response()->json($gradingbj);

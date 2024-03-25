@@ -1,11 +1,11 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <h6 class="float-start mt-1">{{ $title }}</h6>
 
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <a href="{{ route('eo.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
@@ -19,6 +19,8 @@
                 <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
                     teks="kry baru" />
                 <x-theme.btn_filter />
+                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
+                    addClass="float-end history" teks="History" />
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
@@ -57,6 +59,9 @@
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
+        <x-theme.modal idModal="history" title="History Eo" btnSave="T" size="modal-eo-akhir">
+            <div id="load_history"></div>
+        </x-theme.modal>
 
         {{-- <form action="{{ route('eo.input_akhir') }}" method="post">
             @csrf
@@ -168,6 +173,23 @@
                         loadHalaman()
                         loadTambahAnak()
                         $('#tambah2').modal('show')
+                    }
+                });
+            })
+            $(document).on('click', '.history', function(e) {
+                e.preventDefault()
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('eo.history') }}",
+                    success: function(r) {
+                        $("#load_history").html(r);
+
+                        $('#tblHistory').DataTable({
+                            "searching": true,
+                            "autoWidth": false,
+                            "paging": true,
+                            "ordering": true
+                        });
                     }
                 });
             })

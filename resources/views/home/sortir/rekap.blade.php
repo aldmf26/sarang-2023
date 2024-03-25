@@ -125,7 +125,7 @@
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
                                         <i class="fas fa-caret-up"></i></span></td>
                                 <td align="right"><a class="detail" target="_blank"
-                                        href="{{ route('dashboard.detail', $x->no_box) }}">{{ $x->no_box }}
+                                        href="{{ route('dashboard.detail', ['sortir', $x->no_box]) }}">{{ $x->no_box }}
                                         <i class="me-2 fas fa-eye"></i></a></td>
                                 <td align="right">{{ number_format($x->pcs_bk, 0) }}</td>
                                 <td align="right">{{ number_format($x->gr_bk, 0) }}</td>

@@ -23,6 +23,8 @@
                 teks="kry baru" />
             <x-theme.button href="#" modal="Y" idModal="ambil_box" icon="fa-plus" addClass="float-end"
                 teks="Ambil Box Bk" />
+            <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
+                addClass="float-end history" teks="History" />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -50,6 +52,9 @@
                 <div id="load_modal_akhir"></div>
             </x-theme.modal>
         </form>
+        <x-theme.modal idModal="history" title="History Sortir" btnSave="T" size="modal-lg-max">
+            <div id="load_history"></div>
+        </x-theme.modal>
 
         <form action="{{ route('sortir.create_anak') }}" method="post">
             @csrf
@@ -173,6 +178,25 @@
         @section('scripts')
             <script>
                 $(document).ready(function() {
+
+                    $(document).on('click', '.history', function(e) {
+                        e.preventDefault()
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('sortir.history') }}",
+                            success: function(r) {
+                                $("#load_history").html(r);
+
+                                $('#tblHistory').DataTable({
+                                    "searching": true,
+                                    "autoWidth": false,
+                                    "paging": true,
+                                    "ordering": true
+                                });
+                            }
+                        });
+                    })
+
                     function plusSortir(count, classPlus, url) {
                         $(document).on("click", "." + classPlus, function() {
                             count = count + 1;

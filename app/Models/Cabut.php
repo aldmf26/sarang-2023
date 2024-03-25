@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class Cabut extends Model
 {
-    public static function getCabut()
+    public static function getCabut($history = false)
     {
         $id_user = auth()->user()->id;
-        return DB::table('cabut as a')
+        $cabut =  DB::table('cabut as a')
             ->select(
                 'b.id_anak',
                 'a.no_box',
@@ -43,10 +43,14 @@ class Cabut extends Model
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T'], ['a.id_pengawas', $id_user]])
+            ->where([['a.no_box', '!=', '9999'], ['a.id_pengawas', $id_user]])
             ->orderBY('a.selesai', 'ASC')
-            ->orderBY('a.tgl_terima', 'ASC')
-            ->get();
+            ->orderBY('a.tgl_terima', 'ASC');
+
+            if($history){
+                return $cabut->where('a.penutup', 'Y')->get();
+            }
+            return $cabut->where('a.penutup', 'T')->get();
     }
 
 

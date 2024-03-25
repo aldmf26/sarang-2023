@@ -30,103 +30,77 @@ class DashboardController extends Controller
         // return view('dashboard.dashboard', $data);
     }
 
-    public function detail($nobox = null)
+    public function detail($kategori, $nobox = null)
     {
         if (empty($nobox)) {
             return redirect()->back();
         }
-        // $detailNobox = [
-        //     'no_lot' => 'alur',
-        //     'no_box' => '3001',
-        //     'tipe' => 'D',
-        //     'ket' => 'KL',
-        //     'warna' => 'S',
-        // ];
-        $detailNobox = DB::selectOne("SELECT * FROM bk as a
-        left join ket_bk as b on b.id_ket_bk = a.id_ket
-        left join warna as c on c.id_warna = a.id_warna
-        left join users as d on d.id = a.penerima
-        where a.no_box = $nobox and a.kategori = 'cabut'");
 
+        switch ($kategori) {
+            case 'cabut':
+                $query = DB::select("SELECT 
+                a.no_box,
+                b.name as pgws, 
+                c.nama as nm_anak,
+                a.bulan_dibayar as bulan,
+                a.tahun_dibayar as tahun,
+                a.pcs_awal,
+                a.gr_awal,
+                a.pcs_akhir,
+                a.gr_akhir,
+                a.gr_flx,
+                a.eot,
+                a.ttl_rp
+                FROM `cabut` as a 
+                JOIN users as b on a.id_pengawas = b.id
+                JOIN tb_anak as c on a.id_anak = c.id_anak
+                where a.no_box = '$nobox';");
+                $view = 'detail';
+                break;
+            case 'eo':
+                $query = DB::select("SELECT 
+                a.no_box,
+                b.name as pgws, 
+                c.nama as nm_anak,
+                a.bulan_dibayar as bulan,
+                YEAR(a.tgl_input) as tahun,
+                a.gr_eo_awal as gr_awal,
+                a.gr_eo_akhir as gr_akhir,
+                a.ttl_rp
+                FROM `eo` as a 
+                JOIN users as b on a.id_pengawas = b.id
+                JOIN tb_anak as c on a.id_anak = c.id_anak
+                where a.no_box = '$nobox';");
+                $view = 'detail2';
+                break;
+            case 'sortir':
+                $query = DB::select("SELECT 
+                a.no_box,
+                b.name as pgws, 
+                c.nama as nm_anak,
+                a.bulan,
+                YEAR(a.tgl_input) as tahun,
+                a.pcs_awal,
+                a.gr_awal,
+                a.pcs_akhir,
+                a.gr_akhir,
+                a.ttl_rp
+                FROM `sortir` as a 
+                JOIN users as b on a.id_pengawas = b.id
+                JOIN tb_anak as c on a.id_anak = c.id_anak
+                where a.no_box = '$nobox';");
+                $view = 'detail2';
+                break;
+            default:
+                
+                break;
+        }
         $data = [
-            'title' => 'Detail Gaji Box',
-            'detail' => $detailNobox,
-            'cabut' => DB::table('cabut as a')
-                ->select(
-                    'b.id_anak',
-                    'a.no_box',
-                    'a.rupiah',
-                    'c.gr as gr_kelas',
-                    'c.rupiah as rupiah_kelas',
-                    'c.batas_susut',
-                    'c.bonus_susut',
-                    'c.denda_hcr',
-                    'c.eot as eot_rp',
-                    'c.batas_eot',
-                    'b.id_kelas',
-                    'c.rp_bonus',
-                    'a.tgl_serah',
-                    'a.selesai',
-                    'a.bulan_dibayar',
-                    'a.tgl_terima',
-                    'a.id_cabut',
-                    'a.selesai',
-                    'b.nama',
-                    'd.name',
-                    'a.pcs_awal',
-                    'a.pcs_flx',
-                    'a.gr_awal',
-                    'a.gr_flx',
-                    'a.pcs_akhir',
-                    'a.pcs_hcr',
-                    'a.gr_hcr',
-                    'a.gr_akhir',
-                    'a.gr_awal',
-                    'a.eot',
-                )
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-                ->join('users as d', 'a.id_pengawas', 'd.id')
-                ->where([['a.no_box', $nobox]])
-                ->get(),
-
-            'cetak' => DB::select("SELECT *
-            FROM cetak as a
-            LEFT JOIN tb_anak as b on b.id_anak = a.id_anak
-            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas
-            left join users as d on d.id = a.id_pengawas
-            where a.no_box = '$nobox' and a.status = 'akhir'
-            order by a.selesai ASC"),
-
-            'sortir' => DB::table('sortir as a')
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->join('users as d', 'a.id_pengawas', 'd.id')
-                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.no_box', $nobox)
-                ->orderBy('id_sortir', 'DESC')
-                ->get(),
-
-            'grading_bentuk' => DB::select("SELECT *
-            FROM grading_serah as a
-            LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
-            where  b.status = 'bentuk' and a.no_box = '$nobox'
-            "),
-
-            'grading_turun' => DB::select("SELECT *
-            FROM grading_serah as a
-            LEFT JOIN tipe_grade as b on b.id_tipe = a.id_tipe_grade
-            where  b.status = 'turun' and a.no_box = '$nobox'
-            "),
-            'grade' => DB::select("SELECT * FROM grade as a 
-            left join tb_anak as b on b.id_anak = a.id_penerima
-            left join users as d on d.id = a.id_pengawas
-            left join (
-                SELECT c.no_box as box_grading, sum(c.pcs) as pcs_akhir, sum(c.gram) as gr_akhir
-                FROM grading_serah as c 
-                group by c.no_box
-            ) as c on c.box_grading = a.no_box")
-
+            'title'   => "Detail Box $kategori - $nobox",
+            'query' => $query,
+            'kategori' => $kategori
         ];
-        return view('dashboard.detail_new', $data);
+        return view("dashboard.$view", $data);
     }
+
 }

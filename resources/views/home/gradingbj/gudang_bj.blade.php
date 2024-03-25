@@ -29,7 +29,7 @@
                             <th>Grade</th>
                             <th class="text-end">Pcs <br> {{ number_format($ttl_pcs, 0) }}</th>
                             <th class="text-end">Gram <br> {{ number_format($ttl_gr, 0) }}</th>
-                            <th class="text-end">Rp Gram <br> {{ number_format($ttl_rp / $ttl_gr, 0) }}</th>
+                            <th class="text-end">Rp Gram <br> </th>
                             <th class="text-end">Ttl Rp <br> {{ number_format($ttl_rp, 0) }}</th>
                         </tr>
                     </thead>

@@ -219,6 +219,51 @@ class EoController extends Controller
         ];
         return view('home.eo.load_halaman', $data);
     }
+
+    public function history(Request $r)
+    {
+        $tgl1 = $r->tgl1;
+        $tgl2 = $r->tgl2;
+        $id = auth()->user()->id;
+
+        $cabut = DB::table('eo as a')
+            ->select(
+                'a.id_anak',
+                'a.id_eo',
+                'a.no_box',
+                'a.ttl_rp',
+                'a.id_pengawas',
+                'a.id_kelas',
+                'a.tgl_ambil',
+                'a.tgl_serah',
+                'a.tgl_input',
+                'a.gr_eo_awal',
+                'a.gr_eo_akhir',
+                'a.selesai',
+                'a.penutup',
+                'a.bulan_dibayar',
+                'b.nama',
+                'c.kelas',
+                'c.rupiah',
+                'd.name'
+            )
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+            ->join('users as d', 'a.id_pengawas', 'd.id')
+            ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'Y']])
+            ->orderBY('a.selesai', 'ASC')->get();
+
+
+        $query = $cabut;
+        $data = [
+            'title' => 'Divisi Eo',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'cabut' => $query,
+        ];
+        return view('home.eo.history', $data);
+    }
+
     public function hapusCabutRow(Request $r)
     {
         DB::table('eo')->where('id_eo', $r->id_cabut)->delete();

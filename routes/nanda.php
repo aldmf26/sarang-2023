@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/detail/{nobox}', 'detail')->name('detail');
+            Route::get('/detail/{kategori}/{nobox}', 'detail')->name('detail');
         });
 
     Route::controller(CetakController::class)

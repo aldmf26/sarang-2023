@@ -268,11 +268,12 @@ class CabutController extends Controller
         return json_encode($data);
     }
 
-    public function create(Request $r)
+    public function createLama(Request $r)
     {
+
+
         for ($i = 0; $i < count($r->no_box); $i++) {
             $no_box = $r->no_box[$i];
-            $box = Cabut::getStokBk($no_box);
             $id_cabut = $r->id_cabut[$i];
             $data = [
                 'no_box' => $r->no_box[$i] ?? '9999',
@@ -290,10 +291,91 @@ class CabutController extends Controller
                 DB::table('cabut')->where('id_cabut', $id_cabut)->update($data);
             }
         }
-        // return redirect()->route('cabut.index')->with('sukses', 'Berhasil tambah Data');
         return json_encode([
             'pesan' => "Berhasil tambah data cabut"
         ]);
+    }
+
+    public function create(Request $r)
+    {
+        $inputs_by_box = [];
+
+        // Mengumpulkan total PCS dan GR untuk setiap nomor kotak
+        for ($i = 0; $i < count($r->no_box); $i++) {
+            $no_box = $r->no_box[$i];
+            $pcs_awal = $r->pcs_awal[$i];
+            $gr_awal = $r->gr_awal[$i];
+
+            // Menambahkan total PCS dan GR ke dalam array sesuai nomor kotak
+            if (!isset($inputs_by_box[$no_box])) {
+                $inputs_by_box[$no_box] = ['pcs_awal' => $pcs_awal, 'gr_awal' => $gr_awal];
+            } else {
+                $inputs_by_box[$no_box]['pcs_awal'] += $pcs_awal;
+                $inputs_by_box[$no_box]['gr_awal'] += $gr_awal;
+            }
+        }
+
+        // Memeriksa stok untuk setiap nomor kotak
+        foreach ($inputs_by_box as $no_box => $input) {
+            if ($no_box == 9999) {
+                return json_encode([
+                    'pesan' => "Gagal! Tidak dapat menyimpan data untuk nomor box 9999."
+                ]);
+            }
+            
+            // Mendapatkan stok dari database berdasarkan nomor kotak
+            $stok = DB::table('bk')->where('no_box', $no_box)->first();
+
+            // Memeriksa apakah stok ditemukan
+            if (!$stok) {
+                return json_encode([
+                    'pesan' => "Gagal! Stok tidak ditemukan untuk nomor box $no_box."
+                ]);
+            }
+
+            // Memeriksa apakah total PCS dan GR inputan tidak melebihi stok
+            if ($input['pcs_awal'] > $stok->pcs_awal || $input['gr_awal'] > $stok->gr_awal) {
+                return json_encode([
+                    'pesan' => "Gagal! Total PCS atau GR inputan untuk nomor box $no_box melebihi stok yang tersedia."
+                ]);
+            }
+
+            // Lanjutkan dengan memasukkan data ke database
+            for ($x = 0; $x < count($r->no_box); $x++) {
+                if ($r->no_box[$x] == $no_box) {
+                    $data = [
+                        'no_box' => $r->no_box[$x],
+                        'pcs_awal' => $r->pcs_awal[$x],
+                        'gr_awal' => $r->gr_awal[$x],
+                        'id_anak' => $r->id_anak[$x],
+                        'id_pengawas' => $r->id_pengawas[$x],
+                        'rupiah' => $r->rupiah[$x],
+                        'id_kelas' => $r->id_paket[$x],
+                        'tgl_terima' => $r->tgl_terima[$x],
+                    ];
+                    $id_cabut = $r->id_cabut[$x];
+                    if ($id_cabut == 9999) {
+                        DB::table('cabut')->insert($data);
+                    } else {
+                        DB::table('cabut')->where('id_cabut', $id_cabut)->update($data);
+                    }
+                }
+            }
+        }
+
+        return json_encode([
+            'pesan' => "Berhasil tambah data cabut"
+        ]);
+    }
+
+    public function history()
+    {
+        $cabut = Cabut::getCabut(true);
+        $data = [
+            'title' => 'history cabut',
+            'cabut' => $cabut
+        ];
+        return view('home.cabut.history',$data);
     }
 
     public function add()
