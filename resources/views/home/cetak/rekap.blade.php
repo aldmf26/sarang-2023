@@ -129,7 +129,7 @@
                                 <tr x-show="openRows.includes({{ $i }})">
                                     <td>{{ $c->name }}</td>
                                     <td><a class="detail" target="_blank"
-                                            href="{{ route('dashboard.detail', $c->no_box) }}">{{ $c->no_box }}
+                                            href="{{ route('dashboard.detail', ['cetal',$c->no_box]) }}">{{ $c->no_box }}
                                             <i class="me-2 fas fa-eye"></i></a>
                                         {{-- {{ $c->no_box }} --}}
                                     </td>
