@@ -142,7 +142,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
-            Route::get('/delete', 'delete')->name('delete');
+            Route::post('/delete', 'delete')->name('delete');
             Route::post('/selesai', 'selesai')->name('selesai');
             Route::get('/print', 'print')->name('print');
             Route::get('/export', 'export')->name('export');
