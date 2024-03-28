@@ -68,36 +68,7 @@
                             </tr>
 
                             <tr>
-                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsBk, 0) }})</th>
-                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrBk, 0) }})</th>
-                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAwal, 0) }})</th>
-                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAwal, 0) }})</th>
-                                <th class="dhead text-center">Pcs <br> ({{ number_format($ttlPcsAkhir, 0) }})</th>
-                                <th class="dhead text-center">Gr <br> ({{ number_format($ttlGrAkhir, 0) }})</th>
-                                <th class="dhead text-center">Susut </th>
-                                <th class="dhead text-center">Pcs </th>
-                                <th class="dhead text-center">Gr</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($sortirGroup as $i => $d)
-                                <tr
-                                    x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">
-                                    <th>{{ $d->pengawas }}
-                                        <span class="badge bg-primary float-end">Buka
-                                            <i class="fas fa-caret-down"></i></span>
-                                    </th>
-                                    <th class="text-end">Ttl Box : {{ number_format($d->ttl_box, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->pcs_bk, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->gr_bk, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->pcs_awal, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->gr_awal, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->pcs_akhir, 0) }}</th>
-                                    <th class="text-end">{{ number_format($d->gr_akhir, 0) }}</th>
-                                    @php
-                                        $susut = empty($d->gr_awal) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
-                                    @endphp
+                                <th class="dhead text-center">Pcs <br> ({{ number_format($grougrgrg
                                     <th class="text-end">{{ number_format($susut, 0) }} %</th>
                                     <th class="text-end">{{ number_format($d->ttl_rp, 0) }}</th>
                                     <th class="text-end">{{ number_format($d->pcs_bk - $d->pcs_awal, 0) }}</th>
@@ -119,7 +90,6 @@
                                 @endphp
                                 @foreach ($query as $x)
                         <tbody x-show="openRows.includes({{ $i }})">
-
                             <tr>
                                 <td>{{ $d->pengawas }} <span class="badge bg-primary float-end"
                                         x-on:click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">

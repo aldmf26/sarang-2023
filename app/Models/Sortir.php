@@ -38,7 +38,7 @@ class Sortir extends Model
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
                             JOIN (
                                 SELECT no_box,id_pengawas FROM sortir where bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' GROUP BY no_box
-                            ) as b on a.no_box = b.no_box
+                            ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
                             WHERE a.kategori LIKE '%sortir%' and a.selesai = 'T'
                             GROUP by a.penerima
                         ) as d ON d.penerima = a.id_pengawas
