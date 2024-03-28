@@ -767,6 +767,13 @@
                     '.setGr'
                 ]
                 clickSelectInput(inputNya)
+
+                $(document).on('input', '.eotKeyup', function(){
+                    const val = $(this).val()
+                    const count = $(this).attr('count')
+                    $(".selesai"+count).toggleClass('d-none', !(val > 0));
+                   
+                })
             </script>
         @endsection
     </x-slot>
