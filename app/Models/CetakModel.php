@@ -117,4 +117,25 @@ class CetakModel extends Model
 
         return $result;
     }
+
+    public static function rekap_harian()
+    {
+        $result = DB::select("SELECT b.nama, b.id_kelas, a.ttl_anak, c.hari + 1 as hari, c.rp_proses, d.rp_selesai, 
+        d.tgl_serah, a.tgl_awal , DATEDIFF(d.tgl_serah,a.tgl_awal) as hari_kerja_selesai
+        FROM ( SELECT a.id_anak, count(a.id_anak) as ttl_anak , min(a.tgl) as tgl_awal 
+              FROM absen as a 
+              where a.bulan_dibayar = '4' 
+              group by a.id_anak ) as a 
+              left JOIN tb_anak as b on b.id_anak = a.id_anak 
+              left join( SELECT c.id_anak, sum(c.pcs_awal_ctk * c.rp_pcs) as rp_proses, DATEDIFF(NOW(), c.tgl) AS hari 
+                       from cetak as c 
+                        where c.selesai = 'T' and c.bulan_dibayar = '4'
+                        GROUP by c.id_anak ) as c on c.id_anak = a.id_anak 
+                        left join ( SELECT c.id_anak , sum((c.pcs_akhir * c.rp_pcs) + c.rp_harian) as rp_selesai, max(c.tgl_serah) as tgl_serah 
+                        FROM cetak as c 
+                        where c.selesai ='Y' and c.bulan_dibayar = '4' 
+                        group by c.id_anak ) as d on d.id_anak = a.id_anak;
+        ");
+        return $result;
+    }
 }

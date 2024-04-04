@@ -923,4 +923,15 @@ class CetakController extends Controller
         $writer->save('php://output');
         exit();
     }
+
+    public function rekap_harian(Request $r)
+    {
+        $rekap = CetakModel::rekap_harian();
+
+        $data = [
+            'title' => 'rekap harian cetak',
+            'rekap' => $rekap
+        ];
+        return view('home.cetak.rekap_harian', $data);
+    }
 }
