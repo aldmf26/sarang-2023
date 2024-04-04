@@ -448,6 +448,7 @@ class Cabut extends Model
         eo.eo_awal,
         eo.eo_akhir,
         eo.susut as eo_susut,
+        eo.rp_target as eo_rp_target,
         eo.ttl_rp as eo_ttl_rp,
         sortir.pcs_awal as sortir_pcs_awal,
         sortir.pcs_akhir as sortir_pcs_akhir,
@@ -492,7 +493,8 @@ class Cabut extends Model
             id_anak,
             sum(gr_eo_awal) as eo_awal,
             sum(gr_eo_akhir) as eo_akhir,
-            sum(ttl_rp) as ttl_rp,
+            sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END) as ttl_rp,
+            sum(CASE WHEN selesai = 'T' THEN rp_target ELSE 0 END) as rp_target,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
             WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'

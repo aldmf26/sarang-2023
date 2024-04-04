@@ -145,7 +145,10 @@
                                         $data->ttl_rp_denda;
                                     $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
-                                    $ttlProses = $data->rupiah;
+                                    $ttlProses = 
+                                        $data->rupiah + 
+                                        $data->eo_rp_target + 
+                                        $data->sortir_rp_target;
                                     $rataProses = empty($data->hariMasuk) ? 0 : $ttlProses / $data->hariMasuk;
 
                                 @endphp
@@ -154,7 +157,7 @@
                                 <td class="bg-white"></td>
                                 {{-- proses --}}
                                 <td>{{ number_format($data->rupiah, 0) }}</td>
-                                <td>{{ number_format($data->eo_ttl_rp, 0) }}</td>
+                                <td>{{ number_format($data->eo_rp_target, 0) }}</td>
                                 <td>{{ number_format($data->sortir_rp_target, 0) }}</td>
                                 <td>{{ number_format($ttlProses, 0) }}</td>
                                 <td>{{ number_format($rataProses, 0) }}</td>
