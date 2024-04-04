@@ -1,11 +1,11 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <h6 class="float-start mt-1">{{ $title }}</h6>
 
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 @php
                     $id_pengawas = auth()->user()->id;
                     $cekBtn = DB::selectOne("SELECT 
@@ -39,6 +39,9 @@
 
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
                     teks="kry baru" />
+
+                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history" addClass="float-end history"
+                    teks="history" />
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
@@ -56,6 +59,12 @@
             <div id="loadHalaman"></div>
         </section>
 
+        {{-- <form action="{{ route('cabut.create') }}" method="post">
+            @csrf
+            <x-theme.modal idModal="tambah2" title="tambah cabut" btnSave="Y" size="modal-lg-max">
+                <div id="load_tambah_cabut"></div>
+            </x-theme.modal>
+        </form> --}}
         <form id="createCabut">
             @csrf
             <x-theme.modal idModal="tambah2" title="tambah cabut" btnSave="Y" size="modal-lg-max">
@@ -70,6 +79,7 @@
         </form>
 
 
+        
         <form id="createCabutAkhir">
             @csrf
             <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-full">
@@ -107,6 +117,11 @@
                 </div>
             </div>
         </x-theme.modal>
+
+        <x-theme.modal idModal="history" title="History Cabut" size="modal-lg-max" btnSave="T">
+            <div id="load_history_cabut"></div>
+        </x-theme.modal>
+
         @section('scripts')
             <script>
                 $(".select3").select2()
@@ -506,7 +521,7 @@
                         data: datas,
                         dataType: 'json',
                         success: function(r) {
-                            alertToast('sukses', 'Berhasil tambah data cabut')
+                            alertToast('sukses', r.pesan)
                             $('#tambah2').modal('hide')
                             loadHalaman()
                             loadTambahcabut()
@@ -647,7 +662,23 @@
                 setRupiah('grAkhirKeyup')
                 setRupiah('eotKeyup')
                 setRupiah('pcsHcrKeyup')
+                $(document).on('click', '.history', function(e){
+                    e.preventDefault()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('cabut.history')}}",
+                        success: function (r) {
+                            $("#load_history_cabut").html(r);
 
+                            $('#tableHistory').DataTable({
+                                "searching": true,
+                                "autoWidth": false,
+                                "paging": true,
+                                "ordering": true
+                            });
+                        }
+                    });
+                })
                 $(document).on('click', '.saveCabutAkhir', function(e) {
                     e.preventDefault()
                     var count = $(this).attr('count')
@@ -736,6 +767,13 @@
                     '.setGr'
                 ]
                 clickSelectInput(inputNya)
+
+                $(document).on('input', '.eotKeyup', function(){
+                    const val = $(this).val()
+                    const count = $(this).attr('count')
+                    $(".selesai"+count).toggleClass('d-none', !(val > 0));
+                   
+                })
             </script>
         @endsection
     </x-slot>

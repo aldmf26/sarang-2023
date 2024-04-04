@@ -58,7 +58,29 @@ class SortirController extends Controller
 
         return view('home.sortir.index', $data);
     }
+    public function history(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
 
+
+        $data = [
+            'title' => 'Sortir Divisi',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+
+            'cabut' => DB::table('sortir as a')
+                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'Y']])
+                ->orderBY('a.selesai', 'ASC')
+                ->get()
+        ];
+
+        return view('home.sortir.history', $data);
+    }
     public function ambil_box_bk(Request $r)
     {
         $idPengwas = auth()->user()->id;

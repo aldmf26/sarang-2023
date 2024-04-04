@@ -345,7 +345,8 @@ class GradingBjController extends Controller
                     WHERE a.no_box is not null ");
         $data = [
             'title' => 'History Box Kecil',
-            'box_kecil' => $boxKecil
+            'box_kecil' => $boxKecil,
+            'pengawas' => $this->getDataMaster('pengawas')
         ];
         return view('home.gradingbj.history_box_kecil', $data);
     }
@@ -369,7 +370,7 @@ class GradingBjController extends Controller
 
     public function create_suntikan(Request $r)
     {
-        for ($i=0; $i < count($r->gr); $i++) { 
+        for ($i = 0; $i < count($r->gr); $i++) {
             $datas[] = [
                 'nm_partai' => $r->nm_partai[$i],
                 'tipe' => $r->tipe[$i],
@@ -383,8 +384,39 @@ class GradingBjController extends Controller
                 'admin' => auth()->user()->name
             ];
         }
-        
+
         DB::table('grading_suntikan')->insert($datas);
         return redirect()->route('gradingbj.add')->with('sukses', 'Data Berhasil ditambahkan');
+    }
+    public function create_suntikan_boxsp(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $noGrading = DB::table('pengiriman_list_gradingbj')->orderBy('no_grading', 'DESC')->first();
+            for ($i = 0; $i < count($r->gr_kredit); $i++) {
+                $cekGrade = DB::table('pengiriman_list_gradingbj')->where('grade', $r->grade[$i])->first();
+                if (!$cekGrade) {
+                    return redirect()->route('gradingbj.history_box_kecil')->with('error', 'Grade tidak ada di gudang grading');
+                }
+                $datas[] = [
+                    'no_grading' => $noGrading->no_grading + 1,
+                    'grade' => $r->grade[$i],
+                    'no_box' => $r->no_box[$i],
+                    'pcs_kredit' => $r->pcs_kredit[$i],
+                    'gr_kredit' => $r->gr_kredit[$i],
+                    'rp_gram_kredit' => $r->rp_gram_kredit[$i],
+                    'pengawas' => $r->pengawas[$i],
+                    'tgl_grading' => date('Y-m-d'),
+                    'admin' => auth()->user()->name
+                ];
+            }
+
+            DB::table('pengiriman_list_gradingbj')->insert($datas);
+            DB::commit();
+            return redirect()->route('gradingbj.history_box_kecil')->with('sukses', 'Data Berhasil ditambahkan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('gradingbj.history_box_kecil')->with('error', $e->getMessage());
+        }
     }
 }

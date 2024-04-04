@@ -158,6 +158,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'create')->name('create');
             Route::get('/add', 'add')->name('add');
+            Route::get('/history', 'history')->name('history');
             Route::get('/clear', 'clear')->name('clear');
             Route::post('/clearSave', 'clearSave')->name('clearSave');
             Route::get('/global', 'global')->name('global');
@@ -185,6 +186,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
+            Route::get('/laporan_perhari', 'laporan_perhari')->name('laporan_perhari');
+            Route::get('/detail_laporan_harian', 'detail_laporan_harian')->name('detail_laporan_harian');
             Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
             Route::get('/get_kelas_jenis', 'get_kelas_jenis')->name('get_kelas_jenis');
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');
@@ -208,6 +211,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/add', 'add')->name('add');
             Route::get('/create', 'create')->name('create');
             Route::get('/cancel', 'cancel')->name('cancel');
+            Route::get('/history', 'history')->name('history');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/get_box_sinta', 'get_box_sinta')->name('get_box_sinta');
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
@@ -238,6 +242,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::get('/history', 'history')->name('history');
             Route::get('/export', 'export')->name('export');
             Route::get('/create', 'create')->name('create');
             Route::get('/cancel', 'cancel')->name('cancel');
@@ -371,6 +376,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create_ambil_box_kecil', 'create_ambil_box_kecil')->name('create_ambil_box_kecil');
             Route::post('/create', 'create')->name('create');
             Route::post('/create_suntikan', 'create_suntikan')->name('create_suntikan');
+            Route::post('/create_suntikan_boxsp', 'create_suntikan_boxsp')->name('create_suntikan_boxsp');
             Route::post('/create_grading', 'create_grading')->name('create_grading');
             Route::get('/load_grading', 'load_grading')->name('load_grading');
             Route::get('/load_detail', 'load_detail')->name('load_detail');
