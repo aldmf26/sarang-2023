@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/edit', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/export', 'export')->name('export');
+            Route::get('/rekap_harian', 'rekap_harian')->name('rekap_harian');
         });
     Route::controller(GradingController::class)
         ->prefix('home/grading')

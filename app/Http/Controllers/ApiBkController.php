@@ -334,7 +334,14 @@ class ApiBkController extends Controller
         ) as d on a.grade = d.grade
         GROUP BY grade;
         ");
-        
+
         return response()->json($gradingbj);
+    }
+
+    public function cetak_detail(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_detail($r->no_box);
+
+        return response()->json($cetak);
     }
 }
