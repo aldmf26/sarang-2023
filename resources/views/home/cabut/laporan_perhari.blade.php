@@ -129,7 +129,7 @@
                         @endphp
                         @foreach ($tbl as $data)
                             <tr class="detail" style="cursor: pointer" id_anak="{{ $data->id_anak }}">
-                                <td>{{ $data->nm_anak }}</td>
+                                <td class="text-start">{{ $data->nm_anak }}</td>
                                 <td>{{ $data->kelas }}</td>
                                 <td>{{ $data->hariMasuk }}</td>
                                 <td>{{ number_format($data->ttl_rp, 0) }}</td>
