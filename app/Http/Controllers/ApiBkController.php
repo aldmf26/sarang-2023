@@ -342,6 +342,6 @@ class ApiBkController extends Controller
     {
         $cetak = ApiBkModel::cetak_detail($r->no_box);
 
-        return response()->json($r->no_box);
+        return response()->json($cetak);
     }
 }
