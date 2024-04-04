@@ -186,6 +186,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/hapusCabutRow', 'hapusCabutRow')->name('hapusCabutRow');
             Route::get('/ditutup', 'ditutup')->name('ditutup');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
+            Route::get('/laporan_perhari', 'laporan_perhari')->name('laporan_perhari');
+            Route::get('/detail_laporan_harian', 'detail_laporan_harian')->name('detail_laporan_harian');
             Route::get('/load_modal_anak_sisa', 'load_modal_anak_sisa')->name('load_modal_anak_sisa');
             Route::get('/get_kelas_jenis', 'get_kelas_jenis')->name('get_kelas_jenis');
             Route::get('/hapusAnakSisa', 'hapusAnakSisa')->name('hapusAnakSisa');

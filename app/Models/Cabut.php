@@ -345,6 +345,7 @@ class Cabut extends Model
         cabut.gr_flx,
         cabut.susut,
         cabut.ttl_rp,
+        cabut.rupiah,
         eo.eo_awal,
         eo.eo_akhir,
         eo.susut as eo_susut,
@@ -381,7 +382,7 @@ class Cabut extends Model
                     sum(gr_flx) as gr_flx, 
                     SUM(rupiah) as rupiah, 
                     sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
-                    SUM(ttl_rp) as ttl_rp
+                    SUM(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END) as ttl_rp
                   FROM `cabut` 
                   WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                   GROUP BY id_anak 
@@ -405,6 +406,107 @@ class Cabut extends Model
             sum(pcs_akhir) as pcs_akhir, 
             sum(gr_akhir) as gr_akhir, 
             sum(ttl_rp) as ttl_rp,
+            sum((1 - gr_akhir / gr_awal) * 100) as susut
+            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+        ) as sortir on a.id_anak = sortir.id_anak
+        LEFT JOIN (
+            SELECT *, count(*) as ttl FROM absen AS a 
+            WHERE a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'
+             group BY a.id_anak
+        ) as absen on absen.id_anak = a.id_anak  
+        LEFT JOIN (
+            SELECT id_anak,sum(rupiah) as ttl_rp_dll 
+            FROM `tb_hariandll` 
+            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND ditutup = 'T' GROUP by id_anak
+        ) as dll on a.id_anak = dll.id_anak
+        LEFT JOIN (
+            SELECT id_anak, sum(nominal) as ttl_rp_denda 
+            FROM `tb_denda` 
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
+        ) as denda ON a.id_anak = denda.id_anak
+        WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
+    }
+    public static function getRekapLaporanHarian($bulan, $tahun, $id_pengawas)
+    {
+        $bulanKurang = $bulan - 1;
+        $whrAbsen1 = "$tahun-$bulanKurang-27";
+        $whrAbsen2 = "$tahun-$bulan-26";
+
+        return DB::select("SELECT a.id_anak,b.name as pgws,
+        absen.ttl as hariMasuk,
+        a.nama as nm_anak, 
+        a.id_kelas as kelas,
+        cabut.pcs_awal,
+        cabut.gr_awal,
+        cabut.pcs_akhir,
+        cabut.gr_akhir,
+        cabut.eot,
+        cabut.gr_flx,
+        cabut.susut,
+        cabut.ttl_rp,
+        cabut.rupiah,
+        eo.eo_awal,
+        eo.eo_akhir,
+        eo.susut as eo_susut,
+        eo.ttl_rp as eo_ttl_rp,
+        sortir.pcs_awal as sortir_pcs_awal,
+        sortir.pcs_akhir as sortir_pcs_akhir,
+        sortir.gr_awal as sortir_gr_awal,
+        sortir.gr_akhir as sortir_gr_akhir,
+        sortir.susut as sortir_susut,
+        sortir.rp_target as sortir_rp_target,
+        sortir.ttl_rp as sortir_ttl_rp,
+        dll.ttl_rp_dll,
+        denda.ttl_rp_denda
+        FROM 
+            (
+                SELECT id_anak,id_pengawas
+                FROM absen
+                WHERE id_pengawas = '$id_pengawas'
+                AND bulan_dibayar = '$bulan'
+                AND tahun_dibayar = '$tahun'
+                GROUP BY id_anak
+            ) AS absenGet
+        JOIN 
+            tb_anak as a ON absenGet.id_anak = a.id_anak
+        JOIN users as b on absenGet.id_pengawas = b.id
+        LEFT JOIN (
+                  SELECT 
+                    id_anak, 
+                    sum(pcs_awal) as pcs_awal, 
+                    sum(gr_awal) as gr_awal, 
+                    sum(gr_akhir) as gr_akhir, 
+                    sum(pcs_akhir) as pcs_akhir, 
+                    sum(pcs_hcr) as pcs_hcr, 
+                    sum(eot) as eot, 
+                    sum(gr_flx) as gr_flx, 
+                    SUM(CASE WHEN selesai = 'T' THEN rupiah ELSE 0 END) as rupiah, 
+                    sum((1 - (gr_flx + gr_akhir) / gr_awal) * 100) as susut, 
+                    SUM(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END) as ttl_rp
+                  FROM `cabut` 
+                  WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
+                  GROUP BY id_anak 
+        ) as cabut on a.id_anak = cabut.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(gr_eo_awal) as eo_awal,
+            sum(gr_eo_akhir) as eo_akhir,
+            sum(ttl_rp) as ttl_rp,
+            sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
+            FROM eo 
+            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'
+            GROUP by id_anak
+        ) as eo on eo.id_anak = a.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(pcs_awal) as pcs_awal, 
+            sum(gr_awal) as gr_awal, 
+            sum(pcs_akhir) as pcs_akhir, 
+            sum(gr_akhir) as gr_akhir, 
+            sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END ) as ttl_rp,
+            SUM(CASE WHEN selesai = 'T' THEN rp_target ELSE 0 END) as rp_target, 
             sum((1 - gr_akhir / gr_awal) * 100) as susut
             FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak

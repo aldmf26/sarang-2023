@@ -513,6 +513,54 @@ class CabutController extends Controller
         ];
         return view('home.cabut.global', $data);
     }
+    public function laporan_perhari(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        JOIN users as b on a.penerima = b.id
+        WHERE a.kategori != 'cetak'
+        group by b.id");
+        $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+        $tbl = Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
+
+
+        $data = [
+            'title' => 'Laporan Perhari',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'pengawas' => $pengawas,
+            'id_pengawas' => $id_pengawas,
+            'nm_pengawas' => DB::table('users')->where('id', $id_pengawas)->first()->name,
+            'tbl' => $tbl,
+        ];
+        return view('home.cabut.laporan_perhari', $data);
+    }
+
+    public function detail_laporan_harian(Request $r)
+    {
+        $id_anak = $r->id_anak;
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        JOIN users as b on a.penerima = b.id
+        WHERE a.kategori != 'cetak'
+        group by b.id");
+        $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+        $tbl = Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
+
+        $data = [
+            'title' => 'Laporan Detail Perhari',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'pengawas' => $pengawas,
+            'id_pengawas' => $id_pengawas,
+            'tbl' => $tbl,
+            'id_anak' => $id_anak,
+        ];
+        return view('home.cabut.detail_laporan_perhari', $data);
+
+    }
 
     public function export_global(Request $r)
     {

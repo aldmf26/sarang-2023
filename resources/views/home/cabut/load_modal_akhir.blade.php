@@ -134,20 +134,19 @@
                             <button style="font-size: 12px"
                                 class="btn{{ $i + 1 }} btn btn-sm btn-{{ empty($d->gr_akhir) ? 'warning' : 'primary' }} saveCabutAkhir"
                                 type="button" count="{{ $i + 1 }}">Save</button>
-
                             @php
                                 $eot = $d->eot ?? 0;
                             @endphp
                             @if ($eot > 0)
-                            {{-- @if ($eot >= rumusTotalRp($d)->batas_eot || !empty($d->gr_akhir)) --}}
+                                {{-- @if ($eot >= rumusTotalRp($d)->batas_eot || !empty($d->gr_akhir)) --}}
                                 <a style="font-size: 12px"
                                     class="btn btn-success btn-sm selesai selesai{{ $i + 1 }}" href="#"
                                     id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
                             @endif
-                              
+
                             <a style="font-size: 12px"
-                                class="d-none btn btn-success btn-sm selesai selesai{{ $i + 1 }}" href="#"
-                                id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
+                                class="d-none btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
+                                href="#" id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>

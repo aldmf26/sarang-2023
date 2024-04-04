@@ -156,6 +156,8 @@ class EoController extends Controller
             // DB::table('absen')->where([['id_anak', $r->id_anak[$i]], ['tgl', date('Y-m-d')]])->update([
             //     'tgl' => $r->tgl_ambil[$i]
             // ]);
+            $paket = DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->first();
+            $rp_target = $paket->rupiah * $r->gr_eo_awal[$i];
             $data = [
                 'no_box' => $r->no_box[$i] ?? '9999',
                 'gr_eo_awal' => $r->gr_eo_awal[$i],
@@ -163,6 +165,7 @@ class EoController extends Controller
                 'tgl_ambil' => $r->tgl_ambil[$i],
                 'id_anak' => $r->id_anak[$i],
                 'id_pengawas' => $r->id_pengawas[$i],
+                'rp_target' => $rp_target,
                 'tgl_input' => date('Y-m-d'),
             ];
             if($id == '9999') {
