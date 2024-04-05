@@ -332,4 +332,15 @@ class ApiBkModel extends Model
         ", [$no_box]);
         return $result;
     }
+    public static function cetak_detail_export()
+    {
+        $result = DB::selectOne("SELECT a.no_box, a.pcs_awal, a.gr_awal, a.pcs_awal_ctk, a.gr_awal_ctk,
+        a.pcs_tidak_ctk, a.gr_tidak_ctk, a.pcs_cu, a.gr_cu, a.pcs_akhir, a.gr_akhir, (a.rp_pcs * a.pcs_akhir) as rp_ctk,
+        a.bulan_dibayar
+        FROM cetak as a
+        where a.no_box = ? and a.selesai = 'Y'
+        group by a.no_box
+        ");
+        return $result;
+    }
 }

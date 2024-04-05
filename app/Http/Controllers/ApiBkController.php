@@ -345,4 +345,9 @@ class ApiBkController extends Controller
 
         return response()->json($cetak);
     }
+    public function cetak_detail_export(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_detail_export();
+        return response()->json($cetak);
+    }
 }
