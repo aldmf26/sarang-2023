@@ -76,9 +76,10 @@
                     <thead>
                         <tr>
                             <th colspan="3">#</th>
-                            <th colspan="6" class="text-center bg-success text-white">SELESAI</th>
+                            <th colspan="6" class="text-center dhead">SELESAI</th>
                             <th></th>
-                            <th colspan="5" class="text-center bg-warning text-white">PROSES</th>
+                            <th colspan="5" class="text-center dhead">PROSES</th>
+                            <th colspan="2" class="text-white bg-danger text-center">Selesai & Proses</th>
                         </tr>
                         <tr>
                             <th class="dhead">Nama</th>
@@ -96,6 +97,8 @@
                             <th class="dhead">Sortir</th>
                             <th class="dhead">Ttl Gaji Proses</th>
                             <th class="dhead">Rata2</th>
+                            <th class="bg-danger text-white">Ttl</th>
+                            <th class="bg-danger text-white">Rata2</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -150,7 +153,7 @@
                                         $data->eo_rp_target + 
                                         $data->sortir_rp_target;
                                     $rataProses = empty($data->hariMasuk) ? 0 : $ttlProses / $data->hariMasuk;
-
+                                    $rataSelesaiProses = empty($data->hariMasuk) ? 0 : ($ttl + $ttlProses) / $data->hariMasuk
                                 @endphp
                                 <td>{{ number_format($ttl, 0) }}</td>
                                 <td>{{ number_format($rata, 0) }}</td>
@@ -161,6 +164,8 @@
                                 <td>{{ number_format($data->sortir_rp_target, 0) }}</td>
                                 <td>{{ number_format($ttlProses, 0) }}</td>
                                 <td>{{ number_format($rataProses, 0) }}</td>
+                                <td>{{ number_format($ttl + $ttlProses, 0) }}</td>
+                                <td>{{ number_format($rataSelesaiProses, 0) }}</td>
                             </tr>
 
                             @php
