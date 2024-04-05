@@ -327,9 +327,9 @@ class ApiBkModel extends Model
         a.pcs_tidak_ctk, a.gr_tidak_ctk, a.pcs_cu, a.gr_cu, a.pcs_akhir, a.gr_akhir, (a.rp_pcs * a.pcs_akhir) as rp_ctk,
         a.bulan_dibayar
         FROM cetak as a
-        where a.no_box like '%$no_box%' and a.selesai = 'Y'
+        where a.no_box = ? and a.selesai = 'Y'
         group by a.no_box
-        ");
+        ", [$no_box]);
         return $result;
     }
 }
