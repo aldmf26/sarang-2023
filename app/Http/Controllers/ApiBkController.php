@@ -340,7 +340,7 @@ class ApiBkController extends Controller
 
     public function cetak_detail(Request $r)
     {
-        $cetak = ApiBkModel::cetak_detail($r->no_box);
+        $cetak = ApiBkModel::cetak_detail();
 
 
         return response()->json($cetak);
