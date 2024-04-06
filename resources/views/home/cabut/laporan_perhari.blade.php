@@ -199,13 +199,6 @@
                                 "stateSave": true,
                                 "searching": true,
                             });
-                            $('#tableHarian2').DataTable({
-                                "paging": true,
-                                "pageLength": 10,
-                                "lengthChange": true,
-                                "stateSave": true,
-                                "searching": true,
-                            });
 
                         }
                     });

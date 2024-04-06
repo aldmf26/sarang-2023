@@ -19,7 +19,7 @@
     </table>
 </div>
 <div class="col-lg-12">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover" id="tableHarian">
         <thead>
             <tr>
                 <th class="dhead">Kerja</th>
