@@ -47,4 +47,5 @@ Route::controller(ApiBkController::class)
         Route::get('/cabut_selesai', 'cabut_selesai')->name('cabut_selesai');
         Route::get('/datacabutsum2backup', 'datacabutsum2backup')->name('datacabutsum2backup');
         Route::get('/cetak_detail', 'cetak_detail')->name('cetak_detail');
+        Route::get('/cetak_detail_export', 'cetak_detail_export')->name('cetak_detail_export');
     });
