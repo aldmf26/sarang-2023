@@ -131,7 +131,7 @@
 
                         @endphp
                         @foreach ($tbl as $data)
-                            <tr class="detail" style="cursor: pointer" id_anak="{{ $data->id_anak }}">
+                            <tr class="detail" style="cursor: pointer" bulan="{{$bulan}}" tahun="{{$tahun}}" id_anak="{{ $data->id_anak }}">
                                 <td class="text-start">{{ $data->nm_anak }}</td>
                                 <td>{{ $data->kelas }}</td>
                                 <td>{{ $data->hariMasuk }}</td>
@@ -212,7 +212,7 @@
           
 
 
-            <x-theme.modal size="modal-lg-max" title="Detail Laporan" idModal="detail">
+            <x-theme.modal btnSave="T" size="modal-lg" title="Detail Laporan" idModal="detail">
                 <div id="detail_laporan_harian"></div>
             </x-theme.modal>
 
@@ -225,12 +225,16 @@
                 $(document).on('click', '.detail', function(e) {
                     e.preventDefault();
                     const id_anak = $(this).attr('id_anak')
+                    const bulan = $(this).attr('bulan')
+                    const tahun = $(this).attr('tahun')
                     $('#detail').modal('show')
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.detail_laporan_harian') }}",
                         data: {
-                            id_anak: id_anak
+                            id_anak: id_anak,
+                            bulan: bulan,
+                            tahun: tahun,
                         },
                         success: function(r) {
                             $("#detail_laporan_harian").html(r);
