@@ -76,7 +76,7 @@
                     <thead>
                         <tr>
                             <th colspan="3">#</th>
-                            <th colspan="6" class="text-center dhead">SELESAI</th>
+                            <th colspan="7" class="text-center dhead">SELESAI</th>
                             <th></th>
                             <th colspan="5" class="text-center dhead">PROSES</th>
                             <th colspan="2" class="text-white bg-danger text-center">Selesai & Proses</th>
@@ -89,6 +89,7 @@
                             <th class="dhead">Eo</th>
                             <th class="dhead">Sortir</th>
                             <th class="dhead">Dll</th>
+                            <th class="dhead">Denda</th>
                             <th class="dhead">Ttl Gaji Selesai</th>
                             <th class="dhead">Rata2</th>
                             <th class="bg-white"></th>
@@ -113,6 +114,7 @@
                                 <td>{{ number_format($data->eo_ttl_rp, 0) }}</td>
                                 <td>{{ number_format($data->sortir_ttl_rp, 0) }}</td>
                                 <td>{{ number_format($data->ttl_rp_dll, 0) }}</td>
+                                <td>{{ number_format($data->ttl_rp_denda, 0) }}</td>
                                 @php
                                     $ttl =
                                         $data->ttl_rp +
