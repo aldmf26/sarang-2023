@@ -537,16 +537,8 @@ class CabutController extends Controller
         return view('home.cabut.laporan_perhari', $data);
     }
 
-    public function detail_laporan_harian(Request $r)
+    public function detailLaporanQuery($id_anak, $bulan, $tahun)
     {
-        $id_anak = $r->id_anak;
-        $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
-        $bulan =  $r->bulan ?? date('m');
-        $tahun =  $r->tahun ?? date('Y');
-        $absen = DB::selectOne("SELECT count(*) as ttl FROM absen AS a 
-        WHERE a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_anak = '$id_anak'
-         group BY a.id_anak;");
-
         $cabut = DB::select("SELECT 
         a.no_box,
         a.tgl_terima,
@@ -558,7 +550,7 @@ class CabutController extends Controller
         CASE WHEN a.selesai = 'Y' THEN ttl_rp ELSE 0 END  as ttl_rp,
         CASE WHEN a.selesai = 'T' THEN rupiah ELSE 0 END as rp_target
         FROM cabut as a
-        WHERE id_anak = $id_anak AND bulan_dibayar = $bulan AND tahun_dibayar = $tahun AND a.penutup = 'T'");
+        WHERE id_anak = $id_anak AND no_box != 9999 AND bulan_dibayar = $bulan AND tahun_dibayar = $tahun AND a.penutup = 'T'");
 
         $eo = DB::select("SELECT 
         no_box,
@@ -569,7 +561,7 @@ class CabutController extends Controller
         (1 - (gr_eo_akhir / gr_eo_awal)) * 100 as susut
         FROM eo 
         WHERE id_anak = $id_anak AND penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'");
-        
+
         $sortir = DB::select("SELECT 
         no_box,
         pcs_awal as pcs_awal, 
@@ -581,18 +573,35 @@ class CabutController extends Controller
         (1 - gr_akhir / gr_awal) * 100 as susut
         FROM `sortir` WHERE id_anak = $id_anak AND bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999");
 
-        $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+        return [
+            'cabut' => $cabut,
+            'eo' => $eo,
+            'sortir' => $sortir,
+        ];
+    }
 
+    public function detail_laporan_harian(Request $r)
+    {
+        $id_anak = $r->id_anak;
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+
+        $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
+
+        $absen = DB::selectOne("SELECT count(*) as ttl FROM absen AS a 
+        WHERE a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_anak = '$id_anak'
+         group BY a.id_anak;");
+
+        $detail = $this->detailLaporanQuery($id_anak, $bulan, $tahun);
         $data = [
             'title' => 'Laporan Detail Perhari',
             'bulan' => $bulan,
             'tahun' => $tahun,
-            'id_pengawas' => $id_pengawas,
             'id_anak' => $id_anak,
             'anak' => $anak,
-            'cabut' => $cabut,
-            'eo' => $eo,
-            'sortir' => $sortir,
+            'cabut' => $detail['cabut'],
+            'eo' => $detail['eo'],
+            'sortir' => $detail['sortir'],
             'absen' => $absen->ttl,
         ];
         return view('home.cabut.detail_laporan_perhari', $data);

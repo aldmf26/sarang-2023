@@ -49,7 +49,7 @@
                 z-index: 1;
             }
         </style>
-<h6>Pgws : {{ $nm_pengawas }}</h6>
+        <h6>Pgws : {{ $nm_pengawas }}</h6>
         <section class="row">
             <div class="col-lg-12 mb-2">
                 <table class="float-start">
@@ -67,7 +67,7 @@
                 }
             </style>
             <div class="col-lg-6">
-                <table id="tblAldi2" class="table table-stripped table-hover table-bordered table-responsive">
+                <table id="tblAldi" class="table table-stripped table-hover table-bordered table-responsive">
                     @php
                         $bgDanger = 'text-white bg-danger';
                         $buka =
@@ -102,36 +102,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
 
-                            $TtlRp = 0;
-                            $eoTtlRp = 0;
-                            $sortirTtlRp = 0;
-                            $dllTtlRp = 0;
-                            $dendaTtlRp = 0;
-                            $ttlTtlRp = 0;
-
-                            $ttlCbtPcsAwal = 0;
-                            $ttlCbtGrAwal = 0;
-                            $ttlCbtPcsAkhir = 0;
-                            $ttlCbtGrAkhir = 0;
-                            $ttlCbtEotGr = 0;
-                            $ttlCbtGrFlx = 0;
-                            $ttlCbtTtlRp = 0;
-
-                            $ttlSoritrPcsAwal = 0;
-                            $ttlSoritrGrAwal = 0;
-                            $ttlSoritrPcsAkhir = 0;
-                            $ttlSoritrGrAkhir = 0;
-                            $ttlSortirRp = 0;
-
-                            $ttlEoGrAwal = 0;
-                            $ttlEoGrAkhir = 0;
-                            $ttlEoRp = 0;
-
-                        @endphp
                         @foreach ($tbl as $data)
-                            <tr class="detail" style="cursor: pointer" bulan="{{$bulan}}" tahun="{{$tahun}}" id_anak="{{ $data->id_anak }}">
+                            <tr class="detail" style="cursor: pointer" bulan="{{ $bulan }}"
+                                tahun="{{ $tahun }}" id_anak="{{ $data->id_anak }}">
                                 <td class="text-start">{{ $data->nm_anak }}</td>
                                 <td>{{ $data->kelas }}</td>
                                 <td>{{ $data->hariMasuk }}</td>
@@ -148,12 +122,11 @@
                                         $data->ttl_rp_denda;
                                     $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
-                                    $ttlProses = 
-                                        $data->rupiah + 
-                                        $data->eo_rp_target + 
-                                        $data->sortir_rp_target;
+                                    $ttlProses = $data->rupiah + $data->eo_rp_target + $data->sortir_rp_target;
                                     $rataProses = empty($data->hariMasuk) ? 0 : $ttlProses / $data->hariMasuk;
-                                    $rataSelesaiProses = empty($data->hariMasuk) ? 0 : ($ttl + $ttlProses) / $data->hariMasuk
+                                    $rataSelesaiProses = empty($data->hariMasuk)
+                                        ? 0
+                                        : ($ttl + $ttlProses) / $data->hariMasuk;
                                 @endphp
                                 <td>{{ number_format($ttl, 0) }}</td>
                                 <td>{{ number_format($rata, 0) }}</td>
@@ -167,33 +140,6 @@
                                 <td>{{ number_format($ttl + $ttlProses, 0) }}</td>
                                 <td>{{ number_format($rataSelesaiProses, 0) }}</td>
                             </tr>
-
-                            @php
-                                $ttlCbtPcsAwal += $data->pcs_awal;
-                                $ttlCbtGrAwal += $data->gr_awal;
-                                $ttlCbtPcsAkhir += $data->pcs_akhir;
-                                $ttlCbtGrAkhir += $data->gr_akhir;
-                                $ttlCbtEotGr += $data->eot;
-                                $ttlCbtGrFlx += $data->gr_flx;
-                                $ttlCbtTtlRp += $data->ttl_rp;
-
-                                $ttlEoGrAwal += $data->eo_awal;
-                                $ttlEoGrAkhir += $data->eo_akhir;
-                                $ttlEoRp += $data->eo_ttl_rp;
-
-                                $ttlSoritrPcsAwal += $data->sortir_pcs_awal;
-                                $ttlSoritrGrAwal += $data->sortir_gr_awal;
-                                $ttlSoritrPcsAkhir += $data->sortir_pcs_akhir;
-                                $ttlSoritrGrAkhir += $data->sortir_gr_akhir;
-                                $ttlSortirRp += $data->sortir_ttl_rp;
-
-                                $TtlRp += $data->ttl_rp;
-                                $eoTtlRp += $data->eo_ttl_rp;
-                                $sortirTtlRp += $data->sortir_ttl_rp;
-                                $dllTtlRp += $data->ttl_rp_dll;
-                                $dendaTtlRp += $data->ttl_rp_denda;
-                                $ttlTtlRp += $ttl;
-                            @endphp
                         @endforeach
                     </tbody>
                     {{-- <tfoot class="bg-info text-white">
@@ -209,10 +155,13 @@
                 </tfoot> --}}
                 </table>
             </div>
-          
+
 
 
             <x-theme.modal btnSave="T" size="modal-lg" title="Detail Laporan" idModal="detail">
+                <div class="loading d-none">
+                    <x-theme.loading/>
+                </div>
                 <div id="detail_laporan_harian"></div>
             </x-theme.modal>
 
@@ -236,7 +185,12 @@
                             bulan: bulan,
                             tahun: tahun,
                         },
+                        beforeSend:function(){
+                            $("#detail_laporan_harian").html("");
+                            $('.loading').removeClass('d-none');
+                        },
                         success: function(r) {
+                            $('.loading').addClass('d-none');
                             $("#detail_laporan_harian").html(r);
                             $('#tableHarian').DataTable({
                                 "paging": true,
