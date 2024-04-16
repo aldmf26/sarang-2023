@@ -162,7 +162,7 @@
 
             <x-theme.modal btnSave="T" size="modal-lg" title="Detail Laporan" idModal="detail">
                 <div class="loading d-none">
-                    <x-theme.loading/>
+                    <x-theme.loading />
                 </div>
                 <div id="detail_laporan_harian"></div>
             </x-theme.modal>
@@ -187,7 +187,7 @@
                             bulan: bulan,
                             tahun: tahun,
                         },
-                        beforeSend:function(){
+                        beforeSend: function() {
                             $("#detail_laporan_harian").html("");
                             $('.loading').removeClass('d-none');
                         },
