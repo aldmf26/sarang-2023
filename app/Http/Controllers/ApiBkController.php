@@ -352,7 +352,7 @@ class ApiBkController extends Controller
     }
     public function bikin_box(Request $r)
     {
-        $cabut = DB::table('bk')->where('kategori', 'cabut')->where('selesai', 'Y')->get();
+        $cabut = DB::table('bk')->where('kategori', 'cabut')->where('selesai', 'T')->get();
         return response()->json($cabut);
     }
 }
