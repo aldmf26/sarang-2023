@@ -350,4 +350,9 @@ class ApiBkController extends Controller
         $cetak = DB::table('cetak')->get();
         return response()->json($cetak);
     }
+    public function bikin_box(Request $r)
+    {
+        $cabut = DB::table('bk')->where('kategori', 'cabut')->where('selesai', 'Y')->get();
+        return response()->json($cabut);
+    }
 }
