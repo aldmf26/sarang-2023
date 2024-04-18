@@ -354,6 +354,7 @@ class ApiBkController extends Controller
     {
         $cabut = DB::select("SELECT a.*
         FROM bk AS a
+        left join users as b on b.id = a.penerima
         WHERE 
         a.kategori = 'cabut' and 
         
