@@ -352,7 +352,21 @@ class ApiBkController extends Controller
     }
     public function bikin_box(Request $r)
     {
-        $cabut = DB::table('bk')->where('kategori', 'cabut')->where('selesai', 'T')->get();
+        $cabut = DB::select("SELECT a.*
+        FROM bk AS a
+        WHERE 
+        a.kategori = 'cabut' and 
+        
+        NOT EXISTS (
+            SELECT 1
+            FROM cabut AS b
+            WHERE b.no_box = a.no_box
+        )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM eo AS c
+            WHERE c.no_box = a.no_box
+        );");
         return response()->json($cabut);
     }
 }
