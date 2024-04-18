@@ -350,12 +350,14 @@ class ApiBkModel extends Model
             SELECT b.nm_partai, a.no_box, b.tipe, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, 'cabut' as ket
             FROM cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box AND b.kategori = 'cabut'
+            where a.selesai = 'T'
             group by a.no_box
             UNION ALL
         
             SELECT b.nm_partai, c.no_box, b.tipe, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, sum(c.ttl_rp) as ttl_rp, 'eo' as ket
             FROM eo as c
             LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
+            where c.selesai = 'T'
             group by c.no_box
         ) AS combined_result;");
         return $result;
