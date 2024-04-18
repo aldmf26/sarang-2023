@@ -347,15 +347,19 @@ class ApiBkModel extends Model
     public static function cabut_selesai_new()
     {
         $result = DB::select("SELECT * FROM (
-            SELECT b.nm_partai, a.no_box, b.tipe, b.ket, b.warna, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.ttl_rp) as ttl_rp, 'cabut' as kategori, a.tgl_terima as tgl_terima
+            SELECT b.nm_partai, a.no_box, b.tipe, b.ket, b.warna, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.ttl_rp) as ttl_rp, 'cabut' as kategori, a.tgl_terima as tgl_terima, c.nama as nama_anak, c.id_kelas as kelas, e.name as pengawas
             FROM cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box AND b.kategori = 'cabut'
+    		LEFT join tb_anak as c on c.id_anak = a.id_anak
+    		left join users as e on e.id = a.id_pengawas
             where a.selesai = 'T'
             group by a.no_box
             UNION ALL
-            SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima
+            SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, 			   sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima, d.nama as nama_anak, d.id_kelas as kelas, e.name as pengawas
             FROM eo as c
             LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
+    		LEFT join tb_anak as d on d.id_anak = c.id_anak
+    		left join users as e on e.id = c.id_pengawas
             where c.selesai = 'T'
             group by c.no_box
         ) AS combined_result;");
