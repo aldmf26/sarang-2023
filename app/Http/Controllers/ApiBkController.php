@@ -352,7 +352,7 @@ class ApiBkController extends Controller
     }
     public function bikin_box(Request $r)
     {
-        $cabut = DB::select("SELECT a.*, b.
+        $cabut = DB::select("SELECT a.*, b.name
         FROM bk AS a
         left join users as b on b.id = a.penerima
         WHERE 
