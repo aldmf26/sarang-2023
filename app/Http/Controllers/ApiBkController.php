@@ -370,4 +370,11 @@ class ApiBkController extends Controller
         );");
         return response()->json($cabut);
     }
+
+    function cabut_selesai_new(Request $r)
+    {
+        $cabut = ApiBkModel::cabut_selesai_new();
+
+        return response()->json($cabut);
+    }
 }
