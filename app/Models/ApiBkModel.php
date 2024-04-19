@@ -368,16 +368,16 @@ class ApiBkModel extends Model
 
     public static function cabut_laporan()
     {
-        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.pcs_awal, a.gr_awal, if(b.pcs_awal_cbt is null , 0 , b.pcs_awal_cbt) as pcs_awal_cbt, if(b.gr_awal_cbt is null ,0 , b.gr_awal_cbt) as gr_awal_cbt , if(b.pcs_akhir_cbt is null,0,b.pcs_akhir_cbt) as pcs_akhir_cbt, if(b.gr_akhir_cbt is null,0,b.gr_akhir_cbt) as gr_akhir_cbt, if(c.gr_eo_awal is null ,0,c.gr_eo_awal) as gr_eo_awal, if(c.gr_eo_akhir is null,0,c.gr_eo_akhir) as gr_eo_akhir, a.pengawas, d.name, e.nama as anak_cbt, e.id_kelas as kelas_cbt, f.nama as anak_eo, f.id_kelas as kelas_eo
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.pcs_awal, a.gr_awal, if(b.pcs_awal_cbt is null , 0 , b.pcs_awal_cbt) as pcs_awal_cbt, if(b.gr_awal_cbt is null ,0 , b.gr_awal_cbt) as gr_awal_cbt , if(b.pcs_akhir_cbt is null,0,b.pcs_akhir_cbt) as pcs_akhir_cbt, if(b.gr_akhir_cbt is null,0,b.gr_akhir_cbt) as gr_akhir_cbt, if(c.gr_eo_awal is null ,0,c.gr_eo_awal) as gr_eo_awal, if(c.gr_eo_akhir is null,0,c.gr_eo_akhir) as gr_eo_akhir, a.pengawas, d.name, e.nama as anak_cbt, e.id_kelas as kelas_cbt, f.nama as anak_eo, f.id_kelas as kelas_eo, b.cost_cabut, c.cost_eo
         FROM bk as a
         left join (
-            SELECT b.no_box, sum(b.pcs_awal) as pcs_awal_cbt, sum(b.gr_awal) as gr_awal_cbt, sum(b.pcs_akhir) as pcs_akhir_cbt, sum(b.gr_akhir) as gr_akhir_cbt, b.id_anak
+            SELECT b.no_box, sum(b.pcs_awal) as pcs_awal_cbt, sum(b.gr_awal) as gr_awal_cbt, sum(b.pcs_akhir) as pcs_akhir_cbt, sum(b.gr_akhir) as gr_akhir_cbt, b.id_anak, sum(b.ttl_rp) as cost_cabut
             FROM cabut as b 
             group by b.no_box
         ) as b on b.no_box = a.no_box
         
         left join (
-            SELECT c.no_box, sum(c.gr_eo_awal) as gr_eo_awal, sum(c.gr_eo_akhir) as gr_eo_akhir, c.id_anak
+            SELECT c.no_box, sum(c.gr_eo_awal) as gr_eo_awal, sum(c.gr_eo_akhir) as gr_eo_akhir, c.id_anak, sum(c.ttl_rp) as cost_eo
             FROM eo as c
             group by c.no_box
         ) as c on c.no_box = a.no_box
