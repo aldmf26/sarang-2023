@@ -377,4 +377,10 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cabut_laporan(Request $r)
+    {
+        $cabut = ApiBkModel::cabut_laporan();
+
+        return response()->json($cabut);
+    }
 }

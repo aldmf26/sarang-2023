@@ -355,7 +355,7 @@ class ApiBkModel extends Model
             where a.selesai = 'T'
             group by a.no_box
             UNION ALL
-            SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, 			   sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima, d.nama as nama_anak, d.id_kelas as kelas, e.name as pengawas
+            SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal,sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima, d.nama as nama_anak, d.id_kelas as kelas, e.name as pengawas
             FROM eo as c
             LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
     		LEFT join tb_anak as d on d.id_anak = c.id_anak
@@ -363,6 +363,30 @@ class ApiBkModel extends Model
             where c.selesai = 'T'
             group by c.no_box
         ) AS combined_result;");
+        return $result;
+    }
+
+    public static function cabut_laporan()
+    {
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.pcs_awal, a.gr_awal, if(b.pcs_awal_cbt is null , 0 , b.pcs_awal_cbt) as pcs_awal_cbt, if(b.gr_awal_cbt is null ,0 , b.gr_awal_cbt) as gr_awal_cbt , if(b.pcs_akhir_cbt is null,0,b.pcs_akhir_cbt) as pcs_akhir_cbt, if(b.gr_akhir_cbt is null,0,b.gr_akhir_cbt) as gr_akhir_cbt, if(c.gr_eo_awal is null ,0,c.gr_eo_awal) as gr_eo_awal, if(c.gr_eo_akhir is null,0,c.gr_eo_akhir) as gr_eo_akhir, a.pengawas, d.name, e.nama as anak_cbt, e.id_kelas as kelas_cbt, f.nama as anak_eo, f.id_kelas as kelas_eo
+        FROM bk as a
+        left join (
+            SELECT b.no_box, sum(b.pcs_awal) as pcs_awal_cbt, sum(b.gr_awal) as gr_awal_cbt, sum(b.pcs_akhir) as pcs_akhir_cbt, sum(b.gr_akhir) as gr_akhir_cbt, b.id_anak
+            FROM cabut as b 
+            group by b.no_box
+        ) as b on b.no_box = a.no_box
+        
+        left join (
+            SELECT c.no_box, sum(c.gr_eo_awal) as gr_eo_awal, sum(c.gr_eo_akhir) as gr_eo_akhir, c.id_anak
+            FROM eo as c
+            group by c.no_box
+        ) as c on c.no_box = a.no_box
+        
+        left join users as d on d.id = a.penerima
+        left join tb_anak as e on e.id_anak = b.id_anak
+        left join tb_anak as f on f.id_anak = c.id_anak
+         WHERE a.kategori = 'cabut' and a.selesai = 'T';");
+
         return $result;
     }
 }
