@@ -383,4 +383,10 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cetak_laporan_all(Request $r)
+    {
+        $cabut = ApiBkModel::cetak_partai($r->nm_partai);
+
+        return response()->json($cabut);
+    }
 }

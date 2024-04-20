@@ -389,4 +389,42 @@ class ApiBkModel extends Model
 
         return $result;
     }
+
+    public static function cetak_partai($nm_partai)
+    {
+        $result = DB::selectOne("SELECT a.nm_partai, a.no_box, 
+        sum(b.pcs_awal_ambil_ctk) as pcs_awal_ambil_ctk,
+        sum(b.gr_awal_ambil_ctk) as gr_awal_ambil_ctk,
+        sum(b.pcs_tdk_ctk) as pcs_tdk_ctk,
+        sum(b.gr_tdk_ctk) as gr_tdk_ctk,
+        sum(b.pcs_ctk) as pcs_ctk,
+        sum(b.gr_ctk) as gr_ctk,
+        sum(b.pcs_cu) as pcs_cu,
+        sum(b.gr_cu) as gr_cu,
+        sum(b.pcs_akhir_ctk) as pcs_akhir_ctk,
+        sum(b.gr_akhir_ctk) as gr_akhir_ctk,
+        sum(b.cost_ctk) as cost_ctk
+        FROM bk as a
+        left join (
+        SELECT b.no_box, 
+            sum(b.pcs_awal) as pcs_awal_ambil_ctk, 
+            sum(b.gr_awal) as gr_awal_ambil_ctk,
+            sum(b.pcs_tidak_ctk) as pcs_tdk_ctk,
+            sum(b.gr_tidak_ctk) as gr_tdk_ctk,
+            sum(b.pcs_awal_ctk) as pcs_ctk,
+            sum(b.gr_awal_ctk) as gr_ctk,
+            sum(b.pcs_cu) as pcs_cu,
+            sum(b.gr_cu) as gr_cu,
+            sum(b.pcs_akhir) as pcs_akhir_ctk,
+            sum(b.gr_akhir) as gr_akhir_ctk,
+            sum(b.pcs_akhir * b.rp_pcs) as cost_ctk
+            FROM cetak as b
+            GROUP by b.no_box
+        ) as b on b.no_box = a.no_box
+        where a.kategori = 'cetak' and a.nm_partai = ?
+        group by a.nm_partai;
+        ", [$nm_partai]);
+
+        return $result;
+    }
 }

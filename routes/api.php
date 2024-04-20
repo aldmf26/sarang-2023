@@ -51,4 +51,5 @@ Route::controller(ApiBkController::class)
         Route::get('/bikin_box', 'bikin_box')->name('bikin_box');
         Route::get('/cabut_selesai_new', 'cabut_selesai_new')->name('cabut_selesai_new');
         Route::get('/cabut_laporan', 'cabut_laporan')->name('cabut_laporan');
+        Route::get('/cetak_laporan_all', 'cetak_laporan_all')->name('cetak_laporan_all');
     });
