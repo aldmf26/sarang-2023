@@ -440,7 +440,7 @@ class ApiBkModel extends Model
         $result = DB::select("SELECT * , ((1 - (gr_akhir/gr_awal)) * 100 ) as susut
                 FROM (
                     SELECT b.nm_partai, a.no_box, b.tipe, b.ket, b.warna, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,
-                    sum(a.ttl_rp) as ttl_rp, 'cabut' as kategori, a.tgl_terima as tgl_terima, c.nama as nama_anak, c.id_kelas as kelas, e.name as pengawas
+                    sum(a.ttl_rp) as ttl_rp, 'cabut' as kategori, a.tgl_terima as tgl_terima, c.nama as nama_anak, c.id_kelas as kelas, e.name as pengawas, sum(a.eot) as eot, sum(a.gr_flx) as gr_flx
                     FROM cabut AS a 
                     LEFT JOIN bk AS b ON b.no_box = a.no_box AND b.kategori = 'cabut'
                     LEFT join tb_anak as c on c.id_anak = a.id_anak
@@ -448,7 +448,7 @@ class ApiBkModel extends Model
                     where b.nm_partai = '$nm_partai'
                     group by a.id_cabut
                     UNION ALL
-                    SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, 0, sum(c.gr_eo_akhir) as gr_akhir ,sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima, d.nama as nama_anak, d.id_kelas as kelas, e.name as pengawas
+                    SELECT b.nm_partai, c.no_box, b.tipe, b.ket, b.warna, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, 0, sum(c.gr_eo_akhir) as gr_akhir ,sum(c.ttl_rp) as ttl_rp, 'eo' as kategori,  c.tgl_ambil as tgl_terima, d.nama as nama_anak, d.id_kelas as kelas, e.name as pengawas, 0 , 0
                     FROM eo as c
                     LEFT JOIN bk AS b ON b.no_box = c.no_box AND b.kategori = 'cabut'
                     LEFT join tb_anak as d on d.id_anak = c.id_anak
