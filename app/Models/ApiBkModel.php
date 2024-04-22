@@ -100,7 +100,7 @@ class ApiBkModel extends Model
         ) as c on c.no_box = a.no_box
         
         left join (
-        SELECT d.no_box, sum(d.gr_eo_awal) as gr_eo_awal, sum(d.gr_eo_akhir) as gr_eo_akhir, sum(d.ttl_rp) as ttl_rp_eo 
+        SELECT d.id_anak, d.no_box, sum(d.gr_eo_awal) as gr_eo_awal, sum(d.gr_eo_akhir) as gr_eo_akhir, sum(d.ttl_rp) as ttl_rp_eo 
             FROM eo as d 
             group by d.no_box
         ) as d on d.no_box = a.no_box
