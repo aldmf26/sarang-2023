@@ -392,4 +392,10 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cabut_detail(Request $r)
+    {
+        $cabut = ApiBkModel::cabut_detail($r->nm_partai);
+
+        return response()->json($cabut);
+    }
 }
