@@ -369,7 +369,6 @@ class ApiBkController extends Controller
         
         left join users as d on d.id = a.penerima
         where a.kategori = 'cabut' and (a.gr_awal - if(c.gr_eo is null ,0,c.gr_eo) - if(b.gr_cabut is null , 0, b.gr_cabut)) != 0;
-        order by 
         ");
         return response()->json($cabut);
     }
