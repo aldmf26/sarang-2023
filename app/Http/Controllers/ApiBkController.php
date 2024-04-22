@@ -352,22 +352,23 @@ class ApiBkController extends Controller
     }
     public function bikin_box(Request $r)
     {
-        $cabut = DB::select("SELECT a.*, b.name
-        FROM bk AS a
-        left join users as b on b.id = a.penerima
-        WHERE 
-        a.kategori = 'cabut' and 
+        $cabut = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.ket, a.warna, a.tgl, a.pengawas, d.name,
+        a.pcs_awal, a.gr_awal, (a.pcs_awal - if(b.pcs_cabut is null ,0,b.pcs_cabut)) as pcs_sisa , (a.gr_awal - if(c.gr_eo is null ,0,c.gr_eo) - if(b.gr_cabut is null , 0, b.gr_cabut)) as gr_sisa
+        FROM bk as a 
+        left join (
+         SELECT b.no_box, sum(b.pcs_awal) as pcs_cabut, sum(b.gr_awal) as gr_cabut
+            FROM cabut as b 
+            GROUP by b.no_box
+        ) as b on b.no_box = a.no_box
         
-        NOT EXISTS (
-            SELECT 1
-            FROM cabut AS b
-            WHERE b.no_box = a.no_box
-        )
-        AND NOT EXISTS (
-            SELECT 1
-            FROM eo AS c
-            WHERE c.no_box = a.no_box
-        );");
+        left join (
+         SELECT c.no_box, sum(c.gr_eo_awal) as gr_eo
+            FROM eo as c 
+            GROUP by c.no_box
+        ) as c on c.no_box = a.no_box
+        
+        left join users as d on d.id = a.penerima
+        where a.kategori = 'cabut' and (a.gr_awal - if(c.gr_eo is null ,0,c.gr_eo) - if(b.gr_cabut is null , 0, b.gr_cabut)) != 0;");
         return response()->json($cabut);
     }
 
