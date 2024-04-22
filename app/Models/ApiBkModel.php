@@ -107,7 +107,7 @@ class ApiBkModel extends Model
 
         WHERE  a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.no_box 
-        ORDER BY (1 - (IF(c.gr_akhir IS NULL, 0, c.gr_akhir) + IF(d.gr_eo_akhir IS NULL, 0, d.gr_eo_akhir) / (IF(c.gr_awal IS NULL, 0, c.gr_awal) + IF(d.gr_eo_awal IS NULL, 0, d.gr_eo_awal))) * 100) DESC
+        ORDER BY (1 - ((IF(c.gr_akhir IS NULL, 0, c.gr_akhir) + IF(d.gr_eo_akhir IS NULL, 0, d.gr_eo_akhir)) / (IF(c.gr_awal IS NULL, 0, c.gr_awal) + IF(d.gr_eo_awal IS NULL, 0, d.gr_eo_awal))) * 100) DESC
         $whereLimit");
 
         return $result;
