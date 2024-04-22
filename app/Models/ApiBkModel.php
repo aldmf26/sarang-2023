@@ -86,11 +86,11 @@ class ApiBkModel extends Model
         $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT a.no_box, a.tipe,a.no_lot, a.nm_partai, a.no_box, sum(a.pcs_awal) as pcs_awal_bk, sum(a.gr_awal) as gr_awal_bk, b.name,
         c.pcs_awal, c.gr_awal,c.pcs_akhir, c.gr_akhir,c.gr_flx,c.eot_rp,c.batas_eot,c.rupiah,c.ttl_rp, 
-        d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo
+        d.gr_eo_awal, d.gr_eo_akhir, d.ttl_rp_eo, e.nama as nm_anak_cabut, f.nama as nm_anak_eo
         FROM bk as a
         left join users as b on b.id = a.penerima
         LEFT JOIN (
-            SELECT 
+            SELECT a.id_anak,
                 sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.gr_flx) as gr_flx , a.no_box,  c.eot as eot_rp, 
                 c.batas_eot, sum(a.rupiah) as rupiah, sum(a.ttl_rp) as ttl_rp
                 FROM cabut as a
@@ -104,6 +104,9 @@ class ApiBkModel extends Model
             FROM eo as d 
             group by d.no_box
         ) as d on d.no_box = a.no_box
+
+        left join tb_anak as e on e.id_anak = c.id_anak
+        left join tb_anak as f on f.id_anak = d.id_anak
 
         WHERE  a.nm_partai = '$nm_partai' AND a.kategori in('cabut','eo')
         GROUP BY a.no_box 
