@@ -434,8 +434,9 @@ class ApiBkModel extends Model
     }
 
 
-    public static function cabut_detail($nm_partai)
+    public static function cabut_detail($nm_partai, $limit = 10)
     {
+        $whereLimit = $limit == 'ALL' ? '' : "LIMIT $limit";
         $result = DB::select("SELECT * , ((1 - (gr_akhir/gr_awal)) * 100 ) as susut
                 FROM (
                     SELECT b.nm_partai, a.no_box, b.tipe, b.ket, b.warna, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,
@@ -455,7 +456,9 @@ class ApiBkModel extends Model
                     where b.nm_partai = '$nm_partai'
                     group by c.id_eo
                 ) AS combined_result
-                order by  ((1 - (gr_akhir/gr_awal)) * 100) DESC;");
+                order by  ((1 - (gr_akhir/gr_awal)) * 100) DESC
+                $whereLimit
+                ;");
 
         return $result;
     }
