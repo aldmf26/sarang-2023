@@ -406,7 +406,8 @@ class ApiBkModel extends Model
         sum(b.gr_cu) as gr_cu,
         sum(b.pcs_akhir_ctk) as pcs_akhir_ctk,
         sum(b.gr_akhir_ctk) as gr_akhir_ctk,
-        sum(b.cost_ctk) as cost_ctk
+        sum(b.cost_ctk) as cost_ctk,
+        sum(a.ttl_rp) as cost_bk_ctk
         FROM bk as a
         left join (
         SELECT b.no_box, 
