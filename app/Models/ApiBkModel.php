@@ -461,4 +461,30 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function cabut_selesai_g_cetak()
+    {
+        $result = DB::select("SELECT b.nm_partai, b.tipe, c.nm_partai, a.*
+        FROM (
+        SELECT c.name, b.nama, b.id_kelas, a.no_box, a.pcs_akhir, a.gr_akhir, a.ttl_rp, 'cabut' as kerja
+            FROM cabut as a
+            left join tb_anak as b on b.id_anak = a.id_anak
+            left join users as c on c.id = a.id_pengawas
+            WHERE a.selesai = 'Y'
+            
+        UNION ALL   
+        
+        SELECT c.name, b.nama, b.id_kelas, e.no_box, 0, e.gr_eo_akhir, e.ttl_rp, 'eo' as kerja
+            FROM eo as e
+            left join tb_anak as b on b.id_anak = e.id_anak
+            left join users as c on c.id = b.id_pengawas
+            where e.selesai ='Y'
+            
+        ) AS a
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cetak'
+        
+        where c.nm_partai is null;");
+
+        return $result;
+    }
 }
