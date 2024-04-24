@@ -463,7 +463,7 @@ class ApiBkModel extends Model
     }
     public static function cabut_selesai_g_cetak()
     {
-        $result = DB::select("SELECT b.nm_partai, b.tipe, c.nm_partai, a.*
+        $result = DB::select("SELECT b.nm_partai, b.tipe, c.nm_partai as nm_partai2, a.*
         FROM (
         SELECT c.name, b.nama, b.id_kelas, a.no_box, a.pcs_akhir, a.gr_akhir, a.ttl_rp, 'cabut' as kerja
             FROM cabut as a
