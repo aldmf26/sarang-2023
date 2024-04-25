@@ -54,3 +54,5 @@ Route::controller(ApiBkController::class)
         Route::get('/cetak_laporan_all', 'cetak_laporan_all')->name('cetak_laporan_all');
         Route::get('/cabut_detail', 'cabut_detail')->name('cabut_detail');
     });
+
+require __DIR__ . '/apiAldi.php';
