@@ -397,4 +397,16 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cabut_selesai_g_cetak(Request $r)
+    {
+        $cabut = ApiBkModel::cabut_selesai_g_cetak();
+
+        return response()->json($cabut);
+    }
+    function cabut_selesai_g_cetak_nota(Request $r)
+    {
+        $cabut = ApiBkModel::cabut_selesai_g_cetak_nota($r->no_box);
+
+        return response()->json($cabut);
+    }
 }

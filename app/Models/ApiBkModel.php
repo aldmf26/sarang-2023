@@ -461,4 +461,60 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function cabut_selesai_g_cetak()
+    {
+        $result = DB::select("SELECT b.nm_partai, b.tipe, c.nm_partai as nm_partai2, a.*
+        FROM (
+        SELECT c.name, b.nama, b.id_kelas, a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, 'cabut' as kerja
+            FROM cabut as a
+            left join tb_anak as b on b.id_anak = a.id_anak
+            left join users as c on c.id = a.id_pengawas
+            WHERE a.selesai = 'Y'
+            group by a.no_box
+            
+        UNION ALL   
+        
+        SELECT c.name, b.nama, b.id_kelas, e.no_box, 0, sum(e.gr_eo_akhir) as gr_akhir, sum(e.ttl_rp) as ttl_rp, 'eo' as kerja
+            FROM eo as e
+            left join tb_anak as b on b.id_anak = e.id_anak
+            left join users as c on c.id = b.id_pengawas
+            where e.selesai ='Y'
+            group by e.no_box
+            
+        ) AS a
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cetak'
+        
+        where c.nm_partai is null;");
+
+        return $result;
+    }
+
+    public static function cabut_selesai_g_cetak_nota($no_box)
+    {
+        $result = DB::selectOne("SELECT b.nm_partai, b.tipe, c.nm_partai as nm_partai2, a.*
+        FROM (
+        SELECT c.name, b.nama, b.id_kelas, a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, 'cabut' as kerja
+            FROM cabut as a
+            left join tb_anak as b on b.id_anak = a.id_anak
+            left join users as c on c.id = a.id_pengawas
+            WHERE a.selesai = 'Y' 
+            group by a.no_box
+            
+        UNION ALL   
+        
+        SELECT c.name, b.nama, b.id_kelas, e.no_box, 0, sum(e.gr_eo_akhir) as gr_akhir, sum(e.ttl_rp) as ttl_rp, 'eo' as kerja
+            FROM eo as e
+            left join tb_anak as b on b.id_anak = e.id_anak
+            left join users as c on c.id = b.id_pengawas
+            where e.selesai ='Y' 
+            group by e.no_box
+        ) AS a
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cetak'
+        
+        where c.nm_partai is null and a.no_box = '$no_box'");
+
+        return $result;
+    }
 }
