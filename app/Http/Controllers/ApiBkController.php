@@ -409,4 +409,10 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cetak_pgws(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_pgws();
+
+        return response()->json($cetak);
+    }
 }

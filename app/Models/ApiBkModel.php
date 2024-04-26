@@ -517,4 +517,21 @@ class ApiBkModel extends Model
 
         return $result;
     }
+
+    public static function cetak_pgws()
+    {
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tgl, a.pengawas, a.penerima, a.pcs_awal, a.gr_awal, b.pcs_awal_ctk, b.gr_awal_ctk
+        FROM bk as a 
+        left join(
+            SELECT b.no_box, 
+            sum(if(b.pcs_awal is null,0,b.pcs_awal)) as pcs_awal_ctk, 
+            sum(if(b.gr_awal is null,0,b.gr_awal)) as gr_awal_ctk
+            FROM cetak as b
+            GROUP by b.no_box
+        ) as b on b.no_box = a.no_box
+        left join users as c on c.id = a.penerima
+        where a.kategori = 'cetak';");
+
+        return $result;
+    }
 }
