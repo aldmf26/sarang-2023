@@ -530,7 +530,7 @@ class ApiBkModel extends Model
             GROUP by b.no_box
         ) as b on b.no_box = a.no_box
         left join users as c on c.id = a.penerima
-        where a.kategori = 'cetak';");
+        where a.kategori = 'cetak' and (a.pcs_awal - b.pcs_awal_ctk) != 0 ");
 
         return $result;
     }
