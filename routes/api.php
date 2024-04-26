@@ -57,3 +57,5 @@ Route::controller(ApiBkController::class)
         Route::get('/cabut_selesai_g_cetak_nota', 'cabut_selesai_g_cetak_nota')->name('cabut_selesai_g_cetak_nota');
         Route::get('/cetak_pgws', 'cetak_pgws')->name('cetak_pgws');
     });
+
+require __DIR__ . '/apiAldi.php';

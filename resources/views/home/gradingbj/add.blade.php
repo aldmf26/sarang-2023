@@ -170,8 +170,6 @@
                             const index = selectedItem.findIndex(item => item.id_cetak === e.id_cetak);
                             selectedItem.splice(index, 1);
             
-            
-            
                             this.ttlPcs -= e.pcs_akhir
                             this.ttlGr -= e.gr_akhir
                             this.ttlRp -= e.ttl_rp
@@ -226,7 +224,7 @@
                                         <td x-text="item.no_box"></td>
                                         <td align="right" x-text="numberFormat(item.pcs_cabut)"></td>
                                         <td align="right" x-text="numberFormat(item.gr_cabut)"></td>
-                                        <td align="right" x-text="numberFormat(item.ttl_rp)"></td>
+                                        <td align="right" x-text="numberFormat(item.ttl_rp)">ds</td>
                                         <td align="right" x-text="numberFormat(item.cost_cabut)"></td>
                                         <td align="right">0</td>
                                         <td class="text-center"><a href="javascript:void(0)"
