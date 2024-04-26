@@ -520,7 +520,7 @@ class ApiBkModel extends Model
 
     public static function cetak_pgws()
     {
-        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.tgl, a.pengawas, a.penerima, a.pcs_awal, a.gr_awal, b.pcs_awal_ctk, b.gr_awal_ctk
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a. a.tgl, a.pengawas, a.penerima, a.pcs_awal, a.gr_awal, b.pcs_awal_ctk, b.gr_awal_ctk
         FROM bk as a 
         left join(
             SELECT b.no_box, 
