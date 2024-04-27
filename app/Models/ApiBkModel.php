@@ -538,7 +538,7 @@ class ApiBkModel extends Model
 
     public static function cetak_belum_selesai()
     {
-        $result = DB::select("SELECT b.nm_partai, b.tipe, b.ket,b.warna, b.tgl, c.name, d.nama, a.no_box, 
+        $result = DB::select("SELECT b.nm_partai, b.tipe, b.ket,b.warna, b.tgl, c.name, d.nama, d.id_kelas, a.no_box, 
         sum(a.pcs_awal) as pcs_ambil, sum(a.gr_awal) as gr_ambil,
         sum(a.pcs_tidak_ctk) as pcs_tdk_ctk, sum(a.gr_tidak_ctk) as gr_tdk_ctk, sum(a.pcs_awal_ctk) as pcs_awal_ctk,
         sum(a.gr_awal_ctk) as gr_awal_ctk, sum(a.pcs_cu) as pcs_cu, sum(a.gr_cu) as gr_cu , 
