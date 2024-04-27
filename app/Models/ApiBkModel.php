@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -531,6 +532,21 @@ class ApiBkModel extends Model
         ) as b on b.no_box = a.no_box
         left join users as c on c.id = a.penerima
         where a.kategori = 'cetak' and (a.pcs_awal - b.pcs_awal_ctk) != 0 ");
+
+        return $result;
+    }
+
+    public static function cetak_belum_selesai(Request $r)
+    {
+        $result = DB::select("SELECT b.nm_partai, a.no_box, 
+        sum(a.pcs_awal) as pcs_ambil, sum(a.gr_awal) as gr_ambil,
+        sum(a.pcs_tidak_ctk) as pcs_tdk_ctk, sum(a.gr_tidak_ctk) as gr_tdk_ctk, sum(a.pcs_awal_ctk) as pcs_awal_ctk,
+        sum(a.gr_awal_ctk) as gr_awal_ctk, sum(a.pcs_cu) as pcs_cu, sum(a.gr_cu) as gr_cu , 
+        sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
+        FROM cetak as a
+        left JOIN bk as b on b.no_box and b.kategori = 'cetak'
+        WHERE a.selesai = 'T'
+        GROUP by a.no_box;");
 
         return $result;
     }
