@@ -415,7 +415,7 @@ class ApiBkController extends Controller
 
         return response()->json($cetak);
     }
-    function cetak_in_progress(Request $r)
+    function cetak_belum_selesai(Request $r)
     {
         $cetak = ApiBkModel::cetak_belum_selesai();
 
