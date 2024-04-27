@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Psr7\Request;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -536,7 +536,7 @@ class ApiBkModel extends Model
         return $result;
     }
 
-    public static function cetak_belum_selesai(Request $r)
+    public static function cetak_belum_selesai()
     {
         $result = DB::select("SELECT b.nm_partai, a.no_box, 
         sum(a.pcs_awal) as pcs_ambil, sum(a.gr_awal) as gr_ambil,
