@@ -557,7 +557,7 @@ class ApiBkModel extends Model
         $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, c.name, a.pcs_awal, a.gr_awal, b.*
         FROM bk as a 
         left join(
-        SELECT b.no_box, sum(b.pcs_awal) as pcs_awal_ambil, sum(b.gr_awal) as gr_awal_ambil,
+        SELECT b.no_box as box2, sum(b.pcs_awal) as pcs_awal_ambil, sum(b.gr_awal) as gr_awal_ambil,
             sum(b.pcs_tidak_ctk) as pcs_tdk_ctk, sum(b.gr_tidak_ctk) as gr_tdk_ctk,
             sum(b.pcs_awal_ctk) as pcs_awal_ctk, sum(b.gr_awal_ctk) as gr_awal_ctk,
             sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu,
@@ -565,7 +565,7 @@ class ApiBkModel extends Model
             sum(if(b.selesai = 'Y',b.pcs_akhir * b.rp_pcs,0)) as ttl_rp
             FROM cetak as b
             group by b.no_box
-        ) as b on b.no_box = a.no_box
+        ) as b on b.box2 = a.no_box
         left join users as c on c.id = a.penerima
         where a.kategori ='cetak';");
 
