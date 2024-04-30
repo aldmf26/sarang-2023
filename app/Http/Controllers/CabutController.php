@@ -322,7 +322,7 @@ class CabutController extends Controller
                     'pesan' => "Gagal! Tidak dapat menyimpan data untuk nomor box 9999."
                 ]);
             }
-            
+
             // Mendapatkan stok dari database berdasarkan nomor kotak
             $stok = DB::table('bk')->where('no_box', $no_box)->first();
 
@@ -375,7 +375,7 @@ class CabutController extends Controller
             'title' => 'history cabut',
             'cabut' => $cabut
         ];
-        return view('home.cabut.history',$data);
+        return view('home.cabut.history', $data);
     }
 
     public function add()
@@ -605,7 +605,6 @@ class CabutController extends Controller
             'absen' => $absen->ttl,
         ];
         return view('home.cabut.detail_laporan_perhari', $data);
-
     }
 
     public function export_global(Request $r)

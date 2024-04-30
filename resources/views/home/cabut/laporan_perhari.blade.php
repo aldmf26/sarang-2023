@@ -76,9 +76,9 @@
                     <thead>
                         <tr>
                             <th colspan="3">#</th>
-                            <th colspan="7" class="text-center dhead">SELESAI</th>
+                            <th colspan="8" class="text-center dhead">SELESAI</th>
                             <th></th>
-                            <th colspan="5" class="text-center dhead">PROSES</th>
+                            <th colspan="6" class="text-center dhead">PROSES</th>
                             <th colspan="2" class="text-white bg-danger text-center">Selesai & Proses</th>
                         </tr>
                         <tr>
@@ -88,6 +88,7 @@
                             <th class="dhead">Cabut</th>
                             <th class="dhead">Eo</th>
                             <th class="dhead">Sortir</th>
+                            <th class="dhead">Cetak</th>
                             <th class="dhead">Dll</th>
                             <th class="dhead">Denda</th>
                             <th class="dhead">Ttl Gaji Selesai</th>
@@ -96,6 +97,7 @@
                             <th class="dhead">Cabut</th>
                             <th class="dhead">Eo</th>
                             <th class="dhead">Sortir</th>
+                            <th class="dhead">Cetak</th>
                             <th class="dhead">Ttl Gaji Proses</th>
                             <th class="dhead">Rata2</th>
                             <th class="bg-danger text-white">Ttl</th>
@@ -113,6 +115,7 @@
                                 <td>{{ number_format($data->ttl_rp, 0) }}</td>
                                 <td>{{ number_format($data->eo_ttl_rp, 0) }}</td>
                                 <td>{{ number_format($data->sortir_ttl_rp, 0) }}</td>
+                                <td>{{ number_format($data->ttl_rp_cetak, 0) }}</td>
                                 <td>{{ number_format($data->ttl_rp_dll, 0) }}</td>
                                 <td>{{ number_format($data->ttl_rp_denda, 0) }}</td>
                                 @php
@@ -120,11 +123,16 @@
                                         $data->ttl_rp +
                                         $data->eo_ttl_rp +
                                         $data->sortir_ttl_rp +
+                                        $data->ttl_rp_cetak +
                                         $data->ttl_rp_dll -
                                         $data->ttl_rp_denda;
                                     $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
-                                    $ttlProses = $data->rupiah + $data->eo_rp_target + $data->sortir_rp_target;
+                                    $ttlProses =
+                                        $data->rupiah +
+                                        $data->eo_rp_target +
+                                        $data->sortir_rp_target +
+                                        $data->rp_target_ctk;
                                     $rataProses = empty($data->hariMasuk) ? 0 : $ttlProses / $data->hariMasuk;
                                     $rataSelesaiProses = empty($data->hariMasuk)
                                         ? 0
@@ -137,6 +145,7 @@
                                 <td>{{ number_format($data->rupiah, 0) }}</td>
                                 <td>{{ number_format($data->eo_rp_target, 0) }}</td>
                                 <td>{{ number_format($data->sortir_rp_target, 0) }}</td>
+                                <td>{{ number_format($data->rp_target_ctk, 0) }}</td>
                                 <td>{{ number_format($ttlProses, 0) }}</td>
                                 <td>{{ number_format($rataProses, 0) }}</td>
                                 <td>{{ number_format($ttl + $ttlProses, 0) }}</td>
