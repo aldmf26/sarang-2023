@@ -554,7 +554,7 @@ class ApiBkModel extends Model
     }
     public static function cetak_laporan()
     {
-        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, c.name, b.*
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, c.name, a.pcs_awal, a.gr_awal, b.*
         FROM bk as a 
         left join(
         SELECT b.no_box, sum(b.pcs_awal) as pcs_awal_ambil, sum(b.gr_awal) as gr_awal_ambil,
