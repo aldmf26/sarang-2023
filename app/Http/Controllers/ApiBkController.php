@@ -431,7 +431,8 @@ class ApiBkController extends Controller
     public function grading_bj()
     {
         $data = [
-            'grading' => ApiBkModel::grading_bj()
+            'grading' => ApiBkModel::grading_bj(),
+            'bk_sortir' => ApiBkModel::bk_sortir(),
         ];
         return response()->json($data);
     }

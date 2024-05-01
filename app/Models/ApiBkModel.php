@@ -582,4 +582,21 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function bk_sortir()
+    {
+        $result =  DB::select("SELECT a.no_box, a.tipe, a.ket, a.warna, a.pengawas, c.name, a.pcs_awal, a.gr_awal, b.pcs_awal_str, b.gr_awal_str, b.pcs_akhir_str, b.gr_akhir_str, b.ttl_rp
+        FROM bk as a 
+        
+        left join (
+        SELECT b.no_box, b.id_pengawas, sum(b.pcs_awal) as pcs_awal_str, sum(b.gr_awal) as gr_awal_str,
+            sum(b.pcs_akhir) as pcs_akhir_str, sum(b.gr_akhir) as gr_akhir_str, sum(b.ttl_rp) as ttl_rp
+        FROM sortir as b
+            GROUP by b.no_box , b.id_pengawas
+        ) as b on b.no_box = a.no_box and b.id_pengawas = a.penerima
+        left join users as c on c.id = a.penerima
+        
+        where a.kategori ='sortir' and a.gr_awal - b.gr_awal_str != 0;");
+
+        return $result;
+    }
 }
