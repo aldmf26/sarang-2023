@@ -562,12 +562,13 @@ class ApiBkModel extends Model
             sum(b.pcs_awal_ctk) as pcs_awal_ctk, sum(b.gr_awal_ctk) as gr_awal_ctk,
             sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu,
             sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir,
-            sum(if(b.selesai = 'Y',b.pcs_akhir * b.rp_pcs,0)) as ttl_rp
+            sum(if(b.selesai = 'Y',b.pcs_akhir * b.rp_pcs,0)) as ttl_rp,
+            b.penutup
             FROM cetak as b
             group by b.no_box
         ) as b on b.box2 = a.no_box
         left join users as c on c.id = a.penerima
-        where a.kategori ='cetak';");
+        where a.kategori ='cetak' and b.penutup = 'T';");
 
         return $result;
     }
