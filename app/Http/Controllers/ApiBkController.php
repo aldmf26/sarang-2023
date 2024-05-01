@@ -427,4 +427,12 @@ class ApiBkController extends Controller
 
         return response()->json($cetak);
     }
+
+    public function grading_bj()
+    {
+        $data = [
+            'grading' => ApiBkModel::grading_bj()
+        ];
+        return response()->json($data);
+    }
 }

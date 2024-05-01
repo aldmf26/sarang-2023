@@ -572,4 +572,14 @@ class ApiBkModel extends Model
 
         return $result;
     }
+
+    public static function grading_bj()
+    {
+        $result =  DB::select("SELECT grade, sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp, sum(pcs_kredit) as pcs_kredit, sum(gr_kredit) as gr_kredit, sum(gr_kredit * rp_gram_kredit) as ttl_rp_kredit
+        FROM `pengiriman_list_gradingbj` 
+        GROUP BY grade 
+        HAVING pcs - pcs_kredit <> 0 OR gr - gr_kredit <> 0");
+
+        return $result;
+    }
 }
