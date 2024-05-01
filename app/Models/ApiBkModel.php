@@ -584,7 +584,10 @@ class ApiBkModel extends Model
     }
     public static function bk_sortir()
     {
-        $result =  DB::select("SELECT a.no_box, a.tipe, a.ket, a.warna, a.pengawas, c.name, a.pcs_awal, a.gr_awal, b.pcs_awal_str, b.gr_awal_str, b.pcs_akhir_str, b.gr_akhir_str, b.ttl_rp
+        $result =  DB::select("SELECT a.no_box, a.tipe, a.ket, a.warna, a.pengawas, c.name, 
+        a.pcs_awal, a.gr_awal, 
+        if(b.pcs_awal_str is null ,0,b.pcs_awal_str) as pcs_awal_str, 
+        if(b.gr_awal_str is null ,  0, b.gr_awal_str) as gr_awal_str, b.pcs_akhir_str, b.gr_akhir_str, b.ttl_rp
         FROM bk as a 
         
         left join (
