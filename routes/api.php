@@ -60,12 +60,14 @@ Route::controller(ApiBkController::class)
         Route::get('/cetak_belum_selesai', 'cetak_belum_selesai')->name('cetak_belum_selesai');
         Route::get('/cetak_laporan', 'cetak_laporan')->name('cetak_laporan');
         Route::get('/grading_bj', 'grading_bj')->name('grading_bj');
+
+        Route::post('edit_bk', function (Request $b) {
+            $partai = $b->partai;
+            $harga = $b->harga;
+            DB::table('bk')->where('nm_partai', $partai)->where('kategori', 'cabut')->update(['hrga_satuan' => $harga]);
+        });
     });
 
-Route::post('edit_bk', function (Request $b) {
-    $partai = $b->partai;
-    $harga = $b->harga;
-    DB::table('bk')->where('nm_partai', $partai)->where('kategori', 'cabut')->update(['hrga_satuan' => $harga]);
-});
+
 
 require __DIR__ . '/apiAldi.php';
