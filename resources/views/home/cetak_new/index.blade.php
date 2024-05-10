@@ -21,7 +21,7 @@
 
             <form id="save_awal">
                 @csrf
-                <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg" btnSave="Y">
+                <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg-max" btnSave="Y">
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="">Barang Dari</label>
@@ -32,10 +32,16 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- <div class="col-lg-3">
-                            <label for="">Tanggal</label>
-                            <input type="date" class="form-control" name="tgl" value="{{ date('Y-m-d') }}">
-                        </div> --}}
+                        <div class="col-lg-2">
+                            <label for="">Bulan dibayar</label>
+                            <select name="bulan_dibayar" id="" class="select2">
+                                @foreach ($bulan as $b)
+                                    <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
+                                        {{ $b->bulan }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
                         <div class="col-lg-12 mt-4">
                             <div id="load_menu"></div>
                         </div>
@@ -144,9 +150,95 @@
                             data: formData,
                             success: function(response) {
                                 alertToast('sukses', 'Berhasil ditambahkan');
+                                $('.input_awal').val('');
                                 $('#tambah').modal('hide');
                                 load_cetak();
                             },
+                        });
+                    });
+                    $(document).on("click", ".btn_save_akhir", function(e) {
+                        e.preventDefault();
+                        var id_cetak = $(this).attr('id_cetak');
+                        var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
+                        var pcs_awal = $('.pcs_awal' + id_cetak).val();
+                        var gr_akhir = $('.gr_akhir' + id_cetak).val();
+                        var rp_satuan = $('.rp_satuan' + id_cetak).val();
+                        var no = $('.no' + id_cetak).val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetaknew.save_akhir') }}",
+                            data: {
+                                id_cetak: id_cetak,
+                                pcs_akhir: pcs_akhir,
+                                gr_akhir: gr_akhir,
+                                rp_satuan: rp_satuan,
+                            },
+                            success: function(response) {
+
+                                if (pcs_awal !== pcs_akhir) {
+                                    alertToast('error', 'Jumlah Pcs tidak sama');
+                                } else {
+                                    $.get("{{ route('cetaknew.getRowData') }}", {
+                                        id_cetak: id_cetak,
+                                        no: no
+                                    }, function(data) {
+                                        var tr = $('tr[data-id="' + id_cetak + '"]');
+                                        tr.replaceWith(data);
+                                    });
+                                    alertToast('sukses', 'Berhasil ditambahkan');
+                                }
+
+
+                            }
+                        });
+                    });
+                    $(document).on("click", ".btn_selesai", function(e) {
+                        e.preventDefault();
+                        var id_cetak = $(this).attr('id_cetak');
+                        var no = $('.no' + id_cetak).val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetaknew.save_selesai') }}",
+                            data: {
+                                id_cetak: id_cetak,
+                            },
+                            success: function(response) {
+
+                                $.get("{{ route('cetaknew.getRowData') }}", {
+                                    id_cetak: id_cetak,
+                                    no: no
+                                }, function(data) {
+                                    var tr = $('tr[data-id="' + id_cetak + '"]');
+                                    tr.replaceWith(data);
+                                });
+                                alertToast('sukses', 'Berhasil ditambahkan');
+                            }
+                        });
+                    });
+                    $(document).on("click", ".btn_cancel", function(e) {
+                        e.preventDefault();
+                        var id_cetak = $(this).attr('id_cetak');
+                        var no = $('.no' + id_cetak).val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetaknew.cancel_selesai') }}",
+                            data: {
+                                id_cetak: id_cetak,
+                            },
+                            success: function(response) {
+
+                                $.get("{{ route('cetaknew.getRowData') }}", {
+                                    id_cetak: id_cetak,
+                                    no: no
+                                }, function(data) {
+                                    var tr = $('tr[data-id="' + id_cetak + '"]');
+                                    tr.replaceWith(data);
+                                });
+                                alertToast('sukses', 'Data berhasil di cancel');
+                            }
                         });
                     });
 
