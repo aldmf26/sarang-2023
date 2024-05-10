@@ -6,7 +6,7 @@
             teks="Kerja" />
         <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
             teks="" />
-        <x-theme.button href="{{route('cetaknew.history')}}" icon="fa-calendar-week" addClass="float-end"
+        <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
             teks="History" />
     </x-slot>
 
@@ -23,7 +23,7 @@
                 @csrf
                 <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg-max" btnSave="Y">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <label for="">Barang Dari</label>
                             <select name="id_pemberi" id="" class="select2">
                                 <option value="">Pilih Pengawas</option>
