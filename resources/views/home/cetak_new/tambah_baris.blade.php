@@ -1,5 +1,8 @@
 <tr class="baris{{ $count }}">
     <td>
+        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl[]">
+    </td>
+    <td>
         <input type="text" class="form-control" name="no_box[]">
     </td>
     <td>

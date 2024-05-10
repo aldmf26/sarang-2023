@@ -6,6 +6,8 @@
             teks="Kerja" />
         <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
             teks="" />
+        <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
+            teks="History" />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -30,10 +32,10 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-3">
+                        {{-- <div class="col-lg-3">
                             <label for="">Tanggal</label>
                             <input type="date" class="form-control" name="tgl" value="{{ date('Y-m-d') }}">
-                        </div>
+                        </div> --}}
                         <div class="col-lg-12 mt-4">
                             <div id="load_menu"></div>
                         </div>

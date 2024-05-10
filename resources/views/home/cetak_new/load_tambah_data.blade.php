@@ -1,6 +1,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>Tanggal</th>
             <th>No Box</th>
             <th>Nama</th>
             <th>Pcs Awal</th>
@@ -10,6 +11,9 @@
     </thead>
     <tbody>
         <tr class="baris1">
+            <td>
+                <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl[]">
+            </td>
             <td>
                 <input type="text" class="form-control" name="no_box[]">
             </td>
