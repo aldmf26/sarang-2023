@@ -11,7 +11,7 @@
                                         $bulan = DB::table('bulan')->get();
                                     @endphp
                                     @foreach ($bulan as $b)
-                                        <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
+                                        <option {{$b->bulan == date('m')? 'selected' : ''}} value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -23,7 +23,7 @@
                                         $tahun = [2022,2023,2024];
                                     @endphp
                                     @foreach ($tahun as $b)
-                                        <option value="{{ $b }}">{{ strtoupper($b) }}</option>
+                                        <option {{$b == date('Y') ? 'selected' : ''}} value="{{ $b }}">{{ strtoupper($b) }}</option>
                                     @endforeach
                                 </select>
                             </div>

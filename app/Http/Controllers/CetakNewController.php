@@ -86,4 +86,32 @@ class CetakNewController extends Controller
             DB::table('cetak_new')->insert($data);
         }
     }
+    public function history(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+
+        $history = DB::select("SELECT 
+        a.id_anak,
+        b.id_kelas as kelas,
+        count(DISTINCT a.tgl) as ttl_hari,
+         b.nama,
+         sum(a.pcs_awal) as pcs_awal,
+         sum(a.pcs_akhir) as pcs_akhir,
+         sum(a.gr_awal) as gr_awal,
+         sum(a.gr_akhir) as gr_akhir,
+         sum(a.ttl_rp) as ttl_rp
+         FROM `cetak_new` as a
+        JOIN tb_anak as b on a.id_anak = b.id_anak
+        WHERE a.bulan_dibayar = $bulan AND a.tahun = $tahun
+        GROUP BY a.id_anak;");
+
+        $data = [
+            'title' => 'History Cetak',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'history' => $history
+        ];
+        return view('home.cetak_new.history',$data);
+    }
 }
