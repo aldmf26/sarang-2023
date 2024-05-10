@@ -163,6 +163,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_tambah_data', 'load_tambah_data')->name('load_tambah_data');
             Route::get('/tambah_baris', 'tambah_baris')->name('tambah_baris');
             Route::post('/save_target', 'save_target')->name('save_target');
+            Route::get('/save_akhir', 'save_akhir')->name('save_akhir');
+            Route::get('/getRowData', 'getRowData')->name('getRowData');
+            Route::get('/save_selesai', 'save_selesai')->name('save_selesai');
+            Route::get('/cancel_selesai', 'cancel_selesai')->name('cancel_selesai');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
