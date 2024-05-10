@@ -409,4 +409,31 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    function cetak_pgws(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_pgws();
+
+        return response()->json($cetak);
+    }
+    function cetak_belum_selesai(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_belum_selesai();
+
+        return response()->json($cetak);
+    }
+    function cetak_laporan(Request $r)
+    {
+        $cetak = ApiBkModel::cetak_laporan();
+
+        return response()->json($cetak);
+    }
+
+    public function grading_bj()
+    {
+        $data = [
+            'grading' => ApiBkModel::grading_bj(),
+            'bk_sortir' => ApiBkModel::bk_sortir(),
+        ];
+        return response()->json($data);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -514,6 +515,90 @@ class ApiBkModel extends Model
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cetak'
         
         where c.nm_partai is null and a.no_box = '$no_box'");
+
+        return $result;
+    }
+
+    public static function cetak_pgws()
+    {
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, a.ket, a.warna, a.tgl, a.pengawas, c.name, a.pcs_awal, a.gr_awal, b.pcs_awal_ctk, b.gr_awal_ctk
+        FROM bk as a 
+        left join(
+            SELECT b.no_box, 
+            sum(if(b.pcs_awal is null,0,b.pcs_awal)) as pcs_awal_ctk, 
+            sum(if(b.gr_awal is null,0,b.gr_awal)) as gr_awal_ctk
+            FROM cetak as b
+            GROUP by b.no_box
+        ) as b on b.no_box = a.no_box
+        left join users as c on c.id = a.penerima
+        where a.kategori = 'cetak' and (a.pcs_awal - if(b.pcs_awal_ctk is null ,0 ,b.pcs_awal_ctk)) != 0 ");
+
+        return $result;
+    }
+
+    public static function cetak_belum_selesai()
+    {
+        $result = DB::select("SELECT b.nm_partai, b.tipe, b.ket,b.warna, b.tgl, c.name, d.nama, d.id_kelas, a.no_box, 
+        sum(a.pcs_awal) as pcs_ambil, sum(a.gr_awal) as gr_ambil,
+        sum(a.pcs_tidak_ctk) as pcs_tdk_ctk, sum(a.gr_tidak_ctk) as gr_tdk_ctk, sum(a.pcs_awal_ctk) as pcs_awal_ctk,
+        sum(a.gr_awal_ctk) as gr_awal_ctk, sum(a.pcs_cu) as pcs_cu, sum(a.gr_cu) as gr_cu , 
+        sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
+        FROM cetak as a
+        left JOIN bk as b on b.no_box and b.kategori = 'cetak'
+        left join users as c on c.id = b.penerima
+        left join tb_anak as d on d.id_anak = a.id_anak
+        WHERE a.selesai = 'T'
+        GROUP by a.no_box;");
+
+        return $result;
+    }
+    public static function cetak_laporan()
+    {
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.tipe, c.name, a.pcs_awal, a.gr_awal, b.*
+        FROM bk as a 
+        left join(
+        SELECT b.no_box as box2, sum(b.pcs_awal) as pcs_awal_ambil, sum(b.gr_awal) as gr_awal_ambil,
+            sum(b.pcs_tidak_ctk) as pcs_tdk_ctk, sum(b.gr_tidak_ctk) as gr_tdk_ctk,
+            sum(b.pcs_awal_ctk) as pcs_awal_ctk, sum(b.gr_awal_ctk) as gr_awal_ctk,
+            sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu,
+            sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir,
+            sum(if(b.selesai = 'Y',b.pcs_akhir * b.rp_pcs,0)) as ttl_rp,
+            b.penutup
+            FROM cetak as b
+            group by b.no_box
+        ) as b on b.box2 = a.no_box
+        left join users as c on c.id = a.penerima
+        where a.kategori ='cetak' and b.penutup = 'T';");
+
+        return $result;
+    }
+
+    public static function grading_bj()
+    {
+        $result =  DB::select("SELECT grade, sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp, sum(pcs_kredit) as pcs_kredit, sum(gr_kredit) as gr_kredit, sum(gr_kredit * rp_gram_kredit) as ttl_rp_kredit
+        FROM `pengiriman_list_gradingbj` 
+        GROUP BY grade 
+        HAVING pcs - pcs_kredit <> 0 OR gr - gr_kredit <> 0");
+
+        return $result;
+    }
+    public static function bk_sortir()
+    {
+        $result =  DB::select("SELECT a.no_box, a.tipe, a.ket, a.warna, a.pengawas, c.name, 
+        a.pcs_awal, a.gr_awal, 
+        if(b.pcs_awal_str is null ,0,b.pcs_awal_str) as pcs_awal_str, 
+        if(b.gr_awal_str is null ,  0, b.gr_awal_str) as gr_awal_str, b.pcs_akhir_str, b.gr_akhir_str, b.ttl_rp
+        FROM bk as a 
+        
+        left join (
+        SELECT b.no_box, b.id_pengawas, sum(b.pcs_awal) as pcs_awal_str, sum(b.gr_awal) as gr_awal_str,
+            sum(b.pcs_akhir) as pcs_akhir_str, sum(b.gr_akhir) as gr_akhir_str, sum(b.ttl_rp) as ttl_rp
+        FROM sortir as b
+            GROUP by b.no_box , b.id_pengawas
+        ) as b on b.no_box = a.no_box and b.id_pengawas = a.penerima
+        left join users as c on c.id = a.penerima
+        
+        where a.kategori ='sortir' and a.gr_awal - b.gr_awal_str != 0;");
 
         return $result;
     }

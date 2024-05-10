@@ -47,10 +47,10 @@ class Cabut extends Model
             ->orderBY('a.selesai', 'ASC')
             ->orderBY('a.tgl_terima', 'ASC');
 
-            if($history){
-                return $cabut->where('a.penutup', 'Y')->get();
-            }
-            return $cabut->where('a.penutup', 'T')->get();
+        if ($history) {
+            return $cabut->where('a.penutup', 'Y')->get();
+        }
+        return $cabut->where('a.penutup', 'T')->get();
     }
 
 
@@ -458,7 +458,9 @@ class Cabut extends Model
         sortir.rp_target as sortir_rp_target,
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
-        denda.ttl_rp_denda
+        denda.ttl_rp_denda,
+        cetak.ttl_rp_cetak,
+        cetak.rp_target_ctk
         FROM 
             (
                 SELECT id_anak,id_pengawas
@@ -527,6 +529,13 @@ class Cabut extends Model
             FROM `tb_denda` 
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as denda ON a.id_anak = denda.id_anak
+        LEFT JOIN (
+            SELECT id_anak,
+            sum(CASE WHEN c.selesai = 'Y' THEN c.pcs_akhir * c.rp_pcs ELSE 0 END ) as ttl_rp_cetak,
+            sum(CASE WHEN c.selesai = 'T' THEN c.pcs_awal_ctk * c.rp_pcs ELSE 0 END ) as rp_target_ctk
+            FROM cetak as c 
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
+        ) as cetak ON a.id_anak = cetak.id_anak
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
     }
     public static function getPengawasRekap($bulan, $tahun)

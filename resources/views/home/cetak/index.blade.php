@@ -365,46 +365,48 @@
                     input_akhir();
                 });
 
-                $(document).on("click", ".btn_simpan", function() {
+                $(document).on("click",
+                    ".                                                                                                                                ",
+                    function() {
 
-                    var row = $(this).closest("tr"); // Mendapatkan baris terkait dengan tombol "Simpan"
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    var formData = row.find('input, select').serialize();
-                    formData += "&_token=" + csrfToken;
+                        var row = $(this).closest("tr"); // Mendapatkan baris terkait dengan tombol "Simpan"
+                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        var formData = row.find('input, select').serialize();
+                        formData += "&_token=" + csrfToken;
 
 
-                    // Kirim data ke server menggunakan AJAX
-                    $.ajax({
-                        url: "{{ route('cetak.save_akhir') }}", // Ganti dengan URL endpoint penyimpanan data
-                        method: "POST",
-                        data: formData,
-                        success: function(response) {
+                        // Kirim data ke server menggunakan AJAX
+                        $.ajax({
+                            url: "{{ route('cetak.save_akhir') }}", // Ganti dengan URL endpoint penyimpanan data
+                            method: "POST",
+                            data: formData,
+                            success: function(response) {
 
-                            var savedRowId = row.data('id');
+                                var savedRowId = row.data('id');
 
-                            // Muat kembali data baris yang disimpan
-                            $.ajax({
-                                url: "{{ route('cetak.load_row') }}", // Ganti dengan URL endpoint untuk memuat satu baris
-                                method: "GET",
-                                data: {
-                                    id: savedRowId
-                                }, // Sertakan ID baris yang disimpan
-                                success: function(data) {
-                                    var updatedRow = $(data);
-                                    row.replaceWith(
-                                        updatedRow
-                                    );
-                                    $(".select2-add").select2({
-                                        dropdownParent: $('#inputAkhir .modal-content'),
-                                    });
-                                    alertToast('sukses', 'Berhasil ditambahkan');
-                                },
-                            });
+                                // Muat kembali data baris yang disimpan
+                                $.ajax({
+                                    url: "{{ route('cetak.load_row') }}", // Ganti dengan URL endpoint untuk memuat satu baris
+                                    method: "GET",
+                                    data: {
+                                        id: savedRowId
+                                    }, // Sertakan ID baris yang disimpan
+                                    success: function(data) {
+                                        var updatedRow = $(data);
+                                        row.replaceWith(
+                                            updatedRow
+                                        );
+                                        $(".select2-add").select2({
+                                            dropdownParent: $('#inputAkhir .modal-content'),
+                                        });
+                                        alertToast('sukses', 'Berhasil ditambahkan');
+                                    },
+                                });
 
-                            load_cetak();
-                        },
+                                load_cetak();
+                            },
+                        });
                     });
-                });
                 $(document).on('click', '.btn_hapus', function() {
                     var id_cetak = $(this).attr('id_cetak');
                     var konfirmasi = confirm("Apakah Anda yakin?");

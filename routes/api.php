@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiBkController;
 use App\Http\Controllers\OpnameController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +56,18 @@ Route::controller(ApiBkController::class)
         Route::get('/cabut_detail', 'cabut_detail')->name('cabut_detail');
         Route::get('/cabut_selesai_g_cetak', 'cabut_selesai_g_cetak')->name('cabut_selesai_g_cetak');
         Route::get('/cabut_selesai_g_cetak_nota', 'cabut_selesai_g_cetak_nota')->name('cabut_selesai_g_cetak_nota');
+        Route::get('/cetak_pgws', 'cetak_pgws')->name('cetak_pgws');
+        Route::get('/cetak_belum_selesai', 'cetak_belum_selesai')->name('cetak_belum_selesai');
+        Route::get('/cetak_laporan', 'cetak_laporan')->name('cetak_laporan');
+        Route::get('/grading_bj', 'grading_bj')->name('grading_bj');
+
+        Route::post('edit_bk', function (Request $b) {
+            $partai = $b->partai;
+            $harga = $b->harga;
+            DB::table('bk')->where('nm_partai', $partai)->where('kategori', 'cabut')->update(['hrga_satuan' => $harga]);
+        });
     });
+
+
 
 require __DIR__ . '/apiAldi.php';
