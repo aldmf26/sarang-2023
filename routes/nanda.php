@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\Laporan_layerController;
@@ -152,6 +153,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/export', 'export')->name('export');
+        });
+    Route::controller(CetakNewController::class)
+        ->prefix('home/cetaknew')
+        ->name('cetaknew.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
+            Route::get('/load_tambah_data', 'load_tambah_data')->name('load_tambah_data');
+            Route::get('/tambah_baris', 'tambah_baris')->name('tambah_baris');
+            Route::post('/save_target', 'save_target')->name('save_target');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
