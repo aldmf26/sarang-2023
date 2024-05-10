@@ -23,7 +23,7 @@
                 @csrf
                 <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg-max" btnSave="Y">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <label for="">Barang Dari</label>
                             <select name="id_pemberi" id="" class="select2">
                                 <option value="">Pilih Pengawas</option>
