@@ -32,23 +32,51 @@
                     </thead>
                     <tbody>
                         @foreach ($history as $i => $d)
-                            
-                        <tr>
-                            <td>{{ $i+1 }}</td>
-                            <td>{{ strtoupper($d->nama) }} / {{ $d->kelas }}</td>
-                            <td align="right">{{ $d->ttl_hari }}</td>
-                            <td align="right">{{ number_format($d->pcs_awal,0) }}</td>
-                            <td align="right">{{ number_format($d->gr_awal,0) }}</td>
-                            <td align="right">{{ number_format($d->pcs_akhir,0) }}</td>
-                            <td align="right">{{ number_format($d->gr_akhir,0) }}</td>
-                            <td align="right">{{ number_format($d->ttl_rp,0) }}</td>
-                            <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
-                        </tr>
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td>{{ strtoupper($d->nama) }} / {{ $d->kelas }}</td>
+                                <td align="right">{{ $d->ttl_hari }}</td>
+                                <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                                <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                                <td align="right">{{ number_format($d->pcs_akhir, 0) }}</td>
+                                <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
+                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td><button id_anak="{{ $d->id_anak }}" class="btn btn-sm btn-primary detail"><i
+                                            class="fas fa-eye"></i></button></td>
+                            </tr>
                         @endforeach
 
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <x-theme.modal title="Detail History" btnSave="T" idModal="detail">
+            <div id="load_detail"></div>
+        </x-theme.modal>
+        @section('scripts')
+            <script>
+                $('.detail').click(function(e) {
+                    e.preventDefault();
+                    const id_anak = $(this).attr("id_anak")
+                    const bulan_dibayar = "{{ $bulan }}"
+                    const tahun = "{{ $tahun }}"
+
+                    $('#detail').modal('show')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('cetaknew.history_detail')}}",
+                        data: {
+                            id_anak,
+                            bulan_dibayar,
+                            tahun
+                        },
+                        success: function (r) {
+                            $("#load_detail").html(r);
+                        }
+                    });
+                });
+            </script>
+        @endsection
     </x-slot>
 </x-theme.app>

@@ -161,6 +161,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
             Route::get('/history', 'history')->name('history');
+            Route::get('/history_detail', 'history_detail')->name('history_detail');
             Route::get('/load_tambah_data', 'load_tambah_data')->name('load_tambah_data');
             Route::get('/tambah_baris', 'tambah_baris')->name('tambah_baris');
             Route::post('/save_target', 'save_target')->name('save_target');
