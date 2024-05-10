@@ -531,9 +531,9 @@ class Cabut extends Model
         ) as denda ON a.id_anak = denda.id_anak
         LEFT JOIN (
             SELECT id_anak,
-            sum(CASE WHEN c.selesai = 'Y' THEN c.pcs_akhir * c.rp_pcs ELSE 0 END ) as ttl_rp_cetak,
-            sum(CASE WHEN c.selesai = 'T' THEN c.pcs_awal_ctk * c.rp_pcs ELSE 0 END ) as rp_target_ctk
-            FROM cetak as c 
+            sum(CASE WHEN c.selesai = 'Y' THEN c.pcs_akhir * c.rp_satuan ELSE 0 END ) as ttl_rp_cetak,
+            sum(CASE WHEN c.selesai = 'T' THEN c.pcs_awal_ctk * c.rp_satuan ELSE 0 END ) as rp_target_ctk
+            FROM cetak_new as c 
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as cetak ON a.id_anak = cetak.id_anak
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
