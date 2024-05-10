@@ -5,9 +5,9 @@
             <th class="dhead">No Box</th>
             <th class="dhead">Tanggal</th>
             <th class="dhead">Nama</th>
+            <th class="dhead">paket</th>
             <th class="dhead text-end">pcs awal</th>
             <th class="dhead text-end">gr awal</th>
-            <th class="dhead text-end">rp target</th>
             <th width="130px" class="dhead text-end">pcs akhir</th>
             <th width="130px" class="dhead text-end">gr akhir</th>
             <th class="dhead text-end">sst%</th>
@@ -22,9 +22,10 @@
                 <td>{{ $c->no_box }}</td>
                 <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
                 <td>{{ $c->nm_anak }}</td>
+                <td>{{ $c->kelas }}</td>
                 <td class="text-end">{{ $c->pcs_awal_ctk }}</td>
                 <td class="text-end">{{ $c->gr_awal_ctk }}</td>
-                <td class="text-end">{{ number_format($c->rp_satuan, 0) }}</td>
+
                 <td class="text-end">
                     <input type="text" class="form-control text-end pcs_akhir{{ $c->id_cetak }}" name="pcs_akhir[]"
                         value="{{ $c->pcs_akhir }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>

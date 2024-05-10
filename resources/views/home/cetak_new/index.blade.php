@@ -6,7 +6,7 @@
             teks="Kerja" />
         <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
             teks="" />
-        <x-theme.button href="{{route('cetaknew.history')}}" icon="fa-calendar-week" addClass="float-end"
+        <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
             teks="History" />
     </x-slot>
 

@@ -38,11 +38,12 @@ class CetakNewController extends Controller
             $tgl2 = $r->tgl2;
         }
         $data = [
-            'cetak' => DB::select("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan
+            'cetak' => DB::select("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
+            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.tgl between '$tgl1' and '$tgl2'
             order by a.pcs_akhir ASC , a.id_cetak DESC
             ;"),
@@ -99,7 +100,7 @@ class CetakNewController extends Controller
         $data = [
             'pcs_akhir' => $r->pcs_akhir,
             'gr_akhir' => $r->gr_akhir,
-            'ttl_rp' => $r->gr_akhir * $r->rp_satuan
+            'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
         ];
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
     }
@@ -107,11 +108,12 @@ class CetakNewController extends Controller
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan
+            'c' => DB::selectOne("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
+            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.id_cetak = $r->id_cetak;"),
             'no' => $r->no
         ];
@@ -154,6 +156,6 @@ class CetakNewController extends Controller
             'tahun' => $tahun,
             'history' => $history
         ];
-        return view('home.cetak_new.history',$data);
+        return view('home.cetak_new.history', $data);
     }
 }
