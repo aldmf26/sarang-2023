@@ -1,12 +1,11 @@
-<x-theme.app sizeCard="6">
+<x-theme.app sizeCard="6" :title="$title">
     <x-slot name="cardHeader">
         {{-- @include('home.gradingbj.button_nav') --}}
 
-
+        <h6>{{ $title }}</h6>
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
-
             <div class="col-lg-12 mb-3">
                 @include('home.packing.nav', ['name' => 'index'])
             </div>
@@ -60,5 +59,6 @@
             </div>
 
         </section>
+
     </x-slot>
 </x-theme.app>

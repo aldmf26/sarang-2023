@@ -178,7 +178,6 @@ class PackingListController extends Controller
                 if ($r->pcs[$i] != 0) {
                     $rp_gram = PengirimanModel::pengirimanPerGrade($r->grade[$i]);
 
-
                     $dataToInsert[] = [
                         'tgl_pengiriman' => $r->tgl[$i],
                         'partai' => $r->partai[$i],
@@ -195,6 +194,7 @@ class PackingListController extends Controller
                         'no_nota' => $no_nota,
                         'rp_gram' => ($rp_gram->ttl_rp - $rp_gram->ttl_rp_ambil) / ($rp_gram->gr_awal - $rp_gram->gr_ambil)
                     ];
+                    
                 }
             }
 

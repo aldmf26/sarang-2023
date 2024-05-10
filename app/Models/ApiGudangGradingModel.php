@@ -46,13 +46,13 @@ class ApiGudangGradingModel extends Model
     public static function suntikan()
     {
         $suntikan = DB::select("SELECT a.id_suntikan,a.tipe,a.no_box,a.pcs,a.gr,a.ttl_rp,a.cost_cabut,a.cost_cetak 
-                                FROM grading_suntikan as a
-                                WHERE NOT EXISTS (
-                                    SELECT 1 
-                                    FROM pengiriman_gradingbj AS b 
-                                    WHERE b.no_box = a.no_box 
-                                        AND b.pcs_awal = a.pcs 
-                                        AND b.gr_awal = a.gr
+                    FROM grading_suntikan as a
+                    WHERE NOT EXISTS (
+                        SELECT 1 
+                        FROM pengiriman_gradingbj AS b 
+                        WHERE b.no_box = a.no_box 
+                            AND b.pcs_awal = a.pcs 
+                            AND b.gr_awal = a.gr
                                 );");
         return $suntikan;
     }
@@ -66,8 +66,33 @@ class ApiGudangGradingModel extends Model
     public static function gudangBj()
     {
         return DB::select("SELECT grade, sum(pcs) as pcs, sum(gr) as gr, sum(gr * rp_gram) as ttl_rp, sum(pcs_kredit) as pcs_kredit, sum(gr_kredit) as gr_kredit, sum(gr_kredit * rp_gram_kredit) as ttl_rp_kredit
-                        FROM `pengiriman_list_gradingbj` 
-                        GROUP BY grade 
-                        HAVING pcs - pcs_kredit <> 0 OR gr - gr_kredit <> 0");
+                FROM `pengiriman_list_gradingbj` 
+                GROUP BY grade 
+                HAVING pcs - pcs_kredit <> 0 OR gr - gr_kredit <> 0");
+    }
+
+    public static function historyBoxKecil()
+    {
+        $boxKecil = DB::select("SELECT 
+                    a.no_box,
+                    a.grade,
+                    a.pcs_kredit as pcs,
+                     a.gr_kredit as gr,
+                    a.rp_gram_kredit as rp_gram,
+                    a.pengawas,
+                    a.no_grading,
+                    b.pcs as pcs_sortir,
+                    b.gr as gr_sortir,
+                    b.ttl_rp as ttlrp_sortir, b.name
+                    FROM `pengiriman_list_gradingbj` as a 
+                    LEFT JOIN (
+                        SELECT no_box,sum(pcs_akhir) as pcs, sum(gr_akhir) as gr, sum(ttl_rp) as ttl_rp, b.name
+                        FROM `sortir` 
+                        left join users as b on b.id = sortir.id_pengawas 
+                        WHERE selesai = 'Y'
+                        GROUP BY no_box
+                    ) as b on a.no_box = b.no_box
+                    WHERE a.no_box is not null ");
+        return $boxKecil;
     }
 }

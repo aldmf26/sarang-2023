@@ -284,26 +284,7 @@ class GradingBjController extends Controller
 
     public function history_box_kecil()
     {
-        $boxKecil = DB::select("SELECT 
-                    a.no_box,
-                    a.grade,
-                    a.pcs_kredit as pcs,
-                     a.gr_kredit as gr,
-                    a.rp_gram_kredit as rp_gram,
-                    a.pengawas,
-                    a.no_grading,
-                    b.pcs as pcs_sortir,
-                    b.gr as gr_sortir,
-                    b.ttl_rp as ttlrp_sortir, b.name
-                    FROM `pengiriman_list_gradingbj` as a 
-                    LEFT JOIN (
-                        SELECT no_box,sum(pcs_akhir) as pcs, sum(gr_akhir) as gr, sum(ttl_rp) as ttl_rp, b.name
-                        FROM `sortir` 
-                        left join users as b on b.id = sortir.id_pengawas 
-                        WHERE selesai = 'Y'
-                        GROUP BY no_box
-                    ) as b on a.no_box = b.no_box
-                    WHERE a.no_box is not null ");
+        $boxKecil = ApiGudangGradingModel::historyBoxKecil();
         $data = [
             'title' => 'History Box Kecil',
             'box_kecil' => $boxKecil,
