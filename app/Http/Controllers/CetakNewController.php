@@ -149,7 +149,7 @@ class CetakNewController extends Controller
          sum(a.ttl_rp) as ttl_rp
          FROM `cetak_new` as a
         JOIN tb_anak as b on a.id_anak = b.id_anak
-        WHERE a.bulan_dibayar = $bulan AND a.tahun = $tahun
+        WHERE a.bulan_dibayar = $bulan AND YEAR(a.tgl) = $tahun
         GROUP BY a.id_anak;");
 
         $data = [
