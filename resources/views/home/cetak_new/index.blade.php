@@ -162,23 +162,27 @@
                         var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
                         var pcs_awal = $('.pcs_awal' + id_cetak).val();
                         var gr_akhir = $('.gr_akhir' + id_cetak).val();
+                        var pcs_tdk_ctk = $('.pcs_tdk_ctk' + id_cetak).val();
+                        var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
                         var rp_satuan = $('.rp_satuan' + id_cetak).val();
                         var no = $('.no' + id_cetak).val();
 
-                        $.ajax({
-                            type: "get",
-                            url: "{{ route('cetaknew.save_akhir') }}",
-                            data: {
-                                id_cetak: id_cetak,
-                                pcs_akhir: pcs_akhir,
-                                gr_akhir: gr_akhir,
-                                rp_satuan: rp_satuan,
-                            },
-                            success: function(response) {
-
-                                if (pcs_awal !== pcs_akhir) {
-                                    alertToast('error', 'Jumlah Pcs tidak sama');
-                                } else {
+                        var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
+                        if (pcs_awal != ttl_pcs) {
+                            alertToast('error', 'Jumlah Pcs tidak sama');
+                        } else {
+                            $.ajax({
+                                type: "get",
+                                url: "{{ route('cetaknew.save_akhir') }}",
+                                data: {
+                                    id_cetak: id_cetak,
+                                    pcs_akhir: pcs_akhir,
+                                    gr_akhir: gr_akhir,
+                                    pcs_tdk_ctk: pcs_tdk_ctk,
+                                    gr_tdk_ctk: gr_tdk_ctk,
+                                    rp_satuan: rp_satuan,
+                                },
+                                success: function(response) {
                                     $.get("{{ route('cetaknew.getRowData') }}", {
                                         id_cetak: id_cetak,
                                         no: no
@@ -187,11 +191,13 @@
                                         tr.replaceWith(data);
                                     });
                                     alertToast('sukses', 'Berhasil ditambahkan');
+
+
                                 }
+                            });
 
+                        }
 
-                            }
-                        });
                     });
                     $(document).on("click", ".btn_selesai", function(e) {
                         e.preventDefault();
@@ -238,6 +244,21 @@
                                     tr.replaceWith(data);
                                 });
                                 alertToast('sukses', 'Data berhasil di cancel');
+                            }
+                        });
+                    });
+                    $(document).on("click", ".btn_hapus", function(e) {
+                        e.preventDefault();
+                        var id_cetak = $(this).attr('id_cetak');
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetaknew.hapus_data') }}",
+                            data: {
+                                id_cetak: id_cetak,
+                            },
+                            success: function(response) {
+                                alertToast('sukses', 'Data berhasil di hapus');
+                                load_cetak();
                             }
                         });
                     });

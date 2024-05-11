@@ -100,6 +100,8 @@ class CetakNewController extends Controller
         $data = [
             'pcs_akhir' => $r->pcs_akhir,
             'gr_akhir' => $r->gr_akhir,
+            'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
+            'gr_tdk_cetak' => $r->gr_tdk_ctk,
             'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
         ];
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
@@ -157,5 +159,11 @@ class CetakNewController extends Controller
             'history' => $history
         ];
         return view('home.cetak_new.history', $data);
+    }
+
+
+    public function hapus_data(Request $r)
+    {
+        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->delete();
     }
 }
