@@ -150,20 +150,51 @@ class CetakNewController extends Controller
         WHERE a.bulan_dibayar = $bulan AND YEAR(a.tgl) = $tahun
         GROUP BY a.id_anak;");
 
+        $pcs_awal = 0;
+        $gr_awal = 0;
+        $pcs_akhir = 0;
+        $gr_akhir = 0;
+        $ttl_rp = 0;
+        foreach ($history as $d) {
+            $pcs_awal += $d->pcs_awal;
+            $gr_awal += $d->gr_awal;
+            $pcs_akhir += $d->pcs_akhir;
+            $gr_akhir += $d->gr_akhir;
+            $ttl_rp += $d->ttl_rp;
+        }
+
         $data = [
             'title' => 'History Cetak',
             'bulan' => $bulan,
             'tahun' => $tahun,
-            'history' => $history
+            'history' => $history,
+            'pcs_awal' => $pcs_awal,
+            'gr_awal' => $gr_awal,
+            'pcs_akhir' => $pcs_akhir,
+            'gr_akhir' => $gr_akhir,
+            'ttl_rp' => $ttl_rp,
         ];
         return view('home.cetak_new.history', $data);
     }
 
     public function history_detail(Request $r)
     {
+        $id_anak = $r->id_anak;
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $detail = DB::select("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+        From cetak_new as a  
+        LEFT join tb_anak as b on b.id_anak = a.id_anak
+        left join users as c on c.id = a.id_pemberi
+        left join users as d on d.id = a.id_pengawas
+        left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
+        where a.bulan_dibayar = $bulan AND YEAR(a.tgl) = $tahun AND a.id_anak = $id_anak
+        order by a.pcs_akhir ASC , a.id_cetak DESC");
+
         $data = [
             'id_anak' => $r->id_anak,
+            'detail' => $detail
         ];
-        return view('home.cetak_new.detail_history',$data);
+        return view('home.cetak_new.detail_history', $data);
     }
 }

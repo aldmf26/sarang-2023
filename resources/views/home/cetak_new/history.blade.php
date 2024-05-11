@@ -16,7 +16,7 @@
     <x-slot name="cardBody">
         <div class="row">
             <div class="col">
-                <table class="table table-hover table-bordered">
+                <table id="tblHistory" class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th class="dhead">#</th>
@@ -47,32 +47,45 @@
                         @endforeach
 
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="dhead text-center">TOTAL</th>
+                            <th class="dhead text-end">{{ number_format($pcs_awal, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($gr_awal, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($pcs_akhir, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($gr_akhir, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($ttl_rp, 0) }}</th>
+                            <th class="dhead"></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
 
-        <x-theme.modal title="Detail History" btnSave="T" idModal="detail">
+        <x-theme.modal size="modal-lg" title="Detail History" btnSave="T" idModal="detail">
             <div id="load_detail"></div>
         </x-theme.modal>
         @section('scripts')
             <script>
+                loadTable('tblHistory')
                 $('.detail').click(function(e) {
                     e.preventDefault();
                     const id_anak = $(this).attr("id_anak")
-                    const bulan_dibayar = "{{ $bulan }}"
+                    const bulan = "{{ $bulan }}"
                     const tahun = "{{ $tahun }}"
 
                     $('#detail').modal('show')
                     $.ajax({
                         type: "GET",
-                        url: "{{route('cetaknew.history_detail')}}",
+                        url: "{{ route('cetaknew.history_detail') }}",
                         data: {
                             id_anak,
-                            bulan_dibayar,
+                            bulan,
                             tahun
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_detail").html(r);
+                            loadTable('tblDetail')
                         }
                     });
                 });
