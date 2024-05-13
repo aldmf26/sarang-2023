@@ -262,13 +262,31 @@ class CetakNewController extends Controller
         $summary = DB::select("SELECT d.ttl_hari,
         b.name as pgws,
         c.nama,
-        sum(a.ttl_rp) as ttl_rp
+        sum(a.ttl_rp) as ttl_rp,
+        cabut.ttl_rp as ttl_rp_cabut,
+        sortir.ttl_rp as ttl_rp_sortir
         FROM `cetak_new` as a
         JOIN users as b on a.id_pengawas = b.id
         JOIN tb_anak as c on a.id_anak = c.id_anak
         JOIN (
-            SELECT id_anak,count(DISTINCT tgl) as ttl_hari from absen where bulan_dibayar = $bulan AND tahun_dibayar = $tahun GROUP BY id_anak 
+            SELECT id_anak,count(DISTINCT tgl) as ttl_hari from absen 
+            where bulan_dibayar = $bulan AND tahun_dibayar = $tahun GROUP BY id_anak 
         ) as d on d.id_anak = a.id_anak
+        LEFT JOIN (
+                  SELECT 
+                    id_anak, 
+                    SUM(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END) as ttl_rp
+                  FROM `cabut` 
+                  WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
+                  GROUP BY id_anak 
+        ) as cabut on a.id_anak = cabut.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END ) as ttl_rp
+            FROM `sortir` 
+            WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+        ) as sortir on a.id_anak = sortir.id_anak
         WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun
         GROUP BY a.id_anak;");
     

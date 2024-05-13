@@ -435,7 +435,7 @@ class Cabut extends Model
         return DB::select("SELECT a.id_anak,b.name as pgws,
         absen.ttl as hariMasuk,
         a.nama as nm_anak, 
-        a.id_kelas as kelas,
+        a.id_kelas as kelas,    
         cabut.pcs_awal,
         cabut.gr_awal,
         cabut.pcs_akhir,
