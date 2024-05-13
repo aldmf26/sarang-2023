@@ -1,15 +1,22 @@
 <tr class="baris{{ $count }}">
     <td>
+        <select name="id_pemberi[]" id="" class="select">
+            <option value="">Pilih Pengawas</option>
+            @foreach ($users as $u)
+                <option value="{{ $u->id }}">{{ $u->name }}</option>
+            @endforeach
+        </select>
+    </td>
+    <td>
         <input type="text" class="form-control input_awal" name="no_box[]">
     </td>
     <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
     </td>
     <td>
-        <select name="bulan_dibayar[]" id="" class="select">
+        <select name="bulan_dibayar[]" id="" class="form-control">
             @foreach ($bulan as $b)
-                <option value="{{ $b->bulan }}"
-                    {{ $b->bulan == date('m') ? 'selected' : '' }}>
+                <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
                     {{ $b->bulan }}</option>
             @endforeach
         </select>

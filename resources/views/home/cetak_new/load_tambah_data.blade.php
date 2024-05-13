@@ -1,9 +1,10 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th width="130">No Box</th>
+            <th>Dari</th>
+            <th>No Box</th>
             <th>Tanggal</th>
-            <th>Bulan dibayar</th>
+            <th width="80px">Bulan dibayar</th>
             <th>Paket</th>
             <th>Nama</th>
             <th>Pcs Awal</th>
@@ -14,16 +15,23 @@
     <tbody>
         <tr class="baris1">
             <td>
+                <select name="id_pemberi[]" id="" class="select">
+                    <option value="">Pilih Pengawas</option>
+                    @foreach ($users as $u)
+                        <option value="{{ $u->id }}">{{ $u->name }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td>
                 <input type="text" class="form-control input_awal" name="no_box[]">
             </td>
             <td>
                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
             </td>
             <td>
-                <select name="bulan_dibayar[]" id="" class="select">
+                <select name="bulan_dibayar[]" id="" class="form-control">
                     @foreach ($bulan as $b)
-                        <option value="{{ $b->bulan }}"
-                            {{ $b->bulan == date('m') ? 'selected' : '' }}>
+                        <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
                             {{ $b->bulan }}</option>
                     @endforeach
                 </select>
@@ -61,7 +69,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="7">
+            <th colspan="9">
                 <button type="button" class="btn btn-block btn-lg tbh_baris"
                     style="background-color: #F4F7F9; color: #8FA8BD; font-size: 14px; padding: 13px;">
                     <i class="fas fa-plus"></i> Tambah Baris Baru

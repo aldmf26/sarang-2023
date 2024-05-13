@@ -15,7 +15,8 @@
                     teks="History" />
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
-                    <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️  <br> untuk view hari kemarin & selanjutnya</p>
+                <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
+                    & selanjutnya</p>
 
             </div>
         </div>
@@ -35,7 +36,7 @@
                 @csrf
                 <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg-max" btnSave="Y">
                     <div class="row">
-                        <div class="col-lg-2">
+                        {{-- <div class="col-lg-2">
                             <label for="">Barang Dari</label>
                             <select name="id_pemberi" id="" class="select2">
                                 <option value="">Pilih Pengawas</option>
@@ -43,7 +44,7 @@
                                     <option value="{{ $u->id }}">{{ $u->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
 
                         <div class="col-lg-12 mt-4">
                             <div id="load_menu"></div>

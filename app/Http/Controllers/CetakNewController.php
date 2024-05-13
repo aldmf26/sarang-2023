@@ -39,7 +39,7 @@ class CetakNewController extends Controller
             $tgl2 = $r->tgl2;
         }
         $data = [
-            'cetak' => DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+            'cetak' => DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -59,7 +59,8 @@ class CetakNewController extends Controller
         $data = [
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
             'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get(),
-            'bulan' => DB::table('bulan')->get()
+            'bulan' => DB::table('bulan')->get(),
+            'users' => DB::table('users')->where('posisi_id', '13')->get(),
         ];
         return view('home.cetak_new.load_tambah_data', $data);
     }
@@ -70,7 +71,8 @@ class CetakNewController extends Controller
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
             'count' => $r->count,
             'bulan' => DB::table('bulan')->get(),
-            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get()
+            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get(),
+            'users' => DB::table('users')->where('posisi_id', '13')->get(),
         ];
         return view('home.cetak_new.tambah_baris', $data);
     }
@@ -81,7 +83,7 @@ class CetakNewController extends Controller
 
             $rp_satuan = DB::table('kelas_cetak')->where('id_kelas_cetak', $r->id_paket[$x])->first();
             $data = [
-                'id_pemberi' => $r->id_pemberi,
+                'id_pemberi' => $r->id_pemberi[$x],
                 'id_pengawas' => auth()->user()->id,
                 'no_box' => $r->no_box[$x],
                 'tgl' => $r->tgl[$x],
@@ -113,7 +115,7 @@ class CetakNewController extends Controller
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -336,21 +338,21 @@ class CetakNewController extends Controller
         ) as sortir on a.id_anak = sortir.id_anak
         WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun
         GROUP BY a.id_anak;");
-    
+
         $data = [
             'title' => 'Summary Cetak',
             'bulan' => $bulan,
             'tahun' => $tahun,
             'summary' => $summary,
         ];
-        return view('home.cetak_new.summary',$data);
+        return view('home.cetak_new.summary', $data);
     }
 
     public function summary_detail(Request $r)
     {
         $data = [
-            'title' =>'1'
+            'title' => '1'
         ];
-        return view('home.cetak_new.summary_detail',$data);
+        return view('home.cetak_new.summary_detail', $data);
     }
 }
