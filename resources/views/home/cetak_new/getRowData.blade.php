@@ -45,6 +45,9 @@
             $val = $c->capai == 'Y' ? 'T' : 'Y';
             $ket = $c->capai == 'Y' ? 'Capai' : 'Tidak Capai';
         @endphp
+        @if ($c->selesai == 'Y')
+        {{ $ket }}
+        @else
         <button class="btn btn-sm btn-{{$btn}} capai" id_cetak="{{ $c->id_cetak }}" capaiVal="{{ $val }}">
             @if ($c->capai == 'Y')
             <i class="fas fa-check"></i> 
@@ -53,6 +56,7 @@
             @endif
             {{$ket}}
         </button>
+        @endif
         @endif
     </td>
     <td class="text-center">
