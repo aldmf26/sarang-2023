@@ -1,13 +1,25 @@
 <x-theme.app title="{{ $title }} " table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
-            {{ date('d M y', strtotime($tgl2)) }}</h6>
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end tambah_kerja"
-            teks="Kerja" />
-        <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
-            teks="" />
-        <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
-            teks="History" />
+        <div class="d-flex justify-content-between">
+            <div>
+                <h6 class="">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
+                    {{ date('d M y', strtotime($tgl2)) }}</h6>
+                <p class="badge bg-danger">Setor lewat jam 09:30 AM = tidak capai</p>
+            </div>
+            <div>
+                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
+                    addClass="float-end tambah_kerja" teks="Kerja" />
+                <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list" addClass="float-end"
+                    teks="Summary" />
+                <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
+                    teks="History" />
+                <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
+                    addClass="float-end" teks="View" />
+                    <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️  <br> untuk view hari kemarin & selanjutnya</p>
+
+            </div>
+        </div>
+
     </x-slot>
 
     <x-slot name="cardBody">
@@ -32,16 +44,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-2">
-                            <label for="">Bulan dibayar</label>
-                            <select name="bulan_dibayar" id="" class="select2">
-                                @foreach ($bulan as $b)
-                                    <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
-                                        {{ $b->bulan }}</option>
-                                @endforeach
-                            </select>
 
-                        </div>
                         <div class="col-lg-12 mt-4">
                             <div id="load_menu"></div>
                         </div>
@@ -55,11 +58,11 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="">Dari</label>
-                            <input type="date" name="tgl1" id="" class="form-control">
+                            <input id="tgl1" type="date" name="tgl1" id="" class="form-control">
                         </div>
                         <div class="col-lg-6">
                             <label for="">Sampai</label>
-                            <input type="date" name="tgl2" id="" class="form-control">
+                            <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
                         </div>
                     </div>
                 </x-theme.modal>
@@ -263,8 +266,45 @@
                         });
                     });
 
-
+                    $(document).on('click', '.capai', function(e) {
+                        e.preventDefault()
+                        const val = $(this).attr('capaiVal')
+                        const id_cetak = $(this).attr('id_cetak')
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('cetaknew.capai') }}",
+                            data: {
+                                val,
+                                id_cetak
+                            },
+                            dataType: 'json',
+                            success: function(r) {
+                                alertToast(r.status, r.pesan);
+                                load_cetak();
+                            }
+                        });
+                    })
                 });
+
+                var tgl1 = new Date("{{ $tgl1 }}");
+                var tgl2 = new Date("{{ $tgl2 }}");
+
+                $(document).keydown(function(event) {
+                    if (event.ctrlKey && (event.keyCode === 37 || event.keyCode === 39)) {
+                        var offset = event.keyCode === 37 ? -1 : 1;
+                        tgl1.setDate(tgl1.getDate() + offset);
+                        tgl2.setDate(tgl2.getDate() + offset);
+
+                        var formattedTgl1 = formatDate(tgl1);
+                        var formattedTgl2 = formatDate(tgl2);
+
+                        window.location.href = `{{ route('cetaknew.index') }}?tgl1=${formattedTgl1}&tgl2=${formattedTgl2}`;
+                    }
+                });
+
+                function formatDate(date) {
+                    return date.toISOString().split('T')[0];
+                }
             </script>
         @endsection
     </x-slot>

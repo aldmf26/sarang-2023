@@ -1,9 +1,18 @@
 <tr class="baris{{ $count }}">
     <td>
+        <input type="text" class="form-control input_awal" name="no_box[]">
+    </td>
+    <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
     </td>
     <td>
-        <input type="text" class="form-control input_awal" name="no_box[]">
+        <select name="bulan_dibayar[]" id="" class="select">
+            @foreach ($bulan as $b)
+                <option value="{{ $b->bulan }}"
+                    {{ $b->bulan == date('m') ? 'selected' : '' }}>
+                    {{ $b->bulan }}</option>
+            @endforeach
+        </select>
     </td>
     <td>
         <select name="id_paket[]" id="" class="select input_awal">

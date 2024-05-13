@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cabut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +39,7 @@ class CetakNewController extends Controller
             $tgl2 = $r->tgl2;
         }
         $data = [
-            'cetak' => DB::select("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+            'cetak' => DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -57,7 +58,8 @@ class CetakNewController extends Controller
     {
         $data = [
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
-            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get()
+            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get(),
+            'bulan' => DB::table('bulan')->get()
         ];
         return view('home.cetak_new.load_tambah_data', $data);
     }
@@ -67,6 +69,7 @@ class CetakNewController extends Controller
         $data = [
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
             'count' => $r->count,
+            'bulan' => DB::table('bulan')->get(),
             'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get()
         ];
         return view('home.cetak_new.tambah_baris', $data);
@@ -89,7 +92,7 @@ class CetakNewController extends Controller
                 'gr_awal_ctk' => $r->gr_awal[$x],
                 'id_kelas_cetak' => $r->id_paket[$x],
                 'rp_satuan' => $rp_satuan->rp_pcs,
-                'bulan_dibayar' => $r->bulan_dibayar
+                'bulan_dibayar' => $r->bulan_dibayar[$x]
             ];
             DB::table('cetak_new')->insert($data);
         }
@@ -189,7 +192,26 @@ class CetakNewController extends Controller
         $id_anak = $r->id_anak;
         $bulan = $r->bulan;
         $tahun = $r->tahun;
-        $detail = DB::select("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+        $detail = DB::select("SELECT 
+        a.id_cetak,
+         a.selesai,
+         c.name,
+         d.name as pgws,
+         b.nama as nm_anak ,
+         a.no_box,
+         a.grade,
+        a.tgl,
+         a.pcs_awal,
+         a.gr_awal,
+         a.pcs_tdk_cetak,
+         a.gr_tdk_cetak,
+         a.pcs_awal_ctk as pcs_awal_ctk,
+         a.gr_awal_ctk,
+         a.pcs_akhir,
+         a.gr_akhir,
+         a.rp_satuan,
+         a.ttl_rp,
+         e.kelas
         From cetak_new as a  
         LEFT join tb_anak as b on b.id_anak = a.id_anak
         left join users as c on c.id = a.id_pemberi
@@ -198,10 +220,64 @@ class CetakNewController extends Controller
         where a.bulan_dibayar = $bulan AND YEAR(a.tgl) = $tahun AND a.id_anak = $id_anak
         order by a.pcs_akhir ASC , a.id_cetak DESC");
 
+
+        $pcs_awal = 0;
+        $gr_awal = 0;
+        $pcs_akhir = 0;
+        $gr_akhir = 0;
+        $ttl_rp = 0;
+        foreach ($detail as $d) {
+            $pcs_awal += $d->pcs_awal;
+            $gr_awal += $d->gr_awal;
+            $pcs_akhir += $d->pcs_akhir;
+            $gr_akhir += $d->gr_akhir;
+            $ttl_rp += $d->ttl_rp;
+        }
+
         $data = [
             'id_anak' => $r->id_anak,
-            'detail' => $detail
+            'detail' => $detail,
+            'ttlpcs_awal' => $pcs_awal,
+            'ttlgr_awal' => $gr_awal,
+            'ttlpcs_akhir' => $pcs_akhir,
+            'ttlgr_akhir' => $gr_akhir,
+            'ttlttl_rp' => $ttl_rp,
         ];
         return view('home.cetak_new.detail_history', $data);
+    }
+    public function capai(Request $r)
+    {
+        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['capai' => $r->val]);
+        return json_encode([
+            'status' => $r->val == 'T' ? 'error' : 'sukses',
+            'pesan' => $r->val == 'T' ? 'Tidak Capai' : 'Capai',
+        ]);
+    }
+
+    public function summary(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+
+        $summary = DB::select("SELECT d.ttl_hari,
+        b.name as pgws,
+        c.nama,
+        sum(a.ttl_rp) as ttl_rp
+        FROM `cetak_new` as a
+        JOIN users as b on a.id_pengawas = b.id
+        JOIN tb_anak as c on a.id_anak = c.id_anak
+        JOIN (
+            SELECT id_anak,count(DISTINCT tgl) as ttl_hari from absen where bulan_dibayar = $bulan AND tahun_dibayar = $tahun GROUP BY id_anak 
+        ) as d on d.id_anak = a.id_anak
+        WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun
+        GROUP BY a.id_anak;");
+    
+        $data = [
+            'title' => 'Summary Cetak',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'summary' => $summary,
+        ];
+        return view('home.cetak_new.summary',$data);
     }
 }

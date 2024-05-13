@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col">
-        <table class="table" id="tblDetail">
+        <table class="table table-bordered table-hover" id="tblDetail">
             <thead>
                 <tr>
                     <th class="dhead">#</th>
@@ -43,6 +43,12 @@
             <tfoot>
                 <tr>
                     <th class="dhead text-center" colspan="5">TOTAL</th>
+                    <th class="text-end dhead">{{ number_format($ttlpcs_awal,0) }}</th>
+                    <th class="text-end dhead">{{ number_format($ttlgr_awal,0) }}</th>
+                    <th class="text-end dhead">{{ number_format($ttlpcs_akhir,0) }}</th>
+                    <th class="text-end dhead">{{ number_format($ttlgr_akhir,0) }}</th>
+                    <th class="text-end dhead"></th>
+                    <th class="text-end dhead">{{ number_format($ttlttl_rp,0) }}</th>
                 </tr>
             </tfoot>
         </table>

@@ -181,11 +181,21 @@
                 </div>
             </x-theme.modal>
         </form> --}}
+
+        <x-theme.modal idModal="loading" btnSave="T" size="modal-lg" disabled="true" title="Tunggu loading">
+            mohon tunggu loading...
+            <br>
+            <div class="row justify-content-center">
+                <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='38'%20height='38'%20stroke='%235d79d3'%20viewBox='0%200%2038%2038'%3e%3cg%20fill='none'%20fill-rule='evenodd'%3e%3cg%20stroke-width='2'%20transform='translate(1%201)'%3e%3ccircle%20cx='18'%20cy='18'%20r='18'%20stroke-opacity='.5'/%3e%3cpath%20d='M36%2018c0-9.94-8.06-18-18-18'%3e%3canimateTransform%20attributeName='transform'%20dur='1s'%20from='0%2018%2018'%20repeatCount='indefinite'%20to='360%2018%2018'%20type='rotate'/%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e"
+                    class="me-4" style="width: 100px" alt="audio">
+            </div>
+        </x-theme.modal>
         @section('scripts')
             <script>
                 pencarian('pencarian', 'tablealdi')
                 $(document).ready(function() {
                     $(document).on('change', '#tglChange', function() {
+                        $('#loading').modal('show')
                         var nilai = $(this).val()
                         document.location.href = "?tgl=" + nilai
                     })

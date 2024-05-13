@@ -170,6 +170,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/save_selesai', 'save_selesai')->name('save_selesai');
             Route::get('/cancel_selesai', 'cancel_selesai')->name('cancel_selesai');
             Route::get('/hapus_data', 'hapus_data')->name('hapus_data');
+            Route::get('/capai', 'capai')->name('capai');
+            Route::get('/summary', 'summary')->name('summary');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')

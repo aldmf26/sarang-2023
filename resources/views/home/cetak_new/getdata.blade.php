@@ -14,6 +14,7 @@
             <th width="70px" class="dhead text-end">gr akhir</th>
             <th class="dhead text-end">sst%</th>
             <th class="dhead text-end">Total Rp</th>
+            <th class="dhead text-center">Capai</th>
             <th width="130px" class="dhead text-center">Aksi</th>
         </tr>
     </thead>
@@ -55,15 +56,36 @@
                     {{ empty($c->gr_akhir) ? 0 : number_format((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1) }}%
                 </td>
                 <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan) }}</td>
+                <td align="center">
+                    @if (empty($c->capai))
+                    <button class="btn btn-sm btn-success capai" id_cetak="{{ $c->id_cetak }}" capaiVal="Y"><i class="fas fa-check"></i></button>
+                    <button class="btn btn-sm btn-danger capai" id_cetak="{{ $c->id_cetak }}" capaiVal="T">
+                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                    </button>
+                    @else
+                    @php
+                        $btn = $c->capai == 'Y' ? 'success' : 'danger';
+                        $val = $c->capai == 'Y' ? 'T' : 'Y';
+                        $ket = $c->capai == 'Y' ? 'Capai' : 'Tidak Capai';
+                    @endphp
+                    <button class="btn btn-sm btn-{{$btn}} capai" id_cetak="{{ $c->id_cetak }}" capaiVal="{{ $val }}">
+                        @if ($c->capai == 'Y')
+                        <i class="fas fa-check"></i> 
+                        @else
+                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                        @endif
+                        {{$ket}}
+                    </button>
+                    @endif
+                </td>
                 <td class="text-center">
-                    <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
+                    <button style="font-size: 12px" type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
                         class="btn btn-sm btn-warning btn_save_akhir btn_save_akhir{{ $c->id_cetak }}"
-                        id_cetak="{{ $c->id_cetak }}">Akhir
+                        id_cetak="{{ $c->id_cetak }}">Save
                     </button>
 
-                    <button type="button" {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' ? 'hidden' : '' }}
-                        class="btn btn-sm btn-success btn_selesai" id_cetak="{{ $c->id_cetak }}"><i
-                            class="fas fa-check-square"></i>
+                    <button style="font-size: 12px" type="button" {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' ? 'hidden' : '' }}
+                        class="btn btn-sm btn-primary btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
                     </button>
                     <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
                         class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}"
