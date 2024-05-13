@@ -524,7 +524,6 @@ class CabutController extends Controller
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
         $tbl = Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
 
-
         $data = [
             'title' => 'Laporan Perhari',
             'bulan' => $bulan,

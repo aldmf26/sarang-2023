@@ -221,6 +221,36 @@ class CetakNewController extends Controller
         order by a.pcs_akhir ASC , a.id_cetak DESC");
 
 
+        $cabut = DB::Select("SELECT 
+                    a.no_box,
+                    a.pcs_awal,
+                    a.gr_awal,
+                    a.tgl_terima as tgl,
+                    a.pcs_akhir,
+                    a.gr_akhir,
+                    (1 - a.gr_akhir / a.gr_awal) * 100 as susut,
+                    CASE WHEN a.selesai = 'Y' THEN a.ttl_rp ELSE 0 END as ttl_rp,
+                    b.nama as nm_anak,
+                    b.id_kelas as kelas
+                    FROM `cabut` as a
+                    join tb_anak as b on b.id_anak = a.id_anak
+                    WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
+                    AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'");
+        $sortir = DB::Select("SELECT 
+                    a.no_box,
+                    a.pcs_awal,
+                    a.gr_awal,
+                    a.tgl   ,
+                    a.pcs_akhir,
+                    a.gr_akhir,
+                    (1 - a.gr_akhir / a.gr_awal) * 100 as susut,
+                    CASE WHEN a.selesai = 'Y' THEN a.ttl_rp ELSE 0 END as ttl_rp,
+                    b.nama as nm_anak,
+                    b.id_kelas as kelas
+                    FROM `sortir` as a
+                    join tb_anak as b on b.id_anak = a.id_anak
+                    WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
+                    AND a.bulan = '$bulan' AND year(a.tgl_input) = '$tahun'");
         $pcs_awal = 0;
         $gr_awal = 0;
         $pcs_akhir = 0;
@@ -233,9 +263,25 @@ class CetakNewController extends Controller
             $gr_akhir += $d->gr_akhir;
             $ttl_rp += $d->ttl_rp;
         }
+        foreach ($cabut as $d) {
+            $pcs_awal += $d->pcs_awal;
+            $gr_awal += $d->gr_awal;
+            $pcs_akhir += $d->pcs_akhir;
+            $gr_akhir += $d->gr_akhir;
+            $ttl_rp += $d->ttl_rp;
+        }
+
+        foreach ($sortir as $d) {
+            $pcs_awal += $d->pcs_awal;
+            $gr_awal += $d->gr_awal;
+            $pcs_akhir += $d->pcs_akhir;
+            $gr_akhir += $d->gr_akhir;
+            $ttl_rp += $d->ttl_rp;
+        }
 
         $data = [
             'id_anak' => $r->id_anak,
+            'cabut' => $cabut,
             'detail' => $detail,
             'ttlpcs_awal' => $pcs_awal,
             'ttlgr_awal' => $gr_awal,
@@ -261,6 +307,7 @@ class CetakNewController extends Controller
 
         $summary = DB::select("SELECT d.ttl_hari,
         b.name as pgws,
+        a.id_anak,
         c.nama,
         sum(a.ttl_rp) as ttl_rp,
         cabut.ttl_rp as ttl_rp_cabut,
@@ -297,5 +344,13 @@ class CetakNewController extends Controller
             'summary' => $summary,
         ];
         return view('home.cetak_new.summary',$data);
+    }
+
+    public function summary_detail(Request $r)
+    {
+        $data = [
+            'title' =>'1'
+        ];
+        return view('home.cetak_new.summary_detail',$data);
     }
 }
