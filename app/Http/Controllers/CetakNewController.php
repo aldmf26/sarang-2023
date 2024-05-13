@@ -113,7 +113,7 @@ class CetakNewController extends Controller
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
+            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
