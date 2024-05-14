@@ -234,13 +234,14 @@
                             },
                             success: function(response) {
 
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+                                // $.get("{{ route('cetaknew.getRowData') }}", {
+                                //     id_cetak: id_cetak,
+                                //     no: no
+                                // }, function(data) {
+                                //     var tr = $('tr[data-id="' + id_cetak + '"]');
+                                //     tr.replaceWith(data);
+                                // });
+                                load_cetak();
                                 alertToast('sukses', 'Berhasil ditambahkan');
                             }
                         });
@@ -258,13 +259,14 @@
                             },
                             success: function(response) {
 
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+                                // $.get("{{ route('cetaknew.getRowData') }}", {
+                                //     id_cetak: id_cetak,
+                                //     no: no
+                                // }, function(data) {
+                                //     var tr = $('tr[data-id="' + id_cetak + '"]');
+                                //     tr.replaceWith(data);
+                                // });
+                                load_cetak();
                                 alertToast('sukses', 'Data berhasil di cancel');
                             }
                         });

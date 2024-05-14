@@ -17,7 +17,7 @@
             <th class="dhead text-end">Rp Tambahan</th>
             <th class="dhead text-end">Total Rp</th>
             <th class="dhead text-center">Capai</th>
-            <th width="130px" class="dhead text-center">Aksi</th>
+            <th class="dhead text-center">Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -103,7 +103,7 @@
                         @endif
                     @endif
                 </td>
-                <td class="text-center">
+                <td class="text-center" style="white-space: nowrap">
                     <button style="font-size: 12px" type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
                         class="btn btn-sm btn-warning btn_save_akhir btn_save_akhir{{ $c->id_cetak }}"
                         id_cetak="{{ $c->id_cetak }}">Save
