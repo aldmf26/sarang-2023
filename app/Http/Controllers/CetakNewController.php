@@ -10,7 +10,11 @@ class CetakNewController extends Controller
 {
     public function index(Request $r)
     {
-
+        if (empty($r->id_anak)) {
+            $id_anak = 'All';
+        } else {
+            $id_anak = $r->id_anak;
+        }
         if (empty($r->tgl1)) {
             $tgl1 = date('Y-m-d');
             $tgl2 = date('Y-m-d');
@@ -18,12 +22,16 @@ class CetakNewController extends Controller
             $tgl1 = $r->tgl1;
             $tgl2 = $r->tgl2;
         }
+
+
         $data = [
             'title' => 'Cetak',
             'users' => DB::table('users')->where('posisi_id', '13')->get(),
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'bulan' => DB::table('bulan')->get()
+            'id_anak' => $id_anak,
+            'bulan' => DB::table('bulan')->get(),
+            'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
         ];
         return view('home.cetak_new.index', $data);
     }
@@ -31,6 +39,7 @@ class CetakNewController extends Controller
 
     public function get_cetak(Request $r)
     {
+
         if (empty($r->tgl1)) {
             $tgl1 = date('Y-m-d');
             $tgl2 = date('Y-m-t');
@@ -38,8 +47,9 @@ class CetakNewController extends Controller
             $tgl1 = $r->tgl1;
             $tgl2 = $r->tgl2;
         }
-        $data = [
-            'cetak' => DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut
+
+        if ($r->id_anak == 'All') {
+            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -47,8 +57,25 @@ class CetakNewController extends Controller
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.tgl between '$tgl1' and '$tgl2'
             order by a.tgl ASC, b.nama ASC
-            ;"),
+            ;");
+        } else {
+            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
+            From cetak_new as a  
+            LEFT join tb_anak as b on b.id_anak = a.id_anak
+            left join users as c on c.id = a.id_pemberi
+            left join users as d on d.id = a.id_pengawas
+            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$r->id_anak'
+            order by a.tgl ASC, b.nama ASC
+            ;");
+        }
+
+
+
+        $data = [
+            'cetak' => $cetak,
             'tgl1' => $tgl1,
+
 
         ];
         return view('home.cetak_new.getdata', $data);
@@ -58,7 +85,7 @@ class CetakNewController extends Controller
     {
         $data = [
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
-            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get(),
+            'paket' => DB::table('kelas_cetak')->get(),
             'bulan' => DB::table('bulan')->get(),
             'users' => DB::table('users')->where('posisi_id', '13')->get(),
         ];
@@ -71,7 +98,7 @@ class CetakNewController extends Controller
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
             'count' => $r->count,
             'bulan' => DB::table('bulan')->get(),
-            'paket' => DB::table('kelas_cetak')->orderBy('id_kelas_cetak', 'DESC')->get(),
+            'paket' => DB::table('kelas_cetak')->get(),
             'users' => DB::table('users')->where('posisi_id', '13')->get(),
         ];
         return view('home.cetak_new.tambah_baris', $data);
@@ -102,20 +129,46 @@ class CetakNewController extends Controller
 
     public function save_akhir(Request $r)
     {
-        $data = [
-            'pcs_akhir' => $r->pcs_akhir,
-            'gr_akhir' => $r->gr_akhir,
-            'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
-            'gr_tdk_cetak' => $r->gr_tdk_ctk,
-            'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
-        ];
-        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
+        if ($r->id_paket == 16) {
+
+            $data = [
+                'pcs_akhir' => $r->pcs_akhir,
+                'gr_akhir' => $r->gr_akhir,
+                'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
+                'gr_tdk_cetak' => $r->gr_tdk_ctk,
+                'ttl_rp' => $r->pcs_akhir * $r->rp_satuan,
+            ];
+            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
+
+            $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
+
+            $rp_training = DB::selectOne("SELECT a.tgl,  b.nama, COUNT(a.tgl) as ttl, sum(a.ttl_rp) as ttl_rp, c.rp_gaji
+            FROM cetak_new as a 
+            left join tb_anak as b on b.id_anak = a.id_anak
+            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
+            where a.pcs_akhir != 0 and c.id_paket = 16 and a.id_anak = '$cetak->id_anak' and a.tgl = '$cetak->tgl'
+            GROUP by a.id_anak , a.tgl;");
+
+            $data = [
+                'rp_tambahan' => $rp_training->rp_gaji == 0 ? 0 : ($rp_training->rp_gaji - $rp_training->ttl_rp) / $rp_training->ttl,
+            ];
+            DB::table('cetak_new')->where('id_anak', $cetak->id_anak)->where('tgl', $cetak->tgl)->where('pcs_akhir', '!=', '0')->update($data);
+        } else {
+            $data = [
+                'pcs_akhir' => $r->pcs_akhir,
+                'gr_akhir' => $r->gr_akhir,
+                'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
+                'gr_tdk_cetak' => $r->gr_tdk_ctk,
+                'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
+            ];
+            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
+        }
     }
 
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut
+            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut,e.id_paket,a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -187,7 +240,22 @@ class CetakNewController extends Controller
 
     public function hapus_data(Request $r)
     {
-        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->delete();
+        if ($r->id_paket == 16) {
+            $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
+            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->delete();
+            $rp_training = DB::selectOne("SELECT a.tgl,  b.nama, COUNT(a.tgl) as ttl, sum(a.ttl_rp) as ttl_rp, c.rp_gaji
+            FROM cetak_new as a 
+            left join tb_anak as b on b.id_anak = a.id_anak
+            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
+            where a.pcs_akhir != 0 and c.id_paket = 16 and a.id_anak = '$cetak->id_anak' and a.tgl = '$cetak->tgl'
+            GROUP by a.id_anak , a.tgl;");
+            $data = [
+                'rp_tambahan' => $rp_training->rp_gaji == 0 ? 0 : ($rp_training->rp_gaji - $rp_training->ttl_rp) / $rp_training->ttl,
+            ];
+            DB::table('cetak_new')->where('id_anak', $cetak->id_anak)->where('tgl', $cetak->tgl)->where('pcs_akhir', '!=', '0')->update($data);
+        } else {
+            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->delete();
+        }
     }
     public function history_detail(Request $r)
     {
@@ -213,6 +281,7 @@ class CetakNewController extends Controller
          a.gr_akhir,
          a.rp_satuan,
          a.ttl_rp,
+         a.rp_tambahan,
          e.kelas
         From cetak_new as a  
         LEFT join tb_anak as b on b.id_anak = a.id_anak
@@ -263,7 +332,7 @@ class CetakNewController extends Controller
             $gr_awal += $d->gr_awal;
             $pcs_akhir += $d->pcs_akhir;
             $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp;
+            $ttl_rp += $d->ttl_rp + $d->rp_tambahan;
         }
         foreach ($cabut as $d) {
             $pcs_awal += $d->pcs_awal;
@@ -312,6 +381,7 @@ class CetakNewController extends Controller
         a.id_anak,
         c.nama,
         sum(a.ttl_rp) as ttl_rp,
+        sum(a.rp_tambahan) as rp_tambahan,
         cabut.ttl_rp as ttl_rp_cabut,
         sortir.ttl_rp as ttl_rp_sortir
         FROM `cetak_new` as a

@@ -23,6 +23,7 @@
         <input type="hidden" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
             value="{{ $c->pcs_awal_ctk }}">
         <input type="hidden" class="rp_satuan{{ $c->id_cetak }}" value="{{ $c->rp_satuan }}">
+        <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}">
         <input type="hidden" class="no{{ $c->id_cetak }}" value="{{ $no + 1 }}">
     </td>
     <td class="text-end">
@@ -38,7 +39,8 @@
         $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
     @endphp
     <td class="text-end">{{ number_format($denda_susut, 0) }}</td>
-    <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut, 0) }}</td>
+    <td class="text-end">{{ number_format($c->rp_tambahan, 0) }}</td>
+    <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
     <td align="center">
         @if (empty($c->capai))
             <button class="btn btn-sm btn-success capai" id_cetak="{{ $c->id_cetak }}" capaiVal="Y"><i

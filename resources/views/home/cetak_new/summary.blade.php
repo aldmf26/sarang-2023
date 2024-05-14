@@ -32,7 +32,7 @@
                         @foreach ($summary as $i => $d)
                             @php
                                 $ttl_hari = $d->ttl_hari;
-                                $ttl_rp = $d->ttl_rp + $d->ttl_rp_cabut + $d->ttl_rp_sortir;
+                                $ttl_rp = $d->ttl_rp + $d->ttl_rp_cabut + $d->ttl_rp_sortir + $d->rp_tambahan;
                                 $rata2 = $ttl_rp / $ttl_hari;
                                 $target = 90000;
                             @endphp

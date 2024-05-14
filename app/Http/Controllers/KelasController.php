@@ -31,8 +31,8 @@ class KelasController extends Controller
     public function cabutCreate(Request $r)
     {
         $buang = [
-            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'batas_eot','eot', 'denda_hcr',
-            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'batas_eot_tambah','eot_tambah', 'denda_hcr_tambah'
+            'rupiah', 'pcs', 'gr', 'rp_bonus', 'bonus_susut', 'batas_susut', 'denda_susut_persen', 'batas_eot', 'eot', 'denda_hcr',
+            'rupiah_tambah', 'pcs_tambah', 'gr_tambah', 'rp_bonus_tambah', 'bonus_susut_tambah', 'batas_susut_tambah', 'denda_susut_persen_tambah', 'batas_eot_tambah', 'eot_tambah', 'denda_hcr_tambah'
         ];
         foreach ($buang as $d) {
             $r->$d = str()->remove(',', $r->$d);
@@ -268,7 +268,8 @@ class KelasController extends Controller
             'rupiah',
             'rupiah_tambah',
             'denda_hcr',
-            'denda_susut'
+            'denda_susut',
+            'rp_gaji'
         ];
         foreach ($buang as $d) {
             $r->$d = str()->remove(',', $r->$d);
@@ -284,6 +285,7 @@ class KelasController extends Controller
                 'denda_hcr' => $r->denda_hcr[$x],
                 'batas_susut' => $r->batas_susut[$x],
                 'denda_susut' => $r->denda_susut[$x],
+                'rp_gaji' => $r->rp_gaji[$x],
             ];
             DB::table('kelas_cetak')->insert($data);
         }
@@ -301,7 +303,7 @@ class KelasController extends Controller
             'kelas' => DB::table('tb_kelas_sortir')->where('nonaktif', 'T')->get(),
             'title' => 'Kelas Sortir',
         ];
-        return view('data_master.kelas.sortir',$data);
+        return view('data_master.kelas.sortir', $data);
     }
 
     public function cetakSortir(Request $r)

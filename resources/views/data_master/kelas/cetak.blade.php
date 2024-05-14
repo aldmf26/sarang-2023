@@ -49,6 +49,7 @@
                                 <th class="text-end dhead">Denda HCR</th>
                                 <th class="text-end dhead">Bts Sst %</th>
                                 <th class="text-end dhead">Denda Sst</th>
+                                <th class="text-end dhead">Rp Gaji</th>
                                 <th class="dhead" width="60">Aksi</th>
                             </tr>
                         </thead>
@@ -87,6 +88,10 @@
                                 <td>
                                     <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                         name="denda_susut[]">
+                                </td>
+                                <td>
+                                    <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                        name="rp_gaji[]">
                                 </td>
 
                                 <td>
@@ -137,6 +142,10 @@
                                     <td>
                                         <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                             name="denda_susut[]">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="rp_gaji[]">
                                     </td>
                                     <td>
                                         <span class="badge bg-danger" @click="rows.splice(index, 1)"
@@ -191,6 +200,10 @@
                                     <td>
                                         <input x-mask:dynamic="$money($input)" class="form-control text-end"
                                             name="denda_susut[]" value="{{ $d->denda_susut }}">
+                                    </td>
+                                    <td>
+                                        <input x-mask:dynamic="$money($input)" class="form-control text-end"
+                                            name="rp_gaji[]" value="{{ $d->rp_gaji }}">
                                     </td>
                                     <td>
                                         <span id_kelas="{{ $d->id_kelas_cetak }}" data-bs-target="#infoKelas"

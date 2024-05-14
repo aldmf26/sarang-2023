@@ -28,6 +28,7 @@
         <section class="row">
             <input type="hidden" id="tgl1" value="{{ $tgl1 }}">
             <input type="hidden" id="tgl2" value="{{ $tgl2 }}">
+            <input type="hidden" id="id_anak" value="{{ $id_anak }}">
 
 
             <div id="load-cetak"></div>
@@ -65,6 +66,15 @@
                             <label for="">Sampai</label>
                             <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
                         </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="">Pilih Anak</label>
+                            <select name="id_anak" id="" class="selectView">
+                                <option value="All">All</option>
+                                @foreach ($tb_anak as $u)
+                                    <option value="{{ $u->id_anak }}">{{ $u->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </x-theme.modal>
             </form>
@@ -79,11 +89,13 @@
                     function load_cetak() {
                         var tgl1 = $('#tgl1').val();
                         var tgl2 = $('#tgl2').val();
+                        var id_anak = $('#id_anak').val();
                         $.ajax({
                             type: "get",
                             data: {
                                 tgl1: tgl1,
-                                tgl2: tgl2
+                                tgl2: tgl2,
+                                id_anak: id_anak
                             },
                             url: "{{ route('cetaknew.get_cetak') }}",
                             success: function(r) {
@@ -171,6 +183,7 @@
                         var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
                         var rp_satuan = $('.rp_satuan' + id_cetak).val();
                         var no = $('.no' + id_cetak).val();
+                        var id_paket = $('.id_paket' + id_cetak).val();
 
                         var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
                         if (pcs_awal != ttl_pcs) {
@@ -186,15 +199,18 @@
                                     pcs_tdk_ctk: pcs_tdk_ctk,
                                     gr_tdk_ctk: gr_tdk_ctk,
                                     rp_satuan: rp_satuan,
+                                    id_paket: id_paket,
                                 },
                                 success: function(response) {
-                                    $.get("{{ route('cetaknew.getRowData') }}", {
-                                        id_cetak: id_cetak,
-                                        no: no
-                                    }, function(data) {
-                                        var tr = $('tr[data-id="' + id_cetak + '"]');
-                                        tr.replaceWith(data);
-                                    });
+                                    // $.get("{{ route('cetaknew.getRowData') }}", {
+                                    //     id_cetak: id_cetak,
+                                    //     no: no
+                                    // }, function(data) {
+                                    //     var tr = $('tr[data-id="' + id_cetak + '"]');
+                                    //     tr.replaceWith(data);
+                                    // });
+
+                                    load_cetak();
                                     alertToast('sukses', 'Berhasil ditambahkan');
 
 
@@ -255,11 +271,13 @@
                     $(document).on("click", ".btn_hapus", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
+                        var id_paket = $(this).attr('id_paket');
                         $.ajax({
                             type: "get",
                             url: "{{ route('cetaknew.hapus_data') }}",
                             data: {
                                 id_cetak: id_cetak,
+                                id_paket: id_paket
                             },
                             success: function(response) {
                                 alertToast('sukses', 'Data berhasil di hapus');
@@ -291,16 +309,21 @@
                 var tgl1 = new Date("{{ $tgl1 }}");
                 var tgl2 = new Date("{{ $tgl2 }}");
 
+
                 $(document).keydown(function(event) {
                     if (event.ctrlKey && (event.keyCode === 37 || event.keyCode === 39)) {
                         var offset = event.keyCode === 37 ? -1 : 1;
                         tgl1.setDate(tgl1.getDate() + offset);
                         tgl2.setDate(tgl2.getDate() + offset);
 
+
                         var formattedTgl1 = formatDate(tgl1);
                         var formattedTgl2 = formatDate(tgl2);
+                        var id_anak = $('#id_anak').val();
 
-                        window.location.href = `{{ route('cetaknew.index') }}?tgl1=${formattedTgl1}&tgl2=${formattedTgl2}`;
+
+                        window.location.href =
+                            `{{ route('cetaknew.index') }}?tgl1=${formattedTgl1}&tgl2=${formattedTgl2}&id_anak=${id_anak}`;
                     }
                 });
 

@@ -39,7 +39,9 @@
             <td>
                 <select name="id_paket[]" id="" class="select input_awal">
                     @foreach ($paket as $u)
-                        <option value="{{ $u->id_kelas_cetak }}">{{ $u->kelas }} / Rp.{{ $u->rp_pcs }}</option>
+                        <option value="{{ $u->id_kelas_cetak }}" {{ $u->id_kelas_cetak == 6 ? 'selected' : '' }}>
+                            {{ $u->kelas }} /
+                            Rp.{{ $u->rp_pcs }}</option>
                     @endforeach
                 </select>
             </td>

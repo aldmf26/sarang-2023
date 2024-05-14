@@ -14,6 +14,7 @@
             <th width="70px" class="dhead text-end">gr akhir</th>
             <th class="dhead text-end">sst%</th>
             <th class="dhead text-end">Denda sst</th>
+            <th class="dhead text-end">Rp Tambahan</th>
             <th class="dhead text-end">Total Rp</th>
             <th class="dhead text-center">Capai</th>
             <th width="130px" class="dhead text-center">Aksi</th>
@@ -47,6 +48,7 @@
                     <input type="hidden" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
                         value="{{ $c->pcs_awal_ctk }}">
                     <input type="hidden" class="rp_satuan{{ $c->id_cetak }}" value="{{ $c->rp_satuan }}">
+                    <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}">
                     <input type="hidden" class="no{{ $c->id_cetak }}" value="{{ $no + 1 }}">
                 </td>
                 <td class="text-end">
@@ -64,7 +66,9 @@
                     $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
                 @endphp
                 <td class="text-end">{{ number_format($denda_susut, 0) }}</td>
-                <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut, 0) }}</td>
+                <td class="text-end">{{ number_format($c->rp_tambahan, 0) }}</td>
+                <td class="text-end">
+                    {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
                 <td align="center">
                     @if (empty($c->capai))
                         <button class="btn btn-sm btn-success capai" id_cetak="{{ $c->id_cetak }}" capaiVal="Y"><i
@@ -111,7 +115,7 @@
                     </button>
                     <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
                         class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}"
-                        id_cetak="{{ $c->id_cetak }}"><i class="fas fa-trash-alt"></i>
+                        id_cetak="{{ $c->id_cetak }}" id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
                     </button>
 
                     <button type="button" {{ $c->selesai == 'T' ? 'hidden' : '' }}
