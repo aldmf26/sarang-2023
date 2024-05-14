@@ -4,6 +4,7 @@
             <div>
                 <h6 class="">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
                     {{ date('d M y', strtotime($tgl2)) }}</h6>
+                <h6>Anak : {{ $anak }}</h6>
                 <p class="badge bg-danger">Setor lewat jam 09:30 AM = tidak capai</p>
             </div>
             <div>

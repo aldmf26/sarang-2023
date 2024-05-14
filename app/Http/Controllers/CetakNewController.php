@@ -22,7 +22,7 @@ class CetakNewController extends Controller
             $tgl1 = $r->tgl1;
             $tgl2 = $r->tgl2;
         }
-
+        $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
 
         $data = [
             'title' => 'Cetak',
@@ -32,6 +32,7 @@ class CetakNewController extends Controller
             'id_anak' => $id_anak,
             'bulan' => DB::table('bulan')->get(),
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', auth()->user()->id)->get(),
+            'anak' => $id_anak == 'All' ? 'Semua Anak' : $anak->nama
         ];
         return view('home.cetak_new.index', $data);
     }
