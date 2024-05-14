@@ -46,7 +46,7 @@ class CetakNewController extends Controller
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.tgl between '$tgl1' and '$tgl2'
-            order by a.nama ASC
+            order by b.nama ASC
             ;"),
             'tgl1' => $tgl1,
 

@@ -154,7 +154,8 @@
                             data: formData,
                             success: function(response) {
                                 alertToast('sukses', 'Berhasil ditambahkan');
-                                $('.input_awal').val('');
+                                // $('.input_awal').val('');
+                                load_menu();
                                 $('#tambah').modal('hide');
                                 load_cetak();
                             },
