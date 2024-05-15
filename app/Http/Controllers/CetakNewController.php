@@ -272,7 +272,6 @@ class CetakNewController extends Controller
          d.name as pgws,
          b.nama as nm_anak ,
          a.no_box,
-         a.grade,
         a.tgl,
          a.pcs_awal,
          a.gr_awal,
