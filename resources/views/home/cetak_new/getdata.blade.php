@@ -14,7 +14,6 @@
             <th width="70px" class="dhead text-end">gr akhir</th>
             <th class="dhead text-end">sst%</th>
             <th class="dhead text-end">Denda sst</th>
-            <th class="dhead text-end">Rp Tambahan</th>
             <th class="dhead text-end">Total Rp</th>
             <th class="dhead text-center">Capai</th>
             <th class="dhead text-center">Aksi</th>
@@ -66,7 +65,6 @@
                     $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
                 @endphp
                 <td class="text-end">{{ number_format($denda_susut, 0) }}</td>
-                <td class="text-end">{{ number_format($c->rp_tambahan, 0) }}</td>
                 <td class="text-end">
                     {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
                 <td align="center">

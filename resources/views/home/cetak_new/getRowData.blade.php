@@ -39,7 +39,6 @@
         $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
     @endphp
     <td class="text-end">{{ number_format($denda_susut, 0) }}</td>
-    <td class="text-end">{{ number_format($c->rp_tambahan, 0) }}</td>
     <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
     <td align="center">
         @if (empty($c->capai))

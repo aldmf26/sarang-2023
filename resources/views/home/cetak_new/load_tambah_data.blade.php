@@ -1,7 +1,6 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Dari</th>
             <th>No Box</th>
             <th>Tanggal</th>
             <th width="80px">Bulan dibayar</th>
@@ -14,14 +13,6 @@
     </thead>
     <tbody>
         <tr class="baris1">
-            <td>
-                <select name="id_pemberi[]" id="" class="select">
-                    <option value="">Pilih Pengawas</option>
-                    @foreach ($users as $u)
-                        <option value="{{ $u->id }}">{{ $u->name }}</option>
-                    @endforeach
-                </select>
-            </td>
             <td>
                 <input type="text" class="form-control input_awal" name="no_box[]">
             </td>

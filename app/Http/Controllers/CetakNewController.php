@@ -59,7 +59,7 @@ class CetakNewController extends Controller
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.tgl between '$tgl1' and '$tgl2' and b.id_pengawas = '$id_pengawas'
-            order by a.tgl ASC, b.nama ASC
+            order by a.tgl DESC, b.nama ASC
             ;");
         } else {
             $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
@@ -69,7 +69,7 @@ class CetakNewController extends Controller
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$r->id_anak' and b.id_pengawas = '$id_pengawas'
-            order by a.tgl ASC, b.nama ASC
+            order by a.tgl DESC, b.nama ASC
             ;");
         }
 
@@ -113,7 +113,7 @@ class CetakNewController extends Controller
 
             $rp_satuan = DB::table('kelas_cetak')->where('id_kelas_cetak', $r->id_paket[$x])->first();
             $data = [
-                'id_pemberi' => $r->id_pemberi[$x],
+                'id_pemberi' => 0,
                 'id_pengawas' => auth()->user()->id,
                 'no_box' => $r->no_box[$x],
                 'tgl' => $r->tgl[$x],
