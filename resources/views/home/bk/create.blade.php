@@ -55,7 +55,7 @@
                                 <th class="dhead">No</th>
                                 {{-- <th class="dhead">No Lot</th> --}}
                                 <th class="dhead">Nama Partai</th>
-                                <th class="dhead">No Box SP</th>
+                                <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
                                 <th class="dhead">Ket</th>
                                 <th class="dhead">Warna</th>
