@@ -52,7 +52,7 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
 
         if ($r->id_anak == 'All') {
-            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
+            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -62,7 +62,7 @@ class CetakNewController extends Controller
             order by a.tgl ASC, b.nama ASC
             ;");
         } else {
-            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
+            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -171,7 +171,7 @@ class CetakNewController extends Controller
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.grade,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut,e.id_paket,a.rp_tambahan
+            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut,e.id_paket,a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
@@ -378,6 +378,8 @@ class CetakNewController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
+        $id_pengawas = auth()->user()->id;
+
 
         $summary = DB::select("SELECT d.ttl_hari,
         b.name as pgws,
@@ -409,7 +411,7 @@ class CetakNewController extends Controller
             FROM `sortir` 
             WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
-        WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun
+        WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun and c.id_pengawas = '$id_pengawas'
         GROUP BY a.id_anak;");
 
         $data = [
