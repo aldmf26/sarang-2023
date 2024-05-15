@@ -302,14 +302,14 @@
                             dataType: 'json',
                             success: function(r) {
                                 alertToast(r.status, r.pesan);
-                                // load_cetak();
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+                                load_cetak();
+                                // $.get("{{ route('cetaknew.getRowData') }}", {
+                                //     id_cetak: id_cetak,
+                                //     no: no
+                                // }, function(data) {
+                                //     var tr = $('tr[data-id="' + id_cetak + '"]');
+                                //     tr.replaceWith(data);
+                                // });
                             }
                         });
                     })
