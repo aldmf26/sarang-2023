@@ -296,6 +296,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/edit', 'edit')->name('edit');
             Route::get('/delete', 'delete')->name('delete');
+            Route::get('/hapus/{id}', 'hapus')->name('hapus');
             Route::get('/export', 'export')->name('export');
             Route::post('/update', 'update')->name('update');
             Route::get('/rekap', 'rekap')->name('rekap');

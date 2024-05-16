@@ -100,6 +100,12 @@ class HariandllController extends Controller
             DB::table('tb_hariandll')->where('id_hariandll', $r->id[$i])->update(['ditutup' => 'Y']);
         }
     }
+
+    public function hapus($id)
+    {
+        DB::table('tb_hariandll')->where('id_hariandll', $id)->delete();
+        return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil dihapus');
+    }
     public function getQuery($bulan, $tahun)
     {
         return DB::select("SELECT a.bulan_dibayar,a.tgl,b.nama,c.name, SUM(rupiah) AS total_rupiah

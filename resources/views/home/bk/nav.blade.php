@@ -7,8 +7,8 @@
         <a class="nav-link {{ $kategori == 'sortir' ? 'active' : '' }}" aria-current="page"
         href="{{ route("bk.$name", ['kategori' => 'sortir']) }}">Sortir</a>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link {{ $kategori == 'cetak' ? 'active' : '' }}" aria-current="page"
         href="{{ route("bk.$name", ['kategori' => 'cetak']) }}">Cetak</a>
-    </li>
+    </li> --}}
 </ul>

@@ -74,7 +74,7 @@
                             @endif
                             <br>
                             <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
-                                    class="fas fa-check"></i> Hapus </span>
+                                    class="fas fa-check"></i> Tutup </span>
                             <span class="badge bg-danger btn_tutup d-none mt-3" tipe="edit"
                                 style="cursor: pointer">Edit</span>
                             {{-- <x-theme.button href="#" icon="fa-check" variant="danger" addClass="btn_tutup"
@@ -103,6 +103,7 @@
                                     <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
                                         id_cabut="{{ $d->id_hariandll }}">
                                 @endif
+                                <a onclick="return confirm('Yakin dihapus ?')" href="{{ route('hariandll.hapus', $d->id_hariandll) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
                                 {{-- <x-theme.button modal="Y" idModal="delete" data="no_nota={{ $d->id_hariandll }}"
                                     icon="fa-trash" addClass="float-end delete_nota" teks="" variant="danger" /> --}}
                                 {{-- <x-theme.button modal="Y" idModal="edit" icon="fa-pen"

@@ -265,26 +265,27 @@ class CetakNewController extends Controller
         $id_anak = $r->id_anak;
         $bulan = $r->bulan;
         $tahun = $r->tahun;
+        
         $detail = DB::select("SELECT 
         a.id_cetak,
-         a.selesai,
-         c.name,
-         d.name as pgws,
-         b.nama as nm_anak ,
-         a.no_box,
+        a.selesai,
+        c.name,
+        d.name as pgws,
+        b.nama as nm_anak ,
+        a.no_box,
         a.tgl,
-         a.pcs_awal,
-         a.gr_awal,
-         a.pcs_tdk_cetak,
-         a.gr_tdk_cetak,
-         a.pcs_awal_ctk as pcs_awal_ctk,
-         a.gr_awal_ctk,
-         a.pcs_akhir,
-         a.gr_akhir,
-         a.rp_satuan,
-         a.ttl_rp,
-         a.rp_tambahan,
-         e.kelas
+        a.pcs_awal,
+        a.gr_awal,
+        a.pcs_tdk_cetak,
+        a.gr_tdk_cetak,
+        a.pcs_awal_ctk as pcs_awal_ctk,
+        a.gr_awal_ctk,
+        a.pcs_akhir,
+        a.gr_akhir,
+        a.rp_satuan,
+        a.ttl_rp,
+        a.rp_tambahan,
+        e.kelas
         From cetak_new as a  
         LEFT join tb_anak as b on b.id_anak = a.id_anak
         left join users as c on c.id = a.id_pemberi
@@ -309,6 +310,7 @@ class CetakNewController extends Controller
                     join tb_anak as b on b.id_anak = a.id_anak
                     WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
                     AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'");
+
         $sortir = DB::Select("SELECT 
                     a.no_box,
                     a.pcs_awal,
@@ -324,6 +326,27 @@ class CetakNewController extends Controller
                     join tb_anak as b on b.id_anak = a.id_anak
                     WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
                     AND a.bulan = '$bulan' AND year(a.tgl_input) = '$tahun'");
+        
+        $dll = DB::select("SELECT
+                a.rupiah as ttl_rp,
+                b.nama as nm_anak,
+                a.tgl
+                FROM tb_hariandll as a
+                join tb_anak as b on b.id_anak = a.id_anak
+                WHERE a.ditutup = 'T' AND a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun'");
+
+        $eo = DB::select("SELECT
+                a.no_box,
+                a.ttl_rp,
+                b.nama as nm_anak,
+                a.tgl_ambil as tgl,
+                a.gr_eo_awal as gr_awal,
+                a.gr_eo_akhir as gr_akhir,
+                (1 - a.gr_eo_akhir / a.gr_eo_awal) * 100 as susut
+                FROM eo as a
+                join tb_anak as b on b.id_anak = a.id_anak
+                WHERE a.penutup = 'T' AND a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND year(a.tgl_input) = '$tahun'");
+
         $pcs_awal = 0;
         $gr_awal = 0;
         $pcs_akhir = 0;
@@ -352,9 +375,22 @@ class CetakNewController extends Controller
             $ttl_rp += $d->ttl_rp;
         }
 
+        foreach ($eo as $d) {
+            $gr_awal += $d->gr_awal;
+            $gr_akhir += $d->gr_akhir;
+            $ttl_rp += $d->ttl_rp;
+        }
+
+        foreach ($dll as $d) {
+            $ttl_rp += $d->ttl_rp;
+        }
+
         $data = [
             'id_anak' => $r->id_anak,
+            'eo' => $eo,
             'cabut' => $cabut,
+            'sortir' => $sortir,
+            'dll' => $dll,
             'detail' => $detail,
             'ttlpcs_awal' => $pcs_awal,
             'ttlgr_awal' => $gr_awal,
@@ -387,7 +423,9 @@ class CetakNewController extends Controller
         sum(a.ttl_rp) as ttl_rp,
         sum(a.rp_tambahan) as rp_tambahan,
         cabut.ttl_rp as ttl_rp_cabut,
-        sortir.ttl_rp as ttl_rp_sortir
+        sortir.ttl_rp as ttl_rp_sortir,
+        eo.ttl_rp as ttl_rp_eo,
+        dll.ttl_rp as ttl_rp_dll
         FROM `cetak_new` as a
         JOIN users as b on a.id_pengawas = b.id
         JOIN tb_anak as c on a.id_anak = c.id_anak
@@ -410,6 +448,20 @@ class CetakNewController extends Controller
             FROM `sortir` 
             WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END ) as ttl_rp
+            FROM `eo` 
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+        ) as eo on a.id_anak = eo.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(rupiah) as ttl_rp
+            FROM `tb_hariandll` 
+            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND ditutup = 'T' GROUP BY id_anak
+        ) as dll on a.id_anak = dll.id_anak
         WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun and c.id_pengawas = '$id_pengawas'
         GROUP BY a.id_anak;");
 
@@ -420,13 +472,5 @@ class CetakNewController extends Controller
             'summary' => $summary,
         ];
         return view('home.cetak_new.summary', $data);
-    }
-
-    public function summary_detail(Request $r)
-    {
-        $data = [
-            'title' => '1'
-        ];
-        return view('home.cetak_new.summary_detail', $data);
     }
 }
