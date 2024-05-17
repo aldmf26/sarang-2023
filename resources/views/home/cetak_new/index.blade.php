@@ -81,9 +81,9 @@
             </form>
         </section>
 
-
         @section('scripts')
             <script>
+              
                 $(document).ready(function() {
                     load_cetak();
 
