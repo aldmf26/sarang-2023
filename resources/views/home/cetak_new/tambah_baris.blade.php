@@ -1,13 +1,5 @@
 <tr class="baris{{ $count }}">
     <td>
-        <select name="id_pemberi[]" id="" class="select">
-            <option value="">Pilih Pengawas</option>
-            @foreach ($users as $u)
-                <option value="{{ $u->id }}">{{ $u->name }}</option>
-            @endforeach
-        </select>
-    </td>
-    <td>
         <input type="text" class="form-control input_awal" name="no_box[]">
     </td>
     <td>

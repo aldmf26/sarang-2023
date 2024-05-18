@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cabut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CetakNewController extends Controller
 {
@@ -37,21 +39,9 @@ class CetakNewController extends Controller
         return view('home.cetak_new.index', $data);
     }
 
-
-    public function get_cetak(Request $r)
+    public function getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas)
     {
-
-        if (empty($r->tgl1)) {
-            $tgl1 = date('Y-m-d');
-            $tgl2 = date('Y-m-t');
-        } else {
-            $tgl1 = $r->tgl1;
-            $tgl2 = $r->tgl2;
-        }
-
-        $id_pengawas = auth()->user()->id;
-
-        if ($r->id_anak == 'All') {
+        if ($id_anak == 'All') {
             $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
@@ -68,13 +58,22 @@ class CetakNewController extends Controller
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$r->id_anak' and b.id_pengawas = '$id_pengawas'
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' and b.id_pengawas = '$id_pengawas'
             order by a.tgl DESC, b.nama ASC
             ;");
         }
+        return $cetak;
+    }
 
+    public function get_cetak(Request $r)
+    {
+        $tgl1 = empty($r->tgl1) ? date('Y-m-d') : $r->tgl1;
+        $tgl2 = empty($r->tgl2) ? date('Y-m-t') : $r->tgl2;
 
+        $id_pengawas = auth()->user()->id;
+        $id_anak = $r->id_anak;
 
+        $cetak = $this->getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas);
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
@@ -265,7 +264,7 @@ class CetakNewController extends Controller
         $id_anak = $r->id_anak;
         $bulan = $r->bulan;
         $tahun = $r->tahun;
-        
+
         $detail = DB::select("SELECT 
         a.id_cetak,
         a.selesai,
@@ -326,7 +325,7 @@ class CetakNewController extends Controller
                     join tb_anak as b on b.id_anak = a.id_anak
                     WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
                     AND a.bulan = '$bulan' AND year(a.tgl_input) = '$tahun'");
-        
+
         $dll = DB::select("SELECT
                 a.rupiah as ttl_rp,
                 b.nama as nm_anak,
@@ -472,5 +471,87 @@ class CetakNewController extends Controller
             'summary' => $summary,
         ];
         return view('home.cetak_new.summary', $data);
+    }
+
+    public function export(Request $r)
+    {
+
+        $tgl1 = $r->tgl1;
+        $tgl2 = $r->tgl2;
+        $id_pengawas = auth()->user()->id;
+
+        $cetak = $this->getCetakQuery('All', $tgl1, $tgl2, $id_pengawas);
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $kolom = [
+            'A' => 'no box',
+            'B' => 'tgl terima',
+            'C' => 'nama',
+            'D' => 'Paket',
+            'E' => 'Pcs Awal',
+            'F' => 'Gr Awal',
+            'G' => 'Pcs TDK Ctk',
+            'H' => 'Gr TDK Ctk',
+            'I' => 'Pcs Akhir',
+            'J' => 'Gr Akhir',
+            'K' => 'SST',
+            'L' => 'Denda SST',
+            'M' => 'Total RP',
+            'N' => 'Capai',
+        ];
+
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+
+        $no = 2;
+        foreach ($cetak as $item) {
+            $sheet->setCellValue('A' . $no, $item->no_box);
+            $sheet->setCellValue('B' . $no, $item->tgl);
+            $sheet->setCellValue('C' . $no, $item->nm_anak);
+            $sheet->setCellValue('D' . $no, "$item->kelas / Rp. $item->rp_satuan"  );
+            $sheet->setCellValue('E' . $no, $item->pcs_awal_ctk);
+            $sheet->setCellValue('F' . $no, $item->gr_awal_ctk);
+            $sheet->setCellValue('G' . $no, $item->pcs_tdk_cetak);
+            $sheet->setCellValue('H' . $no, $item->gr_tdk_cetak);
+            $sheet->setCellValue('I' . $no, $item->pcs_akhir);
+            $sheet->setCellValue('J' . $no, $item->gr_akhir);
+            $susut = empty($item->gr_akhir)
+                ? 0
+                : round((1 - ($item->gr_akhir + $item->gr_tdk_cetak) / $item->gr_awal_ctk) * 100, 1);
+
+            $denda_susut = $susut >= $item->batas_susut ? $susut * $item->denda_susut : 0;
+            $ttl_rp = $item->pcs_akhir * $item->rp_satuan - $denda_susut;
+            $sheet->setCellValue('K' . $no, $susut);
+            $sheet->setCellValue('L' . $no, $denda_susut);
+            $sheet->setCellValue('M' . $no, $ttl_rp);
+            $sheet->setCellValue('N' . $no, $item->capai);
+            $no++;
+        }
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:N' . $no - 1)->applyFromArray($styleBaris);
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Kerja Cetak " . $tgl1 . " - " . $tgl2;
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 }

@@ -12,6 +12,8 @@
                     addClass="float-end tambah_kerja" teks="Kerja" />
                 <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list" addClass="float-end"
                     teks="Summary" />
+                <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel" addClass="float-end"
+                    teks="Export" />
                 <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
                     teks="History" />
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
@@ -81,9 +83,26 @@
             </form>
         </section>
 
+        <form action="{{ route('cetaknew.export') }}" method="get">
+            <x-theme.modal title="Export" idModal="export">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Dari</label>
+                            <input type="date" name="tgl1" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Sampai</label>
+                            <input type="date" name="tgl2" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
         @section('scripts')
             <script>
-              
                 $(document).ready(function() {
                     load_cetak();
 

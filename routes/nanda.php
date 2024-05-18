@@ -172,6 +172,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/cancel_selesai', 'cancel_selesai')->name('cancel_selesai');
             Route::get('/hapus_data', 'hapus_data')->name('hapus_data');
             Route::get('/capai', 'capai')->name('capai');
+            Route::get('/export', 'export')->name('export');
             Route::get('/summary', 'summary')->name('summary');
         });
     // Route::controller(RekapanController::class)
