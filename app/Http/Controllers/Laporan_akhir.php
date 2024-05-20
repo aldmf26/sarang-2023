@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CetakModel;
 use App\Models\LaporanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,5 +58,23 @@ class Laporan_akhir extends Controller
         ];
 
         return view('home.laporan.detail_cabut', $data);
+    }
+
+    public function summaryCetak(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+        $id_pengawas = '0';
+
+
+        $summary = CetakModel::summary_cetak($bulan, $tahun);
+
+        $data = [
+            'title' => 'Summary Cetak',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'summary' => $summary,
+        ];
+        return view('home.laporan.summary', $data);
     }
 }

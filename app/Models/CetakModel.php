@@ -11,6 +11,7 @@ class CetakModel extends Model
     use HasFactory;
     public static function cetakGroup()
     {
+
         $result = DB::select("SELECT a.id_bk, a.penerima, b.name, count(a.id_bk) as total_bk, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, c.pcs_awal, c.gr_awal, c.pcs_tdk_ctk, c.gr_tidak_ctk, c.pcs_akhir, c.gr_akhir, c.pcs_cu, c.gr_cu, c.ttl_rp, c.denda_susut,c.denda_hcr
         FROM bk as a 
         LEFT join users as b on b.id = a.penerima
@@ -136,6 +137,59 @@ class CetakModel extends Model
                         where c.selesai ='Y' and c.bulan_dibayar = '4' 
                         group by c.id_anak ) as d on d.id_anak = a.id_anak;
         ");
+        return $result;
+    }
+
+    public static function summary_cetak($bulan, $tahun)
+    {
+
+        $result = DB::select("SELECT h.name as pgws,  a.id_anak, b.nama, count(a.tgl) as ttl_absen ,if(d.cost_cabut is null , 0 , d.cost_cabut) as cost_cabut , if(c.cost_cetak is null,0,c.cost_cetak) as cost_cetak, if(e.cost_sortir is null ,0,e.cost_sortir) as cost_sortir, 
+        if(f.cost_eo is null ,0,f.cost_eo) as cost_eo,if(g.cost_dll is null,0,g.cost_dll) as cost_dll
+        FROM absen as a 
+        left JOIN tb_anak as b on b.id_anak = a.id_anak
+        left join users as h on h.id = b.id_pengawas
+        left join (
+        SELECT c.id_anak, sum(c.ttl_rp) as cost_cetak
+            FROM cetak_new as c
+            where c.bulan_dibayar = '$bulan'
+            group by c.id_anak
+        ) as c on c.id_anak =  a.id_anak
+        
+        LEFT JOIN (
+        SELECT d.id_anak, SUM(CASE WHEN d.selesai = 'Y' THEN d.ttl_rp ELSE 0 END) as cost_cabut
+        FROM cabut as d 
+        WHERE d.penutup = 'T' AND d.no_box != 9999 AND d.bulan_dibayar = '$bulan' AND d.tahun_dibayar = '$tahun'
+        GROUP BY d.id_anak 
+        ) as d on a.id_anak = d.id_anak
+        
+        LEFT join (
+            SELECT e.id_anak, sum(CASE WHEN e.selesai = 'Y' THEN e.ttl_rp ELSE 0 END ) as cost_sortir
+            FROM sortir as e 
+            WHERE e.bulan = '$bulan' AND YEAR(e.tgl_input) = '$tahun' AND e.penutup = 'T' AND e.no_box != 9999 
+            GROUP BY e.id_anak
+        ) as e on a.id_anak = e.id_anak
+        
+        LEFT join (
+            SELECT f.id_anak, sum(CASE WHEN f.selesai = 'Y' THEN f.ttl_rp ELSE 0 END ) as cost_eo
+            FROM eo as f 
+            WHERE f.bulan_dibayar = '$bulan' AND YEAR(f.tgl_input) = '$tahun' AND f.penutup = 'T' AND f.no_box != 9999 
+            GROUP BY f.id_anak
+        ) as f on a.id_anak = f.id_anak
+        
+        LEFT join (
+        SELECT  g.id_anak, sum(g.rupiah) as cost_dll
+        FROM tb_hariandll as g
+        WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND ditutup = 'T' GROUP BY id_anak
+        ) as g on a.id_anak = g.id_anak
+        
+        
+        where b.id_pengawas in('285','462','463') and a.bulan_dibayar = '$bulan' and a.tahun_dibayar = '$tahun'
+        group by b.id_anak
+        order by b.nama ASC
+        ");
+
+
+
         return $result;
     }
 }
