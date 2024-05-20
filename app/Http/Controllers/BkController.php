@@ -112,6 +112,13 @@ class BkController extends Controller
         ]);
     }
 
+    public function getNoBoxTambah()
+    {
+        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cabut%' ORDER by no_box DESC limit 1;");
+        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
+        return $nobox;
+    }
+
     public function create(Request $r)
     {
         DB::beginTransaction();
@@ -120,9 +127,9 @@ class BkController extends Controller
                 if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
                     $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
                     $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
-                    $nobox = $r->no_box[$x];
-                    $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
-
+                    // $nobox = $r->no_box[$x];
+                    $nobox = $this->getNoBoxTambah();
+                    
                     // $selectedValue = $r->no_lot[$x];
                     // list($noLot, $ket) = explode('-', $selectedValue);
 
@@ -175,24 +182,24 @@ class BkController extends Controller
                     continue;
                 }
 
-                $nobox = $row[2];
+                $nobox = $this->getNoBoxTambah();
                 $tgl = $row[6];
 
                 // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
                 if (
                     // $cekBox || 
                     empty($row[0]) ||
-                    empty($row[1]) ||
-                    empty($row[6]) ||
-                    empty($row[9]) ||
-                    empty($row[10])
+                    empty($row[5]) ||
+                    empty($row[6])
+                    // empty($row[9]) ||
+                    // empty($row[10])
                 ) {
                     $pesan = [
-                        empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
-                        empty($row[1]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
-                        empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                        empty($row[9]) => "GR TIDAK BOLEH KOSONG",
-                        empty($row[10]) => "KATEGORI TIDAK BOLEH KOSONG",
+                        // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
+                        empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
+                        // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
+                        empty($row[5]) => "GR TIDAK BOLEH KOSONG",
+                        empty($row[6]) => "KATEGORI TIDAK BOLEH KOSONG",
                         // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
                     ];
                     DB::rollBack();
@@ -208,18 +215,18 @@ class BkController extends Controller
                     }
 
                     DB::table('bk')->insert([
-                        'no_lot' => $row[0],
-                        'nm_partai' => $row[1],
+                        'no_lot' => '0',
+                        'nm_partai' => $row[0],
                         'no_box' => $nobox,
-                        'tipe' => $row[3],
-                        'ket' => $row[4],
-                        'warna' => $row[5],
+                        'tipe' => $row[1],
+                        'ket' => $row[2],
+                        'warna' => $row[3],
                         'tgl' => date('Y-m-d'),
-                        'pengawas' => auth()->user()->name,
-                        'penerima' => $row[6],
-                        'pcs_awal' => $row[8],
-                        'gr_awal' => $row[9],
-                        'kategori' => $row[10],
+                        'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
+                        'penerima' => auth()->user()->id,
+                        'pcs_awal' => $row[4],
+                        'gr_awal' => $row[5],
+                        'kategori' => $row[6],
                     ]);
                 }
             }
