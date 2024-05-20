@@ -6,6 +6,7 @@ use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
+use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\ProfileController;
@@ -173,6 +174,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/hapus_data', 'hapus_data')->name('hapus_data');
             Route::get('/capai', 'capai')->name('capai');
             Route::get('/summary', 'summary')->name('summary');
+        });
+    Route::controller(Laporan_akhir::class)
+        ->prefix('home/laporanakhir')
+        ->name('laporanakhir.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/get_bk_akhir', 'get_bk_akhir')->name('get_bk_akhir');
+            Route::post('/save_bk_akhir', 'save_bk_akhir')->name('save_bk_akhir');
+            Route::get('/get_detail_cetak', 'get_detail_cetak')->name('get_detail_cetak');
+            Route::get('/get_detail_cabut', 'get_detail_cabut')->name('get_detail_cabut');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
