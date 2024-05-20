@@ -21,8 +21,8 @@ class BkTemplateExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $sheet = $event->sheet;
-                $cellRange = 'A1:K1';
-                $cellRangeLoop = 'A1:K11';
+                $cellRange = 'A1:G1';
+                $cellRangeLoop = 'A1:G11';
                 // $sheet->setAutoFilter($cellRange);
 
                 $sheet->getStyle($cellRangeLoop)->applyFromArray([
