@@ -221,13 +221,7 @@
                                     id_paket: id_paket,
                                 },
                                 success: function(response) {
-                                    $.get("{{ route('cetaknew.getRowData') }}", {
-                                        id_cetak: id_cetak,
-                                        no: no
-                                    }, function(data) {
-                                        var tr = $('tr[data-id="' + id_cetak + '"]');
-                                        tr.replaceWith(data);
-                                    });
+                                    loadRowData(id_cetak, no)
                                     // load_cetak();
                                     alertToast('sukses', 'Berhasil ditambahkan');
 
@@ -238,6 +232,16 @@
                         }
 
                     });
+
+                    function loadRowData(id_cetak, no) {
+                        $.get("{{ route('cetaknew.getRowData') }}", {
+                            id_cetak: id_cetak,
+                            no: no
+                        }, function(data) {
+                            var tr = $('tr[data-id="' + id_cetak + '"]');
+                            tr.replaceWith(data);
+                        });
+                    }
                     $(document).on("click", ".btn_selesai", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
@@ -251,13 +255,8 @@
                             },
                             success: function(response) {
 
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+                                loadRowData(id_cetak, no)
+
                                 // load_cetak();
                                 alertToast('sukses', 'Berhasil ditambahkan');
                             }
@@ -276,13 +275,9 @@
                             },
                             success: function(response) {
 
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+
+                                loadRowData(id_cetak, no)
+
                                 // load_cetak();
                                 alertToast('sukses', 'Data berhasil di cancel');
                             }
@@ -311,7 +306,7 @@
                         const val = $(this).attr('capaiVal')
                         const id_cetak = $(this).attr('id_cetak')
                         var no = $('.no' + id_cetak).val();
-                        
+
                         $.ajax({
                             type: "GET",
                             url: "{{ route('cetaknew.capai') }}",
@@ -322,13 +317,8 @@
                             dataType: 'json',
                             success: function(r) {
                                 alertToast(r.status, r.pesan);
-                                $.get("{{ route('cetaknew.getRowData') }}", {
-                                    id_cetak: id_cetak,
-                                    no: no
-                                }, function(data) {
-                                    var tr = $('tr[data-id="' + id_cetak + '"]');
-                                    tr.replaceWith(data);
-                                });
+                                loadRowData(id_cetak, no)
+
                                 load_cetak();
                             }
                         });
