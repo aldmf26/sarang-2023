@@ -47,10 +47,15 @@
                                         {{ number_format($p->cost_ctk, 0) }}
                                     </a>
                                 </td>
-                                <td class="text-end">0</td>
+                                <td class="text-end">
+                                    <a href="#" class="detail_sortir" data-bs-toggle="modal"
+                                        partai="{{ $p->nm_partai }}" data-bs-target="#detail_sortir">
+                                        {{ $p->cost_sortir }}
+                                    </a>
+                                </td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">
-                                    {{ number_format($p->ttl_rp + $p->cost_ctk + $p->cost_eo + $p->cost_cbt, 0) }}
+                                    {{ number_format($p->ttl_rp + $p->cost_ctk + $p->cost_eo + $p->cost_cbt + $p->cost_sortir, 0) }}
                                 </td>
                                 <td class="text-end">
                                     <a href="#" data-bs-toggle="modal" class="akhir" data-bs-target="#akhir"
@@ -83,6 +88,11 @@
             <x-theme.modal title="Detail Cetak" idModal="detail_cetak" btnSave="T" size="modal-lg-max">
                 <div id="load_detail_cetak"></div>
             </x-theme.modal>
+
+            <x-theme.modal title="Detail Sortir" idModal="detail_sortir" btnSave="T" size="modal-lg-max">
+                <div id="load_detail_sortir"></div>
+            </x-theme.modal>
+
         </section>
 
 
@@ -128,6 +138,20 @@
                         },
                         success: function(response) {
                             $("#load_detail_cabut").html(response);
+                        }
+                    });
+
+                });
+                $(document).on("click", ".detail_sortir", function() {
+                    var partai = $(this).attr("partai");
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('laporanakhir.get_detail_sortir') }}",
+                        data: {
+                            partai: partai
+                        },
+                        success: function(response) {
+                            $("#load_detail_sortir").html(response);
                         }
                     });
 

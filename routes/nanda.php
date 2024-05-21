@@ -186,6 +186,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_detail_cetak', 'get_detail_cetak')->name('get_detail_cetak');
             Route::get('/get_detail_cabut', 'get_detail_cabut')->name('get_detail_cabut');
             Route::get('/summaryCetak', 'summaryCetak')->name('summaryCetak');
+            Route::get('/get_detail_sortir', 'get_detail_sortir')->name('get_detail_sortir');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
