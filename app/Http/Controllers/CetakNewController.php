@@ -512,7 +512,7 @@ class CetakNewController extends Controller
             $sheet->setCellValue('A' . $no, $item->no_box);
             $sheet->setCellValue('B' . $no, $item->tgl);
             $sheet->setCellValue('C' . $no, $item->nm_anak);
-            $sheet->setCellValue('D' . $no, "$item->kelas / Rp. $item->rp_satuan"  );
+            $sheet->setCellValue('D' . $no, "$item->kelas / Rp. $item->rp_satuan");
             $sheet->setCellValue('E' . $no, $item->pcs_awal_ctk);
             $sheet->setCellValue('F' . $no, $item->gr_awal_ctk);
             $sheet->setCellValue('G' . $no, $item->pcs_tdk_cetak);
