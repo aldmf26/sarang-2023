@@ -59,9 +59,9 @@ class Laporan_akhir extends Controller
     {
         $data = [
             'title' => 'Detail Cabut',
-            'detail' => LaporanModel::LaporanDetailCabut($r->partai)
+            'detail' => LaporanModel::LaporanDetailSortir($r->partai)
         ];
-        return view('home.laporan.detail_cabut', $data);
+        return view('home.laporan.detail_sortir', $data);
     }
 
     public function summaryCetak(Request $r)

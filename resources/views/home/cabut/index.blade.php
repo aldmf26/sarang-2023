@@ -40,8 +40,8 @@
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
                     teks="kry baru" />
 
-                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history" addClass="float-end history"
-                    teks="history" />
+                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
+                    addClass="float-end history" teks="history" />
             </div>
             <div class="col-lg-12">
                 <hr style="border: 2px solid #435EBE">
@@ -79,7 +79,7 @@
         </form>
 
 
-        
+
         <form id="createCabutAkhir">
             @csrf
             <x-theme.modal idModal="inputAkhir" title="tambah cabut akhir" btnSave="T" size="modal-full">
@@ -662,12 +662,12 @@
                 setRupiah('grAkhirKeyup')
                 setRupiah('eotKeyup')
                 setRupiah('pcsHcrKeyup')
-                $(document).on('click', '.history', function(e){
+                $(document).on('click', '.history', function(e) {
                     e.preventDefault()
                     $.ajax({
                         type: "GET",
-                        url: "{{route('cabut.history')}}",
-                        success: function (r) {
+                        url: "{{ route('cabut.history') }}",
+                        success: function(r) {
                             $("#load_history_cabut").html(r);
 
                             $('#tableHistory').DataTable({
@@ -768,11 +768,11 @@
                 ]
                 clickSelectInput(inputNya)
 
-                $(document).on('input', '.eotKeyup', function(){
+                $(document).on('input', '.eotKeyup', function() {
                     const val = $(this).val()
                     const count = $(this).attr('count')
-                    $(".selesai"+count).toggleClass('d-none', !(val > 0));
-                   
+                    $(".selesai" + count).toggleClass('d-none', !(val > 0));
+
                 })
             </script>
         @endsection
