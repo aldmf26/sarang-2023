@@ -34,7 +34,7 @@ class GradingBjController extends Controller
             FROM `pengiriman_gradingbj` as a
             GROUP BY no_grading ORDER BY a.no_grading DESC;"),
             'gudangbj' => $this->getDataMaster('gradingbj'),
-            // 'kategori' => $kategori
+            'kategori' => 'grading'
         ];
 
         return view('home.gradingbj.index', $data);

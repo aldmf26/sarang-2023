@@ -17,7 +17,8 @@
                 <hr>
             </div>
             <div class="col-lg-8 mb-3">
-                @include('home.gradingbj.navsiapgrade', ['name' => 'index'])
+                @include('home.packing.nav', ['name' => 'index'])
+                {{-- @include('home.gradingbj.navsiapgrade', ['name' => 'index']) --}}
             </div>
             <div class="col-lg-12">
                 <table class="table" id="table1">

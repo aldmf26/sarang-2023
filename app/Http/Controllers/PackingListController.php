@@ -257,7 +257,7 @@ class PackingListController extends Controller
     public function gudangKirim(Request $r)
     {
         $data = [
-            'title'  => 'Grading Bj Siap kirim',
+            'title'  => 'Gudang Bj Siap kirim',
             'gudangkirim' => PengirimanModel::Pengiriman(),
             'kategori' => 'gudang'
         ];

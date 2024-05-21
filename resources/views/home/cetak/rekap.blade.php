@@ -72,8 +72,8 @@
                     <thead>
                         <tr>
                             <th width="150" rowspan="2" class="text-center dhead">Pengawas</th>
-                            <th width="85" rowspan="2" class="text-center dhead">No Box</th>
-                            <th colspan="2" class="text-center dhead">BK Awal</th>
+                            <th width="85" rowspan="2" class="text-center dhead">No Box / pgws</th>
+                            <th colspan="2" class="text-center dhead">Cbt Selesai</th>
                             <th colspan="4" class="text-center dhead"> Kerja Awal</th>
                             <th colspan="5" class="text-center dhead"> Kerja Akhir</th>
                             <th width="100" rowspan="2" class="text-center dhead">Ttl Rp <br>
