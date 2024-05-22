@@ -95,9 +95,8 @@ class LaporanModel extends Model
     public static function LaporanDetailSortir($partai)
     {
         $result = DB::select("SELECT a.no_box, b.nm_partai,
-        a.tgl, d.name as pengawas,  c.nama, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_akhir, a.gr_akhir,
-        a.rp_satuan, a.ttl_rp
-        FROM cetak_new as a 
+        a.tgl, d.name as pengawas,  c.nama, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, a.ttl_rp
+        FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join tb_anak as c on c.id_anak = a.id_anak
         left join users as d on d.id = a.id_pengawas
