@@ -346,6 +346,10 @@ class CetakNewController extends Controller
                 join tb_anak as b on b.id_anak = a.id_anak
                 WHERE a.penutup = 'T' AND a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND a.no_box != 9999 AND year(a.tgl_input) = '$tahun'");
 
+        $denda = DB::select("SELECT a.nominal as denda,a.tgl, b.nama as nm_anak FROM tb_denda as a 
+                            join tb_anak as b on b.id_anak = a.id_anak 
+                            WHERE a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl) = '$tahun'");
+
         $pcs_awal = 0;
         $gr_awal = 0;
         $pcs_akhir = 0;
@@ -383,6 +387,9 @@ class CetakNewController extends Controller
         foreach ($dll as $d) {
             $ttl_rp += $d->ttl_rp;
         }
+        foreach ($denda as $d) {
+            $ttl_rp -= $d->denda;
+        }
 
         $data = [
             'id_anak' => $r->id_anak,
@@ -390,6 +397,7 @@ class CetakNewController extends Controller
             'cabut' => $cabut,
             'sortir' => $sortir,
             'dll' => $dll,
+            'denda' => $denda,
             'detail' => $detail,
             'ttlpcs_awal' => $pcs_awal,
             'ttlgr_awal' => $gr_awal,
@@ -424,7 +432,8 @@ class CetakNewController extends Controller
         cabut.ttl_rp as ttl_rp_cabut,
         sortir.ttl_rp as ttl_rp_sortir,
         eo.ttl_rp as ttl_rp_eo,
-        dll.ttl_rp as ttl_rp_dll
+        dll.ttl_rp as ttl_rp_dll,
+        denda.ttl_rp as denda
         FROM `cetak_new` as a
         JOIN users as b on a.id_pengawas = b.id
         JOIN tb_anak as c on a.id_anak = c.id_anak
@@ -461,6 +470,13 @@ class CetakNewController extends Controller
             FROM `tb_hariandll` 
             WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' AND ditutup = 'T' GROUP BY id_anak
         ) as dll on a.id_anak = dll.id_anak
+        LEFT join (
+            SELECT 
+            id_anak,
+            sum(nominal) as ttl_rp
+            FROM `tb_denda` 
+            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP BY id_anak
+        ) as denda on a.id_anak = denda.id_anak
         WHERE a.bulan_dibayar = $bulan AND year(a.tgl) = $tahun and c.id_pengawas = '$id_pengawas'
         GROUP BY a.id_anak;");
 

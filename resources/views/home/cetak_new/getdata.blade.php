@@ -85,7 +85,7 @@
                         @if ($c->selesai == 'Y')
                             {{ $ket }}
                         @else
-                            <button class="btn btn-sm btn-{{ $btn }} capai" id_cetak="{{ $c->id_cetak }}"
+                            <button style="font-size: 12px" class="btn btn-sm btn-{{ $btn }} capai" id_cetak="{{ $c->id_cetak }}"
                                 capaiVal="{{ $val }}">
                                 @if ($c->capai == 'Y')
                                     <i class="fas fa-check"></i>

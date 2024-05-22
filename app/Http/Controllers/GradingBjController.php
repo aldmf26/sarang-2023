@@ -55,6 +55,8 @@ class GradingBjController extends Controller
         $cabut_selesai = ApiGudangGradingModel::cabutSelesai();
         $suntikan = ApiGudangGradingModel::suntikan();
 
+        
+
         $data = [
             'title' => 'Tambah Grading BJ',
             'cetak' => $cetak,

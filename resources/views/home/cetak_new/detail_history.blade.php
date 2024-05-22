@@ -148,6 +148,31 @@
                         <td class="text-end">{{ number_format($c->ttl_rp) }}</td>
                     </tr>
                 @endforeach
+                @foreach ($denda as $c)
+                @php
+                    $no++;
+                @endphp
+                    <tr>
+                        <td>{{ $no }}</td>
+                        <td>-</td>
+                        <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+                        <td>{{ $c->nm_anak }}</td>
+                        <td>Denda</td>
+                        <td class="text-end">-</td>
+                        <td class="text-end">-</td>
+
+                        <td class="text-end">
+                            -
+                        </td>
+                        <td class="text-end">
+                            -
+                        </td>
+                        <td class="text-end">
+                            -
+                        </td>
+                        <td class="text-end">{{ number_format($c->denda) }}</td>
+                    </tr>
+                @endforeach
             </tbody>
             <tfoot>
                 <tr>
