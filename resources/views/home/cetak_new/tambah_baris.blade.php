@@ -15,7 +15,7 @@
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
     </td>
     <td>
-        <select name="bulan_dibayar[]" id="" class="form-control select">
+        <select name="bulan_dibayar[]" id="" class="form-control">
             @foreach ($bulan as $b)
                 <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
                     {{ $b->bulan }}</option>
