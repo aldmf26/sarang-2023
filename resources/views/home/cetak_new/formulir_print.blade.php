@@ -1,24 +1,83 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  </head>
-  <body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <style>
+        @media print {
+          .form-check {
+            display: none;
+          }
+        }
+      </style>
+</head>
+
+<body class="py-3" x-data="{
+    hide: true,
+    classTh: 'align-middle text-center',
+}">
     <h6 class="text-center"><u>FORMULIR SETOR BARANG KE SORTIR</u></h6>
-    <div class="container">
-        <p>Pengawas : ~</p>
-        <div class="row">
-            <div class="col-lg-2">
-            </div>
-            <div class="col-lg-1">
-                <span></span>
-            </div>
-       
-        </div>
+    <div class="form-check float-end me-5">
+        <input @change="hide = ! hide" class="form-check-input" type="checkbox" value=""
+            id="flexCheckIndeterminate">
+        <label class="form-check-label" for="flexCheckIndeterminate">
+            Sembunyikan data
+        </label>
+        <button class="btn btn-sm btn-primary" onclick="window.print()">Print</button>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  </body>
+    <div class="px-3">
+        <p>Pengawas : 
+            <span x-show="hide">{{ auth()->user()->find($detail[0]->id_penerima)->name }} </span>
+            <span style="margin-left: 50px;"
+                class="ml-5">~</span></p>
+        <table style="font-size: 10px; border: 1px solid black" class="table table-bordered">
+         
+            <tr>
+                <th :class="classTh" width="10%">Tgl</th>
+                <th :class="classTh" width="8%">No Box</th>
+                <th :class="classTh">Nama Anak</th>
+                <th :class="classTh">Pcs Awal</th>
+                <th :class="classTh">Gr Awal</th>
+                <th :class="classTh">Pcs Akhir</th>
+                <th :class="classTh">Gr Akhir</th>
+                <th :class="classTh" width="3%">Sst %</th>
+                <th :class="classTh" width="18%">Ttl Rp</th>
+            </tr>
+            @foreach ($detail as $d)
+                <tr x-show="hide">
+                    <td>{{ $d->tanggal }}</td>
+                    <td>{{ $d->no_box }}</td>
+                    <td></td>
+                    <td>{{ $d->pcs_awal }}</td>
+                    <td>{{ $d->gr_awal }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endforeach
+            @for ($i = 0; $i < 25; $i++)
+                <tr x-show="!hide">
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                    <td class="p-3"></td>
+                </tr>
+            @endfor
+        </table>
+    </div>
+
+   
+</body>
+
 </html>
