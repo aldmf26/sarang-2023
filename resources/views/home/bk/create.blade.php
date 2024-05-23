@@ -113,7 +113,7 @@
                                             id="" class="select3 selectPengawas selectTipe">
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
-                                                <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                                <option {{$id_pengawas == $p->id ? 'selected' : ''}} value="{{ $p->id }}">{{ $p->name }}</option>
                                             @endforeach
                                         </select>
                                     </td>

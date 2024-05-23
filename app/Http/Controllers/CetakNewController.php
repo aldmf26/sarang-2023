@@ -42,21 +42,18 @@ class CetakNewController extends Controller
     {
         $no_invoice = str()->random(5);
         $no_box = explode(',', $r->no_box[0]);
-
-        for ($i = 0; $i < count($no_box); $i++) {
-            $no_box = [$no_box[$i]];
-
+        foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
                         sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
                         FROM cetak_new 
-                        WHERE no_box = $no_box AND selesai = 'Y' ");
+                        WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
 
             $data[] = [
                 'no_invoice' => $no_invoice,
-                'no_box' => $no_box[$i],
+                'no_box' => $d,
                 'id_pemberi' => auth()->user()->id,
                 'id_penerima' => $r->id_penerima,
                 'pcs_awal' => $pcs,
@@ -65,6 +62,7 @@ class CetakNewController extends Controller
                 'kategori' => 'sortir',
             ];
         }
+
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
     }

@@ -26,6 +26,7 @@ class BkController extends Controller
         } else {
             $kategori = $r->kategori;
         }
+        $id_user = auth()->user()->id;
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
@@ -33,7 +34,7 @@ class BkController extends Controller
             'kategori' => $kategori,
             'bk' => DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' ORDER BY a.id_bk DESC"),
+            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC"),
 
         ];
         return view('home.bk.index', $data);
@@ -50,6 +51,7 @@ class BkController extends Controller
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori,
+            'id_pengawas' => auth()->user()->id
             // 'gudangBk' => $gudangBk
         ];
         if ($r->kategori == 'cetak') {
