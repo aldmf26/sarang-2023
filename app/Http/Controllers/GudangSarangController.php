@@ -22,10 +22,12 @@ class GudangSarangController extends Controller
         $id_pengawas = auth()->user()->id;
         $data = [
             'title' => 'Gudang Cabut Selesai',
-            'cabut' => DB::select("SELECT a.id_cabut, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir
+            'cabut' => DB::select("SELECT a.id_cabut, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
             FROM cabut as a 
             left join tb_anak as b on b.id_anak = a.id_anak
-            WHERE a.selesai = 'Y' and a.formulir = 'T' and a.id_pengawas = '$id_pengawas'"),
+            WHERE  a.formulir = 'T' and a.id_pengawas = '$id_pengawas'
+            order by a.selesai ASC
+            "),
             'pengawas' => DB::table('users')->where('posisi_id', '14')->get()
         ];
         return view('home.gudang_sarang.index', $data);
