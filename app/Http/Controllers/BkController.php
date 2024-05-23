@@ -266,7 +266,7 @@ class BkController extends Controller
                     'warna' => $row[4],
                     'tgl' => date('Y-m-d'),
                     'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
-                    'penerima' => auth()->user()->id,
+                    'penerima' => $row['7'],
                     'pcs_awal' => $row[5],
                     'gr_awal' => $row[6],
                     'kategori' => 'sortir',
