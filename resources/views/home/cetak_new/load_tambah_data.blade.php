@@ -14,7 +14,7 @@
     <tbody>
         <tr class="baris1">
             <td>
-                <select name="no_box[]" id="" class="form-control select">
+                {{-- <select name="no_box[]" id="" class="form-control select">
 
                     @foreach ($nobox as $x)
                         <option value="">Pilih box</option>
@@ -22,8 +22,8 @@
                             {{ $x->no_box }}
                         </option>
                     @endforeach
-                </select>
-                {{-- <input type="text" class="form-control input_awal" name="no_box[]"> --}}
+                </select> --}}
+                <input type="text" class="form-control input_awal" name="no_box[]">
             </td>
             <td>
                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
@@ -37,14 +37,14 @@
                 </select>
             </td>
             <td>
-                <input type="text" class="form-control" name="id_paket[]">
-                {{-- <select name="id_paket[]" id="" class="select input_awal">
+                {{-- <input type="text" class="form-control" name="id_paket[]"> --}}
+                <select name="id_paket[]" id="" class="select input_awal">
                     @foreach ($paket as $u)
                         <option value="{{ $u->id_kelas_cetak }}" {{ $u->id_kelas_cetak == 6 ? 'selected' : '' }}>
                             {{ $u->kelas }} /
                             Rp.{{ $u->rp_pcs }}</option>
                     @endforeach
-                </select> --}}
+                </select>
             </td>
             <td>
                 <select name="id_anak[]" id="" class="select input_awal">
