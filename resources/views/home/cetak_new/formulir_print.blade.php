@@ -24,8 +24,8 @@
     <h6 class="text-center"><u>FORMULIR SETOR BARANG KE SORTIR</u></h6>
     <div class="form-check float-end me-5">
         <input @change="hide = ! hide" class="form-check-input" type="checkbox" value=""
-            id="flexCheckIndeterminate">
-        <label class="form-check-label" for="flexCheckIndeterminate">
+            id="cekbox">
+        <label class="form-check-label" for="cekbox">
             Sembunyikan data
         </label>
         <button class="btn btn-sm btn-primary" onclick="window.print()">Print</button>

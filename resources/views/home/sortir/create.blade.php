@@ -87,7 +87,7 @@
                                         ->get();
                                 @endphp
                                 <td>
-                                    <select name="tipe[]" id="" class="form-control">
+                                    <select name="tipe[]" id="" class="form-control tipeSelect">
                                         @foreach ($kelas as $i => $d)
                                             <option value="{{ $d->id_kelas }}"
                                                 {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}
