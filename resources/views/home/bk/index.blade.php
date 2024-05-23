@@ -159,6 +159,7 @@
                             </td>
                             <td>
                                 <input type="file" name="file" class="form-control">
+                                <input type="hidden" name="kategori" value="{{ request()->get('kategori') ?? 'cabut' }}">
                             </td>
                         </tr>
                     </table>

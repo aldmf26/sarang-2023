@@ -44,7 +44,7 @@
         {{-- ALL MODAL --}}
         <form action="{{ route('denda.create') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah" title="tambah user" btnSave="Y">
+            <x-theme.modal idModal="tambah" title="tamba denda" btnSave="Y">
                 <div class="row">
                    
                     <div class="col-lg-12">

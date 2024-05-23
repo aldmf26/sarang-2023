@@ -172,6 +172,12 @@ class BkController extends Controller
 
     public function import(Request $r)
     {
+        if($r->kategori == 'sortir')
+        {
+            $this->importSortir($r);
+            return redirect()->route('bk.index',['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
+        } else {
+
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
@@ -226,12 +232,48 @@ class BkController extends Controller
                         'penerima' => auth()->user()->id,
                         'pcs_awal' => $row[4],
                         'gr_awal' => $row[5],
-                        'kategori' => $row[6],
+                        'kategori' => 'cabut',
                     ]);
                 }
             }
             DB::commit();
             return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    }
+
+    public function importSortir($r)
+    {
+        $file = $r->file('file');
+        $spreadsheet = IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+        DB::beginTransaction();
+        try {
+            foreach (array_slice($sheetData, 1) as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
+                DB::table('bk')->insert([
+                    'no_lot' => '0',
+                    'nm_partai' => $row[0],
+                    'no_box' => $row[1],
+                    'tipe' => $row[2],
+                    'ket' => $row[3],
+                    'warna' => $row[4],
+                    'tgl' => date('Y-m-d'),
+                    'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
+                    'penerima' => auth()->user()->id,
+                    'pcs_awal' => $row[5],
+                    'gr_awal' => $row[6],
+                    'kategori' => 'sortir',
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('bk.index',['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());

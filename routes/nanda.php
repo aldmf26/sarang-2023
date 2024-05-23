@@ -175,6 +175,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/capai', 'capai')->name('capai');
             Route::get('/export', 'export')->name('export');
             Route::get('/summary', 'summary')->name('summary');
+            Route::get('/formulir', 'formulir')->name('formulir');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::get('/formulir/{no_invoice}', 'formulir_print')->name('formulir_print');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')

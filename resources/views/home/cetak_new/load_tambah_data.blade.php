@@ -14,13 +14,22 @@
     <tbody>
         <tr class="baris1">
             <td>
-                <input type="text" class="form-control input_awal" name="no_box[]">
+                <select name="no_box[]" id="" class="form-control select">
+                   
+                    @foreach ($nobox as $x)
+                    <option value="">Pilih box</option>
+                        <option value="{{ $x->no_box }}">
+                            {{ $x->no_box }}
+                        </option>
+                    @endforeach
+                </select>
+                {{-- <input type="text" class="form-control input_awal" name="no_box[]"> --}}
             </td>
             <td>
                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
             </td>
             <td>
-                <select name="bulan_dibayar[]" id="" class="form-control">
+                <select name="bulan_dibayar[]" id="" class="form-control ">
                     @foreach ($bulan as $b)
                         <option value="{{ $b->bulan }}" {{ $b->bulan == date('m') ? 'selected' : '' }}>
                             {{ $b->bulan }}</option>
