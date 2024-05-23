@@ -26,7 +26,6 @@
                             <th>#</th>
                             <th>tanggal</th>
                             <th>no box</th>
-                            <th>no box</th>
                             <th class="text-end">pcs awal</th>
                             <th class="text-end">gr awal</th>
                             <th class="text-end">pcs tidak ctk</th>
@@ -48,7 +47,6 @@
                                 <td>{{ $f->no_box }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

@@ -35,22 +35,22 @@ class CetakNewController extends Controller
             'cetak' => $cetak,
             'users' => $this->getData('users'),
         ];
-        return view('home.cetak_new.formulir',$data);
+        return view('home.cetak_new.formulir', $data);
     }
 
     public function save_formulir(Request $r)
     {
         $no_invoice = str()->random(5);
-        $no_box = explode(',',$r->no_box[0]);
-        foreach($no_box as $d) {
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
                         sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
                         FROM cetak_new 
                         WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
-    
+
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
-    
+
             $data[] = [
                 'no_invoice' => $no_invoice,
                 'no_box' => $d,
@@ -62,7 +62,7 @@ class CetakNewController extends Controller
                 'kategori' => 'sortir',
             ];
         }
-    
+
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
     }
@@ -75,7 +75,7 @@ class CetakNewController extends Controller
             'title' => 'Formulir Cetak Print',
             'detail' => $detail
         ];
-        return view('home.cetak_new.formulir_print',$data);
+        return view('home.cetak_new.formulir_print', $data);
     }
 
     public function getData($key)
@@ -86,22 +86,22 @@ class CetakNewController extends Controller
             'bulan' => DB::table('bulan')->get(),
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->get(),
             'paket' => DB::table('kelas_cetak')->get(),
-            'nobox' =>DB::table('formulir_sarang')
-                        ->select('no_box')
-                        ->where([['id_penerima', $id_user],['kategori', 'cetak']])
-                        ->whereNotNull('no_box')
-                        ->whereNotIn('no_box', function($query) {
-                            $query->select('no_box')
-                                ->from('cetak_new');
-                        })
-                        ->get()
+            'nobox' => DB::table('formulir_sarang')
+                ->select('no_box')
+                ->where([['id_penerima', $id_user], ['kategori', 'cetak']])
+                ->whereNotNull('no_box')
+                ->whereNotIn('no_box', function ($query) {
+                    $query->select('no_box')
+                        ->from('cetak_new');
+                })
+                ->get()
 
         ];
         return $data[$key];
     }
     public function index(Request $r)
     {
-        
+
         $id_anak = $r->id_anak ?? 'All';
 
         $tgl1 = $r->tgl1 ?? date('Y-m-d');
