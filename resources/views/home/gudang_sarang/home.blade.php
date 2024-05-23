@@ -4,12 +4,12 @@
             @php
                 $gudang = [
                     [
-                        'name' => 'Siap Grade',
-                        'url' => 'gradingbj.history_ambil',
+                        'name' => 'Gudang Sarang Selesai',
+                        'url' => 'gudangsarang.gudang_cbt_selesai',
                     ],
                     [
-                        'name' => 'Gudang selesai grade',
-                        'url' => 'gradingbj.gudang_bj',
+                        'name' => 'Invoice',
+                        'url' => 'gudangsarang.invoice',
                     ],
                 ];
             @endphp
@@ -20,8 +20,7 @@
                             <div class="card-front">
                                 <div class="card-body">
                                     <h4 class="card-title text-white text-center"><img
-                                            src="{{ asset('img/storage-stacks.png') }}" width="128"
-                                            alt=""><br><br>
+                                            src="{{ asset('img/notes.png') }}" width="128" alt=""><br><br>
                                         {{ $g['name'] }}
                                     </h4>
                                 </div>

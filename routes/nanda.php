@@ -6,6 +6,7 @@ use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
+use App\Http\Controllers\GudangSarangController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
@@ -190,6 +191,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_detail_cabut', 'get_detail_cabut')->name('get_detail_cabut');
             Route::get('/summaryCetak', 'summaryCetak')->name('summaryCetak');
             Route::get('/get_detail_sortir', 'get_detail_sortir')->name('get_detail_sortir');
+        });
+    Route::controller(GudangSarangController::class)
+        ->prefix('home/gudangsarang')
+        ->name('gudangsarang.')
+        ->group(function () {
+            Route::get('/', 'home')->name('home');
+            Route::get('/gudang_cbt_selesai', 'index')->name('gudang_cbt_selesai');
+            Route::get('/get_formulir', 'get_formulir')->name('get_formulir');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
+            Route::get('/invoice', 'invoice')->name('invoice');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')

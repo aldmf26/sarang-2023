@@ -279,7 +279,7 @@
     });
 
     $('#nanda').DataTable({
-        "searching": false,
+        "searching": true,
         scrollY: '400px',
         scrollX: false,
         scrollCollapse: true,
