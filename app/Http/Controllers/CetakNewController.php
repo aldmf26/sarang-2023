@@ -35,15 +35,15 @@ class CetakNewController extends Controller
             'cetak' => $cetak,
             'users' => $this->getData('users'),
         ];
-        return view('home.cetak_new.formulir',$data);
+        return view('home.cetak_new.formulir', $data);
     }
 
     public function save_formulir(Request $r)
     {
         $no_invoice = str()->random(5);
-        $no_box = explode(',',$r->no_box[0]);
+        $no_box = explode(',', $r->no_box[0]);
 
-        for ($i=0; $i < count($no_box); $i++) { 
+        for ($i = 0; $i < count($no_box); $i++) {
             $no_box = [$no_box[$i]];
 
             $ambil = DB::selectOne("SELECT 
@@ -77,7 +77,7 @@ class CetakNewController extends Controller
             'title' => 'Formulir Cetak Print',
             'detail' => $detail
         ];
-        return view('home.cetak_new.formulir_print',$data);
+        return view('home.cetak_new.formulir_print', $data);
     }
 
     public function getData($key)
@@ -88,22 +88,22 @@ class CetakNewController extends Controller
             'bulan' => DB::table('bulan')->get(),
             'tb_anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->get(),
             'paket' => DB::table('kelas_cetak')->get(),
-            'nobox' =>DB::table('formulir_sarang')
-                        ->select('no_box')
-                        ->where([['id_penerima', $id_user],['kategori', 'cetak']])
-                        ->whereNotNull('no_box')
-                        ->whereNotIn('no_box', function($query) {
-                            $query->select('no_box')
-                                ->from('cetak_new');
-                        })
-                        ->get()
+            'nobox' => DB::table('formulir_sarang')
+                ->select('no_box')
+                ->where([['id_penerima', $id_user], ['kategori', 'cetak']])
+                ->whereNotNull('no_box')
+                ->whereNotIn('no_box', function ($query) {
+                    $query->select('no_box')
+                        ->from('cetak_new');
+                })
+                ->get()
 
         ];
         return $data[$key];
     }
     public function index(Request $r)
     {
-        
+
         $id_anak = $r->id_anak ?? 'All';
 
         $tgl1 = $r->tgl1 ?? date('Y-m-d');

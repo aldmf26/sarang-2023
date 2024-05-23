@@ -80,13 +80,14 @@
                         </button>
                     @else
                         @php
-                            [$btn, $val, $ket] = $c->capai == 'Y' ? ['success', 'T', 'Capai'] : ['danger', 'Y', 'Tidak Capai'];
+                            [$btn, $val, $ket] =
+                                $c->capai == 'Y' ? ['success', 'T', 'Capai'] : ['danger', 'Y', 'Tidak Capai'];
                         @endphp
                         @if ($c->selesai == 'Y')
                             {{ $ket }}
                         @else
-                            <button style="font-size: 12px" class="btn btn-sm btn-{{ $btn }} capai" id_cetak="{{ $c->id_cetak }}"
-                                capaiVal="{{ $val }}">
+                            <button style="font-size: 12px" class="btn btn-sm btn-{{ $btn }} capai"
+                                id_cetak="{{ $c->id_cetak }}" capaiVal="{{ $val }}">
                                 @if ($c->capai == 'Y')
                                     <i class="fas fa-check"></i>
                                 @else
