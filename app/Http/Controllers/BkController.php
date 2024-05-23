@@ -51,6 +51,7 @@ class BkController extends Controller
             'pengawas' => User::where('posisi_id', 13)->get(),
             'noBoxTerakhir' => DB::table('bk')->where('kategori', $r->kategori)->orderBy('id_bk', 'DESC')->first()->no_box ?? 5000,
             'kategori' => $r->kategori,
+            'id_pengawas' => auth()->user()->id
             // 'gudangBk' => $gudangBk
         ];
         if ($r->kategori == 'cetak') {
