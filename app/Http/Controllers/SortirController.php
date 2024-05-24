@@ -131,7 +131,7 @@ class SortirController extends Controller
     {
         $ttlPcs = array_sum($r->pcs_awal);
         $ttlGr = array_sum($r->gr_awal);
-        for ($i = 0; $i < count($r->rupiah); $i++) {
+        for ($i = 0; $i < count($r->gr_awal); $i++) {
             $nobox = $r->no_box[$i];
             $admin = auth()->user()->id;
             $cekStok = DB::selectOne("SELECT 
@@ -143,7 +143,7 @@ class SortirController extends Controller
             ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
             WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
             // if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
-                $rupiah = str()->remove('.', $r->rupiah[$i]);
+                // $rupiah = str()->remove('.', $r->rupiah[$i]);
                 $kelasSortir = DB::table('tb_kelas_sortir')->where('id_kelas', $r->tipe[$i])->first();
                 $rupiah = ($kelasSortir->rupiah / $kelasSortir->gr) * $r->gr_awal[$i];
                 $id_sortir = $r->id_sortir[$i];
@@ -167,7 +167,7 @@ class SortirController extends Controller
             // } else {
             //     return 'Stok pcs / gr melebihi Bk';
             // }
-        }
+                }
 
         return 'berhasil';
 

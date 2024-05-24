@@ -54,7 +54,7 @@
                         <th class="dhead text-end" width="110">Pcs Awal</th>
                         <th class="dhead text-end" width="110">Pcuc</th>
                         <th class="dhead text-end" width="110">Gr Awal</th>
-                        <th class="dhead text-end" width="130">Rp Target</th>
+                        {{-- <th class="dhead text-end" width="130">Rp Target</th> --}}
                         <th class="dhead">Aksi</th>
                     </tr>
                 </thead>
@@ -108,11 +108,11 @@
                                 <input type="text" class="form-control text-end grAwalKeyup setGr setGr{{ $i }}" count="{{ $i }}"
                                     value="" id="grInput" name="gr_awal[]">
                             </td>
-                            <td>
+                            {{-- <td>
                                 <input readonly type="text"
                                     class="form-control rupiahInput text-end setRupiah{{ $i }}"
                                     value="0" name="rupiah[]">
-                            </td>
+                            </td> --}}
                             <td align="center">
                                 <button type="button" class="btn rounded-pill hapusKerjSortir"
                                     id_sortir="{{ $d->id_sortir }}"><i class="fas fa-trash text-danger"></i>
