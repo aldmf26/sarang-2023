@@ -118,7 +118,7 @@
                             {{ $c->gr_akhir }}
                         </td>
                         <td class="text-end">
-                            {{ empty($c->gr_akhir) && empty($c->gr_awal_ctk) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
+                            {{ empty($c->gr_awal_ctk) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
                         </td>
                         <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan) }}</td>
                     </tr>
