@@ -144,6 +144,8 @@ class SortirController extends Controller
             WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
             // if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
                 $rupiah = str()->remove('.', $r->rupiah[$i]);
+                $kelasSortir = DB::table('tb_kelas_sortir')->where('id_kelas', $r->tipe[$i])->first();
+                $rupiah = ($kelasSortir->rupiah / $kelasSortir->gr) * $r->gr_awal[$i];
                 $id_sortir = $r->id_sortir[$i];
                 $data = [
                     'no_box' => $r->no_box[$i],

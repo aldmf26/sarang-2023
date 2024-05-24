@@ -93,18 +93,25 @@ class GudangSarangController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice";
 
         $formulir = DB::select("SELECT a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'cetak' and a.tanggal between '$tgl1' and '$tgl2' and a.kategori = 'cetak'
+        WHERE a.kategori = '$kategori' and a.tanggal between '$tgl1' and '$tgl2'
         group by a.no_invoice
         order by a.id_formulir DESC
         ");
+
         $data = [
-            'title' => 'Invoice Awal Cetak',
-            'formulir' => $formulir
+            'title' => 'Invoice Awal ' . $kategori,
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
         ];
         return view('home.gudang_sarang.invoice', $data);
     }
