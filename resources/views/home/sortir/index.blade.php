@@ -206,7 +206,7 @@
                                 success: function(data) {
                                     $("#" + classPlus).append(data);
                                     $(".select2-tambah").select2({
-                                        dropdownParent: $(`#tambah2 .modal-content`)
+                                        dropdownParent: $(`#tambah2 .modal-content`),
                                     });
                                 },
                             });
@@ -243,7 +243,12 @@
                             }
                         });
                     })
+                    $(document).on('change', '.selectTipe',function(e){
+                        var count = $(this).attr('count')
+                        var id_tipe = $(this).val()
 
+
+                    })
                     $(document).on('input', '.setGr', function() {
                         var count = $(this).attr('count')
                         var hasil = $(this).val()

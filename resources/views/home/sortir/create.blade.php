@@ -87,7 +87,8 @@
                                         ->get();
                                 @endphp
                                 <td>
-                                    <select name="tipe[]" id="" class="form-control tipeSelect">
+                                    <select name="tipe[]" id="" count="1" class="form-control selectTipe">
+                                        <option value="">Pilih Tipe</option>
                                         @foreach ($kelas as $i => $d)
                                             <option value="{{ $d->id_kelas }}"
                                                 {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}
@@ -162,6 +163,8 @@
                     }
                 });
             })
+
+            
 
             $(document).on('input', '.setGr', function() {
                 var count = $(this).attr('count')

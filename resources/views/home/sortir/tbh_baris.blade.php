@@ -1,3 +1,4 @@
+
 <tr class="baris{{ $count }}">
     <input type="hidden" name="id_sortir[]" value="9999">
     <td>
@@ -18,10 +19,11 @@
             ->get();
     @endphp
     <td>
-        <select name="tipe[]" id="" class="form-control">
+        <select name="tipe[]" count="{{$count}}" id="" class="form-control selectTipe">
+            <option value="">Pilih Paket</option>
             @foreach ($kelas as $i => $d)
                 <option value="{{ $d->id_kelas }}"
-                    {{ $d->kelas == 'brg' ? 'selected' : '' }}>{{ strtoupper($d->kelas) }}</option>
+                    >{{ strtoupper($d->kelas) }}</option>
             @endforeach
         </select>
     </td>
@@ -51,10 +53,10 @@
         <input type="text" class="form-control text-end setGr setGr{{ $count }}" count="{{ $count }}"
             value="" id="grInput" name="gr_awal[]">
     </td>
-    <td>
+    {{-- <td>
         <input readonly type="text" class="form-control text-end rupiahInput setRupiah{{ $count }}"
             value="0" name="rupiah[]">
-    </td>
+    </td> --}}
     <td align="center">
         <button type="button" class="btn rounded-pill remove_baris" count="{{ $count }}"><i
                 class="fas fa-trash text-danger"></i>

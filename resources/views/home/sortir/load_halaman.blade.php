@@ -13,6 +13,7 @@
             <th class="text-end dhead">Gr Akhir</th>
             <th class="text-end dhead">Susut</th>
             <th class="text-end dhead">Denda</th>
+            <th class="text-end dhead">Rp Target</th>
             <th class="text-end dhead">Ttl Gaji</th>
             <th class="dhead">Selesai</th>
             <th class="dhead" width="70">
@@ -56,6 +57,7 @@
                 @endphp
                 <td align="right">{{ number_format($susut, 0) }}%</td>
                 <td align="right">{{ number_format($d->denda_sp ?? 0, 0) }}</td>
+                <td align="right">{{ number_format($d->rp_target ?? 0, 0) }}</td>
                 <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
                 <td align="center">
                     @if ($d->selesai == 'T')
