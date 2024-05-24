@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }} " table="Y" sizeCard="6" cont="container-fluid">
+<x-theme.app title="{{ $title }} " table="Y" sizeCard="8" cont="container-fluid">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <div class="col-lg-4">
@@ -22,10 +22,17 @@
                     <thead>
                         <tr>
                             <th width="5">#</th>
-                            <th>No Box</th>
-                            <th>Nama Anak</th>
-                            <th class="text-end">Pcs Akhir</th>
-                            <th class="text-end">Gr Akhir</th>
+                            <th>tanggal</th>
+                            <th>no box</th>
+                            <th>tipe</th>
+                            <th>ket</th>
+                            <th>warna</th>
+                            <th class="text-end">Pcs Bk</th>
+                            <th class="text-end">Gr Bk</th>
+                            <th class="text-end">Pcs Cbt</th>
+                            <th class="text-end">Gr Cbt</th>
+                            <th class="text-end">Pcs Sisa</th>
+                            <th class="text-end">Gr Sisa</th>
                             <th class="text-center">
                                 <input type="checkbox" name="" id="checkAll">
                             </th>
@@ -35,45 +42,29 @@
                         @foreach ($cabut as $no => $d)
                             <tr>
                                 <td>{{ $no + 1 }}</td>
+                                <td>{{ date('d-m-Y', strtotime($d->tgl)) }}</td>
                                 <td>{{ $d->no_box }}</td>
-                                <td>{{ $d->nama }}</td>
-                                <td class="text-end">{{ $d->pcs_akhir }}</td>
-                                <td class="text-end">{{ $d->gr_akhir }}</td>
-                                <td class="text-center">
-                                    @if ($d->selesai == 'Y')
-                                        <input type="checkbox" no_box="{{ $d->no_box }}" class="checkbox"
-                                            name="" id="" value="{{ $d->id_cabut }}">
-                                    @else
-                                        belum selesai
-                                    @endif
-
+                                <td>{{ $d->tipe }}</td>
+                                <td>{{ $d->ket }}</td>
+                                <td>{{ $d->warna }}</td>
+                                <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->pcs_cabut, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->gr_cabut, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->pcs_awal - $d->pcs_cabut, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->gr_awal - $d->gr_cabut, 0) }}</td>
+                                <td>
+                                    <input type="checkbox" no_box="{{ $d->no_box }}" class="checkbox" name=""
+                                        id="" value="{{ $d->no_box }}">
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-
-            <form action="{{ route('gudangsarang.save_formulir') }}" method="post">
+            <form action="{{ route('gudangsarang.save_formulir_cabut') }}" method="post">
                 @csrf
                 <x-theme.modal idModal="formulir" btnSave="Y" size="modal-lg" title="Formulir">
-                    <div class="row">
-                        <div class="col-lg-4 mb-6">
-                            <label for="">Tanggal</label>
-                            <input type="date" name="tgl" class="form-control" value="{{ date('Y-m-d') }}">
-                        </div>
-                        <div class="col-lg-4">
-                            <label for="">Pengawas</label>
-                            <select name="id_pengawas" class="form-control" id="">
-                                <option value="">Pilih Pengawas</option>
-                                @foreach ($pengawas as $p)
-                                    <option value="{{ $p->id }}">{{ $p->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
                     <div id="load_formulir"></div>
                 </x-theme.modal>
             </form>
@@ -100,9 +91,9 @@
 
                     $.ajax({
                         type: "get",
-                        url: "{{ route('gudangsarang.get_formulir') }}",
+                        url: "{{ route('gudangsarang.get_formulircabut') }}",
                         data: {
-                            id_cabut: checkedBoxes
+                            no_box: checkedBoxes
                         },
                         success: function(response) {
                             $('#load_formulir').html(response);

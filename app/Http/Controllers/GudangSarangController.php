@@ -26,7 +26,7 @@ class GudangSarangController extends Controller
             FROM cabut as a 
             left join tb_anak as b on b.id_anak = a.id_anak
             WHERE  a.formulir = 'T' and a.id_pengawas = '$id_pengawas'
-            order by a.selesai ASC
+            order by a.selesai DESC , a.id_cabut ASC
             "),
             'pengawas' => DB::table('users')->where('posisi_id', '14')->get()
         ];
@@ -107,5 +107,69 @@ class GudangSarangController extends Controller
             'formulir' => $formulir
         ];
         return view('home.gudang_sarang.invoice', $data);
+    }
+
+    // bk ke cabut
+
+    public function cabut(Request $r)
+    {
+        $id_pengawas = auth()->user()->id;
+        $data = [
+            'title' => 'Gudang Cabut',
+            'cabut' => DB::select("SELECT a.tgl, a.no_box, a.tipe, a.ket, a.warna, a.pcs_awal, a.pcs_awal, a.gr_awal, if(b.pcs_cabut is null ,0,b.pcs_cabut) as pcs_cabut, if(b.gr_cabut is null ,0,b.gr_cabut) as gr_cabut
+            FROM bk as a 
+            left join (
+                SELECT b.no_box, sum(b.pcs_awal) as pcs_cabut, sum(b.gr_awal) as gr_cabut
+                FROM cabut as b
+                group by b.no_box
+            ) as b on b.no_box =  a.no_box
+            where a.penerima = '$id_pengawas' and a.formulir  = 'T' and a.kategori = 'cabut' and a.gr_awal - if(b.gr_cabut is null ,0,b.gr_cabut) != 0;")
+        ];
+
+        return view('home.gudang_sarang.cabut', $data);
+    }
+
+    public function get_formulircabut(Request $r)
+    {
+        $data = [
+            'title' => 'Gudang Sarang',
+            'no_box' => $r->no_box
+        ];
+        return view('home.gudang_sarang.get_formulircabut', $data);
+    }
+
+    public function save_formulir_cabut(Request $r)
+    {
+        $no_box = $r->no_box;
+        $no_invoice = strtoupper(Str::random(5));
+
+        for ($x = 0; $x < count($no_box); $x++) {
+            $data = [
+                'formulir' => 'Y',
+                'invoice_formulir' => 'FS-' . $no_invoice,
+
+            ];
+            DB::table('bk')->where('no_box', $no_box[$x])->update($data);
+        }
+        return redirect("home/gudangsarang/print_cabut?no_invoice=FS-$no_invoice")->with('sukses', 'Data berhasil ditambahkan');
+    }
+
+    public function print_cabut(Request $r)
+    {
+        $data = [
+            'title' => 'Gudang Cabut',
+            'cabut' => DB::select("SELECT a.tgl, a.no_box, a.tipe, a.ket, a.warna, a.pcs_awal, a.pcs_awal, a.gr_awal, if(b.pcs_cabut is null ,0,b.pcs_cabut) as pcs_cabut, if(b.gr_cabut is null ,0,b.gr_cabut) as gr_cabut
+            FROM bk as a 
+            left join (
+                SELECT b.no_box, sum(b.pcs_awal) as pcs_cabut, sum(b.gr_awal) as gr_cabut
+                FROM cabut as b
+                group by b.no_box
+            ) as b on b.no_box =  a.no_box
+            where a.invoice_formulir = '$r->no_invoice'"),
+
+            'nama' => auth()->user()->name
+        ];
+
+        return view('home.gudang_sarang.printcabut', $data);
     }
 }
