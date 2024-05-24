@@ -21,7 +21,7 @@ class GudangSarangController extends Controller
     {
         $id_pengawas = auth()->user()->id;
         $data = [
-            'title' => 'Gudang Cabut Selesai',
+            'title' => 'Cetak Formulir',
             'cabut' => DB::select("SELECT a.id_cabut, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
             FROM cabut as a 
             left join tb_anak as b on b.id_anak = a.id_anak
@@ -122,7 +122,7 @@ class GudangSarangController extends Controller
     {
         $id_pengawas = auth()->user()->id;
         $data = [
-            'title' => 'Gudang Cabut',
+            'title' => 'Cabut Formulir',
             'cabut' => DB::select("SELECT a.tgl, a.no_box, a.tipe, a.ket, a.warna, a.pcs_awal, a.pcs_awal, a.gr_awal, if(b.pcs_cabut is null ,0,b.pcs_cabut) as pcs_cabut, if(b.gr_cabut is null ,0,b.gr_cabut) as gr_cabut
             FROM bk as a 
             left join (

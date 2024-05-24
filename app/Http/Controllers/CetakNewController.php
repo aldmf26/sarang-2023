@@ -19,8 +19,8 @@ class CetakNewController extends Controller
 
         $cetak = DB::select("SELECT a.no_box,sum(a.pcs_akhir) as pcs_akhir,sum(a.gr_akhir) as gr_akhir 
         FROM cetak_new as a 
-        WHERE a.selesai = 'Y' AND a.bulan_dibayar = $bulan 
-        AND YEAR(a.tgl) = $tahun AND a.id_pengawas = $id_user
+        WHERE a.selesai = 'Y' AND a.bulan_dibayar = '$bulan' 
+        AND YEAR(a.tgl) = '$tahun' AND a.id_pengawas = '$id_user'
         AND a.no_box NOT LIKE '%cu%' 
         AND a.no_box NOT IN (select no_box from formulir_sarang where kategori = 'sortir' and no_box = a.no_box) 
         AND a.no_box NOT IN (
@@ -31,7 +31,7 @@ class CetakNewController extends Controller
         GROUP BY a.no_box");
 
         $data = [
-            'title' => 'Formulir Cetak ke Sortir',
+            'title' => 'Formulir  Sortir',
             'cetak' => $cetak,
             'users' => $this->getData('users'),
         ];

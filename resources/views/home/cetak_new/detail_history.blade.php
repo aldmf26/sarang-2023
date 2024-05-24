@@ -21,9 +21,9 @@
                     $no = 1;
                 @endphp
                 @foreach ($cabut as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $c->no_box }}</td>
@@ -47,9 +47,9 @@
                     </tr>
                 @endforeach
                 @foreach ($sortir as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $c->no_box }}</td>
@@ -73,9 +73,9 @@
                     </tr>
                 @endforeach
                 @foreach ($eo as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $c->no_box }}</td>
@@ -99,9 +99,9 @@
                     </tr>
                 @endforeach
                 @foreach ($detail as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $c->no_box }}</td>
@@ -118,15 +118,15 @@
                             {{ $c->gr_akhir }}
                         </td>
                         <td class="text-end">
-                            {{ empty($c->gr_akhir) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
+                            {{ empty($c->gr_akhir) && empty($c->gr_akhir) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
                         </td>
                         <td class="text-end">{{ number_format($c->pcs_akhir * $c->rp_satuan) }}</td>
                     </tr>
                 @endforeach
                 @foreach ($dll as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>-</td>
@@ -149,9 +149,9 @@
                     </tr>
                 @endforeach
                 @foreach ($denda as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr>
                         <td>{{ $no }}</td>
                         <td>-</td>
