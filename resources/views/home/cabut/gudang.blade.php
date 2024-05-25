@@ -109,7 +109,7 @@
 
 
                 {{-- modal ambil box ke cetak --}}
-                <form action="{{ route('cabut.save_formulir') }}" method="post">
+                <form action="{{ route('gudangsarang.save_formulir') }}" method="post">
                     @csrf
                     <x-theme.modal idModal="tambah" title="tambah box" btnSave="Y">
                         <div class="row">
@@ -122,7 +122,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <label for="">Pgws Penerima</label>
-                                <select required name="id_penerima" class="form-control select2" id="">
+                                <select required name="id_pengawas" class="form-control select2" id="">
                                     <option value="">- Pilih pgws -</option>
                                     @foreach ($users as $d)
                                         <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>

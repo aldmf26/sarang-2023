@@ -119,15 +119,18 @@ class GudangSarangController extends Controller
         $no_box = $r->no_box;
         $no_invoice = strtoupper(Str::random(5));
 
-        for ($x = 0; $x < count($no_box); $x++) {
+
+        $no_box = explode(',', $r->no_box[0]);
+
+        foreach ($no_box as $d) {
             $data = [
                 'formulir' => 'Y',
                 'invoice' => 'FS-' . $no_invoice,
 
             ];
-            DB::table('cabut')->where('no_box', $no_box[$x])->update($data);
+            DB::table('cabut')->where('no_box', $d)->update($data);
 
-            $cabut = DB::table('cabut')->where('no_box', $no_box[$x])->first();
+            $cabut = DB::table('cabut')->where('no_box', $d)->first();
 
             $data = [
                 'no_invoice' => 'FS-' . $no_invoice,
