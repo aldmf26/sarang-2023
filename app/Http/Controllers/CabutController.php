@@ -1710,6 +1710,7 @@ class CabutController extends Controller
         $id_user = auth()->user()->id;
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
+        $users = DB::table('users')->where('posisi_id', '14')->get();
 
         $bk = DB::select("SELECT
                     a.no_box,
@@ -1732,7 +1733,7 @@ class CabutController extends Controller
                 a.pcs_awal as pcs,
                 a.gr_awal as gr
                 FROM cabut as a
-                LEFT JOIN cetak_new as cn ON a.no_box = cn.no_box
+                LEFT JOIN formulir_sarang as cn ON a.no_box = cn.no_box
                 WHERE a.selesai = 'Y' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user
                 AND cn.no_box IS NULL
        
@@ -1742,8 +1743,39 @@ class CabutController extends Controller
             'bk' => $bk,
             'cabut' => $cabut,
             'cabutSelesai' => $cabutSelesai,
+            'users' => $users
         ];
         return view('home.cabut.gudang',$data);
+    }
+
+    public function save_formulir(Request $r)
+    {
+        
+        $no_invoice = strtoupper(str()->random(5));
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
+                        FROM cabut 
+                        WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
+
+            $pcs = $ambil->pcs_akhir;
+            $gr = $ambil->gr_akhir;
+
+            $data[] = [
+                'no_invoice' => $no_invoice,
+                'no_box' => $d,
+                'id_pemberi' => auth()->user()->id,
+                'id_penerima' => $r->id_penerima,
+                'pcs_awal' => $pcs,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'sortir',
+            ];
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
     }
     
 }

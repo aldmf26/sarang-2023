@@ -196,6 +196,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_sinta', 'export_sinta')->name('export_sinta');
             Route::get('/summary', 'summary')->name('summary');
             Route::get('/gudang', 'gudang')->name('gudang');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
         });
     Route::controller(GlobalController::class)
         ->prefix('home/global')

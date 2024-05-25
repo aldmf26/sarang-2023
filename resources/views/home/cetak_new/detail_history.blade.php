@@ -19,7 +19,18 @@
             <tbody>
                 @php
                     $no = 1;
+                    $kategoris = [
+                        'cabut' => 'Cbt',
+                        'sortir' => 'Sortir',
+                        'eo' => 'Eo',
+                        'detail' => 'Ctk',
+                        'dll' => 'Dll',
+                        'denda' => 'Denda',
+                    ];
                 @endphp
+                @foreach ($kategoris as $k => $label)
+                    
+                @endforeach
                 @foreach ($cabut as $c)
                     @php
                         $no++;
@@ -149,9 +160,9 @@
                     </tr>
                 @endforeach
                 @foreach ($denda as $c)
-                @php
-                    $no++;
-                @endphp
+                    @php
+                        $no++;
+                    @endphp
                     <tr class="text-danger">
                         <td>{{ $no }}</td>
                         <td>-</td>
