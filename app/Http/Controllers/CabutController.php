@@ -1770,7 +1770,7 @@ class CabutController extends Controller
                 'pcs_awal' => $pcs,
                 'gr_awal' => $gr,
                 'tanggal' => $r->tgl,
-                'kategori' => 'sortir',
+                'kategori' => 'cetak',
             ];
         }
 

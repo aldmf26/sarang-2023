@@ -39,11 +39,10 @@
                             <tr class="detail" id_anak="{{ $d->id_anak }}">
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $d->pgws }}</td>
-                                <td>{{ $d->nm_anak }}</td>
+                                <td class="text-primary">{{ $d->nm_anak }}</td>
                                 <td align="right">{{ $ttl_hari }}</td>
                                 <td align="right">
-                                    <a href="#" 
-                                        >{{ number_format($ttl_rp, 0) }}</a>
+                                    {{ number_format($ttl_rp, 0) }}
                                 </td>
                                 <td align="right">{{ number_format($rata2, 0) }}</td>
                                 {{-- <td>{{ $rata2 < $target ? 'Tidak' : '' }} Capai</td> --}}
