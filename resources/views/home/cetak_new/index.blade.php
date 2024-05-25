@@ -351,6 +351,24 @@
                 function formatDate(date) {
                     return date.toISOString().split('T')[0];
                 }
+
+                $(document).on('change', '.box', function() {
+                    var urutan = $(this).attr('urutan');
+                    var box = $(this).val();
+
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetaknew.get_no_box') }}",
+                        data: {
+                            box: box
+                        },
+                        success: function(response) {
+                            $('.pcs_awal' + urutan).val(response['pcs_awal']);
+                            $('.gr_awal' + urutan).val(response['gr_awal']);
+                        }
+                    });
+                });
             </script>
         @endsection
     </x-slot>

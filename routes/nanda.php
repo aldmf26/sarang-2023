@@ -162,6 +162,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
+            Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
             Route::get('/history', 'history')->name('history');
             Route::get('/history_detail', 'history_detail')->name('history_detail');
             Route::get('/summary_detail', 'summary_detail')->name('summary_detail');

@@ -122,6 +122,18 @@ class CetakNewController extends Controller
         return view('home.cetak_new.index', $data);
     }
 
+    public function get_no_box(Request $r)
+    {
+        $box = $r->box;
+        $formulir = DB::table('formulir_sarang')->where('no_box', $box)->first();
+
+        $data = [
+            'pcs_awal' => $formulir->pcs_awal,
+            'gr_awal' => $formulir->gr_awal,
+        ];
+        return response()->json($data);
+    }
+
 
 
     public function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas)

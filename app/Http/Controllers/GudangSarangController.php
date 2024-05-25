@@ -21,7 +21,7 @@ class GudangSarangController extends Controller
     {
 
         $data = [
-            'title' => 'Cetak Formulir',
+            'title' => 'gudang Cetak',
             'pengawas' => DB::table('users')->where('posisi_id', '14')->get(),
             'view_pengawas' => DB::select("SELECT a.id_pengawas, c.name
             FROM cabut as a 
@@ -74,7 +74,7 @@ class GudangSarangController extends Controller
     public function get_siap_cetak(Request $r)
     {
         $id_penerima =  auth()->user()->id;
-        $cabut = DB::select("SELECT c.name, a.no_box, a.pcs_awal, a.gr_awal, b.selesai
+        $cabut = DB::select("SELECT a.tanggal, c.name, a.no_box, a.pcs_awal, a.gr_awal, b.selesai
         FROM formulir_sarang as a 
         left join (
             SELECT b.no_box, min(b.selesai) as selesai
@@ -82,7 +82,7 @@ class GudangSarangController extends Controller
             group by b.no_box
         ) as b on b.no_box = a.no_box
         left join users as c on c.id = a.id_pemberi
-        where a.kategori = 'cetak' and b.no_box is not null and a.id_penerima = '$id_penerima' ;
+        where a.kategori = 'cetak' and b.no_box is null and a.id_penerima = '$id_penerima' ;
         ");
 
         $data = [
