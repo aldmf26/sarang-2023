@@ -1686,4 +1686,64 @@ class CabutController extends Controller
             return redirect()->route('cabut.clear')->with('error', $e->getMessage())->withInput();
         }
     }
+
+   
+        public function summary(Request $r)
+    {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+        $id_pengawas = auth()->user()->id;
+
+        $summary = Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
+
+        $data = [
+            'title' => 'Summary Cabut',
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'summary' => $summary,
+        ];
+        return view('home.cabut.summary', $data);
+    }
+
+    public function gudang(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+
+        $bk = DB::select("SELECT
+                    a.no_box,
+                    a.pcs_awal as pcs,
+                    a.gr_awal as gr
+                    FROM bk as a
+                    WHERE a.kategori = 'cabut' AND a.penerima = $id_user 
+                    AND a.selesai = 'T' AND NOT EXISTS (
+                        SELECT 1
+                        FROM cabut AS b
+                        WHERE b.no_box = a.no_box
+                    )
+                ");
+        $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr FROM cabut as a
+        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");   
+
+
+        $cabutSelesai = DB::select("SELECT
+                a.no_box,
+                a.pcs_awal as pcs,
+                a.gr_awal as gr
+                FROM cabut as a
+                LEFT JOIN cetak_new as cn ON a.no_box = cn.no_box
+                WHERE a.selesai = 'Y' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user
+                AND cn.no_box IS NULL
+       
+            ");
+        $data = [
+            'title' => 'Gudang Cabut',
+            'bk' => $bk,
+            'cabut' => $cabut,
+            'cabutSelesai' => $cabutSelesai,
+        ];
+        return view('home.cabut.gudang',$data);
+    }
+    
 }

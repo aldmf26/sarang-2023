@@ -152,7 +152,7 @@
                 @php
                     $no++;
                 @endphp
-                    <tr>
+                    <tr class="text-danger">
                         <td>{{ $no }}</td>
                         <td>-</td>
                         <td>{{ date('d M y', strtotime($c->tgl)) }}</td>

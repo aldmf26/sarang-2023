@@ -118,6 +118,9 @@
             right: 1px;
             width: 20px;
         }
+        .pink-magenta {
+            background-color: #E11583;"
+        }
 
         label {
             font-size: 13px;

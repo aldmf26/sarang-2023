@@ -15,31 +15,39 @@
                             WHERE 
                             id_pengawas = '$id_pengawas' AND no_box != 9999;");
                 @endphp
-                <a href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                {{-- <a href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end {{ $cekBtn->hasil == 'true' ? '' : 'disabled' }} btn btn-sm btn-success me-2">
                     <i class="fas fa-check"></i> Cabut Ok
+                </a> --}}
+                <a href="{{ route('cabut.gudang') }}"
+                    style="color: white;background-color: #E11583;" class="float-end btn btn-sm me-2">
+                    <i class="fas fa-clipboard-list"></i> Gudang
                 </a>
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                
 
                 {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
                 teks="List anak sisa" /> --}}
 
 
                 <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
-                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cabut <span
-                        class="badge bg-danger" id="anakBelum"></span>
+                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cabut 
+                    {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
                 </a>
 
-                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
                     class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
-                </a>
+                </a> --}}
 
+                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end"
+                    teks="summary" />
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
                     teks="kry baru" />
 
+                @include('home.bk.btn_import')
                 <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
                     addClass="float-end history" teks="history" />
             </div>
