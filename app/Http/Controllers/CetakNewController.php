@@ -122,6 +122,8 @@ class CetakNewController extends Controller
         return view('home.cetak_new.index', $data);
     }
 
+
+
     public function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas)
     {
         if ($id_anak == 'All') {

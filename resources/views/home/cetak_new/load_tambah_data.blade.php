@@ -14,16 +14,13 @@
     <tbody>
         <tr class="baris1">
             <td>
-                {{-- <select name="no_box[]" id="" class="form-control select">
-
+                <select name="no_box[]" id="" class="form-control select">
+                    <option value="">Pilih box</option>
                     @foreach ($nobox as $x)
-                        <option value="">Pilih box</option>
-                        <option value="{{ $x->no_box }}">
-                            {{ $x->no_box }}
-                        </option>
+                        <option value="{{ $x->no_box }}">{{ $x->no_box }}</option>
                     @endforeach
-                </select> --}}
-                <input type="text" class="form-control input_awal" name="no_box[]">
+                </select>
+                {{-- <input type="text" class="form-control input_awal" name="no_box[]"> --}}
             </td>
             <td>
                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">

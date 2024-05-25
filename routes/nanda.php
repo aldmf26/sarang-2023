@@ -198,6 +198,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'home')->name('home');
             Route::get('/gudang_cbt_selesai', 'index')->name('gudang_cbt_selesai');
+            Route::get('/load_cabut_selesai', 'load_cabut_selesai')->name('load_cabut_selesai');
             Route::get('/get_formulir', 'get_formulir')->name('get_formulir');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
@@ -205,6 +206,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/cabut', 'cabut')->name('cabut');
             Route::get('/print_cabut', 'print_cabut')->name('print_cabut');
             Route::get('/get_formulircabut', 'get_formulircabut')->name('get_formulircabut');
+            Route::get('/get_siap_cetak', 'get_siap_cetak')->name('get_siap_cetak');
+            Route::get('/get_cetak_proses', 'get_cetak_proses')->name('get_cetak_proses');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
         });
     // Route::controller(RekapanController::class)

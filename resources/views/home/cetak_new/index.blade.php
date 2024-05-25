@@ -16,6 +16,8 @@
                     teks="Export" />
                 <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
                     teks="History" />
+                <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="float-end btn btn-sm me-2"
+                    style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
                 <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
