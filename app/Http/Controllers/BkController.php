@@ -27,14 +27,24 @@ class BkController extends Controller
             $kategori = $r->kategori;
         }
         $id_user = auth()->user()->id;
+        if (auth()->user()->posisi_id == 1) {
+            $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            left join users as d on d.id = a.penerima 
+            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
+        } else {
+            $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            left join users as d on d.id = a.penerima 
+            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
+        }
+
+
+
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
-            'bk' => DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
-            left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC"),
+            'bk' => $bk,
 
         ];
         return view('home.bk.index', $data);
@@ -131,7 +141,7 @@ class BkController extends Controller
                     $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
                     // $nobox = $r->no_box[$x];
                     $nobox = $this->getNoBoxTambah();
-                    
+
                     // $selectedValue = $r->no_lot[$x];
                     // list($noLot, $ket) = explode('-', $selectedValue);
 
@@ -174,77 +184,76 @@ class BkController extends Controller
 
     public function import(Request $r)
     {
-        if($r->kategori == 'sortir')
-        {
+        if ($r->kategori == 'sortir') {
             $this->importSortir($r);
-            return redirect()->route('bk.index',['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
+            return redirect()->route('bk.index', ['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
         } else {
 
-        $file = $r->file('file');
-        $spreadsheet = IOFactory::load($file);
-        $sheetData = $spreadsheet->getActiveSheet()->toArray();
-        DB::beginTransaction();
-        try {
-            foreach (array_slice($sheetData, 1) as $row) {
-                if (empty(array_filter($row))) {
-                    continue;
-                }
-
-                $nobox = $this->getNoBoxTambah();
-                $tgl = $row[6];
-
-                // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
-                if (
-                    // $cekBox || 
-                    empty($row[0]) ||
-                    empty($row[5]) ||
-                    empty($row[6])
-                    // empty($row[9]) ||
-                    // empty($row[10])
-                ) {
-                    $pesan = [
-                        // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
-                        empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
-                        // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                        empty($row[5]) => "GR TIDAK BOLEH KOSONG",
-                        empty($row[6]) => "KATEGORI TIDAK BOLEH KOSONG",
-                        // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
-                    ];
-                    DB::rollBack();
-                    return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
-                } else {
-                    if (is_numeric($tgl)) {
-                        // Jika nilai berupa angka, konversi ke format tanggal
-                        $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
-                        $tanggalFormatted = $tanggalExcel->format('Y-m-d');
-                    } else {
-                        // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
-                        $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+            $file = $r->file('file');
+            $spreadsheet = IOFactory::load($file);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            DB::beginTransaction();
+            try {
+                foreach (array_slice($sheetData, 1) as $row) {
+                    if (empty(array_filter($row))) {
+                        continue;
                     }
 
-                    DB::table('bk')->insert([
-                        'no_lot' => '0',
-                        'nm_partai' => $row[0],
-                        'no_box' => $nobox,
-                        'tipe' => $row[1],
-                        'ket' => $row[2],
-                        'warna' => $row[3],
-                        'tgl' => date('Y-m-d'),
-                        'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
-                        'penerima' => auth()->user()->id,
-                        'pcs_awal' => $row[4],
-                        'gr_awal' => $row[5],
-                        'kategori' => 'cabut',
-                    ]);
+                    $nobox = $this->getNoBoxTambah();
+                    $tgl = $row[6];
+
+                    // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+                    if (
+                        // $cekBox || 
+                        empty($row[0]) ||
+                        empty($row[5]) ||
+                        empty($row[6])
+                        // empty($row[9]) ||
+                        // empty($row[10])
+                    ) {
+                        $pesan = [
+                            // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
+                            empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
+                            // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
+                            empty($row[5]) => "GR TIDAK BOLEH KOSONG",
+                            empty($row[6]) => "KATEGORI TIDAK BOLEH KOSONG",
+                            // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
+                        ];
+                        DB::rollBack();
+                        return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
+                    } else {
+                        if (is_numeric($tgl)) {
+                            // Jika nilai berupa angka, konversi ke format tanggal
+                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                        } else {
+                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                        }
+
+                        DB::table('bk')->insert([
+                            'no_lot' => '0',
+                            'nm_partai' => $row[0],
+                            'no_box' => $nobox,
+                            'tipe' => $row[1],
+                            'ket' => $row[2],
+                            'warna' => $row[3],
+                            'tgl' => date('Y-m-d'),
+                            'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
+                            'penerima' => auth()->user()->id,
+                            'pcs_awal' => $row[4],
+                            'gr_awal' => $row[5],
+                            'kategori' => 'cabut',
+                        ]);
+                    }
                 }
+                DB::commit();
+                return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $e->getMessage());
             }
-            DB::commit();
-            return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', $e->getMessage());
         }
-    }
     }
 
     public function importSortir($r)
@@ -275,7 +284,7 @@ class BkController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()->route('bk.index',['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
+            return redirect()->route('bk.index', ['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
