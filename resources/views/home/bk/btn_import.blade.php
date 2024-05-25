@@ -1,5 +1,5 @@
-<x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
-            teks="buat bk" />
+<x-theme.button modal="Y" idModal="import" href="#" icon="fa-plus" addClass="float-end"
+            teks="box" />
         <form action="{{ route('bk.import') }}" enctype="multipart/form-data" method="post">
             @csrf
             <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">

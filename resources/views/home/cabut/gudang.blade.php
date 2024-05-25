@@ -7,7 +7,7 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="3">Box belum diambil</th>
+                            <th class="dhead text-center" colspan="3">Box Stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">No Box</th>
@@ -32,7 +32,7 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="3">Box diambil</th>
+                            <th class="dhead text-center" colspan="3">Box sedang proses</th>
                         </tr>
                         <tr>
 
@@ -78,9 +78,9 @@
                     <thead>
                         <tr>
                             <th class="dhead text-center" colspan="4">
-                                <span>Box selesai blm diambil ctk</span>
+                                <span>Box selesai siap ctk</span>
                                 <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y"
-                                    idModal="tambah" teks="tambah" />
+                                    idModal="tambah" teks="serah" />
                             </th>
                         </tr>
                         <tr>

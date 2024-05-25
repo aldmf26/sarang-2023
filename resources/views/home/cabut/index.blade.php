@@ -20,7 +20,7 @@
                     <i class="fas fa-check"></i> Cabut Ok
                 </a> --}}
                 <a href="{{ route('cabut.gudang') }}"
-                    style="color: white;background-color: #E11583;" class="float-end btn btn-sm me-2">
+                    style="color: white;background-color: #D722A9;" class="float-end btn btn-sm me-2">
                     <i class="fas fa-clipboard-list"></i> Gudang
                 </a>
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
