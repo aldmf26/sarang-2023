@@ -18,7 +18,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-8">
-                @include('home.bk.nav', ['name' => 'index'])
+                {{-- @include('home.bk.nav', ['name' => 'index']) --}}
             </div>
             <div class="col-lg-4 mb-2">
                 <table class="float-end">
