@@ -15,8 +15,8 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link  {{ $rot == 'gudangsarang.gudang_cbt_selesai' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('gudangsarang.gudang_cbt_selesai') }}">
+        <a class="nav-link  {{ $rot == 'cetaknew.formulir' ? 'active' : '' }}" aria-current="page"
+            href="{{ route('cetaknew.formulir') }}">
             Sortir
         </a>
     </li>

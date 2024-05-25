@@ -19,43 +19,115 @@ class GudangSarangController extends Controller
     }
     public function index(Request $r)
     {
-        $id_pengawas = auth()->user()->id;
+
         $data = [
-            'title' => 'Gudang Cabut Selesai',
-            'cabut' => DB::select("SELECT a.id_cabut, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
+            'title' => 'gudang Cetak',
+            'pengawas' => DB::table('users')->where('posisi_id', '14')->get(),
+            'view_pengawas' => DB::select("SELECT a.id_pengawas, c.name
             FROM cabut as a 
-            left join tb_anak as b on b.id_anak = a.id_anak
-            WHERE  a.formulir = 'T' and a.id_pengawas = '$id_pengawas'
-            order by a.selesai DESC , a.id_cabut ASC
-            "),
-            'pengawas' => DB::table('users')->where('posisi_id', '14')->get()
+            left join users as c on c.id = a.id_pengawas
+            where a.formulir = 'T' and a.selesai = 'Y'
+            group by a.id_pengawas
+            ")
         ];
         return view('home.gudang_sarang.index', $data);
+    }
+
+    public function load_cabut_selesai(Request $r)
+    {
+        if (empty($r->id_pengawas)) {
+            $cabut = DB::select("SELECT 
+            a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, min(a.selesai) as selesai
+            FROM ( 
+                SELECT a.id_cabut, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
+                FROM cabut AS a 
+                LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
+                LEFT JOIN users AS c ON c.id = a.id_pengawas
+                WHERE a.formulir = 'T'
+            ) AS a
+            GROUP BY a.pengawas, a.no_box 
+            HAVING min(a.selesai) = 'Y'
+            ORDER BY a.no_box ASC;
+            ");
+        } else {
+            $cabut = DB::select("SELECT 
+            a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, min(a.selesai) as selesai
+            FROM ( 
+                SELECT a.id_pengawas, a.id_cabut, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
+                FROM cabut AS a 
+                LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
+                LEFT JOIN users AS c ON c.id = a.id_pengawas
+                WHERE a.formulir = 'T'
+            ) AS a
+            GROUP BY a.id_pengawas, a.no_box 
+            HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$r->id_pengawas'
+            ORDER BY a.no_box ASC;
+            ");
+        }
+
+        $data = [
+            'cabut' => $cabut,
+        ];
+        return view('home.gudang_sarang.getcetak', $data);
+    }
+
+    public function get_siap_cetak(Request $r)
+    {
+        $id_penerima =  auth()->user()->id;
+        $cabut = DB::select("SELECT a.tanggal, c.name, a.no_box, a.pcs_awal, a.gr_awal, b.selesai
+        FROM formulir_sarang as a 
+        left join (
+            SELECT b.no_box, min(b.selesai) as selesai
+            FROM cetak_new as b
+            group by b.no_box
+        ) as b on b.no_box = a.no_box
+        left join users as c on c.id = a.id_pemberi
+        where a.kategori = 'cetak' and b.no_box is null and a.id_penerima = '$id_penerima' ;
+        ");
+
+        $data = [
+            'cabut' => $cabut,
+        ];
+        return view('home.gudang_sarang.getsiap_cetak', $data);
+    }
+    public function get_cetak_proses(Request $r)
+    {
+        $id_penerima =  auth()->user()->id;
+        $cabut = DB::select("SELECT a.tgl, b.nama, a.no_box, a.pcs_awal, a.gr_awal
+        FROM cetak_new as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        WHERE a.id_pengawas = '$id_penerima' and a.selesai = 'T';
+        ");
+
+        $data = [
+            'cabut' => $cabut,
+        ];
+        return view('home.gudang_sarang.getcetak_proses', $data);
     }
 
     public function get_formulir(Request $r)
     {
         $data = [
             'title' => 'Gudang Sarang',
-            'id_cabut' => $r->id_cabut
+            'no_box' => $r->no_box
         ];
         return view('home.gudang_sarang.get_formulir', $data);
     }
 
     public function save_formulir(Request $r)
     {
-        $id_cabut = $r->id_cabut;
+        $no_box = $r->no_box;
         $no_invoice = strtoupper(Str::random(5));
 
-        for ($x = 0; $x < count($id_cabut); $x++) {
+        for ($x = 0; $x < count($no_box); $x++) {
             $data = [
                 'formulir' => 'Y',
                 'invoice' => 'FS-' . $no_invoice,
 
             ];
-            DB::table('cabut')->where('id_cabut', $id_cabut[$x])->update($data);
+            DB::table('cabut')->where('no_box', $no_box[$x])->update($data);
 
-            $cabut = DB::table('cabut')->where('id_cabut', $id_cabut[$x])->first();
+            $cabut = DB::table('cabut')->where('no_box', $no_box[$x])->first();
 
             $data = [
                 'no_invoice' => 'FS-' . $no_invoice,
@@ -122,7 +194,7 @@ class GudangSarangController extends Controller
     {
         $id_pengawas = auth()->user()->id;
         $data = [
-            'title' => 'Gudang Cabut',
+            'title' => 'Cabut Formulir',
             'cabut' => DB::select("SELECT a.tgl, a.no_box, a.tipe, a.ket, a.warna, a.pcs_awal, a.pcs_awal, a.gr_awal, if(b.pcs_cabut is null ,0,b.pcs_cabut) as pcs_cabut, if(b.gr_cabut is null ,0,b.gr_cabut) as gr_cabut
             FROM bk as a 
             left join (

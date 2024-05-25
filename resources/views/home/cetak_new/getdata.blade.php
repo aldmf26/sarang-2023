@@ -55,12 +55,13 @@
                         value="{{ $c->gr_akhir }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
                 </td>
                 <td class="text-end">
-                    {{ empty($c->gr_akhir) ? 0 : number_format((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1) }}%
+                    {{ empty($c->gr_akhir) || empty($c->gr_awal_ctk) ? 0 : number_format((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1) }}%
                 </td>
                 @php
-                    $susut = empty($c->gr_akhir)
-                        ? 0
-                        : round((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1);
+                    $susut =
+                        empty($c->gr_akhir) || empty($c->gr_awal_ctk)
+                            ? 0
+                            : round((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1);
 
                     $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
                 @endphp

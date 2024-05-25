@@ -10,13 +10,13 @@
     </x-slot>
 
     <x-slot name="cardBody">
-        <div x-data="{ 
+        <div x-data="{
             cek: [],
             selectedItem: [],
             tambah(no_box, pcs, gr) {
                 const selectedItem = this.selectedItem
                 const cetak = this.cetak
-
+        
                 const index = selectedItem.findIndex(item => item.no_box === no_box);
                 if (index === -1) {
                     selectedItem.push({
@@ -27,11 +27,15 @@
                 } else {
                     this.selectedItem.splice(index, 1);
                 }
-              
+        
             }
         }">
             <div class="row">
-                <div class="col">
+                <div class="col-lg-4">
+                    @include('home.gudang_sarang.nav')
+                </div>
+                <div class="col-lg-12">
+                    <br>
                     <table id="tbl_summary" class="table table-hover table-bordered">
                         <thead>
                             <tr>
@@ -51,7 +55,9 @@
                                     <td align="right">{{ $d->gr_akhir }}</td>
                                     <td align="center">
                                         {{-- <button @click="tambah({{$d->no_box}}, {{$d->pcs_akhir}}, {{$d->gr_akhir}})"></button> --}}
-                                        <input type="checkbox" @change="tambah({{$d->no_box}}, {{$d->pcs_akhir}}, {{$d->gr_akhir}})" value="{{$d->no_box}}" x-model="cek">
+                                        <input type="checkbox"
+                                            @change="tambah({{ $d->no_box }}, {{ $d->pcs_akhir }}, {{ $d->gr_akhir }})"
+                                            value="{{ $d->no_box }}" x-model="cek">
                                     </td>
                                 </tr>
                             @endforeach
@@ -92,7 +98,7 @@
                             <input class="d-none" name="no_box[]" type="text" :value="cek">
                             <template x-for="item in selectedItem">
                                 <tr>
-                                    
+
                                     <td x-text="item.no_box"></td>
                                     <td x-text="item.pcs_akhir"></td>
                                     <td x-text="item.gr_akhir"></td>

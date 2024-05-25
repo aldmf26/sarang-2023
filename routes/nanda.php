@@ -162,6 +162,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_cetak', 'get_cetak')->name('get_cetak');
+            Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
             Route::get('/history', 'history')->name('history');
             Route::get('/history_detail', 'history_detail')->name('history_detail');
             Route::get('/summary_detail', 'summary_detail')->name('summary_detail');
@@ -198,6 +199,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'home')->name('home');
             Route::get('/gudang_cbt_selesai', 'index')->name('gudang_cbt_selesai');
+            Route::get('/load_cabut_selesai', 'load_cabut_selesai')->name('load_cabut_selesai');
             Route::get('/get_formulir', 'get_formulir')->name('get_formulir');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
@@ -205,6 +207,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/cabut', 'cabut')->name('cabut');
             Route::get('/print_cabut', 'print_cabut')->name('print_cabut');
             Route::get('/get_formulircabut', 'get_formulircabut')->name('get_formulircabut');
+            Route::get('/get_siap_cetak', 'get_siap_cetak')->name('get_siap_cetak');
+            Route::get('/get_cetak_proses', 'get_cetak_proses')->name('get_cetak_proses');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
         });
     // Route::controller(RekapanController::class)

@@ -14,16 +14,13 @@
     <tbody>
         <tr class="baris1">
             <td>
-                {{-- <select name="no_box[]" id="" class="form-control select">
-
+                <select name="no_box[]" id="" class="form-control select box box1" urutan="1">
+                    <option value="">Pilih box</option>
                     @foreach ($nobox as $x)
-                        <option value="">Pilih box</option>
-                        <option value="{{ $x->no_box }}">
-                            {{ $x->no_box }}
-                        </option>
+                        <option value="{{ $x->no_box }}">{{ $x->no_box }}</option>
                     @endforeach
-                </select> --}}
-                <input type="text" class="form-control input_awal" name="no_box[]">
+                </select>
+                {{-- <input type="text" class="form-control input_awal" name="no_box[]"> --}}
             </td>
             <td>
                 <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">
@@ -55,10 +52,10 @@
                 </select>
             </td>
             <td>
-                <input type="text" class="form-control input_awal" name="pcs_awal[]">
+                <input type="text" class="form-control input_awal pcs_awal1" name="pcs_awal[]">
             </td>
             <td>
-                <input type="text" class="form-control input_awal" name="gr_awal[]">
+                <input type="text" class="form-control input_awal gr_awal1" name="gr_awal[]">
             </td>
             <td>
                 <button type="button" class="btn rounded-pill remove_baris" count="1"><i

@@ -285,6 +285,7 @@
         scrollCollapse: true,
         "autoWidth": true,
         "paging": false,
+        "info": false
     });
     $('#tablealdi').DataTable({
         "searching": false,
