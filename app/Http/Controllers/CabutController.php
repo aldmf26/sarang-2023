@@ -1687,8 +1687,8 @@ class CabutController extends Controller
         }
     }
 
-   
-        public function summary(Request $r)
+
+    public function summary(Request $r)
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
@@ -1727,19 +1727,21 @@ class CabutController extends Controller
                     )
                 ");
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr FROM cabut as a
-        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");   
+        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
 
 
-        $cabutSelesai = DB::select("SELECT
-                a.no_box,
-                a.pcs_awal as pcs,
-                a.gr_awal as gr
-                FROM cabut as a
-                LEFT JOIN formulir_sarang as cn ON a.no_box = cn.no_box
-                WHERE a.selesai = 'Y' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user
-                AND cn.no_box IS NULL
-       
-            ");
+        $cabutSelesai = DB::select("SELECT 
+        a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai
+        FROM ( 
+            SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
+            FROM cabut AS a 
+            LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
+            LEFT JOIN users AS c ON c.id = a.id_pengawas
+            WHERE a.formulir = 'T'
+        ) AS a
+        GROUP BY a.id_pengawas, a.no_box 
+        HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$id_user'
+        ORDER BY a.no_box ASC");
         $data = [
             'title' => 'Gudang Cabut',
             'bk' => $bk,
@@ -1747,12 +1749,12 @@ class CabutController extends Controller
             'cabutSelesai' => $cabutSelesai,
             'users' => $users
         ];
-        return view('home.cabut.gudang',$data);
+        return view('home.cabut.gudang', $data);
     }
 
     public function save_formulir(Request $r)
     {
-        
+
         $no_invoice = strtoupper(str()->random(5));
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
@@ -1779,5 +1781,4 @@ class CabutController extends Controller
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
     }
-    
 }
