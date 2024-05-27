@@ -210,6 +210,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_formulircabut', 'get_formulircabut')->name('get_formulircabut');
             Route::get('/get_siap_cetak', 'get_siap_cetak')->name('get_siap_cetak');
             Route::get('/get_cetak_proses', 'get_cetak_proses')->name('get_cetak_proses');
+            Route::get('/cancel', 'cancel')->name('cancel');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
         });
     // Route::controller(RekapanController::class)
