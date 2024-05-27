@@ -4,6 +4,13 @@
         font-size: 12px;
     }
 
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #000000;
+        line-height: 36px;
+        /* font-size: 12px; */
+        width: 120px !important;
+    }
+
     .kolom_select {
         width: 120px !important;
     }
@@ -15,6 +22,7 @@
             <th class="dhead">Tanggal</th>
             <th class="dhead">No Box</th>
             <th class="dhead kolom_select">Nama</th>
+            <th class="dhead">pcs/gr</th>
             <th class="dhead kolom_select">paket</th>
             <th class="dhead text-end">pcs awal</th>
             <th class="dhead text-end">gr awal</th>
@@ -26,6 +34,7 @@
             <th class="dhead text-end">sst%</th>
             {{-- <th class="dhead text-end">Denda sst</th> --}}
             <th class="dhead text-end">Total Rp</th>
+            <th class="dhead text-end">Bulan bayar</th>
             <th class="dhead text-center">Capai</th>
             <th class="dhead text-center">Aksi</th>
         </tr>
@@ -37,7 +46,8 @@
                 <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
                 <td>{{ $c->no_box }}</td>
                 <td>
-                    <select name="" id="" class="select2_add id_anak{{ $c->id_cetak }}">
+                    <select name="" id="" class="select2_add id_anak{{ $c->id_cetak }}"
+                        {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
                         <option value="">Pilih anak</option>
                         @foreach ($tb_anak as $t)
                             <option value="{{ $t->id_anak }}" {{ $t->id_anak == $c->id_anak ? 'selected' : '' }}>
@@ -47,13 +57,27 @@
                     {{-- {{ $c->nm_anak }} --}}
                 </td>
                 <td>
-                    <select name="id_paket[]" id="" class="select2_add id_paket{{ $c->id_cetak }}">
-                        @foreach ($paket as $u)
-                            <option value="{{ $u->id_kelas_cetak }}"
-                                {{ $u->id_kelas_cetak == $c->id_kelas_cetak ? 'selected' : '' }}>
-                                {{ $u->kelas }} / Rp.{{ $u->rp_pcs }}
-                            </option>
-                        @endforeach
+                    <select name="" id="" class="form-control tipe_bayar tipe_bayar{{ $c->id_cetak }}"
+                        id_cetak="{{ $c->id_cetak }}" {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
+                        <option value="">Pilih</option>
+                        <option value="1" {{ $c->tipe_bayar == 1 ? 'selected' : '' }}>pcs</option>
+                        <option value="2" {{ $c->tipe_bayar == 2 ? 'selected' : '' }}>gr</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="id_paket[]" id="" class="select2_add id_paket{{ $c->id_cetak }}"
+                        {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
+                        @if ($c->id_kelas_cetak == 0)
+                            <option value="">Pilih Paket</option>
+                        @else
+                            @foreach ($paket as $u)
+                                <option value="{{ $u->id_kelas_cetak }}"
+                                    {{ $u->id_kelas_cetak == $c->id_kelas_cetak ? 'selected' : '' }}>
+                                    {{ $u->kelas }} / Rp.{{ $u->rp_pcs }}
+                                </option>
+                            @endforeach
+                        @endif
+
                     </select>
                     {{-- {{ $c->kelas }} / Rp.{{ $c->rp_satuan }} --}}
                 </td>
@@ -101,7 +125,18 @@
                 @endphp
                 {{-- <td class="text-end">{{ number_format($denda_susut, 0) }}</td> --}}
                 <td class="text-end">
-                    {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
+                    {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut, 0) }}</td>
+                <td>
+                    <select id="" class="form-control bulan_dibayar{{ $c->id_cetak }}"
+                        {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
+                        <option value="">Pilih</option>
+                        @foreach ($bulan as $b)
+                            <option value="{{ $b->bulan }}"
+                                {{ $b->bulan == $c->bulan_dibayar ? 'selected' : '' }}>
+                                {{ $b->bulan }}</option>
+                        @endforeach
+                    </select>
+                </td>
                 <td align="center">
                     @if (empty($c->capai))
                         <button class="btn btn-sm btn-success capai no{{ $c->id_cetak }}"
