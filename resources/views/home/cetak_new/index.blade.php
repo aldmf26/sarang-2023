@@ -122,6 +122,7 @@
                             url: "{{ route('cetaknew.get_cetak') }}",
                             success: function(r) {
                                 $("#load-cetak").html(r);
+                                $('.select2_add').select2({});
                                 $('#tableHalaman').DataTable({
                                     "searching": true,
                                     scrollY: '400px',
@@ -204,34 +205,38 @@
                         var pcs_tdk_ctk = $('.pcs_tdk_ctk' + id_cetak).val();
                         var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
                         var rp_satuan = $('.rp_satuan' + id_cetak).val();
+                        var id_anak = $('.id_anak' + id_cetak).val();
+                        var pcs_hcr = $('.pcs_hcr' + id_cetak).val();
                         var no = $('.no' + id_cetak).val();
                         var id_paket = $('.id_paket' + id_cetak).val();
+
                         var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
-                        if (pcs_awal != ttl_pcs) {
-                            alertToast('error', 'Jumlah Pcs tidak sama');
-                        } else {
-                            $.ajax({
-                                type: "get",
-                                url: "{{ route('cetaknew.save_akhir') }}",
-                                data: {
-                                    id_cetak: id_cetak,
-                                    pcs_akhir: pcs_akhir,
-                                    gr_akhir: gr_akhir,
-                                    pcs_tdk_ctk: pcs_tdk_ctk,
-                                    gr_tdk_ctk: gr_tdk_ctk,
-                                    rp_satuan: rp_satuan,
-                                    id_paket: id_paket,
-                                },
-                                success: function(response) {
-                                    loadRowData(id_cetak, no)
-                                    // load_cetak();
-                                    alertToast('sukses', 'Berhasil ditambahkan');
+                        // if (pcs_awal != ttl_pcs) {
+                        //     alertToast('error', 'Jumlah Pcs tidak sama');
+                        // } else {
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cetaknew.save_akhir') }}",
+                            data: {
+                                id_cetak: id_cetak,
+                                pcs_akhir: pcs_akhir,
+                                gr_akhir: gr_akhir,
+                                pcs_tdk_ctk: pcs_tdk_ctk,
+                                gr_tdk_ctk: gr_tdk_ctk,
+                                rp_satuan: rp_satuan,
+                                id_paket: id_paket,
+                                id_anak: id_anak,
+                            },
+                            success: function(response) {
+                                loadRowData(id_cetak, no)
+                                // load_cetak();
+                                alertToast('sukses', 'Berhasil ditambahkan');
 
 
-                                }
-                            });
+                            }
+                        });
 
-                        }
+                        // }
 
                     });
 
@@ -242,8 +247,17 @@
                         }, function(data) {
                             var tr = $('tr[data-id="' + id_cetak + '"]');
                             tr.replaceWith(data);
+
+                            // Check if the new .select2_add elements exist
+                            var newSelectElements = $('.select2_add');
+                            if (newSelectElements.length > 0) {
+                                newSelectElements.select2({});
+                            } else {
+                                console.log('No select2_add elements found.');
+                            }
                         });
                     }
+
                     $(document).on("click", ".btn_selesai", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');

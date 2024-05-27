@@ -126,12 +126,10 @@ class GudangSarangController extends Controller
             $data = [
                 'formulir' => 'Y',
                 'invoice' => 'FS-' . $no_invoice,
-
             ];
             DB::table('cabut')->where('no_box', $d)->update($data);
 
             $cabut = DB::table('cabut')->where('no_box', $d)->first();
-
             $data = [
                 'no_invoice' => 'FS-' . $no_invoice,
                 'no_box' => $cabut->no_box,
@@ -143,6 +141,15 @@ class GudangSarangController extends Controller
                 'kategori' => 'cetak'
             ];
             DB::table('formulir_sarang')->insert($data);
+
+            $data = [
+                'id_pengawas' => $r->id_pengawas,
+                'no_box' => $d,
+                'tgl' => $r->tgl,
+                'pcs_awal_ctk' => $cabut->pcs_akhir,
+                'gr_awal_ctk' => $cabut->gr_akhir,
+            ];
+            DB::table('cetak_new')->insert($data);
         }
         return redirect("home/gudangsarang/print_formulir?no_invoice=FS-$no_invoice")->with('sukses', 'Data berhasil ditambahkan');
     }
