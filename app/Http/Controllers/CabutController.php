@@ -1705,6 +1705,8 @@ class CabutController extends Controller
         return view('home.cabut.summary', $data);
     }
 
+    
+
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;

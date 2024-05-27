@@ -33,7 +33,7 @@
                 </button>
                 @endif
                 @if ($btnSave == 'Y')
-                <button type="submit" class="float-end btn btn-primary button-save-modal">Simpan</button>
+                <button type="submit" class="float-end btn btn-primary button-save-modal">Save</button>
                 <button class="float-end btn btn-primary button-save-modal-loading" type="button" disabled hidden>
                     <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
                     Loading...

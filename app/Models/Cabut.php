@@ -459,8 +459,7 @@ class Cabut extends Model
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
         denda.ttl_rp_denda,
-        cetak.ttl_rp_cetak,
-        cetak.rp_target_ctk
+        cetak.ttl_rp as ctk_ttl_rp
         FROM 
             (
                 SELECT id_anak,id_pengawas
@@ -531,8 +530,7 @@ class Cabut extends Model
         ) as denda ON a.id_anak = denda.id_anak
         LEFT JOIN (
             SELECT id_anak,
-            sum(CASE WHEN c.selesai = 'Y' THEN c.pcs_akhir * c.rp_satuan ELSE 0 END ) as ttl_rp_cetak,
-            sum(CASE WHEN c.selesai = 'T' THEN c.pcs_awal_ctk * c.rp_satuan ELSE 0 END ) as rp_target_ctk
+            sum(ttl_rp) as ttl_rp
             FROM cetak_new as c 
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as cetak ON a.id_anak = cetak.id_anak

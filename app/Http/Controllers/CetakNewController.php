@@ -358,18 +358,16 @@ class CetakNewController extends Controller
             DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->delete();
         }
     }
-    public function history_detail(Request $r)
-    {
-        $id_anak = $r->id_anak;
-        $bulan = $r->bulan;
-        $tahun = $r->tahun;
 
+    public function queryHistoryDetail($id_anak,$bulan,$tahun)
+    {
         $detail = DB::select("SELECT 
         a.id_cetak,
         a.selesai,
         c.name,
         d.name as pgws,
         b.nama as nm_anak ,
+        b.id_kelas ,
         a.no_box,
         a.tgl,
         a.pcs_awal,
@@ -490,8 +488,7 @@ class CetakNewController extends Controller
             $ttl_rp -= $d->denda;
         }
 
-        $data = [
-            'id_anak' => $r->id_anak,
+        return [
             'eo' => $eo,
             'cabut' => $cabut,
             'sortir' => $sortir,
@@ -504,8 +501,67 @@ class CetakNewController extends Controller
             'ttlgr_akhir' => $gr_akhir,
             'ttlttl_rp' => $ttl_rp,
         ];
+
+    }
+    public function history_detail(Request $r)
+    {
+        $id_anak = $r->id_anak;
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $ttl_hari = $r->ttl_hari;
+
+        $query = $this->queryHistoryDetail($id_anak,$bulan,$tahun);
+        $data = [
+            'id_anak' => $id_anak,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'ttl_hari' => $ttl_hari,
+            'eo' => $query['eo'],
+            'cabut' => $query['cabut'],
+            'sortir' => $query['sortir'],
+            'dll' => $query['dll'],
+            'denda' => $query['denda'],
+            'detail' => $query['detail'],
+            'ttlpcs_awal' => $query['ttlpcs_awal'],
+            'ttlgr_awal' => $query['ttlgr_awal'],
+            'ttlpcs_akhir' => $query['ttlpcs_akhir'],
+            'ttlgr_akhir' => $query['ttlgr_akhir'],
+            'ttlttl_rp' => $query['ttlttl_rp'],
+            'ttl_hari' => $ttl_hari,
+        ];
+
+        
         return view('home.cetak_new.detail_history', $data);
     }
+
+    public function print_slipgaji(Request $r)
+    {
+        $id_anak = $r->id_anak;
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $ttl_hari = $r->ttl_hari;
+
+        $query = $this->queryHistoryDetail($id_anak,$bulan,$tahun);
+        $data = [
+            'id_anak' => $r->id_anak,
+            'eo' => $query['eo'],
+            'cabut' => $query['cabut'],
+            'sortir' => $query['sortir'],
+            'dll' => $query['dll'],
+            'denda' => $query['denda'],
+            'detail' => $query['detail'],
+            'ttlpcs_awal' => $query['ttlpcs_awal'],
+            'ttlgr_awal' => $query['ttlgr_awal'],
+            'ttlpcs_akhir' => $query['ttlpcs_akhir'],
+            'ttlgr_akhir' => $query['ttlgr_akhir'],
+            'ttlttl_rp' => $query['ttlttl_rp'],
+            'ttl_hari' => $ttl_hari,
+        ];
+
+        
+        return view('home.cetak_new.print_slipgaji', $data);
+    }
+
     public function capai(Request $r)
     {
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['capai' => $r->val]);

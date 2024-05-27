@@ -50,7 +50,7 @@
             </tr>
             @foreach ($detail as $d)
                 <tr x-show="hide">
-                    <td>{{ $d->tanggal }}</td>
+                    <td>{{ tglFormat($d->tanggal) }}</td>
                     <td>{{ $d->no_box }}</td>
                     <td></td>
                     <td>{{ $d->pcs_awal }}</td>
