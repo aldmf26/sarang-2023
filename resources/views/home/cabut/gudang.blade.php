@@ -7,15 +7,34 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="3">Box Stock</th>
+                            <th class="dheadstock text-center" colspan="3">Box Stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                         </tr>
+                        @php
+
+                            if (!function_exists('ttl')) {
+                                function ttl($tl)
+                                {
+                                    return [
+                                        'pcs' => array_sum(array_column($tl, 'pcs')),
+                                        'gr' => array_sum(array_column($tl, 'gr')),
+                                    ];
+                                }
+                            }
+
+                        @endphp
+                        <tr>
+                            <th class="dhead text-center">Total</th>
+                            <th class="dhead text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
+                        </tr>
                     </thead>
                     <tbody>
+
                         @foreach ($bk as $d)
                             <tr>
                                 <td align="center">{{ $d->no_box }}</td>
@@ -39,6 +58,11 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                        </tr>
+                        <tr>
+                            <th class="dhead text-center">Total</th>
+                            <th class="dhead text-end">{{ number_format(ttl($cabut)['pcs'], 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,23 +96,38 @@
             
                 }
             }">
-                <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
+                            placeholder="cari">
+                    </div>
+                    <div class="col-auto">
+                        <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
+                            teks="serah" />
+                        <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"
+                            teks="Po" />
+                    </div>
+                </div>
 
                 <table id="tbl3" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th class="dhead text-center" colspan="4">
                                 <span>Box selesai siap ctk</span>
-                                <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y"
-                                    idModal="tambah" teks="serah" />
+
                             </th>
                         </tr>
                         <tr>
-
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Aksi</th>
+                            <th class="dhead "></th>
+                        </tr>
+                        <tr>
+                            <th class="dhead text-center">Total</th>
+                            <th class="dhead text-end">{{ number_format(ttl($cabutSelesai)['pcs'], 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}</th>
+                            <th class="dhead text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,7 +148,7 @@
 
 
                 {{-- modal ambil box ke cetak --}}
-                <form action="{{ route('gudangsarang.save_formulir') }}" method="post">
+                <form action="{{ route('cabut.save_formulir') }}" method="post">
                     @csrf
                     <x-theme.modal idModal="tambah" title="tambah box" btnSave="Y">
                         <div class="row">
@@ -122,7 +161,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <label for="">Pgws Penerima</label>
-                                <select required name="id_pengawas" class="form-control select2" id="">
+                                <select required name="id_penerima" class="form-control select2" id="">
                                     <option value="">- Pilih pgws -</option>
                                     @foreach ($users as $d)
                                         <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>

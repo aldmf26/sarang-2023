@@ -1705,6 +1705,8 @@ class CabutController extends Controller
         return view('home.cabut.summary', $data);
     }
 
+    
+
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;
@@ -1753,7 +1755,11 @@ class CabutController extends Controller
     public function save_formulir(Request $r)
     {
 
-        $no_invoice = strtoupper(str()->random(5));
+        $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
+        $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
+        if(!$r->no_box[0] || !$r->id_penerima){
+            return redirect()->route('cabut.gudang')->with('error', 'No Box / Penerima Kosong !');
+        }
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
@@ -1762,7 +1768,7 @@ class CabutController extends Controller
                         WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
 
             $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir;
+            $gr = $ambil->gr_akhir; 
 
             $data[] = [
                 'no_invoice' => $no_invoice,
@@ -1774,9 +1780,11 @@ class CabutController extends Controller
                 'tanggal' => $r->tgl,
                 'kategori' => 'cetak',
             ];
+
+            DB::table('cabut')->where('no_box', $d)->update(['formulir' => 'Y']);
         }
 
         DB::table('formulir_sarang')->insert($data);
-        return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
+        return redirect()->route('gudangsarang.invoice')->with('sukses', 'Data Berhasil');
     }
 }

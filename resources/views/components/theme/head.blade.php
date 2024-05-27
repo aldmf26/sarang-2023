@@ -73,6 +73,13 @@
             background-color: #435EBE !important;
             color: white;
         }
+        .dheadstock {
+            background-color: #FFD1DC !important; 
+            color:rgb(19, 19, 19)
+        }
+        .pointer {
+            cursor: pointer;
+        }
 
         #image-preview img {
             width: 200px;

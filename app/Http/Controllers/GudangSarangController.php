@@ -263,4 +263,15 @@ class GudangSarangController extends Controller
 
         return view('home.gudang_sarang.printcabut', $data);
     }
+
+    public function cancel(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getFormulir = DB::table('formulir_sarang')->where('no_invoice', $no_invoice)->get();
+        foreach ($getFormulir as $d) {
+            DB::table('cabut')->where('no_box', $d->no_box)->update(['formulir' => 'T']);
+        }
+        DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->delete();
+        return redirect('home/gudangsarang')->with('sukses', 'Data Berhasil di hapus');
+    }
 }
