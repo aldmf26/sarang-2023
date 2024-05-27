@@ -139,23 +139,23 @@ class CetakNewController extends Controller
     public function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas)
     {
         if ($id_anak == 'All') {
-            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
+            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , if(a.id_kelas_cetak = '0',6,a.id_kelas_cetak) as id_kelas_cetak, a.pcs_hcr, e.denda_hcr
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.tgl between '$tgl1' and '$tgl2' and b.id_pengawas = '$id_pengawas'
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_pengawas = '$id_pengawas'
             order by a.tgl DESC, b.nama ASC
             ;");
         } else {
-            $cetak = DB::select("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan
+            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , if(a.id_kelas_cetak = '0',6,a.id_kelas_cetak) as id_kelas_cetak , a.pcs_hcr, e.denda_hcr
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' and b.id_pengawas = '$id_pengawas'
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' and a.id_pengawas = '$id_pengawas'
             order by a.tgl DESC, b.nama ASC
             ;");
         }
@@ -174,6 +174,8 @@ class CetakNewController extends Controller
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
+            'tb_anak' => $this->getData('tb_anak'),
+            'paket' => $this->getData('paket'),
 
 
         ];
@@ -230,53 +232,67 @@ class CetakNewController extends Controller
 
     public function save_akhir(Request $r)
     {
-        if ($r->id_paket == 16) {
+        // if ($r->id_paket == 16) {
 
-            $data = [
-                'pcs_akhir' => $r->pcs_akhir,
-                'gr_akhir' => $r->gr_akhir,
-                'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
-                'gr_tdk_cetak' => $r->gr_tdk_ctk,
-                'ttl_rp' => $r->pcs_akhir * $r->rp_satuan,
-            ];
-            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
+        //     $data = [
+        //         'pcs_akhir' => $r->pcs_akhir,
+        //         'gr_akhir' => $r->gr_akhir,
+        //         'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
+        //         'gr_tdk_cetak' => $r->gr_tdk_ctk,
+        //         'ttl_rp' => $r->pcs_akhir * $r->rp_satuan,
+        //     ];
+        //     DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
 
-            $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
+        //     $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
 
-            $rp_training = DB::selectOne("SELECT a.tgl,  b.nama, COUNT(a.tgl) as ttl, sum(a.ttl_rp) as ttl_rp, c.rp_gaji
-            FROM cetak_new as a 
-            left join tb_anak as b on b.id_anak = a.id_anak
-            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
-            where a.pcs_akhir != 0 and c.id_paket = 16 and a.id_anak = '$cetak->id_anak' and a.tgl = '$cetak->tgl'
-            GROUP by a.id_anak , a.tgl;");
+        //     $rp_training = DB::selectOne("SELECT a.tgl,  b.nama, COUNT(a.tgl) as ttl, sum(a.ttl_rp) as ttl_rp, c.rp_gaji
+        //     FROM cetak_new as a 
+        //     left join tb_anak as b on b.id_anak = a.id_anak
+        //     left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
+        //     where a.pcs_akhir != 0 and c.id_paket = 16 and a.id_anak = '$cetak->id_anak' and a.tgl = '$cetak->tgl'
+        //     GROUP by a.id_anak , a.tgl;");
 
-            $data = [
-                'rp_tambahan' => $rp_training->rp_gaji == 0 ? 0 : ($rp_training->rp_gaji - $rp_training->ttl_rp) / $rp_training->ttl,
-            ];
-            DB::table('cetak_new')->where('id_anak', $cetak->id_anak)->where('tgl', $cetak->tgl)->where('pcs_akhir', '!=', '0')->update($data);
-        } else {
-            $data = [
-                'pcs_akhir' => $r->pcs_akhir,
-                'gr_akhir' => $r->gr_akhir,
-                'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
-                'gr_tdk_cetak' => $r->gr_tdk_ctk,
-                'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
-            ];
-            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
-        }
+        //     $data = [
+        //         'rp_tambahan' => $rp_training->rp_gaji == 0 ? 0 : ($rp_training->rp_gaji - $rp_training->ttl_rp) / $rp_training->ttl,
+        //     ];
+        //     DB::table('cetak_new')->where('id_anak', $cetak->id_anak)->where('tgl', $cetak->tgl)->where('pcs_akhir', '!=', '0')->update($data);
+        // } else {
+        $data = [
+            'id_anak' => $r->id_anak,
+            'id_kelas_cetak' => $r->id_paket,
+            'pcs_hcr' => $r->pcs_hcr,
+            'pcs_akhir' => $r->pcs_akhir,
+            'gr_akhir' => $r->gr_akhir,
+            'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
+            'gr_tdk_cetak' => $r->gr_tdk_ctk,
+            'ttl_rp' => $r->pcs_akhir * $r->rp_satuan
+        ];
+        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
+        // }
     }
 
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut,e.id_paket,a.rp_tambahan
+            // 'c' => DB::selectOne("SELECT a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box,a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut,e.id_paket,a.rp_tambahan
+            // From cetak_new as a  
+            // LEFT join tb_anak as b on b.id_anak = a.id_anak
+            // left join users as c on c.id = a.id_pemberi
+            // left join users as d on d.id = a.id_pengawas
+            // left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
+            // where a.id_cetak = $r->id_cetak;"),
+            'c' => DB::selectOne("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , if(a.id_kelas_cetak = '0',6,a.id_kelas_cetak) as id_kelas_cetak, a.pcs_hcr, e.denda_hcr
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.id_cetak = $r->id_cetak;"),
-            'no' => $r->no
+            where a.id_cetak = $r->id_cetak
+        "),
+            'no' => $r->no,
+            'tb_anak' => $this->getData('tb_anak'),
+            'bulan' => $this->getData('bulan'),
+            'paket' => $this->getData('paket'),
         ];
 
         return view('home.cetak_new.getRowData', $data);

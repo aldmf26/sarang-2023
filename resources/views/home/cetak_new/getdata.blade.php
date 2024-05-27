@@ -1,19 +1,30 @@
+<style>
+    .select2 {
+        width: 120px !important;
+        font-size: 12px;
+    }
+
+    .kolom_select {
+        width: 120px !important;
+    }
+</style>
 <table class="table table-bordered" id="tableHalaman">
     <thead>
         <tr>
             <th class="dhead">#</th>
-            <th class="dhead">No Box</th>
             <th class="dhead">Tanggal</th>
-            <th class="dhead">Nama</th>
-            <th class="dhead">paket</th>
+            <th class="dhead">No Box</th>
+            <th class="dhead kolom_select">Nama</th>
+            <th class="dhead kolom_select">paket</th>
             <th class="dhead text-end">pcs awal</th>
             <th class="dhead text-end">gr awal</th>
             <th width="70px" class="dhead text-end">pcs tdk ctk</th>
             <th width="70px" class="dhead text-end">gr tdk ctk</th>
             <th width="70px" class="dhead text-end">pcs akhir</th>
             <th width="70px" class="dhead text-end">gr akhir</th>
+            <th width="70px" class="dhead text-end">pcs hcr</th>
             <th class="dhead text-end">sst%</th>
-            <th class="dhead text-end">Denda sst</th>
+            {{-- <th class="dhead text-end">Denda sst</th> --}}
             <th class="dhead text-end">Total Rp</th>
             <th class="dhead text-center">Capai</th>
             <th class="dhead text-center">Aksi</th>
@@ -23,10 +34,29 @@
         @foreach ($cetak as $no => $c)
             <tr data-id="{{ $c->id_cetak }}">
                 <td>{{ $no + 1 }}</td>
-                <td>{{ $c->no_box }}</td>
                 <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
-                <td>{{ $c->nm_anak }}</td>
-                <td>{{ $c->kelas }} / Rp.{{ $c->rp_satuan }}</td>
+                <td>{{ $c->no_box }}</td>
+                <td>
+                    <select name="" id="" class="select2_add id_anak{{ $c->id_cetak }}">
+                        <option value="">Pilih anak</option>
+                        @foreach ($tb_anak as $t)
+                            <option value="{{ $t->id_anak }}" {{ $t->id_anak == $c->id_anak ? 'selected' : '' }}>
+                                {{ $t->nama }}</option>
+                        @endforeach
+                    </select>
+                    {{-- {{ $c->nm_anak }} --}}
+                </td>
+                <td>
+                    <select name="id_paket[]" id="" class="select2_add id_paket{{ $c->id_cetak }}">
+                        @foreach ($paket as $u)
+                            <option value="{{ $u->id_kelas_cetak }}"
+                                {{ $u->id_kelas_cetak == $c->id_kelas_cetak ? 'selected' : '' }}>
+                                {{ $u->kelas }} / Rp.{{ $u->rp_pcs }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {{-- {{ $c->kelas }} / Rp.{{ $c->rp_satuan }} --}}
+                </td>
                 <td class="text-end">{{ $c->pcs_awal_ctk }}</td>
                 <td class="text-end">{{ $c->gr_awal_ctk }}</td>
 
@@ -47,12 +77,16 @@
                     <input type="hidden" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
                         value="{{ $c->pcs_awal_ctk }}">
                     <input type="hidden" class="rp_satuan{{ $c->id_cetak }}" value="{{ $c->rp_satuan }}">
-                    <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}">
+                    {{-- <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}"> --}}
                     <input type="hidden" class="no{{ $c->id_cetak }}" value="{{ $no + 1 }}">
                 </td>
                 <td class="text-end">
                     <input type="text" class="form-control text-end gr_akhir{{ $c->id_cetak }}" name="gr_akhir[]"
                         value="{{ $c->gr_akhir }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
+                </td>
+                <td class="text-end">
+                    <input type="text" class="form-control text-end pcs_hcr{{ $c->id_cetak }}" name="pcs_akhir[]"
+                        value="{{ $c->pcs_hcr }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
                 </td>
                 <td class="text-end">
                     {{ empty($c->gr_akhir) || empty($c->gr_awal_ctk) ? 0 : number_format((1 - ($c->gr_akhir + $c->gr_tdk_cetak) / $c->gr_awal_ctk) * 100, 1) }}%
@@ -65,7 +99,7 @@
 
                     $denda_susut = $susut >= $c->batas_susut ? $susut * $c->denda_susut : 0;
                 @endphp
-                <td class="text-end">{{ number_format($denda_susut, 0) }}</td>
+                {{-- <td class="text-end">{{ number_format($denda_susut, 0) }}</td> --}}
                 <td class="text-end">
                     {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut + $c->rp_tambahan, 0) }}</td>
                 <td align="center">
