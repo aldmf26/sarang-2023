@@ -10,8 +10,8 @@
             <div>
                 <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm me-2"
                     style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
-                {{-- <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
-                    addClass="float-end tambah_kerja" teks="Kerja" /> --}}
+                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
+                    addClass="float-end tambah_kerja" teks="Kerja" />
                 <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list" addClass="float-end"
                     teks="Summary" />
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel" addClass="float-end"
@@ -139,65 +139,7 @@
                     }
 
 
-                    load_menu();
 
-                    function load_menu() {
-                        $.ajax({
-                            method: "GET",
-                            url: "{{ route('cetaknew.load_tambah_data') }}",
-                            dataType: "html",
-                            success: function(hasil) {
-                                $("#load_menu").html(hasil);
-                                $('.select').select2({
-                                    dropdownParent: $('#tambah .modal-content')
-                                });
-
-                            },
-                        });
-                    }
-
-                    $(document).on("click", ".remove_baris", function() {
-                        var delete_row = $(this).attr("count");
-                        $(".baris" + delete_row).remove();
-                    });
-
-                    var count = 2;
-                    $(document).on("click", ".tbh_baris", function() {
-                        count = count + 1;
-                        $.ajax({
-                            url: "{{ route('cetaknew.tambah_baris') }}",
-                            data: {
-                                count: count,
-                            },
-                            type: "Get",
-                            success: function(data) {
-                                $("#tb_baris").append(data);
-                                $('.select').select2({
-                                    dropdownParent: $('#tambah .modal-content')
-                                });
-                            },
-                        });
-                    });
-
-                    $(document).on("submit", "#save_awal", function(e) {
-                        e.preventDefault();
-                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                        var formData = $(this).serialize();
-                        formData += "&_token=" + csrfToken;
-
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('cetaknew.save_target') }}",
-                            data: formData,
-                            success: function(response) {
-                                alertToast('sukses', 'Berhasil ditambahkan');
-                                // $('.input_awal').val('');
-                                load_menu();
-                                $('#tambah').modal('hide');
-                                load_cetak();
-                            },
-                        });
-                    });
                     $(document).on("click", ".btn_save_akhir", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
@@ -232,6 +174,7 @@
                                 id_anak: id_anak,
                                 tipe_bayar: tipe_bayar,
                                 bulan_dibayar: bulan_dibayar,
+                                pcs_hcr: pcs_hcr
                             },
                             success: function(response) {
                                 loadRowData(id_cetak, no)
@@ -296,9 +239,9 @@
                             success: function(response) {
 
 
-                                loadRowData(id_cetak, no)
+                                // loadRowData(id_cetak, no)
 
-                                // load_cetak();
+                                load_cetak();
                                 alertToast('sukses', 'Data berhasil di cancel');
                             }
                         });
@@ -370,23 +313,7 @@
                     return date.toISOString().split('T')[0];
                 }
 
-                $(document).on('change', '.box', function() {
-                    var urutan = $(this).attr('urutan');
-                    var box = $(this).val();
 
-
-                    $.ajax({
-                        type: "get",
-                        url: "{{ route('cetaknew.get_no_box') }}",
-                        data: {
-                            box: box
-                        },
-                        success: function(response) {
-                            $('.pcs_awal' + urutan).val(response['pcs_awal']);
-                            $('.gr_awal' + urutan).val(response['gr_awal']);
-                        }
-                    });
-                });
                 $(document).on('change', '.tipe_bayar', function() {
                     var id_cetak = $(this).attr('id_cetak');
                     var tipe_bayar = $(this).val();
@@ -404,7 +331,85 @@
                 });
             </script>
             <script>
-                document.body.style.zoom = "75%";
+                document.body.style.zoom = "80%";
+            </script>
+            <script>
+                load_menu();
+
+                function load_menu() {
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ route('cetaknew.load_tambah_data') }}",
+                        dataType: "html",
+                        success: function(hasil) {
+                            $("#load_menu").html(hasil);
+                            $('.select').select2({
+                                dropdownParent: $('#tambah .modal-content')
+                            });
+
+                        },
+                    });
+                }
+
+                $(document).on("click", ".remove_baris", function() {
+                    var delete_row = $(this).attr("count");
+                    $(".baris" + delete_row).remove();
+                });
+
+                var count = 2;
+                $(document).on("click", ".tbh_baris", function() {
+                    count = count + 1;
+                    $.ajax({
+                        url: "{{ route('cetaknew.tambah_baris') }}",
+                        data: {
+                            count: count,
+                        },
+                        type: "Get",
+                        success: function(data) {
+                            $("#tb_baris").append(data);
+                            $('.select').select2({
+                                dropdownParent: $('#tambah .modal-content')
+                            });
+                        },
+                    });
+                });
+
+                $(document).on("submit", "#save_awal", function(e) {
+                    e.preventDefault();
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var formData = $(this).serialize();
+                    formData += "&_token=" + csrfToken;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('cetaknew.save_target') }}",
+                        data: formData,
+                        success: function(response) {
+                            alertToast('sukses', 'Berhasil ditambahkan');
+                            // $('.input_awal').val('');
+                            load_menu();
+                            $('#tambah').modal('hide');
+                            load_cetak();
+                        },
+                    });
+                });
+                $(document).on('change', '.box', function() {
+                    var urutan = $(this).attr('urutan');
+                    var box = $(this).val();
+
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetaknew.get_no_box') }}",
+                        data: {
+                            box: box
+                        },
+                        success: function(response) {
+                            $('.pcs_awal' + urutan).val(response['pcs_awal']);
+                            $('.gr_awal' + urutan).val(response['gr_awal']);
+                        }
+                    });
+                });
             </script>
         @endsection
     </x-slot>

@@ -26,13 +26,15 @@
         </table>
     </div>
     <div class="col-lg-8">
-      
-        <a target="_blank" href="{{ route('cetaknew.print_slipgaji',[
-            'id_anak' => $id_anak,
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'ttl_hari' => $ttl_hari,
-        ]) }}" class="btn btn-sm btn-primary float-end align-middle"><i class="fas fa-print"></i> Print</a>
+
+        <a target="_blank"
+            href="{{ route('cetaknew.print_slipgaji', [
+                'id_anak' => $id_anak,
+                'bulan' => $bulan,
+                'tahun' => $tahun,
+                'ttl_hari' => $ttl_hari,
+            ]) }}"
+            class="btn btn-sm btn-primary float-end align-middle"><i class="fas fa-print"></i> Print</a>
     </div>
 </div>
 <br>
@@ -111,8 +113,6 @@
                                 @endif
                             </td>
                         </tr>
-
-                    
                     @endforeach
                 @endforeach
             </tbody>
@@ -129,7 +129,9 @@
                 </tr>
                 <tr>
                     <th class="dhead text-end" colspan="9">Rata2</th>
-                    <th class="text-end dhead">{{ number_format($ttlttl_rp / $ttl_hari, 0) }}</th>
+                    <th class="text-end dhead">
+                        {{-- {{ emptty($ttl_hari) ? 0 : number_format($ttlttl_rp / $ttl_hari, 0) }} --}}
+                    </th>
                 </tr>
                 {{-- <tr>
                     <th class="dhead text-end" colspan="4">Hari Masuk</th>
