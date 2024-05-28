@@ -155,6 +155,8 @@ class GudangSarangController extends Controller
         return redirect("home/gudangsarang/print_formulir?no_invoice=FS-$no_invoice")->with('sukses', 'Data berhasil ditambahkan');
     }
 
+
+
     public function print_formulir(Request $r)
     {
         $formulir = DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->get();

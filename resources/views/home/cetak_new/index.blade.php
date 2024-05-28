@@ -8,16 +8,17 @@
                 <p class="badge bg-danger">Setor lewat jam 09:30 AM = tidak capai</p>
             </div>
             <div>
-                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
-                    addClass="float-end tambah_kerja" teks="Kerja" />
+                <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm me-2"
+                    style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
+                {{-- <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
+                    addClass="float-end tambah_kerja" teks="Kerja" /> --}}
                 <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list" addClass="float-end"
                     teks="Summary" />
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel" addClass="float-end"
                     teks="Export" />
-                <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
-                    teks="History" />
-                <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="float-end btn btn-sm me-2"
-                    style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
+                {{-- <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
+                    teks="History" /> --}}
+
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
                 <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
@@ -30,6 +31,7 @@
 
     <x-slot name="cardBody">
 
+        </style>
         <section class="row">
             <input type="hidden" id="tgl1" value="{{ $tgl1 }}">
             <input type="hidden" id="tgl2" value="{{ $tgl2 }}">
@@ -209,6 +211,8 @@
                         var pcs_hcr = $('.pcs_hcr' + id_cetak).val();
                         var no = $('.no' + id_cetak).val();
                         var id_paket = $('.id_paket' + id_cetak).val();
+                        var tipe_bayar = $('.tipe_bayar' + id_cetak).val();
+                        var bulan_dibayar = $('.bulan_dibayar' + id_cetak).val();
 
                         var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
                         // if (pcs_awal != ttl_pcs) {
@@ -226,13 +230,13 @@
                                 rp_satuan: rp_satuan,
                                 id_paket: id_paket,
                                 id_anak: id_anak,
+                                tipe_bayar: tipe_bayar,
+                                bulan_dibayar: bulan_dibayar,
                             },
                             success: function(response) {
                                 loadRowData(id_cetak, no)
                                 // load_cetak();
                                 alertToast('sukses', 'Berhasil ditambahkan');
-
-
                             }
                         });
 
@@ -383,6 +387,24 @@
                         }
                     });
                 });
+                $(document).on('change', '.tipe_bayar', function() {
+                    var id_cetak = $(this).attr('id_cetak');
+                    var tipe_bayar = $(this).val();
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cetaknew.get_paket_cetak') }}",
+                        data: {
+                            tipe_bayar: tipe_bayar,
+                        },
+                        success: function(response) {
+                            $('.id_paket' + id_cetak).html(response);
+                        }
+                    });
+                });
+            </script>
+            <script>
+                document.body.style.zoom = "75%";
             </script>
         @endsection
     </x-slot>
