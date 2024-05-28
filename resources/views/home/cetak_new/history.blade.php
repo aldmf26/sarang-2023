@@ -41,7 +41,7 @@
                                 <td align="right">{{ number_format($d->pcs_akhir, 0) }}</td>
                                 <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                <td><button id_anak="{{ $d->id_anak }}" class="btn btn-sm btn-primary detail"><i
+                                <td><button id_anak="{{ $d->id_anak }}" ttl_hari="{{ $d->ttl_hari }}" class="btn btn-sm btn-primary detail"><i
                                             class="fas fa-eye"></i></button></td>
                             </tr>
                         @endforeach
@@ -71,6 +71,7 @@
                 $('.detail').click(function(e) {
                     e.preventDefault();
                     const id_anak = $(this).attr("id_anak")
+                    const ttl_hari = $(this).attr("ttl_hari")
                     const bulan = "{{ $bulan }}"
                     const tahun = "{{ $tahun }}"
 
@@ -81,6 +82,7 @@
                         data: {
                             id_anak,
                             bulan,
+                            ttl_hari,
                             tahun
                         },
                         success: function(r) {
