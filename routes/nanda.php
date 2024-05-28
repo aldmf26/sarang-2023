@@ -210,8 +210,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_formulircabut', 'get_formulircabut')->name('get_formulircabut');
             Route::get('/get_siap_cetak', 'get_siap_cetak')->name('get_siap_cetak');
             Route::get('/get_cetak_proses', 'get_cetak_proses')->name('get_cetak_proses');
-            Route::get('/cancel', 'cancel')->name('cancel');
+            Route::get('/batal', 'batal')->name('batal');
+            Route::get('/selesai', 'selesai')->name('selesai');
+            Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
+            Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')

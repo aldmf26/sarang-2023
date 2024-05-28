@@ -43,21 +43,42 @@
                             <td>{{ $no + 1 }}</td>
                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
                             <td>
-                                <a href="{{ $kategori == 'cetak' ? route('gudangsarang.print_formulir', ['no_invoice' => $d->no_invoice]) : "/home/cetaknew/formulir/$d->no_invoice" }}"
-                                    target="_blank">
-                                    {{ $d->no_invoice }}
-                                </a>
+                                {{ $d->no_invoice }}
                             </td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
                             <td class="text-end">{{ $d->pcs }}</td>
                             <td class="text-end">{{ $d->gr }}</td>
                             <td>
-                                <a onclick="return confirm('Yakin dihapus ?')" href="{{ route('gudangsarang.cancel', ['kategori' => 'cetak', 'no_invoice' => $d->no_invoice]) }}">
-                                    <span class="badge bg-danger">Cancel</span>
-                                </a>
-                                <span class="badge bg-primary">Edit</span>
-                                <span class="badge bg-success">Selesai</span>
+                                @php
+                                    $param = ['kategori' => 'cetak', 'no_invoice' => $d->no_invoice];
+                                    $getCtk = DB::table('formulir_sarang as a')
+                                        ->select('a.no_box')
+                                        ->join('cetak_new as b', 'a.no_box', 'b.no_box')
+                                        ->where('a.no_invoice', $d->no_invoice)
+                                        ->first();
+                                @endphp
+                                @if (!$getCtk)
+                                    <a onclick="return confirm('Yakin dihapus ?')"
+                                        href="{{ route('gudangsarang.batal', $param) }}">
+                                        <span class="badge bg-danger">Batal</span>
+                                    </a>
+
+                                    <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"
+                                        data-kategori="cetak">
+                                        <span class="badge bg-primary">Edit</span>
+                                    </a>
+
+                                    <a onclick="return confirm('Yakin diselesaikan ?')"
+                                        href="{{ route('gudangsarang.selesai', $param) }}">
+                                        <span class="badge bg-success">Selesai</span>
+                                    </a>
+                                @else
+                                    <a href="{{ $kategori == 'cetak' ? route('gudangsarang.print_formulir', ['no_invoice' => $d->no_invoice]) : "/home/cetaknew/formulir/$d->no_invoice" }}"
+                                        target="_blank">
+                                        <span class="badge bg-primary">Print</span>
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -66,6 +87,45 @@
 
 
         </section>
+
+        <form action="{{ route('gudangsarang.update_invoice') }}" method="post">
+            @csrf
+            <x-theme.modal title="Edit Po" idModal="edit" size="modal-lg">
+                <div class="loading d-none">
+                    <x-theme.loading />
+                </div>
+                <div id="load_edit"></div>
+            </x-theme.modal>
+        </form>
+        @section('scripts')
+            <script>
+                $(document).on('click', '.edit', function(e) {
+                    e.preventDefault();
+
+                    var no_invoice = $(this).data('no_invoice');
+                    var kategori = $(this).data('kategori');
+
+                    $("#edit").modal('show')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('gudangsarang.load_edit_invoice') }}",
+                        data: {
+                            no_invoice,
+                            kategori,
+                        },
+                        beforeSend: function() {
+                            $("#load_edit").html("");
+                            $('.loading').removeClass('d-none');
+                        },
+                        success: function(r) {
+                            $('.loading').addClass('d-none');
+                            $("#load_edit").html(r);
+                            pencarian('inputTbl', 'tbl1')
+                        }
+                    });
+                })
+            </script>
+        @endsection
     </x-slot>
 
 </x-theme.app>

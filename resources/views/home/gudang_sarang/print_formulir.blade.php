@@ -27,11 +27,15 @@
 <body>
     <br>
     <div class="container-fluid">
-        <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="print_hilang btn btn-sm btn-warning"><i
-                class="fa-solid fa-left-long"></i>
-            Kembali</a>
-        <a href="#" class="print print_hilang btn btn-sm btn-primary"><i class="fa-solid fa-print"></i> Print</a>
+        <div class="d-flex justify-content-between print_hilang">
+            <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="print_hilang btn btn-sm btn-warning"><i
+                    class="fa-solid fa-left-long"></i>
+                Kembali</a>
+            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i class="fa-solid fa-print"></i>
+                Print</a>
+        </div>
         <h5 class="fw-bold text-center" style="text-decoration: underline">FORMULIR SETOR BARANG KE CETAK</h5>
+
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
         <div class="row">
             <div class="col-lg-12">
@@ -58,7 +62,7 @@
                         @foreach ($formulir as $no => $f)
                             <tr>
                                 <td>{{ $no + 1 }}</td>
-                                <td>{{ date('d-m-Y', strtotime($f->tanggal)) }}</td>
+                                <td>{{ tanggal($f->tanggal) }}</td>
                                 <td>{{ $f->no_box }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
@@ -80,23 +84,7 @@
 
     </div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        $('.print').click(function(e) {
-            e.preventDefault();
-            window.print()
-
-        });
-    </script>
-    {{-- <script>
-        window.print();
-    </script> --}}
+  
 </body>
 
 </html>
