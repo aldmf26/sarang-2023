@@ -779,8 +779,10 @@ class CetakNewController extends Controller
             left join users as b on b.id = a.id_pemberi
             WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b);"),
 
-            'cetak_proses' => DB::select("SELECT a.no_box, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal
+            'cetak_proses' => DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal
             FROM cetak_new as a 
+            left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
+            left join users as c on c.id = b.id_pemberi
             where a.selesai = 'T' and a.id_pengawas = '$id_pengawas'"),
 
             'cetak_selesai' => DB::select("SELECT c.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal

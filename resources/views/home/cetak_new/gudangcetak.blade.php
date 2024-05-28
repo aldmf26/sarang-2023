@@ -1,7 +1,15 @@
 <x-theme.app title="{{ $title }}" table="T">
     <x-slot name="slot">
-        <h6>{{ $title }}</h6>
         <div class="row">
+            <div class="col-lg-8">
+                <h6>{{ $title }}</h6>
+            </div>
+            <div class="col-lg-4">
+                <a href="" class="btn btn-sm btn-success float-end"><i class="fas fa-file-excel"></i> Export</a>
+            </div>
+            <br>
+            <br>
+
             <div class="col-lg-4">
                 <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
@@ -10,8 +18,8 @@
                             <th class="dhead text-center" colspan="4">Cetak stock</th>
                         </tr>
                         <tr>
-                            <th class="dhead text-center">No Box</th>
                             <th class="dhead text-center">Pemilik</th>
+                            <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                         </tr>
@@ -38,8 +46,8 @@
                     <tbody>
                         @foreach ($cabut_selesai as $d)
                             <tr>
-                                <td align="center">{{ $d->no_box }}</td>
                                 <td align="center">{{ $d->name }}</td>
+                                <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
                             </tr>
@@ -53,10 +61,11 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="3">Cetak sedang proses</th>
+                            <th class="dhead text-center" colspan="4">Cetak sedang proses</th>
                         </tr>
                         <tr>
 
+                            <th class="dhead text-center">Pemilik</th>
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
@@ -64,6 +73,7 @@
 
                         <tr>
                             <th class="dheadstock text-center">Total</th>
+                            <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['gr_awal'], 0) }}</th>
                         </tr>
@@ -71,6 +81,7 @@
                     <tbody>
                         @foreach ($cetak_proses as $d)
                             <tr>
+                                <td align="center">{{ $d->name }}</td>
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
@@ -84,6 +95,16 @@
                 selectedItem: [],
                 tambah(no_box, name, pcs_awal, gr_awal) {
                     this.selectedItem.push({ no_box, name, pcs_awal, gr_awal });
+                    this.$nextTick(() => {
+                        this.initSelect2();
+                    });
+                },
+                initSelect2() {
+                    this.$refs.select2.forEach(el => {
+                        $(el).select2({
+                            dropdownParent: $('#tambah .modal-content')
+                        });
+                    });
                 }
             }">
                 <div class="row">
@@ -109,8 +130,8 @@
                         </tr>
                         <tr>
 
-                            <th class="dhead text-center">No Box</th>
                             <th class="dhead text-center">Pemilik</th>
+                            <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-center">Aksi</th>
@@ -127,8 +148,8 @@
                     <tbody>
                         @foreach ($cetak_selesai as $d)
                             <tr>
-                                <td align="center">{{ $d->no_box }}</td>
                                 <td align="center">{{ $d->name }}</td>
+                                <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
                                 <td align="center">
@@ -171,16 +192,25 @@
                                     <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
+                                    <th class="dhead">Pengawas</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <input class="d-none" name="no_box[]" type="text" :value="cek">
-                                <template x-for="item in selectedItem">
+                                <template x-for="(item, index) in selectedItem" :key="index">
                                     <tr>
                                         <td x-text="item.no_box"></td>
                                         <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
+                                        <td>
+                                            <select x-init="initSelect2($el)" class="select2">
+                                                @foreach ($users as $u)
+                                                    <option value="{{ $u->id }}">{{ strtoupper($u->name) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                     </tr>
                                 </template>
                             </tbody>
@@ -196,6 +226,15 @@
         @section('scripts')
             <script>
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
+            </script>
+            <script>
+                document.addEventListener('alpine:init', () => {
+                    Alpine.data('select2Handler', () => ({
+                        initSelect2(element) {
+                            $(element).select2();
+                        }
+                    }));
+                });
             </script>
         @endsection
     </x-slot>

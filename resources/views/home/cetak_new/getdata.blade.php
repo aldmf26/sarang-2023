@@ -36,7 +36,7 @@
             <th class="dhead text-end">Total Rp</th>
             <th class="dhead text-end">Bulan bayar</th>
             <th class="dhead text-center">Capai</th>
-            <th class="dhead text-center">Aksi</th>
+            <th class="dhead text-center" width="100px">Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -59,6 +59,7 @@
                 <td>
                     <select name="" id="" class="form-control tipe_bayar tipe_bayar{{ $c->id_cetak }}"
                         id_cetak="{{ $c->id_cetak }}" {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
+                        <option value="">Pilih</option>
                         <option value="1" {{ $c->tipe_bayar == 1 ? 'selected' : '' }}>pcs</option>
                         <option value="2" {{ $c->tipe_bayar == 2 ? 'selected' : '' }}>gr</option>
                     </select>
