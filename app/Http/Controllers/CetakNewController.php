@@ -271,6 +271,8 @@ class CetakNewController extends Controller
 
         $susut =  (1 - (($r->gr_tdk_cetak + $r->gr_akhir) / $cetak->gr_awal_ctk)) * 100;
 
+        dd($susut);
+
         if (round($susut, 0) >= $kelas_cetak->batas_susut) {
             $denda_susut = round($susut, 0) * $kelas_cetak->denda_susut;
         } else {
