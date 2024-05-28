@@ -74,7 +74,6 @@
                     const ttl_hari = $(this).attr("ttl_hari")
                     const bulan = "{{ $bulan }}"
                     const tahun = "{{ $tahun }}"
-
                     $('#detail').modal('show')
                     $.ajax({
                         type: "GET",

@@ -130,7 +130,7 @@
                 <tr>
                     <th class="dhead text-end" colspan="9">Rata2</th>
                     <th class="text-end dhead">
-                        {{-- {{ emptty($ttl_hari) ? 0 : number_format($ttlttl_rp / $ttl_hari, 0) }} --}}
+                        {{ emptty($ttl_hari) ? 0 : number_format($ttlttl_rp / $ttl_hari, 0) }}
                     </th>
                 </tr>
                 {{-- <tr>

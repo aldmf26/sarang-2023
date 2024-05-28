@@ -46,7 +46,7 @@
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $d->pgws }}</td>
                                 <td><a href="#" class="detail"
-                                        id_anak="{{ $d->id_anak }}">{{ $d->nama }}</a></td>
+                                        ttl_hari="{{$ttl_hari}}" id_anak="{{ $d->id_anak }}">{{ $d->nama }}</a></td>
                                 <td align="right">{{ $ttl_hari }}</td>
                                 <td align="right">
                                     {{ number_format($ttl_rp, 0) }}
@@ -68,6 +68,7 @@
                 $('.detail').click(function(e) {
                     e.preventDefault();
                     const id_anak = $(this).attr("id_anak")
+                    const ttl_hari = $(this).attr("ttl_hari")
                     const bulan = "{{ $bulan }}"
                     const tahun = "{{ $tahun }}"
                     $('#detail').modal('show')
@@ -77,6 +78,7 @@
                         data: {
                             id_anak,
                             bulan,
+                            ttl_hari,
                             tahun
                         },
                         success: function(r) {
