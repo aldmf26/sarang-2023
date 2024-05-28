@@ -1,5 +1,4 @@
 <div class="row">
-
     <div class="col-lg-4">
         <table class="table">
             <tr>
@@ -9,15 +8,18 @@
                     {{ auth()->user()->name }}
                 </th>
             </tr>
+            @php
+                $getAnak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
+                @endphp
             <tr>
                 <th width="1">Nama</th>
                 <th width="1">:</th>
-                <th>{{ $detail[0]->nm_anak }}</th>
+                <th>{{ $getAnak->nama }}</th>
             </tr>
             <tr>
                 <th width="1">Kelas</th>
                 <th width="1">:</th>
-                <th>{{ $detail[0]->id_kelas }}</th>
+                <th>{{ $getAnak->id_kelas }}</th>
             </tr>
             {{-- <tr>
                 <th width="100">Hari Masuk</th>
@@ -102,7 +104,7 @@
                                 @if ($category == 'detail')
                                     {{ empty($c->gr_awal_ctk) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
                                 @else
-                                    {{ number_format($c->susut, 1) ?? '-' }}%
+                                    {{ number_format($c->susut ?? 0, 1) ?? '-' }}%
                                 @endif
                             </td>
 
@@ -129,10 +131,8 @@
                     <th class="text-end dhead">{{ number_format($ttlttl_rp, 0) }}</th>
                 </tr>
                 <tr>
-                    <th class="dhead text-end" colspan="9">Rata2</th>
-                    <th class="text-end dhead">
-                        {{-- {{ emptty($ttl_hari) ? 0 : number_format($ttlttl_rp / $ttl_hari, 0) }} --}}
-                    </th>
+                    <th class="dhead text-end" colspan="9">Masuk Kerja : {{ $ttl_hari }} hari ~ Rata2 </th>
+                    <th class="text-end dhead">{{ number_format($ttlttl_rp / $ttl_hari, 0) }}</th>
                 </tr>
                 {{-- <tr>
                     <th class="dhead text-end" colspan="4">Hari Masuk</th>

@@ -554,7 +554,6 @@ class CetakNewController extends Controller
         $bulan = $r->bulan;
         $tahun = $r->tahun;
         $ttl_hari = $r->ttl_hari;
-
         $query = $this->queryHistoryDetail($id_anak, $bulan, $tahun);
         $data = [
             'id_anak' => $id_anak,

@@ -123,7 +123,7 @@
                                         @if ($category == 'detail')
                                             {{ empty($c->gr_awal_ctk) ? 0 : number_format((1 - $c->gr_akhir / $c->gr_awal_ctk) * 100, 1) }}%
                                         @else
-                                            {{ number_format($c->susut, 1) ?? '-' }}%
+                                            {{ number_format($c->susut ?? 0, 1) ?? '-' }}%
                                         @endif
                                     </td>
         
