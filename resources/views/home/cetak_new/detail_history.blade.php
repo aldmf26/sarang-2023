@@ -8,15 +8,18 @@
                     {{ auth()->user()->name }}
                 </th>
             </tr>
+            @php
+                $getAnak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
+                @endphp
             <tr>
                 <th width="1">Nama</th>
                 <th width="1">:</th>
-                <th>{{ $detail[0]->nm_anak }}</th>
+                <th>{{ $getAnak->nama }}</th>
             </tr>
             <tr>
                 <th width="1">Kelas</th>
                 <th width="1">:</th>
-                <th>{{ $detail[0]->id_kelas }}</th>
+                <th>{{ $getAnak->id_kelas }}</th>
             </tr>
             {{-- <tr>
                 <th width="100">Hari Masuk</th>
