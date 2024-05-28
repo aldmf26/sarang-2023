@@ -5,7 +5,7 @@
                 <h6 class="">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
                     {{ date('d M y', strtotime($tgl2)) }}</h6>
                 <h6>Anak : {{ $anak }}</h6>
-                <p class="badge bg-danger">Setor lewat jam 09:30 AM = tidak capai</p>
+                <p class="badge bg-danger" style="font-size: 14px">Setor lewat jam 09:30 AM = tidak capai</p>
             </div>
             <div>
                 <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm me-2"
