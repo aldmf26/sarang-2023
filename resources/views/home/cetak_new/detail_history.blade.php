@@ -70,7 +70,7 @@
                 @endphp
 
                 @foreach ($categories as $category => $label)
-                    @foreach ($category as $c)
+                    @foreach ($$category as $c)
                         @php
                             $no++;
                             $isDenda = $label == 'Denda';
