@@ -16,7 +16,7 @@
     <td>
         <select name="" id="" class="form-control tipe_bayar tipe_bayar{{ $c->id_cetak }}"
             id_cetak="{{ $c->id_cetak }}" {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
-            <option value="">Pilih</option>
+            {{-- <option value="">Pilih</option> --}}
             <option value="1" {{ $c->tipe_bayar == 1 ? 'selected' : '' }}>pcs</option>
             <option value="2" {{ $c->tipe_bayar == 2 ? 'selected' : '' }}>gr</option>
         </select>
