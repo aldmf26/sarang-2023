@@ -1,14 +1,13 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
-
-
+        <a href="{{ route('sortir.gudang') }}" class="float-end btn btn-sm me-2"
+            style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
 
         <a href="{{ route('sortir.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
             class="float-end btn btn-sm btn-primary me-2">
             <i class="fas fa-file-excel"></i> Export
         </a>
-
 
         <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Sortir <span
@@ -17,7 +16,6 @@
 
         {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja --}}
-
 
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
             teks="kry baru" />
@@ -243,7 +241,7 @@
                             }
                         });
                     })
-                    $(document).on('change', '.selectTipe',function(e){
+                    $(document).on('change', '.selectTipe', function(e) {
                         var count = $(this).attr('count')
                         var id_tipe = $(this).val()
 

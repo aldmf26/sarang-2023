@@ -10,11 +10,11 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <style>
         @media print {
-          .form-check {
-            display: none;
-          }
+            .form-check {
+                display: none;
+            }
         }
-      </style>
+    </style>
 </head>
 
 <body class="py-3" x-data="{
@@ -23,20 +23,20 @@
 }">
     <h6 class="text-center"><u>FORMULIR SETOR BARANG KE SORTIR</u></h6>
     <div class="form-check float-end me-5">
-        <input @change="hide = ! hide" class="form-check-input" type="checkbox" value=""
-            id="cekbox">
+        <input @change="hide = ! hide" class="form-check-input" type="checkbox" value="" id="cekbox">
         <label class="form-check-label" for="cekbox">
             Sembunyikan data
         </label>
         <button class="btn btn-sm btn-primary" onclick="window.print()">Print</button>
     </div>
     <div class="px-3">
-        <p>Pengawas : 
+        <p>Pengawas :
+            <span x-show="hide">{{ auth()->user()->find($detail[0]->id_pemberi)->name }} </span>
+            <span>~</span>
             <span x-show="hide">{{ auth()->user()->find($detail[0]->id_penerima)->name }} </span>
-            <span style="margin-left: 50px;"
-                class="ml-5">~</span></p>
+        </p>
         <table style="font-size: 10px; border: 1px solid black" class="table table-bordered">
-         
+
             <tr>
                 <th :class="classTh" width="10%">Tgl</th>
                 <th :class="classTh" width="8%">No Box</th>
@@ -77,7 +77,7 @@
         </table>
     </div>
 
-   
+
 </body>
 
 </html>

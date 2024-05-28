@@ -237,6 +237,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/rekap', 'rekap')->name('rekap');
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
+            Route::get('/gudang', 'gudang')->name('gudang');
         });
     Route::controller(EoController::class)
         ->prefix('home/eo')

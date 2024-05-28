@@ -1,6 +1,6 @@
 <tr class="baris{{ $count }}">
     <td>
-        <select name="no_box[]" id="" class="form-control select box{{ $count }} box"
+        {{-- <select name="no_box[]" id="" class="form-control select box{{ $count }} box"
             urutan="{{ $count }}">
             <option value="">Pilih box</option>
             @foreach ($nobox as $x)
@@ -8,8 +8,8 @@
                     {{ $x->no_box }}
                 </option>
             @endforeach
-        </select>
-        {{-- <input type="text" class="form-control input_awal" name="no_box[]"> --}}
+        </select> --}}
+        <input type="text" class="form-control input_awal" name="no_box[]">
     </td>
     <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control input_awal" name="tgl[]">

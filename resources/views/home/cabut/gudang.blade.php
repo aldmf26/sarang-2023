@@ -183,7 +183,7 @@
                                     <tr>
 
                                         <td x-text="item.no_box"></td>
-                                        <td x-text="item.pcs"</td>
+                                        <td x-text="item.pcs"></td>
                                         <td x-text="item.gr"></td>
                                     </tr>
                                 </template>

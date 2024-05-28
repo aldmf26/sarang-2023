@@ -82,7 +82,7 @@
     @endphp
     {{-- <td class="text-end">{{ number_format($denda_susut, 0) }}</td> --}}
     <td class="text-end">
-        {{ number_format($c->pcs_akhir * $c->rp_satuan - $denda_susut, 0) }}</td>
+        {{ number_format($c->ttl_rp, 0) }}</td>
     <td>
         <select id="" class="form-control bulan_dibayar{{ $c->id_cetak }}"
             {{ $c->selesai == 'Y' ? 'disabled' : '' }}>

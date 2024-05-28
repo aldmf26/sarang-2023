@@ -143,31 +143,31 @@ class SortirController extends Controller
             ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
             WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
             // if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
-                // $rupiah = str()->remove('.', $r->rupiah[$i]);
-                $kelasSortir = DB::table('tb_kelas_sortir')->where('id_kelas', $r->tipe[$i])->first();
-                $rupiah = ($kelasSortir->rupiah / $kelasSortir->gr) * $r->gr_awal[$i];
-                $id_sortir = $r->id_sortir[$i];
-                $data = [
-                    'no_box' => $r->no_box[$i],
-                    'tgl' => $r->tgl_terima[$i],
-                    'id_pengawas' =>$admin,
-                    'id_anak' => $r->id_anak[$i],
-                    'id_kelas' => $r->tipe[$i],
-                    'pcuc' => $r->pcuc[$i],
-                    'pcs_awal' => $r->pcs_awal[$i],
-                    'gr_awal' => $r->gr_awal[$i],
-                    'rp_target' => $rupiah,
-                    'tgl_input' => date('Y-m-d')
-                ];
-                if ($id_sortir == 9999) {
-                    DB::table('sortir')->insert($data);
-                } else {
-                    DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
-                }
+            // $rupiah = str()->remove('.', $r->rupiah[$i]);
+            $kelasSortir = DB::table('tb_kelas_sortir')->where('id_kelas', $r->tipe[$i])->first();
+            $rupiah = ($kelasSortir->rupiah / $kelasSortir->gr) * $r->gr_awal[$i];
+            $id_sortir = $r->id_sortir[$i];
+            $data = [
+                'no_box' => $r->no_box[$i],
+                'tgl' => $r->tgl_terima[$i],
+                'id_pengawas' => $admin,
+                'id_anak' => $r->id_anak[$i],
+                'id_kelas' => $r->tipe[$i],
+                'pcuc' => $r->pcuc[$i],
+                'pcs_awal' => $r->pcs_awal[$i],
+                'gr_awal' => $r->gr_awal[$i],
+                'rp_target' => $rupiah,
+                'tgl_input' => date('Y-m-d')
+            ];
+            if ($id_sortir == 9999) {
+                DB::table('sortir')->insert($data);
+            } else {
+                DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
+            }
             // } else {
             //     return 'Stok pcs / gr melebihi Bk';
             // }
-                }
+        }
 
         return 'berhasil';
 
@@ -490,5 +490,27 @@ class SortirController extends Controller
         $view = 'home.sortir.export_rekap';
         $tbl = Sortir::queryRekap($bulan, $tahun);
         return Excel::download(new SortirRekapExport($tbl, $view), 'Export REKAP SORTIR.xlsx');
+    }
+
+    public function gudang(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $data = [
+            'title' => 'Gudang',
+
+            'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal
+            FROM formulir_sarang as a 
+            WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' and a.id_penerima = '$id_user';"),
+
+            'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal
+            FROM sortir as a 
+            WHERE a.id_pengawas = '$id_user' and a.selesai = 'T';"),
+
+            'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            FROM sortir as a 
+            WHERE a.id_pengawas = '$id_user' and a.selesai = 'Y';")
+
+        ];
+        return view('home.sortir.gudang', $data);
     }
 }
