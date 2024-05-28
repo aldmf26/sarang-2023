@@ -1714,39 +1714,12 @@ class CabutController extends Controller
         $tahun =  $r->tahun ?? date('Y');
         $users = DB::table('users')->where('posisi_id', '14')->get();
 
-        $bk = DB::select("SELECT
-                    a.no_box,
-                    a.pcs_awal as pcs,
-                    a.gr_awal as gr
-                    FROM bk as a
-                    WHERE a.kategori = 'cabut' AND a.penerima = $id_user 
-                    AND a.selesai = 'T' AND NOT EXISTS (
-                        SELECT 1
-                        FROM cabut AS b
-                        WHERE b.no_box = a.no_box
-                    )
-                ");
-        $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr FROM cabut as a
-        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
-
-
-        $cabutSelesai = DB::select("SELECT 
-        a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai
-        FROM ( 
-            SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
-            FROM cabut AS a 
-            LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
-            LEFT JOIN users AS c ON c.id = a.id_pengawas
-            WHERE a.formulir = 'T'
-        ) AS a
-        GROUP BY a.id_pengawas, a.no_box 
-        HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$id_user'
-        ORDER BY a.no_box ASC");
+        $gudang = Cabut::gudang($bulan, $tahun, $id_user);
         $data = [
             'title' => 'Gudang Cabut',
-            'bk' => $bk,
-            'cabut' => $cabut,
-            'cabutSelesai' => $cabutSelesai,
+            'bk' => $gudang->bk,
+            'cabut' => $gudang->cabut,
+            'cabutSelesai' => $gudang->cabutSelesai,
             'users' => $users
         ];
         return view('home.cabut.gudang', $data);
