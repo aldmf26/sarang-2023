@@ -1758,6 +1758,6 @@ class CabutController extends Controller
         }
 
         DB::table('formulir_sarang')->insert($data);
-        return redirect()->route('gudangsarang.invoice')->with('sukses', 'Data Berhasil');
+        return redirect()->route('cabut.gudang')->with('sukses', 'Data Berhasil');
     }
 }

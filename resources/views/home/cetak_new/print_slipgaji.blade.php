@@ -129,9 +129,9 @@
         
                                     <td class="text-end">
                                         @if ($isDenda)
-                                            {{ number_format($c->denda) }}
+                                            {{ number_format($c->denda,0) }}
                                         @else
-                                            {{ number_format($category == 'detail' ? $c->pcs_akhi r * $c->rp_satuan : $c->ttl_rp) }}
+                                            {{ number_format($category == 'detail' ? $c->pcs_akhir * $c->rp_satuan : $c->ttl_rp) }}
                                         @endif
                                     </td>
                                 </tr>

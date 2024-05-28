@@ -6,16 +6,21 @@
 
             </div>
             <div class="col-lg-8">
+                <a href="{{ route('cabut.gudang') }}"
+                    style="color: white;background-color: #D722A9;" class="float-end btn btn-sm me-2">
+                    <i class="fas fa-clipboard-list"></i> Gudang
+                </a>
+                
                 <a href="{{ route('eo.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end btn btn-sm btn-primary me-2">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
                 <x-theme.button modal="Y" idModal="tambah2" href="#" icon="fa-plus" addClass="float-end"
                     teks="Eo" />
-                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
                     class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja <span
                         class="badge bg-danger" id="anakBelum"></span>
-                </a>
+                </a> --}}
                 <x-theme.button href="#" modal="Y" idModal="anak" icon="fa-plus" addClass="float-end"
                     teks="kry baru" />
                 <x-theme.btn_filter />

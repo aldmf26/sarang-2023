@@ -1,13 +1,16 @@
 <x-theme.app title="{{ $title }}" table="T">
     <x-slot name="slot">
-        <h6>{{ $title }}</h6>
+        <div class="d-flex justify-content-between mb-3">
+            <h6>{{ $title }}</h6>
+            <x-theme.button href="#" icon="fa-print" teks="export" />
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dheadstock text-center" colspan="3">Box Stock</th>
+                            <th class="dhead text-center" colspan="3">Box Stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">No Box</th>
@@ -28,9 +31,9 @@
 
                         @endphp
                         <tr>
-                            <th class="dhead text-center">Total</th>
-                            <th class="dhead text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
-                            <th class="dhead text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
+                            <th class="dheadstock text-center">Total</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,9 +63,9 @@
                             <th class="dhead text-end">Gr</th>
                         </tr>
                         <tr>
-                            <th class="dhead text-center">Total</th>
-                            <th class="dhead text-end">{{ number_format(ttl($cabut)['pcs'], 0) }}</th>
-                            <th class="dhead text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
+                            <th class="dheadstock text-center">Total</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cabut)['pcs'], 0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +76,7 @@
                                 <td align="right">{{ $d->gr }}</td>
                             </tr>
                         @endforeach
+                        
                     </tbody>
                 </table>
             </div>
@@ -124,10 +128,10 @@
                             <th class="dhead "></th>
                         </tr>
                         <tr>
-                            <th class="dhead text-center">Total</th>
-                            <th class="dhead text-end">{{ number_format(ttl($cabutSelesai)['pcs'], 0) }}</th>
-                            <th class="dhead text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}</th>
-                            <th class="dhead text-center">Aksi</th>
+                            <th class="dheadstock text-center">Total</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['pcs'], 0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}</th>
+                            <th class="dheadstock text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
