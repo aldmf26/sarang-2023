@@ -1,7 +1,5 @@
 <div class="row">
-    @php
-        dd($detail);
-    @endphp
+
     <div class="col-lg-4">
         <table class="table">
             <tr>
