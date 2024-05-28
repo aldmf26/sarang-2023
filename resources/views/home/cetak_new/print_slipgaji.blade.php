@@ -153,7 +153,7 @@
                         </tr>
                         <tr>
                             <th class="dhead text-end" colspan="8">Masuk Kerja : {{ $ttl_hari }}hari ~ Rata2 </th>
-                            <th class="text-end dhead">{{ number_format($ttlttl_rp / $ttl_hari, 0) }}</th>
+                            <th class="text-end dhead">{{ number_format($ttlttl_rp, 0) }}</th>
                         </tr>
                         {{-- <tr>
                             <th class="dhead text-end" colspan="4">Hari Masuk</th>
