@@ -23,7 +23,7 @@
             <div class="d-flex justify-content-between mb-3">
                 <h6>{{ $title }}</h6>
                 <div>
-                    <a class="btn btn-sm btn-primary" href="{{ route('cabut.export_gudang',['bulan' => $bulan, 'tahun' => $tahun, 'id_user' => $id_user]) }}"><i class="fas fa-print"></i> Export</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('cabut.export_gudang',['bulan' => $bulan, 'tahun' => $tahun, 'id_user' => $id_user]) }}"><i class="fas fa-print"></i> Export All</a>
                     <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                         teks="serah" />
                     <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"

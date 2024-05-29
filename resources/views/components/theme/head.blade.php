@@ -70,13 +70,15 @@
         }
 
         .dhead {
-            background-color: #435EBE !important;
+            background-color: #8c8989   !important;
             color: white;
         }
+
         .dheadstock {
-            background-color: #FFD1DC !important; 
-            color:rgb(19, 19, 19)
+            background-color: #FFD1DC !important;
+            color: rgb(19, 19, 19)
         }
+
         .pointer {
             cursor: pointer;
         }
@@ -125,8 +127,9 @@
             right: 1px;
             width: 20px;
         }
+
         .pink-magenta {
-            background-color: #E11583;"
+            background-color: #E11583;
         }
 
         label {
@@ -210,13 +213,15 @@
         .modal-dialog-centered {
             justify-content: center;
         }
+
         thead {
-                position: sticky;
-                top: 0;
-                background-color: #f1f1f1;
-                /* Warna latar belakang header yang tetap */
-                z-index: 1;
-            }
+            position: sticky;
+            top: 0;
+            background-color: #f1f1f1;
+            /* Warna latar belakang header yang tetap */
+            z-index: 1;
+        }
+
         .img-detail {
             width: 50%;
             height: 350px;
@@ -254,9 +259,24 @@
             /* font-size: 12px; */
             width: 170px;
         }
+
+        .btn-primary {
+            background-color: #F7914D !important;
+            border-color: #F7914D !important;
+        }
+        .btn-info {
+            background-color: rgb(126, 124, 124) !important;
+            border-color: rgb(126, 124, 124) !important;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: #F7914D !important;
+        }
+        .bg-primary {
+            background-color: #F7914D !important;
+        }
     </style>
     @yield('styles')
-
+    
     <livewire:styles />
     <livewire:scripts />
 </head>

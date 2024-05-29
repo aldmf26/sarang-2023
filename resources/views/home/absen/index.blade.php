@@ -143,44 +143,6 @@
                 </div>
             </x-theme.modal>
         </form>
-        {{-- <form action="{{ route('absen.detailSum') }}" method="get">
-            <x-theme.modal idModal="tambah"  title="Detail Absen">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Bulan</label>
-                            <select name="bulan" class="form-control select2" id="">
-                                <option value="">- Pilih Bulan -</option>
-                                
-                                @foreach ($bulan as $b)
-                                    <option {{ (int) date('m') == $b->bulan ? 'selected' : '' }} value="{{ $b->id_bulan }}">{{ $b->nm_bulan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Tahun</label>
-                            <select name="tahun" class="form-control select2" id="">
-                                <option value="">- Pilih Tahun -</option>
-                                <option value="2022">2022</option>
-                                <option value="2023" selected>2023</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <label for="">Pengawas</label>
-                        <select name="id_pengawas" class="form-control select2" id="">
-                            <option value="all">- ALL -</option>
-                            @foreach ($pengawas as $d)
-                                <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                </div>
-            </x-theme.modal>
-        </form> --}}
 
         <x-theme.modal idModal="loading" btnSave="T" size="modal-lg" disabled="true" title="Tunggu loading">
             mohon tunggu loading...
@@ -221,19 +183,24 @@
 
                         });
 
-
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('absen.create') }}",
-                            data: {
-                                id_anak: idAnakWadah,
-                                id_pengawas: idPengawasWadah,
-                                tgl: tgl
-                            },
-                            success: function(r) {
-                                window.location.reload()
-                            }
-                        });
+                        if(!idAnakWadah.length){
+                            alertToast('err', 'Isi anak dulu untuk menyimpan data !')
+                        } else {
+                            $('#loading').modal('show')
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ route('absen.create') }}",
+                                data: {
+                                    id_anak: idAnakWadah,
+                                    id_pengawas: idPengawasWadah,
+                                    tgl: tgl
+                                },
+                                success: function(r) {
+                                    window.location.reload()
+                                    alertToast('sukses',`Absen Tanggal : ${tgl} berhasil dimasukan`)
+                                }
+                            });
+                        }
                     })
 
                     $(document).on('click', '.detailAbsen', function(e) {

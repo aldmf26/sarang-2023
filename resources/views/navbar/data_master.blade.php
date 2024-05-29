@@ -4,7 +4,7 @@
             @forelse ($data as $d)
                 <div class="col-lg-3">
                     <a href="{{ route($d->route) }}">
-                        <div style="cursor:pointer;background-color: #8ca3f3" class="card border card-hover text-white">
+                        <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                             <div class="card-front">
                                 <div class="card-body">
                                     <h4 class="card-title text-white text-center"><img

@@ -664,7 +664,7 @@ class Cabut extends Model
                     )
                 ");
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr FROM cabut as a
-        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
+        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.no_box != 9999 AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
 
 
 

@@ -104,6 +104,14 @@ class AbsenController extends Controller
 
     public function create(Request $r)
     {
+        $tgl = Carbon::parse($r->tgl);
+        $hari = $tgl->day;
+        $tahun = $tgl->year;
+        $bulan = in_array($hari, [27, 28, 29, 30, 31]) ? $tgl->copy()->addMonth()->month : $tgl->month;
+
+        if(!$r->id_anak) {
+            return redirect()->route('absen.index')->with('error', 'Pilih Anak Terlebih dahulu');
+        }
         DB::table('absen')->where('tgl', $r->tgl)->delete();
 
         for ($i = 0; $i < count($r->id_anak); $i++) {
@@ -113,6 +121,8 @@ class AbsenController extends Controller
                 'id_pengawas' => $r->id_pengawas[$i],
                 'tgl' => $r->tgl,
                 'ket' => '',
+                'bulan_dibayar' => $bulan,
+                'tahun_dibayar' => $tahun,
                 'id_kerja' => 0
             ]);
         }
