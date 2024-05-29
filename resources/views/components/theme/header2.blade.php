@@ -1,14 +1,14 @@
-<div class="header-top">
+<div class="header-top" style="background-color: #8c8989;">
     <div class="container">
         <div class="logo">
             <a href="dashboard">
                 <center>
-                    <img src="https://putrirembulan.com/assets/img/portfolio/swallow.png" alt="Logo">
+                    <img src="https://gudangsarang.ptagafood.com/assets/login/img/empat.svg" alt="Logo">
                 </center>
             </a>
-            <h5>KERJA SARANG</h5>
+            <h6 class="text-white">KERJA SARANG</h6>
         </div>
-        <div class="header-top-right">
+        <div class="header-top-right ">
 
             <div class="dropdown">
                 <a href="#" id="topbarUserDropdown"
@@ -31,8 +31,8 @@
                         <img src='{{ asset("img/$gambar.png") }}' alt="Avatar">
                     </div>
                     <div class="text">
-                        <h6 class="user-dropdown-name">{{ $nama }}</h6>
-                        <p class="user-dropdown-status text-sm text-muted">
+                        <h6 class="text-white user-dropdown-name">{{ $nama }}</h6>
+                        <p class="user-dropdown-status text-sm text-white">
                             {{ $posisi }}
                         </p>
                     </div>

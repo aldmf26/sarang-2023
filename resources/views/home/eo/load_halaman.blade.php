@@ -12,7 +12,7 @@
                     <th class="dhead">Tgl Ambil</th>
                     <th class="dhead" class="text-end">Gr EO <br> Awal ~ Akhir</th>
                     <th class="dhead text-end">Susut</th>
-                    <th class="dhead text-end">Ttl Rp</th>
+                    <th class="dhead text-end">Total Rp</th>
                     <th class="dhead">Selesai</th>
                     <th class="dhead" width="50">
                         <center>

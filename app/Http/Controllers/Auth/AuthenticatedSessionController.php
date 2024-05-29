@@ -28,8 +28,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $redir = auth()->user()->posisi_id == 14 ? 'home/cetaknew' : '/dashboard';
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended($redir);
     }
 
     /**

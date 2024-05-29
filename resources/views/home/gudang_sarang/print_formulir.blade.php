@@ -31,10 +31,11 @@
             <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="print_hilang btn btn-sm btn-warning"><i
                     class="fa-solid fa-left-long"></i>
                 Kembali</a>
-            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i class="fa-solid fa-print"></i>
+            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i
+                    class="fa-solid fa-print"></i>
                 Print</a>
         </div>
-        <h5 class="fw-bold text-center" style="text-decoration: underline">FORMULIR SETOR BARANG KE CETAK</h5>
+        <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK</h5>
 
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
         <div class="row">
@@ -43,48 +44,60 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>tanggal</th>
-                            <th>no box</th>
-                            <th class="text-end">pcs awal</th>
-                            <th class="text-end">gr awal</th>
-                            <th class="text-end">pcs tidak ctk</th>
-                            <th class="text-end">gr tidak ctk</th>
-                            <th>nama anak</th>
-                            <th class="text-end">pcs akhir</th>
-                            <th class="text-end">gr akhir</th>
-                            <th class="text-end">pcs hcr</th>
-                            <th class="text-end">susut%</th>
-                            <th class="text-end">total gaji</th>
-                            <th>capai</th>
+                            <th>Tanggal</th>
+                            <th>No Box</th>
+                            <th class="text-end">Pcs Awal</th>
+                            <th class="text-end">Gr Awal</th>
+                            <th class="text-end">Pcs Tidak Ctk</th>
+                            <th class="text-end">Gr Tidak Ctk</th>
+                            <th>Nama Anak</th>
+                            <th class="text-end">Pcs Akhir</th>
+                            <th class="text-end">Gr Akhir</th>
+                            <th class="text-end">Pcs Hcr</th>
+                            <th class="text-end">Susut%</th>
+                            <th class="text-end">Total Gaji</th>
+                            <th>Capai</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $ttlPcs = 0;
+                            $ttlGr = 0;
+                        @endphp
                         @foreach ($formulir as $no => $f)
+                            @php
+                                $ttlPcs += $f->pcs_awal;
+                                $ttlGr += $f->gr_awal;
+                            @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ tanggal($f->tanggal) }}</td>
                                 <td>{{ $f->no_box }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                @for ($i = 0; $i < 9; $i++)
+                                    <td></td>
+                                @endfor
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-center" colspan="3">Total</th>
+                            <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
+                            <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                            @for ($i = 0; $i < 9; $i++)
+                                <th></th>
+                            @endfor
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
 
     </div>
 
-  
+
 </body>
 
 </html>

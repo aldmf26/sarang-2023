@@ -1,6 +1,6 @@
 <header class="mb-5">
     @include('components.theme.header2')
-    <nav class="main-navbar ">
+    <nav class="main-navbar " style="background-color: #F7914D; ">
         <div class="container font-bold">
             <ul>
                 <li class="menu-item">

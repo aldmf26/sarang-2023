@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }} " table="Y" sizeCard="9">
+<x-theme.app title="{{ $title }} " table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
@@ -29,7 +29,7 @@
                     <tr>
                         <th class="dhead" width="5">#</th>
                         <th class="dhead">Tanggal</th>
-                        <th class="dhead">No Invoice</th>
+                        <th class="dhead">No PO</th>
                         <th class="dhead">Nama Pemberi</th>
                         <th class="dhead">Nama Penerima</th>
                         <th class="dhead text-center">Ttl Box</th>
