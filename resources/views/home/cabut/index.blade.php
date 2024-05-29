@@ -1,8 +1,37 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <div class="row justify-content-end">
-            <div class="col-lg-4">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
+
+        <div class="d-flex justify-content-between">
+            <h6 class="mt-1">{{ $title }}</h6>
+            <div class="d-flex gap-1">
+                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history" addClass="history"
+                    teks="history" />
+                <div>
+                    @include('home.bk.btn_import')
+                </div>
+                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+                    teks="kry baru" />
+                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end"
+                    teks="summary" />
+                <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
+                    class="btn btn-primary btn-sm float-end"><i class="fas fa-plus"></i> Cabut
+                    {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
+                </a>
+                <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                    class="btn btn-sm btn-primary ">
+                    <i class="fas fa-file-excel"></i> Export
+                </a>
+                <a href="{{ route('cabut.gudang') }}" style="color: white;background-color: #D722A9;"
+                    class="btn btn-sm ">
+                    <i class="fas fa-clipboard-list"></i> Gudang
+                </a>
+            </div>
+
+        </div>
+        <hr class="mt-2" style="border: 2px solid #435EBE">
+        @include('home.cabut.nav')
+
+        {{-- <div class="col-lg-4">
 
             </div>
             <div class="col-lg-8">
@@ -15,48 +44,19 @@
                             WHERE 
                             id_pengawas = '$id_pengawas' AND no_box != 9999;");
                 @endphp
-                {{-- <a href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
+                <a href="{{ route('cabut.cabut_ok', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
                     class="float-end {{ $cekBtn->hasil == 'true' ? '' : 'disabled' }} btn btn-sm btn-success me-2">
                     <i class="fas fa-check"></i> Cabut Ok
-                </a> --}}
-                <a href="{{ route('cabut.gudang') }}"
-                    style="color: white;background-color: #D722A9;" class="float-end btn btn-sm me-2">
-                    <i class="fas fa-clipboard-list"></i> Gudang
-                </a>
-                <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"
-                    class="float-end btn btn-sm btn-primary me-2">
-                    <i class="fas fa-file-excel"></i> Export
-                </a>
-                
-
-                {{-- <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
-                teks="List anak sisa" /> --}}
-
-
-                <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
-                    class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Cabut 
-                    {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
                 </a>
 
-                {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
+                <x-theme.button modal="Y" idModal="listAnakSisa" href="#" icon="fa-users" addClass="float-end"
+                teks="List anak sisa" />
+
+                <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
                     class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja
-                </a> --}}
+                </a>
+            </div> --}}
 
-                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end"
-                    teks="summary" />
-                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
-                    teks="kry baru" />
-
-                @include('home.bk.btn_import')
-                <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
-                    addClass="float-end history" teks="history" />
-            </div>
-            <div class="col-lg-12">
-                <hr style="border: 2px solid #435EBE">
-
-            </div>
-            @include('home.cabut.nav')
-        </div>
 
     </x-slot>
 

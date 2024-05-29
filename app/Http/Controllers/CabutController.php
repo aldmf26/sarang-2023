@@ -1165,8 +1165,8 @@ class CabutController extends Controller
         $tahun = $r->tahun;
         $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();;
-        $sheet->setTitle('Summary Box');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Summary Box');    
 
         $koloms = [
             'A1' => 'no lot',
@@ -1697,7 +1697,7 @@ class CabutController extends Controller
         $summary = Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
 
         $data = [
-            'title' => 'Summary Cabut',
+            'title' => 'Summary Perkaryawan',
             'bulan' => $bulan,
             'tahun' => $tahun,
             'summary' => $summary,
@@ -1705,7 +1705,7 @@ class CabutController extends Controller
         return view('home.cabut.summary', $data);
     }
 
-    
+
 
     public function gudang(Request $r)
     {
@@ -1720,9 +1720,117 @@ class CabutController extends Controller
             'bk' => $gudang->bk,
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
-            'users' => $users
+            'users' => $users,
+            'id_user' => $id_user,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
         ];
         return view('home.cabut.gudang', $data);
+    }
+
+    public function export_gudang(Request $r)
+    {
+        $id_user = $r->id_user;
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
+
+        $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Gudang cabut');    
+
+        $koloms = [
+            'A1' => 'box stock',
+            'B1' => 'pgws',
+            'C1' => 'no box',
+            'D1' => 'pcs',
+            'E1' => 'gr',
+            
+            'G1' => 'box sedang proses',
+            'H1' => 'pgws',
+            'I1' => 'no box',
+            'J1' => 'pcs',
+            'K1' => 'gr',
+
+            'M1' => 'box selesai siap cetak',
+            'N1' => 'pgws',
+            'O1' => 'no box',
+            'P1' => 'pcs',
+            'Q1' => 'gr',
+
+
+        ];
+        foreach ($koloms as $kolom => $isiKolom) {
+            $sheet->setCellValue($kolom, ucwords($isiKolom));
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('B2:E2')->applyFromArray($styleBold);
+        $sheet->getStyle('B2:E2')->applyFromArray($styleBaris);
+
+        $sheet->getStyle('H2:K2')->applyFromArray($styleBold);
+        $sheet->getStyle('H2:K2')->applyFromArray($styleBaris);
+
+        $sheet->getStyle('N2:Q2')->applyFromArray($styleBold);
+        $sheet->getStyle('N2:Q2')->applyFromArray($styleBaris);
+        // $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
+
+        
+        $users = DB::table('users')->whereIn('posisi_id', [13,14])->pluck('name', 'id');
+        $dataTypes = [
+            ['key' => 'bk', 'startCol' => 'B'],
+            ['key' => 'cabut', 'startCol' => 'H'],
+            ['key' => 'cabutSelesai', 'startCol' => 'N'],
+        ];
+        
+        foreach ($dataTypes as $dataType) {
+            $row = 2;
+            foreach ($users as $id => $name) {
+                $gudang = Cabut::gudang($bulan, $tahun, $id);
+                foreach ($gudang->{$dataType['key']} as $item) {
+                    $startCol = $dataType['startCol'];
+                    $sheet->setCellValue($startCol . $row, $name);
+
+                    $col1 = chr(ord($startCol) + 1);
+                    $col2 = chr(ord($startCol) + 2);
+                    $col3 = chr(ord($startCol) + 3);
+
+                    $sheet->setCellValue($col1 . $row, $item->no_box);
+                    $sheet->setCellValue($col2 . $row, $item->pcs);
+                    $sheet->setCellValue($col3 . $row, $item->gr);
+
+                    $sheet->getStyle("$startCol$row:$col3$row")->applyFromArray($styleBaris);
+                    $row++;
+                }
+            }
+        }
+
+        
+        
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Gudang Cabut";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 
     public function save_formulir(Request $r)
@@ -1730,7 +1838,7 @@ class CabutController extends Controller
 
         $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
         $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
-        if(!$r->no_box[0] || !$r->id_penerima){
+        if (!$r->no_box[0] || !$r->id_penerima) {
             return redirect()->route('cabut.gudang')->with('error', 'No Box / Penerima Kosong !');
         }
         $no_box = explode(',', $r->no_box[0]);
@@ -1741,7 +1849,7 @@ class CabutController extends Controller
                         WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
 
             $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir; 
+            $gr = $ambil->gr_akhir;
 
             $data[] = [
                 'no_invoice' => $no_invoice,

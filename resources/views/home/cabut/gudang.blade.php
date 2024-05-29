@@ -15,7 +15,7 @@
                         gr: parseFloat(gr),
                     });
                 } else {
-                    this.selectedItem.splice(index, 1);
+                    selectedItem.splice(index, 1);
                 }
         
             }
@@ -23,7 +23,7 @@
             <div class="d-flex justify-content-between mb-3">
                 <h6>{{ $title }}</h6>
                 <div>
-                    <x-theme.button href="#" icon="fa-print" teks="export" />
+                    <a class="btn btn-sm btn-primary" href="{{ route('cabut.export_gudang',['bulan' => $bulan, 'tahun' => $tahun, 'id_user' => $id_user]) }}"><i class="fas fa-print"></i> Export</a>
                     <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                         teks="serah" />
                     <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"
@@ -33,6 +33,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
+                    <div style="overflow-y: scroll; height: 700px">
                     <table id="tbl1" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
@@ -73,9 +74,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 <div class="col-lg-4">
                     <input type="text" id="tbl2input" class="form-control form-control-sm mb-2" placeholder="cari">
+                    <div style="overflow-y: scroll; height: 700px">
 
                     <table id="tbl2" class="table table-bordered table-hover table-striped">
                         <thead>
@@ -105,9 +108,12 @@
 
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 <div class="col-lg-4">
                     <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
+                    <div style="overflow-y: scroll; height: 700px">
+
                     <table id="tbl3" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
@@ -144,7 +150,7 @@
                             @endforeach
                         </tbody>
                     </table>
-
+                    </div>
 
                     {{-- modal ambil box ke cetak --}}
                     <form action="{{ route('cabut.save_formulir') }}" method="post">

@@ -24,7 +24,7 @@
     <x-slot name="cardBody">
 
         <section class="row">
-            <table class="table" id="nanda">
+            <table class="table table-bordered" id="nanda">
                 <thead>
                     <tr>
                         <th class="dhead" width="5">#</th>
@@ -32,6 +32,7 @@
                         <th class="dhead">No Invoice</th>
                         <th class="dhead">Nama Pemberi</th>
                         <th class="dhead">Nama Penerima</th>
+                        <th class="dhead text-center">Ttl Box</th>
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-center">Aksi</th>
@@ -41,14 +42,15 @@
                     @foreach ($formulir as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
+                            <td>{{ tanggal($d->tanggal) }}</td>
                             <td>
                                 {{ $d->no_invoice }}
                             </td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
-                            <td class="text-end">{{ $d->pcs }}</td>
-                            <td class="text-end">{{ $d->gr }}</td>
+                            <td align="center">{{ $d->ttlbox }}</td>
+                            <td class="text-end">{{ number_format($d->pcs,0) }}</td>
+                            <td class="text-end">{{ number_format($d->gr,0) }}</td>
                             <td>
                                 @php
                                     $param = ['kategori' => 'cetak', 'no_invoice' => $d->no_invoice];
