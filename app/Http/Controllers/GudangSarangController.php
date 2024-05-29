@@ -280,7 +280,7 @@ class GudangSarangController extends Controller
     {
         $no_invoice = $r->no_invoice;
         $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
-        foreach($getFormulir as $d) {
+        foreach ($getFormulir as $d) {
             $data[] = [
                 'id_pengawas' => $d->id_penerima,
                 'no_box' => $d->no_box,
@@ -312,7 +312,7 @@ class GudangSarangController extends Controller
     public function update_invoice(Request $r)
     {
         $no_invoice = $r->no_invoice;
-        if(!$r->no_box[0]){
+        if (!$r->no_box[0]) {
             return redirect()->route('gudangsarang.invoice')->with('error', 'No Box / Penerima Kosong !');
         }
         DB::table('formulir_sarang')->where('no_invoice', $no_invoice)->delete();
@@ -324,7 +324,7 @@ class GudangSarangController extends Controller
                         WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
 
             $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir; 
+            $gr = $ambil->gr_akhir;
 
             $data[] = [
                 'no_invoice' => $no_invoice,
@@ -342,5 +342,33 @@ class GudangSarangController extends Controller
 
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('gudangsarang.invoice')->with('sukses', 'Data Berhasil');
+    }
+
+    public function invoice_sortir(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice";
+
+        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.kategori = 'sortir' and a.tanggal between '$tgl1' and '$tgl2'
+        group by a.no_invoice
+        order by a.id_formulir DESC
+        ");
+
+        $data = [
+            'title' => 'Invoice Awal ' . $kategori,
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_sortir', $data);
     }
 }

@@ -5,7 +5,8 @@
                 <h6>{{ $title }}</h6>
             </div>
             <div class="col-lg-4">
-                <a href="" class="btn btn-sm btn-success float-end"><i class="fas fa-file-excel"></i> Export</a>
+                <a href="{{ route('cetaknew.export_gudang') }}" class="btn btn-sm btn-success float-end"><i
+                        class="fas fa-file-excel"></i> Export</a>
             </div>
             <br>
             <br>
@@ -95,17 +96,8 @@
                 selectedItem: [],
                 tambah(no_box, name, pcs_awal, gr_awal) {
                     this.selectedItem.push({ no_box, name, pcs_awal, gr_awal });
-                    this.$nextTick(() => {
-                        this.initSelect2();
-                    });
                 },
-                initSelect2() {
-                    this.$refs.select2.forEach(el => {
-                        $(el).select2({
-                            dropdownParent: $('#tambah .modal-content')
-                        });
-                    });
-                }
+                selectedOption: null
             }">
                 <div class="row">
                     <div class="col">
@@ -161,6 +153,14 @@
                         @endforeach
                     </tbody>
                 </table>
+                <style>
+                    .select2-container--default .select2-selection--single .select2-selection__rendered {
+                        color: #000000;
+                        line-height: 36px;
+                        font-size: 12px;
+                        width: auto;
+                    }
+                </style>
 
 
                 {{-- modal ambil box ke cetak --}}
@@ -192,19 +192,20 @@
                                     <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
-                                    <th class="dhead">Pengawas</th>
+                                    <th class="dhead">Pen</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <input class="d-none" name="no_box[]" type="text" :value="cek">
-                                <template x-for="(item, index) in selectedItem" :key="index">
+                                <template x-for="item in selectedItem">
                                     <tr>
                                         <td x-text="item.no_box"></td>
                                         <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
                                         <td>
-                                            <select x-init="initSelect2($el)" class="select2">
+                                            <select :name="'id_penerima[' + item.no_box + ']'" x-model="selectedOption"
+                                                x-init="initSelect2()" class="select2-alpine">
                                                 @foreach ($users as $u)
                                                     <option value="{{ $u->id }}">{{ strtoupper($u->name) }}
                                                     </option>
@@ -226,15 +227,6 @@
         @section('scripts')
             <script>
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
-            </script>
-            <script>
-                document.addEventListener('alpine:init', () => {
-                    Alpine.data('select2Handler', () => ({
-                        initSelect2(element) {
-                            $(element).select2();
-                        }
-                    }));
-                });
             </script>
         @endsection
     </x-slot>

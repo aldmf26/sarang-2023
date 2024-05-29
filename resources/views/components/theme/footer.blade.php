@@ -73,6 +73,9 @@
     $('.selectView').select2({
         dropdownParent: $('#view .modal-content')
     });
+    $('.select2-edit').select2({
+        dropdownParent: $('#edit .modal-content')
+    });
 
 
     $('.costume_muncul').hide();

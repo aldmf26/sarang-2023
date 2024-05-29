@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabut;
+use App\Models\CetakModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -50,13 +51,21 @@ class CetakNewController extends Controller
                         WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
+            $id_penerima = $r->id_penerima[$d];
 
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+
+            if (empty($urutan_invoice->no_invoice)) {
+                $inv = 1001;
+            } else {
+                $inv = $urutan_invoice->no_invoice + 1;
+            }
 
             $data[] = [
-                'no_invoice' => $no_invoice,
+                'no_invoice' => $inv,
                 'no_box' => $d,
                 'id_pemberi' => auth()->user()->id,
-                'id_penerima' => $ambil->id_pemberi,
+                'id_penerima' => $id_penerima,
                 'pcs_awal' => $pcs,
                 'gr_awal' => $gr,
                 'tanggal' => $r->tgl,
@@ -65,12 +74,15 @@ class CetakNewController extends Controller
         }
 
         DB::table('formulir_sarang')->insert($data);
-        return redirect()->route('cetaknew.formulir_print', $no_invoice)->with('sukses', 'Data Berhasil');
+        return redirect()->route('cetaknew.gudangcetak', $no_invoice)->with('sukses', 'Data Berhasil');
     }
 
     public function formulir_print($no_invoice)
     {
-        $detail = DB::table('formulir_sarang')->where('no_invoice', $no_invoice)->get();
+        $detail = DB::table('formulir_sarang')
+            ->leftJoin('users', 'users.id', 'formulir_sarang.id_penerima')
+            ->where('no_invoice', $no_invoice)
+            ->where('kategori', 'sortir')->get();
 
         $data = [
             'title' => 'Formulir Cetak Print',
@@ -778,25 +790,193 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
         $data = [
             'title' => 'Gudang Cetak',
-            'cabut_selesai' => DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal
-            FROM formulir_sarang as a 
-            left join users as b on b.id = a.id_pemberi
-            WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b);"),
+            'cabut_selesai' => CetakModel::cabut_selesai($id_pengawas),
 
-            'cetak_proses' => DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal
-            FROM cetak_new as a 
-            left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
-            left join users as c on c.id = b.id_pemberi
-            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas'"),
+            'cetak_proses' => CetakModel::cetak_proses($id_pengawas),
 
-            'cetak_selesai' => DB::select("SELECT c.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
-            FROM cetak_new as a 
-            left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
-            left join users as c on c.id = b.id_pemberi
-            where a.selesai = 'Y' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')"),
+            'cetak_selesai' => CetakModel::cetak_selesai($id_pengawas),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
         ];
         return view('home.cetak_new.gudangcetak', $data);
+    }
+
+
+    public function load_edit_invoice(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $no_invoice = $r->no_invoice;
+        $kategori = $r->kategori;
+
+        $cabutSelesai = CetakModel::cetak_selesai($id_user);
+
+        $formulir = DB::table('formulir_sarang')->where([['kategori', 'sortir'], ['no_invoice', $no_invoice]])->get();
+
+
+        $data = [
+            'title' => 'Gudang Sarang',
+            'cabutSelesai' => $cabutSelesai,
+            'formulir' => $formulir,
+            'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
+        ];
+        return view('home.cetak_new.load_edit_invoice', $data);
+    }
+    public function export_gudang(Request $r)
+    {
+        $id_pengawas = auth()->user()->id;
+
+        $cabut_selesai = CetakModel::cabut_selesai($id_pengawas);
+        $cetak_proses = CetakModel::cetak_proses($id_pengawas);
+        $cetak_selesai = CetakModel::cetak_selesai($id_pengawas);
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+        $style_atas_number = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+        );
+
+        $kolom = [
+            'A' => 'Cetak stok',
+            'B' => 'pemilik',
+            'C' => 'no box',
+            'D' => 'pcs',
+            'E' => 'gr',
+
+            'G' => 'Cetak sedang proses',
+            'H' => 'pemilik',
+            'I' => 'no box',
+            'J' => 'pcs',
+            'K' => 'gr',
+
+            'M' => 'Cetak selesai siap sortir',
+            'N' => 'pemilik',
+            'O' => 'no box',
+            'P' => 'pcs',
+            'Q' => 'gr',
+        ];
+
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+
+        $no = 2;
+        $ttl_pcs = 0;
+        $ttl_gr = 0;
+        foreach ($cabut_selesai as $item) {
+            $sheet->setCellValue('B' . $no, $item->name);
+            $sheet->setCellValue('C' . $no, $item->no_box);
+            $sheet->setCellValue('D' . $no, $item->pcs_awal);
+            $sheet->setCellValue('E' . $no, $item->gr_awal);
+
+            $no++;
+            $ttl_pcs += $item->pcs_awal;
+            $ttl_gr += $item->gr_awal;
+        }
+        $sheet->setCellValue('B' . $no, 'Total');
+        $sheet->setCellValue('C' . $no, '');
+        $sheet->setCellValue('D' . $no, $ttl_pcs);
+        $sheet->setCellValue('E' . $no, $ttl_gr);
+
+
+        $sheet->getStyle('B1:C1')->applyFromArray($style_atas);
+        $sheet->getStyle('D1:E1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('B2:E' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('B' . $no . ':E' . $no)->applyFromArray($style_atas);
+
+        $no2 = 2;
+        $ttl_pcs2 = 0;
+        $ttl_gr2 = 0;
+        foreach ($cetak_proses as $item) {
+            $sheet->setCellValue('H' . $no2, $item->name);
+            $sheet->setCellValue('I' . $no2, $item->no_box);
+            $sheet->setCellValue('J' . $no2, $item->pcs_awal);
+            $sheet->setCellValue('K' . $no2, $item->gr_awal);
+
+            $no2++;
+            $ttl_pcs2 += $item->pcs_awal;
+            $ttl_gr2 += $item->gr_awal;
+        }
+
+        $sheet->setCellValue('H' . $no2, 'Total');
+        $sheet->setCellValue('I' . $no2, '');
+        $sheet->setCellValue('J' . $no2, $ttl_pcs2);
+        $sheet->setCellValue('K' . $no2, $ttl_gr2);
+
+        $sheet->getStyle('H1:I1')->applyFromArray($style_atas);
+        $sheet->getStyle('J1:K1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('H2:K' . $no2 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('H' . $no2 . ':K' . $no2)->applyFromArray($style_atas);
+
+        $no3 = 2;
+        $ttl_pcs3 = 0;
+        $ttl_gr3 = 0;
+        foreach ($cetak_selesai as $item) {
+            $sheet->setCellValue('N' . $no3, $item->name);
+            $sheet->setCellValue('O' . $no3, $item->no_box);
+            $sheet->setCellValue('P' . $no3, $item->pcs_awal);
+            $sheet->setCellValue('Q' . $no3, $item->gr_awal);
+
+            $no3++;
+            $ttl_pcs3 += $item->pcs_awal;
+            $ttl_gr3 += $item->gr_awal;
+        }
+
+        $sheet->setCellValue('N' . $no3, 'Total');
+        $sheet->setCellValue('O' . $no3, '');
+        $sheet->setCellValue('P' . $no3, $ttl_pcs3);
+        $sheet->setCellValue('Q' . $no3, $ttl_gr3);
+
+        $sheet->getStyle('N1:O1')->applyFromArray($style_atas);
+        $sheet->getStyle('P1:Q1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('N2:Q' . $no3 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('N' . $no3 . ':Q' . $no3)->applyFromArray($style_atas);
+
+
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Gudang Cetak";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 }
