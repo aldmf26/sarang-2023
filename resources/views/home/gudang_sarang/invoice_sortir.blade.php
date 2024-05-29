@@ -13,8 +13,8 @@
                     aria-current="page" href="{{ route($routeSekarang) }}">Cetak</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page"
-                    href="{{ route($routeSekarang, ['kategori' => 'sortir']) }}">Sortir</a>
+                <a class="nav-link {{ $route == 'gudangsarang.invoice_sortir' && $kategori == 'sortir' ? 'active' : '' }}"
+                    aria-current="page" href="{{ route($routeSekarang, ['kategori' => 'sortir']) }}">Sortir</a>
             </li>
 
 
@@ -90,7 +90,7 @@
 
         </section>
 
-        <form action="{{ route('gudangsarang.update_invoice') }}" method="post">
+        <form action="{{ route('cetaknew.update_invoice') }}" method="post">
             @csrf
             <x-theme.modal title="Edit Po" idModal="edit" size="modal-lg">
                 <div class="loading d-none">

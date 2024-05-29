@@ -18,19 +18,61 @@
                     addClass="float-end ms-2" teks="Export" />
                 {{-- <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
                     teks="History" /> --}}
-
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
-                {{-- <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
-                    & selanjutnya</p> --}}
+                <x-theme.button modal="Y" idModal="import" href="#" icon="fa-plus" addClass="float-end me-2"
+                    teks="box" />
+                <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
+                    & selanjutnya</p>
 
             </div>
         </div>
+
+        <form action="" method="get">
+            <x-theme.modal title="Filter Tanggal" idModal="view">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="">Dari</label>
+                        <input id="tgl1" type="date" name="tgl1" id="" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="">Sampai</label>
+                        <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
+                    </div>
+                    <div class="col-lg-6 mt-2">
+                        <label for="">Pilih Anak</label>
+                        <br>
+                        <select name="id_anak" id="" class="selectView">
+                            <option value="All">All</option>
+                            @foreach ($tb_anak as $u)
+                                <option value="{{ $u->id_anak }}">{{ $u->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
 
     </x-slot>
 
     <x-slot name="cardBody">
 
+        <style>
+            .select2 {
+                width: 120px !important;
+                font-size: 12px;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #000000;
+                line-height: 36px;
+                /* font-size: 12px; */
+                width: 120px !important;
+            }
+
+            .kolom_select {
+                width: 120px !important;
+            }
         </style>
         <section class="row">
             <input type="hidden" id="tgl1" value="{{ $tgl1 }}">
@@ -62,29 +104,7 @@
             </form>
 
 
-            <form action="" method="get">
-                <x-theme.modal title="Filter Tanggal" idModal="view">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <label for="">Dari</label>
-                            <input id="tgl1" type="date" name="tgl1" id="" class="form-control">
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="">Sampai</label>
-                            <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="">Pilih Anak</label>
-                            <select name="id_anak" id="" class="selectView">
-                                <option value="All">All</option>
-                                @foreach ($tb_anak as $u)
-                                    <option value="{{ $u->id_anak }}">{{ $u->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </x-theme.modal>
-            </form>
+
         </section>
 
         <form action="{{ route('cetaknew.export') }}" method="get">
@@ -209,21 +229,30 @@
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
                         var no = $('.no' + id_cetak).val();
+                        var pcs_awal = $('.pcs_awal' + id_cetak).val();
+                        var pcs_tdk_ctk = $('.pcs_tdk_ctk' + id_cetak).val();
+                        var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
 
-                        $.ajax({
-                            type: "get",
-                            url: "{{ route('cetaknew.save_selesai') }}",
-                            data: {
-                                id_cetak: id_cetak,
-                            },
-                            success: function(response) {
+                        var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
 
-                                loadRowData(id_cetak, no)
 
-                                // load_cetak();
-                                alertToast('sukses', 'Berhasil ditambahkan');
-                            }
-                        });
+                        if (pcs_awal != ttl_pcs) {
+                            alertToast('error', 'Jumlah Pcs tidak sama');
+                        } else {
+                            $.ajax({
+                                type: "get",
+                                url: "{{ route('cetaknew.save_selesai') }}",
+                                data: {
+                                    id_cetak: id_cetak,
+                                },
+                                success: function(response) {
+                                    loadRowData(id_cetak, no)
+                                    alertToast('sukses', 'Berhasil ditambahkan');
+                                }
+                            });
+                        }
+
+
                     });
                     $(document).on("click", ".btn_cancel", function(e) {
                         e.preventDefault();

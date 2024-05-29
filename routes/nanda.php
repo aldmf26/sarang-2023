@@ -186,6 +186,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
             Route::get('/selesai_po_sortir', 'selesai_po_sortir')->name('selesai_po_sortir');
+            Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')
