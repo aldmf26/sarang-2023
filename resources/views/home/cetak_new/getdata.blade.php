@@ -1,20 +1,3 @@
-<style>
-    .select2 {
-        width: 120px !important;
-        font-size: 12px;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        color: #000000;
-        line-height: 36px;
-        /* font-size: 12px; */
-        width: 120px !important;
-    }
-
-    .kolom_select {
-        width: 120px !important;
-    }
-</style>
 <table class="table table-bordered" id="tableHalaman">
     <thead>
         <tr>
@@ -22,21 +5,21 @@
             <th class="dhead">Tanggal</th>
             <th class="dhead">No Box</th>
             <th class="dhead kolom_select">Nama</th>
-            <th class="dhead">pcs/gr</th>
-            <th class="dhead kolom_select">paket</th>
-            <th class="dhead text-end">pcs awal</th>
-            <th class="dhead text-end">gr awal</th>
-            <th width="70px" class="dhead text-end">pcs tdk ctk</th>
-            <th width="70px" class="dhead text-end">gr tdk ctk</th>
-            <th width="70px" class="dhead text-end">pcs akhir</th>
-            <th width="70px" class="dhead text-end">gr akhir</th>
-            <th width="70px" class="dhead text-end">pcs hcr</th>
-            <th class="dhead text-end">susut%</th>
+            <th class="dhead">Pcs/Gr</th>
+            <th class="dhead kolom_select">Paket</th>
+            <th class="dhead text-end">Pcs Awal</th>
+            <th class="dhead text-end">Gr Awal</th>
+            <th width="70px" class="dhead text-end">Pcs Tdk Ctk</th>
+            <th width="70px" class="dhead text-end">Gr Tdk Ctk</th>
+            <th width="70px" class="dhead text-end">Pcs Akhir</th>
+            <th width="70px" class="dhead text-end">Gr Akhir</th>
+            <th width="70px" class="dhead text-end">Pcs Hcr</th>
+            <th class="dhead text-end">Susut%</th>
             {{-- <th class="dhead text-end">Denda sst</th> --}}
             <th class="dhead text-end">Total Rp</th>
-            <th class="dhead text-end">Bulan bayar</th>
+            <th class="dhead text-end">Bulan Bayar</th>
             <th class="dhead text-center">Capai</th>
-            <th class="dhead text-center" width="100px">Aksi</th>
+            <th class="dhead text-center" width="150px">Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -178,7 +161,7 @@
                     </button>
 
                     <button style="font-size: 12px" type="button"
-                        {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' ? 'hidden' : '' }}
+                        {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
                         class="btn btn-sm btn-primary btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
                     </button>
                     <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
@@ -186,9 +169,9 @@
                         id_cetak="{{ $c->id_cetak }}" id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
                     </button>
 
-                    <button type="button" {{ $c->selesai == 'T' ? 'hidden' : '' }}
-                        class="btn btn-sm btn-warning btn_cancel" id_cetak="{{ $c->id_cetak }}"><i
-                            class="fas fa-redo"></i>
+                    <button {{ auth()->user()->posisi_id == '1' ? '' : 'hidden' }} type="button"
+                        {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-warning btn_cancel"
+                        id_cetak="{{ $c->id_cetak }}"><i class="fas fa-redo"></i>
                     </button>
 
                 </td>

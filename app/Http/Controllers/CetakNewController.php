@@ -39,54 +39,23 @@ class CetakNewController extends Controller
         return view('home.cetak_new.formulir', $data);
     }
 
-    public function save_formulir(Request $r)
-    {
-        $no_invoice = str()->random(5);
-        $no_box = explode(',', $r->no_box[0]);
-        foreach ($no_box as $d) {
-            $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
-                        FROM cetak_new 
-                        left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
-                        WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
-            $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir;
-            $id_penerima = $r->id_penerima[$d];
 
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
-
-            if (empty($urutan_invoice->no_invoice)) {
-                $inv = 1001;
-            } else {
-                $inv = $urutan_invoice->no_invoice + 1;
-            }
-
-            $data[] = [
-                'no_invoice' => $inv,
-                'no_box' => $d,
-                'id_pemberi' => auth()->user()->id,
-                'id_penerima' => $id_penerima,
-                'pcs_awal' => $pcs,
-                'gr_awal' => $gr,
-                'tanggal' => $r->tgl,
-                'kategori' => 'sortir',
-            ];
-        }
-
-        DB::table('formulir_sarang')->insert($data);
-        return redirect()->route('cetaknew.gudangcetak', $no_invoice)->with('sukses', 'Data Berhasil');
-    }
 
     public function formulir_print($no_invoice)
     {
-        $detail = DB::table('formulir_sarang')
-            ->leftJoin('users', 'users.id', 'formulir_sarang.id_penerima')
-            ->where('no_invoice', $no_invoice)
-            ->where('kategori', 'sortir')->get();
+
+
+        $halaman = DB::select("SELECT a.id_pemberi, b.name, a.id_penerima
+        FROM formulir_sarang as a 
+        left join users as b on b.id = a.id_penerima
+        where a.no_invoice = '$no_invoice' and a.kategori = 'sortir'
+        group by a.id_penerima
+        ");
 
         $data = [
             'title' => 'Formulir Cetak Print',
-            'detail' => $detail
+            'halaman' => $halaman,
+            'no_invoice' => $no_invoice
         ];
         return view('home.cetak_new.formulir_print', $data);
     }
@@ -94,10 +63,16 @@ class CetakNewController extends Controller
     public function getData($key)
     {
         $id_user = auth()->user()->id;
+        $posisi_id = auth()->user()->posisi_id;
+        if ($posisi_id == '1') {
+            $anak = DB::table('tb_anak')->get();
+        } else {
+            $anak = DB::table('tb_anak')->where('id_pengawas', $id_user)->get();
+        }
         $data = [
             'users' => DB::table('users')->where('posisi_id', '13')->get(),
             'bulan' => DB::table('bulan')->get(),
-            'tb_anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->get(),
+            'tb_anak' => $anak,
             'paket' => DB::table('kelas_cetak')->get(),
             'nobox' => DB::table('formulir_sarang')
                 ->select('no_box')
@@ -119,7 +94,6 @@ class CetakNewController extends Controller
 
         $tgl1 = $r->tgl1 ?? date('Y-m-d');
         $tgl2 = $r->tgl2 ?? date('Y-m-d');
-
         $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
 
         $data = [
@@ -149,32 +123,6 @@ class CetakNewController extends Controller
 
 
 
-    public function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas)
-    {
-        if ($id_anak == 'All') {
-            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar, a.ttl_rp
-            From cetak_new as a  
-            LEFT join tb_anak as b on b.id_anak = a.id_anak
-            left join users as c on c.id = a.id_pemberi
-            left join users as d on d.id = a.id_pengawas
-            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_pengawas = '$id_pengawas'
-            order by a.tgl DESC, b.nama ASC
-            ;");
-        } else {
-            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak , a.pcs_hcr, e.denda_hcr,a.tipe_bayar,a.bulan_dibayar,a.ttl_rp
-            From cetak_new as a  
-            LEFT join tb_anak as b on b.id_anak = a.id_anak
-            left join users as c on c.id = a.id_pemberi
-            left join users as d on d.id = a.id_pengawas
-            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' and a.id_pengawas = '$id_pengawas'
-            order by a.tgl DESC, b.nama ASC
-            ;");
-        }
-        return $cetak;
-    }
-
     public function get_cetak(Request $r)
     {
         $tgl1 = $r->tgl1 ?? date('Y-m-d');
@@ -183,7 +131,7 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
 
-        $cetak = $this->getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas);
+        $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas);
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
@@ -274,23 +222,28 @@ class CetakNewController extends Controller
         $kelas_cetak =  DB::table('kelas_cetak')->where('id_kelas_cetak', $r->id_paket)->first();
         $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
 
-        if ($r->tipe_bayar == 1) {
-            $ttl_rp = $r->pcs_akhir * $kelas_cetak->rp_pcs;
-        } else {
-            $ttl_rp = $r->gr_akhir * $kelas_cetak->rp_pcs;
-        }
-        $rp_hcr = $r->pcs_hcr * $kelas_cetak->denda_hcr;
-
-        $susut =  (1 - (($r->gr_tdk_ctk + $r->gr_akhir) / $cetak->gr_awal_ctk)) * 100;
-
-
-        if (round($susut, 0) >= $kelas_cetak->batas_susut) {
-            $denda_susut = round($susut, 0) * $kelas_cetak->denda_susut;
-        } else {
+        if (empty($r->tipe_bayar) || $r->pcs_akhir == 0) {
+            $ttl_rp = 0;
+            $rp_hcr = 0;
+            $susut =  0;
             $denda_susut = 0;
+            $rp_pcs =  0;
+        } else {
+            if ($r->tipe_bayar == 1) {
+                $ttl_rp = $r->pcs_akhir * $kelas_cetak->rp_pcs;
+            } else {
+                $ttl_rp = $r->gr_akhir * $kelas_cetak->rp_pcs;
+            }
+            $rp_hcr = $r->pcs_hcr * $kelas_cetak->denda_hcr;
+
+            $susut =  (1 - (($r->gr_tdk_ctk + $r->gr_akhir) / $cetak->gr_awal_ctk)) * 100;
+            if (round($susut, 0) >= $kelas_cetak->batas_susut) {
+                $denda_susut = round($susut, 0) * $kelas_cetak->denda_susut;
+            } else {
+                $denda_susut = 0;
+            }
+            $rp_pcs =  $kelas_cetak->rp_pcs;
         }
-
-
 
         $data = [
             'id_anak' => $r->id_anak,
@@ -300,7 +253,7 @@ class CetakNewController extends Controller
             'gr_akhir' => $r->gr_akhir,
             'pcs_tdk_cetak' => $r->pcs_tdk_ctk,
             'gr_tdk_cetak' => $r->gr_tdk_ctk,
-            'rp_satuan' => $kelas_cetak->rp_pcs,
+            'rp_satuan' => $rp_pcs,
             'ttl_rp' => $ttl_rp - $rp_hcr - $denda_susut,
             'tipe_bayar' => $r->tipe_bayar,
             'bulan_dibayar' => $r->bulan_dibayar
@@ -710,7 +663,7 @@ class CetakNewController extends Controller
         $tgl2 = $r->tgl2;
         $id_pengawas = auth()->user()->id;
 
-        $cetak = $this->getCetakQuery('All', $tgl1, $tgl2, $id_pengawas);
+        $cetak = CetakModel::getCetakQuery('All', $tgl1, $tgl2, $id_pengawas);
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $sheet = $spreadsheet->getActiveSheet();
@@ -822,9 +775,9 @@ class CetakNewController extends Controller
     {
         $id_pengawas = auth()->user()->id;
 
-        $cabut_selesai = CetakModel::cabut_selesai($id_pengawas);
-        $cetak_proses = CetakModel::cetak_proses($id_pengawas);
-        $cetak_selesai = CetakModel::cetak_selesai($id_pengawas);
+        $cabut_selesai = CetakModel::cabut_selesai(0);
+        $cetak_proses = CetakModel::cetak_proses(0);
+        $cetak_selesai = CetakModel::cetak_selesai(0);
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $sheet = $spreadsheet->getActiveSheet();
@@ -863,30 +816,31 @@ class CetakNewController extends Controller
         );
 
         $kolom = [
-            'A' => 'Cetak stok',
-            'B' => 'pemilik',
-            'C' => 'no box',
-            'D' => 'pcs',
-            'E' => 'gr',
+            'A' => 'Cetak Stok',
+            'B' => 'Pemilik',
+            'C' => 'Pengawas',
+            'D' => 'no box',
+            'E' => 'pcs',
+            'F' => 'gr',
 
-            'G' => 'Cetak sedang proses',
-            'H' => 'pemilik',
-            'I' => 'no box',
-            'J' => 'pcs',
-            'K' => 'gr',
+            'H' => 'Cetak Sedang Proses',
+            'I' => 'Pemilik',
+            'J' => 'Pengawas',
+            'K' => 'No Box',
+            'L' => 'Pcs',
+            'M' => 'Gr',
 
-            'M' => 'Cetak selesai siap sortir',
-            'N' => 'pemilik',
-            'O' => 'no box',
-            'P' => 'pcs',
-            'Q' => 'gr',
+            'O' => 'Cetak Selesai Siap Sortir',
+            'P' => 'Pemilik',
+            'Q' => 'Pengawas',
+            'R' => 'no box',
+            'S' => 'pcs',
+            'T' => 'gr',
         ];
 
         foreach ($kolom as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
         }
-
-
         $no = 2;
         $ttl_pcs = 0;
         $ttl_gr = 0;
@@ -993,5 +947,78 @@ class CetakNewController extends Controller
             DB::table('bk')->insert($data);
         }
         return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
+    }
+
+
+    public function update_invoice(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        if (!$r->no_box[0]) {
+            return redirect()->route('gudangsarang.invoice_sarang', ['kategori' => 'sortir'])->with('error', 'No Box / Penerima Kosong !');
+        }
+        DB::table('formulir_sarang')->where('no_invoice', $no_invoice)->where('kategori', 'sortir')->delete();
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        cetak_new.id_pengawas,
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        FROM cetak_new 
+                        left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
+                        WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
+
+            $pcs = $ambil->pcs_akhir;
+            $gr = $ambil->gr_akhir;
+            $id_penerima = $r->id_penerima[$d];
+            $data[] = [
+                'no_invoice' => $no_invoice,
+                'no_box' => $d,
+                'id_pemberi' => $ambil->id_pengawas,
+                'id_penerima' => $id_penerima,
+                'pcs_awal' => $pcs,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'sortir',
+            ];
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
+    }
+
+    public function save_formulir(Request $r)
+    {
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        FROM cetak_new 
+                        left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
+                        WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
+            $pcs = $ambil->pcs_akhir;
+            $gr = $ambil->gr_akhir;
+            $id_penerima = $r->id_penerima[$d];
+
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+
+            if (empty($urutan_invoice->no_invoice)) {
+                $inv = 1001;
+            } else {
+                $inv = $urutan_invoice->no_invoice + 1;
+            }
+
+            $data[] = [
+                'no_invoice' => $inv,
+                'no_box' => $d,
+                'id_pemberi' => auth()->user()->id,
+                'id_penerima' => $id_penerima,
+                'pcs_awal' => $pcs,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'sortir',
+            ];
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('cetaknew.gudangcetak')->with('sukses', 'Data Berhasil');
     }
 }

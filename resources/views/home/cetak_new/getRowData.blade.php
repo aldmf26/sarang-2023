@@ -1,5 +1,5 @@
 <tr data-id="{{ $c->id_cetak }}">
-    <td>{{ $no + 1 }}</td>
+    <td>{{ $no }}</td>
     <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
     <td>{{ $c->no_box }}</td>
     <td>
@@ -132,7 +132,8 @@
             id_cetak="{{ $c->id_cetak }}">Save
         </button>
 
-        <button style="font-size: 12px" type="button" {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' ? 'hidden' : '' }}
+        <button style="font-size: 12px" type="button"
+            {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
             class="btn btn-sm btn-primary btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
         </button>
         <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
@@ -140,7 +141,8 @@
             id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
         </button>
 
-        <button type="button" {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-warning btn_cancel"
+        <button {{ auth()->user()->posisi_id == '1' ? '' : 'hidden' }} type="button"
+            {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-warning btn_cancel"
             id_cetak="{{ $c->id_cetak }}"><i class="fas fa-redo"></i>
         </button>
 

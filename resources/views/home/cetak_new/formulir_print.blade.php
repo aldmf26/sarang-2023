@@ -21,6 +21,10 @@
             .print_hilang {
                 display: none;
             }
+
+            .section {
+                page-break-after: always;
+            }
         }
     </style>
 </head>
@@ -37,42 +41,54 @@
                     class="fa-solid fa-print"></i>
                 Print</a>
         </div>
-        <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR</h5>
+        @foreach ($halaman as $h)
+            @php
+                $detail = DB::table('formulir_sarang')
+                    ->leftJoin('users', 'users.id', 'formulir_sarang.id_penerima')
+                    ->where('no_invoice', $no_invoice)
+                    ->where('kategori', 'sortir')
+                    ->where('id_penerima', $h->id_penerima)
+                    ->get();
+            @endphp
+            <div class="section">
+                <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR</h5>
 
-        <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($detail[0]->id_pemberi)->name }} </h6>
-        <div class="row">
-            <div class="col-lg-12">
+                <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($h->id_pemberi)->name }} ~
+                    {{ $h->name }} </h6>
+                <div class="row">
+                    <div class="col-lg-12">
 
-                <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
-                    <tr>
-                        <th>Tgl</th>
-                        <th>No Box</th>
-                        <th>Penerima</th>
-                        <th>Nama Anak</th>
-                        <th>Pcs Awal</th>
-                        <th>Gr Awal</th>
-                        <th>Pcs Akhir</th>
-                        <th>Gr Akhir</th>
-                        <th>Susut %</th>
-                        <th>Ttl Rp</th>
-                    </tr>
-                    @foreach ($detail as $d)
-                        <tr>
-                            <td>{{ tglFormat($d->tanggal) }}</td>
-                            <td>{{ $d->no_box }}</td>
-                            <td>{{ $d->name }}</td>
-                            <td></td>
-                            <td>{{ $d->pcs_awal }}</td>
-                            <td>{{ $d->gr_awal }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    @endforeach
-                </table>
+                        <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
+                            <tr>
+                                <th>Tgl</th>
+                                <th>No Box</th>
+                                <th>Nama Anak</th>
+                                <th class="text-end">Pcs Awal</th>
+                                <th class="text-end"> Gr Awal</th>
+                                <th class="text-end">Pcs Akhir</th>
+                                <th class="text-end">Gr Akhir</th>
+                                <th class="text-end">Susut %</th>
+                                <th class="text-end">Total Rp</th>
+                            </tr>
+                            @foreach ($detail as $d)
+                                <tr>
+                                    <td>{{ tglFormat($d->tanggal) }}</td>
+                                    <td>{{ $d->no_box }}</td>
+                                    <td></td>
+                                    <td class="text-end">{{ $d->pcs_awal }}</td>
+                                    <td class="text-end">{{ $d->gr_awal }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
+        @endforeach
+
 
     </div>
 

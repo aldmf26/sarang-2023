@@ -93,8 +93,25 @@
             <div class="col-lg-4" x-data="{
                 cek: [],
                 selectedItem: [],
-                tambah(no_box, name, pcs_awal, gr_awal) {
+                {{-- tambah(no_box, name, pcs_awal, gr_awal) {
                     this.selectedItem.push({ no_box, name, pcs_awal, gr_awal });
+                }, --}}
+                tambah(no_box, name, pcs_awal, gr_awal) {
+                    const selectedItem = this.selectedItem
+                    const cetak = this.cetak
+            
+                    const index = selectedItem.findIndex(item => item.no_box === no_box);
+                    if (index === -1) {
+                        selectedItem.push({
+                            no_box: no_box,
+                            name,
+                            pcs_awal: parseFloat(pcs_awal),
+                            gr_awal: parseFloat(gr_awal),
+                        });
+                    } else {
+                        selectedItem.splice(index, 1);
+                    }
+            
                 },
                 selectedOption: null
             }">
@@ -105,7 +122,8 @@
                     </div>
                     <div class="col-auto">
                         <a href="{{ route('cetaknew.export_gudang') }}"
-                            class="btn btn-sm btn-success float-end ms-2"><i class="fas fa-file-excel"></i> Export</a>
+                            class="btn btn-sm btn-primary float-end ms-2"><i class="fas fa-file-excel"></i> Export
+                            All</a>
                         <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                             teks="serah" />
                         <x-theme.button href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}"
@@ -193,7 +211,7 @@
                                     <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
-                                    <th class="dhead">Pen</th>
+                                    <th class="dhead">Penerima</th>
                                 </tr>
                             </thead>
                             <tbody>

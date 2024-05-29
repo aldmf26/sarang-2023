@@ -21,7 +21,8 @@
         if (index !== -1) {
             this.cek.splice(index, 1);
         }
-    }
+    },
+    selectedOption: null,
 }">
     <input class="d-none" name="no_box[]" type="text" :value="cek">
     <div class="col-lg-3">
@@ -92,7 +93,8 @@
                 @foreach ($formulir as $d)
                     <tr>
                         <td>
-                            <select name="" id="" class="select2-edit">
+                            <select :name="'id_penerima[' + {{ $d->no_box }} + ']'" id=""
+                                class="select2-edit">
                                 @foreach ($users as $u)
                                     <option value="{{ $u->id }}"
                                         {{ $u->id == $d->id_penerima ? 'selected' : '' }}>{{ $u->name }}</option>
@@ -110,6 +112,16 @@
                 @endforeach
                 <template x-for="d in selectedItem">
                     <tr>
+                        <td>
+                            <select :name="'id_penerima[' + d.no_box + ']'" x-model="selectedOption"
+                                x-init="initSelect2()" class="select2-alpine">
+                                <option value="">Pilih</option>
+                                @foreach ($users as $u)
+                                    <option value="{{ $u->id }}">
+                                        {{ $u->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td x-text="d.no_box"></td>
                         <td align="right" x-text="d.pcs"></td>
                         <td align="right" x-text="d.gr"></td>
