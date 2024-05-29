@@ -45,8 +45,8 @@
                             <tr>
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $d->pgws }}</td>
-                                <td><a href="#" class="detail"
-                                        ttl_hari="{{$ttl_hari}}" id_anak="{{ $d->id_anak }}">{{ $d->nama }}</a></td>
+                                <td><a href="#" class="detail" ttl_hari="{{ $ttl_hari }}"
+                                        id_anak="{{ $d->id_anak }}">{{ $d->nama }}</a></td>
                                 <td align="right">{{ $ttl_hari }}</td>
                                 <td align="right">
                                     {{ number_format($ttl_rp, 0) }}
