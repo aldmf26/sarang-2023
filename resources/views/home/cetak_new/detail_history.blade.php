@@ -52,8 +52,8 @@
                     <th class="dhead text-end">gr awal</th>
                     <th class="dhead text-end">pcs akhir</th>
                     <th class="dhead text-end">gr akhir</th>
-                    <th class="dhead text-end">sst%</th>
-                    <th class="dhead text-end">Ttl Rp</th>
+                    <th class="dhead text-end">Susut%</th>
+                    <th class="dhead text-end">Total Rp</th>
                 </tr>
             </thead>
             <tbody>

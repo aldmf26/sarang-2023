@@ -334,11 +334,11 @@ class CabutController extends Controller
             }
 
             // Memeriksa apakah total PCS dan GR inputan tidak melebihi stok
-            if ($input['pcs_awal'] > $stok->pcs_awal || $input['gr_awal'] > $stok->gr_awal) {
-                return json_encode([
-                    'pesan' => "Gagal! Total PCS atau GR inputan untuk nomor box $no_box melebihi stok yang tersedia."
-                ]);
-            }
+            // if ($input['pcs_awal'] > $stok->pcs_awal || $input['gr_awal'] > $stok->gr_awal) {
+            //     return json_encode([
+            //         'pesan' => "Gagal! Total PCS atau GR inputan untuk nomor box $no_box melebihi stok yang tersedia."
+            //     ]);
+            // }
 
             // Lanjutkan dengan memasukkan data ke database
             for ($x = 0; $x < count($r->no_box); $x++) {

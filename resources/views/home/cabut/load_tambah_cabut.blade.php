@@ -25,7 +25,7 @@
                     <th class="dhead">Kelas / Paket</th>
                     <th class="dhead text-end" width="110">Pcs Awal</th>
                     <th class="dhead text-end" width="110">Gr Awal</th>
-                    <th class="dhead text-end" width="130">Ttl Rp</th>
+                    <th class="dhead text-end" width="130">Total Rp</th>
                     <th class="dhead">Aksi</th>
                 </tr>
             </thead>

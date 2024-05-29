@@ -17,7 +17,7 @@
                     <th class="text-end dhead">Pcs Hcr</th>
                     <th class="text-end dhead">Susut</th>
                     <th class="text-end dhead">Rp Trgt</th>
-                    <th class="text-end dhead">Ttl Gaji</th>
+                    <th class="text-end dhead">Total Gaji</th>
                     
                 </tr>
             </thead>
