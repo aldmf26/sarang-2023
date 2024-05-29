@@ -363,7 +363,7 @@ class GudangSarangController extends Controller
         ");
 
         $data = [
-            'title' => 'Invoice Awal ' . $kategori,
+            'title' => 'Po Sortir',
             'formulir' => $formulir,
             'kategori' => $kategori,
             'route' => $route,

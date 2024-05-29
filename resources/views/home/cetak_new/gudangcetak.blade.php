@@ -5,8 +5,7 @@
                 <h6>{{ $title }}</h6>
             </div>
             <div class="col-lg-4">
-                <a href="{{ route('cetaknew.export_gudang') }}" class="btn btn-sm btn-success float-end"><i
-                        class="fas fa-file-excel"></i> Export</a>
+
             </div>
             <br>
             <br>
@@ -105,6 +104,8 @@
                             placeholder="cari">
                     </div>
                     <div class="col-auto">
+                        <a href="{{ route('cetaknew.export_gudang') }}"
+                            class="btn btn-sm btn-success float-end ms-2"><i class="fas fa-file-excel"></i> Export</a>
                         <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                             teks="serah" />
                         <x-theme.button href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}"
