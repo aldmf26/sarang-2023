@@ -553,11 +553,15 @@ class CetakNewController extends Controller
         $bulan = $r->bulan;
         $tahun = $r->tahun;
         $ttl_hari = $r->ttl_hari;
+        $getAnak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
+
+
         $query = $this->queryHistoryDetail($id_anak, $bulan, $tahun);
         $data = [
             'id_anak' => $id_anak,
             'bulan' => $bulan,
             'tahun' => $tahun,
+            'getAnak' => $getAnak,
             'ttl_hari' => $ttl_hari,
             'eo' => $query['eo'],
             'cabut' => $query['cabut'],
