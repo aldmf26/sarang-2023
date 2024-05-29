@@ -103,7 +103,7 @@
                                 @if ($isDenda)
                                     {{ number_format($c->denda) }}
                                 @else
-                                    {{ number_format($category == 'detail' ? $c->pcs_akhir * $c->rp_satuan : $c->ttl_rp) }}
+                                    {{ number_format($category == 'detail' ? $c->ttl_rp : $c->ttl_rp) }}
                                 @endif
                             </td>
                         </tr>

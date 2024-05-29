@@ -462,6 +462,7 @@ class CetakNewController extends Controller
         $pcs_akhir = 0;
         $gr_akhir = 0;
         $ttl_rp = 0;
+        
         foreach ($detail as $d) {
             $pcs_awal += $d->pcs_awal;
             $gr_awal += $d->gr_awal;
