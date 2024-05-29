@@ -22,7 +22,6 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 $redir = auth()->user()->posisi_id == 13 ? '/dashboard' : 'home/cetaknew';
-                dd($redir);
                 return redirect($redir);
             }
         }
