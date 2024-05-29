@@ -24,15 +24,15 @@
     <x-slot name="cardBody">
 
         <section class="row">
-            <table class="table" id="nanda">
+            <table class="table table_bordered" id="nanda">
                 <thead>
                     <tr>
                         <th class="dhead" width="5">#</th>
                         <th class="dhead">Tanggal</th>
-                        <th class="dhead">No Invoice</th>
-                        <th class="dhead text-end">Total Box</th>
+                        <th class="dhead">No Po</th>
                         <th class="dhead">Nama Pemberi</th>
                         <th class="dhead">Nama Penerima</th>
+                        <th class="dhead text-end">Total Box</th>
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-center">Aksi</th>
@@ -46,16 +46,16 @@
                             <td>
                                 {{ $d->no_invoice }}
                             </td>
-                            <td class="text-end">{{ $d->ttl_box }}</td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
+                            <td class="text-end">{{ $d->ttl_box }}</td>
                             <td class="text-end">{{ $d->pcs }}</td>
                             <td class="text-end">{{ $d->gr }}</td>
                             <td>
                                 @php
                                     $param = ['kategori' => 'sortir', 'no_invoice' => $d->no_invoice];
                                     $getCtk = DB::selectOne("SELECT a.no_box FROM formulir_sarang as a 
-                                    join bk as b on b.no_box = a.no_box and b.kategori = 'cetak'
+                                    join bk as b on b.no_box = a.no_box and b.kategori = 'sortir'
                                     where a.no_invoice = '$d->no_invoice'
                                     ");
                                 @endphp
@@ -72,7 +72,7 @@
                                     </a>
 
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('gudangsarang.selesai', $param) }}">
+                                        href="{{ route('cetaknew.selesai_po_sortir', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
                                 @else

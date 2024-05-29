@@ -185,6 +185,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/gudangcetak', 'gudangcetak')->name('gudangcetak');
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
+            Route::get('/selesai_po_sortir', 'selesai_po_sortir')->name('selesai_po_sortir');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')
