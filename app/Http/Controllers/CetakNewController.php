@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Exports\BkTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CetakNewController extends Controller
 {
@@ -779,6 +782,7 @@ class CetakNewController extends Controller
         $cabut_selesai = CetakModel::cabut_selesai(0);
         $cetak_proses = CetakModel::cetak_proses(0);
         $cetak_selesai = CetakModel::cetak_selesai(0);
+
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $sheet = $spreadsheet->getActiveSheet();
@@ -1021,5 +1025,173 @@ class CetakNewController extends Controller
 
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('cetaknew.gudangcetak')->with('sukses', 'Data Berhasil');
+    }
+
+    public function template()
+    {
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFF00', // Kode warna untuk kuning
+                ],
+            ],
+        ];
+        $styleBarisKosong = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+
+        ];
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+
+        $kolom = [
+            'A' => 'Nama Partai',
+            'B' => 'Tipe',
+            'C' => 'Ket',
+            'D' => 'Warna',
+            'E' => 'Pcs Awal',
+            'F' => 'Gr Awal',
+        ];
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+        $kolom = [
+            'A' => 'Bjm 1001 ',
+            'B' => 'd',
+            'C' => 'k',
+            'D' => 'vs',
+            'E' => '40',
+            'F' => '250',
+        ];
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '2', $v);
+        }
+
+        $sheet->getStyle('A1:F1')->applyFromArray($style_atas);
+        $sheet->getStyle('A2:F2')->applyFromArray($styleBaris);
+        $sheet->getStyle('A3:F10')->applyFromArray($styleBarisKosong);
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Template Cetak BK";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+    public function getNoBoxTambah()
+    {
+        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cabut%' ORDER by no_box DESC limit 1;");
+        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
+        return $nobox;
+    }
+
+    public function import(Request $r)
+    {
+        if ($r->kategori == 'sortir') {
+            $this->importSortir($r);
+            return redirect()->route('bk.index', ['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
+        } else {
+
+            $file = $r->file('file');
+            $spreadsheet = IOFactory::load($file);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            DB::beginTransaction();
+            try {
+                foreach (array_slice($sheetData, 1) as $row) {
+                    if (empty(array_filter($row))) {
+                        continue;
+                    }
+
+                    $nobox = $this->getNoBoxTambah();
+
+
+                    // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+                    if (
+                        // $cekBox || 
+                        empty($row[0]) ||
+                        empty($row[5])
+                        // empty($row[9]) ||
+                        // empty($row[10])
+                    ) {
+                        $pesan = [
+                            // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
+                            empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
+                            // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
+                            empty($row[5]) => "GR TIDAK BOLEH KOSONG",
+
+                            // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
+                        ];
+                        DB::rollBack();
+                        return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
+                    } else {
+                        DB::table('bk')->insert([
+                            'no_lot' => '0',
+                            'nm_partai' => $row[0],
+                            'no_box' => $nobox,
+                            'tipe' => $row[1],
+                            'ket' => $row[2],
+                            'warna' => $row[3],
+                            'tgl' => date('Y-m-d'),
+                            'pengawas' => 'sinta',
+                            'penerima' => auth()->user()->id,
+                            'pcs_awal' => $row[4],
+                            'gr_awal' => $row[5],
+                            'kategori' => 'cetak',
+                        ]);
+                        DB::table('formulir_sarang')->insert([
+                            'no_box' => $nobox,
+                            'id_pemberi' => 265,
+                            'id_penerima' => auth()->user()->id,
+                            'pcs_awal' => $row[4],
+                            'gr_awal' => $row[5],
+                        ]);
+                        DB::table('cetak_new')->insert([
+                            'no_box' => $nobox,
+                            'id_pengawas' => auth()->user()->id,
+                            'tgl' => date('Y-m-d'),
+                            'pcs_awal_ctk' => $row[4],
+                            'gr_awal_ctk' => $row[5],
+                        ]);
+                    }
+                }
+                DB::commit();
+                return redirect()->back()->with('sukses', 'Data berhasil import');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
     }
 }

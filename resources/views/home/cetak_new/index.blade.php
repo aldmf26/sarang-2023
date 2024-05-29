@@ -20,10 +20,8 @@
                     teks="History" /> --}}
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
-                <x-theme.button modal="Y" idModal="import" href="#" icon="fa-plus" addClass="float-end me-2"
-                    teks="box" />
-                <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
-                    & selanjutnya</p>
+                @include('home.cetak_new.btn_import')
+
 
             </div>
         </div>
@@ -311,7 +309,7 @@
                                 alertToast(r.status, r.pesan);
                                 loadRowData(id_cetak, no)
 
-                                load_cetak();
+                                // load_cetak();
                             }
                         });
                     })
@@ -360,7 +358,7 @@
                 });
             </script>
             <script>
-                document.body.style.zoom = "80%";
+                document.body.style.zoom = "75%";
             </script>
             <script>
                 load_menu();
