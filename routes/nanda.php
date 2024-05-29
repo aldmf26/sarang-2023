@@ -183,6 +183,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::get('/formulir/{no_invoice}', 'formulir_print')->name('formulir_print');
             Route::get('/gudangcetak', 'gudangcetak')->name('gudangcetak');
+            Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
+            Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')
@@ -217,6 +219,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
+            Route::get('/invoice_sortir', 'invoice_sortir')->name('invoice_sortir');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')

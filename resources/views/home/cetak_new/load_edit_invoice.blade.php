@@ -30,20 +30,16 @@
             <input readonly value="{{ $formulir[0]->tanggal }}" type="date" name="tgl" class="form-control">
         </div>
     </div>
-    <div class="col-lg-3">
-        <label for="">Pgws Penerima</label>
-        <input readonly value="{{ auth()->user()->find($formulir[0]->id_penerima)->name }}" type="text"
-            class="form-control">
-        <input value="{{ auth()->user()->find($formulir[0]->id_penerima)->id }}" type="hidden" name="id_penerima">
-    </div>
+
     <div class="col-lg-3">
         <label for="">No Invoice</label>
         <input readonly value="{{ $formulir[0]->no_invoice }}" type="text" name="no_invoice" class="form-control">
     </div>
+    <div class="col-lg-3"></div>
     <div class="col-lg-6">
         <div class="d-flex justify-content-between">
             <div>
-                <h6>Box Selesai Cabut</h6>
+                <h6>Box Selesai Cetak</h6>
             </div>
             <div>
                 <input style="min-height: 2% !important" type="text" id="inputTbl" placeholder="cari"
@@ -54,6 +50,7 @@
             <table class="table table-bordered table-striped table-hover" id="tbl1">
                 <thead>
                     <tr>
+                        <th class="dheadstock">Pemilik</th>
                         <th class="dheadstock">No Box</th>
                         <th class="dheadstock text-end">Pcs</th>
                         <th class="dheadstock text-end">Gr</th>
@@ -63,12 +60,13 @@
                 <tbody>
                     @foreach ($cabutSelesai as $d)
                         <tr>
+                            <td>{{ $d->name }}</td>
                             <td>{{ $d->no_box }}</td>
-                            <td align="right">{{ $d->pcs }}</td>
-                            <td align="right">{{ $d->gr }}</td>
+                            <td align="right">{{ $d->pcs_awal }}</td>
+                            <td align="right">{{ $d->gr_awal }}</td>
                             <td align="center">
                                 <input type="checkbox"
-                                    @change="tambah({{ $d->no_box }}, {{ $d->pcs }}, {{ $d->gr }})"
+                                    @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }})"
                                     value="{{ $d->no_box }}" x-model="cek">
                             </td>
                         </tr>
@@ -82,6 +80,7 @@
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
+                    <th class="dhead">Penerima</th>
                     <th class="dhead">No Box</th>
                     <th class="dhead text-end">Pcs</th>
                     <th class="dhead text-end">Gr</th>
@@ -92,6 +91,14 @@
 
                 @foreach ($formulir as $d)
                     <tr>
+                        <td>
+                            <select name="" id="" class="select2-edit">
+                                @foreach ($users as $u)
+                                    <option value="{{ $u->id }}"
+                                        {{ $u->id == $d->id_penerima ? 'selected' : '' }}>{{ $u->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td>{{ $d->no_box }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>

@@ -192,4 +192,37 @@ class CetakModel extends Model
 
         return $result;
     }
+
+
+    public static function cetak_selesai($id_pengawas)
+    {
+
+        $result = DB::select("SELECT c.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+        FROM cetak_new as a 
+        left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
+        left join users as c on c.id = b.id_pemberi
+        where a.selesai = 'Y' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
+
+        return $result;
+    }
+
+    public static function cabut_selesai($id_pengawas)
+    {
+        $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal
+        FROM formulir_sarang as a 
+        left join users as b on b.id = a.id_pemberi
+        WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b);");
+
+        return $result;
+    }
+    public static function cetak_proses($id_pengawas)
+    {
+        $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal
+        FROM cetak_new as a 
+        left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
+        left join users as c on c.id = b.id_pemberi
+        where a.selesai = 'T' and a.id_pengawas = '$id_pengawas'");
+
+        return $result;
+    }
 }

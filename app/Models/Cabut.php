@@ -667,7 +667,7 @@ class Cabut extends Model
         WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
 
 
-        
+
 
         return (object)[
             'bk' => $bk,
