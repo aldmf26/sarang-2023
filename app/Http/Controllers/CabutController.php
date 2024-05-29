@@ -1776,14 +1776,14 @@ class CabutController extends Controller
             ],
         ];
 
-        $sheet->getStyle('B2:E2')->applyFromArray($styleBold);
-        $sheet->getStyle('B2:E2')->applyFromArray($styleBaris);
+        $sheet->getStyle('B1:E1')->applyFromArray($styleBold);
+        $sheet->getStyle('B1:E1')->applyFromArray($styleBaris);
 
-        $sheet->getStyle('H2:K2')->applyFromArray($styleBold);
-        $sheet->getStyle('H2:K2')->applyFromArray($styleBaris);
+        $sheet->getStyle('H1:K1')->applyFromArray($styleBold);
+        $sheet->getStyle('H1:K1')->applyFromArray($styleBaris);
 
-        $sheet->getStyle('N2:Q2')->applyFromArray($styleBold);
-        $sheet->getStyle('N2:Q2')->applyFromArray($styleBaris);
+        $sheet->getStyle('N1:Q1')->applyFromArray($styleBold);
+        $sheet->getStyle('N1:Q1')->applyFromArray($styleBaris);
         // $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
 
         

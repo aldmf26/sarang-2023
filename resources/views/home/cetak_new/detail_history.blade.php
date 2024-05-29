@@ -8,9 +8,6 @@
                     {{ auth()->user()->name }}
                 </th>
             </tr>
-            @php
-                $getAnak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
-                @endphp
             <tr>
                 <th width="1">Nama</th>
                 <th width="1">:</th>
@@ -84,19 +81,13 @@
                             <td>{{ $category != 'dll' && $category != 'denda' ? $c->no_box : '-' }}</td>
                             <td>{{ $label }}</td>
 
-                            @if ($category == 'eo')
-                                <td class="text-end">-</td>
-                            @else
-                                <td class="text-end">{{ $c->pcs_awal ?? '-' }}</td>
-                            @endif
+                            <td class="text-end">{{ $category == 'eo' ? '-' : ($c->pcs_awal ?? '-') }}</td>
 
                             <td class="text-end">{{ $c->gr_awal ?? '-' }}</td>
 
-                            @if ($category == 'eo')
-                                <td class="text-end">-</td>
-                            @else
-                                <td class="text-end">{{ $c->pcs_akhir ?? '-' }}</td>
-                            @endif
+                            <td class="text-end">
+                                @if ($category == 'eo') '-' @else {{ $c->pcs_akhir ?? '-' }} @endif
+                            </td>
 
                             <td class="text-end">{{ $c->gr_akhir ?? '-' }}</td>
 

@@ -20,9 +20,9 @@
                     teks="History" /> --}}
 
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
-                    addClass="float-end ms-2" teks="View" />
-                <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
-                    & selanjutnya</p>
+                    addClass="float-end" teks="View" />
+                {{-- <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
+                    & selanjutnya</p> --}}
 
             </div>
         </div>

@@ -1,18 +1,23 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <div class="col-lg-6">
-            <h6 class="float-start mt-1">{{ $title }}</h6>
+        <div class="d-flex justify-content-between">
+            <h6 class="mt-1">{{ $title }}</h6>
+            <div class="d-flex gap-1">
+                <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
+                <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
+                    class="btn btn-sm btn-primary">
+                    <i class="fas fa-file-excel"></i> Export
+                </a>
+                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" 
+                    teks="Tambah" />
+                    <div>
+                        @include('home.bk.btn_import')
+                    </div>
+                <x-theme.btn_filter />
+            </div>
         </div>
-        <x-theme.button href="#" icon="fa-print" addClass="float-end btn_bayar" teks="Print" />
-        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
-            class="float-end btn btn-sm btn-primary me-2">
-            <i class="fas fa-file-excel"></i> Export
-        </a>
-
-        <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" addClass="float-end"
-            teks="Tambah" />
-        @include('home.bk.btn_import')
-        <x-theme.btn_filter />
+       
+        
     </x-slot>
 
     <x-slot name="cardBody">
