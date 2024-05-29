@@ -805,10 +805,7 @@ class CetakNewController extends Controller
         $kategori = $r->kategori;
 
         $cabutSelesai = CetakModel::cetak_selesai($id_user);
-
         $formulir = DB::table('formulir_sarang')->where([['kategori', 'sortir'], ['no_invoice', $no_invoice]])->get();
-
-
         $data = [
             'title' => 'Gudang Sarang',
             'cabutSelesai' => $cabutSelesai,

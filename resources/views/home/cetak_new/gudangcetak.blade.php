@@ -107,8 +107,8 @@
                     <div class="col-auto">
                         <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                             teks="serah" />
-                        <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"
-                            teks="Po" />
+                        <x-theme.button href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}"
+                            icon="fa-clipboard-list" teks="Po" />
                     </div>
                 </div>
 

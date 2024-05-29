@@ -8,19 +8,19 @@
                 <p class="badge bg-danger" style="font-size: 14px">Setor lewat jam 09:30 AM = tidak capai</p>
             </div>
             <div>
-                <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm me-2"
+                <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm ms-2"
                     style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
-                    addClass="float-end tambah_kerja" teks="Kerja" />
-                <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list" addClass="float-end"
-                    teks="Summary" />
-                <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel" addClass="float-end"
-                    teks="Export" />
+                    addClass="float-end tambah_kerja ms-2" teks="Kerja" />
+                <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list"
+                    addClass="float-end ms-2" teks="Summary" />
+                <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
+                    addClass="float-end ms-2" teks="Export" />
                 {{-- <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
                     teks="History" /> --}}
 
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
-                    addClass="float-end" teks="View" />
+                    addClass="float-end ms-2" teks="View" />
                 <p class="badge bg-info text-wrap me-2">tekan CTRL + panah ⬅️kiri / kanan➡️ <br> untuk view hari kemarin
                     & selanjutnya</p>
 
