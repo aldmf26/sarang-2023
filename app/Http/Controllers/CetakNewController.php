@@ -465,12 +465,13 @@ class CetakNewController extends Controller
         $pcs_akhir = 0;
         $gr_akhir = 0;
         $ttl_rp = 0;
+
         foreach ($detail as $d) {
             $pcs_awal += $d->pcs_awal;
             $gr_awal += $d->gr_awal;
             $pcs_akhir += $d->pcs_akhir;
             $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp + $d->rp_tambahan;
+            $ttl_rp += $d->ttl_rp;
         }
         foreach ($cabut as $d) {
             $pcs_awal += $d->pcs_awal;

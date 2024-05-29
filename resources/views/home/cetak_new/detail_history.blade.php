@@ -52,8 +52,8 @@
                     <th class="dhead text-end">gr awal</th>
                     <th class="dhead text-end">pcs akhir</th>
                     <th class="dhead text-end">gr akhir</th>
-                    <th class="dhead text-end">sst%</th>
-                    <th class="dhead text-end">Ttl Rp</th>
+                    <th class="dhead text-end">Susut%</th>
+                    <th class="dhead text-end">Total Rp</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,7 +103,7 @@
                                 @if ($isDenda)
                                     {{ number_format($c->denda) }}
                                 @else
-                                    {{ number_format($category == 'detail' ? $c->pcs_akhir * $c->rp_satuan : $c->ttl_rp) }}
+                                    {{ number_format($category == 'detail' ? $c->ttl_rp : $c->ttl_rp) }}
                                 @endif
                             </td>
                         </tr>
