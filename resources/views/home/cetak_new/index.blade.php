@@ -73,9 +73,9 @@
             }
         </style>
         <section class="row">
-            <input type="hidden" id="tgl1" value="{{ $tgl1 }}">
-            <input type="hidden" id="tgl2" value="{{ $tgl2 }}">
-            <input type="hidden" id="id_anak" value="{{ $id_anak }}">
+            <input type="hidden" class="tgl1" value="{{ $tgl1 }}">
+            <input type="hidden" class="tgl2" value="{{ $tgl2 }}">
+            <input type="hidden" class="id_anak" value="{{ $id_anak }}">
 
 
             <div id="load-cetak"></div>
@@ -126,12 +126,14 @@
         @section('scripts')
             <script>
                 $(document).ready(function() {
+
                     load_cetak();
 
                     function load_cetak() {
-                        var tgl1 = $('#tgl1').val();
-                        var tgl2 = $('#tgl2').val();
-                        var id_anak = $('#id_anak').val();
+                        var tgl1 = $('.tgl1').val();
+                        var tgl2 = $('.tgl2').val();
+                        var id_anak = $('.id_anak').val();
+                        alert(tgl1)
                         $.ajax({
                             type: "get",
                             data: {

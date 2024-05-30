@@ -134,7 +134,10 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
 
+
         $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas);
+
+
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
