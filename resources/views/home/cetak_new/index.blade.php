@@ -133,7 +133,7 @@
                         var tgl1 = $('.tgl1').val();
                         var tgl2 = $('.tgl2').val();
                         var id_anak = $('.id_anak').val();
-                        alert(tgl1)
+
                         $.ajax({
                             type: "get",
                             data: {
