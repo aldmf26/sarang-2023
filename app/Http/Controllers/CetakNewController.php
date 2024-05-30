@@ -1257,7 +1257,7 @@ class CetakNewController extends Controller
 
             $sheet->setCellValue('I' . $no, $item->pcs_awal_cbt);
             $sheet->setCellValue('J' . $no, $item->gr_awal_cbt + $item->gr_awal_eo);
-            $sheet->setCellValue('K' . $no, $item->pcs_akhir_cbt + $item->gr_akhir_eo);
+            $sheet->setCellValue('K' . $no, $item->pcs_akhir_cbt + $item->gr_eo_akhir);
             $sheet->setCellValue('L' . $no, $item->gr_akhir_cbt);
             $sheet->setCellValue('M' . $no, $item->ttl_rp_cbt + $item->ttl_rp_eo);
 
