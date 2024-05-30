@@ -58,7 +58,7 @@
             </thead>
             <tbody>
                 @php
-                    $no = 1;
+                    $no = 0;
                     $categories = [
                         'cabut' => 'Cbt',
                         'sortir' => 'Sortir',
@@ -86,7 +86,7 @@
                             <td class="text-end">{{ $c->gr_awal ?? '-' }}</td>
 
                             <td class="text-end">
-                                @if ($category == 'eo') '-' @else {{ $c->pcs_akhir ?? '-' }} @endif
+                                @if ($category == 'eo') - @else {{ $c->pcs_akhir ?? '-' }} @endif
                             </td>
 
                             <td class="text-end">{{ $c->gr_akhir ?? '-' }}</td>
@@ -103,7 +103,7 @@
                                 @if ($isDenda)
                                     {{ number_format($c->denda) }}
                                 @else
-                                    {{ number_format($category == 'detail' ? $c->ttl_rp : $c->ttl_rp) }}
+                                    {{ number_format($c->ttl_rp) }}
                                 @endif
                             </td>
                         </tr>
