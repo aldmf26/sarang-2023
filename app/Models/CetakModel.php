@@ -293,7 +293,7 @@ class CetakModel extends Model
         $result = DB::select("SELECT h.name, a.nama , b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
         d.pcs_awal_cbt, d.gr_awal_cbt, d.pcs_akhir_cbt, d.gr_akhir_cbt, d.ttl_rp_cbt,
         e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda,
-        i.gr_awal_eo, i.gr_akhir_eo, i.ttl_rp_eo
+        i.gr_awal_eo, i.gr_eo_akhir, i.ttl_rp_eo
         FROM tb_anak as a 
         left join (
          SELECT b.id_anak, count(b.tgl) as ttl_hari
