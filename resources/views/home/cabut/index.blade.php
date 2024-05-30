@@ -9,12 +9,10 @@
                 <div>
                     @include('home.bk.btn_import')
                 </div>
-                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" 
-                    teks="kry baru" />
-                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" 
-                    teks="summary" />
-                <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
-                    class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Cabut
+                <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" teks="kry baru" />
+                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" teks="summary" />
+                <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal" class="btn btn-primary btn-sm"><i
+                        class="fas fa-plus"></i> Cabut
                     {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
                 </a>
                 <a href="{{ route('cabut.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2]) }}"

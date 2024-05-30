@@ -17,12 +17,12 @@
         {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja --}}
 
-        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end"
+        <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end me-2"
             teks="kry baru" />
         {{-- <x-theme.button href="#" modal="Y" idModal="ambil_box" icon="fa-plus" addClass="float-end"
                 teks="Ambil Box Bk" /> --}}
-        <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history" addClass="float-end history"
-            teks="History" />
+        <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
+            addClass="float-end history me-2" teks="History" />
     </x-slot>
 
     <x-slot name="cardBody">
