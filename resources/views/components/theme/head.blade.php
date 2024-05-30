@@ -41,6 +41,9 @@
 
     {{--
     <link rel="stylesheet" href="{{ asset('mycss.css') }}"> --}}
+    @php
+        $warna1 = "#F7914D";
+    @endphp
     <style>
         .pointer {
             cursor: pointer;
@@ -68,15 +71,28 @@
         .scrollable-table table {
             max-width: 100%;
         }
-
+        .dheadstock {
+            background-color: #FFD1DC !important;
+            color: rgb(19, 19, 19)
+        }
         .dhead {
             background-color: #8c8989   !important;
             color: white;
         }
 
-        .dheadstock {
-            background-color: #FFD1DC !important;
-            color: rgb(19, 19, 19)
+        .btn-primary {
+            background-color: {{$warna1}} !important;
+            border-color: {{$warna1}} !important;
+        }
+        .btn-info {
+            background-color: #7e7c7c !important;
+            border-color: #7e7c7c !important;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: {{$warna1}} !important;
+        }
+        .bg-primary {
+            background-color: {{$warna1}} !important;
         }
 
         .pointer {
@@ -260,20 +276,7 @@
             width: 170px;
         }
 
-        .btn-primary {
-            background-color: #F7914D !important;
-            border-color: #F7914D !important;
-        }
-        .btn-info {
-            background-color: rgb(126, 124, 124) !important;
-            border-color: rgb(126, 124, 124) !important;
-        }
-        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-            background-color: #F7914D !important;
-        }
-        .bg-primary {
-            background-color: #F7914D !important;
-        }
+        
     </style>
     @yield('styles')
     

@@ -58,7 +58,7 @@
                 </td>
                 <td class="h6 text-end ttlGr{{ $i + 1 }}">0</td>
                 <td>
-                    <input name="gr_eo_awal[]" type="text" class="form-control text-end" value="0">
+                    <input name="gr_eo_awal[]" type="text" class="form-control text-end" required>
                 </td>
                 <td align="center">
                     <button type="button" class="btn rounded-pill hapusCabutRow" id_cabut="{{ $x->id_eo }}"

@@ -469,38 +469,19 @@ class CetakNewController extends Controller
         $gr_akhir = 0;
         $ttl_rp = 0;
 
-        foreach ($detail as $d) {
-            $pcs_awal += $d->pcs_awal;
-            $gr_awal += $d->gr_awal;
-            $pcs_akhir += $d->pcs_akhir;
-            $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp;
-        }
-        foreach ($cabut as $d) {
-            $pcs_awal += $d->pcs_awal;
-            $gr_awal += $d->gr_awal;
-            $pcs_akhir += $d->pcs_akhir;
-            $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp;
-        }
+        $dataSum = [$detail, $cabut, $sortir, $eo, $dll];
+        foreach ($dataSum as $data) {
+            foreach ($data as $d) {
+                $pcs_awal += $d->pcs_awal ?? 0;
+                $pcs_akhir += $d->pcs_akhir ?? 0;
 
-        foreach ($sortir as $d) {
-            $pcs_awal += $d->pcs_awal;
-            $gr_awal += $d->gr_awal;
-            $pcs_akhir += $d->pcs_akhir;
-            $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp;
-        }
+                $gr_awal += $d->gr_awal ?? 0;
+                $gr_akhir += $d->gr_akhir ?? 0;
 
-        foreach ($eo as $d) {
-            $gr_awal += $d->gr_awal;
-            $gr_akhir += $d->gr_akhir;
-            $ttl_rp += $d->ttl_rp;
+                $ttl_rp += $d->ttl_rp ?? 0;
+            }
         }
-
-        foreach ($dll as $d) {
-            $ttl_rp += $d->ttl_rp;
-        }
+        
         foreach ($denda as $d) {
             $ttl_rp -= $d->denda;
         }
@@ -597,6 +578,7 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
 
 
+        // Cabut::getRekapLaporanHarian($bulan, $tahun, $id_pengawas);
         $summary = DB::select("SELECT d.ttl_hari,
         b.name as pgws,
         a.id_anak,

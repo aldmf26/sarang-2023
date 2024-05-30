@@ -81,16 +81,16 @@
 
                         <tr>
                             <th class="text-center " colspan="4">#</th>
-                            <th x-on:click="cabut = ! cabut" class="text-center text-white bg-info"
+                            <th @click="cabut = ! cabut" class="text-center text-white bg-info"
                                 :colspan="cabut ? '8' : ''" ">
                                 Cabut
                                 {!! $buka !!}
                             </th>
-                            <th x-on:click="eo = ! eo" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
+                            <th @click="eo = ! eo" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
                                 Cabut Eo
                                 {!! $buka !!}
                             </th>
-                            <th x-on:click="sortir= ! sortir" class="text-center text-white bg-primary"
+                            <th @click="sortir= ! sortir" class="text-center text-white bg-primary"
                                 :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
