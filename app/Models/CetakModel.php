@@ -360,7 +360,7 @@ class CetakModel extends Model
             sum(i.gr_eo_akhir) as gr_eo_akhir, 
             sum(i.ttl_rp) as ttl_rp_eo
             FROM eo as i
-            where i.bulan = '$bulan_dibayar' 
+            where i.bulan_dibayar = '$bulan_dibayar' 
             group by i.id_anak
         ) as i on i.id_anak = a.id_anak
         
