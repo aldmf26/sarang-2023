@@ -292,7 +292,8 @@ class CetakModel extends Model
     {
         $result = DB::select("SELECT h.name, a.nama , b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
         d.pcs_awal_cbt, d.gr_awal_cbt, d.pcs_akhir_cbt, d.gr_akhir_cbt, d.ttl_rp_cbt,
-        e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda
+        e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda,
+        i.gr_awal_eo, i.gr_akhir_eo, i.ttl_rp_eo
         FROM tb_anak as a 
         left join (
          SELECT b.id_anak, count(b.tgl) as ttl_hari
@@ -336,6 +337,7 @@ class CetakModel extends Model
             group by e.id_anak
         ) as e on e.id_anak = a.id_anak
         
+        
         left join (
             SELECT f.id_anak, sum(f.rupiah) as ttl_harian
             FROM tb_hariandll as f 
@@ -351,6 +353,16 @@ class CetakModel extends Model
         ) as g on g.id_anak = a.id_anak
 
         left join users as h on h.id = a.id_pengawas
+
+        left join (
+            SELECT i.id_anak, 
+            sum(i.gr_eo_awal) gr_awal_eo, 
+            sum(i.gr_eo_akhir) as gr_eo_akhir, 
+            sum(i.ttl_rp) as ttl_rp_eo
+            FROM eo as i
+            where i.bulan = '$bulan_dibayar' 
+            group by i.id_anak
+        ) as i on i.id_anak = a.id_anak
         
         where a.id_pengawas = '$id_pengawas';");
         return $result;

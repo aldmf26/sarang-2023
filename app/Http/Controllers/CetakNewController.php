@@ -481,7 +481,7 @@ class CetakNewController extends Controller
                 $ttl_rp += $d->ttl_rp ?? 0;
             }
         }
-        
+
         foreach ($denda as $d) {
             $ttl_rp -= $d->denda;
         }
@@ -1256,10 +1256,10 @@ class CetakNewController extends Controller
             $sheet->setCellValue('H' . $no, $item->ttl_rp_cetak);
 
             $sheet->setCellValue('I' . $no, $item->pcs_awal_cbt);
-            $sheet->setCellValue('J' . $no, $item->gr_awal_cbt);
-            $sheet->setCellValue('K' . $no, $item->pcs_akhir_cbt);
+            $sheet->setCellValue('J' . $no, $item->gr_awal_cbt + $item->gr_awal_eo);
+            $sheet->setCellValue('K' . $no, $item->pcs_akhir_cbt + $item->gr_akhir_eo);
             $sheet->setCellValue('L' . $no, $item->gr_akhir_cbt);
-            $sheet->setCellValue('M' . $no, $item->ttl_rp_cbt);
+            $sheet->setCellValue('M' . $no, $item->ttl_rp_cbt + $item->ttl_rp_eo);
 
             $sheet->setCellValue('N' . $no, $item->pcs_awal_str);
             $sheet->setCellValue('O' . $no, $item->gr_awal_str);
@@ -1270,9 +1270,9 @@ class CetakNewController extends Controller
             $sheet->setCellValue('S' . $no, $item->ttl_harian);
             $sheet->setCellValue('T' . $no, $item->ttl_rp_denda);
 
-            $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
+            $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
 
-            $sheet->setCellValue('V' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
+            $sheet->setCellValue('V' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
 
 
 
