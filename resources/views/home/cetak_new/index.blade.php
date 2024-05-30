@@ -12,7 +12,7 @@
                     style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
                     addClass="float-end tambah_kerja ms-2" teks="Kerja" />
-                <x-theme.button href="{{ route('cetaknew.summary') }}" icon="fa-clipboard-list"
+                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list"
                     addClass="float-end ms-2" teks="Summary" />
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
                     addClass="float-end ms-2" teks="Export" />
