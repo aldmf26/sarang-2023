@@ -17,7 +17,7 @@
                 <hr style="border: 2px solid #435EBE">
             </div>
             @include('home.cetak.nav')
-            <ul class="bg-info nav nav-pills float-start mt-4">
+            <ul class="bg-info nav nav-pills dhead mt-4">
                 @foreach ($pengawas as $d)
                     <li class="nav-item">
                         <a class="nav-link text-white {{ $d->id_pengawas == $id_pengawas ? 'active' : '' }}"
@@ -50,8 +50,27 @@
             }
         </style>
 
-        <section class="row">
-            <div class="col-lg-12 mb-2">
+        <section class="row" x-data="{
+            cabut: true,
+            eo: true,
+            sortir: true
+        }">
+            <div class="col-lg-6">
+                <span class="me-2">Filter : </span>
+                <div class="form-check form-check-inline">
+                    <input x-model="cabut" type="checkbox" class="pointer form-check-input" id="cabutCheck">
+                    <label class="pointer form-check-label" for="cabutCheck">Cabut</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input x-model="eo" type="checkbox" class="pointer form-check-input" id="eoCheck">
+                    <label class="pointer form-check-label" for="eoCheck">Eo</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input x-model="sortir" type="checkbox" class="pointer form-check-input" id="sortirCheck">
+                    <label class="pointer form-check-label" for="sortirCheck">Sortir</label>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-2">
                 <table class="float-end">
                     <tbody>
                         <tr>
@@ -67,30 +86,27 @@
                 }
             </style>
             <div class="col-lg-12">
-                <table x-data="{
-                    cabut: true,
-                    eo: true,
-                    sortir: true
-                }" id="tblAldi"
+                <table  id="tblAldi"
                     class="table table-stripped table-bordered table-responsive">
                     @php
                         $bgDanger = 'text-white bg-danger';
-                        $buka = "<span class='badge bg-secondary float-end'>Buka <i class='fas fa-caret-down'></i></span>";
+                        // $buka = "<span class='badge bg-secondary float-end'>Buka <i class='fas fa-caret-down'></i></span>";
+                        $buka = "";
                     @endphp
                     <thead>
 
                         <tr>
                             <th class="text-center " colspan="4">#</th>
-                            <th @click="cabut = ! cabut" class="text-center text-white bg-info"
+                            <th @click="cabut = ! cabut" :class="{ 'd-none': !cabut }" class="text-center text-white bg-info"
                                 :colspan="cabut ? '8' : ''" ">
                                 Cabut
                                 {!! $buka !!}
                             </th>
-                            <th @click="eo = ! eo" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
+                            <th @click="eo = ! eo" :class="{ 'd-none': !eo }" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
                                 Cabut Eo
                                 {!! $buka !!}
                             </th>
-                            <th @click="sortir= ! sortir" class="text-center text-white bg-primary"
+                            <th @click="sortir= ! sortir" :class="{ 'd-none': !sortir }" class="text-center text-white bg-primary"
                                 :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
