@@ -481,7 +481,7 @@ class CetakNewController extends Controller
                 $ttl_rp += $d->ttl_rp ?? 0;
             }
         }
-        
+
         foreach ($denda as $d) {
             $ttl_rp -= $d->denda;
         }
@@ -1097,7 +1097,7 @@ class CetakNewController extends Controller
     }
     public function getNoBoxTambah()
     {
-        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cabut%' ORDER by no_box DESC limit 1;");
+        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cetakcu%' ORDER by no_box DESC limit 1;");
         $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
         return $nobox;
     }
@@ -1106,7 +1106,7 @@ class CetakNewController extends Controller
     {
         if ($r->kategori == 'sortir') {
             $this->importSortir($r);
-            return redirect()->route('bk.index', ['kategori' => 'sortir'])->with('sukses', 'Data berhasil import');
+            return redirect()->route('bk.index', ['kategori' => 'cetak'])->with('sukses', 'Data berhasil import');
         } else {
 
             $file = $r->file('file');
@@ -1153,12 +1153,13 @@ class CetakNewController extends Controller
                             'penerima' => auth()->user()->id,
                             'pcs_awal' => $row[4],
                             'gr_awal' => $row[5],
-                            'kategori' => 'cetak',
+                            'kategori' => 'cetakcu',
                         ]);
                         DB::table('formulir_sarang')->insert([
                             'no_box' => $nobox,
                             'id_pemberi' => 265,
                             'id_penerima' => auth()->user()->id,
+                            'tanggal' => date('Y-m-d'),
                             'pcs_awal' => $row[4],
                             'gr_awal' => $row[5],
                         ]);
@@ -1178,5 +1179,124 @@ class CetakNewController extends Controller
                 return redirect()->back()->with('error', $e->getMessage());
             }
         }
+    }
+
+    public function export_gaji_global(Request $r)
+    {
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+
+        $kolom = [
+            'A' => 'Pengawas',
+            'B' => 'Nama Anak',
+            'C' => 'Hari Masuk',
+            'D' => 'Pcs Awal Cetak',
+            'E' => 'Gr Awal Cetak',
+            'F' => 'Pcs Akhir Cetak',
+            'G' => 'Gr Akhir Cetak',
+            'H' => 'Total Rp Cetak',
+
+            'I' => 'Pcs Awal Cabut',
+            'J' => 'Gr Awal Cabut',
+            'K' => 'Pcs Akhir Cabut',
+            'L' => 'Gr Akhir Cabut',
+            'M' => 'Total Rp Cabut',
+
+            'N' => 'Pcs Awal Sortir',
+            'O' => 'Gr Awal Sortir',
+            'P' => 'Pcs Akhir Sortir',
+            'Q' => 'Gr Akhir Sortir',
+            'R' => 'Total Rp Sortir',
+
+            'S' => 'Kerja Dll',
+            'T' => 'Rp Denda',
+            'U' => 'Total Gaji',
+            'V' => 'Rata-rata',
+
+        ];
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+        $id_penangawas = auth()->user()->id;
+        $gaji =  CetakModel::gaji_global($r->bulan_dibayar, $r->tahun_dibayar, $id_penangawas);
+
+        $no = 2;
+
+        foreach ($gaji as $item) {
+            $sheet->setCellValue('A' . $no, $item->name);
+            $sheet->setCellValue('B' . $no, $item->nama);
+            $sheet->setCellValue('C' . $no, $item->ttl_hari);
+
+            $sheet->setCellValue('D' . $no, $item->pcs_awal_ctk);
+            $sheet->setCellValue('E' . $no, $item->gr_awal_ctk);
+            $sheet->setCellValue('F' . $no, $item->pcs_akhir_ctk);
+            $sheet->setCellValue('G' . $no, $item->gr_akhir_ctk);
+            $sheet->setCellValue('H' . $no, $item->ttl_rp_cetak);
+
+            $sheet->setCellValue('I' . $no, $item->pcs_awal_cbt);
+            $sheet->setCellValue('J' . $no, $item->gr_awal_cbt + $item->gr_awal_eo);
+            $sheet->setCellValue('K' . $no, $item->pcs_akhir_cbt + $item->gr_eo_akhir);
+            $sheet->setCellValue('L' . $no, $item->gr_akhir_cbt);
+            $sheet->setCellValue('M' . $no, $item->ttl_rp_cbt + $item->ttl_rp_eo);
+
+            $sheet->setCellValue('N' . $no, $item->pcs_awal_str);
+            $sheet->setCellValue('O' . $no, $item->gr_awal_str);
+            $sheet->setCellValue('P' . $no, $item->pcs_akhir_str);
+            $sheet->setCellValue('Q' . $no, $item->gr_akhir_str);
+            $sheet->setCellValue('R' . $no, $item->ttl_rp_str);
+
+            $sheet->setCellValue('S' . $no, $item->ttl_harian);
+            $sheet->setCellValue('T' . $no, $item->ttl_rp_denda);
+
+            $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
+
+            $sheet->setCellValue('V' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
+
+
+
+            $no++;
+        }
+
+
+        $sheet->getStyle('A1:V1')->applyFromArray($style_atas);
+        $sheet->getStyle('A2:V' . $no - 1)->applyFromArray($styleBaris);
+
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Export Gaji Global";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 }

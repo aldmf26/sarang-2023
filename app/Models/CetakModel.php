@@ -287,4 +287,84 @@ class CetakModel extends Model
         }
         return $cetak;
     }
+
+    public static function gaji_global($bulan_dibayar, $tahun_dibayar, $id_pengawas)
+    {
+        $result = DB::select("SELECT h.name, a.nama , b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
+        d.pcs_awal_cbt, d.gr_awal_cbt, d.pcs_akhir_cbt, d.gr_akhir_cbt, d.ttl_rp_cbt,
+        e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda,
+        i.gr_awal_eo, i.gr_eo_akhir, i.ttl_rp_eo
+        FROM tb_anak as a 
+        left join (
+         SELECT b.id_anak, count(b.tgl) as ttl_hari
+            FROM absen as b 
+            where b.bulan_dibayar = '$bulan_dibayar' and b.tahun_dibayar = '$tahun_dibayar'
+            GROUP by b.id_anak
+        ) as b on b.id_anak =  a.id_anak
+        
+        left join (
+         SELECT c.id_anak, sum(c.pcs_awal_ctk) as pcs_awal_ctk, 
+         sum(c.gr_awal_ctk) as gr_awal_ctk, 
+         sum(c.pcs_akhir) as pcs_akhir_ctk, 
+         sum(c.gr_akhir) as gr_akhir_ctk, 
+         sum(c.ttl_rp) as ttl_rp_cetak
+            FROM cetak_new as c
+            where c.bulan_dibayar = '$bulan_dibayar' and YEAR(c.tgl) = '$tahun_dibayar'
+            GROUP by c.id_anak
+        ) as c on c.id_anak = a.id_anak
+        
+        left join (
+            SELECT d.id_anak, 
+            sum(d.pcs_awal) as pcs_awal_cbt, 
+            sum(d.gr_awal) as gr_awal_cbt, 
+            sum(d.pcs_akhir) as pcs_akhir_cbt, 
+            sum(d.gr_akhir) as gr_akhir_cbt, 
+            sum(d.ttl_rp) as ttl_rp_cbt
+            FROM cabut as d 
+            where d.bulan_dibayar = '$bulan_dibayar' and d.no_box != '9999'
+            GROUP by d.id_anak
+        ) as d on d.id_anak = a.id_anak
+        
+        left join (
+            SELECT e.id_anak, 
+            sum(e.pcs_awal) as pcs_awal_str, 
+            sum(e.gr_awal) gr_awal_str, 
+            sum(e.pcs_akhir) as pcs_akhir_str, 
+            sum(e.gr_akhir) gr_akhir_str, 
+            sum(e.ttl_rp) as ttl_rp_str 
+            FROM sortir as e 
+            where e.bulan = '$bulan_dibayar' and e. no_box != '9999'
+            group by e.id_anak
+        ) as e on e.id_anak = a.id_anak
+        
+        
+        left join (
+            SELECT f.id_anak, sum(f.rupiah) as ttl_harian
+            FROM tb_hariandll as f 
+            where f.bulan_dibayar = '$bulan_dibayar' and f.tahun_dibayar = '$tahun_dibayar'
+            GROUP by f.id_anak
+        ) as f on f.id_anak = a.id_anak
+        
+        left join (
+         SELECT g.id_anak , sum(g.nominal) as ttl_rp_denda
+            FROM tb_denda as g 
+            where g.bulan_dibayar = '$bulan_dibayar'
+            GROUP by g.id_anak
+        ) as g on g.id_anak = a.id_anak
+
+        left join users as h on h.id = a.id_pengawas
+
+        left join (
+            SELECT i.id_anak, 
+            sum(i.gr_eo_awal) gr_awal_eo, 
+            sum(i.gr_eo_akhir) as gr_eo_akhir, 
+            sum(i.ttl_rp) as ttl_rp_eo
+            FROM eo as i
+            where i.bulan_dibayar = '$bulan_dibayar' and i.no_box != '9999'
+            group by i.id_anak
+        ) as i on i.id_anak = a.id_anak
+        
+        where a.id_pengawas = '$id_pengawas';");
+        return $result;
+    }
 }

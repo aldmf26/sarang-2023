@@ -10,14 +10,18 @@
             <div>
                 <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm ms-2"
                     style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
+
+                <x-theme.button modal="Y" idModal="gaji" href="#" icon="fa-file-excel"
+                    addClass="float-end ms-2" teks="Gaji Global" />
+
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
                     addClass="float-end tambah_kerja ms-2" teks="Kerja" />
                 <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list"
                     addClass="float-end ms-2" teks="Summary" />
+
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
                     addClass="float-end ms-2" teks="Export" />
-                {{-- <x-theme.button href="{{ route('cetaknew.history') }}" icon="fa-calendar-week" addClass="float-end"
-                    teks="History" /> --}}
+
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
                 @include('home.cetak_new.btn_import')
@@ -45,6 +49,26 @@
                             @foreach ($tb_anak as $u)
                                 <option value="{{ $u->id_anak }}">{{ $u->nama }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
+        <form action="{{ route('cetaknew.export_gaji_global') }}" method="get">
+            <x-theme.modal title="Filter Tanggal" idModal="gaji">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="">Bulan dibayar</label>
+                        <select name="bulan_dibayar" id="" class="form-control">
+                            @foreach ($bulan as $b)
+                                <option value="{{ $b->bulan }}">{{ $b->nm_bulan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="">Tahun dibayar</label>
+                        <select name="tahun_dibayar" id="" class="form-control">
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                 </div>
@@ -330,7 +354,7 @@
 
                         var formattedTgl1 = formatDate(tgl1);
                         var formattedTgl2 = formatDate(tgl2);
-                        var id_anak = $('#id_anak').val();
+                        var id_anak = $('.id_anak').val();
 
 
                         window.location.href =

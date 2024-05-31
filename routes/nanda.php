@@ -189,6 +189,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
+            Route::get('/export_gaji_global', 'export_gaji_global')->name('export_gaji_global');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')
