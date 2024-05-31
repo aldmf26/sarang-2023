@@ -321,7 +321,7 @@ class CetakModel extends Model
             sum(d.gr_akhir) as gr_akhir_cbt, 
             sum(d.ttl_rp) as ttl_rp_cbt
             FROM cabut as d 
-            where d.bulan_dibayar = '$bulan_dibayar'
+            where d.bulan_dibayar = '$bulan_dibayar' and d.no_box != '9999'
             GROUP by d.id_anak
         ) as d on d.id_anak = a.id_anak
         
@@ -333,7 +333,7 @@ class CetakModel extends Model
             sum(e.gr_akhir) gr_akhir_str, 
             sum(e.ttl_rp) as ttl_rp_str 
             FROM sortir as e 
-            where e.bulan = '$bulan_dibayar' 
+            where e.bulan = '$bulan_dibayar' and e. no_box != '9999'
             group by e.id_anak
         ) as e on e.id_anak = a.id_anak
         
@@ -360,7 +360,7 @@ class CetakModel extends Model
             sum(i.gr_eo_akhir) as gr_eo_akhir, 
             sum(i.ttl_rp) as ttl_rp_eo
             FROM eo as i
-            where i.bulan_dibayar = '$bulan_dibayar' 
+            where i.bulan_dibayar = '$bulan_dibayar' and i.no_box != '9999'
             group by i.id_anak
         ) as i on i.id_anak = a.id_anak
         
