@@ -647,8 +647,8 @@ class CabutController extends Controller
 
                 'Q2' => 'pcs awal',
                 'R2' => 'gr akhir',
-                'S2' => 'pcs awal',
-                'T2' => 'gr eo akhir',
+                'S2' => 'pcs akhir',
+                'T2' => 'gr akhir',
                 'U2' => 'susut',
                 'V2' => 'ttl rp',
 
