@@ -1,7 +1,7 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
 
-        <div class="row justify-content-end">
+        <div class="row justify-content-end" x-data="">
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }}
                     {{ date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun)))) }}
@@ -17,7 +17,7 @@
                 <hr style="border: 2px solid #435EBE">
             </div>
             @include('home.cetak.nav')
-            <ul class="bg-info nav nav-pills float-start mt-4">
+            <ul class="bg-info nav nav-pills dhead mt-4">
                 @foreach ($pengawas as $d)
                     <li class="nav-item">
                         <a class="nav-link text-white {{ $d->id_pengawas == $id_pengawas ? 'active' : '' }}"
@@ -29,8 +29,9 @@
                             ]) }}">{{ $d->name }}</a>
                     </li>
                 @endforeach
+          
             </ul>
-
+           
         </div>
 
     </x-slot>
@@ -49,9 +50,29 @@
                 z-index: 1;
             }
         </style>
+       
+        <section class="row" x-data="{
+            cabut: true,
+            eo: true,
+            sortir: true
+        }">
 
-        <section class="row">
-            <div class="col-lg-12 mb-2">
+            <div class="col-lg-6">
+                <span class="me-2">Filter : </span>
+                <div class="form-check form-check-inline">
+                    <input x-model="cabut" type="checkbox" class="pointer form-check-input" id="cabutCheck">
+                    <label class="pointer form-check-label" for="cabutCheck">Cabut</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input x-model="eo" type="checkbox" class="pointer form-check-input" id="eoCheck">
+                    <label class="pointer form-check-label" for="eoCheck">Eo</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input x-model="sortir" type="checkbox" class="pointer form-check-input" id="sortirCheck">
+                    <label class="pointer form-check-label" for="sortirCheck">Sortir</label>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-2">
                 <table class="float-end">
                     <tbody>
                         <tr>
@@ -67,31 +88,28 @@
                 }
             </style>
             <div class="col-lg-12">
-                <table x-data="{
-                    cabut: true,
-                    eo: true,
-                    sortir: true
-                }" id="tblAldi"
-                    class="table table-stripped table-bordered table-responsive">
+                <table id="tblAldi" class="table table-stripped table-bordered table-responsive">
                     @php
                         $bgDanger = 'text-white bg-danger';
-                        $buka = "<span class='badge bg-secondary float-end'>Buka <i class='fas fa-caret-down'></i></span>";
+                        // $buka = "<span class='badge bg-secondary float-end'>Buka <i class='fas fa-caret-down'></i></span>";
+                        $buka = '';
                     @endphp
                     <thead>
 
                         <tr>
                             <th class="text-center " colspan="4">#</th>
-                            <th @click="cabut = ! cabut" class="text-center text-white bg-info"
+                            <th @click="cabut = ! cabut" :class="{ 'd-none': !cabut }"
+                                class="text-center text-white bg-info"
                                 :colspan="cabut ? '8' : ''" ">
                                 Cabut
                                 {!! $buka !!}
                             </th>
-                            <th @click="eo = ! eo" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
+                            <th @click="eo = ! eo" :class="{ 'd-none': !eo }" class="text-center text-white bg-success" :colspan="eo ? '4' : ''" ">
                                 Cabut Eo
                                 {!! $buka !!}
                             </th>
-                            <th @click="sortir= ! sortir" class="text-center text-white bg-primary"
-                                :colspan="sortir ? '6' : ''" " >
+                            <th @click="sortir= ! sortir" :class="{ 'd-none': !sortir }"
+                                class="text-center text-white bg-primary" :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
                             <th class="text-center {{ $bgDanger }}" colspan="4">Gajih</th>
@@ -99,7 +117,7 @@
                         <tr>
                             <th class="dhead">Pgws</th>
                             <th class="dhead">Hari Masuk</th>
-                            <th class="dhead">Nama</th>
+                            <th class="dhead">Nama Karyawan</th>
                             <th class="dhead">Kelas</th>
 
                             <th x-show="cabut" class="dhead">Pcs Awal Cbt</th>
@@ -108,19 +126,19 @@
                             <th x-show="cabut" class="dhead">Gr Akhir</th>
                             <th x-show="cabut" class="dhead">Eot Gr</th>
                             <th x-show="cabut" class="dhead">Gr Flx</th>
-                            <th x-show="cabut" class="dhead">Susut</th>
+                            <th x-show="cabut" class="dhead">Susut %</th>
                             <th x-show="cabut" class="{{ $bgDanger }}">Ttl Rp</th>
 
                             <th x-show="eo" class="dhead">Gr Eo Awal</th>
                             <th x-show="eo" class="dhead">Gr Eo Akhir</th>
-                            <th x-show="eo" class="dhead">Susut</th>
+                            <th x-show="eo" class="dhead">Susut %</th>
                             <th x-show="eo" class="{{ $bgDanger }}">Ttl Rp</th>
 
                             <th x-show="sortir" class="dhead">Pcs Awal Srt</th>
                             <th x-show="sortir" class="dhead">Gr Awal</th>
                             <th x-show="sortir" class="dhead">Pcs Akhir</th>
                             <th x-show="sortir" class="dhead">Gr Akhir</th>
-                            <th x-show="sortir" class="dhead">Susut</th>
+                            <th x-show="sortir" class="dhead">Susut %</th>
                             <th x-show="sortir" class="{{ $bgDanger }}">Ttl Rp</th>
 
                             <th class="dhead">Kerja Dll</th>
@@ -158,7 +176,7 @@
                             $ttlEoRp = 0;
 
                         @endphp
-                              @foreach ($tbl as $data)
+                               @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
@@ -172,7 +190,9 @@
                             <td x-show="cabut">{{ number_format($data->eot, 0) }}</td>
                             <td x-show="cabut">{{ number_format($data->gr_flx, 0) }}</td>
                             @php
-                                $susutCbt = empty($data->gr_akhir) ? 0 : (1 - ($data->gr_akhir + $data->gr_flx) / $data->gr_awal) * 100;
+                                $susutCbt = empty($data->gr_akhir)
+                                    ? 0
+                                    : (1 - ($data->gr_akhir + $data->gr_flx) / $data->gr_awal) * 100;
                             @endphp
                             <td x-show="cabut">{{ number_format($susutCbt, 0) }}</td>
                             <td x-show="cabut">{{ number_format($data->ttl_rp, 0) }}</td>
@@ -192,7 +212,9 @@
                             <td x-show="sortir">{{ number_format($data->sortir_pcs_akhir, 0) }}</td>
                             <td x-show="sortir">{{ number_format($data->sortir_gr_akhir, 0) }}</td>
                             @php
-                                $susutSortir = empty($data->sortir_gr_akhir) ? 0 : (1 - $data->sortir_gr_akhir / $data->sortir_gr_awal) * 100;
+                                $susutSortir = empty($data->sortir_gr_akhir)
+                                    ? 0
+                                    : (1 - $data->sortir_gr_akhir / $data->sortir_gr_awal) * 100;
                             @endphp
                             <td x-show="sortir">{{ number_format($susutSortir, 0) }}</td>
                             <td x-show="sortir">{{ number_format($data->sortir_ttl_rp, 0) }}</td>
@@ -201,7 +223,12 @@
                             <td>{{ number_format($data->ttl_rp_dll, 0) }}</td>
                             <td>{{ number_format($data->ttl_rp_denda, 0) }}</td>
                             @php
-                                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll - $data->ttl_rp_denda;
+                                $ttl =
+                                    $data->ttl_rp +
+                                    $data->eo_ttl_rp +
+                                    $data->sortir_ttl_rp +
+                                    $data->ttl_rp_dll -
+                                    $data->ttl_rp_denda;
                                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
                             @endphp
@@ -276,6 +303,7 @@
         </section>
 
         @section('scripts')
+            
             <script>
                 pencarian('pencarian', 'tblAldi')
             </script>
