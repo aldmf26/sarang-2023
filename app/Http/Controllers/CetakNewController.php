@@ -752,6 +752,7 @@ class CetakNewController extends Controller
 
         $cabutSelesai = CetakModel::cetak_selesai($id_user);
         $formulir = DB::table('formulir_sarang')->where([['kategori', 'sortir'], ['no_invoice', $no_invoice]])->get();
+
         $data = [
             'title' => 'Gudang Sarang',
             'cabutSelesai' => $cabutSelesai,
@@ -966,7 +967,7 @@ class CetakNewController extends Controller
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
-            $id_penerima = $r->id_penerima[$d];
+            $id_penerima = $r->id_penerima;
             $data[] = [
                 'no_invoice' => $no_invoice,
                 'no_box' => $d,

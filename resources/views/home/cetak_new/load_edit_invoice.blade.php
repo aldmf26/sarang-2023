@@ -36,7 +36,16 @@
         <label for="">No Invoice</label>
         <input readonly value="{{ $formulir[0]->no_invoice }}" type="text" name="no_invoice" class="form-control">
     </div>
-    <div class="col-lg-3"></div>
+    <div class="col-lg-3">
+        <label for="">Penerima</label>
+
+        <select name="id_penerima" id="" class="select2-edit">
+            @foreach ($users as $u)
+                <option value="{{ $u->id }}" {{ $u->id == $formulir[0]->id_penerima ? 'selected' : '' }}>
+                    {{ $u->name }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="col-lg-6">
         <div class="d-flex justify-content-between">
             <div>
@@ -81,7 +90,7 @@
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="dhead">Penerima</th>
+
                     <th class="dhead">No Box</th>
                     <th class="dhead text-end">Pcs</th>
                     <th class="dhead text-end">Gr</th>
@@ -92,15 +101,6 @@
 
                 @foreach ($formulir as $d)
                     <tr>
-                        <td>
-                            <select :name="'id_penerima[' + {{ $d->no_box }} + ']'" id=""
-                                class="select2-edit">
-                                @foreach ($users as $u)
-                                    <option value="{{ $u->id }}"
-                                        {{ $u->id == $d->id_penerima ? 'selected' : '' }}>{{ $u->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
                         <td>{{ $d->no_box }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
@@ -112,16 +112,6 @@
                 @endforeach
                 <template x-for="d in selectedItem">
                     <tr>
-                        <td>
-                            <select :name="'id_penerima[' + d.no_box + ']'" x-model="selectedOption"
-                                x-init="initSelect2()" class="select2-alpine">
-                                <option value="">Pilih</option>
-                                @foreach ($users as $u)
-                                    <option value="{{ $u->id }}">
-                                        {{ $u->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
                         <td x-text="d.no_box"></td>
                         <td align="right" x-text="d.pcs"></td>
                         <td align="right" x-text="d.gr"></td>
