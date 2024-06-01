@@ -26,6 +26,23 @@
     </x-slot>
 
     <x-slot name="cardBody">
+        <style>
+            .select2 {
+                width: 120px !important;
+                font-size: 12px;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #000000;
+                line-height: 36px;
+                /* font-size: 12px; */
+                width: 120px !important;
+            }
+
+            .kolom_select {
+                width: 120px !important;
+            }
+        </style>
         <section class="row">
             <div id="loadHalaman"></div>
         </section>
@@ -365,6 +382,7 @@
                                     "ordering": true
                                 });
                                 inputChecked('cekSemuaTutup', 'cekTutup')
+                                $('.select2_add').select2({});
                             }
                         });
 
@@ -629,7 +647,103 @@
                                 loadTambahsortir()
                             }
                         });
-                    })
+                    });
+
+
+
+
+                    $(document).on('click', '.save_akhir', function(e) {
+                        e.preventDefault();
+                        var id_sortir = $(this).attr('id_sortir');
+                        var id_anak = $('.id_anak' + id_sortir).val();
+                        var id_kelas = $('.id_kelas' + id_sortir).val();
+                        var id_paket = $('.id_paket' + id_sortir).val();
+                        var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
+                        var gr_akhir = $('.gr_akhir' + id_sortir).val();
+                        var gr_awal = $('.gr_awal' + id_sortir).val();
+                        var bulan_dibayar = $('.bulan_dibayar' + id_sortir).val();
+                        var no = $('.no' + id_sortir).val();
+
+
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('sortir.save_akhir') }}",
+                            data: {
+                                id_sortir: id_sortir,
+                                id_anak: id_anak,
+                                id_kelas: id_kelas,
+                                pcs_akhir: pcs_akhir,
+                                gr_akhir: gr_akhir,
+                                gr_awal: gr_awal,
+                                bulan_dibayar: bulan_dibayar
+                            },
+                            success: function(response) {
+                                alertToast('sukses', 'Berhasil ditambahkan');
+                                loadRowData(id_sortir, no);
+                            }
+                        });
+                    });
+
+                    function loadRowData(id_sortir, no) {
+                        $.get("{{ route('sortir.load_halamanrow') }}", {
+                            id_sortir: id_sortir,
+                            no: no
+                        }, function(data) {
+                            var tr = $('tr[data-id="' + id_sortir + '"]');
+                            tr.replaceWith(data);
+
+                            // Check if the new .select2_add elements exist
+                            var newSelectElements = $('.select2_add');
+                            if (newSelectElements.length > 0) {
+                                newSelectElements.select2({});
+                            } else {
+                                console.log('No select2_add elements found.');
+                            }
+                        });
+                    }
+                    $(document).on('click', '.selesai_new', function(e) {
+                        e.preventDefault();
+                        var id_sortir = $(this).attr('id_sortir');
+                        var pcs_awal = $('.pcs_awal' + id_sortir).val();
+                        var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
+                        var no = $('.no' + id_sortir).val();
+
+
+
+                        if (pcs_awal != pcs_akhir) {
+                            alertToast('error', 'Jumlah Pcs tidak sama');
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ route('sortir.selesai_sortir') }}",
+                                data: {
+                                    id_sortir: id_sortir,
+                                },
+                                success: function(response) {
+                                    loadRowData(id_sortir, no)
+                                    alertToast('sukses', 'Berhasil ditambahkan');
+                                }
+                            });
+                        }
+
+
+                    });
+                    $(document).on('click', '.cancel_new', function(e) {
+                        e.preventDefault();
+                        var id_sortir = $(this).attr('id_sortir');
+                        var no = $('.no' + id_sortir).val();
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('sortir.cancel_sortir') }}",
+                            data: {
+                                id_sortir: id_sortir,
+                            },
+                            success: function(response) {
+                                loadRowData(id_sortir, no)
+                                alertToast('sukses', 'Berhasil ditambahkan');
+                            }
+                        });
+                    });
                 });
 
                 var inputNya = ['.grFlexKeyup',
@@ -641,6 +755,9 @@
                     '.pcucAkhirKeyup',
                 ]
                 clickSelectInput(inputNya)
+            </script>
+            <script>
+                document.body.style.zoom = "80%";
             </script>
         @endsection
     </x-slot>

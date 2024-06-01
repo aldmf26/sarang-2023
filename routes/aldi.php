@@ -239,6 +239,11 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/updateAnakBelum', 'updateAnakBelum')->name('updateAnakBelum');
             Route::get('/export_rekap', 'export_rekap')->name('export_rekap');
             Route::get('/gudang', 'gudang')->name('gudang');
+            Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::get('/save_akhir', 'save_akhir')->name('save_akhir');
+            Route::get('/cancel_sortir', 'cancel_sortir')->name('cancel_sortir');
+            Route::get('/load_halamanrow', 'load_halamanrow')->name('load_halamanrow');
         });
     Route::controller(EoController::class)
         ->prefix('home/eo')

@@ -7,18 +7,7 @@
             </div>
         </div>
 
-        <ul class="nav nav-pills float-start">
-            <li class="nav-item">
-                <a class="nav-link {{ $route == $routeSekarang && $kategori == 'cetak' ? 'active' : '' }}"
-                    aria-current="page" href="{{ route($routeSekarang) }}">Cetak</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ $route == $routeSekarang && $kategori == 'sortir' ? 'active' : '' }}"
-                    aria-current="page" href="{{ route($routeSekarang, ['kategori' => 'sortir']) }}">Sortir</a>
-            </li>
-
-
-        </ul>
+        @include('home.gudang_sarang.nav')
     </x-slot>
 
     <x-slot name="cardBody">
@@ -49,8 +38,8 @@
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
                             <td align="center">{{ $d->ttlbox }}</td>
-                            <td class="text-end">{{ number_format($d->pcs,0) }}</td>
-                            <td class="text-end">{{ number_format($d->gr,0) }}</td>
+                            <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
+                            <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
                                 @php
                                     $param = ['kategori' => 'cetak', 'no_invoice' => $d->no_invoice];

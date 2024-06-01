@@ -315,7 +315,7 @@ class GudangSarangController extends Controller
         if (!$r->no_box[0]) {
             return redirect()->route('gudangsarang.invoice')->with('error', 'No Box / Penerima Kosong !');
         }
-        DB::table('formulir_sarang')->where([['no_invoice', $no_invoice],['kategori', 'cetak']])->delete();
+        DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'cetak']])->delete();
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
@@ -351,7 +351,7 @@ class GudangSarangController extends Controller
         $tgl2 = $tgl['tgl2'];
         $kategori = $r->kategori ?? 'cetak';
         $route = request()->route()->getName();
-        $routeSekarang = "gudangsarang.invoice";
+        $routeSekarang = "gudangsarang.invoice_sortir";
 
         $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM formulir_sarang as a
@@ -370,5 +370,48 @@ class GudangSarangController extends Controller
             'routeSekarang' => $routeSekarang,
         ];
         return view('home.gudang_sarang.invoice_sortir', $data);
+    }
+    public function invoice_grade(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice_grade";
+
+        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.kategori = 'grade' and a.tanggal between '$tgl1' and '$tgl2'
+        group by a.no_invoice
+        order by a.id_formulir DESC
+        ");
+
+        $data = [
+            'title' => 'Po Sortir',
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_grade', $data);
+    }
+
+    public function print_formulir_grade(Request $r)
+    {
+        $formulir = DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->get();
+        $ket_formulir = DB::selectOne("SELECT  b.name, c.name as penerima
+        FROM formulir_sarang as a 
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
+        $data = [
+            'title' => 'Gudang Sarang',
+            'formulir' => $formulir,
+            'ket_formulir' => $ket_formulir
+        ];
+        return view('home.gudang_sarang/print_formulir_grade', $data);
     }
 }

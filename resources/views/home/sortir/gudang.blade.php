@@ -1,6 +1,20 @@
 <x-theme.app title="{{ $title }}" table="T">
     <x-slot name="slot">
-        <h6>{{ $title }}</h6>
+        <div class="row">
+            <div class="col-lg-8">
+                <h6>{{ $title }}</h6>
+            </div>
+            <div class="col-lg-4">
+                <a href="{{ route('sortir.export_gudang') }}" class="btn btn-sm btn-primary float-end ms-2"><i
+                        class="fas fa-file-excel"></i> Export
+                    All</a>
+                <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
+                    addClass="float-end ms-2" teks="serah" />
+                <x-theme.button href="{{ route('gudangsarang.invoice_grade', ['kategori' => 'grade']) }}"
+                    icon="fa-clipboard-list" addClass="float-end" teks="Po Grade" />
+            </div>
+        </div>
+        <br>
         <div class="row">
             <div class="col-lg-4">
                 <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
@@ -80,20 +94,28 @@
                 cek: [],
                 selectedItem: [],
                 tambah(no_box, pcs_awal, gr_awal) {
-                    this.selectedItem.push({ no_box, pcs_awal, gr_awal });
-                }
+                    const selectedItem = this.selectedItem
+                    const cetak = this.cetak
+            
+                    const index = selectedItem.findIndex(item => item.no_box === no_box);
+                    if (index === -1) {
+                        selectedItem.push({
+                            no_box: no_box,
+                            pcs_awal: parseFloat(pcs_awal),
+                            gr_awal: parseFloat(gr_awal),
+                        });
+                    } else {
+                        selectedItem.splice(index, 1);
+                    }
+            
+                },
             }">
                 <div class="row">
                     <div class="col">
                         <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
-                    <div class="col-auto">
-                        <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
-                            teks="serah" />
-                        <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"
-                            teks="Po" />
-                    </div>
+
                 </div>
 
 
@@ -142,7 +164,7 @@
 
 
                 {{-- modal ambil box ke cetak --}}
-                {{-- <form action="{{ route('cetaknew.save_formulir') }}" method="post">
+                <form action="{{ route('sortir.save_formulir') }}" method="post">
                     @csrf
                     <x-theme.modal idModal="tambah" title="tambah box" btnSave="Y">
                         <div class="row">
@@ -167,7 +189,6 @@
                             <thead>
                                 <tr>
                                     <th class="dhead">No Box</th>
-                                    <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
                                 </tr>
@@ -177,7 +198,6 @@
                                 <template x-for="item in selectedItem">
                                     <tr>
                                         <td x-text="item.no_box"></td>
-                                        <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
                                     </tr>
@@ -185,7 +205,7 @@
                             </tbody>
                         </table>
                     </x-theme.modal>
-                </form> --}}
+                </form>
 
             </div>
 

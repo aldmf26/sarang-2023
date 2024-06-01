@@ -8,6 +8,8 @@ use App\Models\Sortir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class SortirController extends Controller
 {
@@ -237,51 +239,7 @@ class SortirController extends Controller
         return view('home.sortir.load_modal_detail', $data);
     }
 
-    public function input_akhir(Request $r)
-    {
-        $id_anak = $r->id_anak;
-        $no_box = $r->no_box;
-        $tgl = $r->tgl;
-        $gr_akhir = $r->gr_akhir;
-        $pcs_akhir = $r->pcs_akhir;
-        $pcus = $r->pcus;
-        $id_sortir = $r->id_sortir;
-        $bulan = $r->bulan;
-        if ($gr_akhir == 0) {
-            return [
-                'tipe' => 'error',
-                'pesan' => 'Gr Akhir kosong'
-            ];
-        }
 
-
-        $getSortir = DB::table('sortir')->where('id_sortir', $id_sortir);
-        $get = $getSortir->first();
-        $susut = $gr_akhir == 0  ? 0 : (1 - $gr_akhir / $get->gr_awal) * 100;
-
-        $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $get->id_kelas)->first();
-
-        $rupiah = $get->rp_target;
-        $denda = 0;
-        if ($susut > $kelas->denda_susut) {
-            $denda = $susut > $kelas->bts_denda_sst ? $kelas->batas_denda_rp : (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
-            $rupiah = $rupiah - $denda;
-        }
-
-        $getSortir->update([
-            'pcs_akhir' => $pcs_akhir,
-            'pcus' => $pcus,
-            'gr_akhir' => $gr_akhir,
-            'bulan' => $bulan,
-            'ttl_rp' => $rupiah,
-            'tgl' => $tgl,
-            'denda_sp' => $denda,
-        ]);
-        return [
-            'tipe' => 'sukses',
-            'pesan' => 'Berhasil Input Akhir'
-        ];
-    }
 
     public function load_halaman(Request $r)
     {
@@ -296,15 +254,48 @@ class SortirController extends Controller
             'tgl2' => $tgl2,
 
             'cabut' => DB::table('sortir as a')
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
                 ->orderBY('a.selesai', 'ASC')
-                ->get()
+                ->get(),
+            'kelas' => DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get(),
+            'anak' => $this->getAnak(),
+            'bulan' => DB::table('bulan')->get(),
         ];
 
         return view('home.sortir.load_halaman', $data);
+    }
+    public function load_halamanrow(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+
+
+        $data = [
+            'title' => 'Sortir Divisi',
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+
+            'd' => DB::table('sortir as a')
+                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+                ->where('id_sortir', $r->id_sortir)
+                ->orderBY('a.selesai', 'ASC')
+                ->first(),
+            'kelas' => DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get(),
+            'anak' => $this->getAnak(),
+            'bulan' => DB::table('bulan')->get(),
+            'no' => $r->no
+        ];
+
+
+
+        return view('home.sortir.load_halaman_row', $data);
     }
 
     public function load_anak()
@@ -508,9 +499,301 @@ class SortirController extends Controller
 
             'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
             FROM sortir as a 
-            WHERE a.id_pengawas = '$id_user' and a.selesai = 'Y';")
+            
+            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and  a.id_pengawas = '$id_user' and a.selesai = 'Y';"),
+
+            'users' => DB::table('users')->where('posisi_id', '!=', '1')->get()
 
         ];
         return view('home.sortir.gudang', $data);
+    }
+
+    public function export_gudang(Request $r)
+    {
+        $id_pengawas = auth()->user()->id;
+
+        $siap_sortir = DB::select("SELECT b.name, a.no_box, a.pcs_awal, a.gr_awal
+        FROM formulir_sarang as a 
+        left join users as b on b.id = a.id_penerima
+        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' ");
+
+        $sortir_proses = DB::select("SELECT b.name, a.no_box, a.pcs_awal, a.gr_awal
+        FROM sortir as a 
+        left join users as b on b.id = a.id_pengawas
+        WHERE  a.selesai = 'T';");
+
+        $sortir_selesai = DB::select("SELECT b.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+        FROM sortir as a 
+        left join users as b on b.id = a.id_pengawas
+        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y';");
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+        $style_atas_number = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+        );
+
+        $kolom = [
+            'A' => 'Sortir Stok',
+            'B' => 'Pengawas',
+            'C' => 'no box',
+            'D' => 'pcs',
+            'E' => 'gr',
+
+            'G' => 'Sortir Sedang Proses',
+            'H' => 'Pengawas',
+            'I' => 'No Box',
+            'J' => 'Pcs',
+            'K' => 'Gr',
+
+            'M' => 'Sortir Selesai Siap Grade',
+            'N' => 'Pengawas',
+            'O' => 'no box',
+            'P' => 'pcs',
+            'Q' => 'gr',
+        ];
+
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+        $no = 2;
+        $ttl_pcs = 0;
+        $ttl_gr = 0;
+        foreach ($siap_sortir as $item) {
+            $sheet->setCellValue('B' . $no, $item->name);
+            $sheet->setCellValue('C' . $no, $item->no_box);
+            $sheet->setCellValue('D' . $no, $item->pcs_awal);
+            $sheet->setCellValue('E' . $no, $item->gr_awal);
+
+            $no++;
+            $ttl_pcs += $item->pcs_awal;
+            $ttl_gr += $item->gr_awal;
+        }
+        $sheet->setCellValue('B' . $no, 'Total');
+        $sheet->setCellValue('C' . $no, '');
+        $sheet->setCellValue('D' . $no, $ttl_pcs);
+        $sheet->setCellValue('E' . $no, $ttl_gr);
+
+
+        $sheet->getStyle('B1:C1')->applyFromArray($style_atas);
+        $sheet->getStyle('D1:E1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('B2:E' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('B' . $no . ':E' . $no)->applyFromArray($style_atas);
+
+        $no2 = 2;
+        $ttl_pcs2 = 0;
+        $ttl_gr2 = 0;
+        foreach ($sortir_proses as $item) {
+            $sheet->setCellValue('H' . $no2, $item->name);
+            $sheet->setCellValue('I' . $no2, $item->no_box);
+            $sheet->setCellValue('J' . $no2, $item->pcs_awal);
+            $sheet->setCellValue('K' . $no2, $item->gr_awal);
+
+            $no2++;
+            $ttl_pcs2 += $item->pcs_awal;
+            $ttl_gr2 += $item->gr_awal;
+        }
+
+        $sheet->setCellValue('H' . $no2, 'Total');
+        $sheet->setCellValue('I' . $no2, '');
+        $sheet->setCellValue('J' . $no2, $ttl_pcs2);
+        $sheet->setCellValue('K' . $no2, $ttl_gr2);
+
+        $sheet->getStyle('H1:I1')->applyFromArray($style_atas);
+        $sheet->getStyle('J1:K1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('H2:K' . $no2 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('H' . $no2 . ':K' . $no2)->applyFromArray($style_atas);
+
+        $no3 = 2;
+        $ttl_pcs3 = 0;
+        $ttl_gr3 = 0;
+        foreach ($sortir_selesai as $item) {
+            $sheet->setCellValue('N' . $no3, $item->name);
+            $sheet->setCellValue('O' . $no3, $item->no_box);
+            $sheet->setCellValue('P' . $no3, $item->pcs_awal);
+            $sheet->setCellValue('Q' . $no3, $item->gr_awal);
+
+            $no3++;
+            $ttl_pcs3 += $item->pcs_awal;
+            $ttl_gr3 += $item->gr_awal;
+        }
+
+        $sheet->setCellValue('N' . $no3, 'Total');
+        $sheet->setCellValue('O' . $no3, '');
+        $sheet->setCellValue('P' . $no3, $ttl_pcs3);
+        $sheet->setCellValue('Q' . $no3, $ttl_gr3);
+
+        $sheet->getStyle('N1:O1')->applyFromArray($style_atas);
+        $sheet->getStyle('P1:Q1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('N2:Q' . $no3 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('N' . $no3 . ':Q' . $no3)->applyFromArray($style_atas);
+
+
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Gudang Cetak";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+
+
+    public function save_formulir(Request $r)
+    {
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        FROM sortir 
+                        left join formulir_sarang on formulir_sarang.no_box = sortir.no_box and formulir_sarang.kategori = 'grade'
+                        WHERE sortir.no_box = $d AND sortir.selesai = 'Y' GROUP BY sortir.no_box ");
+            $pcs = $ambil->pcs_akhir;
+            $gr = $ambil->gr_akhir;
+
+
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+
+            if (empty($urutan_invoice->no_invoice)) {
+                $inv = 1001;
+            } else {
+                $inv = $urutan_invoice->no_invoice + 1;
+            }
+
+            $data[] = [
+                'no_invoice' => $inv,
+                'no_box' => $d,
+                'id_pemberi' => auth()->user()->id,
+                'id_penerima' => $r->id_penerima,
+                'pcs_awal' => $pcs,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'grade',
+            ];
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('sortir.gudang')->with('sukses', 'Data Berhasil');
+    }
+
+    public function save_akhir(Request $r)
+    {
+        $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $r->id_kelas)->first();
+        $rupiah =  empty($kelas->rupiah) ? 0 : $kelas->rupiah / $kelas->gr;
+        $rp_target = $rupiah == 0 ? 0 : $rupiah * $r->gr_awal;
+
+        $susut = $r->gr_akhir == 0  ? 0 : (1 - $r->gr_akhir / $r->gr_awal) * 100;
+
+        $denda = 0;
+        $rupiah = $rp_target;
+        if ($susut > $kelas->denda_susut) {
+            $denda = $susut > $kelas->bts_denda_sst ? $kelas->batas_denda_rp : (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
+            $rupiah = $rp_target - $denda;
+        }
+
+        $data = [
+            'id_anak' => $r->id_anak,
+            'id_kelas' => $r->id_kelas,
+            'pcs_akhir' => $r->pcs_akhir,
+            'gr_akhir' => $r->gr_akhir,
+            'bulan' => $r->bulan_dibayar,
+            'rp_target' => $rp_target,
+            'ttl_rp' => $rupiah,
+            'denda_sp' => $denda,
+
+        ];
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->update($data);
+    }
+
+    public function input_akhir(Request $r)
+    {
+        $id_anak = $r->id_anak;
+        $no_box = $r->no_box;
+        $tgl = $r->tgl;
+        $gr_akhir = $r->gr_akhir;
+        $pcs_akhir = $r->pcs_akhir;
+        $pcus = $r->pcus;
+        $id_sortir = $r->id_sortir;
+        $bulan = $r->bulan;
+        if ($gr_akhir == 0) {
+            return [
+                'tipe' => 'error',
+                'pesan' => 'Gr Akhir kosong'
+            ];
+        }
+
+
+        $getSortir = DB::table('sortir')->where('id_sortir', $id_sortir);
+        $get = $getSortir->first();
+        $susut = $gr_akhir == 0  ? 0 : (1 - $gr_akhir / $get->gr_awal) * 100;
+
+        $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $get->id_kelas)->first();
+
+        $rupiah = $get->rp_target;
+        $denda = 0;
+        if ($susut > $kelas->denda_susut) {
+            $denda = $susut > $kelas->bts_denda_sst ? $kelas->batas_denda_rp : (number_format($susut) - $kelas->denda_susut) * $kelas->denda;
+            $rupiah = $rupiah - $denda;
+        }
+
+        $getSortir->update([
+            'pcs_akhir' => $pcs_akhir,
+            'pcus' => $pcus,
+            'gr_akhir' => $gr_akhir,
+            'bulan' => $bulan,
+            'ttl_rp' => $rupiah,
+            'tgl' => $tgl,
+            'denda_sp' => $denda,
+        ]);
+        return [
+            'tipe' => 'sukses',
+            'pesan' => 'Berhasil Input Akhir'
+        ];
+    }
+
+    public function cancel_sortir(Request $r)
+    {
+        DB::table('sortir')->where('id_sortir', $r->id_sortir)->update([
+            'selesai' => 'T',
+        ]);
     }
 }

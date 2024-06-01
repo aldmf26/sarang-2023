@@ -1,5 +1,5 @@
 <tr data-id="{{ $c->id_cetak }}">
-    <td>{{ $no }}</td>
+    <td>{{ $no + 1 }}</td>
     <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
     <td>{{ $c->no_box }}</td>
     <td>
@@ -128,13 +128,13 @@
     </td>
     <td class="text-center" style="white-space: nowrap">
         <button style="font-size: 12px" type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
-            class="btn btn-sm btn-warning btn_save_akhir btn_save_akhir{{ $c->id_cetak }}"
+            class="btn btn-sm btn-primary btn_save_akhir btn_save_akhir{{ $c->id_cetak }}"
             id_cetak="{{ $c->id_cetak }}">Save
         </button>
 
         <button style="font-size: 12px" type="button"
             {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
-            class="btn btn-sm btn-primary btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
+            class="btn btn-sm btn-success btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
         </button>
         <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
             class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}" id_cetak="{{ $c->id_cetak }}"
@@ -142,7 +142,7 @@
         </button>
 
         <button {{ auth()->user()->posisi_id == '1' ? '' : 'hidden' }} type="button"
-            {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-warning btn_cancel"
+            {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-danger btn_cancel"
             id_cetak="{{ $c->id_cetak }}"><i class="fas fa-redo"></i>
         </button>
 

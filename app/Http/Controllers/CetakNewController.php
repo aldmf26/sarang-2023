@@ -935,6 +935,14 @@ class CetakNewController extends Controller
                 'penerima' => $f->id_penerima,
             ];
             DB::table('bk')->insert($data);
+            $data = [
+                'no_box' => $f->no_box,
+                'pcs_awal' => $f->pcs_awal,
+                'gr_awal' => $f->gr_awal,
+                'tgl' => $f->tanggal,
+                'id_pengawas' => $f->id_penerima,
+            ];
+            DB::table('sortir')->insert($data);
         }
         return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
     }
@@ -986,7 +994,7 @@ class CetakNewController extends Controller
                         WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
-            $id_penerima = $r->id_penerima[$d];
+
 
             $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
 
@@ -1000,7 +1008,7 @@ class CetakNewController extends Controller
                 'no_invoice' => $inv,
                 'no_box' => $d,
                 'id_pemberi' => auth()->user()->id,
-                'id_penerima' => $id_penerima,
+                'id_penerima' => $r->id_penerima,
                 'pcs_awal' => $pcs,
                 'gr_awal' => $gr,
                 'tanggal' => $r->tgl,

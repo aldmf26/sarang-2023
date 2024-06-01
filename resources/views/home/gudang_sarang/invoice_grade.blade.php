@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }} " table="Y" sizeCard="9">
+<x-theme.app title="{{ $title }} " table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
@@ -13,15 +13,15 @@
     <x-slot name="cardBody">
 
         <section class="row">
-            <table class="table table_bordered" id="nanda">
+            <table class="table table-bordered" id="nanda">
                 <thead>
                     <tr>
                         <th class="dhead" width="5">#</th>
                         <th class="dhead">Tanggal</th>
-                        <th class="dhead">No Po</th>
+                        <th class="dhead">No PO</th>
                         <th class="dhead">Nama Pemberi</th>
                         <th class="dhead">Nama Penerima</th>
-                        <th class="dhead text-end">Total Box</th>
+                        <th class="dhead text-center">Ttl Box</th>
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-center">Aksi</th>
@@ -31,24 +31,24 @@
                     @foreach ($formulir as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
+                            <td>{{ tanggal($d->tanggal) }}</td>
                             <td>
                                 {{ $d->no_invoice }}
                             </td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
-                            <td class="text-end">{{ $d->ttl_box }}</td>
-                            <td class="text-end">{{ $d->pcs }}</td>
-                            <td class="text-end">{{ $d->gr }}</td>
+                            <td align="center">{{ $d->ttl_box }}</td>
+                            <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
+                            <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
                                 @php
-                                    $param = ['kategori' => 'sortir', 'no_invoice' => $d->no_invoice];
-                                    $getCtk = DB::selectOne("SELECT a.no_box FROM formulir_sarang as a 
-                                    join bk as b on b.no_box = a.no_box and b.kategori = 'sortir'
-                                    where a.no_invoice = '$d->no_invoice'
-                                    ");
+                                    $param = ['kategori' => 'grade', 'no_invoice' => $d->no_invoice];
+                                    $getCtk = DB::table('formulir_sarang as a')
+                                        ->select('a.no_box')
+                                        ->join('cetak_new as b', 'a.no_box', 'b.no_box')
+                                        ->where('a.no_invoice', $d->no_invoice)
+                                        ->first();
                                 @endphp
-
                                 @if (!$getCtk)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal', $param) }}">
@@ -56,16 +56,16 @@
                                     </a>
 
                                     <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"
-                                        data-kategori="sortir">
+                                        data-kategori="cetak">
                                         <span class="badge bg-primary">Edit</span>
                                     </a>
 
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('cetaknew.selesai_po_sortir', $param) }}">
+                                        href="{{ route('gudangsarang.selesai', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
                                 @else
-                                    <a href="{{ $kategori == 'cetak' ? route('gudangsarang.print_formulir', ['no_invoice' => $d->no_invoice]) : "/home/cetaknew/formulir/$d->no_invoice" }}"
+                                    <a href="{{ route('gudangsarang.print_formulir_grade', ['no_invoice' => $d->no_invoice]) }}"
                                         target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
@@ -79,7 +79,7 @@
 
         </section>
 
-        <form action="{{ route('cetaknew.update_invoice') }}" method="post">
+        <form action="{{ route('gudangsarang.update_invoice') }}" method="post">
             @csrf
             <x-theme.modal title="Edit Po" idModal="edit" size="modal-lg">
                 <div class="loading d-none">
@@ -96,11 +96,10 @@
                     var no_invoice = $(this).data('no_invoice');
                     var kategori = $(this).data('kategori');
 
-
                     $("#edit").modal('show')
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('cetaknew.load_edit_invoice') }}",
+                        url: "{{ route('gudangsarang.load_edit_invoice') }}",
                         data: {
                             no_invoice,
                             kategori,
@@ -113,10 +112,7 @@
                             $('.loading').addClass('d-none');
                             $("#load_edit").html(r);
                             pencarian('inputTbl', 'tbl1')
-                            $('.select2-edit').select2({
-                                dropdownParent: $('#edit .modal-content')
-                            });
-                        },
+                        }
                     });
                 })
             </script>

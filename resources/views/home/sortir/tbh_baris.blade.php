@@ -1,4 +1,3 @@
-
 <tr class="baris{{ $count }}">
     <input type="hidden" name="id_sortir[]" value="9999">
     <td>
@@ -14,21 +13,18 @@
 
     </td>
     @php
-        $kelas = DB::table('tb_kelas_sortir')
-            ->orderBy('id_kelas', 'ASC')
-            ->get();
+        $kelas = DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get();
     @endphp
     <td>
-        <select name="tipe[]" count="{{$count}}" id="" class="form-control selectTipe">
+        <select name="tipe[]" count="{{ $count }}" id="" class="form-control selectTipe">
             <option value="">Pilih Paket</option>
             @foreach ($kelas as $i => $d)
-                <option value="{{ $d->id_kelas }}"
-                    >{{ strtoupper($d->kelas) }}</option>
+                <option value="{{ $d->id_kelas }}">{{ strtoupper($d->kelas) }}</option>
             @endforeach
         </select>
     </td>
     <td>
-        <select name="no_box[]" id="" required class="select2-tambah pilihBox" count="{{$count}}">
+        <select name="no_box[]" id="" required class="select2-tambah pilihBox" count="{{ $count }}">
             <option value="">Pilih Box</option>
             @foreach ($boxBk as $d)
                 @if ($d->gr_awal - $d->gr_cabut > 1)
@@ -46,8 +42,7 @@
             name="pcs_awal[]">
     </td>
     <td>
-        <input type="text" class="form-control text-end" value="0" id="pcuc"
-            name="pcuc[]">
+        <input type="text" class="form-control text-end" value="0" id="pcuc" name="pcuc[]">
     </td>
     <td>
         <input type="text" class="form-control text-end setGr setGr{{ $count }}" count="{{ $count }}"

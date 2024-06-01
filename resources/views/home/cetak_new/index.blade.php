@@ -16,8 +16,8 @@
 
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
                     addClass="float-end tambah_kerja ms-2" teks="Kerja" />
-                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list"
-                    addClass="float-end ms-2" teks="Summary" />
+                <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end ms-2"
+                    teks="Summary" />
 
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
                     addClass="float-end ms-2" teks="Export" />
@@ -181,9 +181,6 @@
                             }
                         });
                     }
-
-
-
                     $(document).on("click", ".btn_save_akhir", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');

@@ -3,9 +3,16 @@
         <div class="row">
             <div class="col-lg-8">
                 <h6>{{ $title }}</h6>
+
             </div>
             <div class="col-lg-4">
-
+                <a href="{{ route('cetaknew.export_gudang') }}" class="btn btn-sm btn-primary float-end ms-2"><i
+                        class="fas fa-file-excel"></i> Export
+                    All</a>
+                <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
+                    addClass="float-end ms-2" teks="serah" />
+                <x-theme.button href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}"
+                    icon="fa-clipboard-list" addClass="float-end" teks="Po Sortir" />
             </div>
             <br>
             <br>
@@ -120,15 +127,7 @@
                         <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
-                    <div class="col-auto">
-                        <a href="{{ route('cetaknew.export_gudang') }}"
-                            class="btn btn-sm btn-primary float-end ms-2"><i class="fas fa-file-excel"></i> Export
-                            All</a>
-                        <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
-                            teks="serah" />
-                        <x-theme.button href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}"
-                            icon="fa-clipboard-list" teks="Po" />
-                    </div>
+
                 </div>
 
 
@@ -194,7 +193,7 @@
                                         class="form-control">
                                 </div>
                             </div>
-                            {{-- <div class="col-lg-4">
+                            <div class="col-lg-4">
                                 <label for="">Pgws Penerima</label>
                                 <select required name="id_penerima" class="form-control select2" id="">
                                     <option value="">- Pilih pgws -</option>
@@ -202,7 +201,7 @@
                                         <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
                                     @endforeach
                                 </select>
-                            </div> --}}
+                            </div>
                         </div>
                         <table class="table">
                             <thead>
@@ -211,7 +210,7 @@
                                     <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
-                                    <th class="dhead">Penerima</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -222,15 +221,7 @@
                                         <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
-                                        <td>
-                                            <select :name="'id_penerima[' + item.no_box + ']'" x-model="selectedOption"
-                                                x-init="initSelect2()" class="select2-alpine">
-                                                @foreach ($users as $u)
-                                                    <option value="{{ $u->id }}">{{ strtoupper($u->name) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
+
                                     </tr>
                                 </template>
                             </tbody>

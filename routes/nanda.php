@@ -225,6 +225,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::get('/invoice_sortir', 'invoice_sortir')->name('invoice_sortir');
+            Route::get('/invoice_grade', 'invoice_grade')->name('invoice_grade');
+            Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
