@@ -1,21 +1,19 @@
 <x-theme.app title="{{ $title }}" table="T">
     <x-slot name="slot">
-        <div class="row">
-            <div class="col-lg-8">
-                <h6>{{ $title }}</h6>
-            </div>
-            <div class="col-lg-4">
-                <a href="{{ route('sortir.export_gudang') }}" class="btn btn-sm btn-primary float-end ms-2"><i
+        <div class="d-flex justify-content-between">
+            <h6>{{ $title }}</h6>
+
+            <div>
+                <a href="{{ route('sortir.export_gudang') }}" class="btn btn-sm btn-primary"><i
                         class="fas fa-file-excel"></i> Export
                     All</a>
                 <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
-                    addClass="float-end ms-2" teks="serah" />
+                    teks="serah" />
                 <x-theme.button href="{{ route('gudangsarang.invoice_grade', ['kategori' => 'grade']) }}"
-                    icon="fa-clipboard-list" addClass="float-end" teks="Po Grade" />
+                    icon="fa-clipboard-list" teks="Po Grade" />
             </div>
         </div>
-        <br>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-lg-4">
                 <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
