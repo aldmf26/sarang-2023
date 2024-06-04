@@ -15,7 +15,7 @@
             <th class="text-end dhead">Rp Target</th>
             <th class="text-end dhead">Total Rp</th>
             <th class="text-end dhead">Bulan Dibayar</th>
-            <th class="dhead">Aksi</th>
+            <th class="dhead" width="100">Aksi</th>
             <th class="dhead" width="70">
                 <center>
                     @php
@@ -29,8 +29,8 @@
                     <br>
                     <span class="badge bg-danger btn_tutup d-none" tipe="tutup" style="cursor: pointer"><i
                             class="fas fa-check"></i> Tutup </span>
-                    <span class="badge bg-danger btn_tutup d-none mt-3" tipe="cancel_data"
-                        style="cursor: pointer">Cancel</span>
+                    {{-- <span class="badge bg-danger btn_tutup d-none mt-3" tipe="cancel_data"
+                        style="cursor: pointer">Cancel</span> --}}
 
                 </center>
             </th>
@@ -119,9 +119,10 @@
                             id_sortir="{{ $d->id_sortir }}">selesai</a>
                     @else
                         @php
-                            $posisi = auth();
+                            $posisi = auth()->user()->posisi_id;
                         @endphp
-                        <a href="#" class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
+                        <a href="#" {{ $posisi == 1 ? '' : 'hidden' }}
+                            class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
                             id_sortir="{{ $d->id_sortir }}"><i class="fas fa-redo"></i></a>
                     @endif
                 </td>

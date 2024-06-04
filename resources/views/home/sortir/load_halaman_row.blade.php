@@ -77,7 +77,11 @@
                 class="btn btn-success btn-sm selesai_new selesai_new{{ $d->id_sortir }}"
                 id_sortir="{{ $d->id_sortir }}">selesai</a>
         @else
-            <a href="#" class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
+            @php
+                $posisi = auth()->user()->posisi_id;
+            @endphp
+            <a href="#" {{ $posisi == 1 ? '' : 'hidden' }}
+                class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
                 id_sortir="{{ $d->id_sortir }}"><i class="fas fa-redo"></i></a>
         @endif
     </td>
