@@ -25,69 +25,71 @@
 </head>
 
 <body>
-    <br>
     <div class="container-fluid">
         <div class="d-flex justify-content-between print_hilang">
-            <a href=""></a>
-            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i
-                    class="fa-solid fa-print"></i>
-                Print</a>
+            <a href="#"></a>
+            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary">
+                <i class="fa-solid fa-print"></i> Print
+            </a>
         </div>
         <h5 class="fw-bold text-center" style="text-decoration: underline">PO GRADE</h5>
 
+        <h6 class="fw-bold">Tanggal : {{ tanggal($ket_formulir->tanggal) }}</h6>
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
+        <h6>Po : </h6>
+
+        <!-- Table Structure -->
+        @foreach ($formulir as $d)
         <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-bordered" style="font-size: 13px">
+            <div class="col-md-4">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Tanggal</th>
                             <th>No Box</th>
-                            <th class="text-end">Pcs Awal</th>
-                            <th class="text-end">Gr Awal</th>
-                            <th>Nama Pengawas</th>
-                            <th class="text-end">Pcs Akhir</th>
-                            <th class="text-end">Gr Akhir</th>
+                            <th>Tipe</th>
+                            <th>Pcs</th>
+                            <th>Gr</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $ttlPcs = 0;
-                            $ttlGr = 0;
-                        @endphp
-                        @foreach ($formulir as $no => $f)
-                            @php
-                                $ttlPcs += $f->pcs_awal;
-                                $ttlGr += $f->gr_awal;
-                            @endphp
-                            <tr>
-                                <td>{{ $no + 1 }}</td>
-                                <td>{{ tanggal($f->tanggal) }}</td>
-                                <td>{{ $f->no_box }}</td>
-                                <td class="text-end">{{ $f->pcs_awal }}</td>
-                                <td class="text-end">{{ $f->gr_awal }}</td>
-                                @for ($i = 0; $i < 3; $i++)
-                                    <td></td>
-                                @endfor
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
                         <tr>
-                            <th class="text-center" colspan="3">Total</th>
-                            <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
-                            <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
-                            @for ($i = 0; $i < 3; $i++)
-                                <th></th>
-                            @endfor
+                            <td>{{$d->no_box}}</td>
+                            <td>{{$d->tipe}}</td>
+                            <td>{{ $d->pcs }}</td>
+                            <td>{{ $d->gr }}</td>
                         </tr>
-                    </tfoot>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Pcs</th>
+                            <th>Gr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for ($i = 1; $i <= 5; $i++)
+                            
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        @endfor
+                       
+                        <!-- Add more rows as needed -->
+                    </tbody>
                 </table>
             </div>
         </div>
+        @endforeach
 
     </div>
+  
 
 
 </body>
