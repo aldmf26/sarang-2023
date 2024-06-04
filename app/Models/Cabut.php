@@ -654,7 +654,8 @@ class Cabut extends Model
         $bk = DB::select("SELECT
                     a.no_box,
                     a.pcs_awal as pcs,
-                    a.gr_awal as gr
+                    a.gr_awal as gr,
+                    a.hrga_satuan, (a.hrga_satuan * a.gr_awal) as ttl_rp
                     FROM bk as a
                     WHERE a.kategori = 'cabut' AND a.penerima = $id_user 
                     AND a.selesai = 'T' AND NOT EXISTS (
@@ -663,12 +664,10 @@ class Cabut extends Model
                         WHERE b.no_box = a.no_box
                     )
                 ");
-        $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr FROM cabut as a
-        WHERE a.selesai = 'T' AND a.bulan_dibayar = '$bulan' AND a.no_box != 9999 AND a.tahun_dibayar = '$tahun' AND a.id_pengawas = $id_user;");
-
-
-
-
+        $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp
+        FROM cabut as a
+        left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
+        WHERE a.selesai = 'T'  AND a.no_box != 9999 AND a.id_pengawas = $id_user;");
         return (object)[
             'bk' => $bk,
             'cabut' => $cabut,
@@ -679,16 +678,18 @@ class Cabut extends Model
     public static function gudangCabutSelesai($id_user = null)
     {
         return DB::select("SELECT 
-        a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai
+        a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai, sum(a.ttl_rp) as ttl_rp_cbt,
+        (b.hrga_satuan * b.gr_awal) as ttl_rp
         FROM ( 
-            SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai
+            SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai, a.ttl_rp
             FROM cabut AS a 
             LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
             LEFT JOIN users AS c ON c.id = a.id_pengawas
             WHERE a.formulir = 'T'
         ) AS a
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         GROUP BY a.id_pengawas, a.no_box 
-        HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$id_user'
+        HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$id_user' AND a.no_box != 9999 
         ORDER BY a.no_box ASC");
     }
 }

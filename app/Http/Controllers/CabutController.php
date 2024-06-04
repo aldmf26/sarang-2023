@@ -1166,7 +1166,7 @@ class CabutController extends Controller
         $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Summary Box');    
+        $sheet->setTitle('Summary Box');
 
         $koloms = [
             'A1' => 'no lot',
@@ -1737,7 +1737,7 @@ class CabutController extends Controller
         $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Gudang cabut');    
+        $sheet->setTitle('Gudang cabut');
 
         $koloms = [
             'A1' => 'box stock',
@@ -1745,7 +1745,7 @@ class CabutController extends Controller
             'C1' => 'no box',
             'D1' => 'pcs',
             'E1' => 'gr',
-            
+
             'G1' => 'box sedang proses',
             'H1' => 'pgws',
             'I1' => 'no box',
@@ -1786,14 +1786,14 @@ class CabutController extends Controller
         $sheet->getStyle('N1:Q1')->applyFromArray($styleBaris);
         // $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
 
-        
-        $users = DB::table('users')->whereIn('posisi_id', [13,14])->pluck('name', 'id');
+
+        $users = DB::table('users')->whereIn('posisi_id', [13, 14])->pluck('name', 'id');
         $dataTypes = [
             ['key' => 'bk', 'startCol' => 'B'],
             ['key' => 'cabut', 'startCol' => 'H'],
             ['key' => 'cabutSelesai', 'startCol' => 'N'],
         ];
-        
+
         foreach ($dataTypes as $dataType) {
             $row = 2;
             foreach ($users as $id => $name) {
@@ -1816,8 +1816,8 @@ class CabutController extends Controller
             }
         }
 
-        
-        
+
+
 
         $writer = new Xlsx($spreadsheet);
         $fileName = "Gudang Cabut";
