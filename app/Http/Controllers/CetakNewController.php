@@ -740,6 +740,7 @@ class CetakNewController extends Controller
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
         ];
+
         return view('home.cetak_new.gudangcetak', $data);
     }
 

@@ -43,9 +43,10 @@
                             <td>
                                 @php
                                     $param = ['kategori' => 'sortir', 'no_invoice' => $d->no_invoice];
-                                    $getCtk = DB::selectOne("SELECT a.no_box FROM formulir_sarang as a 
+                                    $getCtk = DB::selectOne("SELECT a.no_box 
+                                    FROM formulir_sarang as a 
                                     join bk as b on b.no_box = a.no_box and b.kategori = 'sortir'
-                                    where a.no_invoice = '$d->no_invoice'
+                                    where a.no_invoice = '$d->no_invoice' and a.kategori = 'sortir'
                                     ");
                                 @endphp
 
