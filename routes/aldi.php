@@ -375,7 +375,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         });
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
-        ->name('gradingbj.')
+        ->name('gradingbj_copy.')
         ->group(function () {
             Route::get('/history_ambil', 'index')->name('history_ambil');
             Route::get('/add', 'add')->name('add');
@@ -394,6 +394,13 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::get('/', 'halAwal')->name('index');
+        });
+    Route::controller(GradingBjController::class)
+        ->prefix('home/gradingbj')
+        ->name('gradingbj.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{no_box}', 'grading')->name('grading');
         });
     Route::controller(OpnameController::class)
         ->prefix('home/opname')
