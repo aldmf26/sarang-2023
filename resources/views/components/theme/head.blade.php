@@ -41,12 +41,10 @@
 
     {{--
     <link rel="stylesheet" href="{{ asset('mycss.css') }}"> --}}
-    @php
-        $warna1 = "#F7914D";
-    @endphp
     <style>
-        .pointer {
-            cursor: pointer;
+        :root {
+            --warna1: #F7914D;
+            --warnaDhead: #8c8989;
         }
 
         .cardHover:hover {
@@ -76,23 +74,23 @@
             color: rgb(19, 19, 19)
         }
         .dhead {
-            background-color: #8c8989   !important;
+            background-color: var(--warnaDhead)   !important;
             color: white;
         }
 
         .btn-primary {
-            background-color: {{$warna1}} !important;
-            border-color: {{$warna1}} !important;
+            background-color: var(--warna1) !important;
+            border-color: var(--warna1) !important;
         }
         .btn-info {
             background-color: #7e7c7c !important;
             border-color: #7e7c7c !important;
         }
         .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-            background-color: {{$warna1}} !important;
+            background-color: var(--warna1) !important;
         }
         .bg-primary {
-            background-color: {{$warna1}} !important;
+            background-color: var(--warna1) !important;
         }
 
         .pointer {
