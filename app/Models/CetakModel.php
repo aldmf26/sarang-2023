@@ -187,9 +187,6 @@ class CetakModel extends Model
         group by b.id_anak
         order by b.nama ASC
         ");
-
-
-
         return $result;
     }
 
@@ -197,14 +194,14 @@ class CetakModel extends Model
     public static function cetak_selesai($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT c.name, d.name as pgws, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            $result = DB::select("SELECT c.name, d.name as pgws, a.no_box, (a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
             left join users as d on d.id = a.id_pengawas
             where a.selesai = 'Y'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
         } else {
-            $result = DB::select("SELECT c.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            $result = DB::select("SELECT c.name, a.no_box, (a.pcs_akhir +  a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
@@ -217,19 +214,18 @@ class CetakModel extends Model
     public static function cabut_selesai($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal
+            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
-        WHERE a.kategori = 'cetak'  and a.no_box not in(SELECT b.no_box FROM cetak_new as b);");
+        left join bk as c on c.no_box = a.no_box
+        WHERE a.kategori = 'cetak'  and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
         } else {
-            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal
+            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal,(c.hrga_satuan  * c.gr_awal) as ttl_rp
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
-        WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b);");
+        left join bk as c on c.no_box = a.no_box
+        WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
         }
-
-
-
         return $result;
     }
     public static function cetak_proses($id_pengawas)
@@ -239,17 +235,14 @@ class CetakModel extends Model
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
-            where a.selesai = 'T' ");
+            where a.selesai = 'T' and a.id_anak != 0");
         } else {
             $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
-            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas'");
+            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0");
         }
-
-
-
         return $result;
     }
 
@@ -262,8 +255,6 @@ class CetakModel extends Model
         } else {
             $pgws = 'and a.id_pengawas = ' . $id_pengawas;
         }
-
-
         if ($id_anak == 'All') {
             $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar, a.ttl_rp
             From cetak_new as a  
