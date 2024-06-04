@@ -989,7 +989,7 @@ class CetakNewController extends Controller
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi
                         FROM cetak_new 
                         left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
                         WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
@@ -1021,7 +1021,7 @@ class CetakNewController extends Controller
         return redirect()->route('cetaknew.gudangcetak')->with('sukses', 'Data Berhasil');
     }
 
-    public function template()
+    public function template(Request $r)
     {
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
@@ -1092,7 +1092,8 @@ class CetakNewController extends Controller
         $writer = new Xlsx($spreadsheet);
 
         // Menggunakan response untuk mengirimkan file ke browser
-        $fileName = "Template Cetak BK";
+        $kategori =  $r->kategori;
+        $fileName = empty($r->kategori) ? "Template Cetak BK" : 'Template Sortir Bk';
         return response()->stream(
             function () use ($writer) {
                 $writer->save('php://output');
@@ -1106,87 +1107,84 @@ class CetakNewController extends Controller
     }
     public function getNoBoxTambah()
     {
-        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cetakcu%' ORDER by no_box DESC limit 1;");
+        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cetakimport%' ORDER by no_box DESC limit 1;");
         $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
         return $nobox;
     }
 
     public function import(Request $r)
     {
-        if ($r->kategori == 'sortir') {
-            $this->importSortir($r);
-            return redirect()->route('bk.index', ['kategori' => 'cetak'])->with('sukses', 'Data berhasil import');
-        } else {
-
-            $file = $r->file('file');
-            $spreadsheet = IOFactory::load($file);
-            $sheetData = $spreadsheet->getActiveSheet()->toArray();
-            DB::beginTransaction();
-            try {
-                foreach (array_slice($sheetData, 1) as $row) {
-                    if (empty(array_filter($row))) {
-                        continue;
-                    }
-
-                    $nobox = $this->getNoBoxTambah();
 
 
-                    // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
-                    if (
-                        // $cekBox || 
-                        empty($row[0]) ||
-                        empty($row[5])
-                        // empty($row[9]) ||
-                        // empty($row[10])
-                    ) {
-                        $pesan = [
-                            // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
-                            empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
-                            // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                            empty($row[5]) => "GR TIDAK BOLEH KOSONG",
-
-                            // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
-                        ];
-                        DB::rollBack();
-                        return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
-                    } else {
-                        DB::table('bk')->insert([
-                            'no_lot' => '0',
-                            'nm_partai' => $row[0],
-                            'no_box' => $nobox,
-                            'tipe' => $row[1],
-                            'ket' => $row[2],
-                            'warna' => $row[3],
-                            'tgl' => date('Y-m-d'),
-                            'pengawas' => 'sinta',
-                            'penerima' => auth()->user()->id,
-                            'pcs_awal' => $row[4],
-                            'gr_awal' => $row[5],
-                            'kategori' => 'cetakcu',
-                        ]);
-                        DB::table('formulir_sarang')->insert([
-                            'no_box' => $nobox,
-                            'id_pemberi' => 265,
-                            'id_penerima' => auth()->user()->id,
-                            'tanggal' => date('Y-m-d'),
-                            'pcs_awal' => $row[4],
-                            'gr_awal' => $row[5],
-                        ]);
-                        DB::table('cetak_new')->insert([
-                            'no_box' => $nobox,
-                            'id_pengawas' => auth()->user()->id,
-                            'tgl' => date('Y-m-d'),
-                            'pcs_awal_ctk' => $row[4],
-                            'gr_awal_ctk' => $row[5],
-                        ]);
-                    }
+        $file = $r->file('file');
+        $spreadsheet = IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+        DB::beginTransaction();
+        try {
+            foreach (array_slice($sheetData, 1) as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
                 }
-                DB::commit();
-                return redirect()->back()->with('sukses', 'Data berhasil import');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return redirect()->back()->with('error', $e->getMessage());
+
+                $nobox = $this->getNoBoxTambah();
+
+
+                // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+                if (
+                    // $cekBox || 
+                    empty($row[0]) ||
+                    empty($row[5])
+                    // empty($row[9]) ||
+                    // empty($row[10])
+                ) {
+                    $pesan = [
+                        // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
+                        empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
+                        // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
+                        empty($row[5]) => "GR TIDAK BOLEH KOSONG",
+
+                        // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
+                    ];
+                    DB::rollBack();
+                    return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
+                } else {
+                    DB::table('bk')->insert([
+                        'no_lot' => '0',
+                        'nm_partai' => $row[0],
+                        'no_box' => $nobox,
+                        'tipe' => $row[1],
+                        'ket' => $row[2],
+                        'warna' => $row[3],
+                        'tgl' => date('Y-m-d'),
+                        'pengawas' => 'sinta',
+                        'penerima' => auth()->user()->id,
+                        'pcs_awal' => $row[4],
+                        'gr_awal' => $row[5],
+                        'kategori' => 'cetakimport',
+                    ]);
+                    DB::table('formulir_sarang')->insert([
+                        'no_box' => $nobox,
+                        'id_pemberi' => 265,
+                        'id_penerima' => auth()->user()->id,
+                        'tanggal' => date('Y-m-d'),
+                        'pcs_awal' => $row[4],
+                        'gr_awal' => $row[5],
+                        'kategori' => 'cetak'
+                    ]);
+                    DB::table('cetak_new')->insert([
+                        'no_box' => $nobox,
+                        'id_pengawas' => auth()->user()->id,
+                        'tgl' => date('Y-m-d'),
+                        'pcs_awal_ctk' => $row[4],
+                        'gr_awal_ctk' => $row[5],
+                    ]);
+                }
             }
+            DB::commit();
+            return redirect()->back()->with('sukses', 'Data berhasil import');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

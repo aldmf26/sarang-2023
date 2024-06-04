@@ -244,6 +244,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/save_akhir', 'save_akhir')->name('save_akhir');
             Route::get('/cancel_sortir', 'cancel_sortir')->name('cancel_sortir');
             Route::get('/load_halamanrow', 'load_halamanrow')->name('load_halamanrow');
+            Route::post('/import', 'import')->name('import');
         });
     Route::controller(EoController::class)
         ->prefix('home/eo')

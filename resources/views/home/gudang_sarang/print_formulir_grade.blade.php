@@ -34,7 +34,6 @@
                 Print</a>
         </div>
         <h5 class="fw-bold text-center" style="text-decoration: underline">PO GRADE</h5>
-
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
         <div class="row">
             <div class="col-lg-12">
@@ -46,7 +45,7 @@
                             <th>No Box</th>
                             <th class="text-end">Pcs Awal</th>
                             <th class="text-end">Gr Awal</th>
-                            <th>Nama Pengawas</th>
+                            <th>Nama Karyawan</th>
                             <th class="text-end">Pcs Akhir</th>
                             <th class="text-end">Gr Akhir</th>
                         </tr>

@@ -197,14 +197,14 @@ class CetakModel extends Model
     public static function cetak_selesai($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT c.name, d.name as pgws, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            $result = DB::select("SELECT c.name, d.name as pgws, a.no_box, (a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
             left join users as d on d.id = a.id_pengawas
             where a.selesai = 'Y'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
         } else {
-            $result = DB::select("SELECT c.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            $result = DB::select("SELECT c.name, a.no_box, (a.pcs_akhir +  a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
