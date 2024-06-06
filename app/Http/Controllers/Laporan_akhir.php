@@ -11,9 +11,16 @@ class Laporan_akhir extends Controller
 {
     public function index(Request $r)
     {
+        if (empty($r->bulan)) {
+            $bulan = date('m');
+        } else {
+            $bulan = $r->bulan;
+        }
         $data = [
             'title' => 'Laporan Partai',
-            'partai' => LaporanModel::LaporanPerPartai(),
+            'partai' => LaporanModel::LaporanPerPartai($bulan),
+            'bulan' => $bulan,
+            'oprasional' => DB::table('oprasional')->where('bulan_dibayar', $bulan)->first()
         ];
         return view('home.laporan.lapPerpartai', $data);
     }
@@ -43,7 +50,7 @@ class Laporan_akhir extends Controller
     {
         $data = [
             'title' => 'Detail Cetak',
-            'detail' => LaporanModel::LaporanDetailCetak($r->partai)
+            'detail' => LaporanModel::LaporanDetailCetak($r->partai, $r->bulan)
         ];
         return view('home.laporan.detail_cetak', $data);
     }
@@ -51,7 +58,7 @@ class Laporan_akhir extends Controller
     {
         $data = [
             'title' => 'Detail Cabut',
-            'detail' => LaporanModel::LaporanDetailCabut($r->partai)
+            'detail' => LaporanModel::LaporanDetailCabut($r->partai, $r->bulan)
         ];
         return view('home.laporan.detail_cabut', $data);
     }
@@ -59,7 +66,7 @@ class Laporan_akhir extends Controller
     {
         $data = [
             'title' => 'Detail Cabut',
-            'detail' => LaporanModel::LaporanDetailSortir($r->partai)
+            'detail' => LaporanModel::LaporanDetailSortir($r->partai, $r->bulan)
         ];
         return view('home.laporan.detail_sortir', $data);
     }
@@ -77,5 +84,20 @@ class Laporan_akhir extends Controller
             'summary' => $summary,
         ];
         return view('home.laporan.summary', $data);
+    }
+
+    public function save_oprasional(Request $r)
+    {
+        DB::table('oprasional')->where('bulan_dibayar', $r->bulan_dibayar)->where('tahun_dibayar', $r->tahun_dibayar)->delete();
+
+        $data = [
+            'rupiah' => $r->total_rp,
+            'bulan_dibayar' => $r->bulan_dibayar,
+            'tahun_dibayar' => $r->tahun_dibayar,
+            'admin' => auth()->user()->name
+        ];
+
+        DB::table('oprasional')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

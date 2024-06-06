@@ -809,25 +809,32 @@ class CetakNewController extends Controller
 
         $kolom = [
             'A' => 'Cetak Stok',
-            'B' => 'Pemilik',
-            'C' => 'Pengawas',
+            'B' => 'pemilik',
+            'C' => 'pengawas',
             'D' => 'no box',
             'E' => 'pcs',
             'F' => 'gr',
+            'G' => 'rp/gr',
+            'H' => 'total rp',
 
-            'H' => 'Cetak Sedang Proses',
-            'I' => 'Pemilik',
-            'J' => 'Pengawas',
-            'K' => 'No Box',
-            'L' => 'Pcs',
-            'M' => 'Gr',
+            'J' => 'Cetak Sedang Proses',
+            'K' => 'pemilik',
+            'L' => 'pengawas',
+            'M' => 'no box',
+            'N' => 'pcs',
+            'O' => 'gr',
+            'P' => 'rp/gr',
+            'Q' => 'total rp',
 
-            'O' => 'Cetak Selesai Siap Sortir',
-            'P' => 'Pemilik',
-            'Q' => 'Pengawas',
-            'R' => 'no box',
-            'S' => 'pcs',
-            'T' => 'gr',
+            'S' => 'Cetak Selesai Siap Sortir',
+            'T' => 'pemilik',
+            'U' => 'pengawas',
+            'V' => 'no box',
+            'W' => 'pcs',
+            'X' => 'gr',
+            'Y' => 'total rp',
+            'Z' => 'total cbt',
+            'AA' => 'total ctk',
         ];
 
         foreach ($kolom as $k => $v) {
@@ -836,74 +843,104 @@ class CetakNewController extends Controller
         $no = 2;
         $ttl_pcs = 0;
         $ttl_gr = 0;
+        $ttl_rp = 0;
         foreach ($cabut_selesai as $item) {
             $sheet->setCellValue('B' . $no, $item->name);
-            $sheet->setCellValue('C' . $no, $item->no_box);
-            $sheet->setCellValue('D' . $no, $item->pcs_awal);
-            $sheet->setCellValue('E' . $no, $item->gr_awal);
+            $sheet->setCellValue('C' . $no, $item->pgws);
+            $sheet->setCellValue('D' . $no, $item->no_box);
+            $sheet->setCellValue('E' . $no, $item->pcs_awal);
+            $sheet->setCellValue('F' . $no, $item->gr_awal);
+            $sheet->setCellValue('G' . $no, $item->ttl_rp / $item->gr_awal);
+            $sheet->setCellValue('H' . $no, $item->ttl_rp);
 
             $no++;
             $ttl_pcs += $item->pcs_awal;
             $ttl_gr += $item->gr_awal;
+            $ttl_rp += $item->ttl_rp;
         }
         $sheet->setCellValue('B' . $no, 'Total');
         $sheet->setCellValue('C' . $no, '');
-        $sheet->setCellValue('D' . $no, $ttl_pcs);
-        $sheet->setCellValue('E' . $no, $ttl_gr);
+        $sheet->setCellValue('D' . $no, '');
+        $sheet->setCellValue('E' . $no, $ttl_pcs);
+        $sheet->setCellValue('F' . $no, $ttl_gr);
+        $sheet->setCellValue('G' . $no, '');
+        $sheet->setCellValue('H' . $no, $ttl_rp);
 
 
-        $sheet->getStyle('B1:C1')->applyFromArray($style_atas);
-        $sheet->getStyle('D1:E1')->applyFromArray($style_atas_number);
-        $sheet->getStyle('B2:E' . $no - 1)->applyFromArray($styleBaris);
-        $sheet->getStyle('B' . $no . ':E' . $no)->applyFromArray($style_atas);
+        $sheet->getStyle('B1:D1')->applyFromArray($style_atas);
+        $sheet->getStyle('E1:H1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('B2:H' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('B' . $no . ':H' . $no)->applyFromArray($style_atas);
 
         $no2 = 2;
         $ttl_pcs2 = 0;
         $ttl_gr2 = 0;
+        $ttl_rp2 = 0;
         foreach ($cetak_proses as $item) {
-            $sheet->setCellValue('H' . $no2, $item->name);
-            $sheet->setCellValue('I' . $no2, $item->no_box);
-            $sheet->setCellValue('J' . $no2, $item->pcs_awal);
-            $sheet->setCellValue('K' . $no2, $item->gr_awal);
+            $sheet->setCellValue('K' . $no2, $item->name);
+            $sheet->setCellValue('L' . $no2, $item->pgws);
+            $sheet->setCellValue('M' . $no2, $item->no_box);
+            $sheet->setCellValue('N' . $no2, $item->pcs_awal);
+            $sheet->setCellValue('O' . $no2, $item->gr_awal);
+            $sheet->setCellValue('P' . $no2, $item->ttl_rp / $item->gr_awal);
+            $sheet->setCellValue('Q' . $no2, $item->ttl_rp);
 
             $no2++;
             $ttl_pcs2 += $item->pcs_awal;
             $ttl_gr2 += $item->gr_awal;
+            $ttl_rp2 += $item->ttl_rp;
         }
 
-        $sheet->setCellValue('H' . $no2, 'Total');
-        $sheet->setCellValue('I' . $no2, '');
-        $sheet->setCellValue('J' . $no2, $ttl_pcs2);
-        $sheet->setCellValue('K' . $no2, $ttl_gr2);
+        $sheet->setCellValue('K' . $no2, 'Total');
+        $sheet->setCellValue('L' . $no2, '');
+        $sheet->setCellValue('M' . $no2, '');
+        $sheet->setCellValue('N' . $no2, $ttl_pcs2);
+        $sheet->setCellValue('O' . $no2, $ttl_gr2);
+        $sheet->setCellValue('P' . $no2, '');
+        $sheet->setCellValue('Q' . $no2, $ttl_rp2);
 
-        $sheet->getStyle('H1:I1')->applyFromArray($style_atas);
-        $sheet->getStyle('J1:K1')->applyFromArray($style_atas_number);
-        $sheet->getStyle('H2:K' . $no2 - 1)->applyFromArray($styleBaris);
-        $sheet->getStyle('H' . $no2 . ':K' . $no2)->applyFromArray($style_atas);
+        $sheet->getStyle('K1:M1')->applyFromArray($style_atas);
+        $sheet->getStyle('N1:Q1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('K2:Q' . $no2 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('K' . $no2 . ':Q' . $no2)->applyFromArray($style_atas);
 
         $no3 = 2;
         $ttl_pcs3 = 0;
         $ttl_gr3 = 0;
+        $ttl_rp3 = 0;
+        $cost_cbt3 = 0;
+        $cost_ctk3 = 0;
         foreach ($cetak_selesai as $item) {
-            $sheet->setCellValue('N' . $no3, $item->name);
-            $sheet->setCellValue('O' . $no3, $item->no_box);
-            $sheet->setCellValue('P' . $no3, $item->pcs_awal);
-            $sheet->setCellValue('Q' . $no3, $item->gr_awal);
+            $sheet->setCellValue('T' . $no3, $item->name);
+            $sheet->setCellValue('U' . $no3, $item->pgws);
+            $sheet->setCellValue('V' . $no3, $item->no_box);
+            $sheet->setCellValue('W' . $no3, $item->pcs_awal);
+            $sheet->setCellValue('X' . $no3, $item->gr_awal);
+            $sheet->setCellValue('Y' . $no3, $item->ttl_rp);
+            $sheet->setCellValue('Z' . $no3, $item->cost_cbt);
+            $sheet->setCellValue('AA' . $no3, $item->cost_ctk);
 
             $no3++;
             $ttl_pcs3 += $item->pcs_awal;
             $ttl_gr3 += $item->gr_awal;
+            $ttl_rp3 += $item->ttl_rp;
+            $cost_cbt3 += $item->cost_cbt;
+            $cost_ctk3 += $item->cost_ctk;
         }
 
-        $sheet->setCellValue('N' . $no3, 'Total');
-        $sheet->setCellValue('O' . $no3, '');
-        $sheet->setCellValue('P' . $no3, $ttl_pcs3);
-        $sheet->setCellValue('Q' . $no3, $ttl_gr3);
+        $sheet->setCellValue('T' . $no3, 'Total');
+        $sheet->setCellValue('U' . $no3, '');
+        $sheet->setCellValue('V' . $no3, '');
+        $sheet->setCellValue('W' . $no3, $ttl_pcs3);
+        $sheet->setCellValue('X' . $no3, $ttl_gr3);
+        $sheet->setCellValue('Y' . $no3, $ttl_rp3);
+        $sheet->setCellValue('Z' . $no3, $cost_cbt3);
+        $sheet->setCellValue('AA' . $no3, $cost_ctk3);
 
-        $sheet->getStyle('N1:O1')->applyFromArray($style_atas);
-        $sheet->getStyle('P1:Q1')->applyFromArray($style_atas_number);
-        $sheet->getStyle('N2:Q' . $no3 - 1)->applyFromArray($styleBaris);
-        $sheet->getStyle('N' . $no3 . ':Q' . $no3)->applyFromArray($style_atas);
+        $sheet->getStyle('T1:V1')->applyFromArray($style_atas);
+        $sheet->getStyle('W1:AA1')->applyFromArray($style_atas_number);
+        $sheet->getStyle('T2:AA' . $no3 - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('T' . $no3 . ':AA' . $no3)->applyFromArray($style_atas);
 
 
 

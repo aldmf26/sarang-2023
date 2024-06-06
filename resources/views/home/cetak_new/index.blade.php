@@ -181,9 +181,8 @@
                             }
                         });
                     }
-                    $(document).on("click", ".btn_save_akhir", function(e) {
-                        e.preventDefault();
-                        var id_cetak = $(this).attr('id_cetak');
+
+                    function saveAkhir(id_cetak) {
                         var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
                         var pcs_awal = $('.pcs_awal' + id_cetak).val();
                         var gr_akhir = $('.gr_akhir' + id_cetak).val();
@@ -197,10 +196,7 @@
                         var tipe_bayar = $('.tipe_bayar' + id_cetak).val();
                         var bulan_dibayar = $('.bulan_dibayar' + id_cetak).val();
 
-                        var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
-                        // if (pcs_awal != ttl_pcs) {
-                        //     alertToast('error', 'Jumlah Pcs tidak sama');
-                        // } else {
+
                         $.ajax({
                             type: "get",
                             url: "{{ route('cetaknew.save_akhir') }}",
@@ -219,12 +215,16 @@
                             },
                             success: function(response) {
                                 loadRowData(id_cetak, no)
-                                // load_cetak();
                                 alertToast('sukses', 'Berhasil ditambahkan');
                             }
                         });
 
-                        // }
+
+                    }
+                    $(document).on("click", ".btn_save_akhir", function(e) {
+                        e.preventDefault();
+                        var id_cetak = $(this).attr('id_cetak');
+                        saveAkhir(id_cetak);
 
                     });
 
@@ -319,7 +319,7 @@
                         const val = $(this).attr('capaiVal')
                         const id_cetak = $(this).attr('id_cetak')
                         var no = $('.no' + id_cetak).val();
-
+                        saveAkhir(id_cetak);
                         $.ajax({
                             type: "GET",
                             url: "{{ route('cetaknew.capai') }}",
@@ -329,7 +329,7 @@
                             },
                             dataType: 'json',
                             success: function(r) {
-                                alertToast(r.status, r.pesan);
+                                // alertToast(r.status, r.pesan);
                                 loadRowData(id_cetak, no)
 
                                 // load_cetak();

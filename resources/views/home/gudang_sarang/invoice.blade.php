@@ -52,7 +52,7 @@
                                 @if (!$getCtk)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal', $param) }}">
-                                        <span class="badge bg-danger">Batal</span>
+                                        <span class="badge bg-danger">Cancel</span>
                                     </a>
 
                                     <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"

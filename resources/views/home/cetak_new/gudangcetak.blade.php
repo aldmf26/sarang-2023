@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="T">
+<x-theme.app title="{{ $title }}" table="T" cont="container-fluid">
     <x-slot name="slot">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
@@ -19,13 +19,14 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">Cetak stock</th>
+                            <th class="dhead text-center" colspan="6">Cetak stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">Pemilik</th>
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Rp/gr</th>
                             <th class="dhead text-end">Ttl Rp</th>
                         </tr>
                         @php
@@ -37,6 +38,8 @@
                                         'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
                                         'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
                                         'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                        'cost_cbt' => array_sum(array_column($tl, 'cost_cbt')),
+                                        'cost_ctk' => array_sum(array_column($tl, 'cost_ctk')),
                                     ];
                                 }
                             }
@@ -47,6 +50,7 @@
                             <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['gr_awal'], 0) }}</th>
+                            <th class="dheadstock text-end"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
@@ -57,6 +61,7 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
+                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
@@ -69,7 +74,7 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">Cetak sedang proses</th>
+                            <th class="dhead text-center" colspan="6">Cetak sedang proses</th>
                         </tr>
                         <tr>
 
@@ -77,6 +82,7 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Rp/gr</th>
                             <th class="dhead text-end">Ttl Rp</th>
                         </tr>
                         <tr>
@@ -84,6 +90,7 @@
                             <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['gr_awal'], 0) }}</th>
+                            <th class="dheadstock text-end"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
@@ -94,6 +101,7 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
+                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
@@ -106,7 +114,7 @@
                 {{-- tambah(no_box, name, pcs_awal, gr_awal) {
                     this.selectedItem.push({ no_box, name, pcs_awal, gr_awal });
                 }, --}}
-                tambah(no_box, name, pcs_awal, gr_awal, ttl_rp) {
+                tambah(no_box, name, pcs_awal, gr_awal, ttl_rp, cost_cbt, cost_ctk) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
             
@@ -118,13 +126,20 @@
                             pcs_awal: parseFloat(pcs_awal),
                             gr_awal: parseFloat(gr_awal),
                             ttl_rp: parseFloat(ttl_rp),
+                            ttl_rp: parseFloat(ttl_rp),
+                            cost_cbt: parseFloat(cost_cbt),
+                            cost_ctk: parseFloat(cost_ctk),
                         });
                     } else {
                         selectedItem.splice(index, 1);
                     }
             
                 },
-                selectedOption: null
+                selectedOption: null,
+                formatNumber(value) {
+                    // Format number with '.' as thousands separator and ',' as decimal separator
+                    return new Intl.NumberFormat('id-ID', { style: 'decimal', maximumFractionDigits: 0 }).format(value);
+                }
             }">
                 <div class="row">
                     <div class="col">
@@ -135,7 +150,7 @@
                 <table id="tbl3" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="6">
+                            <th class="dhead text-center" colspan="8">
                                 <span>Cetak selesai siap sortir</span>
                             </th>
                         </tr>
@@ -145,6 +160,8 @@
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-end">Total Rp</th>
+                            <th class="dhead text-end">Total Cbt</th>
+                            <th class="dhead text-end">Total Ctk</th>
                             <th class="dhead text-center">Aksi</th>
                         </tr>
                         <tr>
@@ -154,6 +171,10 @@
                             </th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['gr_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['cost_cbt'], 0) }}
+                            </th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['cost_ctk'], 0) }}
+                            </th>
                             <th class="dheadstock text-end"></th>
                         </tr>
                     </thead>
@@ -165,9 +186,11 @@
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
                                 <td align="center">
                                     <input type="checkbox"
-                                        @change="tambah({{ $d->no_box }}, '{{ $d->name }}', {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
+                                        @change="tambah({{ $d->no_box }}, '{{ $d->name }}', {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }},{{ $d->cost_cbt }},{{ $d->cost_ctk }})"
                                         value="{{ $d->no_box }}" x-model="cek">
                                 </td>
                             </tr>
@@ -214,6 +237,8 @@
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
                                     <th class="dhead">Total Rp</th>
+                                    <th class="dhead">Total Cbt</th>
+                                    <th class="dhead">Total Ctk</th>
 
                                 </tr>
                             </thead>
@@ -225,7 +250,9 @@
                                         <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
-                                        <td x-text="item.ttl_rp"></td>
+                                        <td x-text="formatNumber(item.ttl_rp)"></td>
+                                        <td x-text="formatNumber(item.cost_cbt)"></td>
+                                        <td x-text="formatNumber(item.cost_ctk)"></td>
 
                                     </tr>
                                 </template>
@@ -242,6 +269,9 @@
         @section('scripts')
             <script>
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
+            </script>
+            <script>
+                document.body.style.zoom = "80%";
             </script>
         @endsection
     </x-slot>
