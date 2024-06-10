@@ -499,7 +499,9 @@ class SortirController extends Controller
             'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
             FROM sortir as a 
             
-            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and  a.id_pengawas = '$id_user' and a.selesai = 'Y';"),
+            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b 
+            where b.kategori = 'grade') and  a.id_pengawas = '$id_user' 
+            and a.selesai = 'Y' ORDER BY a.id_sortir DESC;"),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get()
 

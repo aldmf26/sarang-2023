@@ -276,6 +276,22 @@ class GudangSarangController extends Controller
         return redirect('home/gudangsarang/invoice')->with('sukses', 'Data Berhasil di hapus');
     }
 
+    public function selesai_grade(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
+        foreach ($getFormulir as $d) {
+            $data[] = [
+                'no_box_sortir' => $d->no_box,
+                'tgl' => $d->tanggal,
+                'pcs' => 0,
+                'gr' => 0,
+            ];
+        }
+        DB::table('grading')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
+    }
+
     public function selesai(Request $r)
     {
         $no_invoice = $r->no_invoice;
@@ -402,16 +418,18 @@ class GudangSarangController extends Controller
     public function print_formulir_grade(Request $r)
     {
         $formulir = DB::table('formulir_sarang as a')
-                    ->where('a.no_invoice', $r->no_invoice)
+                    ->where([['a.no_invoice', $r->no_invoice],['b.kategori', 'sortir'],['a.kategori', 'grade']])
                     ->join('bk as b', 'a.no_box', '=', 'b.no_box')
-                    ->groupBy('a.no_box')
+                    ->groupBy('a.no_box','a.kategori')
                     ->selectRaw('b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
                     ->get();
+
         $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
         WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
+
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
