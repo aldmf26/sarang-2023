@@ -45,8 +45,8 @@
                                     $param = ['kategori' => 'grade', 'no_invoice' => $d->no_invoice];
                                     $getCtk = DB::table('formulir_sarang as a')
                                         ->select('a.no_box')
-                                        ->join('cetak_new as b', 'a.no_box', 'b.no_box')
-                                        ->where('a.no_invoice', $d->no_invoice)
+                                        ->join('grading as b', 'a.no_box', 'b.no_box_sortir')
+                                        ->where([['a.no_invoice', $d->no_invoice],['a.kategori', 'grade']])
                                         ->first();
                                 @endphp
                                 @if (!$getCtk)
@@ -61,7 +61,7 @@
                                     </a>
 
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('gudangsarang.selesai', $param) }}">
+                                        href="{{ route('gudangsarang.selesai_grade', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
                                 @else

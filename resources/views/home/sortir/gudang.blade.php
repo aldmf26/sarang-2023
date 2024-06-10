@@ -130,7 +130,7 @@
 
                 </div>
 
-
+                <div style="overflow-y: scroll; height: 700px">
                 <table id="tbl3" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
@@ -178,7 +178,7 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                </div>
 
                 {{-- modal ambil box ke cetak --}}
                 <form action="{{ route('sortir.save_formulir') }}" method="post">

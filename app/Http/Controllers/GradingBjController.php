@@ -14,15 +14,27 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class GradingBjController extends Controller
 {
     protected $nmTbl = 'pengiriman_gradingbj';
-    public function getDataMaster($jenis)
+    public function getDataMaster($jenis, $noBox = null)
     {
+        $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
+        $formulir = DB::select("SELECT 
+        b.no_box, b.tanggal, e.tipe, c.name as pemberi, b.no_invoice, sum(b.pcs_awal - d.pcs) as pcs_awal, sum(b.gr_awal - d.gr) as gr_awal
+        FROM grading as a 
+        JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'sortir'
+        $whereBox
+        LEFT JOIN(
+            select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
+            from grading 
+            group by no_box_sortir
+        ) as d on d.no_box = b.no_box
+        JOIN users as c on c.id = b.id_pemberi
+        GROUP BY b.no_box
+        HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
+        ORDER BY b.tanggal DESC");
 
         $arr = [
-            'formulir' => DB::select("SELECT 
-                a.no_box, a.tanggal, b.name as pemberi, a.no_invoice, a.pcs_awal, a.gr_awal
-                FROM formulir_sarang as a 
-                JOIN users as b on a.id_pemberi = b.id
-                WHERE a.kategori = 'grade'"),
+            'formulir' => $formulir,
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];
@@ -37,12 +49,12 @@ class GradingBjController extends Controller
         return view('home.gradingbj.index', $data);
     }
 
-    public function grading($no_box)
+    public function grading(Request $r)
     {
-        $getFormulir = DB::table('formulir_sarang')->where('no_box', $no_box)->first();
+        $getFormulir = $this->getDataMaster('formulir', $r->no_box);
         $no_invoice = 1001;
         $gradeStatuses = ['bentuk', 'turun'];
-        $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('urutan', 'ASC')->get();
+        $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
         $gradeBentuk = $tb_grade->where('status', 'bentuk');
         $gradeTurun = $tb_grade->where('status', 'turun');
         $data = [
@@ -50,11 +62,86 @@ class GradingBjController extends Controller
             'no_invoice' => $no_invoice,
             'user' => auth()->user()->name,
             'getFormulir' => $getFormulir,
-            'gradeBentuk' => $gradeBentuk,
+            'gradeBentuk' => $tb_grade,
             'gradeTurun' => $gradeTurun,
         ];
 
         return view('home.gradingbj.grading', $data);
     }
 
+    public function getNoInvoiceTambah()
+    {
+        $cekInvoice = DB::selectOne("SELECT no_invoice FROM `grading` ORDER by no_invoice DESC limit 1;");
+        $noinvoice = isset($cekInvoice->no_invoice) ? $cekInvoice->no_invoice + 1 : 1001;
+        return $noinvoice;
+    }
+
+    public function create(Request $r)
+    {
+        $noinvoice = $this->getNoInvoiceTambah();
+        for ($i = 0; $i < count($r->grade); $i++) {
+            $id_grade = $r->grade[$i];
+            $no_box_sortir = $r->no_box_sortir[$i];
+            $no_box_grading = $r->box_sp[$i];
+            $pcs = $r->pcs[$i];
+            $gr = $r->gr[$i];
+            $admin = auth()->user()->name;
+            $tgl = date('Y-m-d');
+
+            $data[] = [
+                'id_grade' => $id_grade,
+                'no_box_grading' => $no_box_grading,
+                'no_box_sortir' => $no_box_sortir,
+                'pcs' => $pcs,
+                'gr' => $gr,
+                'admin' => $admin,
+                'tgl' => $tgl,
+                'no_invoice' => $noinvoice,
+            ];
+        }
+        DB::table('grading')->insert($data);
+        return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
+    }
+
+    public function gudang_siap_kirim(Request $r)
+    {
+        $gudang = DB::select(
+            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr 
+            FROM `grading` as a
+            left JOIN tb_grade as b on a.id_grade = b.id_grade
+            WHERE a.id_grade is not null
+            GROUP BY a.no_box_grading"
+        );
+        $data = [
+            'title' => 'gudang siap kirim',
+            'gudang' => $gudang
+        ];
+        return view('home.gradingbj.gudang_siap_kirim', $data);
+    }
+    public function detail(Request $r)
+    {
+        $no_box = $r->no_box;
+        $detail = DB::table('grading as a')
+            ->select('c.tipe', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
+            ->join('tb_grade as b', 'a.id_grade', 'b.id_grade')
+            ->join('bk as c', 'c.no_box', 'a.no_box_sortir')
+            ->where([['a.no_box_grading', $no_box], ['c.kategori', 'sortir']])->get();
+        $data = [
+            'no_box' => $no_box,
+            'detail' => $detail
+        ];
+        return view('home.gradingbj.detail_gudang_siap_kirim', $data);
+    }
+
+    public function cancel(Request $r)
+    {
+        DB::table('grading')->where('no_box_grading', $r->no_box)->delete();
+        return redirect()->back()->with('sukses', 'diselesaikan');
+    }
+
+    public function selesai(Request $r)
+    {
+        DB::table('grading')->where('no_box_grading', $r->no_box)->update(['selesai' => $r->selesai == 'T' ? 'Y' : 'T']);
+        return redirect()->back()->with('sukses', 'diselesaikan');
+    }
 }
