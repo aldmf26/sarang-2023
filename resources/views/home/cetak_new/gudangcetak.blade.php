@@ -114,13 +114,14 @@
                 {{-- tambah(no_box, name, pcs_awal, gr_awal) {
                     this.selectedItem.push({ no_box, name, pcs_awal, gr_awal });
                 }, --}}
-                tambah(no_box, name, pcs_awal, gr_awal, ttl_rp, cost_cbt, cost_ctk) {
+                tambah(id_cetak, no_box, name, pcs_awal, gr_awal, ttl_rp, cost_cbt, cost_ctk) {
                     const selectedItem = this.selectedItem
                     const cetak = this.cetak
             
-                    const index = selectedItem.findIndex(item => item.no_box === no_box);
+                    const index = selectedItem.findIndex(item => item.id_cetak === id_cetak);
                     if (index === -1) {
                         selectedItem.push({
+                            id_cetak: id_cetak,
                             no_box: no_box,
                             name,
                             pcs_awal: parseFloat(pcs_awal),
@@ -181,7 +182,7 @@
                     <tbody>
                         @foreach ($cetak_selesai as $d)
                             <tr>
-                                <td align="center">{{ $d->name }}</td>
+                                <td align="center">{{ $d->name }} </td>
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
@@ -190,8 +191,8 @@
                                 <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
                                 <td align="center">
                                     <input type="checkbox"
-                                        @change="tambah({{ $d->no_box }}, '{{ $d->name }}', {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }},{{ $d->cost_cbt }},{{ $d->cost_ctk }})"
-                                        value="{{ $d->no_box }}" x-model="cek">
+                                        @change="tambah({{ $d->id_cetak }}, '{{ $d->no_box }}', '{{ $d->name ?? '-' }}', {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp ?? 0 }},{{ $d->cost_cbt ?? 0 }},{{ $d->cost_ctk ?? 0 }})"
+                                        value="{{ $d->id_cetak }}" x-model="cek">
                                 </td>
                             </tr>
                         @endforeach
@@ -243,7 +244,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <input class="d-none" name="no_box[]" type="text" :value="cek">
+                                <input class="d-none" name="id_cetak[]" type="text" :value="cek">
                                 <template x-for="item in selectedItem">
                                     <tr>
                                         <td x-text="item.no_box"></td>

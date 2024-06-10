@@ -651,27 +651,23 @@ class Cabut extends Model
 
     public static function gudang($bulan = null, $tahun = null, $id_user = null)
     {
-        $bk = DB::select("SELECT
-                    a.no_box,
-                    b.name as penerima,
-                    a.pcs_awal as pcs,
-                    a.gr_awal as gr,
-                    a.hrga_satuan, (a.hrga_satuan * a.gr_awal) as ttl_rp
-                    FROM bk as a
-                    left join users as b on b.id = a.penerima
-                    WHERE a.kategori = 'cabut' AND a.penerima = $id_user 
-                    AND a.selesai = 'T' AND NOT EXISTS (
-                        SELECT 1
-                        FROM cabut AS b
-                        WHERE b.no_box = a.no_box
-                    )
+        $bk = DB::select("SELECT a.no_box,b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
+                (a.hrga_satuan * a.gr_awal) as ttl_rp
+                FROM bk as a
+                left join users as b on b.id = a.penerima
+                WHERE a.kategori = 'cabut' AND a.penerima = $id_user
+                AND a.selesai = 'T' 
+                AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
+                and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box);
                 ");
+
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp,
         c.name as penerima
         FROM cabut as a
         left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
         WHERE a.selesai = 'T'  AND a.no_box != 9999 AND a.id_pengawas = $id_user;");
+
         return (object)[
             'bk' => $bk,
             'cabut' => $cabut,

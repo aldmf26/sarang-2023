@@ -25,26 +25,27 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Rp/gr</th>
                             <th class="dhead text-end">Total Rp</th>
                         </tr>
                         @php
-
                             if (!function_exists('ttl')) {
                                 function ttl($tl)
                                 {
                                     return [
                                         'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
                                         'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
+
                                         'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
                                     ];
                                 }
                             }
-
                         @endphp
                         <tr>
                             <th class="dheadstock text-center">Total</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['gr_awal'], 0) }}</th>
+                            <th class="dheadstock text-end"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
@@ -54,6 +55,7 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
+                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
@@ -66,13 +68,14 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="4">Sortir sedang proses</th>
+                            <th class="dhead text-center" colspan="5">Sortir sedang proses</th>
                         </tr>
                         <tr>
 
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Rp/gr</th>
                             <th class="dhead text-end">Total Rp</th>
                         </tr>
 
@@ -81,6 +84,7 @@
                             <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['pcs_awal'], 0) }}
                             </th>
                             <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['gr_awal'], 0) }}</th>
+                            <th class="dheadstock text-end"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
@@ -90,6 +94,7 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
+                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach

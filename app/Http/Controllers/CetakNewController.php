@@ -46,8 +46,6 @@ class CetakNewController extends Controller
 
     public function formulir_print($no_invoice)
     {
-
-
         $halaman = DB::select("SELECT a.id_pemberi, b.name, a.id_penerima
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_penerima
@@ -741,6 +739,8 @@ class CetakNewController extends Controller
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
         ];
 
+
+
         return view('home.cetak_new.gudangcetak', $data);
     }
 
@@ -1031,9 +1031,9 @@ class CetakNewController extends Controller
                         FROM cetak_new 
                         left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
                         WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
+
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
-
 
             $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
 
@@ -1152,8 +1152,6 @@ class CetakNewController extends Controller
 
     public function import(Request $r)
     {
-
-
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
@@ -1318,8 +1316,6 @@ class CetakNewController extends Controller
             $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
 
             $sheet->setCellValue('V' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
-
-
 
             $no++;
         }
