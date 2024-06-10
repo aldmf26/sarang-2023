@@ -488,20 +488,20 @@ class SortirController extends Controller
         $data = [
             'title' => 'Gudang',
 
-            'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal
+            'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM formulir_sarang as a 
+            left join bk as b on b.no_box = a.no_box
             WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' and a.id_penerima = '$id_user';"),
 
-            'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal
+            'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM sortir as a 
+            left join bk as b on b.no_box = a.no_box
             WHERE a.id_pengawas = '$id_user' and a.selesai = 'T';"),
 
-            'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
+            'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM sortir as a 
-            
-            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b 
-            where b.kategori = 'grade') and  a.id_pengawas = '$id_user' 
-            and a.selesai = 'Y' ORDER BY a.id_sortir DESC;"),
+            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and  a.id_pengawas = '$id_user' and a.selesai = 'Y';"),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get()
 

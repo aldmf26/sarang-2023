@@ -1735,33 +1735,40 @@ class CabutController extends Controller
         $tahun =  $r->tahun ?? date('Y');
 
         $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
+        $gudang = Cabut::gudang($bulan, $tahun, $id_user);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Gudang cabut');
 
         $koloms = [
-            'A1' => 'box stock',
-            'B1' => 'pgws',
-            'C1' => 'no box',
-            'D1' => 'pcs',
-            'E1' => 'gr',
+            'A' => 'box stock',
+            'B' => 'pgws',
+            'C' => 'no box',
+            'D' => 'pcs',
+            'E' => 'gr',
+            'F' => 'rp/gr',
+            'G' => 'total rp',
 
-            'G1' => 'box sedang proses',
-            'H1' => 'pgws',
-            'I1' => 'no box',
-            'J1' => 'pcs',
-            'K1' => 'gr',
+            'I' => 'box sedang proses',
+            'J' => 'pgws',
+            'K' => 'no box',
+            'L' => 'pcs',
+            'M' => 'gr',
+            'N' => 'rp/gr',
+            'O' => 'total rp',
 
-            'M1' => 'box selesai siap cetak',
-            'N1' => 'pgws',
-            'O1' => 'no box',
-            'P1' => 'pcs',
-            'Q1' => 'gr',
+            'Q' => 'box selesai siap cetak',
+            'R' => 'pgws',
+            'S' => 'no box',
+            'T' => 'pcs',
+            'U' => 'gr',
+            'V' => 'rp/gr',
+            'W' => 'total rp',
 
 
         ];
-        foreach ($koloms as $kolom => $isiKolom) {
-            $sheet->setCellValue($kolom, ucwords($isiKolom));
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
         }
         $styleBold = [
             'font' => [
@@ -1776,45 +1783,106 @@ class CabutController extends Controller
             ],
         ];
 
-        $sheet->getStyle('B1:E1')->applyFromArray($styleBold);
-        $sheet->getStyle('B1:E1')->applyFromArray($styleBaris);
+        $sheet->getStyle('B1:G1')->applyFromArray($styleBold);
+        $sheet->getStyle('B1:G1')->applyFromArray($styleBaris);
 
-        $sheet->getStyle('H1:K1')->applyFromArray($styleBold);
-        $sheet->getStyle('H1:K1')->applyFromArray($styleBaris);
+        $sheet->getStyle('J1:O1')->applyFromArray($styleBold);
+        $sheet->getStyle('J1:O1')->applyFromArray($styleBaris);
 
-        $sheet->getStyle('N1:Q1')->applyFromArray($styleBold);
-        $sheet->getStyle('N1:Q1')->applyFromArray($styleBaris);
+        $sheet->getStyle('R1:W1')->applyFromArray($styleBold);
+        $sheet->getStyle('R1:W1')->applyFromArray($styleBaris);
         // $sheet->getStyle('A1:R1')->applyFromArray($styleBaris);
 
-
+        $bk = $gudang->bk;
+        $cabut = $gudang->cabut;
+        $cabutSelesai = $gudang->cabutSelesai;
         $users = DB::table('users')->whereIn('posisi_id', [13, 14])->pluck('name', 'id');
-        $dataTypes = [
-            ['key' => 'bk', 'startCol' => 'B'],
-            ['key' => 'cabut', 'startCol' => 'H'],
-            ['key' => 'cabutSelesai', 'startCol' => 'N'],
-        ];
 
-        foreach ($dataTypes as $dataType) {
-            $row = 2;
-            foreach ($users as $id => $name) {
-                $gudang = Cabut::gudang($bulan, $tahun, $id);
-                foreach ($gudang->{$dataType['key']} as $item) {
-                    $startCol = $dataType['startCol'];
-                    $sheet->setCellValue($startCol . $row, $name);
+        $no = 2;
+        $ttl_pcs = 0;
+        $ttl_gr = 0;
+        $ttl_rp = 0;
+        foreach ($bk as $item) {
+            $sheet->setCellValue('B' . $no, $item->penerima);
+            $sheet->setCellValue('C' . $no, $item->no_box);
+            $sheet->setCellValue('D' . $no, $item->pcs);
+            $sheet->setCellValue('E' . $no, $item->gr);
+            $sheet->setCellValue('F' . $no, $item->ttl_rp / $item->gr);
+            $sheet->setCellValue('G' . $no, $item->ttl_rp);
 
-                    $col1 = chr(ord($startCol) + 1);
-                    $col2 = chr(ord($startCol) + 2);
-                    $col3 = chr(ord($startCol) + 3);
-
-                    $sheet->setCellValue($col1 . $row, $item->no_box);
-                    $sheet->setCellValue($col2 . $row, $item->pcs);
-                    $sheet->setCellValue($col3 . $row, $item->gr);
-
-                    $sheet->getStyle("$startCol$row:$col3$row")->applyFromArray($styleBaris);
-                    $row++;
-                }
-            }
+            $no++;
+            $ttl_pcs += $item->pcs;
+            $ttl_gr += $item->gr;
+            $ttl_rp += $item->ttl_rp;
         }
+        $sheet->setCellValue('B' . $no, 'Total');
+        $sheet->setCellValue('C' . $no, '');
+        $sheet->setCellValue('D' . $no, $ttl_pcs);
+        $sheet->setCellValue('E' . $no, $ttl_gr);
+        $sheet->setCellValue('F' . $no, '');
+        $sheet->setCellValue('G' . $no, $ttl_rp);
+
+        $sheet->getStyle('B2:G' . $no)->applyFromArray($styleBaris);
+        $sheet->getStyle('B' . $no . ':G' . $no)->applyFromArray($styleBold);
+
+
+        $no = 2;
+        $ttl_pcs = 0;
+        $ttl_gr = 0;
+        $ttl_rp = 0;
+        foreach ($cabut as $item) {
+            $sheet->setCellValue('J' . $no, $item->penerima);
+            $sheet->setCellValue('K' . $no, $item->no_box);
+            $sheet->setCellValue('L' . $no, $item->pcs);
+            $sheet->setCellValue('M' . $no, $item->gr);
+            $sheet->setCellValue('N' . $no, $item->ttl_rp / $item->gr);
+            $sheet->setCellValue('O' . $no, $item->ttl_rp);
+
+            $no++;
+            $ttl_pcs += $item->pcs;
+            $ttl_gr += $item->gr;
+            $ttl_rp += $item->ttl_rp;
+        }
+        $sheet->setCellValue('J' . $no, 'Total');
+        $sheet->setCellValue('K' . $no, '');
+        $sheet->setCellValue('L' . $no, $ttl_pcs);
+        $sheet->setCellValue('M' . $no, $ttl_gr);
+        $sheet->setCellValue('N' . $no, '');
+        $sheet->setCellValue('O' . $no, $ttl_rp);
+
+        $sheet->getStyle('J2:O' . $no)->applyFromArray($styleBaris);
+        $sheet->getStyle('J' . $no . ':O' . $no)->applyFromArray($styleBold);
+
+
+
+        $no = 2;
+        $ttl_pcs = 0;
+        $ttl_gr = 0;
+        $ttl_rp = 0;
+        foreach ($cabutSelesai as $item) {
+            $sheet->setCellValue('R' . $no, $item->pengawas);
+            $sheet->setCellValue('S' . $no, $item->no_box);
+            $sheet->setCellValue('T' . $no, $item->pcs);
+            $sheet->setCellValue('U' . $no, $item->gr);
+            $sheet->setCellValue('V' . $no, $item->ttl_rp / $item->gr);
+            $sheet->setCellValue('W' . $no, $item->ttl_rp);
+
+            $no++;
+            $ttl_pcs += $item->pcs;
+            $ttl_gr += $item->gr;
+            $ttl_rp += $item->ttl_rp;
+        }
+        $sheet->setCellValue('R' . $no, 'Total');
+        $sheet->setCellValue('S' . $no, '');
+        $sheet->setCellValue('T' . $no, $ttl_pcs);
+        $sheet->setCellValue('U' . $no, $ttl_gr);
+        $sheet->setCellValue('V' . $no, '');
+        $sheet->setCellValue('W' . $no, $ttl_rp);
+
+        $sheet->getStyle('R2:W' . $no)->applyFromArray($styleBaris);
+        $sheet->getStyle('R' . $no . ':W' . $no)->applyFromArray($styleBold);
+
+
 
 
 

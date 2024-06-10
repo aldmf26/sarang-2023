@@ -10,7 +10,8 @@
             <th class="dhead text-end">Gr Awal</th>
             <th class="dhead text-end">Pcs Akhir</th>
             <th class="dhead text-end">Gr Akhir</th>
-            <th class="dhead text-end">Ttl Rp</th>
+            <th class="dhead text-end">Total Rp</th>
+            <th class="dhead text-end">Bulan Dibayar</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,7 @@
                 <td class="text-end">{{ number_format($d->pcs_akhir, 0) }}</td>
                 <td class="text-end">{{ number_format($d->gr_akhir, 0) }}</td>
                 <td class="text-end">{{ number_format($d->ttl_rp, 0) }}</td>
+                <td class="text-end">{{ number_format($d->bulan, 0) }}</td>
             </tr>
         @endforeach
     </tbody>

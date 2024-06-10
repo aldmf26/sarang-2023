@@ -40,7 +40,7 @@
                             <td class="text-end">{{ $d->ttl_box }}</td>
                             <td class="text-end">{{ $d->pcs }}</td>
                             <td class="text-end">{{ $d->gr }}</td>
-                            <td>
+                            <td class="nowrap">
                                 @php
                                     $param = ['kategori' => 'sortir', 'no_invoice' => $d->no_invoice];
                                     $getCtk = DB::selectOne("SELECT a.no_box 
@@ -53,7 +53,7 @@
                                 @if (!$getCtk)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal', $param) }}">
-                                        <span class="badge bg-danger">Batal</span>
+                                        <span class="badge bg-danger">Cancel</span>
                                     </a>
 
                                     <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"
