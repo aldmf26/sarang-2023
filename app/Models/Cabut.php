@@ -660,8 +660,9 @@ class Cabut extends Model
                 WHERE a.kategori = 'cabut' $penerima
                 AND a.selesai = 'T' 
                 AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
-                and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box);
-                ");
+                and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
+                and a.baru = 'baru'
+                ;");
 
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp,
@@ -669,7 +670,7 @@ class Cabut extends Model
         FROM cabut as a
         left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
-        WHERE a.selesai = 'T'  AND a.no_box != 9999 $penerima2");
+        WHERE a.selesai = 'T'  AND a.no_box != 9999 $penerima2 and b.baru = 'baru'");
 
         return (object)[
             'bk' => $bk,
@@ -692,7 +693,7 @@ class Cabut extends Model
             LEFT JOIN users AS c ON c.id = a.id_pengawas
             WHERE a.formulir = 'T'
         ) AS a
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' AND b.baru = 'baru'
         GROUP BY a.id_pengawas, a.no_box 
         HAVING min(a.selesai) = 'Y' $penerima2 AND a.no_box != 9999 
         ORDER BY a.no_box ASC");
