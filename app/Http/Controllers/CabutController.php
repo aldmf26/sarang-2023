@@ -1724,6 +1724,7 @@ class CabutController extends Controller
             'id_user' => $id_user,
             'bulan' => $bulan,
             'tahun' => $tahun,
+            'posisi' => auth()->user()->posisi_id
         ];
         return view('home.cabut.gudang', $data);
     }
@@ -1735,7 +1736,7 @@ class CabutController extends Controller
         $tahun =  $r->tahun ?? date('Y');
 
         $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
-        $gudang = Cabut::gudang($bulan, $tahun, $id_user);
+        $gudang = Cabut::gudang($bulan, $tahun);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Gudang cabut');

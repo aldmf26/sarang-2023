@@ -131,53 +131,53 @@
                 </div>
 
                 <div style="overflow-y: scroll; height: 700px">
-                <table id="tbl3" class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th class="dhead text-center" colspan="5">
-                                <span>Sortir selesai siap grading</span>
-                            </th>
-                        </tr>
-                        <tr>
-
-                            <th class="dhead text-center">No Box</th>
-                            <th class="dhead text-end">Pcs</th>
-                            <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Total Rp</th>
-                            <th class="dhead text-center">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th class="dheadstock text-center">Total</th>
-                            <th class="dheadstock text-center"></th>
-                            <th class="dheadstock text-end">
-                                {{ number_format(ttl($sortir_selesai)['pcs_awal'], 0) }}
-                            </th>
-                            <th class="dheadstock text-end">
-                                {{ number_format(ttl($sortir_selesai)['gr_awal'], 0) }}
-                            </th>
-                            <th class="dheadstock text-end">
-                                {{ number_format(ttl($sortir_selesai)['ttl_rp'], 0) }}
-                            </th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($sortir_selesai as $d)
+                    <table id="tbl3" class="table table-bordered table-hover table-striped">
+                        <thead>
                             <tr>
-                                <td align="center">{{ $d->no_box }}</td>
-                                {{-- <td align="center">{{ $d->name }}</td> --}}
-                                <td align="right">{{ $d->pcs_awal }}</td>
-                                <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                <td align="center">
-                                    <input type="checkbox"
-                                        @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
-                                        value="{{ $d->no_box }}" x-model="cek">
-                                </td>
+                                <th class="dhead text-center" colspan="5">
+                                    <span>Sortir selesai siap grading</span>
+                                </th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            <tr>
+
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Total Rp</th>
+                                <th class="dhead text-center">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl($sortir_selesai)['pcs_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl($sortir_selesai)['gr_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl($sortir_selesai)['ttl_rp'], 0) }}
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sortir_selesai as $d)
+                                <tr>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    {{-- <td align="center">{{ $d->name }}</td> --}}
+                                    <td align="right">{{ $d->pcs_awal }}</td>
+                                    <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="center">
+                                        <input type="checkbox"
+                                            @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
+                                            value="{{ $d->no_box }}" x-model="cek">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
 
                 {{-- modal ambil box ke cetak --}}

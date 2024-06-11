@@ -727,7 +727,13 @@ class CetakNewController extends Controller
 
     public function gudangcetak(Request $r)
     {
-        $id_pengawas = auth()->user()->id;
+        if (auth()->user()->posisi_id == '1') {
+            $id_pengawas = 0;
+        } else {
+            $id_pengawas = auth()->user()->id;
+        }
+
+
         $data = [
             'title' => 'Gudang Cetak',
             'cabut_selesai' => CetakModel::cabut_selesai($id_pengawas),

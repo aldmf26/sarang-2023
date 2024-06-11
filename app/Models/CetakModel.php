@@ -201,7 +201,9 @@ class CetakModel extends Model
             left join users as d on d.id = a.id_pengawas
             left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
             left join cabut as f on f.no_box = a.no_box
-            where a.selesai = 'Y' and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
+            where a.selesai = 'Y' 
+            and  b.id_pemberi is not null 
+            and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
         } else {
             $result = DB::select("SELECT a.id_cetak, c.name, a.no_box, (a.pcs_akhir +  a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal, (e.gr_awal * e.hrga_satuan) as ttl_rp , a.ttl_rp as cost_ctk , f.ttl_rp as cost_cbt
             FROM cetak_new as a 
@@ -209,7 +211,9 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
             left join cabut as f on f.no_box = a.no_box
-            where a.selesai = 'Y' and a.formulir = 'T' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
+            where a.selesai = 'Y' 
+             and  b.id_pemberi is not null
+            and a.formulir = 'T' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
         }
 
         return $result;
@@ -223,14 +227,18 @@ class CetakModel extends Model
         left join users as b on b.id = a.id_pemberi
         left join bk as c on c.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
-        WHERE a.kategori = 'cetak'  and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
+        WHERE a.kategori = 'cetak'  
+        and a.id_pemberi is not null
+        and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
         } else {
             $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal,(c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join bk as c on c.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
-        WHERE a.kategori = 'cetak' and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
+        WHERE a.kategori = 'cetak' 
+        and a.id_pemberi is not null
+        and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
         }
         return $result;
     }
@@ -243,7 +251,7 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
-            where a.selesai = 'T' and a.id_anak != 0");
+            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null");
         } else {
             $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp, e.name as pgws
             FROM cetak_new as a 
@@ -251,7 +259,7 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
-            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0");
+            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0 and b.id_pemberi is not null");
         }
         return $result;
     }

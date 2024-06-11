@@ -36,7 +36,8 @@
         <input type="hidden" class="form-control text-end pcs_awal{{ $d->id_sortir }}"
             value="{{ $d->pcs_awal ?? 0 }}">
         <input type="text" class="form-control text-end pcs_akhir{{ $d->id_sortir }}"
-            value="{{ $d->pcs_akhir ?? 0 }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+            value="{{ empty($d->pcs_akhir) ? $d->pcs_awal : $d->pcs_akhir }}"
+            {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
     </td>
     <td align="right">
 
@@ -58,7 +59,7 @@
             <option value="0">Pilih</option>
             @foreach ($bulan as $b)
                 <option value="{{ $b->id_bulan }}" {{ $d->bulan == $b->id_bulan ? 'selected' : '' }}>
-                    {{ $b->bulan }}</option>
+                    {{ $b->nm_bulan }}</option>
             @endforeach
         </select>
     </td>
@@ -73,7 +74,7 @@
                 id_sortir="{{ $d->id_sortir }}">save</a>
 
             <a href="#"
-                {{ $d->id_anak == 0 || $d->id_kelas == 0 || empty($d->pcs_akhir) || empty($d->gr_akhir) || $d->bulan == 0 ? 'hidden' : '' }}
+                {{ $d->id_anak == 0 || $d->id_kelas == 0 || empty($d->gr_akhir) || $d->bulan == 0 ? 'hidden' : '' }}
                 class="btn btn-success btn-sm selesai_new selesai_new{{ $d->id_sortir }}"
                 id_sortir="{{ $d->id_sortir }}">selesai</a>
         @else

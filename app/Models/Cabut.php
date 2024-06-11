@@ -651,22 +651,25 @@ class Cabut extends Model
 
     public static function gudang($bulan = null, $tahun = null, $id_user = null)
     {
-        $bk = DB::select("SELECT a.no_box,b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
+        $posisi = auth()->user()->posisi_id;
+        $penerima = $id_user == null || $posisi == 1 ? '' : "AND a.penerima = $id_user";
+        $bk = DB::select("SELECT a.no_box, b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
                 (a.hrga_satuan * a.gr_awal) as ttl_rp
                 FROM bk as a
                 left join users as b on b.id = a.penerima
-                WHERE a.kategori = 'cabut' AND a.penerima = $id_user
+                WHERE a.kategori = 'cabut' $penerima
                 AND a.selesai = 'T' 
                 AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
                 and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box);
                 ");
 
+        $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp,
         c.name as penerima
         FROM cabut as a
         left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
-        WHERE a.selesai = 'T'  AND a.no_box != 9999 AND a.id_pengawas = $id_user;");
+        WHERE a.selesai = 'T'  AND a.no_box != 9999 $penerima2");
 
         return (object)[
             'bk' => $bk,
@@ -677,6 +680,8 @@ class Cabut extends Model
 
     public static function gudangCabutSelesai($id_user = null)
     {
+        $posisi = auth()->user()->posisi_id;
+        $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         return DB::select("SELECT 
         a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai, sum(a.ttl_rp) as ttl_rp_cbt,
         (b.hrga_satuan * b.gr_awal) as ttl_rp
@@ -689,7 +694,7 @@ class Cabut extends Model
         ) AS a
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         GROUP BY a.id_pengawas, a.no_box 
-        HAVING min(a.selesai) = 'Y' AND a.id_pengawas = '$id_user' AND a.no_box != 9999 
+        HAVING min(a.selesai) = 'Y' $penerima2 AND a.no_box != 9999 
         ORDER BY a.no_box ASC");
     }
 }

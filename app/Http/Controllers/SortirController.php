@@ -485,23 +485,35 @@ class SortirController extends Controller
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;
+        if (auth()->user()->posisi_id == 1) {
+            $id_penerima = '';
+            $id_pengawas = '';
+        } else {
+            $id_penerima = "AND a.id_penerima = $id_user";
+            $id_pengawas = "AND a.id_pengawas = $id_user";
+        }
+
+
+
         $data = [
             'title' => 'Gudang',
 
             'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM formulir_sarang as a 
             left join bk as b on b.no_box = a.no_box
-            WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' and a.id_penerima = '$id_user';"),
+            WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' $id_penerima;"),
 
             'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM sortir as a 
             left join bk as b on b.no_box = a.no_box
-            WHERE a.id_pengawas = '$id_user' and a.selesai = 'T';"),
+            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+            WHERE a.selesai = 'T' $id_pengawas;"),
 
             'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM sortir as a 
             left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and  a.id_pengawas = '$id_user' and a.selesai = 'Y';"),
+            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y';"),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get()
 
@@ -521,11 +533,13 @@ class SortirController extends Controller
         $sortir_proses = DB::select("SELECT b.name, a.no_box, a.pcs_awal, a.gr_awal
         FROM sortir as a 
         left join users as b on b.id = a.id_pengawas
+        join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
         WHERE  a.selesai = 'T';");
 
         $sortir_selesai = DB::select("SELECT b.name, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal
         FROM sortir as a 
         left join users as b on b.id = a.id_pengawas
+        join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
         WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y';");
 
         $spreadsheet = new Spreadsheet();
