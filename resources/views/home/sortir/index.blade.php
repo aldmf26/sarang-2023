@@ -707,6 +707,7 @@
                         var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
                         var gr_akhir = $('.gr_akhir' + id_sortir).val();
                         var gr_awal = $('.gr_awal' + id_sortir).val();
+                        var tgl = $('.tgl' + id_sortir).val();
                         var bulan_dibayar = $('.bulan_dibayar' + id_sortir).val();
                         var no = $('.no' + id_sortir).val();
 
@@ -721,7 +722,8 @@
                                 pcs_akhir: pcs_akhir,
                                 gr_akhir: gr_akhir,
                                 gr_awal: gr_awal,
-                                bulan_dibayar: bulan_dibayar
+                                bulan_dibayar: bulan_dibayar,
+                                tgl: tgl
                             },
                             success: function(response) {
                                 alertToast('sukses', 'Berhasil ditambahkan');

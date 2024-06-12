@@ -40,7 +40,11 @@
         @foreach ($cabut as $no => $d)
             <tr data-id="{{ $d->id_sortir }}">
                 <td>{{ $no + 1 }}</td>
-                <td>{{ date('d M Y', strtotime($d->tgl)) }}</td>
+                <td>
+                    {{-- {{ date('d M Y', strtotime($d->tgl)) }} --}}
+                    <input type="date" value="{{ $d->tgl }}" class="form-control tgl{{ $d->id_sortir }}"
+                        name="tgl_cabut[]">
+                </td>
                 <td>
                     <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
                         id_sortir="{{ $d->id_sortir }}">{{ $d->no_box }}</a>

@@ -1,6 +1,9 @@
 <tr data-id="{{ $d->id_sortir }}">
     <td>{{ $no }}</td>
-    <td>{{ date('d M Y', strtotime($d->tgl)) }}</td>
+    <td>
+        <input type="date" value="{{ $d->tgl }}" class="form-control tgl{{ $d->id_sortir }}" name="tgl_cabut[]">
+        {{-- {{ date('d M Y', strtotime($d->tgl)) }} --}}
+    </td>
     <td>
         <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
             id_sortir="{{ $d->id_sortir }}">{{ $d->no_box }}</a>
