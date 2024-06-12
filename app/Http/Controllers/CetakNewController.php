@@ -1027,13 +1027,13 @@ class CetakNewController extends Controller
 
     public function save_formulir(Request $r)
     {
-        $no_box = explode(',', $r->no_box[0]);
+        $no_box = explode(',', $r->id_cetak[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi
+                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi, cetak_new.no_box
                         FROM cetak_new 
                         left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
-                        WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
+                        WHERE cetak_new.id_cetak = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
@@ -1048,7 +1048,7 @@ class CetakNewController extends Controller
 
             $data[] = [
                 'no_invoice' => $inv,
-                'no_box' => $d,
+                'no_box' => $ambil->no_box,
                 'id_pemberi' => auth()->user()->id,
                 'id_penerima' => $r->id_penerima,
                 'pcs_awal' => $pcs,
