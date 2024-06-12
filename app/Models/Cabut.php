@@ -654,7 +654,7 @@ class Cabut extends Model
         $posisi = auth()->user()->posisi_id;
         $penerima = $id_user == null || $posisi == 1 ? '' : "AND a.penerima = $id_user";
         $bk = DB::select("SELECT a.no_box, b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
-                (a.hrga_satuan * a.gr_awal) as ttl_rp
+                (a.hrga_satuan * a.gr_awal) as ttl_rp, a.nm_partai
                 FROM bk as a
                 left join users as b on b.id = a.penerima
                 WHERE a.kategori = 'cabut' $penerima
@@ -666,7 +666,7 @@ class Cabut extends Model
 
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp,
-        c.name as penerima
+        c.name as penerima, b.nm_partai
         FROM cabut as a
         left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
@@ -685,7 +685,7 @@ class Cabut extends Model
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         return DB::select("SELECT 
         a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai, sum(a.ttl_rp) as ttl_rp_cbt,
-        (b.hrga_satuan * b.gr_awal) as ttl_rp
+        (b.hrga_satuan * b.gr_awal) as ttl_rp, b.nm_partai
         FROM ( 
             SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai, a.ttl_rp
             FROM cabut AS a 

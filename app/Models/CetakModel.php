@@ -194,7 +194,7 @@ class CetakModel extends Model
     public static function cetak_selesai($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.id_cetak, c.name, d.name as pgws, a.no_box, (a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal, (e.gr_awal * e.hrga_satuan) as ttl_rp, a.ttl_rp as cost_ctk, f.ttl_rp as cost_cbt
+            $result = DB::select("SELECT a.id_cetak, c.name, d.name as pgws, a.no_box, (a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal, (e.gr_awal * e.hrga_satuan) as ttl_rp, a.ttl_rp as cost_ctk, f.ttl_rp as cost_cbt, e.nm_partai
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
@@ -203,7 +203,9 @@ class CetakModel extends Model
             left join cabut as f on f.no_box = a.no_box
             where a.selesai = 'Y' 
             and  b.id_pemberi is not null 
-            and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
+            and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')
+            order by a.no_box ASC
+            ");
         } else {
             $result = DB::select("SELECT a.id_cetak, c.name, a.no_box, (a.pcs_akhir +  a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal, (e.gr_awal * e.hrga_satuan) as ttl_rp , a.ttl_rp as cost_ctk , f.ttl_rp as cost_cbt
             FROM cetak_new as a 
@@ -213,7 +215,9 @@ class CetakModel extends Model
             left join cabut as f on f.no_box = a.no_box
             where a.selesai = 'Y' 
              and  b.id_pemberi is not null
-            and a.formulir = 'T' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')");
+            and a.formulir = 'T' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')
+            order by a.no_box ASC
+            ");
         }
 
         return $result;
@@ -223,7 +227,7 @@ class CetakModel extends Model
     {
         if ($id_pengawas == 0) {
             $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
-            d.ttl_rp as cost_cbt
+            d.ttl_rp as cost_cbt, c.nm_partai
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join bk as c on c.no_box = a.no_box
@@ -247,7 +251,7 @@ class CetakModel extends Model
     public static function cetak_proses($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , e.name as pgws, f.ttl_rp as cost_cbt
+            $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , e.name as pgws, f.ttl_rp as cost_cbt, d.nm_partai
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi

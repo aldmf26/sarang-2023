@@ -11,10 +11,11 @@
                     <table id="tbl1" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="6">Box Stock</th>
+                                <th class="dhead text-center" colspan="7">Box Stock</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -39,6 +40,7 @@
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
                                 <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['hrga_satuan'], 0) }}</th>
@@ -51,6 +53,7 @@
                             @foreach ($bk as $d)
                                 <tr>
                                     <td align="center">{{ $d->penerima }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
@@ -69,11 +72,12 @@
                     <table id="tbl2" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="6">Box sedang proses</th>
+                                <th class="dhead text-center" colspan="7">Box sedang proses</th>
                             </tr>
                             <tr>
 
-                                <th class="dhead text-center">Penerima</th>
+                                <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -82,6 +86,7 @@
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabut)['pcs'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
@@ -94,6 +99,7 @@
                             @foreach ($cabut as $d)
                                 <tr>
                                     <td align="center">{{ $d->penerima }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
@@ -113,13 +119,13 @@
                     <table id="tbl3" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="6">
+                                <th class="dhead text-center" colspan="7">
                                     <span>Box selesai siap ctk</span>
-
                                 </th>
                             </tr>
                             <tr>
-                                <th class="dhead text-center ">Penerima</th>
+                                <th class="dhead text-center ">Pemilik</th>
+                                <th class="dhead text-center ">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -129,6 +135,7 @@
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center "></th>
                                 <th class="dheadstock text-center "></th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['pcs'], 0) }}
                                 </th>
@@ -145,8 +152,8 @@
                         <tbody>
                             @foreach ($cabutSelesai as $d)
                                 <tr>
-                                    <td align="center" class="">
-                                        {{ $d->pengawas }}</td>
+                                    <td align="center">{{ $d->pengawas }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
@@ -172,10 +179,11 @@
                     <table id="tbl4" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="7">Cetak stock</th>
+                                <th class="dhead text-center" colspan="8">Cetak stock</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -201,6 +209,7 @@
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
                                 <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cabut_selesai)['pcs_awal'], 0) }}
                                 </th>
@@ -219,6 +228,7 @@
                             @foreach ($cabut_selesai as $d)
                                 <tr>
                                     <td align="center">{{ $d->name }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
@@ -238,12 +248,13 @@
                     <table id="tbl5" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="8">Cetak sedang proses</th>
+                                <th class="dhead text-center" colspan="9">Cetak sedang proses</th>
                             </tr>
                             <tr>
 
                                 <th class="dhead text-center">Pemilik</th>
                                 <th class="dhead text-center">Pengawas</th>
+                                <th class="dhead text-center">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -253,6 +264,7 @@
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-end">
@@ -273,6 +285,7 @@
                                 <tr>
                                     <td align="center">{{ $d->name }}</td>
                                     <td align="center">{{ $d->pgws }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
@@ -291,13 +304,14 @@
                     <table id="tbl6" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="8">
+                                <th class="dhead text-center" colspan="9">
                                     <span>Cetak selesai siap sortir</span>
                                 </th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
                                 <th class="dhead text-center">Pengawas</th>
+                                <th class="dhead text-center">Partai</th>
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -308,6 +322,7 @@
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-center"></th>
 
@@ -332,6 +347,7 @@
                                 <tr>
                                     <td align="center">{{ $d->name }} </td>
                                     <td align="center">{{ $d->pgws }} </td>
+                                    <td align="center">{{ $d->nm_partai }} </td>
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
