@@ -257,7 +257,8 @@ class CetakNewController extends Controller
             'rp_satuan' => $rp_pcs,
             'ttl_rp' => $ttl_rp - $rp_hcr - $denda_susut,
             'tipe_bayar' => $r->tipe_bayar,
-            'bulan_dibayar' => $r->bulan_dibayar
+            'bulan_dibayar' => $r->bulan_dibayar,
+            'tgl' => $r->tgl,
         ];
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
         // }

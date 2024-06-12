@@ -195,6 +195,7 @@
                         var id_paket = $('.id_paket' + id_cetak).val();
                         var tipe_bayar = $('.tipe_bayar' + id_cetak).val();
                         var bulan_dibayar = $('.bulan_dibayar' + id_cetak).val();
+                        var tgl = $('.tgl' + id_cetak).val();
 
 
                         $.ajax({
@@ -211,7 +212,8 @@
                                 id_anak: id_anak,
                                 tipe_bayar: tipe_bayar,
                                 bulan_dibayar: bulan_dibayar,
-                                pcs_hcr: pcs_hcr
+                                pcs_hcr: pcs_hcr,
+                                tgl: tgl,
                             },
                             success: function(response) {
                                 loadRowData(id_cetak, no)

@@ -1,6 +1,9 @@
 <tr data-id="{{ $c->id_cetak }}">
     <td>{{ $no + 1 }}</td>
-    <td>{{ date('d M y', strtotime($c->tgl)) }}</td>
+    <td>
+        <input type="date" class="form-control tgl{{ $c->id_cetak }}" value="{{ $c->tgl }}">
+        {{-- {{ date('d M y', strtotime($c->tgl)) }} --}}
+    </td>
     <td>{{ $c->no_box }}</td>
     <td>
         <select name="" id="" class="select2_add id_anak{{ $c->id_cetak }}"
