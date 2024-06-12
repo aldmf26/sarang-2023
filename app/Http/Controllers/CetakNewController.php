@@ -41,9 +41,6 @@ class CetakNewController extends Controller
         ];
         return view('home.cetak_new.formulir', $data);
     }
-
-
-
     public function formulir_print($no_invoice)
     {
         $halaman = DB::select("SELECT a.id_pemberi, b.name, a.id_penerima

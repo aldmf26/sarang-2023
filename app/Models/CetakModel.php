@@ -222,10 +222,12 @@ class CetakModel extends Model
     public static function cabut_selesai($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws
+            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
+            d.ttl_rp as cost_cbt
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join bk as c on c.no_box = a.no_box
+        left join cabut as d on d.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
         WHERE a.kategori = 'cetak'  
         and a.id_pemberi is not null
@@ -245,13 +247,16 @@ class CetakModel extends Model
     public static function cetak_proses($id_pengawas)
     {
         if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , e.name as pgws
+            $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , e.name as pgws, f.ttl_rp as cost_cbt
             FROM cetak_new as a 
             left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
             left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
-            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null");
+            left join cabut as f on f.no_box = b.no_box
+            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null
+            order by a.no_box ASC
+            ");
         } else {
             $result = DB::select("SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp, e.name as pgws
             FROM cetak_new as a 
@@ -259,7 +264,9 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
-            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0 and b.id_pemberi is not null");
+            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0 and b.id_pemberi is not null
+            order by a.no_box ASC
+            ");
         }
         return $result;
     }

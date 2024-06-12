@@ -131,7 +131,8 @@
                             <tbody>
                                 @foreach ($cabut as $d)
                                     <tr>
-                                        <td align="center {{ $posisi == 1 ? '' : 'd-none' }}">{{ $d->penerima }}</td>
+                                        <td align="center {{ $posisi == 1 ? '' : 'd-none' }}">{{ $d->penerima }}
+                                            dsada</td>
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">{{ $d->pcs }}</td>
                                         <td align="right">{{ $d->gr }}</td>
