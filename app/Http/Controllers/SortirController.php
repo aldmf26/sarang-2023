@@ -138,9 +138,9 @@ class SortirController extends Controller
             $cekStok = DB::selectOne("SELECT 
             sum(a.pcs_awal) - sum(b.pcs) as pcs, 
             sum(a.gr_awal) - sum(b.gr) as gr 
-            FROM `bk`  as a
+            FROM bk  as a
             JOIN (
-                SELECT no_box,id_pengawas,sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM `sortir` GROUP BY no_box,id_pengawas
+                SELECT no_box,id_pengawas,sum(pcs_awal) as pcs, sum(gr_awal) as gr FROM sortir GROUP BY no_box,id_pengawas
             ) as b on a.no_box = b.no_box AND a.penerima = b.id_pengawas
             WHERE a.no_box = '$nobox' AND a.kategori LIKE '%sortir%' AND a.penerima= '$admin';");
             // if ($ttlPcs <= $cekStok->pcs && $ttlGr <= $cekStok->gr) {
@@ -161,7 +161,15 @@ class SortirController extends Controller
                 'tgl_input' => date('Y-m-d')
             ];
             if ($id_sortir == 9999) {
-                DB::table('sortir')->insert($data);
+                $cekSortir = DB::table('sortir')->where([
+                    ['no_box', $r->no_box[$i]],
+                    ['id_anak', $r->id_anak[$i]],
+                    ['pcs_awal', $r->pcs_awal[$i]],
+                    ['gr_awal', $r->gr_awal[$i]]
+                ])->first();
+                if (!$cekSortir) {
+                    DB::table('sortir')->insert($data);
+                }
             } else {
                 DB::table('sortir')->where('id_sortir', $id_sortir)->update($data);
             }

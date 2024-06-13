@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class Sortir extends Model
 {
@@ -68,5 +69,19 @@ class Sortir extends Model
         WHERE  a.no_box != 9999 AND a.penutup = 'T' $where AND a.bulan = '$bulan' AND YEAR(a.tgl_input) = '$tahun'
         GROUP by a.no_box,a.id_pengawas
         ");
+    }
+
+    public static function siap_sortir($id_user)
+    {
+        if (auth()->user()->posisi_id == 1) {
+            $id_penerima = '';
+        } else {
+            $id_penerima = "AND a.id_penerima = $id_user";
+        }
+        $result = DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
+        FROM formulir_sarang as a 
+        left join bk as b on b.no_box = a.no_box
+        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' $id_penerima;");
+        return $result;
     }
 }
