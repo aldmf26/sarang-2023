@@ -71,17 +71,50 @@ class Sortir extends Model
         ");
     }
 
-    public static function siap_sortir($id_user)
+    public static function siap_sortir()
+    {
+
+        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
+        (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name
+        FROM formulir_sarang as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join cabut as c on c.no_box = a.no_box
+        left join cetak_new as d on d.no_box = a.no_box
+        left join eo as e on e.no_box = a.no_box
+        left join users as f on f.id = a.id_penerima
+        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and a.kategori = 'sortir';");
+        return $result;
+    }
+    public static function sortir_proses()
+    {
+
+        $result = DB::select("SELECT b.nm_partai,  a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
+        d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name
+        FROM sortir as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+        left join cabut as d on d.no_box = a.no_box
+        left join cetak_new as e on e.no_box = a.no_box
+        left join users as f on f.id = a.id_pengawas
+        WHERE a.selesai = 'T' and a.id_anak != 0 ;");
+        return $result;
+    }
+    public static function sortir_selesai($id_user)
     {
         if (auth()->user()->posisi_id == 1) {
-            $id_penerima = '';
+            $id_pengawas = '';
         } else {
-            $id_penerima = "AND a.id_penerima = $id_user";
+            $id_pengawas = "AND a.id_pengawas = $id_user";
         }
-        $result = DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
-        FROM formulir_sarang as a 
-        left join bk as b on b.no_box = a.no_box
-        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' $id_penerima;");
+        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str
+        FROM sortir as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+        left join cabut as d on d.no_box = a.no_box
+        left join cetak_new as e on e.no_box = a.no_box
+        left join users as f on f.id = a.id_pengawas
+        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y';");
+
         return $result;
     }
 }

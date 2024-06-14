@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cabut;
 use App\Models\CetakModel;
+use App\Models\Sortir;
 use Illuminate\Http\Request;
 
 class GudangController extends Controller
@@ -22,6 +23,9 @@ class GudangController extends Controller
             'cabut_selesai' => CetakModel::cabut_selesai(0),
             'cetak_proses' => CetakModel::cetak_proses(0),
             'cetak_selesai' => CetakModel::cetak_selesai(0),
+            'siap_sortir' => Sortir::siap_sortir(),
+            'sortir_proses' => Sortir::sortir_proses(),
+            'sortir_selesai' => Sortir::sortir_selesai($id_user),
         ];
         return view('home.gudang.index', $data);
     }

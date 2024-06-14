@@ -361,6 +361,238 @@
                     </table>
                 </div>
             </div>
+
+            <div class="col-lg-12">
+                <br>
+                <br>
+                <br>
+                <h6 class="float-start mt-1">Gudang Sortir</h6>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <div style="overflow-y: scroll; height: 400px">
+                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="dhead text-center" colspan="9">Sortir stock</th>
+                            </tr>
+                            <tr>
+                                <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Rp/gr</th>
+                                <th class="dhead text-end">Total Rp</th>
+                                <th class="dhead text-end">Total Rp Cbt</th>
+                                <th class="dhead text-end">Total Rp Ctk</th>
+                            </tr>
+                            @php
+                                if (!function_exists('ttl3')) {
+                                    function ttl3($tl)
+                                    {
+                                        return [
+                                            'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
+                                            'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
+                                            'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                            'cost_cbt' => array_sum(array_column($tl, 'cost_cbt')),
+                                            'cost_ctk' => array_sum(array_column($tl, 'cost_ctk')),
+                                        ];
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['pcs_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['gr_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end"></th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['ttl_rp'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['cost_cbt'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['cost_ctk'], 0) }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($siap_sortir as $d)
+                                <tr>
+                                    <td align="center">{{ $d->name }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td align="right">{{ $d->pcs_awal }}</td>
+                                    <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <div style="overflow-y: scroll; height: 400px">
+                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="dhead text-center" colspan="9">Sortir sedang proses</th>
+                            </tr>
+                            <tr>
+                                <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Rp/gr</th>
+                                <th class="dhead text-end">Total Rp</th>
+                                <th class="dhead text-end">Total Rp Cbt</th>
+                                <th class="dhead text-end">Total Rp Ctk</th>
+                            </tr>
+                            @php
+                                if (!function_exists('ttl3')) {
+                                    function ttl3($tl)
+                                    {
+                                        return [
+                                            'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
+                                            'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
+                                            'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                            'cost_cbt' => array_sum(array_column($tl, 'cost_cbt')),
+                                            'cost_ctk' => array_sum(array_column($tl, 'cost_ctk')),
+                                        ];
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl3($sortir_proses)['pcs_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl3($sortir_proses)['gr_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end"></th>
+                                <th class="dheadstock text-end">{{ number_format(ttl3($sortir_proses)['ttl_rp'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl3($sortir_proses)['cost_cbt'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl3($sortir_proses)['cost_ctk'], 0) }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sortir_proses as $d)
+                                <tr>
+                                    <td align="center">{{ $d->name }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td align="right">{{ $d->pcs_awal }}</td>
+                                    <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <div style="overflow-y: scroll; height: 400px">
+                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="dhead text-center" colspan="10">Sortir selesai siap grading</th>
+                            </tr>
+                            <tr>
+                                <th class="dhead text-center">Pemilik</th>
+                                <th class="dhead text-center">Partai</th>
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Rp/gr</th>
+                                <th class="dhead text-end">Total Rp</th>
+                                <th class="dhead text-end">Total Rp Cbt</th>
+                                <th class="dhead text-end">Total Rp Ctk</th>
+                                <th class="dhead text-end">Total Rp Str</th>
+                            </tr>
+                            @php
+                                if (!function_exists('ttl4')) {
+                                    function ttl4($tl)
+                                    {
+                                        return [
+                                            'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
+                                            'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
+                                            'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                            'cost_cbt' => array_sum(array_column($tl, 'cost_cbt')),
+                                            'cost_ctk' => array_sum(array_column($tl, 'cost_ctk')),
+                                            'cost_str' => array_sum(array_column($tl, 'cost_str')),
+                                        ];
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-center"></th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['pcs_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['gr_awal'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['ttl_rp'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['cost_cbt'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['cost_ctk'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['cost_ctk'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl4($sortir_selesai)['cost_str'], 0) }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sortir_selesai as $d)
+                                <tr>
+                                    <td align="center">{{ $d->name }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td align="right">{{ $d->pcs_awal }}</td>
+                                    <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_str, 0) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
         </section>
     </x-slot>
     @section('scripts')
@@ -368,7 +600,7 @@
             ["tbl1", "tbl2", "tbl3", "tbl4", "tbl5", "tbl6"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
         </script>
         <script>
-            document.body.style.zoom = "75%";
+            document.body.style.zoom = "67%";
         </script>
     @endsection
 </x-theme.app>
