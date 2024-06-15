@@ -779,6 +779,7 @@ class SortirController extends Controller
             'ttl_rp' => $rupiah,
             'denda_sp' => $denda,
             'tgl' => $r->tgl,
+            'selesai' => 'T',
 
         ];
         DB::table('sortir')->where('id_sortir', $r->id_sortir)->update($data);
