@@ -77,8 +77,12 @@
                 <td align="right">{{ $d->gr_awal ?? 0 }}</td>
                 <td align="right">
                     <input type="hidden" class="no{{ $d->id_sortir }}" value="{{ $no + 1 }}">
+
+                    <input type="hidden" class="form-control text-end pcs_awal{{ $d->id_sortir }}"
+                        value="{{ $d->pcs_awal ?? 0 }}">
                     <input type="text" class="form-control text-end pcs_akhir{{ $d->id_sortir }}"
-                        value="{{ $d->pcs_akhir ?? 0 }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+                        value="{{ empty($d->pcs_akhir) ? $d->pcs_awal : $d->pcs_akhir }}"
+                        {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
 
                 </td>
                 <td align="right">

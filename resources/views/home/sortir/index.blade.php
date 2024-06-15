@@ -25,6 +25,8 @@
                 teks="Ambil Box Bk" /> --}}
         <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
             addClass="float-end history me-2" teks="History" />
+        <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end me-2"
+            teks="View" />
     </x-slot>
 
     <x-slot name="cardBody">
@@ -46,6 +48,9 @@
             }
         </style>
         <section class="row">
+            <input type="hidden" class="tgl1" value="{{ $tgl1 }}">
+            <input type="hidden" class="tgl2" value="{{ $tgl2 }}">
+            <input type="hidden" class="id_anak" value="{{ $id_anak }}">
             <div id="loadHalaman"></div>
         </section>
 
@@ -89,6 +94,31 @@
                     </div>
                 </div>
                 <div id="load_anak"></div>
+            </x-theme.modal>
+        </form>
+
+        <form action="" method="get">
+            <x-theme.modal title="Filter Tanggal" idModal="view">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="">Dari</label>
+                        <input id="tgl1" type="date" name="tgl1" id="" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="">Sampai</label>
+                        <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
+                    </div>
+                    <div class="col-lg-6 mt-2">
+                        <label for="">Pilih Anak</label>
+                        <br>
+                        <select name="id_anak" id="" class="selectView">
+                            <option value="All">All</option>
+                            @foreach ($tb_anak as $u)
+                                <option value="{{ $u->id_anak }}">{{ $u->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </x-theme.modal>
         </form>
 
@@ -415,6 +445,7 @@
                             data: {
                                 tgl1: "{{ $tgl1 }}",
                                 tgl2: "{{ $tgl2 }}",
+                                id_anak: "{{ $id_anak }}",
                             },
                             success: function(r) {
                                 $("#loadHalaman").html(r);
@@ -755,6 +786,7 @@
                         var pcs_awal = $('.pcs_awal' + id_sortir).val();
                         var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
                         var no = $('.no' + id_sortir).val();
+
 
 
 

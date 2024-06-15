@@ -39,22 +39,24 @@ class SortirController extends Controller
     }
     public function index(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 = $tgl['tgl1'];
-        $tgl2 = $tgl['tgl2'];
+        $tgl1 = $r->tgl1 ?? date('Y-m-d');
+        $tgl2 = $r->tgl2 ?? date('Y-m-t');
+        $id_anak = $r->id_anak ?? 'All';
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'boxBk' => $this->getStokBk(),
             'anak' => $this->getAnak(),
+            'tb_anak' => $this->getAnak(),
             'cabut' => DB::table('sortir as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->orderBy('id_sortir', 'DESC')
-                ->get()
+                ->get(),
+            'id_anak' => $id_anak
         ];
 
         return view('home.sortir.index', $data);
@@ -250,23 +252,37 @@ class SortirController extends Controller
 
     public function load_halaman(Request $r)
     {
-        $tgl = tanggalFilter($r);
-        $tgl1 = $tgl['tgl1'];
-        $tgl2 = $tgl['tgl2'];
+        $tgl1 = $r->tgl1 ?? date('Y-m-d');
+        $tgl2 = $r->tgl2 ?? date('Y-m-t');
+        $id_anak = $r->id_anak;
+
+        if ($id_anak == 'All') {
+            $sortir = DB::table('sortir as a')
+                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                ->orderBY('a.selesai', 'ASC')
+                ->get();
+        } else {
+            $sortir = DB::table('sortir as a')
+                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+                ->where('a.id_pengawas', auth()->user()->id)
+                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                ->where('a.id_anak', $id_anak)
+                ->orderBY('a.selesai', 'ASC')
+                ->get();
+        }
 
 
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-
-            'cabut' => DB::table('sortir as a')
-                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                ->orderBY('a.selesai', 'ASC')
-                ->get(),
+            'cabut' => $sortir,
             'kelas' => DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get(),
             'anak' => $this->getAnak(),
             'bulan' => DB::table('bulan')->get(),

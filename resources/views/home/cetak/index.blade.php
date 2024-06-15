@@ -7,6 +7,7 @@
         </a>
         <x-theme.button href="#" modal="Y" idModal="gaji_global" icon="fa-file-excel" addClass="float-end"
             teks="Export Gaji Global" />
+
         <x-theme.button href="#" modal="Y" idModal="import" icon="fa-upload" addClass="float-end"
             teks="Import" />
 
