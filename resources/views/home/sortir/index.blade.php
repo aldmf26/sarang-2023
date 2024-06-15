@@ -460,6 +460,7 @@
                                 });
                                 inputChecked('cekSemuaTutup', 'cekTutup')
                                 $('.select2_add').select2({});
+                                pencarian('tblinput1', 'tablestr');
                             }
                         });
 

@@ -1,4 +1,6 @@
-<table class="table table-bordered" id="tableHalaman">
+<input type="text" id="tblinput1" class="form-control form-control-sm mb-2 float-end" style="width: 170px"
+    placeholder="cari">
+<table class="table table-bordered" id="tablestr">
     <thead>
         <tr>
             <th class="dhead">#</th>
