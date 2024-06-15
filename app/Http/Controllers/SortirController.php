@@ -41,7 +41,7 @@ class SortirController extends Controller
     {
         $bulan = date('m');
         $tgl1 = $r->tgl1 ?? date("Y-$bulan-1-27");
-        $tgl2 = $r->tgl2 ?? date('Y-m-t');
+        $tgl2 = $r->tgl2 ?? date('Y-m-26');
         $id_anak = $r->id_anak ?? 'All';
         $data = [
             'title' => 'Sortir Divisi',
