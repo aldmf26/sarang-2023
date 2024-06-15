@@ -39,7 +39,8 @@ class SortirController extends Controller
     }
     public function index(Request $r)
     {
-        $tgl1 = $r->tgl1 ?? date('Y-m-d');
+        $bulan = date('m');
+        $tgl1 = $r->tgl1 ?? date("Y-$bulan-1-27");
         $tgl2 = $r->tgl2 ?? date('Y-m-t');
         $id_anak = $r->id_anak ?? 'All';
         $data = [
