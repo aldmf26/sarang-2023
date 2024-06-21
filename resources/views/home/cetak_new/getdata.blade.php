@@ -69,11 +69,11 @@
                 </td>
                 <td class="text-end">
                     <input type="text" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
-                        value="{{ $c->pcs_awal_ctk }}">
+                        value="{{ $c->pcs_awal_ctk }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
                 </td>
                 <td class="text-end">
                     <input type="text" class="form-control text-end gr_awal{{ $c->id_cetak }}"
-                        value="{{ $c->gr_awal_ctk }}">
+                        value="{{ $c->gr_awal_ctk }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
                 </td>
 
                 <td class="text-end">
