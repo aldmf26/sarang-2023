@@ -185,6 +185,7 @@
                     function saveAkhir(id_cetak) {
                         var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
                         var pcs_awal = $('.pcs_awal' + id_cetak).val();
+                        var gr_awal = $('.gr_awal' + id_cetak).val();
                         var gr_akhir = $('.gr_akhir' + id_cetak).val();
                         var pcs_tdk_ctk = $('.pcs_tdk_ctk' + id_cetak).val();
                         var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
@@ -214,6 +215,8 @@
                                 bulan_dibayar: bulan_dibayar,
                                 pcs_hcr: pcs_hcr,
                                 tgl: tgl,
+                                pcs_awal: pcs_awal,
+                                gr_awal: gr_awal
                             },
                             success: function(response) {
                                 loadRowData(id_cetak, no)

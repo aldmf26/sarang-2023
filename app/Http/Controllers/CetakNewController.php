@@ -259,6 +259,8 @@ class CetakNewController extends Controller
             'tipe_bayar' => $r->tipe_bayar,
             'bulan_dibayar' => $r->bulan_dibayar,
             'tgl' => $r->tgl,
+            'pcs_awal_ctk' => $r->pcs_awal,
+            'gr_awal_ctk' => $r->gr_awal
         ];
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update($data);
         // }
