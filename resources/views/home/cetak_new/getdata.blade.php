@@ -67,8 +67,14 @@
                     </select>
                     {{-- {{ $c->kelas }} / Rp.{{ $c->rp_satuan }} --}}
                 </td>
-                <td class="text-end">{{ $c->pcs_awal_ctk }}</td>
-                <td class="text-end">{{ $c->gr_awal_ctk }}</td>
+                <td class="text-end">
+                    <input type="text" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
+                        value="{{ $c->pcs_awal_ctk }}">
+                </td>
+                <td class="text-end">
+                    <input type="text" class="form-control text-end gr_awal{{ $c->id_cetak }}"
+                        value="{{ $c->gr_awal_ctk }}">
+                </td>
 
                 <td class="text-end">
                     <input type="text" class="form-control text-end pcs_tdk_ctk{{ $c->id_cetak }}"
@@ -84,8 +90,7 @@
                         value="{{ $c->pcs_akhir }}" {{ $c->selesai == 'Y' ? 'readonly' : '' }}>
 
                     {{-- hidden --}}
-                    <input type="hidden" class="form-control text-end pcs_awal{{ $c->id_cetak }}"
-                        value="{{ $c->pcs_awal_ctk }}">
+
                     <input type="hidden" class="rp_satuan{{ $c->id_cetak }}" value="{{ $c->rp_satuan }}">
                     {{-- <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}"> --}}
                     <input type="hidden" class="no{{ $c->id_cetak }}" value="{{ $no + 1 }}">
@@ -167,10 +172,10 @@
                         {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
                         class="btn btn-sm btn-success btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
                     </button>
-                    <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
+                    {{-- <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
                         class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}"
                         id_cetak="{{ $c->id_cetak }}" id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
-                    </button>
+                    </button> --}}
 
                     <button {{ auth()->user()->posisi_id == '1' ? '' : 'hidden' }} type="button"
                         {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-danger btn_cancel"
