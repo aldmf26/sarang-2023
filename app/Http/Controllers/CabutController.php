@@ -1704,9 +1704,6 @@ class CabutController extends Controller
         ];
         return view('home.cabut.summary', $data);
     }
-
-
-
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;
@@ -1720,7 +1717,9 @@ class CabutController extends Controller
             'bk' => $gudang->bk,
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
+            'eoSelesai' => $gudang->eoSelesai,
             'users' => $users,
+            'users2' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
             'id_user' => $id_user,
             'bulan' => $bulan,
             'tahun' => $tahun,
@@ -1932,6 +1931,42 @@ class CabutController extends Controller
             ];
 
             DB::table('cabut')->where('no_box', $d)->update(['formulir' => 'Y']);
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('cabut.gudang')->with('sukses', 'Data Berhasil');
+    }
+
+
+    public function save_formulir_eo(Request $r)
+    {
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        sum(a.gr_eo_akhir) as gr_akhir ,a.no_box
+                        FROM eo as a 
+                        WHERE a.no_box = $d AND a.selesai = 'Y' GROUP BY a.no_box ");
+
+            $gr = $ambil->gr_akhir;
+
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+
+            if (empty($urutan_invoice->no_invoice)) {
+                $inv = 1001;
+            } else {
+                $inv = $urutan_invoice->no_invoice + 1;
+            }
+
+            $data[] = [
+                'no_invoice' => $inv,
+                'no_box' => $ambil->no_box,
+                'id_pemberi' => auth()->user()->id,
+                'id_penerima' => $r->id_penerima,
+                'pcs_awal' => 0,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'sortir',
+            ];
         }
 
         DB::table('formulir_sarang')->insert($data);
