@@ -7,6 +7,7 @@ use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\BoxKirimController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
 use App\Http\Controllers\GlobalController;
@@ -24,20 +25,34 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-
+use Spatie\Activitylog\Models\Activity;
 
 Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/403', function () {
         view('error.403');
     })->name('403');
+    // Route::get('/log', function (Request $r) {
+    //     $pengawas = DB::table('users')->select('id as id_pengawas','name')->where('posisi_id', 13)->get();
+    //     $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+    //     $data = [
+    //         'pengawas' => $pengawas,
+    //         'id_pengawas' => $id_pengawas,
+    //         'log' => Activity::join('users as b', 'activity_log.causer_id', '=', 'b.id')
+    //                     ->select('activity_log.*', 'b.name')
+    //                     ->where('activity_log.causer_id', $id_pengawas)
+    //                     ->orderBy('activity_log.id', 'desc')
+    //                     ->get(),
+    //     ];
+    //    return view('log.index',$data);
+    // })->name('log');
 
 
-    Route::get('/db', function (Request $r) {
-        if ($r->password == 'Takemor.') {
-            return view('db');
-        }
-        return view('db.login');
-    })->name('db');
+    // Route::get('/db', function (Request $r) {
+    //     if ($r->password == 'Takemor.') {
+    //         return view('db');
+    //     }
+    //     return view('db.login');
+    // })->name('db');
 
     Route::post('/dbcreate', function (Request $r) {
         $namaDataseSebelumnyaba = DB::getDatabaseName();
@@ -347,18 +362,43 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'create')->name('create');
         });
-    Route::controller(PengirimanController::class)
-        ->prefix('home/pengiriman')
+    // Route::controller(PengirimanController::class)
+    //     ->prefix('home/pengiriman_copy')
+    //     ->name('pengiriman_copy.')
+    //     ->group(function () {
+    //         Route::get('/', 'hal_awal')->name('index');
+    //         Route::get('/add', 'add')->name('add');
+    //         Route::get('/edit', 'edit')->name('edit');
+    //         Route::post('/create', 'create')->name('create');
+    //         Route::get('/template', 'template')->name('template');
+    //         Route::post('/import', 'import')->name('import');
+    //         Route::post('/update', 'update')->name('update');
+    //         Route::post('/delete', 'delete')->name('delete');
+    //     });
+    Route::controller(BoxKirimController::class)
+        ->prefix('home/gradingbj/boxkirim')
         ->name('pengiriman.')
         ->group(function () {
-            Route::get('/', 'hal_awal')->name('index');
+            Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
-            Route::post('/delete', 'delete')->name('delete');
+            Route::get('/delete', 'delete')->name('delete');
+        });
+    Route::controller(PackingListController::class)
+        ->prefix('home/gradingbj/packinglist')
+        ->name('packinglist.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
+            Route::post('/pengiriman', 'create')->name('create');
+            Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
+            Route::get('/detail', 'detail')->name('detail');
+            Route::get('/print/{no_nota}', 'print')->name('print');
+            Route::get('/delete/{no_nota}', 'delete')->name('delete');
         });
     Route::controller(SiapKirimController::class)
         ->prefix('home/siapkirim')
@@ -372,7 +412,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_grading', 'load_grading')->name('load_grading');
             Route::get('/load_detail', 'load_detail')->name('load_detail');
             Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
-            Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
+            Route::get('/get_select_grade',     'get_select_grade')->name('get_select_grade');
             Route::get('/', 'hal_awal')->name('index');
         });
     Route::controller(GradingBjController::class)
@@ -417,34 +457,34 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/detail', 'detail')->name('detail');
         });
 
-    Route::controller(PackingListController::class)
-        ->prefix('home/packinglist')
-        ->name('packinglist.')
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/tambahgr', function () {
-                return view('tambahgr');
-            });
-            Route::post('/tambahgr', function (Request $r) {
-                for ($i = 0; $i < count($r->nm_grade); $i++) {
-                    if ($r->nm_grade[$i] != '') {
-                        DB::table('tb_grade')->insert([
-                            'nm_grade' => $r->nm_grade[$i],
-                            'urutan' => $i + 1
-                        ]);
-                    }
-                }
-            })->name('tambahgr');
-            Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
-            Route::get('/add_box_kirim', 'add_box_kirim')->name('add_box_kirim');
-            Route::post('/create_box_kirim', 'create_box_kirim')->name('create_box_kirim');
-            Route::get('/detail', 'detail')->name('detail');
-            Route::post('/update', 'update')->name('update');
-            Route::get('/edit', 'edit')->name('edit');
-            Route::get('/print/{no_nota}', 'print')->name('print');
-            Route::get('/delete/{no_nota}', 'delete')->name('delete');
-            Route::post('/create', 'create')->name('create');
-            Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
-            Route::get('/gudangKirim', 'gudangKirim')->name('gudangKirim');
-        });
+    // Route::controller(PackingListController::class)
+    //     ->prefix('home/packinglist')
+    //     ->name('packinglist.')
+    //     ->group(function () {
+    //         Route::get('/', 'index')->name('index');
+    //         Route::get('/tambahgr', function () {
+    //             return view('tambahgr');
+    //         });
+    //         Route::post('/tambahgr', function (Request $r) {
+    //             for ($i = 0; $i < count($r->nm_grade); $i++) {
+    //                 if ($r->nm_grade[$i] != '') {
+    //                     DB::table('tb_grade')->insert([
+    //                         'nm_grade' => $r->nm_grade[$i],
+    //                         'urutan' => $i + 1
+    //                     ]);
+    //                 }
+    //             }
+    //         })->name('tambahgr');
+    //         Route::get('/load_tbh', 'load_tbh')->name('load_tbh');
+    //         Route::get('/add_box_kirim', 'add_box_kirim')->name('add_box_kirim');
+    //         Route::post('/create_box_kirim', 'create_box_kirim')->name('create_box_kirim');
+    //         Route::get('/detail', 'detail')->name('detail');
+    //         Route::post('/update', 'update')->name('update');
+    //         Route::get('/edit', 'edit')->name('edit');
+    //         Route::get('/print/{no_nota}', 'print')->name('print');
+    //         Route::get('/delete/{no_nota}', 'delete')->name('delete');
+    //         Route::post('/create', 'create')->name('create');
+    //         Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
+    //         Route::get('/gudangKirim', 'gudangKirim')->name('gudangKirim');
+    //     });
 });

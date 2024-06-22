@@ -42,7 +42,7 @@ class GradingBjController extends Controller
     public function index(Request $r)
     {
         $data = [
-            'title' => 'Grading BJ',
+            'title' => 'Grading',
             'formulir' => $this->getDataMaster('formulir')
         ];
 
@@ -113,7 +113,7 @@ class GradingBjController extends Controller
             GROUP BY a.no_box_grading"
         );
         $data = [
-            'title' => 'gudang siap kirim',
+            'title' => 'Gudang Siap Kirim',
             'gudang' => $gudang
         ];
         return view('home.gradingbj.gudang_siap_kirim', $data);
