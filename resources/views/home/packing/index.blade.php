@@ -63,30 +63,13 @@
             }
         </style>
         <section class="row">
-            @if ($kategori == 'packing')
-                <div class="col-lg-4 mb-2">
-                    @include('home.gudang_tampilan.gudangSiapKirim')
-                </div>
-                <div class="col-lg-4 mb-2">
-                    @include('home.gudang_tampilan.packingList')
-                </div>
-                <div class="col-lg-4 mb-2">
-                    @include('home.gudang_tampilan.boxBarcode')
-                </div>
-            @else
-                <div class="col-lg-5 mb-2">
-                    @include('home.gudang_tampilan.bjSiapKirim')
-                </div>
-                <div class="col-lg-5 mb-2">
-                    @include('home.gudang_tampilan.gudangSiapKirim')
-                </div>
-            @endif
+           
 
             <div class="col-lg-12">
                 <hr>
             </div>
             <div class="col-lg-8">
-                @include('home.packing.nav', ['name' => 'index'])
+                {{-- @include('home.packing.nav', ['name' => 'index']) --}}
             </div>
             <div class="col-lg-4 mb-2 ">
                 <table>

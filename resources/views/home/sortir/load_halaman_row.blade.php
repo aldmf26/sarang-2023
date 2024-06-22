@@ -9,14 +9,18 @@
             id_sortir="{{ $d->id_sortir }}">{{ $d->no_box }}</a>
     </td>
     <td>
-        <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
-            {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
-            <option value="">Pilih Anak</option>
-            @foreach ($anak as $a)
-                <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
-                    {{ ucwords($a->nama) }}</option>
-            @endforeach
-        </select>
+        @if ($d->selesai == 'Y')
+                        {{$d->nama}}
+                    @else
+                    <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
+                        {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
+                        <option value="">Pilih Anak</option>
+                        @foreach ($anak as $a)
+                            <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
+                                {{ ucwords($a->nama) }}</option>
+                        @endforeach
+                    </select>
+                    @endif
     </td>
     <td>
         <select name="" id="" class="form-control id_kelas{{ $d->id_sortir }}"

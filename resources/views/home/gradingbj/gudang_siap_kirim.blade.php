@@ -1,11 +1,6 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="7">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
-        <div class="d-flex justify-content-between">
-            <h6>{{ $title }}</h6>
-            <div>
-                {{-- <x-theme.button href="{{ route('gradingbj.gudang_siap_kirim') }}" icon="fa-warehouse" teks="Gudang Siap Kirim" /> --}}
-            </div>
-        </div>
+        @include('home.gradingbj.nav')
     </x-slot>
 
     <x-slot name="cardBody">
