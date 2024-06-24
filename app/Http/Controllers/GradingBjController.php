@@ -8,8 +8,10 @@ use App\Models\PengirimanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GradingBjController extends Controller
 {
@@ -51,6 +53,9 @@ class GradingBjController extends Controller
 
     public function grading(Request $r)
     {
+        if ($r->submit == 'export') {
+            return $this->exportGrading($r->no_box);
+        }
         $getFormulir = $this->getDataMaster('formulir', $r->no_box);
         $no_invoice = 1001;
         $gradeStatuses = ['bentuk', 'turun'];
@@ -69,11 +74,132 @@ class GradingBjController extends Controller
         return view('home.gradingbj.grading', $data);
     }
 
+    public function exportGrading($no_box)
+    {
+        $getFormulir = $this->getDataMaster('formulir', $no_box);
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Template Grading');
+        $koloms = [
+            'A' => 'box sortir',
+            'B' => 'box pengiriman',
+            'C' => 'pcs',
+            'D' => 'gr',
+            'E' => 'grade',
+
+            'H' => 'box sortir dipilih',
+            'I' => 'pcs',
+            'J' => 'gr',
+        ];
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A1:E1')->applyFromArray($styleBold);
+        $sheet->getStyle('H1:J1')->applyFromArray($styleBold);
+
+        $no = 2;
+        foreach ($getFormulir as $item) {
+            $sheet->setCellValue('H' . $no, $item->no_box);
+            $sheet->setCellValue('I' . $no, $item->pcs_awal);
+            $sheet->setCellValue('J' . $no, $item->gr_awal);
+
+            $no++;
+        }
+
+        $sheet->getStyle('H1:J' . $no - 1)->applyFromArray($styleBaris);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Template Grading";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+
     public function getNoInvoiceTambah()
     {
         $cekInvoice = DB::selectOne("SELECT no_invoice FROM `grading` ORDER by no_invoice DESC limit 1;");
         $noinvoice = isset($cekInvoice->no_invoice) ? $cekInvoice->no_invoice + 1 : 1001;
         return $noinvoice;
+    }
+
+    public function import(Request $r)
+    {
+        $file = $r->file('file');
+        $spreadsheet = IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+        $noinvoice = $this->getNoInvoiceTambah();
+
+        $admin = auth()->user()->name;
+        $tgl = date('Y-m-d');
+
+        DB::beginTransaction();
+        try {
+            foreach (array_slice($sheetData, 1) as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
+                if (
+                    empty($row[0]) ||
+                    empty($row[1]) ||
+                    empty($row[2]) ||
+                    empty($row[3]) ||
+                    empty($row[4])
+                ) {
+                    $pesan = [
+                        empty($row[0]) => "BOX SORTIR",
+                        empty($row[1]) => "BOX PENGIRIMAN",
+                        empty($row[2]) => "PCS",
+                        empty($row[3]) => "GR",
+                        empty($row[4]) => "GRADE",
+                    ];
+                    DB::rollBack();
+                    return redirect()->route('gradingbj.index')->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
+                } else {
+                    $cekGrade = DB::table('tb_grade')->where('nm_grade', $row[4])->first();
+                    if(!$cekGrade){
+                        DB::rollBack();
+                        return redirect()->route('gradingbj.index')->with('error', "GRADE " . $row[4] . ' TIDAK TERDAFTAR');
+                    }
+
+                    DB::table('grading')->insert([
+                        'id_grade' => $cekGrade->id_grade,
+                        'no_box_grading' => $row[1],
+                        'no_box_sortir' => $row[0],
+                        'pcs' => $row[2],
+                        'gr' => $row[3],
+                        'admin' => $admin,
+                        'tgl' => $tgl,
+                        'no_invoice' => $noinvoice,
+                    ]);
+                }
+            }
+            DB::commit();
+            return redirect()->route('gradingbj.index')->with('sukses', 'Data berhasil import');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function create(Request $r)
@@ -106,14 +232,18 @@ class GradingBjController extends Controller
     public function gudang_siap_kirim(Request $r)
     {
         $gudang = DB::select(
-            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr 
+            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, c.pcs as pcs_pengiriman, c.gr as gr_pengiriman
             FROM `grading` as a
             left JOIN tb_grade as b on a.id_grade = b.id_grade
+            LEFT JOIN (
+                select no_box, sum(pcs) as pcs,sum(gr) as gr from pengiriman group by no_box
+            ) as c on c.no_box = a.no_box_grading
             WHERE a.id_grade is not null
-            GROUP BY a.no_box_grading"
+            GROUP BY a.no_box_grading 
+            ORDER BY a.no_box_grading ASC"
         );
         $data = [
-            'title' => 'Gudang Siap Kirim',
+            'title' => 'Stock Siap Kirim',
             'gudang' => $gudang
         ];
         return view('home.gradingbj.gudang_siap_kirim', $data);

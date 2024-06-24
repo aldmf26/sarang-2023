@@ -21,8 +21,8 @@
                     $ttlPcs = 0;
                     $ttlGr = 0;
                     foreach ($gudang as $d) {
-                        $ttlPcs += $d->pcs;
-                        $ttlGr += $d->gr;
+                        $ttlPcs += $d->pcs - $d->pcs_pengiriman;
+                        $ttlGr += $d->gr - $d->gr_pengiriman;
                     }
                 @endphp
                 <tr>
@@ -38,8 +38,8 @@
                             <td>SP{{ $d->no_box }}</td>
                             <td class="text-primary pointer detail" data-nobox="{{ $d->no_box }}">{{ $d->grade }}
                             </td>
-                            <td class="text-end">{{ $d->pcs }}</td>
-                            <td class="text-end">{{ $d->gr }}</td>
+                            <td class="text-end">{{ $d->pcs - $d->pcs_pengiriman }}</td>
+                            <td class="text-end">{{ $d->gr - $d->gr_pengiriman }}</td>
                             <td align="right">
                                 @php
                                     $param = ['no_box' => $d->no_box, 'selesai' => $d->selesai];

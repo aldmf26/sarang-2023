@@ -83,6 +83,14 @@
                        
                         <!-- Add more rows as needed -->
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Total :</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Susut :</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
