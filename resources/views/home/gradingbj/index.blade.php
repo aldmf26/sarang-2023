@@ -10,16 +10,21 @@
             </div>
             <div class="col-lg-12 mt-2">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-8">
                         <input type="text" id="tbl1input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
-                    <div class="col-lg-3">
+
+                    <div class="col-lg-4">
                         <form action="{{ route('gradingbj.grading') }}" method="post">
                             @csrf
+                            <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
+                                href="">Import</a>
+                            <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
+                                href="" x-show="cek.length">Export</button>
                             <input type="hidden" name="no_box" class="form-control" :value="cek">
-                            <button x-transition x-show="cek.length" class="btn-block btn btn-sm btn-primary float-end"
-                                type="submit">
+                            <button name="submit" value="grading" x-transition x-show="cek.length"
+                                class="btn btn-sm btn-primary" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Grading
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
@@ -28,7 +33,8 @@
                     </div>
                 </div>
                 <div style="overflow-y: scroll; height: 500px">
-                    <table id="tbl1" class="table table-hover table-striped">
+                    <x-theme.alert pesan="{{ session()->get('error') }}" />
+                    <table id="tbl1" class="table table-hover table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th class="dhead">#</th>
@@ -64,6 +70,13 @@
                 </div>
             </div>
         </section>
+
+        <form action="{{ route('gradingbj.import') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Import" idModal="import">
+                <input type="file" name="file" class="form-control">
+            </x-theme.modal>
+        </form>
         @section('scripts')
             <script>
                 pencarian('tbl1input', 'tbl1')

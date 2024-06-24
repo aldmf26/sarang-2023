@@ -1,14 +1,14 @@
 
 @php
     $namaRoute = request()->route()->getName();
-    $routes = [
+    $routes  = [
         'gradingbj.index' => [
             'route' => 'gradingbj.index',
             'teks' => 'Grading',
         ],
         'gradingbj.gudang_siap_kirim' => [
             'route' => 'gradingbj.gudang_siap_kirim',
-            'teks' => 'Gudang Siap Kirim',
+            'teks' => 'Stock Siap Kirim',
         ],
         'pengiriman.add' => [
             'route' => 'pengiriman.add',
@@ -31,6 +31,7 @@
 @endphp
 
 @foreach ($routes as $key => $route)
+
     {{-- @if ($namaRoute != $key) --}}
     <x-theme.button variant="{{ $namaRoute == $key ? 'info' : 'primary' }}" href="{{ route($route['route']) }}"
         icon="{{ $route['icon'] ?? 'fa-warehouse' }}" teks="{{ $route['teks'] }}" />
