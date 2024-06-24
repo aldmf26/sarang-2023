@@ -10,48 +10,19 @@ class LaporanModel extends Model
 {
     use HasFactory;
 
-    public static function LaporanPerPartai($bulan)
+    public static function LaporanPerPartai()
     {
-        $result = DB::select("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.hrga_satuan) as hrga_satuan,
-        sum(a.gr_awal * a.hrga_satuan) as ttl_rp, if(b.cost_cbt is null ,0 ,b.cost_cbt) as cost_cbt , if(d.cost_eo is null,0,d.cost_eo) as cost_eo , if(c.cost_ctk is null,0,c.cost_ctk) as cost_ctk, e.pcs as pcs_akhir, e.gr as gr_akhir, if(f.cost_sortir is null,0,f.cost_sortir) as cost_sortir, b.pcs_cbt, b.gr_cbt, d.gr_akhir_eo
-        FROM bk as a
-        left join (
-        SELECT sum(b.pcs_akhir) as pcs_cbt, sum(b.gr_akhir) as gr_cbt, c.nm_partai,  sum(b.ttl_rp) as cost_cbt
-            FROM cabut as b 
-            left join bk as c on c.no_box = b.no_box and c.kategori = 'cabut'
-            where b.bulan_dibayar = '$bulan'
-            group by c.nm_partai
-        ) as b on b.nm_partai = a.nm_partai
-        
-        left join (
-            SELECT e.nm_partai, sum(d.ttl_rp) as cost_ctk
-            FROM cetak_new as d
-            left join bk as e on e.no_box = d.no_box and e.kategori = 'cabut'
-            where d.bulan_dibayar = '$bulan'
-            group by e.nm_partai
-        ) as c on c.nm_partai = a.nm_partai
-        
-        left join (
-            SELECT sum(f.gr_eo_akhir) as gr_akhir_eo, g.nm_partai, sum(f.ttl_rp) as cost_eo
-            FROM eo as f
-            left join bk as g on f.no_box = g.no_box and g.kategori = 'cabut'
-            where f.bulan_dibayar = '$bulan'
-            group by g.nm_partai
-        ) as d on d.nm_partai = a.nm_partai
+        $result = DB::select("SELECT a.nm_partai, a.no_box, a.pcs_awal, a.gr_awal,a.hrga_satuan,
+        b.pcs_akhir as pcs_cbt, b.gr_akhir as gr_cbt, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
+        c.pcs_akhir as pcs_ctk, c.gr_akhir as gr_ctk, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp ) / c.gr_akhir) as rp_gram_ctk, ((1-((c.gr_akhir + c.gr_tdk_cetak) / a.gr_awal)) * 100) as sst_ctk,
+        d.pcs_akhir as pcs_str, d.gr_akhir as gr_str, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / c.gr_akhir) as rp_gram_str, ((1-(d.gr_akhir / a.gr_awal)) * 100) as sst_str,
 
-        left join bk_akhir as e on e.nm_partai = a.nm_partai
-
-        left join (
-            SELECT i.nm_partai, sum(h.ttl_rp) as cost_sortir
-            FROM sortir as h
-            left join bk as i on h.no_box = i.no_box and i.kategori = 'cabut'
-            where h.bulan = '$bulan'
-            group by i.nm_partai
-        ) as f on f.nm_partai = a.nm_partai
-        
-        where a.kategori = 'cabut'
-        GROUP by a.nm_partai;");
-
+        (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str
+        FROM bk as a 
+        left join cabut as b on b.no_box = a.no_box
+        left join cetak_new as c on c.no_box = a.no_box 
+        left join sortir as d on d.no_box = a.no_box
+        where a.kategori = 'cabut' and a.baru = 'baru';");
         return $result;
     }
 
@@ -108,5 +79,47 @@ class LaporanModel extends Model
         order by a.tgl ASC;");
 
         return $result;
+    }
+
+    public static function LaporanDetailBox($no_box)
+    {
+        $cabut = DB::selectOne("SELECT b.name as pgws, c.nama as nm_anak, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, a.ttl_rp,
+        (d.hrga_satuan * d.gr_awal) as cost_bk
+        FROM cabut as a 
+        left join users as b on b.id = a.id_pengawas
+        left join tb_anak as c on c.id_anak = a.id_anak
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+        where a.no_box = '$no_box'
+        ");
+
+        $cetak = DB::selectOne("SELECT b.name as pgws, c.nama as nm_anak, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, a.pcs_akhir, a.gr_akhir, a.ttl_rp,
+        (d.hrga_satuan * d.gr_awal) as cost_bk, e.ttl_rp as cost_cbt
+        FROM cetak_new as a
+        left join users as b on b.id = a.id_pengawas
+        left join tb_anak as c on c.id_anak = a.id_anak
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+        left join cabut as e on e.no_box = a.no_box
+        where a.no_box = '$no_box'
+        ");
+
+        $sortir = DB::selectOne("SELECT b.name as pgws, c.nama as nm_anak, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, a.ttl_rp,
+        (d.hrga_satuan * d.gr_awal) as cost_bk, e.ttl_rp as cost_cbt, f.ttl_rp as cost_ctk
+        FROM sortir as a
+        left join users as b on b.id = a.id_pengawas
+        left join tb_anak as c on c.id_anak = a.id_anak
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+        left join cabut as e on e.no_box = a.no_box
+        left join cetak_new as f on f.no_box = a.no_box
+        where a.no_box = '$no_box'
+        ");
+
+
+        return (object)[
+
+            'cabut' => $cabut,
+            'cetak' => $cetak,
+            'sortir' => $sortir
+
+        ];
     }
 }
