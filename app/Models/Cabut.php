@@ -665,17 +665,26 @@ class Cabut extends Model
                 ;");
 
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
+        $penerima3 = $id_user == null || $posisi == 1 ? '' : "AND d.id_pengawas = $id_user";
+
         $cabut = DB::select("SELECT a.no_box, a.pcs_awal as pcs, a.gr_awal as gr , b.hrga_satuan, (a.gr_awal * b.hrga_satuan) as ttl_rp,
         c.name as penerima, b.nm_partai
         FROM cabut as a
         left join bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
-        WHERE a.selesai = 'T'  AND a.no_box != 9999 $penerima2 and b.baru = 'baru'");
+        WHERE a.selesai = 'T'  AND a.no_box != 9999 $penerima2 and b.baru = 'baru'     
+        UNION ALL
+        SELECT d.no_box, 0, d.gr_eo_awal as gr, e.hrga_satuan, (d.gr_eo_awal * e.hrga_satuan) as ttl_rp, f.name as penerima, e.nm_partai
+        FROM eo as d
+        left join bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'
+        left join users as f on f.id = d.id_pengawas
+        WHERE d.selesai = 'T'  AND d.no_box != 9999 $penerima3 and e.baru = 'baru';");
 
         return (object)[
             'bk' => $bk,
             'cabut' => $cabut,
             'cabutSelesai' => self::gudangCabutSelesai($id_user),
+            'eoSelesai' => self::gudangEoSelesai($id_user),
         ];
     }
 
@@ -697,5 +706,17 @@ class Cabut extends Model
         GROUP BY a.id_pengawas, a.no_box 
         HAVING min(a.selesai) = 'Y' $penerima2 AND a.no_box != 9999 
         ORDER BY a.no_box ASC");
+    }
+    public static function gudangEoSelesai($id_user = null)
+    {
+        $posisi = auth()->user()->posisi_id;
+        $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
+        return DB::select("SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_eo_akhir as gr, a.ttl_rp as ttl_rp_cbt
+        FROM eo as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join users as c on c.id = a.id_pengawas
+        where a.selesai ='Y' and b.baru = 'baru'  $penerima2
+        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+        order by a.no_box ASC;");
     }
 }

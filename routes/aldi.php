@@ -213,6 +213,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/gudang', 'gudang')->name('gudang');
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::post('/save_formulir_eo', 'save_formulir_eo')->name('save_formulir_eo');
         });
     Route::controller(GlobalController::class)
         ->prefix('home/global')

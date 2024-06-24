@@ -18,9 +18,9 @@ class Laporan_akhir extends Controller
         }
         $data = [
             'title' => 'Laporan Partai',
-            'partai' => LaporanModel::LaporanPerPartai($bulan),
+            'partai' => LaporanModel::LaporanPerPartai(),
             'bulan' => $bulan,
-            'oprasional' => DB::table('oprasional')->where('bulan_dibayar', $bulan)->first()
+            // 'oprasional' => DB::table('oprasional')->where('bulan_dibayar', $bulan)->first()
         ];
         return view('home.laporan.lapPerpartai', $data);
     }
@@ -99,5 +99,19 @@ class Laporan_akhir extends Controller
 
         DB::table('oprasional')->insert($data);
         return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
+    }
+
+    public function get_detail(Request $r)
+    {
+        $data = [
+            'title' => 'Detail Box',
+            'no_box' => $r->no_box,
+            'partai' => $r->partai,
+            'cabut' => LaporanModel::LaporanDetailBox($r->no_box)->cabut,
+            'cetak' => LaporanModel::LaporanDetailBox($r->no_box)->cetak,
+            'sortir' => LaporanModel::LaporanDetailBox($r->no_box)->sortir,
+        ];
+
+        return view('home.laporan.detail', $data);
     }
 }

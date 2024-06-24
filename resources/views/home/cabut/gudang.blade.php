@@ -257,6 +257,151 @@
                         </x-theme.modal>
                     </form>
                 </div>
+                <div>
+                    <a class="btn btn-sm btn-primary"
+                        href="{{ route('cabut.export_gudang', ['bulan' => $bulan, 'tahun' => $tahun, 'id_user' => $id_user]) }}"><i
+                            class="fas fa-print"></i> Export All</a>
+                    <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah2"
+                        teks="serah" />
+                    <x-theme.button href="{{ route('gudangsarang.invoice') }}" icon="fa-clipboard-list"
+                        teks="Po Cetak" />
+                </div>
+                <div class="col-lg-4 mt-2" x-data="{
+                    cek: [],
+                    selectedItem2: [],
+                    tambah2(no_box, gr, ttl_rp_cbt, ttl_rp) {
+                        const selectedItem2 = this.selectedItem2
+                        const cetak = this.cetak
+                
+                        const index = selectedItem2.findIndex(item => item.no_box === no_box);
+                        if (index === -1) {
+                            selectedItem2.push({
+                                no_box: no_box,
+                                gr: parseFloat(gr),
+                                ttl_rp_cbt: parseFloat(ttl_rp_cbt),
+                                ttl_rp: parseFloat(ttl_rp),
+                            });
+                        } else {
+                            selectedItem2.splice(index, 1);
+                        }
+                
+                    },
+                    formatNumber(value) {
+                        // Format number with '.' as thousands separator and ',' as decimal separator
+                        return new Intl.NumberFormat('id-ID', { style: 'decimal', maximumFractionDigits: 0 }).format(value);
+                    }
+                }">
+                    <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
+                        placeholder="cari">
+                    <div style="overflow-y: scroll; height: 700px">
+
+                        <table id="tbl3" class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '7' : '6' }}">
+                                        <span>Box selesai siap sortir</span>
+
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="dhead text-center {{ $posisi == 1 ? '' : 'd-none' }}">Penerima</th>
+                                    <th class="dhead text-center">No Box</th>
+                                    <th class="dhead text-end">Pcs</th>
+                                    <th class="dhead text-end">Gr</th>
+                                    <th class="dhead text-end">Total Rp Bk</th>
+                                    <th class="dhead text-end">Total Rp Cbt</th>
+                                    <th class="dhead "></th>
+                                </tr>
+                                <tr>
+                                    <th class="dheadstock text-center">Total</th>
+                                    <th class="dheadstock text-center {{ $posisi == 1 ? '' : 'd-none' }}"></th>
+                                    <th class="dheadstock text-end">0</th>
+                                    <th class="dheadstock text-end">{{ number_format(ttl($eoSelesai)['gr'], 0) }}
+                                    </th>
+                                    <th class="dheadstock text-end">
+                                        {{ number_format(ttl($eoSelesai)['ttl_rp'], 0) }}
+                                    </th>
+                                    <th class="dheadstock text-end">
+                                        {{ number_format(ttl($eoSelesai)['ttl_rp_cbt'], 0) }}
+                                    </th>
+                                    <th class="dheadstock text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($eoSelesai as $d)
+                                    <tr>
+                                        <td align="center" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ $d->pengawas }}</td>
+                                        <td align="center">{{ $d->no_box }}</td>
+                                        <td align="right">0</td>
+                                        <td align="right">{{ $d->gr }}</td>
+                                        <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                        <td align="right">{{ number_format($d->ttl_rp_cbt, 0) }}</td>
+                                        <td align="center">
+                                            <input type="checkbox"
+                                                @change="tambah2({{ $d->no_box }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
+                                                value="{{ $d->no_box }}" x-model="cek">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- modal ambil box ke cetak --}}
+                    <form action="{{ route('cabut.save_formulir_eo') }}" method="post">
+                        @csrf
+                        <x-theme.modal idModal="tambah2" title="tambah box" btnSave="Y">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="">Tgl</label>
+                                        <input value="{{ date('Y-m-d') }}" type="date" name="tgl"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="">Pgws Penerima</label>
+                                    <select required name="id_penerima" class="form-control " id="">
+                                        <option value="">- Pilih pgws -</option>
+                                        @foreach ($users2 as $d)
+                                            <option value="{{ $d->id }}">{{ strtoupper($d->name) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="dhead">No Box</th>
+                                                <th class="dhead text-end">Pcs</th>
+                                                <th class="dhead text-end">Gr</th>
+                                                <th class="dhead text-end">Total Rp Bk</th>
+                                                <th class="dhead text-end">Total Rp Eo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <input class="d-none" name="no_box[]" type="text"
+                                                :value="cek">
+                                            <template x-for="item in selectedItem2">
+                                                <tr>
+
+                                                    <td x-text="item.no_box"></td>
+                                                    <td align="right">0</td>
+                                                    <td align="right" x-text="item.gr"></td>
+                                                    <td align="right" x-text="formatNumber(item.ttl_rp)"></td>
+                                                    <td align="right" x-text="formatNumber(item.ttl_rp_cbt)"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </x-theme.modal>
+                    </form>
+                </div>
             </div>
         </div>
         @section('scripts')

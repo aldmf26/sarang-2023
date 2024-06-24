@@ -203,6 +203,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/summaryCetak', 'summaryCetak')->name('summaryCetak');
             Route::get('/get_detail_sortir', 'get_detail_sortir')->name('get_detail_sortir');
             Route::post('/save_oprasional', 'save_oprasional')->name('save_oprasional');
+            Route::get('/get_detail', 'get_detail')->name('get_detail');
         });
     Route::controller(GudangSarangController::class)
         ->prefix('home/gudangsarang')
