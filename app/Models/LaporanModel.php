@@ -16,12 +16,29 @@ class LaporanModel extends Model
         b.pcs_akhir as pcs_cbt, b.gr_akhir as gr_cbt, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
         c.pcs_akhir as pcs_ctk, c.gr_akhir as gr_ctk, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp ) / c.gr_akhir) as rp_gram_ctk, ((1-((c.gr_akhir + c.gr_tdk_cetak) / a.gr_awal)) * 100) as sst_ctk,
         d.pcs_akhir as pcs_str, d.gr_akhir as gr_str, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / c.gr_akhir) as rp_gram_str, ((1-(d.gr_akhir / a.gr_awal)) * 100) as sst_str,
-
-        (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str
+        e.gr_eo_akhir as gr_eo, (((a.hrga_satuan * a.gr_awal) + e.ttl_rp ) / e.gr_eo_akhir) as rp_gram_eo, ((1-(e.gr_eo_akhir / a.gr_awal)) * 100) as sst_eo,
+        (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str, e.ttl_rp as cost_eo, f.ttl_rp as cost_cu
         FROM bk as a 
         left join cabut as b on b.no_box = a.no_box
-        left join cetak_new as c on c.no_box = a.no_box 
+
+        left join (
+            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp
+            FROM cetak_new as c
+            left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak
+            where d.kategori= 'CTK'
+        ) as c on c.no_box = a.no_box
+
         left join sortir as d on d.no_box = a.no_box
+        left join eo as e on e.no_box = a.no_box
+
+        left join (
+            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp
+            FROM cetak_new as c
+            left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak
+            where d.kategori= 'CU'
+        ) as f on f.no_box = a.no_box
+
+
         where a.kategori = 'cabut' and a.baru = 'baru';");
         return $result;
     }

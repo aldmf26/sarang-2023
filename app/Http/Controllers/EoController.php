@@ -157,6 +157,7 @@ class EoController extends Controller
             //     'tgl' => $r->tgl_ambil[$i]
             // ]);
             $paket = DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->first();
+
             $rp_target = $paket->rupiah * $r->gr_eo_awal[$i];
             $data = [
                 'no_box' => $r->no_box[$i] ?? '9999',
@@ -168,7 +169,7 @@ class EoController extends Controller
                 'rp_target' => $rp_target,
                 'tgl_input' => date('Y-m-d'),
             ];
-            if($id == '9999') {
+            if ($id == '9999') {
                 DB::table('eo')->insert($data);
             } else {
                 DB::table('eo')->where('id_eo', $r->id_eo[$i])->update($data);
@@ -295,10 +296,12 @@ class EoController extends Controller
                 'b.nama',
                 'c.kelas',
                 'c.rupiah',
+                'c.id_paket',
+                'a.rp_target',
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.no_box', '!=', '9999'],['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
+            ->where([['a.no_box', '!=', '9999'], ['a.selesai', 'T'], ['a.id_pengawas', auth()->user()->id]])
             ->orderBy('a.id_eo', 'DESC')
             ->get();
         $data = [
@@ -316,10 +319,15 @@ class EoController extends Controller
 
     public function input_akhir(Request $r)
     {
+        $eo = DB::selectOne("SELECT b.id_paket, a.rp_target , b.rupiah FROM eo as a 
+        left join tb_kelas as b on a.id_kelas = b.id_kelas
+        where a.id_eo = $r->id_eo");
+        $ttl_rp =  $eo->id_paket == 15 ? $eo->rp_target : $eo->rupiah * $r->gr_eo_akhir;
+
         DB::table('eo')->where('id_eo', $r->id_eo)->update([
             'gr_eo_akhir' => $r->gr_eo_akhir,
             'tgl_serah' => $r->tgl_serah,
-            'ttl_rp' => $r->ttl_rp,
+            'ttl_rp' => $ttl_rp,
             'bulan_dibayar' => $r->bulan,
         ]);
     }
@@ -412,7 +420,7 @@ class EoController extends Controller
         return Excel::download(new EoExport($tbl, $view), 'Export EO.xlsx');
     }
     public function ditutup(Request $r)
-    {  
+    {
 
         $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
         foreach ($r->datas as $d) {
@@ -428,7 +436,7 @@ class EoController extends Controller
 
         $ttlPcsBk = 0;
         $ttlGrBk = 0;
-     
+
         $ttlPcsAwal = 0;
         $ttlGrAwal = 0;
         $ttlPcsAkhir = 0;

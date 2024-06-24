@@ -360,14 +360,16 @@
                         count: count
                     };
 
-                    var floatFields = ['gr_eo_akhir', 'gr_eo_awal', 'rupiah', 'ttl_rp', 'id_eo', 'tgl_serah', 'bulan'];
+                    var floatFields = ['gr_eo_akhir', 'gr_eo_awal', 'rupiah', 'ttl_rp', 'id_eo', 'tgl_serah', 'bulan',
+                        'id_paket', 'rp_target'
+                    ];
 
                     floatFields.forEach((fieldName) => {
                         data[fieldName] = parseFloat(row.find(`input[name='${fieldName}${count}[]']`).val()) ||
                             0;
                     })
 
-                    var ttl_rp = data.rupiah == 0 ? 50000 : data.rupiah * data.gr_eo_akhir
+                    var ttl_rp = data.id_paket == 15 ? data.rp_target : data.rupiah * data.gr_eo_akhir
 
                     var setRupiah = ttl_rp.toLocaleString('id-ID', {
                         maximumFractionDigits: 0

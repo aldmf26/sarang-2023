@@ -36,6 +36,10 @@
                         <td class="fs-bold">{{ strtoupper($x->nama) }}</td>
                         <td>
                             <input type="text" readonly value="{{ $x->kelas }}" class="form-control">
+                            <input type="hidden" name="id_paket{{ $i + 1 }}[]" readonly
+                                value="{{ $x->id_paket }}" class="form-control">
+                            <input type="hidden" name="rp_target{{ $i + 1 }}[]" readonly
+                                value="{{ $x->rp_target }}" class="form-control">
                         </td>
                         <td>
                             <input readonly value="{{ $x->gr_eo_awal }}" name="gr_eo_awal{{ $i + 1 }}[]"
