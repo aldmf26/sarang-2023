@@ -34,6 +34,7 @@
                             <th class="dhead" rowspan="2">no box</th>
                             <th class="text-center dhead" colspan="3">BK</th>
                             <th class="text-center dhead" colspan="4">Cabut</th>
+                            <th class="text-center dhead" colspan="4">Eox/Eol</th>
                             <th class="text-center dhead" colspan="4">Cetak</th>
                             <th class="text-center dhead" colspan="4">Sortir</th>
                             <th class="dhead" rowspan="2">Cost bk</th>
@@ -49,18 +50,23 @@
                             <th class="dhead text-end">gr awal</th>
                             <th class="dhead text-end">rp/gr</th>
 
-                            <th class="dhead text-end">pcs awal</th>
-                            <th class="dhead text-end">gr awal</th>
+                            <th class="dhead text-end">pcs akhir</th>
+                            <th class="dhead text-end">gr akhir</th>
                             <th class="dhead text-end">rp/gr</th>
                             <th class="dhead text-end">susut%</th>
 
-                            <th class="dhead text-end">pcs awal</th>
-                            <th class="dhead text-end">gr awal</th>
+                            <th class="dhead text-end">pcs akhir</th>
+                            <th class="dhead text-end">gr akhir</th>
                             <th class="dhead text-end">rp/gr</th>
                             <th class="dhead text-end">susut%</th>
 
-                            <th class="dhead text-end">pcs awal</th>
-                            <th class="dhead text-end">gr awal</th>
+                            <th class="dhead text-end">pcs akhir</th>
+                            <th class="dhead text-end">gr akhir</th>
+                            <th class="dhead text-end">rp/gr</th>
+                            <th class="dhead text-end">susut%</th>
+
+                            <th class="dhead text-end">pcs akhir</th>
+                            <th class="dhead text-end">gr akhir</th>
                             <th class="dhead text-end">rp/gr</th>
                             <th class="dhead text-end">susut%</th>
 
@@ -87,6 +93,11 @@
                                 <td class="text-end">{{ number_format($p->rp_gram_cbt, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->sst_cbt, 0) }} %</td>
 
+                                <td class="text-end">0</td>
+                                <td class="text-end">{{ $p->gr_eo ?? 0 }}</td>
+                                <td class="text-end">{{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->sst_eo ?? 0, 0) }} %</td>
+
                                 <td class="text-end">{{ $p->pcs_ctk }}</td>
                                 <td class="text-end">{{ $p->gr_ctk }}</td>
                                 <td class="text-end">{{ number_format($p->rp_gram_ctk, 0) }}</td>
@@ -101,6 +112,7 @@
                                 <td class="text-end">{{ number_format($p->cost_cbt, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_ctk, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_str, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
                             </tr>
                         @endforeach
 
