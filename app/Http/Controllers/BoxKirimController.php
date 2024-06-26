@@ -168,4 +168,34 @@ class BoxKirimController extends Controller
         DB::table('pengiriman')->whereIn('id_pengiriman', $id_pengiriman)->delete();
         return redirect()->route('pengiriman.index')->with('success', 'Data dihapus');
     }
+
+
+    public function kirim(Request $r)
+    {
+        $admin = auth()->user()->name;
+        $tgl_input = date('Y-m-d');
+        $no_nota = DB::table('pengiriman')->orderBy('id_pengiriman', 'DESC')->first();
+        $no_nota = empty($no_nota) ? 1001 : $no_nota->no_nota + 1;
+        foreach(explode(',', $r->no_box) as $d){
+            $grade = DB::table('grading as a')
+                            ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
+                            ->where('a.no_box_grading', $d)
+                            ->first()
+                            ->nm_grade;
+                            
+            $dataToInsert[] = [
+                'no_box' => $d,
+                'pcs' => $r->pcs[$i],
+                'gr' => $r->gr[$i],
+                'cek_qc' => $r->cek_qc[$i],
+                'no_barcode' => $r->no_barcode[$i],
+                'admin' => $admin,
+                'grade' => $grade,
+                'tgl_input' => $tgl_input,
+                'no_nota' => $no_nota,
+            ];
+        }
+
+        return redirect()->route('pengiriman.index')->with('sukses', 'Data Berhasil');
+    }
 }

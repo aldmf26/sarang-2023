@@ -81,9 +81,21 @@
                             <td>{{ $category != 'dll' && $category != 'denda' ? $c->no_box : '-' }}</td>
                             <td>{{ $label }}</td>
 
-                            <td class="text-end">{{ $category == 'eo' ? '-' : ($c->pcs_awal ?? '-') }}</td>
+                            <td class="text-end">
+                                @if ($category == 'ctk')
+                                    {{ $c->pcs_awal_ctk ?? '-' }}
+                                @else
+                                    {{ $category == 'eo' ? '-' : ($c->pcs_awal ?? '-') }}
+                                @endif
+                            </td>
 
-                            <td class="text-end">{{ $c->gr_awal ?? '-' }}</td>
+                            <td class="text-end">
+                                @if ($category == 'ctk')
+                                    {{ $c->gr_awal_ctk ?? '-' }}
+                                @else
+                                    {{ $c->gr_awal ?? '-' }}
+                                @endif
+                            </td>
 
                             <td class="text-end">
                                 @if ($category == 'eo') - @else {{ $c->pcs_akhir ?? '-' }} @endif

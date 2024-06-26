@@ -384,6 +384,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');
             Route::get('/template', 'template')->name('template');
+            Route::post('/kirim', 'kirim')->name('kirim');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');

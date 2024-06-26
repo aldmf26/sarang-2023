@@ -10,14 +10,16 @@
             </div>
             <div class="col-lg-12 mt-2">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-7">
                         <input type="text" id="tbl1input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <form action="{{ route('gradingbj.grading') }}" method="post">
                             @csrf
+                            <a href="#" class="btn btn-sm btn-info"
+                                href=""><i class="fa fa-warehouse"></i> Gudang</a>
                             <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
                                 href="">Import</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
