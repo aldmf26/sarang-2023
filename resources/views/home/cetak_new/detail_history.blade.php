@@ -91,7 +91,7 @@
 
                             <td class="text-end">
 
-                                @if ($label == 'detail')
+                                @if ($category == 'detail')
                                     {{ $c->gr_awal_ctk ?? '-' }}
                                 @else
                                     {{ $c->gr_awal ?? '-' }}
