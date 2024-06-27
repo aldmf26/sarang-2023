@@ -47,6 +47,7 @@
                                         ->select('a.no_box')
                                         ->join('cetak_new as b', 'a.no_box', 'b.no_box')
                                         ->where('a.no_invoice', $d->no_invoice)
+                                        ->where('a.kategori', 'cetak')
                                         ->first();
                                 @endphp
                                 @if (!$getCtk)
