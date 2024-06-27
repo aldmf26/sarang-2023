@@ -90,6 +90,7 @@
                             </td>
 
                             <td class="text-end">
+                                {{ $category }}
                                 @if ($category == 'ctk')
                                     {{ $c->gr_awal_ctk ?? '-' }}
                                     dsa
