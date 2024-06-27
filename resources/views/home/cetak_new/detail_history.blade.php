@@ -85,7 +85,7 @@
                                 @if ($category == 'ctk')
                                     {{ $c->pcs_awal_ctk ?? '-' }}
                                 @else
-                                    {{ $category == 'eo' ? '-' : ($c->pcs_awal ?? '-') }}
+                                    {{ $category == 'eo' ? '-' : $c->pcs_awal ?? '-' }}
                                 @endif
                             </td>
 
@@ -95,10 +95,15 @@
                                 @else
                                     {{ $c->gr_awal ?? '-' }}
                                 @endif
+                                dsa
                             </td>
 
                             <td class="text-end">
-                                @if ($category == 'eo') - @else {{ $c->pcs_akhir ?? '-' }} @endif
+                                @if ($category == 'eo')
+                                    -
+                                @else
+                                    {{ $c->pcs_akhir ?? '-' }}
+                                @endif
                             </td>
 
                             <td class="text-end">{{ $c->gr_akhir ?? '-' }}</td>
