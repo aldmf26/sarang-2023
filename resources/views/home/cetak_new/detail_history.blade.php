@@ -92,10 +92,12 @@
                             <td class="text-end">
                                 @if ($category == 'Ctk')
                                     {{ $c->gr_awal_ctk ?? '-' }}
+                                    dsa
                                 @else
                                     {{ $c->gr_awal ?? '-' }}
+                                    sdasdas
                                 @endif
-                                dsa
+
                             </td>
 
                             <td class="text-end">
