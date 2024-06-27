@@ -20,7 +20,7 @@ class LaporanModel extends Model
         d.pcs_akhir as pcs_str, d.gr_akhir as gr_str, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / c.gr_akhir) as rp_gram_str, ((1-(d.gr_akhir / a.gr_awal)) * 100) as sst_str,
         e.gr_eo_akhir as gr_eo, (((a.hrga_satuan * a.gr_awal) + e.ttl_rp ) / e.gr_eo_akhir) as rp_gram_eo, ((1-(e.gr_eo_akhir / a.gr_awal)) * 100) as sst_eo,
         (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str, e.ttl_rp as cost_eo, f.ttl_rp as cost_cu, (g.rp_gr * b.gr_akhir) as oprasional_cbt, (d.gr_akhir * h.rp_gr) as oprasional_str, f.oprasional_cu,
-        c.oprasional_ctk, (e.gr_eo_akhir * i.rp_gr ) as oprasional_eo
+        c.oprasional_ctk, (e.gr_eo_akhir * i.rp_gr ) as oprasional_eo, j.cost_dll
         FROM bk as a 
         left join cabut as b on b.no_box = a.no_box
         left join oprasional as g on g.bulan = b.bulan_dibayar
@@ -46,6 +46,10 @@ class LaporanModel extends Model
             left join oprasional as e on e.bulan = c.bulan_dibayar
             where d.kategori= 'CU'
         ) as f on f.no_box = a.no_box
+
+        left join (
+            SELECT j.no_box, sum(j.rupiah) as cost_dll FROM tb_hariandll as j group by j.no_box
+        ) as j on j.no_box =  a.no_box
 
 
         where a.kategori = 'cabut' and a.baru = 'baru';");

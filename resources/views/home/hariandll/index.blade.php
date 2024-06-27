@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <ul class="nav nav-pills float-start">
             <li class="nav-item">
@@ -46,6 +46,7 @@
                 <thead>
                     <tr>
                         <th class="dhead">#</th>
+                        <th class="dhead">No Box</th>
                         <th class="dhead">Bulan dibayar</th>
                         <th class="dhead">Tanggal</th>
                         <th class="dhead">Nama Anak</th>
@@ -65,9 +66,7 @@
                         <th class="text-end dhead">Rupiah <br> (Rp {{ number_format($ttlRp, 0) }})</th>
                         <th class="dhead">
                             @php
-                                $adaDitutup = DB::table('tb_hariandll')
-                                    ->where('ditutup', 'T')
-                                    ->first();
+                                $adaDitutup = DB::table('tb_hariandll')->where('ditutup', 'T')->first();
                             @endphp
                             @if (!empty($adaDitutup))
                                 <input style="text-align: center" type="checkbox" class="form-check" id="cekSemuaTutup">
@@ -86,7 +85,10 @@
                     @foreach ($datas as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
+                            <td>{{ $d->no_box }}</td>
+                            <td>
+                                {{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
+                            </td>
                             <td>{{ tanggal($d->tgl) }}</td>
                             <td>{{ $d->nama }}</td>
                             <td>{{ $d->ket }}</td>
@@ -96,14 +98,15 @@
                             @else
                             @endif
                             <td>{{ $d->lokasi }}</td>
-
                             <td class="text-end">{{ number_format($d->rupiah, 0) }}</td>
                             <td>
                                 @if ($d->ditutup != 'Y')
                                     <input type="checkbox" class="form-check cekTutup" name="cekTutup[]"
                                         id_cabut="{{ $d->id_hariandll }}">
                                 @endif
-                                <a onclick="return confirm('Yakin dihapus ?')" href="{{ route('hariandll.hapus', $d->id_hariandll) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                <a onclick="return confirm('Yakin dihapus ?')"
+                                    href="{{ route('hariandll.hapus', $d->id_hariandll) }}"
+                                    class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
                                 {{-- <x-theme.button modal="Y" idModal="delete" data="no_nota={{ $d->id_hariandll }}"
                                     icon="fa-trash" addClass="float-end delete_nota" teks="" variant="danger" /> --}}
                                 {{-- <x-theme.button modal="Y" idModal="edit" icon="fa-pen"
@@ -118,12 +121,10 @@
 
         <form action="{{ route('hariandll.create') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah" title="Tambah Harian DLL" size="modal-lg" btnSave="Y">
-
-
+            <x-theme.modal idModal="tambah" title="Tambah Harian DLL" size="modal-lg-max" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-4">
-                        <table class="table table-striped" width="50%">
+                        <table class="table table-striped" width="40%">
                             <thead>
                                 <tr>
                                     <th class="dhead">Bulan dibayar</th>
@@ -153,6 +154,7 @@
                     <thead>
                         <tr>
                             <th class="dhead">Tanggal</th>
+                            <th class="dhead">No Box</th>
                             <th class="dhead" width="20%">Nama Anak</th>
                             <th class="dhead">Keterangan</th>
                             <th class="dhead">Lokasi</th>
@@ -166,6 +168,9 @@
                             <td>
                                 <input style="font-size: 13px;" type="date" value="{{ date('Y-m-d') }}"
                                     class="form-control" name="tgl[]">
+                            </td>
+                            <td>
+                                <input style="font-size: 13px;" type="text" class="form-control" name="no_box[]">
                             </td>
                             <td>
                                 <select required name="id_anak[]" class="form-control select2" id="">

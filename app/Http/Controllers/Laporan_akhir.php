@@ -143,16 +143,13 @@ class Laporan_akhir extends Controller
     public function saveoprasional(Request $r)
     {
         $formattedNumber = $r->biaya_oprasional;
-
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
-
         // Validasi angka mentah
         if (!is_numeric($rawNumber)) {
             return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
-
         $data = [
             'rp_oprasional' => $rawNumber,
             'bulan' => $r->bulan,

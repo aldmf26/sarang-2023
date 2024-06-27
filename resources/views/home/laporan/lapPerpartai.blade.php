@@ -44,11 +44,13 @@
                             <th class="text-center dhead" colspan="4">Sortir</th>
                             <th class="dhead" rowspan="2">Cost bk</th>
                             <th class="dhead" rowspan="2">Cost cbt</th>
+                            <th class="dhead" rowspan="2">Cost eox/eol</th>
                             <th class="dhead" rowspan="2">Cost ctk</th>
                             <th class="dhead" rowspan="2">Cost sortir</th>
                             <th class="dhead" rowspan="2">Cost cu</th>
                             <th class="dhead" rowspan="2">Cost dll</th>
                             <th class="dhead" rowspan="2">Cost oprasional</th>
+                            <th class="dhead" rowspan="2">Total Rp</th>
                         </tr>
                         <tr>
                             <th class="dhead text-end">pcs awal</th>
@@ -107,7 +109,8 @@
 
                                 <td class="text-end">{{ $p->pcs_ctk }}</td>
                                 <td class="text-end">{{ $p->gr_ctk }}</td>
-                                <td class="text-end">{{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_ctk, 0) }}
+                                <td class="text-end">
+                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_ctk, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($p->sst_ctk, 0) }} %</td>
 
@@ -120,12 +123,23 @@
 
                                 <td class="text-end">{{ number_format($p->cost_bk, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_cbt, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->cost_eo, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_ctk, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_str, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
-                                <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($p->cost_dll, 0) }}</td>
                                 <td class="text-end">
                                     {{ number_format($p->oprasional_cbt + $p->oprasional_ctk + $p->oprasional_str + $p->oprasional_cu + $p->oprasional_eo, 0) }}
+                                </td>
+                                @php
+                                    $cost_oprasional =
+                                        $p->oprasional_cbt +
+                                        $p->oprasional_ctk +
+                                        $p->oprasional_str +
+                                        $p->oprasional_cu +
+                                        $p->oprasional_eo;
+                                @endphp
+                                <td>{{ number_format($cost_oprasional + $p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str + $p->cost_cu + $p->cost_dll + $p->cost_eo, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -166,7 +180,6 @@
                                         <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
                                         <td x-data="numberFormat({{ $oprasional->rp_oprasional }})">
-
                                             <input type="text" class="form-control" autofocus
                                                 name="biaya_oprasional" id="number" x-model="formattedNumber"
                                                 @keyup="formatNumber" value="{{ $oprasional->rp_oprasional }}">

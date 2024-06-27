@@ -58,6 +58,7 @@ class HariandllController extends Controller
             $rupiah = str()->remove(',', $r->rupiah[$i]);
             DB::table('tb_hariandll')->insert([
                 'tgl' => $r->tgl[$i],
+                'no_box' => $r->no_box[$i],
                 'id_anak' => $r->id_anak[$i],
                 'ket' => $r->ket[$i],
                 'rupiah' => $rupiah,
