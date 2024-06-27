@@ -82,7 +82,7 @@
                             <td>{{ $label }}</td>
 
                             <td class="text-end">
-                                @if ($category == 'ctk')
+                                @if ($category == 'Ctk')
                                     {{ $c->pcs_awal_ctk ?? '-' }}
                                 @else
                                     {{ $category == 'eo' ? '-' : $c->pcs_awal ?? '-' }}
