@@ -81,7 +81,7 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
+                    {{-- <tfoot>
                         <tr>
                             <th class="text-center" colspan="3">Total</th>
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
@@ -90,7 +90,7 @@
                                 <th></th>
                             @endfor
                         </tr>
-                    </tfoot>
+                    </tfoot> --}}
                 </table>
             </div>
         </div>
