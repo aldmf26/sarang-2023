@@ -421,7 +421,7 @@ class GudangSarangController extends Controller
                     ->where([['a.no_invoice', $r->no_invoice],['b.kategori', 'sortir'],['a.kategori', 'grade']])
                     ->join('bk as b', 'a.no_box', '=', 'b.no_box')
                     ->groupBy('a.no_box','a.kategori')
-                    ->selectRaw('b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
+                    ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
                     ->get();
 
         $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima

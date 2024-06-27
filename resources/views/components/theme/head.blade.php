@@ -44,6 +44,7 @@
     <style>
         :root {
             --warna1: #F7914D;
+            --warnaPengiriman: #87cefa;
             --warnaDhead: #8c8989;
         }
 
@@ -81,6 +82,11 @@
         .btn-primary {
             background-color: var(--warna1) !important;
             border-color: var(--warna1) !important;
+        }
+        .btn-pengiriman {
+            background-color: var(--warnaPengiriman) !important;
+            border-color: var(--warnaPengiriman) !important;
+            color:black;
         }
         .btn-info {
             background-color: #7e7c7c !important;

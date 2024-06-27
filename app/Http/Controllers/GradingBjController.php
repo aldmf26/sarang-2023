@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\GradingbjTemplateExport;
 use App\Models\ApiGudangGradingModel;
+use App\Models\Grading;
 use App\Models\PengirimanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +46,7 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Grading',
-            'formulir' => $this->getDataMaster('formulir')
+            'formulir' => Grading::dapatkanStokBox('formulir')
         ];
 
         return view('home.gradingbj.index', $data);
@@ -56,7 +57,7 @@ class GradingBjController extends Controller
         if ($r->submit == 'export') {
             return $this->exportGrading($r->no_box);
         }
-        $getFormulir = $this->getDataMaster('formulir', $r->no_box);
+        $getFormulir = Grading::dapatkanStokBox('formulir', $r->no_box);
         $no_invoice = 1001;
         $gradeStatuses = ['bentuk', 'turun'];
         $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
@@ -76,20 +77,21 @@ class GradingBjController extends Controller
 
     public function exportGrading($no_box)
     {
-        $getFormulir = $this->getDataMaster('formulir', $no_box);
+        $getFormulir = Grading::dapatkanStokBox('formulir', $no_box);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Template Grading');
         $koloms = [
-            'A' => 'box sortir',
-            'B' => 'box pengiriman',
-            'C' => 'pcs',
-            'D' => 'gr',
-            'E' => 'grade',
+            'A' => 'No Box Dipilih',
+            'B' => 'pcs',
+            'C' => 'gr',
 
-            'H' => 'box sortir dipilih',
-            'I' => 'pcs',
-            'J' => 'gr',
+            'F' => 'No Box',
+            'G' => 'grade',
+            'H' => 'pcs',
+            'I' => 'gr',
+            'J' => 'box pengiriman',
+
         ];
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
@@ -107,19 +109,19 @@ class GradingBjController extends Controller
             ],
         ];
 
-        $sheet->getStyle('A1:E1')->applyFromArray($styleBold);
-        $sheet->getStyle('H1:J1')->applyFromArray($styleBold);
+        $sheet->getStyle('F1:J1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:C1')->applyFromArray($styleBold);
 
         $no = 2;
         foreach ($getFormulir as $item) {
-            $sheet->setCellValue('H' . $no, $item->no_box);
-            $sheet->setCellValue('I' . $no, $item->pcs_awal);
-            $sheet->setCellValue('J' . $no, $item->gr_awal);
+            $sheet->setCellValue('A' . $no, $item->no_box);
+            $sheet->setCellValue('B' . $no, $item->pcs_awal);
+            $sheet->setCellValue('C' . $no, $item->gr_awal);
 
             $no++;
         }
 
-        $sheet->getStyle('H1:J' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:C' . $no - 1)->applyFromArray($styleBaris);
 
         $writer = new Xlsx($spreadsheet);
         $fileName = "Template Grading";
@@ -155,39 +157,49 @@ class GradingBjController extends Controller
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
+                $nobox = $row[5];
+                $grade = $row[6];
+                $pcs = $row[7];
+                $gr = $row[8];
+                $boxPengiriman = $row[9];
+
                 if (empty(array_filter($row))) {
                     continue;
                 }
 
                 if (
-                    empty($row[0]) ||
-                    empty($row[1]) ||
-                    empty($row[2]) ||
-                    empty($row[3]) ||
-                    empty($row[4])
+                    empty($nobox) ||
+                    empty($grade) ||
+                    empty($pcs) ||
+                    empty($gr) ||
+                    empty($boxPengiriman)
                 ) {
                     $pesan = [
-                        empty($row[0]) => "BOX SORTIR",
-                        empty($row[1]) => "BOX PENGIRIMAN",
-                        empty($row[2]) => "PCS",
-                        empty($row[3]) => "GR",
-                        empty($row[4]) => "GRADE",
+                        empty($nobox) => "NO BOX",
+                        empty($grade) => "GRADE",
+                        empty($pcs) => "PCS",
+                        empty($gr) => "GR",
+                        empty($boxPengiriman) => "BOX PENGIRIMAN",
                     ];
                     DB::rollBack();
-                    return redirect()->route('gradingbj.index')->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
+                    return redirect()
+                            ->route('gradingbj.index')
+                            ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    $cekGrade = DB::table('tb_grade')->where('nm_grade', $row[4])->first();
+                    $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
                     if(!$cekGrade){
                         DB::rollBack();
-                        return redirect()->route('gradingbj.index')->with('error', "GRADE " . $row[4] . ' TIDAK TERDAFTAR');
+                        return redirect()
+                                ->route('gradingbj.index')
+                                ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
                     }
 
                     DB::table('grading')->insert([
                         'id_grade' => $cekGrade->id_grade,
-                        'no_box_grading' => $row[1],
-                        'no_box_sortir' => $row[0],
-                        'pcs' => $row[2],
-                        'gr' => $row[3],
+                        'no_box_grading' => $boxPengiriman,
+                        'no_box_sortir' => $nobox,
+                        'pcs' => $pcs,
+                        'gr' => $gr,
                         'admin' => $admin,
                         'tgl' => $tgl,
                         'no_invoice' => $noinvoice,
