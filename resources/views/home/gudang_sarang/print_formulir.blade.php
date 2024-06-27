@@ -71,7 +71,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>
-                                <td>{{ tanggal($f->tanggal) }}</td>
+                                <td></td>
                                 <td>{{ $f->no_box }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
