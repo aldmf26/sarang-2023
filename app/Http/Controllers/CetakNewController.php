@@ -743,6 +743,7 @@ class CetakNewController extends Controller
             'cetak_selesai' => CetakModel::cetak_selesai($id_pengawas),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
+            'posisi' => auth()->user()->posisi_id
         ];
 
 

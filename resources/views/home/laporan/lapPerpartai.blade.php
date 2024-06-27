@@ -17,9 +17,14 @@
 
     <x-slot name="cardBody">
         <section class="row">
-            {{-- <div class="col-lg-8">
+            <div class="col-lg-8">
                 @include('home.laporan.nav')
-            </div> --}}
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-2 mb-2">
+                <a href="#" class="btn btn-primary float-end" data-bs-toggle="modal"
+                    data-bs-target="#oprasional"><i class="fas fa-plus"></i> Cost Oprasional</a>
+            </div>
             <div class="col-lg-10"></div>
             <div class="col-lg-2">
                 <input type="text" id="pencarian" class="form-control form-control-sm mb-2 float-end"
@@ -90,22 +95,27 @@
 
                                 <td class="text-end">{{ $p->pcs_cbt }}</td>
                                 <td class="text-end">{{ $p->gr_cbt }}</td>
-                                <td class="text-end">{{ number_format($p->rp_gram_cbt, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_cbt, 0) }}
+                                </td>
                                 <td class="text-end">{{ number_format($p->sst_cbt, 0) }} %</td>
 
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ $p->gr_eo ?? 0 }}</td>
-                                <td class="text-end">{{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
+                                <td class="text-end">
+                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->sst_eo ?? 0, 0) }} %</td>
 
                                 <td class="text-end">{{ $p->pcs_ctk }}</td>
                                 <td class="text-end">{{ $p->gr_ctk }}</td>
-                                <td class="text-end">{{ number_format($p->rp_gram_ctk, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_ctk, 0) }}
+                                </td>
                                 <td class="text-end">{{ number_format($p->sst_ctk, 0) }} %</td>
 
                                 <td class="text-end">{{ $p->pcs_str }}</td>
                                 <td class="text-end">{{ $p->gr_str }}</td>
-                                <td class="text-end">{{ number_format($p->rp_gram_str, 0) }}</td>
+                                <td class="text-end">
+                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_str, 0) }}
+                                </td>
                                 <td class="text-end">{{ number_format($p->sst_str, 0) }} %</td>
 
                                 <td class="text-end">{{ number_format($p->cost_bk, 0) }}</td>
@@ -113,6 +123,10 @@
                                 <td class="text-end">{{ number_format($p->cost_ctk, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_str, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
+                                <td class="text-end">0</td>
+                                <td class="text-end">
+                                    {{ number_format($p->oprasional_cbt + $p->oprasional_ctk + $p->oprasional_str + $p->oprasional_cu + $p->oprasional_eo, 0) }}
+                                </td>
                             </tr>
                         @endforeach
 
@@ -126,6 +140,69 @@
                     <div id="load_detail"></div>
                 </div>
             </x-theme.modal>
+
+            <form action="{{ route('laporanakhir.saveoprasional') }}" method="post">
+                @csrf
+                <x-theme.modal title="Oprasional" idModal="oprasional" size="modal-lg" btnSave="Y">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>Bulan/Tahun : {{ $bulan }}/{{ date('Y') }} </h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="dhead text-end">Gr Akhir Cbt</th>
+                                        <th class="dhead text-end">Gr Akhir Eo</th>
+                                        <th class="dhead text-end">Gr Akhir Ctk</th>
+                                        <th class="dhead text-end">Gr Akhir Sortir</th>
+                                        <th class="dhead text-end">Gr Akhir Cu</th>
+                                        <th class="dhead text-end" width="150px">Cost Oprasional</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-end">{{ number_format($cabut->gr_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($eo->gr_eo_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
+                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional }})">
+
+                                            <input type="text" class="form-control" autofocus
+                                                name="biaya_oprasional" id="number" x-model="formattedNumber"
+                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional }}">
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-lg-2">
+
+                            <h6 class="">
+                                Total :
+                                {{ number_format($cabut->gr_akhir + $eo->gr_eo_akhir + $ctk->gr_akhir + $str->gr_akhir + $cu->gr_akhir, 0) }}
+                            </h6>
+                            @php
+                                $total =
+                                    $cabut->gr_akhir +
+                                    $eo->gr_eo_akhir +
+                                    $ctk->gr_akhir +
+                                    $str->gr_akhir +
+                                    $cu->gr_akhir;
+                            @endphp
+
+                        </div>
+                        <div class="col-lg-10">
+
+                        </div>
+                        <input type="hidden" name="bulan" value="{{ $bulan }}">
+                        <input type="hidden" name="tahun" value="{{ date('Y') }}">
+                        <input type="hidden" name="gr_akhir" value="{{ $total }}">
+
+                    </div>
+                </x-theme.modal>
+            </form>
 
 
 
@@ -153,6 +230,20 @@
 
                 });
                 pencarian('pencarian', 'table_cari')
+            </script>
+            <script>
+                function numberFormat(initialValue) {
+                    return {
+                        formattedNumber: new Intl.NumberFormat().format(initialValue),
+                        formatNumber() {
+                            // Hapus karakter non-digit dan simpan nomor mentah
+                            let rawNumber = this.formattedNumber.replace(/\D/g, '');
+
+                            // Format nomor dengan pemisah ribuan
+                            this.formattedNumber = new Intl.NumberFormat().format(rawNumber);
+                        }
+                    };
+                }
             </script>
         @endsection
     </x-slot>

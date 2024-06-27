@@ -540,7 +540,8 @@ class SortirController extends Controller
             join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
             WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y';"),
 
-            'users' => DB::table('users')->where('posisi_id', '!=', '1')->get()
+            'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
+            'posisi' => auth()->user()->posisi_id
 
         ];
         return view('home.sortir.gudang', $data);

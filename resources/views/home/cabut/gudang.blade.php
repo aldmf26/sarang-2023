@@ -53,8 +53,8 @@
                                     <th class="dhead text-center">No Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp/gr</th>
-                                    <th class="dhead text-end">Total rp</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total rp</th>
                                 </tr>
                                 @php
 
@@ -77,8 +77,10 @@
                                     <th class="dheadstock text-center {{ $posisi == 1 ? '' : 'd-none' }}"></th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
-                                    <th class="dheadstock text-end">{{ number_format(ttl($bk)['hrga_satuan'], 0) }}</th>
-                                    <th class="dheadstock text-end">
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                        {{ number_format(ttl($bk)['hrga_satuan'], 0) }}
+                                    </th>
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($bk)['ttl_rp'], 0) }}</th>
                                 </tr>
                             </thead>
@@ -91,8 +93,10 @@
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">{{ $d->pcs }}</td>
                                         <td align="right">{{ $d->gr }}</td>
-                                        <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
-                                        <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->hrga_satuan, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->hrga_satuan * $d->gr, 0) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -115,17 +119,19 @@
                                     <th class="dhead text-center">No Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp/Gr</th>
-                                    <th class="dhead text-end">Total Rp</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/Gr</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                                 </tr>
                                 <tr>
                                     <th class="dheadstock text-center">Total</th>
                                     <th class="dheadstock text-center {{ $posisi == 1 ? '' : 'd-none' }}"></th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($cabut)['pcs'], 0) }}</th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
-                                    <th class="dheadstock text-end">{{ number_format(ttl($cabut)['hrga_satuan'], 0) }}
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                        {{ number_format(ttl($cabut)['hrga_satuan'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">{{ number_format(ttl($cabut)['ttl_rp'], 0) }}</th>
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                        {{ number_format(ttl($cabut)['ttl_rp'], 0) }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,8 +142,10 @@
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">{{ $d->pcs }}</td>
                                         <td align="right">{{ $d->gr }}</td>
-                                        <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
-                                        <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                        <td align="rightc " class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->hrga_satuan, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp, 0) }}</td>
                                     </tr>
                                 @endforeach
 
@@ -162,8 +170,8 @@
                                     <th class="dhead text-center">No Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Total Rp Bk</th>
-                                    <th class="dhead text-end">Total Rp Cbt</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Bk</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Cbt</th>
                                     <th class="dhead "></th>
                                 </tr>
                                 <tr>
@@ -173,10 +181,10 @@
                                     </th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($cabutSelesai)['ttl_rp'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($cabutSelesai)['ttl_rp_cbt'], 0) }}
                                     </th>
                                     <th class="dheadstock text-center">Aksi</th>
@@ -190,8 +198,10 @@
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">{{ $d->pcs }}</td>
                                         <td align="right">{{ $d->gr }}</td>
-                                        <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                        <td align="right">{{ number_format($d->ttl_rp_cbt, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp_cbt, 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah({{ $d->no_box }}, {{ $d->pcs }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
@@ -231,8 +241,10 @@
                                                 <th class="dhead">No Box</th>
                                                 <th class="dhead text-end">Pcs</th>
                                                 <th class="dhead text-end">Gr</th>
-                                                <th class="dhead text-end">Total Rp Bk</th>
-                                                <th class="dhead text-end">Total Rp Cbt</th>
+                                                <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp
+                                                    Bk</th>
+                                                <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp
+                                                    Cbt</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -244,8 +256,10 @@
                                                     <td x-text="item.no_box"></td>
                                                     <td align="right" x-text="item.pcs"></td>
                                                     <td align="right" x-text="item.gr"></td>
-                                                    <td align="right" x-text="formatNumber(item.ttl_rp)"></td>
-                                                    <td align="right" x-text="formatNumber(item.ttl_rp_cbt)"></td>
+                                                    <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}"
+                                                        x-text="formatNumber(item.ttl_rp)"></td>
+                                                    <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}"
+                                                        x-text="formatNumber(item.ttl_rp_cbt)"></td>
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -308,8 +322,8 @@
                                     <th class="dhead text-center">No Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Total Rp Bk</th>
-                                    <th class="dhead text-end">Total Rp Cbt</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Bk</th>
+                                    <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Cbt</th>
                                     <th class="dhead "></th>
                                 </tr>
                                 <tr>
@@ -318,10 +332,10 @@
                                     <th class="dheadstock text-end">0</th>
                                     <th class="dheadstock text-end">{{ number_format(ttl($eoSelesai)['gr'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($eoSelesai)['ttl_rp'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">
+                                    <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($eoSelesai)['ttl_rp_cbt'], 0) }}
                                     </th>
                                     <th class="dheadstock text-center">Aksi</th>
@@ -335,8 +349,10 @@
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">0</td>
                                         <td align="right">{{ $d->gr }}</td>
-                                        <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                        <td align="right">{{ number_format($d->ttl_rp_cbt, 0) }}</td>
+                                        <td align="right {{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp, 0) }}</td>
+                                        <td align="right {{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp_cbt, 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah2({{ $d->no_box }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
@@ -409,7 +425,11 @@
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
             </script>
             <script>
-                document.body.style.zoom = "75%";
+                if ({{ $posisi == 1 }}) {
+                    document.body.style.zoom = "90%";
+                } else {
+                    document.body.style.zoom = "75%";
+                }
             </script>
         @endsection
     </x-slot>

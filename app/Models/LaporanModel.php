@@ -13,28 +13,37 @@ class LaporanModel extends Model
     public static function LaporanPerPartai()
     {
         $result = DB::select("SELECT a.nm_partai, a.no_box, a.pcs_awal, a.gr_awal,a.hrga_satuan,
-        b.pcs_akhir as pcs_cbt, b.gr_akhir as gr_cbt, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
+        b.pcs_akhir as pcs_cbt, b.gr_akhir as gr_cbt, 
+        (((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, 
+        ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
         c.pcs_akhir as pcs_ctk, c.gr_akhir as gr_ctk, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp ) / c.gr_akhir) as rp_gram_ctk, ((1-((c.gr_akhir + c.gr_tdk_cetak) / a.gr_awal)) * 100) as sst_ctk,
         d.pcs_akhir as pcs_str, d.gr_akhir as gr_str, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / c.gr_akhir) as rp_gram_str, ((1-(d.gr_akhir / a.gr_awal)) * 100) as sst_str,
         e.gr_eo_akhir as gr_eo, (((a.hrga_satuan * a.gr_awal) + e.ttl_rp ) / e.gr_eo_akhir) as rp_gram_eo, ((1-(e.gr_eo_akhir / a.gr_awal)) * 100) as sst_eo,
-        (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str, e.ttl_rp as cost_eo, f.ttl_rp as cost_cu
+        (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str, e.ttl_rp as cost_eo, f.ttl_rp as cost_cu, (g.rp_gr * b.gr_akhir) as oprasional_cbt, (d.gr_akhir * h.rp_gr) as oprasional_str, f.oprasional_cu,
+        c.oprasional_ctk, (e.gr_eo_akhir * i.rp_gr ) as oprasional_eo
         FROM bk as a 
         left join cabut as b on b.no_box = a.no_box
+        left join oprasional as g on g.bulan = b.bulan_dibayar
 
         left join (
-            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp
+            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (e.rp_gr * c.gr_akhir) as oprasional_ctk
             FROM cetak_new as c
             left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak
+            left join oprasional as e on e.bulan = c.bulan_dibayar
             where d.kategori= 'CTK'
         ) as c on c.no_box = a.no_box
 
         left join sortir as d on d.no_box = a.no_box
+        left join oprasional as h on h.bulan = d.bulan
+
         left join eo as e on e.no_box = a.no_box
+        left join oprasional as i on i.bulan = e.bulan_dibayar
 
         left join (
-            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp
+            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (c.gr_akhir * e.rp_gr) as oprasional_cu
             FROM cetak_new as c
             left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak
+            left join oprasional as e on e.bulan = c.bulan_dibayar
             where d.kategori= 'CU'
         ) as f on f.no_box = a.no_box
 
@@ -138,5 +147,26 @@ class LaporanModel extends Model
             'sortir' => $sortir
 
         ];
+    }
+
+    public static function LaporanPartai()
+    {
+        $result = DB::select("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk , 
+        sum(a.gr_awal * a.hrga_satuan) as ttl_rp_bk, sum(b.gr_akhir) as gr_cbt , sum(b.ttl_rp) as cost_cbt,
+        sum(c.gr_eo_akhir) as gr_eo_akhir, sum(c.ttl_rp) as cost_eo,
+        sum(d.gr_akhir) as gr_ctk , sum(d.ttl_rp) as cost_ctk,
+        sum(e.gr_akhir) as gr_str, sum(e.ttl_rp) as cost_str
+
+        FROM bk as a
+
+        left join cabut as b on b.no_box = a.no_box and b.selesai = 'Y'
+        left join eo as c on c.no_box = a.no_box and c.selesai ='Y'
+        left join cetak_new as d on d.no_box = a.no_box and d.selesai = 'Y'
+        left join sortir as e on e.no_box = a.no_box and e.selesai = 'Y'
+
+        where a.baru = 'baru' and a.kategori ='cabut' 
+        GROUP by a.nm_partai;");
+
+        return $result;
     }
 }

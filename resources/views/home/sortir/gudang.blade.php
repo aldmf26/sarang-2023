@@ -25,8 +25,8 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Rp/gr</th>
-                            <th class="dhead text-end">Total Rp</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                         </tr>
                         @php
                             if (!function_exists('ttl')) {
@@ -45,8 +45,9 @@
                             <th class="dheadstock text-center">Total</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['gr_awal'], 0) }}</th>
-                            <th class="dheadstock text-end"></th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($siap_sortir)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}"></th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($siap_sortir)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,8 +56,10 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -75,8 +78,8 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Rp/gr</th>
-                            <th class="dhead text-end">Total Rp</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                         </tr>
 
                         <tr>
@@ -84,8 +87,9 @@
                             <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['pcs_awal'], 0) }}
                             </th>
                             <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['gr_awal'], 0) }}</th>
-                            <th class="dheadstock text-end"></th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($sortir_proses)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}"></th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($sortir_proses)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,8 +98,10 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -143,7 +149,7 @@
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+                                <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                                 <th class="dhead text-center">Aksi</th>
                             </tr>
                             <tr>
@@ -155,7 +161,7 @@
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl($sortir_selesai)['gr_awal'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end">
+                                <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                     {{ number_format(ttl($sortir_selesai)['ttl_rp'], 0) }}
                                 </th>
 
@@ -168,7 +174,8 @@
                                     {{-- <td align="center">{{ $d->name }}</td> --}}
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                        {{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="center">
                                         <input type="checkbox"
                                             @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
@@ -208,7 +215,7 @@
                                     <th class="dhead">No Box</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
-                                    <th class="dhead">Total Rp</th>
+                                    <th class="dhead {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,7 +225,7 @@
                                         <td x-text="item.no_box"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
-                                        <td x-text="item.ttl_rp"></td>
+                                        <td class="{{ $posisi == 1 ? '' : 'd-none' }}" x-text="item.ttl_rp"></td>
                                     </tr>
                                 </template>
                             </tbody>

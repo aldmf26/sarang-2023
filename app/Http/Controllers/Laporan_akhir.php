@@ -20,7 +20,16 @@ class Laporan_akhir extends Controller
             'title' => 'Laporan Partai',
             'partai' => LaporanModel::LaporanPerPartai(),
             'bulan' => $bulan,
-            // 'oprasional' => DB::table('oprasional')->where('bulan_dibayar', $bulan)->first()
+            'cabut' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cabut as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y'"),
+            'eo' => DB::selectOne("SELECT sum(a.gr_eo_akhir) as gr_eo_akhir FROM eo as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y'"),
+            'ctk' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CTK'"),
+            'str' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.bulan = '$bulan' and a.selesai ='Y'"),
+            'cu' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
+            'oprasional' => DB::table('oprasional')->where('bulan', $bulan)->first()
         ];
         return view('home.laporan.lapPerpartai', $data);
     }
@@ -113,5 +122,45 @@ class Laporan_akhir extends Controller
         ];
 
         return view('home.laporan.detail', $data);
+    }
+
+    public function lapPartai(Request $r)
+    {
+        if (empty($r->bulan)) {
+            $bulan = date('m');
+        } else {
+            $bulan = $r->bulan;
+        }
+        $data = [
+            'title' => 'Laporan Partai',
+            'partai' => LaporanModel::LaporanPartai(),
+            'bulan' => $bulan,
+            // 'oprasional' => DB::table('oprasional')->where('bulan_dibayar', $bulan)->first()
+        ];
+        return view('home.laporan.lapPartai', $data);
+    }
+
+    public function saveoprasional(Request $r)
+    {
+        $formattedNumber = $r->biaya_oprasional;
+
+        // Hapus pemisah ribuan untuk mendapatkan angka mentah
+        $rawNumber = str_replace(',', '', $formattedNumber);
+
+        // Validasi angka mentah
+        if (!is_numeric($rawNumber)) {
+            return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
+        }
+        DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
+
+        $data = [
+            'rp_oprasional' => $rawNumber,
+            'bulan' => $r->bulan,
+            'tahun' => $r->tahun,
+            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'gr' => $r->gr_akhir
+        ];
+        DB::table('oprasional')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

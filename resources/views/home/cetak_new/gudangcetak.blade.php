@@ -26,8 +26,8 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Rp/gr</th>
-                            <th class="dhead text-end">Ttl Rp</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Ttl Rp</th>
                         </tr>
                         @php
 
@@ -50,8 +50,9 @@
                             <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['gr_awal'], 0) }}</th>
-                            <th class="dheadstock text-end"></th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cabut_selesai)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}"></th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($cabut_selesai)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,8 +62,10 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -82,16 +85,17 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Rp/gr</th>
-                            <th class="dhead text-end">Ttl Rp</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Ttl Rp</th>
                         </tr>
                         <tr>
                             <th class="dheadstock text-center">Total</th>
                             <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['pcs_awal'], 0) }}</th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['gr_awal'], 0) }}</th>
-                            <th class="dheadstock text-end"></th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_proses)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}"></th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($cetak_proses)['ttl_rp'], 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,8 +105,10 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -160,9 +166,9 @@
                             <th class="dhead text-center">No Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
-                            <th class="dhead text-end">Total Rp</th>
-                            <th class="dhead text-end">Total Cbt</th>
-                            <th class="dhead text-end">Total Ctk</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Cbt</th>
+                            <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Ctk</th>
                             <th class="dhead text-center">Aksi</th>
                         </tr>
                         <tr>
@@ -171,10 +177,13 @@
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['pcs_awal'], 0) }}
                             </th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['gr_awal'], 0) }}</th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['ttl_rp'], 0) }}</th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['cost_cbt'], 0) }}
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($cetak_selesai)['ttl_rp'], 0) }}</th>
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($cetak_selesai)['cost_cbt'], 0) }}
                             </th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['cost_ctk'], 0) }}
+                            <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
+                                {{ number_format(ttl($cetak_selesai)['cost_ctk'], 0) }}
                             </th>
                             <th class="dheadstock text-end"></th>
                         </tr>
@@ -186,9 +195,12 @@
                                 <td align="center">{{ $d->no_box }}</td>
                                 <td align="right">{{ $d->pcs_awal }}</td>
                                 <td align="right">{{ $d->gr_awal }}</td>
-                                <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
-                                <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->ttl_rp, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->cost_cbt, 0) }}</td>
+                                <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                    {{ number_format($d->cost_ctk, 0) }}</td>
                                 <td align="center">
                                     <input type="checkbox"
                                         @change="tambah({{ $d->id_cetak }}, '{{ $d->no_box }}', '{{ $d->name ?? '-' }}', {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp ?? 0 }},{{ $d->cost_cbt ?? 0 }},{{ $d->cost_ctk ?? 0 }})"
@@ -237,9 +249,9 @@
                                     <th class="dhead">Pemilik</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
-                                    <th class="dhead">Total Rp</th>
-                                    <th class="dhead">Total Cbt</th>
-                                    <th class="dhead">Total Ctk</th>
+                                    <th class="dhead {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
+                                    <th class="dhead {{ $posisi == 1 ? '' : 'd-none' }}">Total Cbt</th>
+                                    <th class="dhead {{ $posisi == 1 ? '' : 'd-none' }}">Total Ctk</th>
 
                                 </tr>
                             </thead>
@@ -251,9 +263,12 @@
                                         <td x-text="item.name"></td>
                                         <td x-text="item.pcs_awal"></td>
                                         <td x-text="item.gr_awal"></td>
-                                        <td x-text="formatNumber(item.ttl_rp)"></td>
-                                        <td x-text="formatNumber(item.cost_cbt)"></td>
-                                        <td x-text="formatNumber(item.cost_ctk)"></td>
+                                        <td class="{{ $posisi == 1 ? '' : 'd-none' }}"
+                                            x-text="formatNumber(item.ttl_rp)"></td>
+                                        <td class="{{ $posisi == 1 ? '' : 'd-none' }}"
+                                            x-text="formatNumber(item.cost_cbt)"></td>
+                                        <td class="{{ $posisi == 1 ? '' : 'd-none' }}"
+                                            x-text="formatNumber(item.cost_ctk)"></td>
 
                                     </tr>
                                 </template>
