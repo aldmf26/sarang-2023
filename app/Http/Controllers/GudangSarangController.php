@@ -164,7 +164,7 @@ class GudangSarangController extends Controller
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE no_invoice = '$r->no_invoice'");
+        WHERE no_invoice = '$r->no_invoice' and a.kategori = 'cetak'");
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
@@ -418,11 +418,11 @@ class GudangSarangController extends Controller
     public function print_formulir_grade(Request $r)
     {
         $formulir = DB::table('formulir_sarang as a')
-                    ->where([['a.no_invoice', $r->no_invoice],['b.kategori', 'sortir'],['a.kategori', 'grade']])
-                    ->join('bk as b', 'a.no_box', '=', 'b.no_box')
-                    ->groupBy('a.no_box','a.kategori')
-                    ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
-                    ->get();
+            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'sortir'], ['a.kategori', 'grade']])
+            ->join('bk as b', 'a.no_box', '=', 'b.no_box')
+            ->groupBy('a.no_box', 'a.kategori')
+            ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
+            ->get();
 
         $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
         FROM formulir_sarang as a 
