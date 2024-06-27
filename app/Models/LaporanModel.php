@@ -52,7 +52,9 @@ class LaporanModel extends Model
         ) as j on j.no_box =  a.no_box
 
 
-        where a.kategori = 'cabut' and a.baru = 'baru';");
+        where a.kategori = 'cabut' and a.baru = 'baru'
+        
+        ;");
         return $result;
     }
 
@@ -167,9 +169,11 @@ class LaporanModel extends Model
         left join eo as c on c.no_box = a.no_box and c.selesai ='Y'
         left join cetak_new as d on d.no_box = a.no_box and d.selesai = 'Y'
         left join sortir as e on e.no_box = a.no_box and e.selesai = 'Y'
-
+    
         where a.baru = 'baru' and a.kategori ='cabut' 
-        GROUP by a.nm_partai;");
+        GROUP by a.nm_partai
+        order by a.nm_partai ASC
+        ;");
 
         return $result;
     }
