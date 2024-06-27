@@ -90,7 +90,7 @@
                             </td>
 
                             <td class="text-end">
-                                @if ($category == 'Ctk')
+                                @if ($category == 'ctk')
                                     {{ $c->gr_awal_ctk ?? '-' }}
                                     dsa
                                 @else
