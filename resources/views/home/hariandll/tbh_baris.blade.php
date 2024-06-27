@@ -1,9 +1,9 @@
-
-
-<tr class="baris{{$count}}">
+<tr class="baris{{ $count }}">
     <td>
-        <input style="font-size: 13px;" type="date" value="{{ date('Y-m-d') }}" class="form-control"
-                                            name="tgl[]">
+        <input style="font-size: 13px;" type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl[]">
+    </td>
+    <td>
+        <input style="font-size: 13px;" type="text" class="form-control" name="no_box[]">
     </td>
     <td>
         <select required name="id_anak[]" class="form-control select3-add" id="">
@@ -28,10 +28,10 @@
         </select>
     </td>
     <td>
-        <input x-mask:dynamic="$money($input)"  class="form-control text-end" class="form-control" name="rupiah[]">
+        <input x-mask:dynamic="$money($input)" class="form-control text-end" class="form-control" name="rupiah[]">
     </td>
     <td align="center">
-        <button type="button" class="btn rounded-pill remove_baris" count="{{$count}}"><i
+        <button type="button" class="btn rounded-pill remove_baris" count="{{ $count }}"><i
                 class="fas fa-trash text-danger"></i>
         </button>
     </td>
