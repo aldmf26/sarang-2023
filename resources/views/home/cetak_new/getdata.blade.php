@@ -7,8 +7,8 @@
             <th class="dhead kolom_select">Nama Karyawan</th>
             <th class="dhead">Pcs/Gr</th>
             <th class="dhead kolom_select">Paket</th>
-            <th class="dhead text-end">Pcs Awal</th>
-            <th class="dhead text-end">Gr Awal</th>
+            <th width="70px" class="dhead text-end">Pcs Awal</th>
+            <th width="70px" class="dhead text-end">Gr Awal</th>
             <th width="70px" class="dhead text-end">Pcs Tdk Ctk</th>
             <th width="70px" class="dhead text-end">Gr Tdk Ctk</th>
             <th width="70px" class="dhead text-end">Pcs Akhir</th>

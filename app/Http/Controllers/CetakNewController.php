@@ -230,19 +230,23 @@ class CetakNewController extends Controller
             $denda_susut = 0;
             $rp_pcs =  0;
         } else {
+            $susut =  (1 - (($r->gr_tdk_ctk + $r->gr_akhir) / $cetak->gr_awal_ctk)) * 100;
             if ($r->tipe_bayar == 1) {
                 $ttl_rp = $r->pcs_akhir * $kelas_cetak->rp_pcs;
+                if ($susut >= $kelas_cetak->batas_susut) {
+                    $denda_susut = $susut * $kelas_cetak->denda_susut;
+                } else {
+                    $denda_susut = 0;
+                }
             } else {
-                $ttl_rp = $r->gr_akhir * $kelas_cetak->rp_pcs;
-            }
-            $rp_hcr = $r->pcs_hcr * $kelas_cetak->denda_hcr;
-
-            $susut =  (1 - (($r->gr_tdk_ctk + $r->gr_akhir) / $cetak->gr_awal_ctk)) * 100;
-            if ($susut >= $kelas_cetak->batas_susut) {
-                $denda_susut = $susut * $kelas_cetak->denda_susut;
-            } else {
+                if ($susut > $kelas_cetak->batas_susut) {
+                    $ttl_rp = $r->gr_akhir * $kelas_cetak->rp_down;
+                } else {
+                    $ttl_rp = $r->gr_akhir * $kelas_cetak->rp_pcs;
+                }
                 $denda_susut = 0;
             }
+            $rp_hcr = $r->pcs_hcr * $kelas_cetak->denda_hcr;
             $rp_pcs =  $kelas_cetak->rp_pcs;
         }
 
