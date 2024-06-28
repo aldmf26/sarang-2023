@@ -10,12 +10,12 @@
             </div>
             <div class="col-lg-12 mt-2">
                 <div class="row">
-                    <div class="col-lg-7">
+                    <div class="col-lg-5">
                         <input type="text" id="tbl1input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
 
-                    <div class="col-lg-5">
+                    <div class="col-lg-7">
                         <form action="{{ route('gradingbj.grading') }}" method="post">
                             @csrf
                             <a href="#" class="btn btn-sm btn-info"
@@ -29,6 +29,12 @@
                                 class="btn btn-sm btn-primary" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Grading
+                                <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            </button>
+                            <button name="submit" value="selisih" x-transition x-show="cek.length"
+                                class="btn btn-sm btn-danger" type="submit">
+                                <i class="fas fa-plus"></i>
+                                Selisih
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             </button>
                         </form>

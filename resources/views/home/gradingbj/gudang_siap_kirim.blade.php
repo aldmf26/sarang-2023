@@ -6,15 +6,17 @@
     <x-slot name="cardBody">
         <section x-data="{ cek: [] }">
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-5">
                     <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-7">
                     <form action="{{ route('pengiriman.kirim') }}" method="post">
                         @csrf
-                        <a href="#" class="btn btn-sm btn-info"
+                        <a href="{{route('pengiriman.gudang')}}" class="btn btn-sm btn-info"
                             href=""><i class="fa fa-warehouse"></i> Gudang</a>
+                        <a href="{{route('packinglist.pengiriman')}}" class="btn btn-sm btn-primary"
+                            href=""><i class="fa fa-clipboard-list"></i> Packinglist</a>
                     
                         <input type="hidden" name="no_box" class="form-control" :value="cek">
                         <button x-transition x-show="cek.length"
@@ -42,8 +44,10 @@
                             $ttlPcs = 0;
                             $ttlGr = 0;
                             foreach ($gudang as $d) {
-                                $ttlPcs += $d->pcs - $d->pcs_pengiriman;
-                                $ttlGr += $d->gr - $d->gr_pengiriman;
+                                if($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0){
+                                    $ttlPcs += $d->pcs - $d->pcs_pengiriman;
+                                    $ttlGr += $d->gr - $d->gr_pengiriman;
+                                }
                             }
                         @endphp
                         <tr>
@@ -55,45 +59,31 @@
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
-                                <tr @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
-                                    <td>SP{{ $d->no_box }}</td>
-                                    <td class="text-primary pointer">
-                                        <span class="detail" data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>  
-                                    </td>
-                                    <td class="text-end">{{ $d->pcs - $d->pcs_pengiriman }}</td>
-                                    <td class="text-end">{{ $d->gr - $d->gr_pengiriman }}</td>
-                                    <td align="right" class="d-flex justify-content-evenly">
-                                        <input type="checkbox" class="form-check"
-                                            :checked="cek.includes('{{ $d->no_box }}')" name="id[]" id=""
-                                            value="{{ $d->no_box }}">
-    
-                                        @php
-                                            $param = ['no_box' => $d->no_box, 'selesai' => $d->selesai];
-                                        @endphp
-                                        @if ($d->selesai == 'T')
-                                            <a onclick="return confirm('Yakin dihapus ?')"
-                                                href="{{ route('gradingbj.cancel', $param) }}">
-                                                <span class="badge bg-danger">Cancel</span>
-                                            </a>
-                                        @endif
-    
-                                        {{-- <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"
-                                            data-kategori="cetak">
-                                            <span class="badge bg-primary">Edit</span>
-                                        </a> --}}
-    
-                                        {{-- <a onclick="return confirm('Anda Yakin ?')"
-                                        href="{{ route('gradingbj.selesai', $param) }}">
-                                        <span class="badge bg-success">
-                                            @if ($d->selesai == 'Y')
-                                                <i class="fas fa-redo"></i>
-                                            @else
-                                                selesai
+                                @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0)
+                                    <tr @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
+                                        <td>P{{ $d->no_box }}</td>
+                                        <td class="text-primary pointer">   
+                                            <span class="detail" data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>  
+                                        </td>
+                                        <td class="text-end">{{ $d->pcs - $d->pcs_pengiriman }}</td>
+                                        <td class="text-end">{{ $d->gr - $d->gr_pengiriman }}</td>
+                                        <td align="right" class="d-flex justify-content-evenly">
+                                            <input type="checkbox" class="form-check"
+                                                :checked="cek.includes('{{ $d->no_box }}')" name="id[]" id=""
+                                                value="{{ $d->no_box }}">
+        
+                                            @php
+                                                $param = ['no_box' => $d->no_box, 'selesai' => $d->selesai];
+                                            @endphp
+                                            @if ($d->selesai == 'T')
+                                                <a onclick="return confirm('Yakin dihapus ?')"
+                                                    href="{{ route('gradingbj.cancel', $param) }}">
+                                                    <span class="badge bg-danger">Cancel</span>
+                                                </a>
                                             @endif
-                                        </span>
-                                    </a> --}}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

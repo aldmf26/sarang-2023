@@ -57,6 +57,9 @@ class GradingBjController extends Controller
         if ($r->submit == 'export') {
             return $this->exportGrading($r->no_box);
         }
+        if ($r->submit == 'selisih') {
+            return $this->selisih($r->no_box);
+        }
         $getFormulir = Grading::dapatkanStokBox('formulir', $r->no_box);
         $no_invoice = 1001;
         $gradeStatuses = ['bentuk', 'turun'];
@@ -170,14 +173,14 @@ class GradingBjController extends Controller
                 if (
                     empty($nobox) ||
                     empty($grade) ||
-                    empty($pcs) ||
+                    // empty($pcs) ||
                     empty($gr) ||
                     empty($boxPengiriman)
                 ) {
                     $pesan = [
                         empty($nobox) => "NO BOX",
                         empty($grade) => "GRADE",
-                        empty($pcs) => "PCS",
+                        // empty($pcs) => "PCS",
                         empty($gr) => "GR",
                         empty($boxPengiriman) => "BOX PENGIRIMAN",
                     ];
@@ -214,6 +217,11 @@ class GradingBjController extends Controller
         }
     }
 
+    public function selisih($no_box)
+    {
+        return redirect()->back()->with('sukses', 'Data Berhasil');
+    }
+
     public function create(Request $r)
     {
         $noinvoice = $this->getNoInvoiceTambah();
@@ -243,17 +251,7 @@ class GradingBjController extends Controller
 
     public function gudang_siap_kirim(Request $r)
     {
-        $gudang = DB::select(
-            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, c.pcs as pcs_pengiriman, c.gr as gr_pengiriman
-            FROM `grading` as a
-            left JOIN tb_grade as b on a.id_grade = b.id_grade
-            LEFT JOIN (
-                select no_box, sum(pcs) as pcs,sum(gr) as gr from pengiriman group by no_box
-            ) as c on c.no_box = a.no_box_grading
-            WHERE a.id_grade is not null
-            GROUP BY a.no_box_grading 
-            ORDER BY a.no_box_grading ASC"
-        );
+        $gudang = Grading::siapKirim();
         $data = [
             'title' => 'Stock Siap Kirim',
             'gudang' => $gudang
@@ -264,7 +262,7 @@ class GradingBjController extends Controller
     {
         $no_box = $r->no_box;
         $detail = DB::table('grading as a')
-            ->select('c.tipe', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
+            ->select('c.tipe','c.ket', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
             ->join('tb_grade as b', 'a.id_grade', 'b.id_grade')
             ->join('bk as c', 'c.no_box', 'a.no_box_sortir')
             ->where([['a.no_box_grading', $no_box], ['c.kategori', 'sortir']])->get();

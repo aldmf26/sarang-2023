@@ -381,13 +381,19 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/po/{no_nota}', 'po')->name('po');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');
+            Route::post('/save_po', 'save_po')->name('save_po');
             Route::get('/template', 'template')->name('template');
+            Route::get('/gudang', 'gudang')->name('gudang');
             Route::post('/kirim', 'kirim')->name('kirim');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
+            Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
+            Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
+            Route::get('/batal', 'batal')->name('batal');
         });
     Route::controller(PackingListController::class)
         ->prefix('home/gradingbj/packinglist')

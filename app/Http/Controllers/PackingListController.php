@@ -56,7 +56,15 @@ class PackingListController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
         
-        $packing = DB::select("SELECT a.no_nota,a.no_invoice_manual as no_invoice,a.nm_packing,a.tgl,count(*) as ttl_box,sum(b.pcs) as pcs, sum(a.gr_naik + b.gr) as gr FROM `pengiriman_packing_list` as a
+        $packing = DB::select("SELECT 
+        a.no_nota,
+        a.no_invoice_manual as no_invoice,
+        a.nm_packing,
+        a.tgl,
+        count(*) as ttl_box,
+        sum(b.pcs) as pcs,
+        sum(b.gr + (b.gr / a.kadar)) as gr 
+        FROM `pengiriman_packing_list` as a
         JOIN pengiriman as b on a.id_pengiriman = b.id_pengiriman
         WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
         GROUP BY a.no_nota
@@ -64,6 +72,7 @@ class PackingListController extends Controller
 
         $data = [
             'title' => 'Pengiriman',
+
             'packing' => $packing,
         ];
 
@@ -84,7 +93,8 @@ class PackingListController extends Controller
         $detailPacking = DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->first();
         $id_pengiriman = DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->pluck('id_pengiriman')->toArray();
         $id_pengiriman = implode(',', $id_pengiriman);
-        $detail = DB::select("SELECT a.grade,sum(a.pcs) as pcs, sum(a.gr + c.gr_naik) as gr, count(*) as box
+        $detail = DB::select("SELECT a.grade,sum(a.pcs) as pcs, sum(a.gr + (a.gr / c.kadar)) as gr 
+, count(*) as box
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.id_pengiriman = c.id_pengiriman
         WHERE a.id_pengiriman in ($id_pengiriman)

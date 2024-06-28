@@ -12,7 +12,7 @@ class Grading extends Model
     {
         $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe, c.name as pemberi, b.no_invoice, sum(b.pcs_awal - d.pcs) as pcs_awal, sum(b.gr_awal - d.gr) as gr_awal
+        b.no_box, b.tanggal, e.tipe, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'sortir'
@@ -32,5 +32,21 @@ class Grading extends Model
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];
+    }
+
+    public static function siapKirim()
+    {
+        $gudang = DB::select(
+            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, c.pcs as pcs_pengiriman, c.gr as gr_pengiriman
+            FROM `grading` as a
+            left JOIN tb_grade as b on a.id_grade = b.id_grade
+            LEFT JOIN (
+                select no_box, sum(pcs) as pcs,sum(gr) as gr from pengiriman group by no_box
+            ) as c on c.no_box = a.no_box_grading
+            WHERE a.id_grade is not null
+            GROUP BY a.no_box_grading 
+            ORDER BY a.no_box_grading ASC"
+        );
+        return $gudang;
     }
 }
