@@ -5,7 +5,7 @@
 
     <x-slot name="cardBody">
 
-        <section class="row" x-data="{ cek: [''] }">
+        <section class="row" x-data="{ cek: [] }">
             <div class="col-lg-12">
             </div>
             <div class="col-lg-12 mt-2">
