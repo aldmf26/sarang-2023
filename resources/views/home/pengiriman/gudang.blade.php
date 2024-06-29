@@ -31,22 +31,30 @@
                         </tr>
                         @php
                             if (!function_exists('ttl')) {
-                                function ttl($tl)
+                                function ttl($tl, $kolom)
                                 {
-                                    return [
-                                        'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
-                                        'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
-
-                                        'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
-                                    ];
+                                    return array_sum(array_column($tl, $kolom));
                                 }
                             }
+                            $ttlRpGudang = 0;
+                            foreach($gudang as $g) {
+                                    $ttlRpGudang += $g->total_rp_gram_str * $g->gr;
+                            }
                         @endphp
-                        
+                        <tr>
+                            <th class="dheadstock text-center" colspan="2">Total</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($gudang,'pcs'),0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($gudang,'gr'),0) }}</th>
+                            <th class="dheadstock text-end"></th>
+                            <th class="dheadstock text-end">{{ number_format($ttlRpGudang,0)  }}</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach ($gudang as $d)
                         @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0)
+                        @php
+                            $rpGram = $d->total_rp_gram_str;
+                        @endphp
                             <tr >
                                 <td>P{{ $d->no_box }}</td>
                                 <td class="">   
@@ -54,8 +62,8 @@
                                 </td>
                                 <td class="text-end">{{ $d->pcs }}</td>
                                 <td class="text-end">{{ $d->gr }}</td>
-                                <td class="text-end">{{ $d->gr }}</td>
-                                <td class="text-end">{{ $d->gr }}</td>
+                                <td class="text-end">{{ number_format($rpGram,0) }}</td>
+                                <td class="text-end">{{ number_format($rpGram * $d->gr,0) }}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -79,22 +87,29 @@
                             <th class="dhead text-end">Total Rp</th>
                         </tr>
                         @php
-                            if (!function_exists('ttl')) {
-                                function ttl($tl)
-                                {
-                                    return [
-                                        'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
-                                        'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
-
-                                        'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
-                                    ];
-                                }
-                            }
-                        @endphp
                         
+                        $ttlRpGudang = 0;
+                        $pcsTtl = 0;
+                        $grTtl = 0;
+                        foreach($selesai as $g) {
+                            $pcsTtl += $g->pcs;
+                            $grTtl += $g->gr;
+                            $ttlRpGudang += $g->rp_gram * $g->gr;
+                        }
+                    @endphp
+                    <tr>
+                        <th class="dheadstock text-center" colspan="2">Total</th>
+                        <th class="dheadstock text-end">{{ number_format($pcsTtl,0) }}</th>
+                        <th class="dheadstock text-end">{{ number_format($grTtl,0) }}</th>
+                        <th class="dheadstock text-end"></th>
+                        <th class="dheadstock text-end">{{ number_format($ttlRpGudang,0)  }}</th>
+                    </tr>
                     </thead>
                     <tbody>
                         @foreach ($selesai as $d)
+                        @php
+                            $rpGram = $d->rp_gram;
+                        @endphp
                             <tr >
                                 <td>P{{ $d->no_box }}</td>
                                 <td class="">   
@@ -102,8 +117,8 @@
                                 </td>
                                 <td class="text-end">{{ $d->pcs }}</td>
                                 <td class="text-end">{{ $d->gr }}</td>
-                                <td class="text-end">{{ $d->gr }}</td>
-                                <td class="text-end">{{ $d->gr }}</td>
+                                <td class="text-end">{{ number_format($rpGram,0) }}</td>
+                                <td class="text-end">{{ number_format($rpGram * $d->gr,0) }}</td>
                             </tr>
                     @endforeach
                         

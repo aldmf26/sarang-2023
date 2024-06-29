@@ -407,7 +407,7 @@ class Cabut extends Model
             sum(gr_akhir) as gr_akhir, 
             sum(ttl_rp) as ttl_rp,
             sum((1 - gr_akhir / gr_awal) * 100) as susut
-            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
         LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 

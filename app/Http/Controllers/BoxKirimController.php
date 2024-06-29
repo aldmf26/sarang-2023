@@ -186,6 +186,7 @@ class BoxKirimController extends Controller
             $ambilBox = DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr FROM `grading` as a
                     where a.no_box_grading = $d
                     group by a.no_box_grading");
+            $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
             $dataToInsert[] = [
                 'no_box' => $d,
                 'pcs' => $ambilBox->pcs,
@@ -194,6 +195,7 @@ class BoxKirimController extends Controller
                 'grade' => $grade,
                 'tgl_input' => $tgl_input,
                 'no_nota' => $no_nota,
+                'rp_gram' => $rp_gram,
             ];
         }
         DB::table('pengiriman')->insert($dataToInsert);
@@ -287,51 +289,15 @@ class BoxKirimController extends Controller
     {
         $selesai = DB::table('pengiriman_packing_list as a')
                         ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
-                        ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade')
+                        ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'b.rp_gram')
                         ->get();
 
-        $querydilaporan = DB::select("SELECT 
-            a.no_box,
-            d.pcs_akhir as pcs_str, 
-            d.gr_akhir as gr_str, 
-            (
-                (
-                (a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp
-                ) / c.gr_akhir
-            ) as rp_gram_str, 
-            (
-                (
-                1 -(d.gr_akhir / a.gr_awal)
-                ) * 100
-            ) as sst_str
-            FROM 
-            bk as a 
-            left join cabut as b on b.no_box = a.no_box 
-            left join (
-                SELECT 
-                c.no_box, 
-                c.pcs_akhir, 
-                c.gr_akhir, 
-                c.gr_tdk_cetak, 
-                c.ttl_rp, 
-                (e.rp_gr * c.gr_akhir) as oprasional_ctk 
-                FROM 
-                cetak_new as c 
-                left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak 
-                left join oprasional as e on e.bulan = c.bulan_dibayar 
-                where 
-                d.kategori = 'CTK'
-            ) as c on c.no_box = a.no_box 
-            left join sortir as d on d.no_box = a.no_box 
-            
-            where 
-            a.kategori = 'cabut' 
-            and a.baru = 'baru'
-            GROUP BY e.no_box_sortir;");
+        $gudang = Grading::gudangPengirimanGr();
+        // $gudang = Grading::siapKirim();
                             
         $data = [
             'title' => 'Gudang Pengiriman',
-            'gudang' => Grading::siapKirim(),
+            'gudang' => $gudang,
             'selesai' => $selesai
         ];
         return view('home.pengiriman.gudang', $data);

@@ -5,7 +5,7 @@
 
     <x-slot name="cardBody">
 
-        <section class="row" x-data="{ cek: [] }">
+        <section class="row" x-data="{ cek: [''] }">
             <div class="col-lg-12">
             </div>
             <div class="col-lg-12 mt-2">
@@ -18,8 +18,8 @@
                     <div class="col-lg-7">
                         <form action="{{ route('gradingbj.grading') }}" method="post">
                             @csrf
-                            <a href="#" class="btn btn-sm btn-info"
-                                href=""><i class="fa fa-warehouse"></i> Gudang</a>
+                            <a href="#" data-bs-target="#selisih" data-bs-toggle="modal" class="selisih btn btn-sm btn-primary"
+                                href=""><i class="fa fa-warehouse"></i> Data Selisih</a>
                             <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
                                 href="">Import</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
@@ -85,9 +85,23 @@
                 <input type="file" name="file" class="form-control">
             </x-theme.modal>
         </form>
+        <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
+            <div id="loadSelisih"></div>
+        </x-theme.modal>
         @section('scripts')
             <script>
                 pencarian('tbl1input', 'tbl1')
+                $(".selisih").click(function (e) { 
+                    e.preventDefault();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('gradingbj.load_selisih')}}",
+                        success: function (r) {
+                            $("#loadSelisih").html(r);
+                            loadTable('tblSelisih')
+                        }
+                    });
+                });
             </script>
         @endsection
     </x-slot>

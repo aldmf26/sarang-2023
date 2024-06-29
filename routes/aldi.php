@@ -456,6 +456,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/cancel', 'cancel')->name('cancel');
             Route::get('/selesai', 'selesai')->name('selesai');
+            Route::get('/load_selisih', 'load_selisih')->name('load_selisih');
+            Route::get('/export_selisih', 'export_selisih')->name('export_selisih');
         });
     Route::controller(OpnameController::class)
         ->prefix('home/opname')
