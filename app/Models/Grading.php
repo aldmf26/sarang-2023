@@ -53,17 +53,7 @@ class Grading extends Model
 
     public static function gudangPengirimanGr($no_box = null)
     {
-        $whereBox = $no_box ? "WHERE 
-                NOT EXISTS (
-                    SELECT 1
-                    FROM pengiriman p
-                    WHERE p.no_box = g.no_box
-                ) AND WHERE g.no_box = $no_box " : "WHERE 
-                NOT EXISTS (
-                    SELECT 1
-                    FROM pengiriman p
-                    WHERE p.no_box = g.no_box
-                )";
+        $whereBox = $no_box ? "AND g.no_box = $no_box " : '';
         $select = $no_box ? 'selectOne' : 'select';
         return DB::$select("WITH
                 sortir_data AS (
@@ -145,7 +135,12 @@ class Grading extends Model
                 g.total_rp_gram_str 
                 FROM 
                 grading_total g
-                 $whereBox
+                WHERE 
+                NOT EXISTS (
+                    SELECT 1
+                    FROM pengiriman p
+                    WHERE p.no_box = g.no_box
+                ) $whereBox
                 ");
     }
 }
