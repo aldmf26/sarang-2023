@@ -140,7 +140,7 @@ class Grading extends Model
                     SELECT 1
                     FROM pengiriman p
                     WHERE p.no_box = g.no_box
-                )
-                $whereBox");
+                ) $whereBox
+                ");
     }
 }
