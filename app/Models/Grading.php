@@ -55,7 +55,7 @@ class Grading extends Model
     {
         $whereBox = $no_box ? "AND WHERE g.no_box = $no_box " : '';
         $select = $no_box ? 'selectOne' : 'select';
-        return DB::$select("WITH -- Subquery untuk mengambil data sortir dan operasi lainnya
+        return DB::$select("WITH
                 sortir_data AS (
                 SELECT 
                     a.no_box, 
@@ -86,7 +86,7 @@ class Grading extends Model
                 GROUP BY 
                     a.no_box
                 ), 
-                -- Query untuk grading dan menghitung total rp_gram_str
+            
                 grading_total AS (
                 SELECT 
                     GROUP_CONCAT(a.no_box_sortir) as no_box_sortir, 
