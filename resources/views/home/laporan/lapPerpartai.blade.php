@@ -188,10 +188,10 @@
                                         <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
-                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional }})">
+                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional ?? 0 }})">
                                             <input type="text" class="form-control" autofocus
                                                 name="biaya_oprasional" id="number" x-model="formattedNumber"
-                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional }}">
+                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional ?? 0 }}">
 
                                         </td>
                                     </tr>
