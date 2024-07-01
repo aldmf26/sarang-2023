@@ -100,7 +100,7 @@ class LaporanModel extends Model
         ) as j on j.no_box =  a.no_box
 
 
-        where a.kategori = 'cabut' and a.baru != 'baru'
+        where a.kategori = 'cabut' and a.baru = 'baru'
         
         ;");
         return $result;
