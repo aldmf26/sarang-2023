@@ -8,20 +8,38 @@
                     class="btn btn-sm btn-primary">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
-                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" 
-                    teks="Tambah" />
-                    <div>
-                        @include('home.bk.btn_import')
-                    </div>
+                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" teks="Tambah" />
+                <div>
+                    @include('home.bk.btn_import')
+                </div>
                 <x-theme.btn_filter />
             </div>
         </div>
-       
-        
+
+
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
+            @if ($kategori == 'nanda')
+                <form action="{{ route('importperbaikan.index') }}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    <div class="col-lg-4">
+                        <input type="file" name="file" class="form-control">
+                        <button class="btn btn-primary" type="submit">Import Bk</button>
+                    </div>
+                </form>
+                <form action="{{ route('importperbaikan.importperbaikansortir') }}" enctype="multipart/form-data"
+                    method="post">
+                    @csrf
+                    <div class="col-lg-4">
+                        <input type="file" name="file" class="form-control">
+                        <button class="btn btn-primary" type="submit">Import Sortir</button>
+                    </div>
+                </form>
+            @else
+            @endif
+
             <div class="col-lg-8">
                 {{-- @include('home.bk.nav', ['name' => 'index']) --}}
             </div>

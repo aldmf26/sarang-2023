@@ -11,7 +11,7 @@
                     <table id="tbl1" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="7">Box Stock</th>
+                                <th class="dhead text-center" colspan="6">Box Stock</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
@@ -20,7 +20,6 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total rp</th>
                             </tr>
                             @php
                                 if (!function_exists('ttl')) {
@@ -30,8 +29,6 @@
                                             'pcs' => array_sum(array_column($tl, 'pcs')),
                                             'gr' => array_sum(array_column($tl, 'gr')),
                                             'hrga_satuan' => array_sum(array_column($tl, 'hrga_satuan')),
-                                            'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
-                                            'ttl_rp_cbt' => array_sum(array_column($tl, 'ttl_rp_cbt')),
                                         ];
                                     }
                                 }
@@ -44,8 +41,8 @@
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($bk)['hrga_satuan'], 0) }}</th>
-                                <th class="dheadstock text-end">
-                                    {{ number_format(ttl($bk)['ttl_rp'], 0) }}</th>
+                                {{-- <th class="dheadstock text-end">
+                                    {{ number_format(ttl($bk)['ttl_rp'], 0) }}</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +55,7 @@
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
                                     <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
-                                    <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td>
+                                    {{-- <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -72,7 +69,7 @@
                     <table id="tbl2" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="7">Box sedang proses</th>
+                                <th class="dhead text-center" colspan="6">Box sedang proses</th>
                             </tr>
                             <tr>
 
@@ -82,7 +79,7 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/Gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+                                {{-- <th class="dhead text-end">Total Rp</th> --}}
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
@@ -92,7 +89,7 @@
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabut)['gr'], 0) }}</th>
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabut)['hrga_satuan'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end">{{ number_format(ttl($cabut)['ttl_rp'], 0) }}</th>
+                                {{-- <th class="dheadstock text-end">{{ number_format(ttl($cabut)['ttl_rp'], 0) }}</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -104,7 +101,7 @@
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
                                     <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td> --}}
                                 </tr>
                             @endforeach
 
@@ -119,7 +116,7 @@
                     <table id="tbl3" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="7">
+                                <th class="dhead text-center" colspan="6">
                                     <span>Box selesai siap ctk</span>
                                 </th>
                             </tr>
@@ -129,8 +126,8 @@
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                <th class="dhead text-end">Total Rp Bk</th>
-                                <th class="dhead text-end">Total Rp Cbt</th>
+                                <th class="dhead text-end">Rp/Gr</th>
+                                {{-- <th class="dhead text-end">Total Rp Cbt</th> --}}
 
                             </tr>
                             <tr>
@@ -142,11 +139,11 @@
                                 <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
-                                    {{ number_format(ttl($cabutSelesai)['ttl_rp'], 0) }}
+                                    {{ number_format(ttl($cabutSelesai)['hrga_satuan'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end">
+                                {{-- <th class="dheadstock text-end">
                                     {{ number_format(ttl($cabutSelesai)['ttl_rp_cbt'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -157,9 +154,7 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp_cbt, 0) }}</td>
-
+                                    <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -179,7 +174,7 @@
                     <table id="tbl4" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="8">Cetak stock</th>
+                                <th class="dhead text-center" colspan="6">Cetak stock</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
@@ -188,8 +183,7 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Ttl Rp</th>
-                                <th class="dhead text-end">Total Rp Cbt</th>
+
                             </tr>
                             @php
 
@@ -217,11 +211,11 @@
                                     {{ number_format(ttl2($cabut_selesai)['gr_awal'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end"></th>
-                                <th class="dheadstock text-end">{{ number_format(ttl2($cabut_selesai)['ttl_rp'], 0) }}
+                                {{-- <th class="dheadstock text-end">{{ number_format(ttl2($cabut_selesai)['ttl_rp'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cabut_selesai)['cost_cbt'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -232,9 +226,9 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt) / $d->gr_awal, 0) }}</td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -248,7 +242,7 @@
                     <table id="tbl5" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="9">Cetak sedang proses</th>
+                                <th class="dhead text-center" colspan="7">Cetak sedang proses</th>
                             </tr>
                             <tr>
 
@@ -259,8 +253,8 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Ttl Rp</th>
-                                <th class="dhead text-end">Total Rp Cbt</th>
+                                {{-- <th class="dhead text-end">Ttl Rp</th>
+                                <th class="dhead text-end">Total Rp Cbt</th> --}}
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
@@ -273,11 +267,11 @@
                                 <th class="dheadstock text-end">{{ number_format(ttl2($cetak_proses)['gr_awal'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end"></th>
-                                <th class="dheadstock text-end">{{ number_format(ttl2($cetak_proses)['ttl_rp'], 0) }}
+                                {{-- <th class="dheadstock text-end">{{ number_format(ttl2($cetak_proses)['ttl_rp'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cetak_proses)['cost_cbt'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -289,9 +283,10 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt) / $d->gr_awal, 0) }}</td>
+                                    {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -304,7 +299,7 @@
                     <table id="tbl6" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="9">
+                                <th class="dhead text-center" colspan="7">
                                     <span>Cetak selesai siap sortir</span>
                                 </th>
                             </tr>
@@ -315,9 +310,9 @@
                                 <th class="dhead text-center">No Box</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                <th class="dhead text-end">Total Rp</th>
-                                <th class="dhead text-end">Total Rp Cbt</th>
-                                <th class="dhead text-end">Total Rp Ctk</th>
+                                <th class="dhead text-end">Rp/gr</th>
+                                {{-- <th class="dhead text-end">Total Rp Cbt</th>
+                                <th class="dhead text-end">Total Rp Ctk</th> --}}
 
                             </tr>
                             <tr>
@@ -332,14 +327,13 @@
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cetak_selesai)['gr_awal'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end">{{ number_format(ttl2($cetak_selesai)['ttl_rp'], 0) }}
-                                </th>
-                                <th class="dheadstock text-end">
+                                <th class="dheadstock text-end"></th>
+                                {{-- <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cetak_selesai)['cost_cbt'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl2($cetak_selesai)['cost_ctk'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -351,9 +345,11 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk) / $d->gr_awal, 0) }}
+                                    </td>
+                                    {{-- <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td> --}}
 
                                 </tr>
                             @endforeach
@@ -374,7 +370,7 @@
                     <table id="tbl7" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="9">Sortir stock</th>
+                                <th class="dhead text-center" colspan="6">Sortir stock</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
@@ -383,9 +379,9 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+                                {{-- <th class="dhead text-end">Total Rp</th>
                                 <th class="dhead text-end">Total Rp Cbt</th>
-                                <th class="dhead text-end">Total Rp Ctk</th>
+                                <th class="dhead text-end">Total Rp Ctk</th> --}}
                             </tr>
                             @php
                                 if (!function_exists('ttl3')) {
@@ -410,12 +406,12 @@
                                 <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['gr_awal'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end"></th>
-                                <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['ttl_rp'], 0) }}
+                                {{-- <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['ttl_rp'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['cost_cbt'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">{{ number_format(ttl3($siap_sortir)['cost_ctk'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -426,10 +422,12 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk) / $d->gr_awal, 0) }}
+                                    </td>
+                                    {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -442,7 +440,7 @@
                     <table id="tbl7" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="9">Sortir sedang proses</th>
+                                <th class="dhead text-center" colspan="6">Sortir sedang proses</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
@@ -451,9 +449,9 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+                                {{-- <th class="dhead text-end">Total Rp</th>
                                 <th class="dhead text-end">Total Rp Cbt</th>
-                                <th class="dhead text-end">Total Rp Ctk</th>
+                                <th class="dhead text-end">Total Rp Ctk</th> --}}
                             </tr>
                             @php
                                 if (!function_exists('ttl3')) {
@@ -480,14 +478,14 @@
                                     {{ number_format(ttl3($sortir_proses)['gr_awal'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end"></th>
-                                <th class="dheadstock text-end">{{ number_format(ttl3($sortir_proses)['ttl_rp'], 0) }}
+                                {{-- <th class="dheadstock text-end">{{ number_format(ttl3($sortir_proses)['ttl_rp'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl3($sortir_proses)['cost_cbt'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl3($sortir_proses)['cost_ctk'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -498,10 +496,12 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk) / $d->gr_awal, 0) }}
+                                    </td>
+                                    {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_ctk, 0) }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -514,7 +514,7 @@
                     <table id="tbl7" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="dhead text-center" colspan="10">Sortir selesai siap grading</th>
+                                <th class="dhead text-center" colspan="6">Sortir selesai siap grading</th>
                             </tr>
                             <tr>
                                 <th class="dhead text-center">Pemilik</th>
@@ -523,10 +523,10 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+                                {{-- <th class="dhead text-end">Total Rp</th>
                                 <th class="dhead text-end">Total Rp Cbt</th>
                                 <th class="dhead text-end">Total Rp Ctk</th>
-                                <th class="dhead text-end">Total Rp Str</th>
+                                <th class="dhead text-end">Total Rp Str</th> --}}
                             </tr>
                             @php
                                 if (!function_exists('ttl4')) {
@@ -553,7 +553,8 @@
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl4($sortir_selesai)['gr_awal'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end">
+                                <th class="dheadstock text-center"></th>
+                                {{-- <th class="dheadstock text-end">
                                     {{ number_format(ttl4($sortir_selesai)['ttl_rp'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
@@ -567,7 +568,7 @@
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl4($sortir_selesai)['cost_str'], 0) }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -578,11 +579,13 @@
                                     <td align="center">{{ $d->no_box }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_str) / $d->gr_awal, 0) }}
+                                    </td>
+                                    {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_ctk, 0) }}</td>
-                                    <td align="right">{{ number_format($d->cost_str, 0) }}</td>
+                                    <td align="right">{{ number_format($d->cost_str, 0) }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

@@ -165,6 +165,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create_ambil_cetak', 'create_ambil_cetak')->name('create_ambil_cetak');
             Route::post('/import', 'import')->name('import');
             Route::get('/export', 'export')->name('export');
+            Route::post('/importperbaikan', 'importperbaikan')->name('importperbaikan');
         });
     Route::controller(CabutController::class)
         ->prefix('home/cabut')

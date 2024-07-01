@@ -129,15 +129,16 @@
                                 <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->cost_dll, 0) }}</td>
                                 <td class="text-end">
-                                    {{ number_format($p->oprasional_cbt + $p->oprasional_ctk + $p->oprasional_str + $p->oprasional_cu + $p->oprasional_eo, 0) }}
+                                    {{ empty($p->oprasional_cbt) ? 0 : number_format($p->oprasional_cbt + $p->oprasional_ctk + $p->oprasional_str + $p->oprasional_cu + $p->oprasional_eo, 0) }}
                                 </td>
                                 @php
-                                    $cost_oprasional =
-                                        $p->oprasional_cbt +
-                                        $p->oprasional_ctk +
-                                        $p->oprasional_str +
-                                        $p->oprasional_cu +
-                                        $p->oprasional_eo;
+                                    $cost_oprasional = empty($p->oprasional_cbt)
+                                        ? 0
+                                        : $p->oprasional_cbt +
+                                            $p->oprasional_ctk +
+                                            $p->oprasional_str +
+                                            $p->oprasional_cu +
+                                            $p->oprasional_eo;
                                 @endphp
                                 <td>{{ number_format($cost_oprasional + $p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str + $p->cost_cu + $p->cost_dll + $p->cost_eo, 0) }}
                                 </td>
@@ -159,8 +160,16 @@
                 @csrf
                 <x-theme.modal title="Oprasional" idModal="oprasional" size="modal-lg" btnSave="Y">
                     <div class="row">
+                        <div class="col-lg-3 mb-3">
+                            <label for="">Pilih Bulan</label>
+                            <select name="" id="" class="form-control">
+                                @foreach ($bulandata as $b)
+                                    <option value="{{ $b->id_bulan }}">{{ $b->nm_bulan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-lg-12">
-                            <h5>Bulan/Tahun : {{ $bulan }}/{{ date('Y') }} </h5>
+
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -179,10 +188,10 @@
                                         <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
-                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional }})">
+                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional ?? 0 }})">
                                             <input type="text" class="form-control" autofocus
                                                 name="biaya_oprasional" id="number" x-model="formattedNumber"
-                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional }}">
+                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional ?? 0 }}">
 
                                         </td>
                                     </tr>
