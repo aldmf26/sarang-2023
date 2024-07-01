@@ -118,6 +118,7 @@
                                 <td class="text-end">{{ $p->gr_str }}</td>
                                 <td class="text-end">
                                     {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_str, 0) }}
+                                    dsad
                                 </td>
                                 <td class="text-end">{{ number_format($p->sst_str, 0) }} %</td>
 
