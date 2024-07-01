@@ -29,7 +29,8 @@ class Laporan_akhir extends Controller
             'cu' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
-            'oprasional' => DB::table('oprasional')->where('bulan', $bulan)->first()
+            'oprasional' => DB::table('oprasional')->where('bulan', $bulan)->first(),
+            'bulandata' => DB::table('bulan')->get()
         ];
         return view('home.laporan.lapPerpartai', $data);
     }

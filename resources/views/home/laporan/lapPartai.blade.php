@@ -64,7 +64,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $p->nm_partai }}</td>
+                                <td>{{ $p->nm_partai ?? '' }}</td>
                                 <td class="text-end">{{ number_format($c->pcs ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($c->gr ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($c->rupiah ?? 0, 0) }}</td>

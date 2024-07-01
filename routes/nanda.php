@@ -7,6 +7,7 @@ use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
+use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
@@ -240,4 +241,11 @@ Route::middleware('auth')->group(function () {
     //         Route::get('/', 'index')->name('index');
     //         Route::get('/export', 'export')->name('export');
     //     });
+    Route::controller(importPerbaikanController::class)
+        ->prefix('home/importperbaikan')
+        ->name('importperbaikan.')
+        ->group(function () {
+            Route::post('/', 'importperbaikan')->name('index');
+            Route::post('/importperbaikansortir', 'importperbaikansortir')->name('importperbaikansortir');
+        });
 });
