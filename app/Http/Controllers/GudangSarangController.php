@@ -186,7 +186,7 @@ class GudangSarangController extends Controller
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = '$kategori' and a.tanggal between '$tgl1' and '$tgl2'
+        WHERE a.kategori = '$kategori' 
         group by a.no_invoice
         order by a.id_formulir DESC
         ");
@@ -373,7 +373,7 @@ class GudangSarangController extends Controller
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'sortir' and a.tanggal between '$tgl1' and '$tgl2'
+        WHERE a.kategori = 'sortir' 
         group by a.no_invoice
         order by a.id_formulir DESC
         ");
@@ -400,7 +400,7 @@ class GudangSarangController extends Controller
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'grade' and a.tanggal between '$tgl1' and '$tgl2'
+        WHERE a.kategori = 'grade' 
         group by a.no_invoice
         order by a.id_formulir DESC
         ");
