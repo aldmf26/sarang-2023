@@ -93,7 +93,7 @@
                                 </td>
                                 <td class="text-end">{{ $p->pcs_awal }}</td>
                                 <td class="text-end">{{ $p->gr_awal }}</td>
-                                <td class="text-end">{{ number_format($p->hrga_satuan, 0) }}</td>
+                                <td class="text-end">{{ number_format($p->hrga_satuan, 0) }} dsa</td>
 
                                 <td class="text-end">{{ $p->pcs_cbt }}</td>
                                 <td class="text-end">{{ $p->gr_cbt }}</td>
