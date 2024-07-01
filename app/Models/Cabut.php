@@ -694,7 +694,7 @@ class Cabut extends Model
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         return DB::select("SELECT 
         a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai, sum(a.ttl_rp) as ttl_rp_cbt,
-        (b.hrga_satuan * b.gr_awal) as ttl_rp, b.nm_partai
+        (b.hrga_satuan * b.gr_awal) as ttl_rp, b.nm_partai, sum((a.ttl_rp + (b.hrga_satuan * b.gr_awal)) /  a.gr_akhir) as hrga_satuan
         FROM ( 
             SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai, a.ttl_rp
             FROM cabut AS a 
