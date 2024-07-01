@@ -13,23 +13,23 @@
             <form action="{{ route('packinglist.tbh_invoice') }}" method="post">
 
                 <div class="col-lg-12" x-data="{
-                    tbhInvoice: false
+                    tbhInvoice: false,
                 }">
                 <div class="scrollable-table">
 
                     <table class="table table-stripped" id="tablealdi">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Tgl Kirim</th>
-                                <th>No Packinglist</th>
-                                <th>No Invoice</th>
-                                <th>Nama Packing List</th>
-                                <th class="text-end">Box</th>
-                                <th class="text-end">Pcs</th>
-                                <th class="text-end">Gr</th>
+                                <th class="dhead">#</th>
+                                <th class="dhead">Tgl Kirim</th>
+                                <th class="dhead">No Packinglist</th>
+                                {{-- <th class="dhead">No Invoice</th> --}}
+                                <th class="dhead">Nama Packing List</th>
+                                <th class="dhead text-end">Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
                                 {{-- <th class="text-end">Ttl Rp</th> --}}
-                                <th width="100" class="text-center">Aksi</th>
+                                <th width="100" class="dhead text-center">Aksi</th>
                             </tr>
                         </thead>
 
@@ -39,8 +39,8 @@
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
                                     <td>{{ tanggal($d->tgl) }}</td>
-                                    <td>{{ $d->no_nota }}</td>
-                                    <td class="tambah_invoice" no_invoice="{{ $d->no_nota }}">
+                                    <td>PI {{ $d->no_nota }}</td>
+                                    {{-- <td class="tambah_invoice" no_invoice="{{ $d->no_nota }}">
                                         @if (!$d->no_invoice)
                                             @csrf
                                             <span @click="tbhInvoice = !tbhInvoice"
@@ -55,7 +55,7 @@
                                             {{ $d->no_invoice }}
                                         @endif
 
-                                    </td>
+                                    </td> --}}
                                     <td>{{ ucwords($d->nm_packing) }}</td>
                                     <td align="right">{{ $d->ttl_box }}</td>
                                     <td align="right">{{ number_format($d->pcs, 0) }}</td>
@@ -67,9 +67,9 @@
                                         <a href="{{ route('packinglist.print', $d->no_nota) }}"
                                             class="btn btn-sm btn-primary" target="_blank"><i
                                                 class="fas fa-print"></i></a>
-                                        <a onclick="return confirm('Yakin dihapus ?')"
+                                        {{-- <a onclick="return confirm('Yakin dihapus ?')"
                                             href="{{ route('packinglist.delete', $d->no_nota) }}"
-                                            class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a> --}}
 
                                     </td>
                                 </tr>

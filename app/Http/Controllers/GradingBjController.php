@@ -38,7 +38,8 @@ class GradingBjController extends Controller
 
         $arr = [
             'formulir' => $formulir,
-            'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
+            'pengawas' => DB::table('users')->where('posisi_id', 13)->get(),
+            'selisih' => DB::table('grading_selisih')->get()
         ];
         return $arr[$jenis];
     }
@@ -52,10 +53,85 @@ class GradingBjController extends Controller
         return view('home.gradingbj.index', $data);
     }
 
+    public function load_selisih()
+    {
+        $selisih = $this->getDataMaster('selisih');
+        $data = [
+            'title' => 'Load Selisih',
+            'selisih'=> $selisih
+        ];
+        return view('home.gradingbj.selisih',$data);
+    }
+    
+    public function export_selisih()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('grading selisih');
+        $koloms = [
+            'A' => 'no box',
+            'B' => 'tgl',
+            'C' => 'pcs',
+            'D' => 'gr',
+            'E' => 'admin',
+
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('F1:J1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:C1')->applyFromArray($styleBold);
+
+        $selisih = $this->getDataMaster('selisih');
+
+        $no = 2;
+        foreach ($selisih as $item) {
+            $sheet->setCellValue('A' . $no, $item->no_box);
+            $sheet->setCellValue('B' . $no, $item->tgl);
+            $sheet->setCellValue('C' . $no, $item->pcs);
+            $sheet->setCellValue('D' . $no, $item->gr);
+            $sheet->setCellValue('E' . $no, $item->admin);
+
+            $no++;
+        }
+
+        $sheet->getStyle('A1:E' . $no - 1)->applyFromArray($styleBaris);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Grading Selisih";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+
     public function grading(Request $r)
     {
         if ($r->submit == 'export') {
             return $this->exportGrading($r->no_box);
+        }
+        if ($r->submit == 'selisih') {
+            return $this->selisih($r->no_box);
         }
         $getFormulir = Grading::dapatkanStokBox('formulir', $r->no_box);
         $no_invoice = 1001;
@@ -170,28 +246,28 @@ class GradingBjController extends Controller
                 if (
                     empty($nobox) ||
                     empty($grade) ||
-                    empty($pcs) ||
+                    // empty($pcs) ||
                     empty($gr) ||
                     empty($boxPengiriman)
                 ) {
                     $pesan = [
                         empty($nobox) => "NO BOX",
                         empty($grade) => "GRADE",
-                        empty($pcs) => "PCS",
+                        // empty($pcs) => "PCS",
                         empty($gr) => "GR",
                         empty($boxPengiriman) => "BOX PENGIRIMAN",
                     ];
                     DB::rollBack();
                     return redirect()
-                            ->route('gradingbj.index')
-                            ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
+                        ->route('gradingbj.index')
+                        ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
                     $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
-                    if(!$cekGrade){
+                    if (!$cekGrade) {
                         DB::rollBack();
                         return redirect()
-                                ->route('gradingbj.index')
-                                ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
+                            ->route('gradingbj.index')
+                            ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
                     }
 
                     DB::table('grading')->insert([
@@ -212,6 +288,31 @@ class GradingBjController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function selisih($no_box)
+    {
+        try {
+            DB::beginTransaction();
+            foreach (explode(',', $no_box) as $d) {
+                $grading = Grading::dapatkanStokBox('formulir', $d)[0];
+                $data[] = [
+                    'no_box' => $d,
+                    'pcs' => $grading->pcs_awal,
+                    'gr' => $grading->gr_awal,
+                    'admin' => auth()->user()->name,
+                    'tgl' => date('Y-m-d'),
+                ];
+                DB::table('grading')->where('no_box_sortir', $d)->update(['selesai' => 'Y']);
+            }
+            DB::table('grading_selisih')->insert($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('sukses', 'Data Berhasil');
     }
 
     public function create(Request $r)
@@ -243,17 +344,7 @@ class GradingBjController extends Controller
 
     public function gudang_siap_kirim(Request $r)
     {
-        $gudang = DB::select(
-            "SELECT b.nm_grade as grade,b.id_grade,a.selesai, a.no_invoice, a.no_box_grading as no_box, sum(a.pcs) as pcs, sum(a.gr) as gr, c.pcs as pcs_pengiriman, c.gr as gr_pengiriman
-            FROM `grading` as a
-            left JOIN tb_grade as b on a.id_grade = b.id_grade
-            LEFT JOIN (
-                select no_box, sum(pcs) as pcs,sum(gr) as gr from pengiriman group by no_box
-            ) as c on c.no_box = a.no_box_grading
-            WHERE a.id_grade is not null
-            GROUP BY a.no_box_grading 
-            ORDER BY a.no_box_grading ASC"
-        );
+        $gudang = Grading::siapKirim();
         $data = [
             'title' => 'Stock Siap Kirim',
             'gudang' => $gudang
@@ -264,7 +355,7 @@ class GradingBjController extends Controller
     {
         $no_box = $r->no_box;
         $detail = DB::table('grading as a')
-            ->select('c.tipe', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
+            ->select('c.tipe', 'c.ket', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
             ->join('tb_grade as b', 'a.id_grade', 'b.id_grade')
             ->join('bk as c', 'c.no_box', 'a.no_box_sortir')
             ->where([['a.no_box_grading', $no_box], ['c.kategori', 'sortir']])->get();

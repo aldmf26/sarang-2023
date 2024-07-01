@@ -439,7 +439,7 @@ class CetakNewController extends Controller
                     FROM `sortir` as a
                     join tb_anak as b on b.id_anak = a.id_anak
                     WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
-                    AND a.bulan = '$bulan' AND year(a.tgl_input) = '$tahun'");
+                    AND a.bulan = '$bulan' AND year(a.tgl) = '$tahun'");
 
         $dll = DB::select("SELECT
                 a.rupiah as ttl_rp,

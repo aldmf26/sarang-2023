@@ -29,7 +29,7 @@
                 @foreach ($detail as $d)
                     <tr>
                         <td>{{ $d->no_box_sortir }}</td>
-                        <td>{{ $d->tipe }}</td>
+                        <td>{{ $d->tipe . ' ' . $d->ket }}</td>
                         <td>{{ $d->pcs }}</td>
                         <td>{{ $d->gr }}</td>
                     </tr>

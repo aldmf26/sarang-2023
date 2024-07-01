@@ -79,7 +79,7 @@ class DashboardController extends Controller
                 b.name as pgws, 
                 c.nama as nm_anak,
                 a.bulan,
-                YEAR(a.tgl_input) as tahun,
+                YEAR(a.tgl) as tahun,
                 a.pcs_awal,
                 a.gr_awal,
                 a.pcs_akhir,

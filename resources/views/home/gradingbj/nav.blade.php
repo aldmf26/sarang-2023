@@ -36,7 +36,7 @@
 @foreach ($routes as $key => $route)
 
     {{-- @if ($namaRoute != $key) --}}
-    <x-theme.button variant="{{$route['variant']}}" href="{{ route($route['route']) }}"
+    <x-theme.button variant="{{$route['variant'] ?? 'primary'}}" href="{{ route($route['route']) }}"
         icon="{{ $route['icon'] ?? 'fa-warehouse' }}" teks="{{ $route['teks'] }}" />
     {{-- @endif --}}
 @endforeach

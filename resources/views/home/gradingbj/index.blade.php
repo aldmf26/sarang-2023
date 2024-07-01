@@ -10,16 +10,16 @@
             </div>
             <div class="col-lg-12 mt-2">
                 <div class="row">
-                    <div class="col-lg-7">
+                    <div class="col-lg-5">
                         <input type="text" id="tbl1input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                     </div>
 
-                    <div class="col-lg-5">
+                    <div class="col-lg-7">
                         <form action="{{ route('gradingbj.grading') }}" method="post">
                             @csrf
-                            <a href="#" class="btn btn-sm btn-info"
-                                href=""><i class="fa fa-warehouse"></i> Gudang</a>
+                            <a href="#" data-bs-target="#selisih" data-bs-toggle="modal" class="selisih btn btn-sm btn-primary"
+                                href=""><i class="fa fa-warehouse"></i> Data Selisih</a>
                             <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
                                 href="">Import</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
@@ -29,6 +29,12 @@
                                 class="btn btn-sm btn-primary" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Grading
+                                <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            </button>
+                            <button name="submit" value="selisih" x-transition x-show="cek.length"
+                                class="btn btn-sm btn-danger" type="submit">
+                                <i class="fas fa-plus"></i>
+                                Selisih
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             </button>
                         </form>
@@ -79,9 +85,23 @@
                 <input type="file" name="file" class="form-control">
             </x-theme.modal>
         </form>
+        <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
+            <div id="loadSelisih"></div>
+        </x-theme.modal>
         @section('scripts')
             <script>
                 pencarian('tbl1input', 'tbl1')
+                $(".selisih").click(function (e) { 
+                    e.preventDefault();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{route('gradingbj.load_selisih')}}",
+                        success: function (r) {
+                            $("#loadSelisih").html(r);
+                            loadTable('tblSelisih')
+                        }
+                    });
+                });
             </script>
         @endsection
     </x-slot>
