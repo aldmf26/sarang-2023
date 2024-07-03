@@ -19,7 +19,7 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">Sortir stock</th>
+                            <th class="dhead text-center" colspan="5">({{count($siap_sortir)}}) Sortir stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">No Box</th>
@@ -71,7 +71,7 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">Sortir sedang proses</th>
+                            <th class="dhead text-center" colspan="5">({{count($sortir_proses)}}) Sortir sedang proses</th>
                         </tr>
                         <tr>
 
@@ -141,7 +141,7 @@
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="5">
-                                    <span>Sortir selesai siap grading</span>
+                                    <span>({{count($sortir_selesai)}}) Sortir selesai siap grading</span>
                                 </th>
                             </tr>
                             <tr>
@@ -150,19 +150,18 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
-                                <th class="dhead text-center">Aksi</th>
+                                <th class="dhead text-center">Aksi </th>
                             </tr>
                             <tr>
                                 <th class="dheadstock text-center">Total</th>
-                                <th class="dheadstock text-center"></th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl($sortir_selesai)['pcs_awal'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
                                     {{ number_format(ttl($sortir_selesai)['gr_awal'], 0) }}
                                 </th>
-                                <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
-                                    {{ number_format(ttl($sortir_selesai)['ttl_rp'], 0) }}
+                                <th class="dheadstock text-center">
+                                    <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
                                 </th>
 
                             </tr>
@@ -177,7 +176,7 @@
                                     <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="center">
-                                        <input type="checkbox"
+                                        <input type="checkbox" class="form-check"
                                             @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
                                             value="{{ $d->no_box }}" x-model="cek">
                                     </td>

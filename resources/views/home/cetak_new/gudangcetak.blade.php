@@ -19,7 +19,7 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="6">Cetak stock</th>
+                            <th class="dhead text-center" colspan="6">({{count($cabut_selesai)}})Cetak stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">Pemilik</th>
@@ -77,7 +77,7 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="6">Cetak sedang proses</th>
+                            <th class="dhead text-center" colspan="6">({{count($cetak_proses)}}) Cetak sedang proses</th>
                         </tr>
                         <tr>
 
@@ -158,7 +158,7 @@
                     <thead>
                         <tr>
                             <th class="dhead text-center" colspan="8">
-                                <span>Cetak selesai siap sortir</span>
+                                <span>({{count($cetak_selesai)}}) Cetak selesai siap sortir</span>
                             </th>
                         </tr>
                         <tr>
@@ -185,7 +185,7 @@
                             <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                 {{ number_format(ttl($cetak_selesai)['cost_ctk'], 0) }}
                             </th>
-                            <th class="dheadstock text-end"></th>
+                            <th class="dheadstock text-center"><span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span></th>
                         </tr>
                     </thead>
                     <tbody>

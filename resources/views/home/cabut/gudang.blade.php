@@ -45,12 +45,12 @@
                         <table id="tbl1" class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">Box Stock
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">({{count($bk)}}) Box Stock 
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="dhead text-center {{ $posisi == 1 ? '' : 'd-none' }}">Pemilik</th>
-                                    <th class="dhead text-center">No Box</th>
+                                    <th class="dhead text-center">No Box </th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Rp/gr</th>
@@ -110,8 +110,8 @@
                         <table id="tbl2" class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">Box sedang
-                                        proses</th>
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">({{count($cabut)}}) Box sedang
+                                        proses </th>
                                 </tr>
                                 <tr>
 
@@ -161,7 +161,7 @@
                             <thead>
                                 <tr>
                                     <th class="dhead text-center" colspan="{{ $posisi == 1 ? '7' : '6' }}">
-                                        <span>Box selesai siap ctk</span>
+                                        <span>({{count($cabutSelesai)}}) Box selesai siap ctk </span>
 
                                     </th>
                                 </tr>
@@ -172,7 +172,7 @@
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Bk</th>
                                     <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp Cbt</th>
-                                    <th class="dhead "></th>
+                                    <th class="dhead text-center">Aksi</th>
                                 </tr>
                                 <tr>
                                     <th class="dheadstock text-center">Total</th>
@@ -187,7 +187,7 @@
                                     <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($cabutSelesai)['ttl_rp_cbt'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-center">Aksi</th>
+                                    <th class="dheadstock text-center"> <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -206,6 +206,7 @@
                                             <input type="checkbox"
                                                 @change="tambah({{ $d->no_box }}, {{ $d->pcs }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
                                                 value="{{ $d->no_box }}" x-model="cek">
+                                                
                                         </td>
                                     </tr>
                                 @endforeach
@@ -357,6 +358,7 @@
                                             <input type="checkbox"
                                                 @change="tambah2({{ $d->no_box }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
                                                 value="{{ $d->no_box }}" x-model="cek">
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
