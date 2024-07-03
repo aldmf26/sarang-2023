@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cabut;
 use App\Models\CetakModel;
+use App\Models\Grading;
 use App\Models\Sortir;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GudangController extends Controller
 {
@@ -15,11 +17,13 @@ class GudangController extends Controller
         $tahun =  $r->tahun ?? date('Y');
         $id_user = auth()->user()->id;
         $gudang = Cabut::gudang($bulan, $tahun, $id_user);
+
         $data = [
             'title' => 'Data Gudang Awal',
             'bk' => $gudang->bk,
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
+            'eoSelesai' => $gudang->eoSelesai,
             'cabut_selesai' => CetakModel::cabut_selesai(0),
             'cetak_proses' => CetakModel::cetak_proses(0),
             'cetak_selesai' => CetakModel::cetak_selesai(0),

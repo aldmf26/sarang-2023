@@ -75,13 +75,14 @@ class Sortir extends Model
     {
 
         $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
-        (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name
+        (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join cabut as c on c.no_box = a.no_box
         left join cetak_new as d on d.no_box = a.no_box
         left join eo as e on e.no_box = a.no_box
         left join users as f on f.id = a.id_penerima
+        left join eo as g on g.no_box = a.no_box
         WHERE a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and a.kategori = 'sortir';");
         return $result;
     }
@@ -89,13 +90,14 @@ class Sortir extends Model
     {
 
         $result = DB::select("SELECT b.nm_partai,  a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
-        d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name
+        d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
         left join cabut as d on d.no_box = a.no_box
         left join cetak_new as e on e.no_box = a.no_box
         left join users as f on f.id = a.id_pengawas
+        left join eo as g on g.no_box = a.no_box
         WHERE a.selesai = 'T' and a.id_anak != 0 ;");
         return $result;
     }
@@ -106,13 +108,14 @@ class Sortir extends Model
         } else {
             $id_pengawas = "AND a.id_pengawas = $id_user";
         }
-        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str
+        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str, g.ttl_rp as cost_eo
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
         left join cabut as d on d.no_box = a.no_box
         left join cetak_new as e on e.no_box = a.no_box
         left join users as f on f.id = a.id_pengawas
+        left join eo as g on g.no_box = a.no_box
         WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y';");
 
         return $result;
