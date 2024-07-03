@@ -100,15 +100,15 @@
         <form action="" method="get">
             <x-theme.modal title="Filter Tanggal" idModal="view">
                 <div class="row">
-                    <div class="col-lg-6">
+                    {{-- <div class="col-lg-6">
                         <label for="">Dari</label>
                         <input id="tgl1" type="date" name="tgl1" id="" class="form-control">
                     </div>
                     <div class="col-lg-6">
                         <label for="">Sampai</label>
                         <input id="tgl2" type="date" name="tgl2" id="" class="form-control">
-                    </div>
-                    <div class="col-lg-6 mt-2">
+                    </div> --}}
+                    <div class="col-lg-12 mt-2">
                         <label for="">Pilih Anak</label>
                         <br>
                         <select name="id_anak" id="" class="selectView">
@@ -438,7 +438,7 @@
                     loadHalaman()
                     loadInputAkhir()
 
-                   
+
 
                     function loadHalaman() {
                         $.ajax({
