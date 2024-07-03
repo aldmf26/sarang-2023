@@ -350,9 +350,9 @@
                                         <td align="center">{{ $d->no_box }}</td>
                                         <td align="right">0</td>
                                         <td align="right">{{ $d->gr }}</td>
-                                        <td align="right {{ $posisi == 1 ? '' : 'd-none' }}">
+                                        <td align="right " class="{{ $posisi == 1 ? '' : 'd-none' }}">
                                             {{ number_format($d->ttl_rp, 0) }}</td>
-                                        <td align="right {{ $posisi == 1 ? '' : 'd-none' }}">
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
                                             {{ number_format($d->ttl_rp_cbt, 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"

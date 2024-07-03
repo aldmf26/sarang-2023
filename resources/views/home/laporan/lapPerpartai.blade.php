@@ -97,27 +97,28 @@
 
                                 <td class="text-end">{{ $p->pcs_cbt }}</td>
                                 <td class="text-end">{{ $p->gr_cbt }}</td>
-                                <td class="text-end">{{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_cbt, 0) }}
+                                <td class="text-end">
+                                    {{ $p->hrga_satuan == 0 || empty($p->gr_cbt) ? 0 : number_format(($p->cost_bk + $p->cost_cbt) / $p->gr_cbt, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($p->sst_cbt, 0) }} %</td>
 
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ $p->gr_eo ?? 0 }}</td>
                                 <td class="text-end">
-                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_eo ?? 0, 0) }}</td>
+                                    {{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($p->sst_eo ?? 0, 0) }} %</td>
 
                                 <td class="text-end">{{ $p->pcs_ctk }}</td>
                                 <td class="text-end">{{ $p->gr_ctk }}</td>
                                 <td class="text-end">
-                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_ctk, 0) }}
+                                    {{ $p->hrga_satuan == 0 || empty($p->gr_ctk) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk) / $p->gr_ctk, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($p->sst_ctk, 0) }} %</td>
 
                                 <td class="text-end">{{ $p->pcs_str }}</td>
                                 <td class="text-end">{{ $p->gr_str }}</td>
                                 <td class="text-end">
-                                    {{ number_format($p->hrga_satuan == 0 ? 0 : $p->rp_gram_str, 0) }}
+                                    {{ $p->hrga_satuan == 0 || empty($p->gr_str) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str) / $p->gr_str, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($p->sst_str, 0) }} %</td>
 

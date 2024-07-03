@@ -263,7 +263,7 @@ class SortirController extends Controller
                 ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                // ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->orderBY('a.selesai', 'ASC')
                 ->get();
         } else {
@@ -272,7 +272,7 @@ class SortirController extends Controller
                 ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
                 ->where('a.id_pengawas', auth()->user()->id)
                 ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                ->whereBetween('a.tgl', [$tgl1, $tgl2])
+                // ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->where('a.id_anak', $id_anak)
                 ->orderBY('a.selesai', 'ASC')
                 ->get();

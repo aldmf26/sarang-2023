@@ -1326,7 +1326,7 @@ class CetakNewController extends Controller
 
             $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
 
-            $sheet->setCellValue('V' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
+            $sheet->setCellValue('V' . $no, empty($item->ttl_hari) ? 0 : ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
 
             $no++;
         }

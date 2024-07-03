@@ -603,7 +603,7 @@
             ["tbl1", "tbl2", "tbl3", "tbl4", "tbl5", "tbl6"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
         </script>
         <script>
-            document.body.style.zoom = "67%";
+            document.body.style.zoom = "75%";
         </script>
     @endsection
 </x-theme.app>
