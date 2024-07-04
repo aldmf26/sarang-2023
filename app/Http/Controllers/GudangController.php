@@ -26,14 +26,33 @@ class GudangController extends Controller
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
             'eoSelesai' => $gudang->eoSelesai,
-            'cabut_selesai' => CetakModel::cabut_selesai(0),
-            'cetak_proses' => CetakModel::cetak_proses(0),
-            'cetak_selesai' => CetakModel::cetak_selesai(0),
             'siap_sortir' => Sortir::siap_sortir(),
             'sortir_proses' => Sortir::sortir_proses(),
             'sortir_selesai' => Sortir::sortir_selesai($id_user),
         ];
         return view('home.gudang.index', $data);
+    }
+
+    public function cetak(Request $r)
+    {
+        $data = [
+            'title' => 'Data Gudang Cetak',
+            'cabut_selesai' => CetakModel::cabut_selesai(0),
+            'cetak_proses' => CetakModel::cetak_proses(0),
+            'cetak_selesai' => CetakModel::cetak_selesai(0),
+        ];
+        return view('home.gudang.cetak', $data);
+    }
+    public function sortir(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $data = [
+            'title' => 'Data Gudang Sortir',
+            'siap_sortir' => Sortir::siap_sortir(),
+            'sortir_proses' => Sortir::sortir_proses(),
+            'sortir_selesai' => Sortir::sortir_selesai($id_user),
+        ];
+        return view('home.gudang.sortir', $data);
     }
 
     function export(Request $r)
@@ -68,7 +87,7 @@ class GudangController extends Controller
 
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet();
-        $sheet1->setTitle('Box Stock');
+        $sheet1->setTitle('Gudang Bk');
 
 
         $sheet1->getStyle("B1:G1")->applyFromArray($style_atas);
@@ -119,7 +138,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('D' . $kolom, $d->no_box);
             $sheet1->setCellValue('E' . $kolom, $d->pcs);
             $sheet1->setCellValue('F' . $kolom, $d->gr);
-            $sheet1->setCellValue('G' . $kolom, $d->hrga_satuan);
+            $sheet1->setCellValue('G' . $kolom, round($d->hrga_satuan, 0));
             $kolom++;
         }
         $sheet1->getStyle('A2:G' . $kolom - 1)->applyFromArray($style);
@@ -131,7 +150,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('L' . $kolom2, $d->no_box);
             $sheet1->setCellValue('M' . $kolom2, $d->pcs);
             $sheet1->setCellValue('N' . $kolom2, $d->gr);
-            $sheet1->setCellValue('O' . $kolom2, $d->hrga_satuan);
+            $sheet1->setCellValue('O' . $kolom2, round($d->hrga_satuan, 0));
             $kolom2++;
         }
         $sheet1->getStyle('J2:O' . $kolom2 - 1)->applyFromArray($style);
@@ -143,7 +162,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('T' . $kolom3, $d->no_box);
             $sheet1->setCellValue('U' . $kolom3, $d->pcs);
             $sheet1->setCellValue('V' . $kolom3, $d->gr);
-            $sheet1->setCellValue('W' . $kolom3, $d->hrga_satuan);
+            $sheet1->setCellValue('W' . $kolom3, round($d->hrga_satuan, 0));
             $kolom3++;
         }
         $sheet1->getStyle('R2:W' . $kolom3 - 1)->applyFromArray($style);
@@ -155,7 +174,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('AB' . $kolom4, $d->no_box);
             $sheet1->setCellValue('AC' . $kolom4, 0);
             $sheet1->setCellValue('AD' . $kolom4, $d->gr);
-            $sheet1->setCellValue('AE' . $kolom4, $d->hrga_satuan);
+            $sheet1->setCellValue('AE' . $kolom4, round($d->hrga_satuan, 0));
             $kolom4++;
         }
         $sheet1->getStyle('Z2:AE' . $kolom4 - 1)->applyFromArray($style);
@@ -311,6 +330,16 @@ class GudangController extends Controller
         }
         $sheet3->getStyle('R2:W' . $kolom4 - 1)->applyFromArray($style);
 
+        // batas ke empat
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $sheet4 = $spreadsheet->getActiveSheet(3);
+        $sheet4->setTitle('Grading');
+        // batas ke lima
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(4);
+        $sheet4 = $spreadsheet->getActiveSheet(4);
+        $sheet4->setTitle('Pengiriman');
 
 
         $namafile = "Opname Gudang.xlsx";
