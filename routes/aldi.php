@@ -145,6 +145,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('gudang.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/export', 'export')->name('export');
         });
     Route::controller(BkController::class)
         ->prefix('home/bk')

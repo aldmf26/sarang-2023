@@ -62,7 +62,7 @@ class Grading extends Model
                     (
                     (
                         (a.hrga_satuan * a.gr_awal) + COALESCE(b.ttl_rp, 0) + COALESCE(c.ttl_rp, 0) + COALESCE(d.ttl_rp, 0)
-                    ) / COALESCE(c.gr_akhir, 1)
+                    ) / COALESCE(d.gr_akhir, 1)
                     ) as rp_gram_str 
                 FROM 
                     bk as a 

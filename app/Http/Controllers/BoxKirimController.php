@@ -206,7 +206,7 @@ class BoxKirimController extends Controller
     {
         $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
                 WHERE a.no_nota = $no_nota GROUP by a.no_nota;");
-        
+
         $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->get();
         $data = [
             'title' => 'Po Pengiriman',
@@ -270,7 +270,7 @@ class BoxKirimController extends Controller
         $formulir = DB::table('pengiriman_packing_list as a')
             ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
             ->where('a.no_nota', $r->no_invoice)
-            ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade','a.tgl')
+            ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'a.tgl')
             ->get();
         $data = [
             'title' => 'Gudang Sarang',
@@ -288,13 +288,13 @@ class BoxKirimController extends Controller
     public function gudang(Request $r)
     {
         $selesai = DB::table('pengiriman_packing_list as a')
-                        ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
-                        ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'b.rp_gram')
-                        ->get();
+            ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
+            ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'b.rp_gram')
+            ->get();
 
         $gudang = Grading::gudangPengirimanGr();
         // $gudang = Grading::siapKirim();
-                            
+
         $data = [
             'title' => 'Gudang Pengiriman',
             'gudang' => $gudang,

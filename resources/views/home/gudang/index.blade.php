@@ -1,6 +1,16 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
-        <h6 class="float-start mt-1">Gudang Cabut</h6>
+        <div class="row">
+            <div class="col-lg-6">
+                <h6 class="float-start mt-1">Gudang Cabut</h6>
+            </div>
+            <div class="col-lg-6">
+                <a class="btn btn-sm btn-primary float-end" href="{{ route('gudang.export') }}"><i
+                        class="fas fa-print"></i>
+                    Export All</a>
+            </div>
+        </div>
+
     </x-slot>
 
     <x-slot name="cardBody">
@@ -165,13 +175,71 @@
                 <br>
                 <br>
                 <br>
+
+            </div>
+            <div class="col-lg-4">
+                <input type="text" id="tbl4input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <div style="overflow-y: scroll; height: 400px">
+
+                    <table id="tbl4" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="dhead text-center" colspan="6">
+                                    <span>Eox selesai siap str</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="dhead text-center ">Pemilik</th>
+                                <th class="dhead text-center ">Partai</th>
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Rp/Gr</th>
+                                {{-- <th class="dhead text-end">Total Rp Cbt</th> --}}
+
+                            </tr>
+                            <tr>
+                                <th class="dheadstock text-center">Total</th>
+                                <th class="dheadstock text-center "></th>
+                                <th class="dheadstock text-center "></th>
+                                <th class="dheadstock text-end">0
+                                </th>
+                                <th class="dheadstock text-end">{{ number_format(ttl($eoSelesai)['gr'], 0) }}
+                                </th>
+                                <th class="dheadstock text-end">
+                                    {{ number_format(ttl($eoSelesai)['hrga_satuan'], 0) }}
+                                </th>
+                                {{-- <th class="dheadstock text-end">
+                                    {{ number_format(ttl($cabutSelesai)['ttl_rp_cbt'], 0) }}
+                                </th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($eoSelesai as $d)
+                                <tr>
+                                    <td align="center">{{ $d->pengawas }}</td>
+                                    <td align="center">{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td align="right">0</td>
+                                    <td align="right">{{ $d->gr }}</td>
+                                    <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <br>
+                <br>
+                <br>
                 <h6 class="float-start mt-1">Gudang Cetak</h6>
             </div>
             <div class="col-lg-4">
 
-                <input type="text" id="tbl4input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl5input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl4" class="table table-bordered table-hover table-striped">
+                    <table id="tbl5" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="6">Cetak stock</th>
@@ -237,9 +305,9 @@
             </div>
 
             <div class="col-lg-4">
-                <input type="text" id="tbl5input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl6input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl5" class="table table-bordered table-hover table-striped">
+                    <table id="tbl6" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="7">Cetak sedang proses</th>
@@ -294,9 +362,9 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <input type="text" id="tbl6input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl6" class="table table-bordered table-hover table-striped">
+                    <table id="tbl7" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="7">
@@ -365,9 +433,9 @@
                 <h6 class="float-start mt-1">Gudang Sortir</h6>
             </div>
             <div class="col-lg-4">
-                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl8input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                    <table id="tbl8" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="6">Sortir stock</th>
@@ -423,7 +491,7 @@
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
                                     <td align="right">
-                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk) / $d->gr_awal, 0) }}
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_eo) / $d->gr_awal, 0) }}
                                     </td>
                                     {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
@@ -435,9 +503,9 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl9input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                    <table id="tbl9" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="6">Sortir sedang proses</th>
@@ -497,7 +565,7 @@
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
                                     <td align="right">
-                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk) / $d->gr_awal, 0) }}
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_eo) / $d->gr_awal, 0) }}
                                     </td>
                                     {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
@@ -509,9 +577,9 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <input type="text" id="tbl7input" class="form-control form-control-sm mb-2" placeholder="cari">
+                <input type="text" id="tbl10input" class="form-control form-control-sm mb-2" placeholder="cari">
                 <div style="overflow-y: scroll; height: 400px">
-                    <table id="tbl7" class="table table-bordered table-hover table-striped">
+                    <table id="tbl10" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="6">Sortir selesai siap grading</th>
@@ -580,7 +648,7 @@
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
                                     <td align="right">
-                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_str) / $d->gr_awal, 0) }}
+                                        {{ number_format(($d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_str + $d->cost_eo) / $d->gr_awal, 0) }}
                                     </td>
                                     {{-- <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="right">{{ number_format($d->cost_cbt, 0) }}</td>
@@ -600,7 +668,8 @@
     </x-slot>
     @section('scripts')
         <script>
-            ["tbl1", "tbl2", "tbl3", "tbl4", "tbl5", "tbl6"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
+            ["tbl1", "tbl2", "tbl3", "tbl4", "tbl5", "tbl6", "tgbl7", "tbl8", "tbl9", "tbl10"].forEach((tbl, i) => pencarian(
+                `tbl${i+1}input`, tbl));
         </script>
         <script>
             document.body.style.zoom = "75%";
