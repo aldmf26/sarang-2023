@@ -732,7 +732,7 @@ class SortirController extends Controller
             $gr = $ambil->gr_akhir;
 
 
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
 
             if (empty($urutan_invoice->no_invoice)) {
                 $inv = 1001;
