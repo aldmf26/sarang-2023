@@ -5,7 +5,7 @@
                 <h6 class="float-start mt-1">Gudang Cabut</h6>
             </div>
             <div class="col-lg-6">
-                <a class="btn btn-sm btn-primary float-end" href="{{ route('cabut.export_gudang') }}"><i
+                <a class="btn btn-sm btn-primary float-end" href="{{ route('gudang.export') }}"><i
                         class="fas fa-print"></i>
                     Export All</a>
             </div>
