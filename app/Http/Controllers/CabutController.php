@@ -1941,6 +1941,7 @@ class CabutController extends Controller
     public function save_formulir_eo(Request $r)
     {
         $no_box = explode(',', $r->no_box[0]);
+        dd($r->no_box[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
             sum(a.gr_eo_akhir) as gr_akhir ,a.no_box
