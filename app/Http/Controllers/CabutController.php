@@ -1946,14 +1946,14 @@ class CabutController extends Controller
             $ambil = DB::selectOne("SELECT 
             SUM(a.gr_eo_akhir) AS gr_akhir, a.no_box
         FROM eo AS a
-        WHERE a.no_box = '6114' AND a.selesai = 'Y'
+        WHERE a.no_box = '$d' AND a.selesai = 'Y'
         GROUP BY a.no_box
 
         UNION ALL
 
         SELECT  SUM(a.gr_akhir) AS gr_akhir, a.no_box
         FROM cabut AS a
-        WHERE a.no_box = '6114' AND a.selesai = 'Y'
+        WHERE a.no_box = '$d' AND a.selesai = 'Y'
         GROUP BY a.no_box;");
 
             dd($ambil);
