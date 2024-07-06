@@ -1954,6 +1954,7 @@ class CabutController extends Controller
             GROUP BY no_box;");
 
             $gr = $ambil->gr_akhir;
+            dd($gr);
 
 
             $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
