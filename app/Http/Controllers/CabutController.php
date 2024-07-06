@@ -1956,7 +1956,7 @@ class CabutController extends Controller
         WHERE a.no_box = '$d' AND a.selesai = 'Y'
         GROUP BY a.no_box;");
 
-            dd($ambil);
+
 
             $gr = $ambil->gr_akhir;
 
