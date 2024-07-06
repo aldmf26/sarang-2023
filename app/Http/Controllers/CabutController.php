@@ -1950,7 +1950,7 @@ class CabutController extends Controller
                         UNION ALL
                         SELECT  sum(a.gr_akhir) as gr_akhir, a.no_box
                         FROM cabut as a
-                        where a.no_box = $d AND a.selesai = 'Y'
+                        where a.no_box = '$d' AND a.selesai = 'Y'
                         
                         GROUP BY no_box ");
 
