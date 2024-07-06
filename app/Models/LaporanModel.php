@@ -20,24 +20,50 @@ class LaporanModel extends Model
         d.pcs_akhir as pcs_str, d.gr_akhir as gr_str, (((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / d.gr_akhir) as rp_gram_str, ((1-(d.gr_akhir / a.gr_awal)) * 100) as sst_str,
         e.gr_eo_akhir as gr_eo, (((a.hrga_satuan * a.gr_awal) + e.ttl_rp ) / e.gr_eo_akhir) as rp_gram_eo, ((1-(e.gr_eo_akhir / a.gr_awal)) * 100) as sst_eo,
         (a.hrga_satuan * a.gr_awal) as cost_bk, b.ttl_rp as cost_cbt, c.ttl_rp as cost_ctk, d.ttl_rp as cost_str, e.ttl_rp as cost_eo, f.ttl_rp as cost_cu, (g.rp_gr * b.gr_akhir) as oprasional_cbt, (d.gr_akhir * h.rp_gr) as oprasional_str, f.oprasional_cu,
-        c.oprasional_ctk, (e.gr_eo_akhir * i.rp_gr ) as oprasional_eo, j.cost_dll
+        c.oprasional_ctk, (e.gr_eo_akhir * i.rp_gr ) as oprasional_eo, j.cost_dll,
+        (k.rp_harian_cbt * b.gr_akhir) as harian_cbt,c.harian_ctk, (l.rp_harian_str * d.gr_akhir) as harian_str, (m.rp_harian_eo * e.gr_eo_akhir) as harian_eo
         FROM bk as a 
         left join cabut as b on b.no_box = a.no_box
         left join oprasional as g on g.bulan = b.bulan_dibayar
+        left join (
+        	SELECT sum(k.rupiah / b.gr) as rp_harian_cbt, k.bulan_dibayar, k.tahun_dibayar
+            FROM tb_hariandll as k 
+            left join oprasional as b on b.bulan = k.bulan_dibayar and b.tahun = k.tahun_dibayar
+            group by k.bulan_dibayar, k.tahun_dibayar
+        ) as k on k.bulan_dibayar = b.bulan_dibayar and k.tahun_dibayar = b.tahun_dibayar
+
 
         left join (
-            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (e.rp_gr * c.gr_akhir) as oprasional_ctk
+            SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (e.rp_gr * c.gr_akhir) as oprasional_ctk,(k.rp_harian_ctk * c.gr_akhir) as harian_ctk
             FROM cetak_new as c
             left join kelas_cetak as d on d.id_kelas_cetak = c.id_kelas_cetak
             left join oprasional as e on e.bulan = c.bulan_dibayar
+            left join (
+        	SELECT sum(k.rupiah / b.gr) as rp_harian_ctk, k.bulan_dibayar
+                FROM tb_hariandll as k 
+                left join oprasional as b on b.bulan = k.bulan_dibayar and b.tahun = k.tahun_dibayar
+                group by k.bulan_dibayar, k.tahun_dibayar
+        	) as k on k.bulan_dibayar = c.bulan_dibayar
             where d.kategori= 'CTK'
         ) as c on c.no_box = a.no_box
 
         left join sortir as d on d.no_box = a.no_box
         left join oprasional as h on h.bulan = d.bulan
+        left join (
+        	SELECT sum(k.rupiah / b.gr) as rp_harian_str, k.bulan_dibayar
+                FROM tb_hariandll as k 
+                left join oprasional as b on b.bulan = k.bulan_dibayar and b.tahun = k.tahun_dibayar
+                group by k.bulan_dibayar, k.tahun_dibayar
+        ) as l on l.bulan_dibayar = d.bulan
 
         left join eo as e on e.no_box = a.no_box
         left join oprasional as i on i.bulan = e.bulan_dibayar
+        left join (
+        	SELECT sum(k.rupiah / b.gr) as rp_harian_eo, k.bulan_dibayar
+                FROM tb_hariandll as k 
+                left join oprasional as b on b.bulan = k.bulan_dibayar and b.tahun = k.tahun_dibayar
+                group by k.bulan_dibayar, k.tahun_dibayar
+        ) as m on m.bulan_dibayar = e.bulan_dibayar
 
         left join (
             SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (c.gr_akhir * e.rp_gr) as oprasional_cu

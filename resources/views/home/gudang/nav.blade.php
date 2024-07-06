@@ -15,6 +15,14 @@
             <a class="nav-link  {{ $rot == 'gudang.sortir' ? 'active' : '' }}" aria-current="page"
                 href="{{ route('gudang.sortir') }}">Gudang Sortir</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link  {{ $rot == 'gudang.grading' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('gudang.grading') }}">Gudang Grading & Pengiriman</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  {{ $rot == 'gudang.totalan' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('gudang.sortir') }}">Totalan</a>
+        </li>
 
     </ul>
 </div>

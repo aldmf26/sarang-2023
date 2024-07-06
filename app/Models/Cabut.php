@@ -700,7 +700,7 @@ class Cabut extends Model
             FROM cabut AS a 
             LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
             LEFT JOIN users AS c ON c.id = a.id_pengawas
-            WHERE a.formulir = 'T'
+            WHERE a.formulir = 'T' and a.pcs != 0
         ) AS a
         join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' AND b.baru = 'baru'
         GROUP BY a.id_pengawas, a.no_box 

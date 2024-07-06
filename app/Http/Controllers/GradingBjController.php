@@ -58,11 +58,11 @@ class GradingBjController extends Controller
         $selisih = $this->getDataMaster('selisih');
         $data = [
             'title' => 'Load Selisih',
-            'selisih'=> $selisih
+            'selisih' => $selisih
         ];
-        return view('home.gradingbj.selisih',$data);
+        return view('home.gradingbj.selisih', $data);
     }
-    
+
     public function export_selisih()
     {
         $spreadsheet = new Spreadsheet();

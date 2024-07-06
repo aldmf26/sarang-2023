@@ -143,4 +143,72 @@ class Grading extends Model
                 ) $whereBox
                 ");
     }
+
+    public static function grading_stock()
+    {
+        $result = DB::select("SELECT h.name as pemilik, i.name as penerima, c.nm_partai, a.no_box_sortir, b.pcs_awal, b.gr_awal, (b.pcs_awal - j.pcs_ambil) as pcs, (COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) as gr,
+        (c.gr_awal * c.hrga_satuan) as cost_bk,
+                d.ttl_rp as cost_cbt, e.ttl_rp as cost_eo, f.ttl_rp as cost_ctk, g.ttl_rp as cost_str
+                FROM grading as a 
+                left join formulir_sarang as b on b.no_box = a.no_box_sortir and b.kategori ='grade'
+                left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
+                left join cabut as d on d.no_box =  a.no_box_sortir
+                left join eo as e on e.no_box = a.no_box_sortir
+                left join cetak_new as f on f.no_box = a.no_box_sortir
+                left join sortir as g on g.no_box = a.no_box_sortir
+                left join users as h on h.id = c.penerima
+                left join users as i on i.id = b.id_penerima
+                
+                left join (
+                    SELECT j.no_box_sortir, sum(j.pcs) as pcs_ambil, sum(j.gr) as gr_ambil
+                    FROM grading as j 
+                    GROUP by j.no_box_sortir 
+                ) as j on j.no_box_sortir = a.no_box_sortir
+                left join grading_selisih as k on k.no_box = a.no_box_sortir
+                where a.gr = 0 and (COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) != 0
+                group by a.no_box_sortir;");
+
+        return $result;
+    }
+
+    public static function gradingbox()
+    {
+        $result = DB::select("SELECT h.name as pemilik, i.name as penerima, a.no_box_sortir, a.no_box_grading, b.pcs_awal, b.gr_awal, sum(a.pcs) as pcs_grading, sum(a.gr) as gr_grading,
+        sum(round((((c.gr_awal * c.hrga_satuan) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) / b.gr_awal),0) * a.gr) as ttl_rp,
+        j.nm_grade
+        FROM grading as a 
+        left join formulir_sarang as b on b.no_box = a.no_box_sortir and b.kategori ='grade'
+        left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
+        left join cabut as d on d.no_box =  a.no_box_sortir
+        left join eo as e on e.no_box = a.no_box_sortir
+        left join cetak_new as f on f.no_box = a.no_box_sortir
+        left join sortir as g on g.no_box = a.no_box_sortir
+        left join users as h on h.id = c.penerima
+        left join users as i on i.id = b.id_penerima
+        left join tb_grade as j on j.id_grade = a.id_grade
+        where a.gr != 0 and a.no_box_grading not in(SELECT k.no_nota FROM pengiriman as k)
+        group by a.no_box_grading;");
+
+        return $result;
+    }
+    public static function gradingboxkirim()
+    {
+        $result = DB::select("SELECT h.name as pemilik, i.name as penerima, a.no_box_sortir, a.no_box_grading, b.pcs_awal, b.gr_awal, sum(a.pcs) as pcs_grading, sum(a.gr) as gr_grading,
+        sum(round((((c.gr_awal * c.hrga_satuan) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) / b.gr_awal),0) * a.gr) as ttl_rp,
+        j.nm_grade
+        FROM grading as a 
+        left join formulir_sarang as b on b.no_box = a.no_box_sortir and b.kategori ='grade'
+        left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
+        left join cabut as d on d.no_box =  a.no_box_sortir
+        left join eo as e on e.no_box = a.no_box_sortir
+        left join cetak_new as f on f.no_box = a.no_box_sortir
+        left join sortir as g on g.no_box = a.no_box_sortir
+        left join users as h on h.id = c.penerima
+        left join users as i on i.id = b.id_penerima
+        left join tb_grade as j on j.id_grade = a.id_grade
+        where a.gr != 0 and a.no_box_grading in(SELECT k.no_nota FROM pengiriman as k)
+        group by a.no_box_grading;");
+
+        return $result;
+    }
 }
