@@ -36,10 +36,19 @@ class GradingBjController extends Controller
         HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
         ORDER BY b.tanggal DESC");
 
+        $susut = DB::select("SELECT a.no_box,a.gr_awal as gr_awal,b.gr FROM `formulir_sarang` as a
+        join (
+        SELECT a.no_box_sortir as no_box,sum(a.pcs) as pcs,sum(a.gr) as gr FROM `grading` as a
+        GROUP BY a.no_box_sortir
+        HAVING sum(a.gr) > 0
+        ) as b on a.no_box = b.no_box
+        WHERE a.kategori = 'grade'
+        GROUP by a.no_box;");
         $arr = [
             'formulir' => $formulir,
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get(),
-            'selisih' => DB::table('grading_selisih')->get()
+            'selisih' => DB::table('grading_selisih')->get(),
+            'susut' => $susut
         ];
         return $arr[$jenis];
     }
@@ -56,13 +65,16 @@ class GradingBjController extends Controller
     public function load_selisih()
     {
         $selisih = $this->getDataMaster('selisih');
+        $susut = $this->getDataMaster('susut');
+
         $data = [
             'title' => 'Load Selisih',
-            'selisih'=> $selisih
+            'selisih' => $selisih,
+            'susut' => $susut
         ];
-        return view('home.gradingbj.selisih',$data);
+        return view('home.gradingbj.selisih', $data);
     }
-    
+
     public function export_selisih()
     {
         $spreadsheet = new Spreadsheet();
@@ -125,6 +137,61 @@ class GradingBjController extends Controller
         );
     }
 
+    public function export_susut()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('grading susut');
+        $koloms = [
+            'A' => 'no box',
+            'B' => 'susut',
+
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A1:B1')->applyFromArray($styleBold);
+
+        $selisih = $this->getDataMaster('susut');
+
+        $no = 2;
+        foreach ($selisih as $item) {
+            $sheet->setCellValue('A' . $no, $item->no_box);
+            $sheet->setCellValue('B' . $no, number_format((1-($item->gr / $item->gr_awal)) * 100,0));
+
+            $no++;
+        }
+
+        $sheet->getStyle('A1:B' . $no - 1)->applyFromArray($styleBaris);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Grading Susut";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+    }
+
     public function grading(Request $r)
     {
         if ($r->submit == 'export') {
@@ -159,14 +226,19 @@ class GradingBjController extends Controller
         $sheet->setTitle('Template Grading');
         $koloms = [
             'A' => 'No Box Dipilih',
-            'B' => 'pcs',
-            'C' => 'gr',
+            'B' => 'pcs awal',
+            'C' => 'gr awal',
+            'D' => 'pcs akhir',
+            'E' => 'gr akhir',
+            'F' => 'susut',
 
-            'F' => 'No Box',
-            'G' => 'grade',
-            'H' => 'pcs',
-            'I' => 'gr',
-            'J' => 'box pengiriman',
+            'H' => 'No Box',
+            'I' => 'grade',
+            'J' => 'pcs',
+            'K' => 'gr',
+            'L' => 'box pengiriman',
+
+            'N' => 'grade',
 
         ];
         foreach ($koloms as $k => $v) {
@@ -185,19 +257,43 @@ class GradingBjController extends Controller
             ],
         ];
 
-        $sheet->getStyle('F1:J1')->applyFromArray($styleBold);
-        $sheet->getStyle('A1:C1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:F1')->applyFromArray($styleBold);
+        $styleBackground = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFFFF00',
+                ],
+            ],
+        ];
+        $sheet->getStyle('H1:L1')->applyFromArray($styleBackground);
+        $sheet->getStyle('H1:L1')->applyFromArray($styleBold);
+        $sheet->getStyle('N1')->applyFromArray($styleBold);
 
+        $sheet->setCellValue('D2', "SUMIFS(J:J,H:H,A2)");
+        $sheet->setCellValue('E2', "SUMIFS(K:K,H:H,A2)");
+        $sheet->setCellValue('F2', "1-(E2/C2)");
         $no = 2;
         foreach ($getFormulir as $item) {
             $sheet->setCellValue('A' . $no, $item->no_box);
-            $sheet->setCellValue('B' . $no, $item->pcs_awal);
+            $sheet->setCellValue('B' . $no, $item->pcs_awal);   
             $sheet->setCellValue('C' . $no, $item->gr_awal);
+            $h_no_box = $item->no_box;
+            // Mengisi kolom H dengan nilai no_box selama 15 baris
+            for ($i = 0; $i < 15; $i++) {
+                // $sheet->setCellValue('H' . ($no + $i), $h_no_box);
+            }
+            $no += 15;
+        }
+
+        $grade = DB::table('tb_grade')->get();
+        $no = 2;
+        foreach ($grade as $item) {
+            $sheet->setCellValue('N' . $no, $item->nm_grade);
 
             $no++;
         }
-
-        $sheet->getStyle('A1:C' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('N1:N' . $no - 1)->applyFromArray($styleBaris);
 
         $writer = new Xlsx($spreadsheet);
         $fileName = "Template Grading";
@@ -233,13 +329,13 @@ class GradingBjController extends Controller
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
-                $nobox = $row[5];
-                $grade = $row[6];
-                $pcs = $row[7];
-                $gr = $row[8];
-                $boxPengiriman = $row[9];
+                $nobox = $row[7];
+                $grade = $row[8];
+                $pcs = $row[9];
+                $gr = $row[10];
+                $boxPengiriman = $row[11];
 
-                if (empty(array_filter($row))) {
+                if (empty($nobox) && empty($grade) && empty($pcs) && empty($gr) && empty($boxPengiriman)) {
                     continue;
                 }
 

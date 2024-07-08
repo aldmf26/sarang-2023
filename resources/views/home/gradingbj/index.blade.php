@@ -99,6 +99,7 @@
                         success: function (r) {
                             $("#loadSelisih").html(r);
                             loadTable('tblSelisih')
+                            loadTable('tblSusut')
                         }
                     });
                 });

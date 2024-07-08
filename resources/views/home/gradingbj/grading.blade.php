@@ -96,11 +96,11 @@
                                                 name="pcs[]">
                                         </td>
                                         <td>
-                                            <input x-model="gr[index]" type="number" class="text-end form-control"
+                                            <input required x-model="gr[index]" type="number" class="text-end form-control"
                                                 name="gr[]">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="box_sp[]">
+                                            <input required type="text" class="form-control" name="box_sp[]">
                                         </td>
                                         <td>
                                             <span @click="removeRow(index)" class="badge bg-danger pointer"><i
