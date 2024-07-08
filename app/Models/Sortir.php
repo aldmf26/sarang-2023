@@ -73,7 +73,6 @@ class Sortir extends Model
 
     public static function siap_sortir()
     {
-
         $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
         (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
         FROM formulir_sarang as a 
