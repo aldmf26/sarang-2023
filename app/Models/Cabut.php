@@ -700,7 +700,7 @@ class Cabut extends Model
             FROM cabut AS a 
             LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
             LEFT JOIN users AS c ON c.id = a.id_pengawas
-            WHERE a.formulir = 'T'
+            WHERE a.formulir = 'T' and a.pcs_akhir != 0
         ) AS a
         join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' AND b.baru = 'baru'
         GROUP BY a.id_pengawas, a.no_box 
@@ -715,8 +715,17 @@ class Cabut extends Model
         FROM eo as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
-        where a.selesai ='Y' and b.baru = 'baru'  $penerima2
+        where a.selesai ='Y' and b.baru = 'baru' $penerima2
         and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
-        order by a.no_box ASC;");
+        
+UNION ALL
+SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, a.ttl_rp as ttl_rp_cbt, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join users as c on c.id = a.id_pengawas
+        where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0 $penerima2
+        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+        
+ ORDER by no_box;");
     }
 }

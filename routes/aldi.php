@@ -145,6 +145,11 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('gudang.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/sortir', 'sortir')->name('sortir');
+            Route::get('/grading', 'grading')->name('grading');
+            Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
+            Route::get('/totalan', 'totalan')->name('totalan');
             Route::get('/export', 'export')->name('export');
         });
     Route::controller(BkController::class)

@@ -1941,13 +1941,26 @@ class CabutController extends Controller
     public function save_formulir_eo(Request $r)
     {
         $no_box = explode(',', $r->no_box[0]);
+
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
-                        sum(a.gr_eo_akhir) as gr_akhir ,a.no_box
-                        FROM eo as a 
-                        WHERE a.no_box = $d AND a.selesai = 'Y' GROUP BY a.no_box ");
+            SUM(a.gr_eo_akhir) AS gr_akhir, a.no_box
+        FROM eo AS a
+        WHERE a.no_box = '$d' AND a.selesai = 'Y'
+        GROUP BY a.no_box
+
+        UNION ALL
+
+        SELECT  SUM(a.gr_akhir) AS gr_akhir, a.no_box
+        FROM cabut AS a
+        WHERE a.no_box = '$d' AND a.selesai = 'Y'
+        GROUP BY a.no_box;");
+
+
 
             $gr = $ambil->gr_akhir;
+
+
 
             $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
 
