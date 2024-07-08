@@ -241,6 +241,7 @@ class CetakModel extends Model
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join bk as c on c.no_box = a.no_box
+        left join cabut as d on d.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
         WHERE a.kategori = 'cetak' and d.pcs_akhir != 0
         and a.id_pemberi is not null
