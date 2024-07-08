@@ -17,11 +17,15 @@
         </li>
         <li class="nav-item">
             <a class="nav-link  {{ $rot == 'gudang.grading' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('gudang.grading') }}">Gudang Grading & Pengiriman</a>
+                href="{{ route('gudang.grading') }}">Grading</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  {{ $rot == 'gudang.pengiriman' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('gudang.pengiriman') }}">Pengiriman</a>
         </li>
         <li class="nav-item">
             <a class="nav-link  {{ $rot == 'gudang.totalan' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('gudang.sortir') }}">Totalan</a>
+                href="{{ route('gudang.totalan') }}">Totalan</a>
         </li>
 
     </ul>
