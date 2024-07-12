@@ -87,7 +87,7 @@ class Sortir extends Model
         left join eo as e on e.no_box = a.no_box
         left join users as f on f.id = a.id_penerima
         left join eo as g on g.no_box = a.no_box
-        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and a.kategori = 'sortir';");
+        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and a.kategori = 'sortir' and a.id_anak = 0;");
         return $result;
     }
     public static function sortir_proses()
