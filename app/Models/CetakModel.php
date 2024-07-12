@@ -201,7 +201,8 @@ class CetakModel extends Model
             left join users as d on d.id = a.id_pengawas
             left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
             left join cabut as f on f.no_box = a.no_box
-            where a.selesai = 'Y' 
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            where a.selesai = 'Y' and g.ketegori = 'CTK'
             and  b.id_pemberi is not null 
             and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')
             order by a.no_box ASC
@@ -213,7 +214,8 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
             left join cabut as f on f.no_box = a.no_box
-            where a.selesai = 'Y' 
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            where a.selesai = 'Y' and g.ketegori = 'CTK'
              and  b.id_pemberi is not null
             and a.formulir = 'T' and a.id_pengawas = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')
             order by a.no_box ASC
@@ -259,7 +261,8 @@ class CetakModel extends Model
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
             left join cabut as f on f.no_box = b.no_box
-            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null and g.ketegori = 'CTK'
             order by a.no_box ASC
             ");
         } else {
@@ -269,7 +272,8 @@ class CetakModel extends Model
             left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join users as e on e.id = a.id_pengawas
-            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0 and b.id_pemberi is not null
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            where a.selesai = 'T' and a.id_pengawas = '$id_pengawas' and a.id_anak != 0 and b.id_pemberi is not null and g.ketegori = 'CTK'
             order by a.no_box ASC
             ");
         }
