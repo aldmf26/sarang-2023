@@ -71,8 +71,13 @@ class Sortir extends Model
         ");
     }
 
-    public static function siap_sortir()
+    public static function siap_sortir($id_user)
     {
+        if (auth()->user()->posisi_id == 1) {
+            $id_pengawas = '';
+        } else {
+            $id_pengawas = "AND a.id_pengawas = $id_user";
+        }
         $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
         (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
         FROM formulir_sarang as a 
@@ -90,8 +95,13 @@ class Sortir extends Model
         WHERE a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and a.kategori = 'sortir' and a.id_anak = 0;");
         return $result;
     }
-    public static function sortir_proses()
+    public static function sortir_proses($id_user)
     {
+        if (auth()->user()->posisi_id == 1) {
+            $id_pengawas = '';
+        } else {
+            $id_pengawas = "AND a.id_pengawas = $id_user";
+        }
 
         $result = DB::select("SELECT b.nm_partai,  a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
         d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
@@ -107,7 +117,7 @@ class Sortir extends Model
         ) as e on e.no_box = a.no_box
         left join users as f on f.id = a.id_pengawas
         left join eo as g on g.no_box = a.no_box
-        WHERE a.selesai = 'T' and a.id_anak != 0  ;");
+        WHERE a.selesai = 'T' and a.id_anak != 0  $id_pengawas ;");
         return $result;
     }
     public static function sortir_selesai($id_user)
@@ -131,7 +141,7 @@ class Sortir extends Model
         
         left join users as f on f.id = a.id_pengawas
         left join eo as g on g.no_box = a.no_box
-        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' ");
+        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' $id_pengawas; ");
 
         return $result;
     }

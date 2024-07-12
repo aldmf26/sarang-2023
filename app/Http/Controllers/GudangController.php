@@ -48,8 +48,8 @@ class GudangController extends Controller
         $id_user = auth()->user()->id;
         $data = [
             'title' => 'Data Gudang Sortir',
-            'siap_sortir' => Sortir::siap_sortir(),
-            'sortir_proses' => Sortir::sortir_proses(),
+            'siap_sortir' => Sortir::siap_sortir($id_user),
+            'sortir_proses' => Sortir::sortir_proses($id_user),
             'sortir_selesai' => Sortir::sortir_selesai($id_user),
         ];
         return view('home.gudang.sortir', $data);
@@ -90,8 +90,8 @@ class GudangController extends Controller
             'cetak_proses' => CetakModel::cetak_proses(0),
             'cetak_selesai' => CetakModel::cetak_selesai(0),
 
-            'siap_sortir' => Sortir::siap_sortir(),
-            'sortir_proses' => Sortir::sortir_proses(),
+            'siap_sortir' => Sortir::siap_sortir($id_user),
+            'sortir_proses' => Sortir::sortir_proses($id_user),
             'sortir_selesai' => Sortir::sortir_selesai($id_user),
             'grading' => Grading::grading_stock(),
             'gradingbox' => Grading::gradingbox(),
@@ -317,7 +317,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('F1', 'Gr');
         $sheet3->setCellValue('G1', 'Rp/gr');
 
-        $sortir_stock = Sortir::siap_sortir();
+        $sortir_stock = Sortir::siap_sortir($id_user);
         $kolom2 = 2;
         foreach ($sortir_stock as $d) {
             $sheet3->setCellValue('B' . $kolom2, $d->name);
@@ -340,7 +340,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('N1', 'Gr');
         $sheet3->setCellValue('O1', 'Rp/gr');
 
-        $sortir_proses = Sortir::sortir_proses();
+        $sortir_proses = Sortir::sortir_proses($id_user);
         $kolom3 = 2;
         foreach ($sortir_proses as $d) {
             $sheet3->setCellValue('J' . $kolom3, $d->name);
