@@ -28,9 +28,7 @@ class GudangController extends Controller
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
             'eoSelesai' => $gudang->eoSelesai,
-            'siap_sortir' => Sortir::siap_sortir(),
-            'sortir_proses' => Sortir::sortir_proses(),
-            'sortir_selesai' => Sortir::sortir_selesai($id_user),
+
         ];
         return view('home.gudang.index', $data);
     }
