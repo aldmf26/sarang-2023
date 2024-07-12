@@ -524,9 +524,10 @@ class SortirController extends Controller
             'title' => 'Gudang',
 
             'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
-            FROM formulir_sarang as a 
+            FROM sortir as a 
             left join bk as b on b.no_box = a.no_box
-            WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' $id_penerima ;"),
+            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+            WHERE a.selesai = 'T' and a.id_anak = 0  $id_pengawas;"),
 
             'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
             FROM sortir as a 
