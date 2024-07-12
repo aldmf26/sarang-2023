@@ -510,6 +510,15 @@ class SortirController extends Controller
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;
+        if (auth()->user()->posisi_id == 1) {
+            $id_penerima = '';
+            $id_pengawas = '';
+        } else {
+            $id_penerima = "AND a.id_penerima = $id_user";
+            $id_pengawas = "AND a.id_pengawas = $id_user";
+        }
+
+
 
         $data = [
             'title' => 'Gudang',
