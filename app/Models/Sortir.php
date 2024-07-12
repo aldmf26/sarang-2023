@@ -96,10 +96,10 @@ class Sortir extends Model
         join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
         left join cabut as d on d.no_box = a.no_box
         left join cetak_new as e on e.no_box = a.no_box
-        -- left join kelas_cetak as h on h.id_kelas_cetak = e.id_kelas_cetak
+        left join kelas_cetak as h on h.id_kelas_cetak = e.id_kelas_cetak
         left join users as f on f.id = a.id_pengawas
         left join eo as g on g.no_box = a.no_box
-        WHERE a.selesai = 'T' and a.id_anak != 0 ;");
+        WHERE a.selesai = 'T' and a.id_anak != 0 and h.kategori = 'CTK' ;");
         return $result;
     }
     public static function sortir_selesai($id_user)
