@@ -699,6 +699,7 @@
                         gr_akhir: row.find(`input[name='gr_akhir${count}[]']`).val(),
                         eot: row.find(`input[name='eot${count}[]']`).val(),
                         pcs_hcr: row.find(`input[name='pcs_hcr${count}[]']`).val(),
+                        ket_hcr: row.find(`input[name='ket_hcr${count}[]']`).val(),
                         ttl_rp: row.find(`input[name='ttl_rp${count}[]']`).val(),
                         count: count,
                         _token: row.data("csrf-token")
