@@ -80,12 +80,15 @@ class GudangController extends Controller
         $tahun =  $r->tahun ?? date('Y');
         $id_user = auth()->user()->id;
         $gudang = Cabut::gudang($bulan, $tahun, $id_user);
+        // dd(Grading::gradingbox());
+
         $data = [
             'title' => 'Data Totalan',
             'bk' => $gudang->bk,
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
             'eoSelesai' => $gudang->eoSelesai,
+
             'cabut_selesai' => CetakModel::cabut_selesai(0),
             'cetak_proses' => CetakModel::cetak_proses(0),
             'cetak_selesai' => CetakModel::cetak_selesai(0),
@@ -93,6 +96,7 @@ class GudangController extends Controller
             'siap_sortir' => Sortir::siap_sortir($id_user),
             'sortir_proses' => Sortir::sortir_proses($id_user),
             'sortir_selesai' => Sortir::sortir_selesai($id_user),
+
             'grading' => Grading::grading_stock(),
             'gradingbox' => Grading::gradingbox(),
             'gradingboxkirim' => Grading::gradingboxkirim(),
@@ -287,9 +291,9 @@ class GudangController extends Controller
         }
         $sheet2->getStyle('J2:P' . $kolom3 - 1)->applyFromArray($style);
 
-        $cetak_proses = CetakModel::cetak_selesai(0);
+        $cetak_selesai = CetakModel::cetak_selesai(0);
         $kolom4 = 2;
-        foreach ($cetak_proses as $d) {
+        foreach ($cetak_selesai as $d) {
             $sheet2->setCellValue('S' . $kolom4, $d->name);
             $sheet2->setCellValue('T' . $kolom4, $d->pgws);
             $sheet2->setCellValue('U' . $kolom4, $d->nm_partai);
@@ -457,7 +461,167 @@ class GudangController extends Controller
         }
         $sheet5->getStyle('J2:O' . $kolom4 - 1)->applyFromArray($style);
 
+        // batas ke enam
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(5);
+        $sheet6 = $spreadsheet->getActiveSheet(5);
+        $sheet6->setTitle('Totalan');
 
+        // box stock
+        $sheet6->getStyle("B1:E1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('A1', 'Box Stock');
+        $sheet6->setCellValue('B1', 'Ttl Box');
+        $sheet6->setCellValue('C1', 'Pcs');
+        $sheet6->setCellValue('D1', 'Gr');
+        $sheet6->setCellValue('E1', 'Rp/gr');
+
+        $cost_bk = 0;
+        foreach ($gudang->bk as $d) {
+            $cost_bk += $d->hrga_satuan * $d->gr;
+        }
+        $sheet6->setCellValue('B2', count($gudang->bk));
+        $sheet6->setCellValue('C2', array_sum(array_column($gudang->bk, 'pcs')));
+        $sheet6->setCellValue('D2', array_sum(array_column($gudang->bk, 'gr')));
+        if (array_sum(array_column($gudang->bk, 'gr')) != 0) {
+            $sheet6->setCellValue('E2', round($cost_bk / array_sum(array_column($gudang->bk, 'gr')), 0));
+        } else {
+            $sheet6->setCellValue('E2', 0);
+        }
+        $sheet6->getStyle('B2:E2')->applyFromArray($style);
+        // box stock
+
+
+        // box sedang Proses
+        $sheet6->getStyle("H1:K1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('G1', 'Box Sedang Proses');
+        $sheet6->setCellValue('H1', 'Ttl Box');
+        $sheet6->setCellValue('I1', 'Pcs');
+        $sheet6->setCellValue('J1', 'Gr');
+        $sheet6->setCellValue('K1', 'Rp/gr');
+        $cost_bk_proses = 0;
+        foreach ($gudang->cabut as $d) {
+            $cost_bk_proses += $d->hrga_satuan * $d->gr;
+        }
+        $sheet6->setCellValue('H2', count($gudang->cabut));
+        $sheet6->setCellValue('I2', array_sum(array_column($gudang->cabut, 'pcs')));
+        $sheet6->setCellValue('J2', array_sum(array_column($gudang->cabut, 'gr')));
+        if (array_sum(array_column($gudang->cabut, 'gr')) != 0) {
+            $sheet6->setCellValue('K2', round($cost_bk / array_sum(array_column($gudang->cabut, 'gr')), 0));
+        } else {
+            $sheet6->setCellValue('K2', 0);
+        }
+        $sheet6->getStyle('H2:K2')->applyFromArray($style);
+        // box sedang Proses
+
+        // box Selesai Siap Cetak
+        $sheet6->getStyle("N1:Q1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('M1', 'Box Selesai Siap Cetak');
+        $sheet6->setCellValue('N1', 'Ttl Box');
+        $sheet6->setCellValue('O1', 'Pcs');
+        $sheet6->setCellValue('P1', 'Gr');
+        $sheet6->setCellValue('Q1', 'Rp/gr');
+        $cost_cabutSelesai = 0;
+        foreach ($gudang->cabutSelesai as $d) {
+            $cost_cabutSelesai += $d->hrga_satuan * $d->gr;
+        }
+        $sheet6->setCellValue('N2', count($gudang->cabutSelesai));
+        $sheet6->setCellValue('O2', array_sum(array_column($gudang->cabutSelesai, 'pcs')));
+        $sheet6->setCellValue('P2', array_sum(array_column($gudang->cabutSelesai, 'gr')));
+        if (array_sum(array_column($gudang->cabutSelesai, 'gr')) != 0) {
+            $sheet6->setCellValue('Q2', round($cost_cabutSelesai / array_sum(array_column($gudang->cabutSelesai, 'gr')), 0));
+        } else {
+            $sheet6->setCellValue('Q2', 0);
+        }
+        $sheet6->getStyle('N2:Q2')->applyFromArray($style);
+        // box Selesai Siap Cetak
+
+        // box Selesai Siap Sortir
+        $sheet6->getStyle("T1:W1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('S1', 'Box Selesai Siap Sortir');
+        $sheet6->setCellValue('T1', 'Ttl Box');
+        $sheet6->setCellValue('U1', 'Pcs');
+        $sheet6->setCellValue('V1', 'Gr');
+        $sheet6->setCellValue('W1', 'Rp/gr');
+        $cost_eoSelesai = 0;
+        foreach ($gudang->eoSelesai as $d) {
+            $cost_eoSelesai += $d->hrga_satuan * $d->gr;
+        }
+        $sheet6->setCellValue('T2', count($gudang->eoSelesai));
+        $sheet6->setCellValue('U2', array_sum(array_column($gudang->eoSelesai, 'pcs')));
+        $sheet6->setCellValue('V2', array_sum(array_column($gudang->eoSelesai, 'gr')));
+        if (array_sum(array_column($gudang->eoSelesai, 'gr')) != 0) {
+            $sheet6->setCellValue('W2', round($cost_eoSelesai / array_sum(array_column($gudang->eoSelesai, 'gr')), 0));
+        } else {
+            $sheet6->setCellValue('W2', 0);
+        }
+        $sheet6->getStyle('T2:W2')->applyFromArray($style);
+        // box Selesai Siap Sortir
+
+        // cetak stock
+        $sheet6->getStyle("B4:E4")->applyFromArray($style_atas);
+        $sheet6->setCellValue('A4', 'Cetak Stock');
+        $sheet6->setCellValue('B4', 'Ttl Box');
+        $sheet6->setCellValue('C4', 'Pcs');
+        $sheet6->setCellValue('D4', 'Gr');
+        $sheet6->setCellValue('E4', 'Rp/gr');
+        $cost_cabut_selesai = 0;
+        foreach ($cetak_stock as $d) {
+            $cost_cabut_selesai += $d->ttl_rp + $d->cost_cbt;
+        }
+        $sheet6->setCellValue('B5', count($cetak_stock));
+        $sheet6->setCellValue('C5', array_sum(array_column($cetak_stock, 'pcs_awal')));
+        $sheet6->setCellValue('D5', array_sum(array_column($cetak_stock, 'gr_awal')));
+        if (array_sum(array_column($cetak_stock, 'gr_awal')) != 0) {
+            $sheet6->setCellValue('E5', round($cost_cabut_selesai / array_sum(array_column($cetak_stock, 'gr_awal')), 0));
+        } else {
+            $sheet6->setCellValue('E5', 0);
+        }
+        $sheet6->getStyle('B5:E5')->applyFromArray($style);
+        // cetak stock
+
+        // cetak Proses
+        $sheet6->getStyle("H4:K4")->applyFromArray($style_atas);
+        $sheet6->setCellValue('G4', 'Cetak Proses');
+        $sheet6->setCellValue('H4', 'Ttl Box');
+        $sheet6->setCellValue('I4', 'Pcs');
+        $sheet6->setCellValue('J4', 'Gr');
+        $sheet6->setCellValue('K4', 'Rp/gr');
+        $cost_cetak_proses = 0;
+        foreach ($cetak_proses as $d) {
+            $cost_cetak_proses += $d->ttl_rp + $d->cost_cbt;
+        }
+        $sheet6->setCellValue('H5', count($cetak_proses));
+        $sheet6->setCellValue('I5', array_sum(array_column($cetak_proses, 'pcs_awal')));
+        $sheet6->setCellValue('J5', array_sum(array_column($cetak_proses, 'gr_awal')));
+        if (array_sum(array_column($cetak_proses, 'gr_awal')) != 0) {
+            $sheet6->setCellValue('K5', round($cost_cabut_selesai / array_sum(array_column($cetak_proses, 'gr_awal')), 0));
+        } else {
+            $sheet6->setCellValue('K5', 0);
+        }
+        $sheet6->getStyle('H5:K5')->applyFromArray($style);
+        // cetak Proses
+
+        // cetak selesai
+        $sheet6->getStyle("N4:Q4")->applyFromArray($style_atas);
+        $sheet6->setCellValue('M4', 'Cetak Selesai Siap Sortir');
+        $sheet6->setCellValue('N4', 'Ttl Box');
+        $sheet6->setCellValue('O4', 'Pcs');
+        $sheet6->setCellValue('P4', 'Gr');
+        $sheet6->setCellValue('Q4', 'Rp/gr');
+        $cost_cetak_selesai = 0;
+        foreach ($cetak_selesai as $d) {
+            $cost_cetak_selesai += $d->ttl_rp + $d->cost_cbt;
+        }
+        $sheet6->setCellValue('N5', count($cetak_selesai));
+        $sheet6->setCellValue('O5', array_sum(array_column($cetak_selesai, 'pcs_awal')));
+        $sheet6->setCellValue('P5', array_sum(array_column($cetak_selesai, 'gr_awal')));
+        if (array_sum(array_column($cetak_selesai, 'gr_awal')) != 0) {
+            $sheet6->setCellValue('Q5', round($cost_cetak_selesai / array_sum(array_column($cetak_selesai, 'gr_awal')), 0));
+        } else {
+            $sheet6->setCellValue('Q5', 0);
+        }
+        $sheet6->getStyle('N5:Q5')->applyFromArray($style);
+        // cetak selesai
 
         $namafile = "Opname Gudang.xlsx";
 

@@ -181,12 +181,17 @@ class Grading extends Model
         left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
         left join cabut as d on d.no_box =  a.no_box_sortir
         left join eo as e on e.no_box = a.no_box_sortir
-        left join cetak_new as f on f.no_box = a.no_box_sortir
+        left join (
+        	SELECT d.no_box, d.ttl_rp 
+            FROM cetak_new as d 
+            left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+            where h.kategori = 'CTK'
+        ) as f on f.no_box = a.no_box_sortir
         left join sortir as g on g.no_box = a.no_box_sortir
         left join users as h on h.id = c.penerima
         left join users as i on i.id = b.id_penerima
         left join tb_grade as j on j.id_grade = a.id_grade
-        where a.gr != 0 and a.no_box_grading not in(SELECT k.no_nota FROM pengiriman as k)
+        where a.gr != 0 and a.no_box_grading not in(SELECT k.no_box FROM pengiriman as k)
         group by a.no_box_grading;");
 
         return $result;
@@ -201,12 +206,17 @@ class Grading extends Model
         left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
         left join cabut as d on d.no_box =  a.no_box_sortir
         left join eo as e on e.no_box = a.no_box_sortir
-        left join cetak_new as f on f.no_box = a.no_box_sortir
+        left join (
+        	SELECT d.no_box, d.ttl_rp 
+            FROM cetak_new as d 
+            left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+            where h.kategori = 'CTK'
+        ) as f on f.no_box = a.no_box_sortir
         left join sortir as g on g.no_box = a.no_box_sortir
         left join users as h on h.id = c.penerima
         left join users as i on i.id = b.id_penerima
         left join tb_grade as j on j.id_grade = a.id_grade
-        where a.gr != 0 and a.no_box_grading in(SELECT k.no_nota FROM pengiriman as k)
+        where a.gr != 0 and a.no_box_grading in(SELECT k.no_box FROM pengiriman as k)
         group by a.no_box_grading;");
 
         return $result;
