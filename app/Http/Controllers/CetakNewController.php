@@ -223,7 +223,7 @@ class CetakNewController extends Controller
         $kelas_cetak =  DB::table('kelas_cetak')->where('id_kelas_cetak', $r->id_paket)->first();
         $cetak =  DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->first();
 
-        if (empty($r->tipe_bayar) || $r->pcs_akhir == 0) {
+        if (empty($r->tipe_bayar)) {
             $ttl_rp = 0;
             $rp_hcr = 0;
             $susut =  0;
