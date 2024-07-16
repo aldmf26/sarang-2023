@@ -61,6 +61,7 @@ class Cabut extends Model
             ->select(
                 'b.id_anak',
                 'a.no_box',
+                'a.ket_hcr',
                 'a.id_cabut',
                 'a.rupiah',
                 'c.pcs as pcs_kelas',

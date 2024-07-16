@@ -396,6 +396,7 @@ class CabutController extends Controller
             'gr_akhir' => $r->gr_akhir,
             'gr_flx' => $r->gr_flx,
             'pcs_hcr' => $r->pcs_hcr,
+            'ket_hcr' => $r->ket_hcr,
             'bulan_dibayar' => $r->bulan,
             'eot' => $r->eot,
             'ttl_rp' => $r->ttl_rp,

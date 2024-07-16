@@ -29,6 +29,7 @@
                     <th class="dhead text-end" width="75">Gr Akhir</th>
                     <th class="dhead text-end" width="75">EOT</th>
                     <th class="dhead text-end" width="75">Pcs Hcr</th>
+                    <th class="dhead text-end" width="105">Ket Hcr</th>
                     <th class="dhead text-end" width="55">Susut</th>
                     <th class="dhead text-end" width="120">Ttl Rp</th>
                     <th class="dhead" width="120">Dibayar</th>
@@ -106,6 +107,10 @@
                         <td>
                             <input value="{{ $d->pcs_hcr }}" name="pcs_hcr{{ $i + 1 }}[]" type="text"
                                 class="form-control text-end pcsHcrKeyup" count="{{ $i + 1 }}">
+                        </td>
+                        <td>
+                            <input value="{{ $d->ket_hcr }}" name="ket_hcr{{ $i + 1 }}[]" type="text"
+                                class="form-control text-end ketHcrKeyup" count="{{ $i + 1 }}">
                         </td>
 
                         <td class="susut{{ $i + 1 }} text-end">
