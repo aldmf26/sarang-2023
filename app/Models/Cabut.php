@@ -40,6 +40,7 @@ class Cabut extends Model
                 'a.gr_akhir',
                 'a.gr_awal',
                 'a.eot',
+                'c.denda_susut_persen',
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')

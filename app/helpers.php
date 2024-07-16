@@ -134,11 +134,11 @@ if (!function_exists('rumusTotalRp ')) {
         $rupiah = $detail->rupiah;
 
         if ($susut > $detail->batas_susut) {
-            $denda = ($susut - $detail->batas_susut) * 0.03 * $detail->rupiah;
+            $denda = ($susut - $detail->batas_susut) * ($detail->denda_susut_persen / 100) * $detail->rupiah;
             $rupiah = $rupiah - $denda;
         }
         if ($susut < $detail->bonus_susut) {
-            $bonus_susut = $detail->rp_bonus != 0  ? ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas : 0; 
+            $bonus_susut = $detail->rp_bonus != 0  ? ($detail->rp_bonus * $detail->gr_awal) / $detail->gr_kelas : 0;
         }
 
         $denda_hcr = $detail->pcs_hcr * 5000;
