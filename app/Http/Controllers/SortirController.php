@@ -510,36 +510,12 @@ class SortirController extends Controller
     public function gudang(Request $r)
     {
         $id_user = auth()->user()->id;
-        if (auth()->user()->posisi_id == 1) {
-            $id_penerima = '';
-            $id_pengawas = '';
-        } else {
-            $id_penerima = "AND a.id_penerima = $id_user";
-            $id_pengawas = "AND a.id_pengawas = $id_user";
-        }
-
-
-
         $data = [
             'title' => 'Gudang',
 
-            'siap_sortir' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
-            FROM sortir as a 
-            left join bk as b on b.no_box = a.no_box
-            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
-            WHERE a.selesai = 'T' and a.id_anak = 0  $id_pengawas;"),
-
-            'sortir_proses' => DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp
-            FROM sortir as a 
-            left join bk as b on b.no_box = a.no_box
-            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
-            WHERE a.selesai = 'T' and a.id_anak != 0  $id_pengawas;"),
-
-            'sortir_selesai' => DB::select("SELECT a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp
-            FROM sortir as a 
-            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-            join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
-            WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y';"),
+            'siap_sortir' => Sortir::siap_sortir($id_user),
+            'sortir_proses' => Sortir::sortir_proses($id_user),
+            'sortir_selesai' => Sortir::sortir_selesai($id_user),
 
             'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
             'posisi' => auth()->user()->posisi_id
