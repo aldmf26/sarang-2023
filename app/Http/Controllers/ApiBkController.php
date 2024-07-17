@@ -440,6 +440,7 @@ class ApiBkController extends Controller
     {
         $r = DB::select("SELECT a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM bk as a 
+        where a.kategori = 'cabut'
         GROUP by a.nm_partai;");
 
         return response()->json($r);
