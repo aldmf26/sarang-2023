@@ -6,6 +6,7 @@ use App\Models\Cabut;
 use App\Models\CetakModel;
 use App\Models\Grading;
 use App\Models\Sortir;
+use App\Models\TotalanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -102,6 +103,15 @@ class GudangController extends Controller
             'gradingboxkirim' => Grading::gradingboxkirim(),
         ];
         return view('home.gudang.totalan', $data);
+    }
+    public function totalan_new(Request $r)
+    {
+        $data = [
+            'title' => 'Data Totalan',
+            'bksinta' => TotalanModel::bksinta(),
+
+        ];
+        return view('home.gudang.totalan_new', $data);
     }
 
     function export(Request $r)

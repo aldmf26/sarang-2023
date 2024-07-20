@@ -150,6 +150,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/grading', 'grading')->name('grading');
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/totalan', 'totalan')->name('totalan');
+            Route::get('/totalan_new', 'totalan_new')->name('totalan_new');
             Route::get('/export', 'export')->name('export');
         });
     Route::controller(BkController::class)

@@ -1207,24 +1207,25 @@ class CetakNewController extends Controller
                         'penerima' => auth()->user()->id,
                         'pcs_awal' => $row[4],
                         'gr_awal' => $row[5],
-                        'kategori' => 'cetakimport',
+                        'kategori' => 'cetak',
+                        'baru' => 'baru',
                     ]);
-                    DB::table('formulir_sarang')->insert([
-                        'no_box' => $nobox,
-                        'id_pemberi' => 265,
-                        'id_penerima' => auth()->user()->id,
-                        'tanggal' => date('Y-m-d'),
-                        'pcs_awal' => $row[4],
-                        'gr_awal' => $row[5],
-                        'kategori' => 'cetak'
-                    ]);
-                    DB::table('cetak_new')->insert([
-                        'no_box' => $nobox,
-                        'id_pengawas' => auth()->user()->id,
-                        'tgl' => date('Y-m-d'),
-                        'pcs_awal_ctk' => $row[4],
-                        'gr_awal_ctk' => $row[5],
-                    ]);
+                    // DB::table('formulir_sarang')->insert([
+                    //     'no_box' => $nobox,
+                    //     'id_pemberi' => 265,
+                    //     'id_penerima' => auth()->user()->id,
+                    //     'tanggal' => date('Y-m-d'),
+                    //     'pcs_awal' => $row[4],
+                    //     'gr_awal' => $row[5],
+                    //     'kategori' => 'cetak'
+                    // ]);
+                    // DB::table('cetak_new')->insert([
+                    //     'no_box' => $nobox,
+                    //     'id_pengawas' => auth()->user()->id,
+                    //     'tgl' => date('Y-m-d'),
+                    //     'pcs_awal_ctk' => $row[4],
+                    //     'gr_awal_ctk' => $row[5],
+                    // ]);
                 }
             }
             DB::commit();
