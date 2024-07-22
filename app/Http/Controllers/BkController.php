@@ -30,15 +30,12 @@ class BkController extends Controller
         if (auth()->user()->posisi_id == 1) {
             $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
+            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
         } else {
             $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
+            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
         }
-
-
-
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
