@@ -30,15 +30,12 @@ class BkController extends Controller
         if (auth()->user()->posisi_id == 1) {
             $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
+            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
         } else {
             $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
-            WHERE a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
+            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
         }
-
-
-
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
@@ -199,7 +196,7 @@ class BkController extends Controller
                         continue;
                     }
 
-                    $nobox = $this->getNoBoxTambah();
+                    
                     $tgl = $row[6];
 
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
@@ -230,7 +227,7 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-
+                        $nobox = $this->getNoBoxTambah();
                         DB::table('bk')->insert([
                             'no_lot' => '0',
                             'nm_partai' => $row[0],
@@ -240,9 +237,9 @@ class BkController extends Controller
                             'warna' => $row[3],
                             'tgl' => date('Y-m-d'),
                             'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
-                            'penerima' => auth()->user()->id,
-                            'pcs_awal' => $row[4],
-                            'gr_awal' => $row[5],
+                            'penerima' => $row[4],
+                            'pcs_awal' => $row[5],
+                            'gr_awal' => $row[6],
                             'kategori' => 'cabut',
                         ]);
                     }

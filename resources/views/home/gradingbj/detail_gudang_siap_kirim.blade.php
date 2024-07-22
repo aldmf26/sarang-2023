@@ -40,7 +40,7 @@
                                 <input type="hidden" name="no_box" value="{{ $d->no_box_sortir }}">
                                 <input type="hidden" name="selesai" value="{{ $d->selesai }}">
                                 <input type="hidden" name="id_grading" value="{{ $d->id_grading }}">
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus ?')">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin di cancel ?')">
                                     <span class="badge bg-danger">Cancel</span>
                                 </button>
                             </form>
