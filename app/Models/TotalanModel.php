@@ -67,7 +67,7 @@ class TotalanModel extends Model
             FROM cabut AS a 
             LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
             LEFT JOIN users AS c ON c.id = a.id_pengawas
-            WHERE a.formulir = 'T' and a.pcs_akhir != 0
+            WHERE a.formulir = 'T' and  a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak') and a.pcs_akhir != 0
         ) AS a
         join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' AND b.baru = 'baru'
         GROUP BY a.id_pengawas, a.no_box 
@@ -256,7 +256,12 @@ Having a.nm_partai = '$nm_partai';
                             left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
                             left join cabut as d on d.no_box =  a.no_box_sortir
                             left join eo as e on e.no_box = a.no_box_sortir
-                            left join cetak_new as f on f.no_box = a.no_box_sortir
+                            left join (
+                                SELECT d.no_box, d.ttl_rp 
+                                FROM cetak_new as d 
+                                left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+                                where h.kategori = 'CTK'
+                            ) as f on f.no_box = a.no_box_sortir
                             left join sortir as g on g.no_box = a.no_box_sortir
                             left join users as h on h.id = c.penerima
                             left join users as i on i.id = b.id_penerima
@@ -272,6 +277,26 @@ Having a.nm_partai = '$nm_partai';
             ) as a 
             group by a.nm_partai
             Having a.nm_partai = '$nm_partai';
+        ");
+
+        return $result;
+    }
+    public static function box_belum_kirim($nm_partai)
+    {
+        $result = DB::selectOne("SELECT b.nm_partai, a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) as ttl_rp
+        FROM grading as a 
+        left join bk as b on b.no_box = a.no_box_sortir and b.kategori = 'cabut' 
+        left join cabut as c on c.no_box = a.no_box_sortir
+        left join eo as e on e.no_box = a.no_box_sortir
+        left join (
+          SELECT d.no_box, d.ttl_rp 
+          FROM cetak_new as d 
+          left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+          where h.kategori = 'CTK'
+        ) as f on f.no_box = a.no_box_sortir
+        left join sortir as g on g.no_box = a.no_box_sortir
+        where a.no_box_grading is not null and b.nm_partai = '$nm_partai'
+        GROUP by b.nm_partai;
         ");
 
         return $result;

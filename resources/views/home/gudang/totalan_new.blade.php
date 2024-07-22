@@ -69,6 +69,7 @@
                                 $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
                                 $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
                                 $grading_stock = \App\Models\TotalanModel::grading_stock($b->nm_partai);
+                                $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
@@ -142,6 +143,16 @@
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
+                                <td>Sortir Stok</td>
+                                <td class="text-end">{{ number_format($stock_sortir->pcs ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($stock_sortir->gr ?? 0, 0) }}</td>
+                                <td class="text-end">
+                                    {{ empty($stock_sortir->gr) ? 0 : number_format($stock_sortir->ttl_rp / $stock_sortir->gr, 0) }}
+                                </td>
+                                <td class="text-end">{{ number_format($stock_sortir->ttl_rp ?? 0, 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir sedang proses</td>
                                 <td class="text-end">{{ number_format($sortir_proses->pcs ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_proses->gr ?? 0, 0) }}</td>
@@ -169,6 +180,16 @@
                                     {{ empty($grading_stock->gr) ? 0 : number_format($grading_stock->ttl_rp / $grading_stock->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $b->nm_partai }}</td>
+                                <td>Box belum kirim</td>
+                                <td class="text-end">{{ number_format($box_belum_kirim->pcs ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($box_belum_kirim->gr ?? 0, 0) }}</td>
+                                <td class="text-end">
+                                    {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }}
+                                </td>
+                                <td class="text-end">{{ number_format($box_belum_kirim->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
