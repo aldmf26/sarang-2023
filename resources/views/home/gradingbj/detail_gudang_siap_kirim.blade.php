@@ -23,6 +23,7 @@
                     <th class="dhead">Tipe</th>
                     <th class="dhead">Pcs</th>
                     <th class="dhead">Gr</th>
+                    <th class="dhead">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,18 @@
                         <td>{{ $d->tipe . ' ' . $d->ket }}</td>
                         <td>{{ $d->pcs }}</td>
                         <td>{{ $d->gr }}</td>
+                        <td>
+                            <form action="{{ route('gradingbj.cancel') }}" method="post">
+                                @csrf
+                                @method('post')
+                                <input type="hidden" name="no_box" value="{{ $d->no_box_sortir }}">
+                                <input type="hidden" name="selesai" value="{{ $d->selesai }}">
+                                <input type="hidden" name="id_grading" value="{{ $d->id_grading }}">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus ?')">
+                                    <span class="badge bg-danger">Cancel</span>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

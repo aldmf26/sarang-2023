@@ -4,13 +4,13 @@
     </x-slot>
 
     <x-slot name="cardBody">
-        <section x-data="{ cek: [] }">
+        <section x-data="{ cek: [], ttlPcs: 0, ttlGr: 0 }">
             <div class="row">
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
                 </div>
-
-                <div class="col-lg-7">
+                
+                <div class="col-lg-8">
                     <form action="{{ route('pengiriman.kirim') }}" method="post">
                         @csrf
                         <a href="{{route('pengiriman.gudang')}}" class="btn btn-sm btn-info"
@@ -18,16 +18,17 @@
                         <a href="{{route('packinglist.pengiriman')}}" class="btn btn-sm btn-primary"
                             href=""><i class="fa fa-clipboard-list"></i> Packinglist</a>
                     
-                        <input type="hidden" name="no_box" class="form-control" :value="cek">
+                        <input type="hidden" name="no_box" class="form-control" :value="cek.join(',')">
                         <button x-transition x-show="cek.length"
                             class="btn btn-sm btn-primary" type="submit">
                             <i class="fas fa-plus"></i>
                             Kirim
                             <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            <span  x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
                         </button>
                     </form>
                 </div>
-                <div class="scrollable-table">
+                <div class="scrollable-table col-lg-12">
                     <table id="tbl1" class="table table-hover table-striped table-bordered">
                         <thead>
                             <tr>
@@ -55,12 +56,26 @@
                             <td class="dheadstock"></td>
                             <td class="text-end dheadstock h6 ">{{ $ttlPcs }}</td>
                             <td class="text-end dheadstock h6 ">{{ $ttlGr }}</td>
-                            <td class="dheadstock"></td>
+                            <td class="dheadstock">
+                                {{-- <div x-show="cek.length">
+                                    Dipilih <br> Pcs : <span></span> Gr : <span></span>
+                                </div> --}}
+                            </td>
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
                                 @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0)
-                                    <tr @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
+                                    <tr @click="
+                                            if (cek.includes('{{ $d->no_box }}')) {
+                                                cek = cek.filter(x => x !== '{{ $d->no_box }}'); 
+                                                ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}; 
+                                                ttlGr -= {{ $d->gr - $d->gr_pengiriman }};
+                                            } else {
+                                                cek.push('{{ $d->no_box }}'); 
+                                                ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}; 
+                                                ttlGr += {{ $d->gr - $d->gr_pengiriman }};
+                                            }
+                                        ">
                                         <td>P{{ $d->no_box }}</td>
                                         <td class="text-primary pointer">   
                                             <span class="detail" data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>  
@@ -75,12 +90,12 @@
                                             @php
                                                 $param = ['no_box' => $d->no_box, 'selesai' => $d->selesai];
                                             @endphp
-                                            @if ($d->selesai == 'T')
+                                            {{-- @if ($d->selesai == 'T')
                                                 <a onclick="return confirm('Yakin dihapus ?')"
                                                     href="{{ route('gradingbj.cancel', $param) }}">
                                                     <span class="badge bg-danger">Cancel</span>
                                                 </a>
-                                            @endif
+                                            @endif --}}
                                         </td>
                                     </tr>
                                 @endif
@@ -126,3 +141,4 @@
         @endsection
     </x-slot>
 </x-theme.app>
+
