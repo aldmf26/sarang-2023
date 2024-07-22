@@ -67,7 +67,7 @@
                                 $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
                                 $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
                                 $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
-                                $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
+                                // $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
                                 // $grading_stock = \App\Models\TotalanModel::grading_stock($b->nm_partai);
                                 // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
@@ -161,7 +161,7 @@
                                 </td>
                                 <td class="text-end">{{ number_format($sortir_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir selesai siap grading</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->pcs ?? 0, 0) }}</td>
@@ -170,7 +170,7 @@
                                     {{ empty($sortir_selesai->gr) ? 0 : number_format($sortir_selesai->ttl_rp / $sortir_selesai->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
-                            </tr>
+                            </tr> --}}
                             {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Grading Stock</td>
