@@ -40,6 +40,7 @@ class Cabut extends Model
                 'a.gr_akhir',
                 'a.gr_awal',
                 'a.eot',
+                'c.denda_susut_persen',
             )
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
@@ -686,6 +687,8 @@ class Cabut extends Model
             'cabut' => $cabut,
             'cabutSelesai' => self::gudangCabutSelesai($id_user),
             'eoSelesai' => self::gudangEoSelesai($id_user),
+            'cabutSelesainew' => self::gudangCabutSelesainew($id_user),
+            'eoSelesainew' => self::gudangEoSelesainew($id_user),
         ];
     }
 
@@ -728,5 +731,44 @@ SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as
         and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
         
  ORDER by no_box;");
+    }
+
+    public static function gudangCabutSelesainew($id_user = null)
+    {
+        $posisi = auth()->user()->posisi_id;
+        $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
+        return DB::select("SELECT 
+        a.pengawas, a.no_box, a.nama, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, min(a.selesai) as selesai, sum(a.ttl_rp) as ttl_rp_cbt,
+        (b.hrga_satuan * b.gr_awal) as ttl_rp, b.nm_partai, sum((a.ttl_rp + (b.hrga_satuan * b.gr_awal)) /  a.gr_akhir) as hrga_satuan
+        FROM ( 
+            SELECT a.id_cabut, a.id_pengawas, c.name as pengawas, a.no_box, b.nama, a.pcs_akhir, a.gr_akhir, a.selesai, a.ttl_rp
+            FROM cabut AS a 
+            LEFT JOIN tb_anak AS b ON b.id_anak = a.id_anak
+            LEFT JOIN users AS c ON c.id = a.id_pengawas
+            WHERE  a.pcs_akhir != 0
+        ) AS a
+        join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' AND b.baru = 'baru'
+        GROUP BY a.id_pengawas, a.no_box 
+        HAVING min(a.selesai) = 'Y' $penerima2 AND a.no_box != 9999 
+        ORDER BY a.no_box ASC");
+    }
+    public static function gudangEoSelesainew($id_user = null)
+    {
+        $posisi = auth()->user()->posisi_id;
+        $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
+        return DB::select("SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_eo_akhir as gr, a.ttl_rp as ttl_rp_cbt, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_eo_akhir) as hrga_satuan
+        FROM eo as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join users as c on c.id = a.id_pengawas
+        where a.selesai ='Y' and b.baru = 'baru' 
+        
+        UNION ALL
+        SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, a.ttl_rp as ttl_rp_cbt, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan
+                FROM cabut as a 
+                left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                left join users as c on c.id = a.id_pengawas
+                where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0 
+                
+        ORDER by no_box;");
     }
 }

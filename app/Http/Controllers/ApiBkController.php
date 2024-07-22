@@ -436,4 +436,13 @@ class ApiBkController extends Controller
         ];
         return response()->json($data);
     }
+    public function sum_partai(Request $r)
+    {
+        $r = DB::select("SELECT a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM bk as a 
+        where a.kategori = 'cabut'
+        GROUP by a.nm_partai;");
+
+        return response()->json($r);
+    }
 }
