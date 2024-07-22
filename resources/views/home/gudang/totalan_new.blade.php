@@ -62,9 +62,9 @@
                                 $bk_proses = \App\Models\TotalanModel::bksedang_proses($b->nm_partai);
                                 $bk_selesai_siap_ctk = \App\Models\TotalannewModel::bkselesai_siap_ctk($b->nm_partai);
                                 $bk_selesai_siap_str = \App\Models\TotalanModel::bkselesai_siap_str($b->nm_partai);
-                                $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
-                                $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
-                                $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
+                                // $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
+                                // $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
+                                // $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
                                 // $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
                                 // $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
                                 // $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
@@ -111,7 +111,7 @@
                                 </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak Stok</td>
                                 <td class="text-end">{{ number_format($cetak_stok->pcs ?? 0, 0) }}</td>
@@ -140,7 +140,7 @@
                                     {{ empty($cetak_selesai->gr) ? 0 : number_format($cetak_selesai->ttl_rp / $cetak_selesai->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($cetak_selesai->ttl_rp ?? 0, 0) }}</td>
-                            </tr>
+                            </tr> --}}
                             {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir Stok</td>
