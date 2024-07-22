@@ -8,7 +8,7 @@
             <th>Tipe</th>
             <th>Ket</th>
             <th>Warna</th>
-            {{-- <th>Id Penerima</th> --}}
+            <th>Id Penerima</th>
             {{-- <th>Tgl</th> --}}
             <th>Pcs Awal</th>
             <th>Gr Awal</th>
@@ -27,7 +27,7 @@
             <td style="{{ $yellow }}">d</td>
             <td style="{{ $yellow }}">k</td>
             <td style="{{ $yellow }}">vs</td>
-            {{-- <td style="{{ $yellow }}">1</td> --}}
+            <td style="{{ $yellow }}">1</td>
             {{-- <td style="{{ $yellow }}">2023-11-01</td> --}}
             <td style="{{ $yellow }}">126</td>
             <td style="{{ $yellow }}">1000</td>

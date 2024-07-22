@@ -199,7 +199,7 @@ class BkController extends Controller
                         continue;
                     }
 
-                    $nobox = $this->getNoBoxTambah();
+                    
                     $tgl = $row[6];
 
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
@@ -230,7 +230,9 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-
+                        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE penerima = '$row[4]' and kategori like '%cabut%' ORDER by no_box DESC limit 1;");
+                        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
+                        
                         DB::table('bk')->insert([
                             'no_lot' => '0',
                             'nm_partai' => $row[0],
@@ -240,9 +242,9 @@ class BkController extends Controller
                             'warna' => $row[3],
                             'tgl' => date('Y-m-d'),
                             'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
-                            'penerima' => auth()->user()->id,
-                            'pcs_awal' => $row[4],
-                            'gr_awal' => $row[5],
+                            'penerima' => $row[4],
+                            'pcs_awal' => $row[5],
+                            'gr_awal' => $row[6],
                             'kategori' => 'cabut',
                         ]);
                     }
