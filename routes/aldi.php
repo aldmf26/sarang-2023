@@ -458,10 +458,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/grading', 'grading')->name('grading');
             Route::post('/create', 'create')->name('create');
+            Route::post('/createUlang', 'createUlang')->name('createUlang');
             Route::post('/import', 'import')->name('import');
             Route::get('/gudang_siap_kirim', 'gudang_siap_kirim')->name('gudang_siap_kirim');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/cancel', 'cancel')->name('cancel');
+            Route::post('/cancel', 'cancelBoxPengiriman')->name('cancelBoxPengiriman');
             Route::get('/selesai', 'selesai')->name('selesai');
             Route::get('/load_selisih', 'load_selisih')->name('load_selisih');
             Route::get('/export_selisih', 'export_selisih')->name('export_selisih');

@@ -171,7 +171,7 @@ class GradingBjController extends Controller
         $no = 2;
         foreach ($selisih as $item) {
             $sheet->setCellValue('A' . $no, $item->no_box);
-            $sheet->setCellValue('B' . $no, number_format((1-($item->gr / $item->gr_awal)) * 100,0));
+            $sheet->setCellValue('B' . $no, number_format((1 - ($item->gr / $item->gr_awal)) * 100, 0));
 
             $no++;
         }
@@ -276,7 +276,7 @@ class GradingBjController extends Controller
         $no = 2;
         foreach ($getFormulir as $item) {
             $sheet->setCellValue('A' . $no, $item->no_box);
-            $sheet->setCellValue('B' . $no, $item->pcs_awal);   
+            $sheet->setCellValue('B' . $no, $item->pcs_awal);
             $sheet->setCellValue('C' . $no, $item->gr_awal);
             $h_no_box = $item->no_box;
             // Mengisi kolom H dengan nilai no_box selama 15 baris
@@ -451,7 +451,7 @@ class GradingBjController extends Controller
     {
         $no_box = $r->no_box;
         $detail = DB::table('grading as a')
-            ->select('c.tipe', 'c.ket', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
+            ->select('c.tipe', 'a.selesai', 'a.id_grading', 'c.ket', 'b.nm_grade as grade', 'a.no_box_grading as no_box', 'a.no_box_sortir', 'a.pcs', 'a.gr')
             ->join('tb_grade as b', 'a.id_grade', 'b.id_grade')
             ->join('bk as c', 'c.no_box', 'a.no_box_sortir')
             ->where([['a.no_box_grading', $no_box], ['c.kategori', 'sortir']])->get();
@@ -460,6 +460,62 @@ class GradingBjController extends Controller
             'detail' => $detail
         ];
         return view('home.gradingbj.detail_gudang_siap_kirim', $data);
+    }
+
+    public function cancelBoxPengiriman(Request $r)
+    {
+        
+        $no_box = $r->no_box;
+        $getFormulir = DB::select("SELECT a.no_box_sortir as no_box, sum(a.pcs) as pcs_awal, sum(a.gr) as gr_awal, b.tipe FROM `grading` as a 
+        join bk as b on a.no_box_sortir = b.no_box and b.kategori = 'sortir'
+        WHERE a.no_box_sortir = '$no_box' GROUP BY a.no_box_sortir;");
+
+        $getBox = DB::select("SELECT b.id_grade,a.no_box_sortir as no_box,a.no_box_grading ,a.pcs,a.gr, b.nm_grade FROM `grading` as a 
+        join tb_grade as b on a.id_grade = b.id_grade
+        WHERE a.no_box_sortir = '$no_box'");
+
+        $gradeStatuses = ['bentuk', 'turun'];
+        $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
+        $gradeTurun = $tb_grade->where('status', 'turun');
+        $data = [
+            'title' => 'Cancel Grading',
+            'no_box' => $no_box,
+            'user' => auth()->user()->name,
+            'gradeBentuk' => $tb_grade,
+            'gradeTurun' => $gradeTurun,
+            'getFormulir' => $getFormulir,
+            'getBox' => $getBox,
+        ];
+        return view('home.gradingbj.cancel_grading', $data);
+    }
+
+    public function createUlang(Request $r)
+    {
+        $boxsortir = $r->no_box_sortir[0];
+        DB::table('grading')->where([['no_box_sortir', $boxsortir],['admin' , '!=', '']])->delete();
+        $noinvoice = $this->getNoInvoiceTambah();
+        for ($i = 0; $i < count($r->grade); $i++) {
+            $id_grade = $r->grade[$i];
+            $no_box_sortir = $r->no_box_sortir[$i];
+            $no_box_grading = $r->box_sp[$i];
+            $pcs = $r->pcs[$i];
+            $gr = $r->gr[$i];
+            $admin = auth()->user()->name;
+            $tgl = date('Y-m-d');
+            
+            $data[] = [
+                'id_grade' => $id_grade,
+                'no_box_grading' => $no_box_grading,
+                'no_box_sortir' => $no_box_sortir,
+                'pcs' => $pcs,
+                'gr' => $gr,
+                'admin' => $admin,
+                'tgl' => $tgl,
+                'no_invoice' => $noinvoice,
+            ];
+        }
+        DB::table('grading')->insert($data);
+        return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
     }
 
     public function cancel(Request $r)
