@@ -230,9 +230,7 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-                        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE penerima = '$row[4]' and kategori like '%cabut%' ORDER by no_box DESC limit 1;");
-                        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
-                        
+                        $nobox = $this->getNoBoxTambah();
                         DB::table('bk')->insert([
                             'no_lot' => '0',
                             'nm_partai' => $row[0],
