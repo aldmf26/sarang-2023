@@ -149,7 +149,7 @@ class CetakNewController extends Controller
     {
         $data = [
             'tb_anak' => $this->getData('tb_anak'),
-            'paket' => $this->getData('paket'),
+            'paket' => DB::table('kelas_cetak')->where('kategori', 'CU')->get(),
             'bulan' => $this->getData('bulan'),
             'users' => $this->getData('users'),
             'nobox' => $this->getData('nobox'),
@@ -163,7 +163,7 @@ class CetakNewController extends Controller
             'count' => $r->count,
             'tb_anak' => $this->getData('tb_anak'),
             'bulan' => $this->getData('bulan'),
-            'paket' => $this->getData('paket'),
+            'paket' => DB::table('kelas_cetak')->where('kategori', 'CU')->get(),
             'users' => $this->getData('users'),
             'nobox' => $this->getData('nobox'),
         ];

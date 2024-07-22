@@ -140,7 +140,7 @@ HAVING a.nm_partai = '$nm_partai';
             left join users as e on e.id = a.id_pengawas
             left join cabut as f on f.no_box = b.no_box
             left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
-            where a.selesai = 'T' and a.id_anak != 0 and b.id_pemberi is not null and g.kategori = 'CTK'
+            where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK'
             order by a.no_box ASC
 
             ) as a 
