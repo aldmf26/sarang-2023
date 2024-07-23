@@ -256,9 +256,6 @@ HAVING a.nm_partai = '$nm_partai';
                                 where h.kategori = 'CTK'
                             ) as f on f.no_box = a.no_box_sortir
                             left join sortir as g on g.no_box = a.no_box_sortir
-                            left join users as h on h.id = c.penerima
-                            left join users as i on i.id = b.id_penerima
-                            
                             left join (
                                 SELECT j.no_box_sortir, sum(j.pcs) as pcs_ambil, sum(j.gr) as gr_ambil
                                 FROM grading as j 
@@ -273,8 +270,13 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function box_belum_kirim($nm_partai)
     {
-        $result = DB::selectOne("SELECT b.nm_partai, a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) as ttl_rp
-        FROM grading as a 
+        $result = DB::selectOne("SELECT b.nm_partai, a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr , sum((((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) / h.gr_awal) * a.gr) as ttl_rp
+        FROM (
+        SELECT a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr
+            FROM grading as a 
+           where a.no_box_grading is not null
+            group by a.no_box_sortir
+        ) as a
         left join bk as b on b.no_box = a.no_box_sortir and b.kategori = 'cabut' 
         left join cabut as c on c.no_box = a.no_box_sortir
         left join eo as e on e.no_box = a.no_box_sortir
@@ -285,7 +287,8 @@ HAVING a.nm_partai = '$nm_partai';
           where h.kategori = 'CTK'
         ) as f on f.no_box = a.no_box_sortir
         left join sortir as g on g.no_box = a.no_box_sortir
-        where a.no_box_grading is not null and b.nm_partai = '$nm_partai'
+        left join formulir_sarang as h on h.no_box = a.no_box_sortir and h.kategori = 'grade'
+        where   b.nm_partai = '$nm_partai'
         GROUP by b.nm_partai;
         ");
 

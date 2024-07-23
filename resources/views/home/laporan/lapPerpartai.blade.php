@@ -194,7 +194,7 @@
                 @csrf
                 <x-theme.modal title="Oprasional" idModal="oprasional" size="modal-lg" btnSave="Y">
                     <div class="row">
-                        <div class="col-lg-3 mb-3">
+                        {{-- <div class="col-lg-3 mb-3">
                             <label for="">Pilih Bulan</label>
                             <select name="bulan" id="" class="form-control">
                                 @foreach ($bulandata as $b)
@@ -202,9 +202,9 @@
                                         {{ $b->id_bulan == $bulan ? 'selected' : '' }}>{{ $b->nm_bulan }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-12">
-
+                            <h5>Gaji : {{ number_format($gaji->ttl_rp, 0) }}</h5>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -255,7 +255,7 @@
                         <div class="col-lg-12">
 
                         </div>
-                        {{-- <input type="hidden" name="bulan" value="{{ $bulan }}"> --}}
+                        <input type="hidden" name="bulan" value="{{ $bulan }}">
                         <input type="hidden" name="tahun" value="{{ date('Y') }}">
                         <input type="hidden" name="gr_akhir" value="{{ $total }}">
 
