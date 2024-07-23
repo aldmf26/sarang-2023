@@ -203,8 +203,8 @@ class BkController extends Controller
                     if (
                         // $cekBox || 
                         empty($row[0]) ||
-                        empty($row[5]) ||
-                        empty($row[6])
+                        empty($row[6]) ||
+                        empty($row[7])
                         // empty($row[9]) ||
                         // empty($row[10])
                     ) {
@@ -212,8 +212,8 @@ class BkController extends Controller
                             // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
                             empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
                             // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                            empty($row[5]) => "GR TIDAK BOLEH KOSONG",
-                            empty($row[6]) => "KATEGORI TIDAK BOLEH KOSONG",
+                            empty($row[6]) => "GR TIDAK BOLEH KOSONG",
+                            empty($row[7]) => "KATEGORI TIDAK BOLEH KOSONG",
                             // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
                         ];
                         DB::rollBack();
