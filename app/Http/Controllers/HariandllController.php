@@ -38,6 +38,7 @@ class HariandllController extends Controller
             'datas' => DB::table('tb_hariandll  as a')
                 ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
                 ->where([['ditutup', 'T'], ['b.id_pengawas', $id_user], ['kategori', $kategori]])
+                ->whereBetween('a.tgl', [$tgl1, $tgl2])
                 ->orderBy('a.id_hariandll', 'DESC')
                 ->get()
         ];
