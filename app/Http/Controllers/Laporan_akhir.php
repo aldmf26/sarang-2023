@@ -133,7 +133,7 @@ class Laporan_akhir extends Controller
         DB::table('oprasional')->where('bulan_dibayar', $r->bulan_dibayar)->where('tahun_dibayar', $r->tahun_dibayar)->delete();
 
         $data = [
-            'rupiah' => $r->total_rp,
+            'rupiah' => $r->total_rp - $r->gaji,
             'bulan_dibayar' => $r->bulan_dibayar,
             'tahun_dibayar' => $r->tahun_dibayar,
             'admin' => auth()->user()->name
@@ -184,10 +184,10 @@ class Laporan_akhir extends Controller
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
         $data = [
-            'rp_oprasional' => $rawNumber,
+            'rp_oprasional' => $rawNumber - $r->gaji,
             'bulan' => $r->bulan,
             'tahun' => $r->tahun,
-            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'rp_gr' => ($rawNumber - $r->gaji) / $r->gr_akhir,
             'gr' => $r->gr_akhir
         ];
         DB::table('oprasional')->insert($data);

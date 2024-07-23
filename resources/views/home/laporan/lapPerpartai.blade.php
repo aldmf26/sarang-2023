@@ -204,7 +204,7 @@
                             </select>
                         </div> --}}
                         <div class="col-lg-12">
-                            <h5>Gaji : {{ number_format($gaji->ttl_rp, 0) }}</h5>
+                            {{-- <h5>Gaji : {{ number_format($gaji->ttl_rp, 0) }}</h5> --}}
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -213,7 +213,9 @@
                                         <th class="dhead text-end">Gr Akhir Ctk</th>
                                         <th class="dhead text-end">Gr Akhir Sortir</th>
                                         <th class="dhead text-end">Gr Akhir Cu</th>
-                                        <th class="dhead text-end" width="150px">Cost Oprasional</th>
+                                        <th class="dhead text-end">Gaji</th>
+                                        <th class="dhead text-end">Cost Oprasional</th>
+                                        <th class="dhead text-end" width="150px">Total Oprasional</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -223,10 +225,17 @@
                                         <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
-                                        <td x-data="numberFormat({{ $oprasional->rp_oprasional ?? 0 }})">
+                                        <td class="text-end">{{ number_format($gaji->ttl_rp, 0) }}</td>
+                                        <td class="text-end">{{ number_format($oprasional->rp_oprasional ?? 0, 0) }}
+                                        </td>
+                                        <input type="hidden" name="gaji" value="{{ $gaji->ttl_rp ?? 0 }}">
+
+
+                                        <td x-data="numberFormat({{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_rp }})">
                                             <input type="text" class="form-control" autofocus
                                                 name="biaya_oprasional" id="number" x-model="formattedNumber"
-                                                @keyup="formatNumber" value="{{ $oprasional->rp_oprasional ?? 0 }}">
+                                                @keyup="formatNumber"
+                                                value="{{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_rp }}">
 
                                         </td>
                                     </tr>
@@ -247,7 +256,7 @@
                                 Total :
                                 {{ number_format($cabut->gr_akhir + $eo->gr_eo_akhir + $ctk->gr_akhir + $str->gr_akhir + $cu->gr_akhir, 0) }}
                                 | Rp/gr :
-                                {{ empty($oprasional->rp_oprasional) ? 0 : number_format($oprasional->rp_oprasional / $total, 0) }}
+                                {{ empty($oprasional->rp_oprasional) ? 0 : number_format(($oprasional->rp_oprasional + $gaji->ttl_rp) / $total, 0) }}
                             </h6>
 
 
