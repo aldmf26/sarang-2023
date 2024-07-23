@@ -30,7 +30,39 @@ class Laporan_akhir extends Controller
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
             'oprasional' => DB::table('oprasional')->where('bulan', $bulan)->first(),
-            'bulandata' => DB::table('bulan')->get()
+            'bulandata' => DB::table('bulan')->get(),
+            'gaji' => DB::selectOne("SELECT  sum(a.ttl_rp - a.ttl_denda) as ttl_rp
+            FROM(
+             SELECT sum(a.ttl_rp) as ttl_rp , 0 as ttl_denda
+            FROM cabut as a 
+            where a.bulan_dibayar = '6' and a.no_box != '999' and a.id_pengawas != '421' and a.penutup = 'Y'
+
+            UNION ALL
+
+            SELECT sum(b.ttl_rp) as ttl_rp, 0 as ttl_denda
+            FROM eo as b 
+            where b.bulan_dibayar = '6' and b.no_box != '999'
+
+            UNION ALL 
+            SELECT sum(c.ttl_rp) as ttl_rp , 0 as ttl_denda
+            FROM cetak_new as c
+            where c.bulan_dibayar = '6'
+
+            UNION ALL
+            SELECT sum(d.ttl_rp) as ttl_rp , 0 as ttl_denda
+            FROM sortir as d 
+            where d.bulan = '6'
+
+            UNION ALL
+            SELECT sum(e.rupiah) as ttl_rp , 0 as ttl_denda
+            FROM tb_hariandll as e 
+            where e.bulan_dibayar = '6'
+
+            UNION ALL
+            SELECT 0 as ttl_rp, sum(f.nominal) as ttl_denda 
+            FROM tb_denda as f 
+            where f.bulan_dibayar = '6')  as a
+            ;")
         ];
         return view('home.laporan.lapPerpartai', $data);
     }
@@ -101,7 +133,7 @@ class Laporan_akhir extends Controller
         DB::table('oprasional')->where('bulan_dibayar', $r->bulan_dibayar)->where('tahun_dibayar', $r->tahun_dibayar)->delete();
 
         $data = [
-            'rupiah' => $r->total_rp,
+            'rupiah' => $r->total_rp - $r->gaji,
             'bulan_dibayar' => $r->bulan_dibayar,
             'tahun_dibayar' => $r->tahun_dibayar,
             'admin' => auth()->user()->name
@@ -152,10 +184,10 @@ class Laporan_akhir extends Controller
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
         $data = [
-            'rp_oprasional' => $rawNumber,
+            'rp_oprasional' => $rawNumber - $r->gaji,
             'bulan' => $r->bulan,
             'tahun' => $r->tahun,
-            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'rp_gr' => ($rawNumber - $r->gaji) / $r->gr_akhir,
             'gr' => $r->gr_akhir
         ];
         DB::table('oprasional')->insert($data);

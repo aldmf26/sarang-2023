@@ -200,8 +200,9 @@
                                 <td class="text-end">
                                     {{-- {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }} --}}
                                     0
-                                {{-- </td>
-                                <td class="text-end"></td> --}}
+                                </td>
+                                <td class="text-end">0</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
