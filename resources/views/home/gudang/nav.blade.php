@@ -24,8 +24,8 @@
                 href="{{ route('gudang.pengiriman') }}">Pengiriman</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link  {{ $rot == 'gudang.totalan' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('gudang.totalan') }}">Totalan</a>
+            <a class="nav-link  {{ $rot == 'gudang.totalan_new' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('gudang.totalan_new') }}">Totalan</a>
         </li>
 
     </ul>

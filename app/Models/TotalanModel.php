@@ -242,9 +242,9 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function grading_stock($nm_partai)
     {
-        $result = DB::selectOne("SELECT  c.nm_partai, sum(b.pcs_awal - j.pcs_ambil) as pcs, sum(COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) as gr,
-                    sum((c.gr_awal * c.hrga_satuan) + COALESCE(d.ttl_rp ,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) ) as ttl_rp
-                            FROM grading as a 
+        $result = DB::selectOne("SELECT  c.nm_partai, sum(b.gr_awal) as gr_awal, sum(b.pcs_awal - j.pcs_ambil) as pcs, sum(COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) as gr,
+                    sum((((c.gr_awal * c.hrga_satuan) + COALESCE(d.ttl_rp ,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) / COALESCE(b.gr_awal)) *  (COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0))) as ttl_rp
+                            FROM grading as a
                             left join formulir_sarang as b on b.no_box = a.no_box_sortir and b.kategori ='grade'
                             left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
                             left join cabut as d on d.no_box =  a.no_box_sortir
