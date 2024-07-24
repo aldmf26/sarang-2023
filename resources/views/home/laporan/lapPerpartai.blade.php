@@ -231,11 +231,11 @@
                                         <input type="hidden" name="gaji" value="{{ $gaji->ttl_gaji ?? 0 }}">
 
 
-                                        <td x-data="numberFormat({{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_rp }})">
+                                        <td x-data="numberFormat({{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_gaji }})">
                                             <input type="text" class="form-control" autofocus
                                                 name="biaya_oprasional" id="number" x-model="formattedNumber"
                                                 @keyup="formatNumber"
-                                                value="{{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_rp }}">
+                                                value="{{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_gaji }}">
 
                                         </td>
                                     </tr>

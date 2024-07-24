@@ -157,7 +157,7 @@ HAVING a.nm_partai = '$nm_partai';
     {
         $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp
         FROM formulir_sarang as a 
-        left join bk as b on b.no_box = a.no_box
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join cabut as c on c.no_box = a.no_box
         left join eo as d on d.no_box = a.no_box
         left join (
@@ -166,7 +166,7 @@ HAVING a.nm_partai = '$nm_partai';
                     left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
                     where h.kategori = 'CTK'
         ) as e on e.no_box = a.no_box
-        where b.baru = 'baru' and b.kategori ='cabut' and a.kategori='sortir' and a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and b.nm_partai = '$nm_partai'
+        where b.baru = 'baru' and a.kategori='sortir' and a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) and b.nm_partai = '$nm_partai'
         group by b.nm_partai;
         ");
 
