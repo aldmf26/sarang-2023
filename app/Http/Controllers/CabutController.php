@@ -1710,7 +1710,7 @@ class CabutController extends Controller
         $id_user = auth()->user()->id;
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
-        $users = DB::table('users')->where('posisi_id', '14')->get();
+        $users = DB::table('users')->where([['posisi_id', '14']])->get();
 
         $gudang = Cabut::gudang($bulan, $tahun, $id_user);
         $data = [
@@ -1904,7 +1904,6 @@ class CabutController extends Controller
 
     public function save_formulir(Request $r)
     {
-
         $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
         $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
         if (!$r->no_box[0] || !$r->id_penerima) {
@@ -1919,7 +1918,27 @@ class CabutController extends Controller
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
+            if ($r->grading) {
+                $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
 
+                if (empty($urutan_invoice->no_invoice)) {
+                    $inv = 1001;
+                } else {
+                    $inv = $urutan_invoice->no_invoice + 1;
+                }
+
+                $data[] = [
+                    'no_invoice' => $inv,
+                    'no_box' => $d,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => $r->id_penerima,
+                    'pcs_awal' => $pcs,
+                    'gr_awal' => $gr,
+                    'tanggal' => $r->tgl,
+                    'kategori' => 'grade',
+                ];
+            } else {
+            }
             $data[] = [
                 'no_invoice' => $no_invoice,
                 'no_box' => $d,
@@ -1961,9 +1980,9 @@ class CabutController extends Controller
 
             $gr = $ambil->gr_akhir;
 
+            $kategori = $r->grading ? 'grade' : 'sortir';
 
-
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = '$kategori'");
 
             if (empty($urutan_invoice->no_invoice)) {
                 $inv = 1001;
@@ -1979,7 +1998,7 @@ class CabutController extends Controller
                 'pcs_awal' => 0,
                 'gr_awal' => $gr,
                 'tanggal' => $r->tgl,
-                'kategori' => 'sortir',
+                'kategori' => $kategori,
             ];
         }
 
