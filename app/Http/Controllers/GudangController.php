@@ -503,13 +503,14 @@ class GudangController extends Controller
         $sheet6->getStyle('A2:F' . $kolom5 - 1)->applyFromArray($style);
 
 
-        $sheet6->getStyle("I1:N1")->applyFromArray($style_atas);
+        $sheet6->getStyle("I1:O1")->applyFromArray($style_atas);
         $sheet6->setCellValue('I1', 'Nama Partai');
         $sheet6->setCellValue('J1', 'Lokasi');
         $sheet6->setCellValue('K1', 'Pcs');
         $sheet6->setCellValue('L1', 'Gr');
         $sheet6->setCellValue('M1', 'Rp/gr');
-        $sheet6->setCellValue('N1', 'Total Rp');
+        $sheet6->setCellValue('M1', 'Cost BK');
+        $sheet6->setCellValue('O1', 'Total Rp');
 
         $kolom6 = 2;
         foreach ($bk_sinta as $no => $b) {
