@@ -83,7 +83,7 @@
 
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             @foreach ($partai as $no => $p)
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
@@ -155,7 +155,7 @@
                             @endforeach
 
 
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
             </div>
