@@ -60,16 +60,16 @@
                             @php
                                 $bk_stock = \App\Models\TotalanModel::bkstock($b->nm_partai);
                                 $bk_proses = \App\Models\TotalanModel::bksedang_proses($b->nm_partai);
-                                // $bk_selesai_siap_ctk = \App\Models\TotalannewModel::bkselesai_siap_ctk($b->nm_partai);
-                                // $bk_selesai_siap_str = \App\Models\TotalanModel::bkselesai_siap_str($b->nm_partai);
-                                // $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
-                                // $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
-                                // $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
-                                // $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
-                                // $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
-                                // $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
-                                // $grading_stock = \App\Models\TotalanModel::grading_stock($b->nm_partai);
-                                // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
+                                $bk_selesai_siap_ctk = \App\Models\TotalannewModel::bkselesai_siap_ctk($b->nm_partai);
+                                $bk_selesai_siap_str = \App\Models\TotalanModel::bkselesai_siap_str($b->nm_partai);
+                                $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
+                                $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
+                                $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
+                                $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
+                                $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
+                                $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
+                                $grading_stock = \App\Models\TotalanModel::grading_stock($b->nm_partai);
+                                $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
@@ -91,7 +91,7 @@
                                 </td>
                                 <td class="text-end">{{ number_format($bk_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            {{-- 
+
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai siap cetak</td>
@@ -199,7 +199,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">
                                     {{-- {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }} --}}
-                                    0
+                                    00
                                 </td>
                                 <td class="text-end">0</td>
                             </tr>
