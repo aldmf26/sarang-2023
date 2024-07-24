@@ -225,7 +225,7 @@
                                         <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($gaji->ttl_rp, 0) }}</td>
+                                        <td class="text-end">{{ number_format($gaji->ttl_gaji, 0) }}</td>
                                         <td class="text-end">{{ number_format($oprasional->rp_oprasional ?? 0, 0) }}
                                         </td>
                                         <input type="hidden" name="gaji" value="{{ $gaji->ttl_gaji ?? 0 }}">
