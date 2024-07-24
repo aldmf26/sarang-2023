@@ -20,12 +20,12 @@ class Laporan_akhir extends Controller
             'title' => 'Laporan Partai',
             'partai' => LaporanModel::LaporanPerPartai(),
             'bulan' => $bulan,
-            'cabut' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cabut as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y'"),
-            'eo' => DB::selectOne("SELECT sum(a.gr_eo_akhir) as gr_eo_akhir FROM eo as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y'"),
+            'cabut' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cabut as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
+            'eo' => DB::selectOne("SELECT sum(a.gr_eo_akhir) as gr_eo_akhir FROM eo as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
             'ctk' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CTK'"),
-            'str' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.bulan = '$bulan' and a.selesai ='Y'"),
+            'str' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.bulan = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
             'cu' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
