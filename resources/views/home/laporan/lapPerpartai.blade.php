@@ -256,7 +256,7 @@
                                 Total :
                                 {{ number_format($cabut->gr_akhir + $eo->gr_eo_akhir + $ctk->gr_akhir + $str->gr_akhir + $cu->gr_akhir, 0) }}
                                 | Rp/gr :
-                                {{ empty($oprasional->rp_oprasional) ? 0 : number_format(($oprasional->rp_oprasional + $gaji->ttl_rp) / $total, 0) }}
+                                {{ empty($oprasional->rp_oprasional) ? 0 : number_format(($oprasional->rp_oprasional + $gaji->ttl_gaji) / $total, 0) }}
                             </h6>
 
 
