@@ -26,7 +26,6 @@ class Laporan_akhir extends Controller
                 join users as b on a.pgws = b.name	
                 WHERE a.bulan_dibayar = $bulan
                 GROUP BY b.lokasi;"))->keyBy('lokasi');
-                dd($gaji);
         $data = [
             'title' => 'Laporan Partai',
             'partai' => LaporanModel::LaporanPerPartai(),
