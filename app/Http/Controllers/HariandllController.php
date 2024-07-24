@@ -61,6 +61,7 @@ class HariandllController extends Controller
                 'tgl' => $r->tgl[$i],
                 'no_box' => $r->no_box[$i],
                 'id_anak' => $r->id_anak[$i],
+                'id_pengawas' => auth()->user()->id,
                 'ket' => $r->ket[$i],
                 'rupiah' => $rupiah,
                 'bulan_dibayar' => $r->bulan_dibayar,

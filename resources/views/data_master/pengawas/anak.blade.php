@@ -26,7 +26,7 @@
                             <td>{{ ucwords($d->kelas) }}</td>
                             <td>{{ ucwords($d->name) }}</td>
                             <td>
-                                <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a>
+                                {{-- <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a> --}}
 
                                 <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen" addClass="float-end edit" teks=""
                                 data="id={{ $d->id_anak }}" />
