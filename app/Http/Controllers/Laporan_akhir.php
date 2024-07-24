@@ -11,21 +11,29 @@ class Laporan_akhir extends Controller
 {
     public function index(Request $r)
     {
-        if (empty($r->bulan)) {
-            $bulan = date('m');
-        } else {
-            $bulan = $r->bulan;
+        $now = date('m');
+        $bulan = $r->bulan ?? date('m') - 1;
+        if ($bulan < 1) {
+            $bulan = 12 + $bulan;
         }
+        $gaji = collect(DB::select("SELECT 
+                    COALESCE(b.lokasi, 'ctk') as lokasi,
+                    sum(a.ttl_gaji) as ttl_gaji,
+                    sum(a.cbt_gr_akhir) as gr_akhir,
+                    sum(a.eo_gr_akhir) as eo_gr_akhir, 
+                    sum(a.srt_gr_akhir) as srt_gr_akhir 
+                    FROM `tb_gaji_penutup` as a 
+                join users as b on a.pgws = b.name	
+                WHERE a.bulan_dibayar = $bulan
+                GROUP BY b.lokasi;"))->keyBy('lokasi');
         $data = [
             'title' => 'Laporan Partai',
             'partai' => LaporanModel::LaporanPerPartai(),
             'bulan' => $bulan,
-            'cabut' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cabut as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
-            'eo' => DB::selectOne("SELECT sum(a.gr_eo_akhir) as gr_eo_akhir FROM eo as a where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
-            'ctk' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
-            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-            where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CTK'"),
-            'str' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM sortir as a where a.bulan = '$bulan' and a.selesai ='Y' and a.no_box != '9999'"),
+            'cabutGrAkhir' => $gaji['bjm']->gr_akhir + $gaji['sby']->gr_akhir,
+            'gr_eo_akhir' =>   $gaji['bjm']->eo_gr_akhir + $gaji['mtd']->eo_gr_akhir,
+            'ctk' => $gaji['ctk']->gr_akhir,
+            'str' => $gaji['bjm']->srt_gr_akhir + $gaji['ctk']->srt_gr_akhir,
             'cu' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
@@ -33,7 +41,8 @@ class Laporan_akhir extends Controller
             'bulandata' => DB::table('bulan')->get(),
             'gaji' => DB::selectOne("SELECT sum(a.ttl_gaji) as ttl_gaji
                 FROM tb_gaji_penutup as a 
-                where a.bulan_dibayar = '$bulan';
+                JOIN users as b on a.pgws = b.name
+                where a.bulan_dibayar = '$bulan' and b.posisi_id ;
             "),
         ];
         return view('home.laporan.lapPerpartai', $data);

@@ -19,6 +19,7 @@ use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PackingListController;
+use App\Http\Controllers\PenutupController;
 use App\Http\Controllers\SiapKirimController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -476,6 +477,13 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail', 'detail')->name('detail');
+        });
+    Route::controller(PenutupController::class)
+        ->prefix('data_master/penutup')
+        ->name('penutup.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/import', 'import')->name('import');
         });
 
     // Route::controller(PackingListController::class)

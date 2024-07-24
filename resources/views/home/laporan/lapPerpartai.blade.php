@@ -83,7 +83,7 @@
 
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @foreach ($partai as $no => $p)
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
@@ -155,7 +155,7 @@
                             @endforeach
 
 
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
@@ -212,7 +212,6 @@
                                         <th class="dhead text-end">Gr Akhir Eo</th>
                                         <th class="dhead text-end">Gr Akhir Ctk</th>
                                         <th class="dhead text-end">Gr Akhir Sortir</th>
-                                        <th class="dhead text-end">Gr Akhir Cu</th>
                                         <th class="dhead text-end">Gaji</th>
                                         <th class="dhead text-end">Cost Oprasional</th>
                                         <th class="dhead text-end" width="150px">Total Oprasional</th>
@@ -220,11 +219,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-end">{{ number_format($cabut->gr_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($eo->gr_eo_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($ctk->gr_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($str->gr_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($cu->gr_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($cabutGrAkhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($gr_eo_akhir, 0) }}</td>
+                                        <td class="text-end">{{ number_format($ctk, 0) }}</td>
+                                        <td class="text-end">{{ number_format($str, 0) }}</td>
                                         <td class="text-end">{{ number_format($gaji->ttl_gaji, 0) }}</td>
                                         <td class="text-end">{{ number_format($oprasional->rp_oprasional ?? 0, 0) }}
                                         </td>
@@ -246,15 +244,14 @@
                         <div class="col-lg-12">
                             @php
                                 $total =
-                                    $cabut->gr_akhir +
-                                    $eo->gr_eo_akhir +
-                                    $ctk->gr_akhir +
-                                    $str->gr_akhir +
-                                    $cu->gr_akhir;
+                                    $cabutGrAkhir +
+                                    $gr_eo_akhir +
+                                    $ctk +
+                                    $str;
                             @endphp
                             <h6 class="">
                                 Total :
-                                {{ number_format($cabut->gr_akhir + $eo->gr_eo_akhir + $ctk->gr_akhir + $str->gr_akhir + $cu->gr_akhir, 0) }}
+                                {{ number_format($cabutGrAkhir + $gr_eo_akhir + $ctk + $str, 0) }}
                                 | Rp/gr :
                                 {{ empty($oprasional->rp_oprasional) ? 0 : number_format(($oprasional->rp_oprasional + $gaji->ttl_gaji) / $total, 0) }}
                             </h6>
