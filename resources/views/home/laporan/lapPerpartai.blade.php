@@ -228,7 +228,7 @@
                                         <td class="text-end">{{ number_format($gaji->ttl_rp, 0) }}</td>
                                         <td class="text-end">{{ number_format($oprasional->rp_oprasional ?? 0, 0) }}
                                         </td>
-                                        <input type="hidden" name="gaji" value="{{ $gaji->ttl_rp ?? 0 }}">
+                                        <input type="hidden" name="gaji" value="{{ $gaji->ttl_gaji ?? 0 }}">
 
 
                                         <td x-data="numberFormat({{ empty($oprasional->rp_oprasional) ? 0 : $oprasional->rp_oprasional + $gaji->ttl_rp }})">

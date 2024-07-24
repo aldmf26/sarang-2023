@@ -52,6 +52,7 @@
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-end">Rp/gr</th>
+                            <th class="dhead text-end">Cost bk</th>
                             <th class="dhead text-end">Total Rp</th>
                         </tr>
                     </thead>
@@ -62,13 +63,15 @@
                                 $bk_proses = \App\Models\TotalanModel::bksedang_proses($b->nm_partai);
                                 $bk_selesai_siap_ctk = \App\Models\TotalannewModel::bkselesai_siap_ctk($b->nm_partai);
                                 $bk_selesai_siap_str = \App\Models\TotalanModel::bkselesai_siap_str($b->nm_partai);
+
                                 $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
                                 $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
                                 $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
+
                                 $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
                                 $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
                                 $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
-                                $grading_stock = \App\Models\TotalanModel::grading_stock($b->nm_partai);
+                                $grading_stock = \App\Models\TotalannewModel::grading_stock($b->nm_partai);
                                 $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
@@ -80,6 +83,7 @@
                                     {{ empty($bk_stock->gr) ? 0 : number_format($bk_stock->ttl_rp / $bk_stock->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($bk_stock->ttl_rp ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($bk_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
@@ -90,8 +94,8 @@
                                     {{ empty($bk_proses->gr) ? 0 : number_format($bk_proses->ttl_rp / $bk_proses->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($bk_proses->ttl_rp ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($bk_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai siap cetak</td>
@@ -100,46 +104,51 @@
                                 <td class="text-end">
                                     {{ empty($bk_selesai_siap_ctk->gr) ? 0 : number_format($bk_selesai_siap_ctk->ttl_rp / $bk_selesai_siap_ctk->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($bk_selesai_siap_ctk->cost_bk ?? 0, 0) }} </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_ctk->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai siap sortir</td>
                                 <td class="text-end">0</td>
-                                <td class="text-end">{{ number_format($bk_selesai_siap_str->gr ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($bk_selesai_siap_str->gr ?? 0, 0) }} </td>
                                 <td class="text-end">
                                     {{ empty($bk_selesai_siap_str->gr) ? 0 : number_format($bk_selesai_siap_str->ttl_rp / $bk_selesai_siap_str->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($bk_selesai_siap_str->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak Stok</td>
-                                <td class="text-end">{{ number_format($cetak_stok->pcs ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($cetak_stok->pcs ?? 0, 0) }} </td>
                                 <td class="text-end">{{ number_format($cetak_stok->gr ?? 0, 0) }}</td>
                                 <td class="text-end">
                                     {{ empty($cetak_stok->gr) ? 0 : number_format($cetak_stok->ttl_rp / $cetak_stok->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($cetak_stok->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_stok->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak sedang proses</td>
-                                <td class="text-end">{{ number_format($cetak_proses->pcs ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($cetak_proses->pcs ?? 0, 0) }} </td>
                                 <td class="text-end">{{ number_format($cetak_proses->gr ?? 0, 0) }}</td>
                                 <td class="text-end">
                                     {{ empty($cetak_proses->gr) ? 0 : number_format($cetak_proses->ttl_rp / $cetak_proses->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($cetak_proses->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak selesai siap sortir</td>
-                                <td class="text-end">{{ number_format($cetak_selesai->pcs ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($cetak_selesai->pcs ?? 0, 0) }} </td>
                                 <td class="text-end">{{ number_format($cetak_selesai->gr ?? 0, 0) }}</td>
                                 <td class="text-end">
                                     {{ empty($cetak_selesai->gr) ? 0 : number_format($cetak_selesai->ttl_rp / $cetak_selesai->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($cetak_selesai->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -150,6 +159,7 @@
                                 <td class="text-end">
                                     {{ empty($stock_sortir->gr) ? 0 : number_format($stock_sortir->ttl_rp / $stock_sortir->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($stock_sortir->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($stock_sortir->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -160,6 +170,7 @@
                                 <td class="text-end">
                                     {{ empty($sortir_proses->gr) ? 0 : number_format($sortir_proses->ttl_rp / $sortir_proses->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($sortir_proses->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -170,6 +181,7 @@
                                 <td class="text-end">
                                     {{ empty($sortir_selesai->gr) ? 0 : number_format($sortir_selesai->ttl_rp / $sortir_selesai->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($sortir_selesai->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -180,6 +192,7 @@
                                 <td class="text-end">
                                     {{ empty($grading_stock->gr) ? 0 : number_format($grading_stock->ttl_rp / $grading_stock->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($grading_stock->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -190,6 +203,7 @@
                                 <td class="text-end">
                                     {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }}
                                 </td>
+                                <td class="text-end">{{ number_format($box_belum_kirim->cost_bk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($box_belum_kirim->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
@@ -198,9 +212,9 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">
-                                    {{-- {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }} --}}
-                                    00
+                                    0
                                 </td>
+                                <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                             </tr>
                         @endforeach

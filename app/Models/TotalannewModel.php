@@ -56,11 +56,11 @@ class TotalannewModel extends Model
     }
     public static function bkselesai_siap_ctk($nm_partai)
     {
-        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum((b.hrga_satuan * b.gr_awal) + a.ttl_rp) as ttl_rp
-FROM cabut as a 
-left join bk as b on b.no_box = a.no_box 
-where b.nm_partai = '$nm_partai' and a.selesai = 'Y' and a.formulir = 'T' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak')
-group by b.nm_partai;
+        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum((b.hrga_satuan * b.gr_awal) + a.ttl_rp) as ttl_rp, sum(b.hrga_satuan * b.gr_awal) as cost_bk
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        where b.nm_partai = '$nm_partai' and a.selesai = 'Y' and a.formulir = 'T' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak') and a.pcs_awal != 0
+        group by b.nm_partai;
         ");
 
         return $result;
@@ -74,7 +74,7 @@ SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
         where a.selesai ='Y' and b.baru = 'baru'
-        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+        
         
 UNION ALL
 SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, a.ttl_rp as ttl_rp_cbt, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan
@@ -82,7 +82,7 @@ SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
         where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
-        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+        
         
  ORDER by no_box
 ) as a
@@ -217,31 +217,30 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function grading_stock($nm_partai)
     {
-        $result = DB::selectOne("SELECT  c.nm_partai, sum(b.pcs_awal - j.pcs_ambil) as pcs, sum(COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) as gr,
-                    sum((c.gr_awal * c.hrga_satuan) + COALESCE(d.ttl_rp ,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) ) as ttl_rp
-                            FROM grading as a 
-                            left join formulir_sarang as b on b.no_box = a.no_box_sortir and b.kategori ='grade'
-                            left join bk as c on c.no_box = a.no_box_sortir and c.kategori = 'cabut'
-                            left join cabut as d on d.no_box =  a.no_box_sortir
-                            left join eo as e on e.no_box = a.no_box_sortir
-                            left join (
-                                SELECT d.no_box, d.ttl_rp 
-                                FROM cetak_new as d 
-                                left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
-                                where h.kategori = 'CTK'
-                            ) as f on f.no_box = a.no_box_sortir
-                            left join sortir as g on g.no_box = a.no_box_sortir
-                            left join users as h on h.id = c.penerima
-                            left join users as i on i.id = b.id_penerima
-                            
-                            left join (
-                                SELECT j.no_box_sortir, sum(j.pcs) as pcs_ambil, sum(j.gr) as gr_ambil
-                                FROM grading as j 
-                                GROUP by j.no_box_sortir 
-                            ) as j on j.no_box_sortir = a.no_box_sortir
-                            left join grading_selisih as k on k.no_box = a.no_box_sortir
-                            where a.gr = 0 and (COALESCE(b.gr_awal,0) - COALESCE(j.gr_ambil,0) - COALESCE(k.gr,0)) != 0 and c.nm_partai = '$nm_partai'
-                            group by c.nm_partai;
+        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal - c.pcs_grading) as pcs, sum(a.gr_awal - c.gr_grading) as gr, sum(b.hrga_satuan * b.gr_awal) as cost_bk,
+            sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0)) as ttl_rp 
+            FROM formulir_sarang as a 
+            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            left join (
+            SELECT c.no_box_sortir as no_box, sum(c.pcs) as pcs_grading, sum(c.gr) as gr_grading
+                FROM grading as c
+                group by c.no_box_sortir
+            ) as c on c.no_box = a.no_box
+
+            left join cabut as e on e.no_box = a.no_box
+
+            left join (
+                SELECT d.no_box, d.ttl_rp 
+                FROM cetak_new as d 
+                left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+                where h.kategori = 'CTK'
+            ) as f on f.no_box = a.no_box
+
+            left join sortir as g on g.no_box = a.no_box
+            left join eo as h on h.no_box = a.no_box
+
+            where a.kategori ='grade' and b.nm_partai = '$nm_partai' 
+        
         ");
 
         return $result;
@@ -249,7 +248,12 @@ HAVING a.nm_partai = '$nm_partai';
     public static function box_belum_kirim($nm_partai)
     {
         $result = DB::selectOne("SELECT b.nm_partai, a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0)) as ttl_rp
-        FROM grading as a 
+         FROM 
+        ( SELECT a.no_box_sortir, sum(a.pcs) as pcs, sum(a.gr) as gr
+         FROM grading as a 
+         where a.no_box_grading is not null
+            group by a.no_box_sortir
+        ) as a 
         left join bk as b on b.no_box = a.no_box_sortir and b.kategori = 'cabut' 
         left join cabut as c on c.no_box = a.no_box_sortir
         left join eo as e on e.no_box = a.no_box_sortir
@@ -260,7 +264,7 @@ HAVING a.nm_partai = '$nm_partai';
           where h.kategori = 'CTK'
         ) as f on f.no_box = a.no_box_sortir
         left join sortir as g on g.no_box = a.no_box_sortir
-        where a.no_box_grading is not null and b.nm_partai = '$nm_partai'
+        where  b.nm_partai = '$nm_partai'
         GROUP by b.nm_partai;
         ");
 
