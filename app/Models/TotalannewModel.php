@@ -56,7 +56,7 @@ class TotalannewModel extends Model
     }
     public static function bkselesai_siap_ctk($nm_partai)
     {
-        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum((b.hrga_satuan * b.gr_awal) + a.ttl_rp) as ttl_rp, sum(b.hrga_satuan * b.gr_awal) as cost_bk
+        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum((b.hrga_satuan * b.gr_awal) + a.ttl_rp) as ttl_rp, sum(b.hrga_satuan * b.gr_awal) as cost_bk, sum(a.ttl_rp) as cost_cbt
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         where b.nm_partai = '$nm_partai' and a.selesai = 'Y' and a.formulir = 'T' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak') and a.pcs_awal != 0
@@ -217,8 +217,14 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function grading_stock($nm_partai)
     {
-        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal - c.pcs_grading) as pcs, sum(a.gr_awal - c.gr_grading) as gr, sum(b.hrga_satuan * b.gr_awal) as cost_bk,
-            sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0)) as ttl_rp 
+        $result = DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal - c.pcs_grading) as pcs, sum(a.gr_awal - c.gr_grading) as gr, 
+            
+            sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0)) as ttl_rp , 
+            sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
+            sum(e.ttl_rp) as cost_cbt, 
+            sum(h.ttl_rp) as cost_eo, 
+            sum(f.ttl_rp) as cost_ctk, 
+            sum(g.ttl_rp) as cost_str
             FROM formulir_sarang as a 
             left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             left join (
