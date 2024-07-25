@@ -76,7 +76,7 @@
                                 $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
                                 $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
                                 $grading_stock = \App\Models\TotalannewModel::grading_stock($b->nm_partai);
-                                $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
+                                // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
