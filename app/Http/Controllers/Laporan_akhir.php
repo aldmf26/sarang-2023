@@ -32,8 +32,8 @@ class Laporan_akhir extends Controller
             'bulan' => $bulan,
             'cabutGrAkhir' => $gaji['bjm']->gr_akhir + $gaji['sby']->gr_akhir,
             'gr_eo_akhir' =>   $gaji['bjm']->eo_gr_akhir + $gaji['mtd']->eo_gr_akhir,
-            'ctk' => $gaji['']->gr_akhir,
-            'str' => $gaji['bjm']->srt_gr_akhir + $gaji['']->srt_gr_akhir,
+            'ctk' => $gaji['ctk']->gr_akhir,
+            'str' => $gaji['bjm']->srt_gr_akhir + $gaji['ctk']->srt_gr_akhir,
             'cu' => DB::selectOne("SELECT sum(a.gr_akhir) as gr_akhir FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
             where a.bulan_dibayar = '$bulan' and a.selesai ='Y' and b.kategori = 'CU'"),
