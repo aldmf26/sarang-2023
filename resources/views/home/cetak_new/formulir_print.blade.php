@@ -51,7 +51,7 @@
                     ->get();
             @endphp
             <div class="section">
-                <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR</h5>
+                <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{$no_invoice}}</h5>
 
                 <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($h->id_pemberi)->name }} ~
                     {{ $h->name }} </h6>

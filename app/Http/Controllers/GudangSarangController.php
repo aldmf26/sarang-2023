@@ -168,6 +168,7 @@ class GudangSarangController extends Controller
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
             'ket_formulir' => $ket_formulir
         ];
         return view('home.gudang_sarang/print_formulir', $data);

@@ -165,7 +165,7 @@
                     <div id="load_detail"></div>
                 </div>
             </x-theme.modal>
-
+            
             <form action="" method="get">
                 <x-theme.modal title="View" idModal="view" size="modal-lg-sm" btnSave="Y">
                     <div class="row">
