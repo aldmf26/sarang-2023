@@ -35,7 +35,7 @@
                     class="fa-solid fa-print"></i>
                 Print</a>
         </div>
-        <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK</h5>
+        <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK : {{$no_invoice}}</h5>
 
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
         <div class="row">

@@ -83,7 +83,7 @@
 
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             @foreach ($partai as $no => $p)
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
@@ -155,7 +155,7 @@
                             @endforeach
 
 
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                     <div id="load_detail"></div>
                 </div>
             </x-theme.modal>
-
+            
             <form action="" method="get">
                 <x-theme.modal title="View" idModal="view" size="modal-lg-sm" btnSave="Y">
                     <div class="row">

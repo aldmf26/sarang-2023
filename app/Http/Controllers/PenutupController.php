@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Imports\PenutupImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PenutupController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
+        $bulan =  $r->bulan ?? date('m');
+        $tahun =  $r->tahun ?? date('Y');
         // $gaji = DB::select()
         $data = [
             'title' => 'Data Gaji Penutup',
-            'gaji' => DB::table('gaji_penutup')->get(),
+            'gaji' => DB::table('tb_gaji_penutup')->get(),
         ];
         return view('data_master.penutup.index',$data);
     }
