@@ -72,11 +72,12 @@
                                 $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
                                 $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
 
-                                $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
-                                $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
-                                $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
+                                // $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
+                                // $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
+                                // $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
                                 // $grading_stock = \App\Models\TotalannewModel::grading_stock($b->nm_partai);
                                 // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
+
                             @endphp
                             <tr>
                                 <td>{{ $b->nm_partai }}</td>
@@ -183,7 +184,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir Stok</td>
                                 <td class="text-end">{{ number_format($stock_sortir->pcs ?? 0, 0) }}</td>
@@ -227,7 +228,7 @@
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_str ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
-                            </tr>
+                            </tr> --}}
                             {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Grading Stock</td>
