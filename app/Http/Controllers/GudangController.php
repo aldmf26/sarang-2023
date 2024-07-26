@@ -726,8 +726,25 @@ class GudangController extends Controller
         }
         $sheet6->getStyle('M2:W' . $kolom6 - 1)->applyFromArray($style);
 
-
         // box stock
+
+        // batas ke lima
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(6);
+        $sheet7 = $spreadsheet->getActiveSheet(6);
+        $sheet7->setTitle('cost');
+
+        $oprasional = DB::select("SELECT b.nm_bulan, a.tahun, a.rp_oprasional
+        FROM oprasional as a 
+        left join bulan as b on b.bulan = a.bulan;");
+
+        $kolomcost = 1;
+        foreach ($oprasional as $o) {
+            $sheet7->setCellValue('A' . $kolomcost, $o->nm_bulan);
+            $sheet7->setCellValue('B' . $kolomcost, $o->nm_bulan);
+            $kolomcost++;
+        }
+
 
 
 
