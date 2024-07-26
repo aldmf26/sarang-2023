@@ -75,7 +75,7 @@
                                 $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
                                 $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);
                                 $sortir_selesai = \App\Models\TotalanModel::sortir_selesai($b->nm_partai);
-                                $grading_stock = \App\Models\TotalannewModel::grading_stock($b->nm_partai);
+                                // $grading_stock = \App\Models\TotalannewModel::grading_stock($b->nm_partai);
                                 // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
@@ -228,7 +228,7 @@
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_str ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Grading Stock</td>
                                 <td class="text-end">{{ number_format($grading_stock->pcs ?? 0, 0) }}</td>
@@ -242,7 +242,7 @@
                                 <td class="text-end">{{ number_format($grading_stock->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->cost_str ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
-                            </tr>
+                            </tr> --}}
                             {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box belum kirim</td>
