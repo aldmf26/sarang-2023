@@ -131,13 +131,10 @@ class TotalanModel extends Model
     {
         $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr , sum(a.ttl_rp + a.cost_cbt) as ttl_rp, sum(a.ttl_rp) as cost_bk, sum(a.cost_cbt) as cost_cbt
             FROM (
-            SELECT a.no_box, c.name, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , e.name as pgws, f.ttl_rp as cost_cbt, d.nm_partai, d.pcs_awal as pcs_bk
+            SELECT a.no_box, a.pcs_awal_ctk as pcs_awal, a.gr_awal_ctk as gr_awal, (d.gr_awal * d.hrga_satuan) as ttl_rp , f.ttl_rp as cost_cbt, d.nm_partai, d.pcs_awal as pcs_bk
             FROM cetak_new as a 
-            left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
-            left join users as c on c.id = b.id_pemberi
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
-            left join users as e on e.id = a.id_pengawas
-            left join cabut as f on f.no_box = b.no_box
+            left join cabut as f on f.no_box = a.no_box
             left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
             where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK'
             order by a.no_box ASC
