@@ -16,7 +16,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-4">
-                <table id="tbl8" class="table table-bordered table-hover table-striped">
+                <table id="table2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th class="dhead">No</th>
@@ -44,9 +44,10 @@
             </div>
 
             <div class="col-lg-8">
-                <table id="tbl9" class="table table-bordered table-hover table-striped">
+                <table id="table" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
+                            <th class="dhead">No</th>
                             <th class="dhead">Nama Partai</th>
                             <th class="dhead">Lokasi</th>
                             <th class="dhead text-end">Pcs</th>
@@ -61,6 +62,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $no = 1;
+                        @endphp
                         @foreach ($bksinta as $b)
                             @php
                                 $bk_stock = \App\Models\TotalanModel::bkstock($b->nm_partai);
@@ -79,6 +83,7 @@
                                 // $box_belum_kirim = \App\Models\TotalanModel::box_belum_kirim($b->nm_partai);
                             @endphp
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box Stok</td>
                                 <td class="text-end">{{ number_format($bk_stock->pcs ?? 0, 0) }}</td>
@@ -94,6 +99,7 @@
                                 <td class="text-end">{{ number_format($bk_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box sedang proses</td>
                                 <td class="text-end">{{ number_format($bk_proses->pcs ?? 0, 0) }}</td>
@@ -109,6 +115,7 @@
                                 <td class="text-end">{{ number_format($bk_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai siap cetak</td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_ctk->pcs ?? 0, 0) }}</td>
@@ -124,6 +131,7 @@
                                 <td class="text-end">{{ number_format($bk_selesai_siap_ctk->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai siap sortir</td>
                                 <td class="text-end">0</td>
@@ -139,6 +147,7 @@
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak Stok</td>
                                 <td class="text-end">{{ number_format($cetak_stok->pcs ?? 0, 0) }} </td>
@@ -154,6 +163,7 @@
                                 <td class="text-end">{{ number_format($cetak_stok->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak sedang proses</td>
                                 <td class="text-end">{{ number_format($cetak_proses->pcs ?? 0, 0) }} </td>
@@ -169,6 +179,7 @@
                                 <td class="text-end">{{ number_format($cetak_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Cetak selesai siap sortir</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->pcs ?? 0, 0) }} </td>
@@ -184,6 +195,7 @@
                                 <td class="text-end">{{ number_format($cetak_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir Stok</td>
                                 <td class="text-end">{{ number_format($stock_sortir->pcs ?? 0, 0) }}</td>
@@ -199,6 +211,7 @@
                                 <td class="text-end">{{ number_format($stock_sortir->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir sedang proses</td>
                                 <td class="text-end">{{ number_format($sortir_proses->pcs ?? 0, 0) }}</td>
@@ -214,6 +227,7 @@
                                 <td class="text-end">{{ number_format($sortir_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Sortir selesai siap grading</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->pcs ?? 0, 0) }}</td>
@@ -229,6 +243,7 @@
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Grading Stock</td>
                                 <td class="text-end">{{ number_format($grading_stock->pcs ?? 0, 0) }}</td>
@@ -244,6 +259,7 @@
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box belum kirim</td>
                                 <td class="text-end">{{ number_format($box_belum_kirim->pcs ?? 0, 0) }}</td>
@@ -259,6 +275,7 @@
                                 <td class="text-end">{{ number_format($box_belum_kirim->ttl_rp ?? 0, 0) }}</td>
                             </tr>
                             <tr>
+                                <td>{{ $no++ }}</td>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box selesai kirim</td>
                                 <td class="text-end">0</td>
