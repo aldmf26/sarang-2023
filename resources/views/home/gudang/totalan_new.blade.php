@@ -70,7 +70,7 @@
 
                                 $cetak_stok = \App\Models\TotalanModel::cetak_stok($b->nm_partai);
                                 $cetak_proses = \App\Models\TotalanModel::cetak_proses($b->nm_partai);
-                                $cetak_selesai = \App\Models\TotalanModel::cetak_selesai($b->nm_partai);
+                                $cetak_selesai = \App\Models\TotalannewModel::cetak_selesai($b->nm_partai);
 
                                 // $stock_sortir = \App\Models\TotalanModel::stock_sortir($b->nm_partai);
                                 // $sortir_proses = \App\Models\TotalanModel::sortir_proses($b->nm_partai);

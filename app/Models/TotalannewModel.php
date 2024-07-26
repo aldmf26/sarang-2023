@@ -132,23 +132,14 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function cetak_selesai($nm_partai)
     {
-        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) pcs , sum(a.gr_awal) as gr, sum(a.ttl_rp + a.cost_ctk + cost_cbt) as ttl_rp
-            FROM (
-            SELECT a.id_cetak, c.name, d.name as pgws, a.no_box, (a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, (a.gr_akhir + a.gr_tdk_cetak) as gr_awal, (e.gr_awal * e.hrga_satuan) as ttl_rp, a.ttl_rp as cost_ctk, f.ttl_rp as cost_cbt, e.nm_partai
-                        FROM cetak_new as a 
-                        left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
-                        left join users as c on c.id = b.id_pemberi
-                        left join users as d on d.id = a.id_pengawas
-                        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
-                        left join cabut as f on f.no_box = a.no_box
-                        left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
-                        where a.selesai = 'Y' and g.kategori = 'CTK'
-                        and  b.id_pemberi is not null 
-                        and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir')
-                        order by a.no_box ASC
-            ) as a 
-            group by a.nm_partai
-            HAVING a.nm_partai = '$nm_partai';
+        $result = DB::selectOne("SELECT e.nm_partai, sum(a.pcs_akhir + a.pcs_tdk_cetak) as pcs_awal, sum(a.gr_akhir + a.gr_tdk_cetak) as gr_awal, sum(e.gr_awal * e.hrga_satuan) as cost_bk, sum(a.ttl_rp) as cost_ctk, sum(f.ttl_rp) as cost_cbt, sum((e.gr_awal * e.hrga_satuan) + a.ttl_rp + f.ttl_rp) as ttl_rp
+        FROM cetak_new as a 
+        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
+        left join cabut as f on f.no_box = a.no_box
+        left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+        where a.selesai = 'Y' and g.kategori = 'CTK'
+        and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir') and e.nm_partai = '$nm_partai'
+        group by e.nm_partai;
         ");
 
         return $result;
