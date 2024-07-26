@@ -243,7 +243,7 @@
                                 <td class="text-end">{{ number_format($grading_stock->cost_str ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>Box belum kirim</td>
                                 <td class="text-end">{{ number_format($box_belum_kirim->pcs ?? 0, 0) }}</td>
@@ -270,7 +270,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
-                            </tr>
+                            </tr> --}}
                         @endforeach
                     </tbody>
                 </table>

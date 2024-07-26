@@ -16,7 +16,7 @@ class TotalanModel extends Model
         FROM bk as a 
         WHERE a.baru = 'baru' and a.kategori = 'cabut'
         GROUP by a.nm_partai
-        ORDER by a.nm_partai ASC;");
+        ORDER by  a.id_bk DESC;");
 
         return $result;
     }
@@ -177,7 +177,7 @@ class TotalanModel extends Model
         sum(COALESCE(c.ttl_rp,0) ) as cost_cbt, sum(COALESCE(d.ttl_rp,0)) as cost_eo, sum(e.ttl_rp) as cost_ctk
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
-        left join cabut as c on c.no_box = a.no_box
+        left join cabut as c on c.no_box = a.no_box and b.kategori = 'cabut'
         left join eo as d on d.no_box = a.no_box
         left join (
                     SELECT d.no_box, d.ttl_rp 
