@@ -492,9 +492,9 @@ class GudangController extends Controller
         $sheet6->setCellValue('J1', 'Cek');
         $sheet6->setCellValue('K1', 'Sst');
 
-        $sheet6->setCellValue('G2', 'SUMIF($M:$M;B2;$O:$O)');
-        $sheet6->setCellValue('H2', 'SUMIF($M:$M;B2;$P:$P)');
-        $sheet6->setCellValue('I2', 'SUMIF($M:$M;B2;$R:$R)');
+        $sheet6->setCellValue('G2', 'SUMIF($M:$M,B2,$O:$O)');
+        $sheet6->setCellValue('H2', 'SUMIF($M:$M,B2,$P:$P)');
+        $sheet6->setCellValue('I2', 'SUMIF($M:$M,B2,$R:$R)');
         $sheet6->setCellValue('J2', 'I2-F2+C2-G2');
         $sheet6->setCellValue('K2', '1-(H2/D2)');
 
