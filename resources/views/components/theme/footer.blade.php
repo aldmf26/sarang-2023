@@ -271,6 +271,13 @@
         "stateSave": true,
         "searching": true,
     });
+    $('#table2').DataTable({
+        "paging": true,
+        "pageLength": 10,
+        "lengthChange": true,
+        "stateSave": true,
+        "searching": true,
+    });
 
     $('#tableScroll').DataTable({
         "searching": true,
