@@ -1038,7 +1038,7 @@ class CetakNewController extends Controller
         $no_box = explode(',', $r->id_cetak[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi, cetak_new.no_box
+                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi, cetak_new.no_box
                         FROM cetak_new 
                         left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
                         WHERE cetak_new.id_cetak = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");

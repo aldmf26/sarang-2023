@@ -198,6 +198,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_bk_akhir', 'get_bk_akhir')->name('get_bk_akhir');
+            Route::get('/search', 'search')->name('search');
             Route::post('/save_bk_akhir', 'save_bk_akhir')->name('save_bk_akhir');
             Route::get('/get_detail_cetak', 'get_detail_cetak')->name('get_detail_cetak');
             Route::get('/get_detail_cabut', 'get_detail_cabut')->name('get_detail_cabut');

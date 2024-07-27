@@ -17,147 +17,176 @@
 
     <x-slot name="cardBody">
         <section class="row">
-            <div class="col-lg-8">
-                @include('home.laporan.nav')
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        @include('home.laporan.nav')
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-primary float-end" data-bs-toggle="modal"
+                            data-bs-target="#oprasional"><i class="fas fa-plus"></i> Cost Oprasional</a>
+                        <a href="#" class="btn btn-primary float-end me-2" data-bs-toggle="modal"
+                            data-bs-target="#view"><i class="fas fa-calendar-check"></i> View</a>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-8"></div>
-            <div class="col-lg-4 mb-2">
-                <a href="#" class="btn btn-primary float-end" data-bs-toggle="modal"
-                    data-bs-target="#oprasional"><i class="fas fa-plus"></i> Cost Oprasional</a>
-                <a href="#" class="btn btn-primary float-end me-2" data-bs-toggle="modal"
-                    data-bs-target="#view"><i class="fas fa-calendar-check"></i> View</a>
+            <div class="col-lg-12 mt-3 mb-1">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <select name="show" id="" class="form-select show">
+                            @foreach ($options as $opt)
+                                <option {{ $opt == request()->get('show') ? 'selected' : '' }}
+                                    value="{{ $opt === 'All' ? $total : $opt }}">{{ $opt }}</option>
+                            @endforeach
+                        </select>
+                        <label for="">per halaman</label>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div>
+                            <input type="text" id="search" class="form-control form-control-sm"
+                                style="width: 170px" placeholder="cari partai atau no box">
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-sm btnSearch" type="submit"><i
+                                    class="fas fa-search"></i>
+                                Cari</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-lg-10"></div>
-            <div class="col-lg-2">
-                <input type="text" id="pencarian" class="form-control form-control-sm mb-2 float-end"
-                    style="width: 170px" placeholder="cari">
-            </div>
             <div class="col-lg-12">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_cari" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="dhead " rowspan="2">#</th>
-                                <th class="dhead" rowspan="2">partai</th>
-                                <th class="dhead" rowspan="2">no box</th>
-                                <th class="text-center dhead" colspan="3">BK</th>
-                                <th class="text-center dhead" colspan="4">Cabut</th>
-                                <th class="text-center dhead" colspan="4">Eox/Eol</th>
-                                <th class="text-center dhead" colspan="4">Cetak</th>
-                                <th class="text-center dhead" colspan="4">Sortir</th>
-                                <th class="dhead text-end" rowspan="2">Cost bk</th>
-                                <th class="dhead text-end" rowspan="2">Cost cbt</th>
-                                <th class="dhead text-end" rowspan="2">Cost eox/eol</th>
-                                <th class="dhead text-end" rowspan="2">Cost ctk</th>
-                                <th class="dhead text-end" rowspan="2">Cost sortir</th>
-                                <th class="dhead text-end" rowspan="2">Cost cu</th>
-                                <th class="dhead text-end" rowspan="2">Cost dll</th>
-                                <th class="dhead text-end" rowspan="2">Cost oprasional</th>
-                                <th class="dhead text-end" rowspan="2">Total Rp</th>
-                            </tr>
-                            <tr>
-                                <th class="dhead text-end">pcs awal</th>
-                                <th class="dhead text-end">gr awal</th>
-                                <th class="dhead text-end">rp/gr</th>
-
-                                <th class="dhead text-end">pcs akhir</th>
-                                <th class="dhead text-end">gr akhir</th>
-                                <th class="dhead text-end">rp/gr</th>
-                                <th class="dhead text-end">susut%</th>
-
-                                <th class="dhead text-end">pcs akhir</th>
-                                <th class="dhead text-end">gr akhir</th>
-                                <th class="dhead text-end">rp/gr</th>
-                                <th class="dhead text-end">susut%</th>
-
-                                <th class="dhead text-end">pcs akhir</th>
-                                <th class="dhead text-end">gr akhir</th>
-                                <th class="dhead text-end">rp/gr</th>
-                                <th class="dhead text-end">susut%</th>
-
-                                <th class="dhead text-end">pcs akhir</th>
-                                <th class="dhead text-end">gr akhir</th>
-                                <th class="dhead text-end">rp/gr</th>
-                                <th class="dhead text-end">susut%</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($partai as $no => $p)
+                    <div class="tblhide">
+                        <table class="table table-bordered " id="table_cari" width="100%">
+                            <thead>
                                 <tr>
-                                    <td>{{ $no + 1 }}</td>
-                                    <td>{{ $p->nm_partai }}</td>
-                                    <td>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
-                                            class="detail no_box{{ $p->no_box }}" no_box="{{ $p->no_box }}"
-                                            partai="{{ $p->nm_partai }}">
-                                            <u>{{ $p->no_box }}</u>
-                                        </a>
-                                    </td>
-                                    <td class="text-end">{{ $p->pcs_awal }}</td>
-                                    <td class="text-end">{{ $p->gr_awal }}</td>
-                                    <td class="text-end">{{ number_format($p->hrga_satuan, 0) }}</td>
-
-                                    <td class="text-end">{{ $p->pcs_cbt }}</td>
-                                    <td class="text-end">{{ $p->gr_cbt }}</td>
-                                    <td class="text-end">
-                                        {{ $p->hrga_satuan == 0 || empty($p->gr_cbt) ? 0 : number_format(($p->cost_bk + $p->cost_cbt) / $p->gr_cbt, 0) }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($p->sst_cbt, 0) }} %</td>
-
-                                    <td class="text-end">0</td>
-                                    <td class="text-end">{{ $p->gr_eo ?? 0 }}</td>
-                                    <td class="text-end">
-                                        {{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->sst_eo ?? 0, 0) }} %</td>
-
-                                    <td class="text-end">{{ $p->pcs_ctk }}</td>
-                                    <td class="text-end">{{ $p->gr_ctk }}</td>
-                                    <td class="text-end">
-                                        {{ $p->hrga_satuan == 0 || empty($p->gr_ctk) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk) / $p->gr_ctk, 0) }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($p->sst_ctk, 0) }} %</td>
-
-                                    <td class="text-end">{{ $p->pcs_str }}</td>
-                                    <td class="text-end">{{ $p->gr_str }}</td>
-                                    <td class="text-end">
-                                        {{ $p->hrga_satuan == 0 || empty($p->gr_str) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str) / $p->gr_str, 0) }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($p->sst_str, 0) }} %</td>
-
-                                    <td class="text-end">{{ number_format($p->cost_bk, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->cost_cbt, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->cost_eo, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->cost_ctk, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->cost_str, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
-                                    <td class="text-end">
-                                        {{ number_format($p->harian_cbt + $p->harian_ctk + $p->harian_str + $p->harian_eo, 0) }}
-                                        @php
-                                            $harian = $p->harian_cbt + $p->harian_ctk + $p->harian_str + $p->harian_eo;
-                                            $cost_oprasional =
-                                                $p->oprasional_cbt +
-                                                $p->oprasional_ctk +
-                                                $p->oprasional_str +
-                                                $p->oprasional_eo;
-
-                                        @endphp
-                                    </td>
-                                    <td class="text-end">
-                                        {{ number_format($cost_oprasional, 0) }}
-                                    </td>
-
-                                    <td class="text-end">
-                                        {{ number_format($cost_oprasional + $p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str + $p->cost_cu + $harian + $p->cost_eo, 0) }}
-                                    </td>
+                                    <th class="dhead " rowspan="2">#</th>
+                                    <th class="dhead" rowspan="2">partai</th>
+                                    {{-- <th class="dhead" rowspan="2">no box</th> --}}
+                                    <th class="text-center dhead" colspan="3">BK</th>
+                                    <th class="text-center dhead" colspan="4">Cabut</th>
+                                    <th class="text-center dhead" colspan="4">Eox/Eol</th>
+                                    <th class="text-center dhead" colspan="4">Cetak</th>
+                                    <th class="text-center dhead" colspan="4">Sortir</th>
+                                    <th class="dhead text-end" rowspan="2">Cost bk</th>
+                                    <th class="dhead text-end" rowspan="2">Cost cbt</th>
+                                    <th class="dhead text-end" rowspan="2">Cost eox/eol</th>
+                                    <th class="dhead text-end" rowspan="2">Cost ctk</th>
+                                    <th class="dhead text-end" rowspan="2">Cost sortir</th>
+                                    <th class="dhead text-end" rowspan="2">Cost cu</th>
+                                    <th class="dhead text-end" rowspan="2">Cost dll</th>
+                                    <th class="dhead text-end" rowspan="2">Cost oprasional</th>
+                                    <th class="dhead text-end" rowspan="2">Total Rp</th>
                                 </tr>
-                            @endforeach
+                                <tr>
+                                    <th class="dhead text-end">pcs awal</th>
+                                    <th class="dhead text-end">gr awal</th>
+                                    <th class="dhead text-end">rp/gr</th>
 
+                                    <th class="dhead text-end">pcs akhir</th>
+                                    <th class="dhead text-end">gr akhir</th>
+                                    <th class="dhead text-end">rp/gr</th>
+                                    <th class="dhead text-end">susut%</th>
 
-                        </tbody>
-                    </table>
+                                    <th class="dhead text-end">pcs akhir</th>
+                                    <th class="dhead text-end">gr akhir</th>
+                                    <th class="dhead text-end">rp/gr</th>
+                                    <th class="dhead text-end">susut%</th>
+
+                                    <th class="dhead text-end">pcs akhir</th>
+                                    <th class="dhead text-end">gr akhir</th>
+                                    <th class="dhead text-end">rp/gr</th>
+                                    <th class="dhead text-end">susut%</th>
+
+                                    <th class="dhead text-end">pcs akhir</th>
+                                    <th class="dhead text-end">gr akhir</th>
+                                    <th class="dhead text-end">rp/gr</th>
+                                    <th class="dhead text-end">susut%</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($partai as $no => $p)
+                                    <tr>
+                                        <td>{{ $partai->firstItem() + $no }}</td>
+                                        <td>{{ $p->nm_partai }}</td>
+                                        {{-- <td>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
+                                                class="detail no_box{{ $p->no_box ?? '-' }}"
+                                                no_box="{{ $p->no_box ?? '-' }}" partai="{{ $p->nm_partai }}">
+                                                <u>{{ $p->no_box ?? '-' }}</u>
+                                            </a>
+                                        </td> --}}
+                                        <td class="text-end">{{ number_format($p->pcs_awal ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->gr_awal ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->hrga_satuan ?? 0, 0) }}</td>
+
+                                        <td class="text-end">{{ number_format($p->pcs_cbt ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->gr_cbt ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ $p->hrga_satuan == 0 || empty($p->gr_cbt) ? 0 : number_format(($p->cost_bk + $p->cost_cbt) / $p->gr_cbt, 0) }}
+                                        </td>
+                                        <td class="text-end">{{ $p->sst_cbt ?? 0 }} %</td>
+
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">{{ number_format($p->gr_eo ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ $p->sst_eo ?? 0 }} %</td>
+
+                                        <td class="text-end">{{ number_format($p->pcs_ctk ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->gr_ctk ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ $p->hrga_satuan == 0 || empty($p->gr_ctk) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk) / $p->gr_ctk, 0) }}
+                                        </td>
+                                        <td class="text-end">{{ $p->sst_ctk ?? 0 }} %</td>
+
+                                        <td class="text-end">{{ number_format($p->pcs_str ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->gr_str ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ $p->hrga_satuan == 0 || empty($p->gr_str) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str) / $p->gr_str, 0) }}
+                                        </td>
+                                        <td class="text-end">{{ number_format($p->sst_str, 0) }} %</td>
+
+                                        <td class="text-end">{{ number_format($p->cost_bk, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->cost_cbt, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->cost_eo, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->cost_ctk, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->cost_str, 0) }}</td>
+                                        <td class="text-end">{{ number_format($p->cost_cu, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($p->harian_cbt + $p->harian_ctk + $p->harian_str + $p->harian_eo, 0) }}
+                                            @php
+                                                $harian =
+                                                    $p->harian_cbt + $p->harian_ctk + $p->harian_str + $p->harian_eo;
+                                                $cost_oprasional =
+                                                    $p->oprasional_cbt +
+                                                    $p->oprasional_ctk +
+                                                    $p->oprasional_str +
+                                                    $p->oprasional_eo;
+
+                                            @endphp
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($cost_oprasional, 0) }}
+                                        </td>
+
+                                        <td class="text-end">
+                                            {{ number_format($cost_oprasional + $p->cost_bk + $p->cost_cbt + $p->cost_ctk + $p->cost_str + $p->cost_cu + $harian + $p->cost_eo, 0) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between">
+                            {{ $partai->links() }}
+                            <p><b>Total : {{ number_format($partai->total(), 0) }} Data</b></p>
+                        </div>
+                    </div>
+                    <div id="loadSearch"></div>
                 </div>
+                @include('components.theme.loading')
             </div>
 
             <x-theme.modal title="Detail Box" idModal="detail" size="modal-lg-max" btnSave="T">
@@ -165,7 +194,7 @@
                     <div id="load_detail"></div>
                 </div>
             </x-theme.modal>
-            
+
             <form action="" method="get">
                 <x-theme.modal title="View" idModal="view" size="modal-lg-sm" btnSave="Y">
                     <div class="row">
@@ -243,11 +272,7 @@
                         </div>
                         <div class="col-lg-12">
                             @php
-                                $total =
-                                    $cabutGrAkhir +
-                                    $gr_eo_akhir +
-                                    $ctk +
-                                    $str;
+                                $total = $cabutGrAkhir + $gr_eo_akhir + $ctk + $str;
                             @endphp
                             <h6 class="">
                                 Total :
@@ -268,16 +293,43 @@
                     </div>
                 </x-theme.modal>
             </form>
-
-
-
         </section>
-
-
-
 
         @section('js')
             <script>
+                // fitur show data
+                $('.show').change(function() {
+                    var showVal = $(this).val();
+                    var currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('show', showVal);
+
+                    // Pastikan page diatur kembali ke 1 setiap kali parameter show berubah
+                    currentUrl.searchParams.set('page', 1);
+
+                    window.location.href = currentUrl.toString();
+                });
+
+                // fitur search
+                $('.loading').hide();
+                $(document).on('click', '.btnSearch', function() {
+                    var search = $('#search').val();
+                    $('.table_cari').remove();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('laporanakhir.search') }}?search=" + search,
+                        beforeSend: function() {
+                            $('.loading').show();
+                        },
+                        success: function(r) {
+                            $('.loading').hide();
+                            $('#loadSearch').html(r);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                        }
+                    });
+                })
+
                 $(document).on("click", ".detail", function() {
                     var no_box = $(this).attr("no_box");
                     var partai = $(this).attr("partai");

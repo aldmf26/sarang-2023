@@ -72,7 +72,7 @@
                             </tr>
                             @foreach ($detail as $d)
                                 <tr>
-                                    <td>{{ tglFormat($d->tanggal) }}</td>
+                                    <td style="width: 100px"></td>
                                     <td>{{ $d->no_box }}</td>
                                     <td></td>
                                     <td class="text-end">{{ $d->pcs_awal }}</td>

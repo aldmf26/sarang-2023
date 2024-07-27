@@ -388,7 +388,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-lg-4">
+                                {{-- <div class="col-lg-4">
                                     <div class="form-check">
                                         <label for="checkbox2">Aksi</label>
                                         <div class="checkbox">
@@ -396,7 +396,7 @@
                                             <label for="checkbox2">langsung Grading</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 
                                 <div class="col-lg-12">
                                     <table class="table">

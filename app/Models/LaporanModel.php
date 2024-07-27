@@ -5,14 +5,155 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class LaporanModel extends Model
 {
     use HasFactory;
 
-    public static function LaporanPerPartai()
+    public static function LaporanPerPartai($show)
     {
-        $result = DB::select("SELECT a.nm_partai, a.no_box, a.pcs_awal, a.gr_awal,a.hrga_satuan,
+        // Dapatkan nomor halaman saat ini
+        $page = request()->get('page', 1);
+        $perPage = $show ?? 10; // Jumlah item per halaman
+        $offset = ($page - 1) * $perPage;
+
+        // Jalankan query untuk hasil ter-paginate
+        $query = "SELECT a.nm_partai, 
+       SUM(a.pcs_awal) as pcs_awal, 
+       SUM(a.gr_awal) as gr_awal,
+       a.hrga_satuan,
+
+       SUM(b.pcs_akhir) as pcs_cbt, 
+       SUM(b.gr_akhir) as gr_cbt, 
+       SUM(((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, 
+       ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
+
+       SUM(c.pcs_akhir) as pcs_ctk, 
+       SUM(c.gr_akhir) as gr_ctk, 
+       SUM((((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp ) / c.gr_akhir)) as rp_gram_ctk, 
+       (((1-((c.gr_akhir + c.gr_tdk_cetak) / a.gr_awal)) * 100)) as sst_ctk,
+
+       SUM(d.pcs_akhir) as pcs_str, 
+       SUM(d.gr_akhir) as gr_str, 
+       SUM((((a.hrga_satuan * a.gr_awal) + b.ttl_rp + c.ttl_rp + d.ttl_rp ) / d.gr_akhir)) as rp_gram_str, 
+       (((1-(d.gr_akhir / a.gr_awal)) * 100)) as sst_str,
+
+       SUM(e.gr_eo_akhir) as gr_eo, 
+       SUM((((a.hrga_satuan * a.gr_awal) + e.ttl_rp ) / e.gr_eo_akhir)) as rp_gram_eo, 
+       (((1-(e.gr_eo_akhir / a.gr_awal)) * 100)) as sst_eo,
+
+       SUM((a.hrga_satuan * a.gr_awal)) as cost_bk, 
+       SUM(b.ttl_rp) as cost_cbt, 
+       SUM(c.ttl_rp) as cost_ctk, 
+       SUM(d.ttl_rp) as cost_str, 
+       SUM(e.ttl_rp) as cost_eo, 
+       SUM(f.ttl_rp) as cost_cu, 
+       SUM(j.cost_dll) as cost_dll,
+
+       SUM((g.rp_gr * b.gr_akhir)) as oprasional_cbt, 
+       SUM((d.gr_akhir * h.rp_gr)) as oprasional_str, 
+       SUM(f.oprasional_cu) as oprasional_cu,
+       SUM(c.oprasional_ctk) as oprasional_ctk, 
+       SUM((e.gr_eo_akhir * i.rp_gr)) as oprasional_eo, 
+       
+       SUM((k.rp_harian_cbt * b.gr_akhir)) as harian_cbt,
+       SUM(c.harian_ctk) as harian_ctk, 
+       SUM((l.rp_harian_str * d.gr_akhir)) as harian_str, 
+       SUM((m.rp_harian_eo * e.gr_eo_akhir)) as harian_eo
+FROM bk as a 
+LEFT JOIN cabut as b ON b.no_box = a.no_box
+LEFT JOIN oprasional as g ON g.bulan = b.bulan_dibayar
+LEFT JOIN (
+    SELECT SUM(k.rupiah / b.gr) as rp_harian_cbt, k.bulan_dibayar, k.tahun_dibayar
+    FROM tb_hariandll as k 
+    LEFT JOIN oprasional as b ON b.bulan = k.bulan_dibayar AND b.tahun = k.tahun_dibayar
+    GROUP BY k.bulan_dibayar, k.tahun_dibayar
+) as k ON k.bulan_dibayar = b.bulan_dibayar AND k.tahun_dibayar = b.tahun_dibayar
+LEFT JOIN (
+    SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (e.rp_gr * c.gr_akhir) as oprasional_ctk, (k.rp_harian_ctk * c.gr_akhir) as harian_ctk
+    FROM cetak_new as c
+    LEFT JOIN kelas_cetak as d ON d.id_kelas_cetak = c.id_kelas_cetak
+    LEFT JOIN oprasional as e ON e.bulan = c.bulan_dibayar
+    LEFT JOIN (
+        SELECT SUM(k.rupiah / b.gr) as rp_harian_ctk, k.bulan_dibayar
+        FROM tb_hariandll as k 
+        LEFT JOIN oprasional as b ON b.bulan = k.bulan_dibayar AND b.tahun = k.tahun_dibayar
+        GROUP BY k.bulan_dibayar, k.tahun_dibayar
+    ) as k ON k.bulan_dibayar = c.bulan_dibayar
+    WHERE d.kategori= 'CTK'
+) as c ON c.no_box = a.no_box
+LEFT JOIN sortir as d ON d.no_box = a.no_box
+LEFT JOIN oprasional as h ON h.bulan = d.bulan
+LEFT JOIN (
+    SELECT SUM(k.rupiah / b.gr) as rp_harian_str, k.bulan_dibayar
+    FROM tb_hariandll as k 
+    LEFT JOIN oprasional as b ON b.bulan = k.bulan_dibayar AND b.tahun = k.tahun_dibayar
+    GROUP BY k.bulan_dibayar, k.tahun_dibayar
+) as l ON l.bulan_dibayar = d.bulan
+LEFT JOIN eo as e ON e.no_box = a.no_box
+LEFT JOIN oprasional as i ON i.bulan = e.bulan_dibayar
+LEFT JOIN (
+    SELECT SUM(k.rupiah / b.gr) as rp_harian_eo, k.bulan_dibayar
+    FROM tb_hariandll as k 
+    LEFT JOIN oprasional as b ON b.bulan = k.bulan_dibayar AND b.tahun = k.tahun_dibayar
+    GROUP BY k.bulan_dibayar, k.tahun_dibayar
+) as m ON m.bulan_dibayar = e.bulan_dibayar
+LEFT JOIN (
+    SELECT c.no_box, c.pcs_akhir, c.gr_akhir, c.gr_tdk_cetak, c.ttl_rp, (c.gr_akhir * e.rp_gr) as oprasional_cu
+    FROM cetak_new as c
+    LEFT JOIN kelas_cetak as d ON d.id_kelas_cetak = c.id_kelas_cetak
+    LEFT JOIN oprasional as e ON e.bulan = c.bulan_dibayar
+    WHERE d.kategori= 'CU'
+) as f ON f.no_box = a.no_box
+LEFT JOIN (
+    SELECT j.no_box, SUM(j.rupiah) as cost_dll 
+    FROM tb_hariandll as j 
+    GROUP BY j.no_box
+) as j ON j.no_box =  a.no_box
+WHERE a.kategori = 'cabut' AND a.baru = 'baru'
+GROUP BY a.nm_partai
+LIMIT :limit OFFSET :offset;
+";
+
+        // Jalankan query dengan limit dan offset
+        $items = DB::select($query, [
+            'limit' => $perPage,
+            'offset' => $offset,
+        ]);
+
+        // Hitung total record
+        $totalQuery = "SELECT COUNT(DISTINCT a.nm_partai) as count 
+        FROM bk as a 
+        LEFT JOIN cabut as b ON b.no_box = a.no_box
+        WHERE a.kategori = 'cabut' AND a.baru = 'baru'";
+
+        $total = DB::select($totalQuery)[0]->count;
+
+        $options = [10];
+        if ($total >= 50) {
+            $options = [10, 50];
+            while ($total >= end($options)) {
+                $options[] = end($options) * 2;
+            }
+        }
+        $options[] = $total;
+
+        // Buat instance LengthAwarePaginator
+        $paginator = new LengthAwarePaginator($items, $total, $perPage, $page, [
+            'path' => request()->url(),
+            'query' => array_merge(request()->query(), ['show' => $perPage]), // Menambahkan parameter show
+        ]);
+
+        return [
+        'paginator' => $paginator,
+        'options' => $options,
+    ];
+    }
+
+    public static function LaporanPerPartaiSearch($search)
+    {
+        return DB::select("SELECT a.nm_partai, a.no_box, a.pcs_awal, a.gr_awal,a.hrga_satuan,
         b.pcs_akhir as pcs_cbt, b.gr_akhir as gr_cbt, 
         (((a.hrga_satuan * a.gr_awal) + b.ttl_rp ) / b.gr_akhir) as rp_gram_cbt, 
         ((1-(b.gr_akhir / a.gr_awal)) * 100) as sst_cbt,
@@ -78,10 +219,7 @@ class LaporanModel extends Model
         ) as j on j.no_box =  a.no_box
 
 
-        where a.kategori = 'cabut' and a.baru = 'baru'
-        
-        ;");
-        return $result;
+        where a.kategori = 'cabut' and a.baru = 'baru' AND (a.nm_partai LIKE '%$search%' OR a.no_box LIKE '%$search%')");
     }
 
     public static function LaporanPerPartaiLama()

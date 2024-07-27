@@ -11,11 +11,15 @@ class Laporan_akhir extends Controller
 {
     public function index(Request $r)
     {
+        $show = $r->show;
+        $search = $r->search;
         $now = date('m');
+
         $bulan = $r->bulan ?? date('m') - 1;
         if ($bulan < 1) {
             $bulan = 12 + $bulan;
         }
+
         $gaji = collect(DB::select("SELECT 
                     COALESCE(b.lokasi, 'ctk') as lokasi,
                     sum(a.ttl_gaji) as ttl_gaji,
@@ -26,9 +30,12 @@ class Laporan_akhir extends Controller
                 join users as b on a.pgws = b.name	
                 WHERE a.bulan_dibayar = $bulan
                 GROUP BY b.lokasi;"))->keyBy('lokasi');
+        $partai = LaporanModel::LaporanPerPartai($show);
         $data = [
             'title' => 'Laporan Partai',
-            'partai' => LaporanModel::LaporanPerPartai(),
+            'partai' => $partai['paginator'],
+            'options' => $partai['options'],
+            'total' => $partai['paginator']->total(),
             'bulan' => $bulan,
             'cabutGrAkhir' => $gaji['bjm']->gr_akhir + $gaji['sby']->gr_akhir,
             'gr_eo_akhir' =>   $gaji['bjm']->eo_gr_akhir + $gaji['mtd']->eo_gr_akhir,
@@ -46,6 +53,15 @@ class Laporan_akhir extends Controller
             "),
         ];
         return view('home.laporan.lapPerpartai', $data);
+    }
+
+    public function search(Request $r)
+    {
+        $search = $r->search;
+        $data = [
+            'partai' => LaporanModel::LaporanPerPartaiSearch($search)
+        ];
+        return view('home.laporan.lapPerpartaiSearch', $data);
     }
 
     public function get_bk_akhir(Request $r)
