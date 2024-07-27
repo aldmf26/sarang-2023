@@ -498,10 +498,27 @@ class GudangController extends Controller
         $sheet6->setCellValue('J2', 'I2-F2+C2-G2');
         $sheet6->setCellValue('K2', '1-(H2/D2)');
 
-        $sheet6->setCellValue('M1', 'Ttl Rp');
-        $sheet6->setCellValue('N1', 'Ttl Rp');
 
         $bk_sinta = TotalanModel::bksinta();
+
+        $ttl_bk = 0;
+        foreach ($bk_sinta as $no => $b) {
+            $ttl_bk += $b->ttl_rp;
+        }
+
+        $op = DB::selectOne("SELECT sum(a.ttl_gaji) as ttl_gaji, c.rp_oprasional, b.nm_bulan
+        FROM tb_gaji_penutup as a 
+        left join bulan as b on b.bulan = a.bulan_dibayar
+        left join oprasional as c on c.bulan = a.bulan_dibayar and a.tahun_dibayar = c.tahun
+        ");
+
+        $sheet6->setCellValue('M1', 'Ttl Rp');
+        $sheet6->setCellValue('M2', $ttl_bk + $op->ttl_gaji + $op->rp_oprasional);;
+
+        $sheet6->setCellValue('N1', 'Ttl Rp');
+        $sheet6->setCellValue('N2', '=sum(Z:Z)');
+
+
 
         $kolom5 = 2;
         foreach ($bk_sinta as $no => $b) {
