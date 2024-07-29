@@ -210,16 +210,12 @@ HAVING a.nm_partai = '$nm_partai';
     {
         $result = DB::selectOne("SELECT b.nm_partai, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_grading,0)) as pcs, sum(a.gr_awal - c.gr_grading) as gr, 
             
-            sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0) + COALESCE(e.gr_akhir * i.rp_gr,0) + COALESCE(f.cost_op_ctk,0) + COALESCE(g.gr_akhir * j.rp_gr,0) + COALESCE(h.gr_eo_akhir * k.rp_gr,0) ) as ttl_rp , 
+            sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0)  ) as ttl_rp , 
             sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
             sum(e.ttl_rp) as cost_cbt, 
             sum(h.ttl_rp) as cost_eo, 
             sum(f.ttl_rp) as cost_ctk, 
-            sum(g.ttl_rp) as cost_str,
-            sum(e.gr_akhir * i.rp_gr) as cost_op_cbt,
-            sum(f.cost_op_ctk) as cost_op_ctk,
-            sum(g.gr_akhir * j.rp_gr) as cost_op_str,
-            sum(h.gr_eo_akhir * k.rp_gr) as cost_op_eo
+            sum(g.ttl_rp) as cost_str
             FROM formulir_sarang as a 
             left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             left join (
@@ -229,20 +225,20 @@ HAVING a.nm_partai = '$nm_partai';
             ) as c on c.no_box = a.no_box
 
             left join cabut as e on e.no_box = a.no_box
-            left join oprasional as i on i.bulan = e.bulan_dibayar
+            
 
             left join (
-                SELECT d.no_box, d.ttl_rp , (d.gr_akhir * b.rp_gr) as cost_op_ctk
+                SELECT d.no_box, d.ttl_rp 
                 FROM cetak_new as d 
                 left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
-                left join oprasional as b on b.bulan = d.bulan_dibayar
+               
                 where h.kategori = 'CTK'
             ) as f on f.no_box = a.no_box
 
             left join sortir as g on g.no_box = a.no_box
-            left join oprasional as j on j.bulan = g.bulan
+            
             left join eo as h on h.no_box = a.no_box
-            left join oprasional as k on k.bulan = h.bulan_dibayar
+            
 
             where a.kategori ='grade' and b.nm_partai = '$nm_partai';
         
