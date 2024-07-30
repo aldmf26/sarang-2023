@@ -53,7 +53,7 @@
             <div class="section">
                 <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{ $no_invoice }}</h5>
 
-                <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($h->id_pemberi)->name }} ~
+                <h6 class="fw-bold">Pengawascwq : {{ auth()->user()->find($h->id_pemberi)->name }} ~
                     {{ $h->name }} </h6>
                 <div class="row">
                     <div class="col-lg-12">
