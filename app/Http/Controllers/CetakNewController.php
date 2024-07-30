@@ -21,7 +21,7 @@ class CetakNewController extends Controller
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
 
-        $cetak = DB::select("SELECT a.no_box,sum(a.pcs_akhir) as pcs_akhir,sum(a.gr_akhir) as gr_akhir 
+        $cetak = DB::select("SELECT a.no_box,sum(a.pcs_akhir + a.pcs_tdk_cetak) as pcs_akhir,sum(a.gr_akhir + a.gr_tdk_cetak) as gr_akhir 
         FROM cetak_new as a 
         WHERE a.selesai = 'Y' AND a.bulan_dibayar = '$bulan' 
         AND YEAR(a.tgl) = '$tahun' AND a.id_pengawas = '$id_user'

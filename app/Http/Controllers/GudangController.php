@@ -534,7 +534,7 @@ class GudangController extends Controller
         $sheet6->getStyle('A2:K' . $kolom5 - 1)->applyFromArray($style);
 
 
-        $sheet6->getStyle("P1:Z1")->applyFromArray($style_atas);
+        $sheet6->getStyle("P1:AA1")->applyFromArray($style_atas);
         $sheet6->setCellValue('P1', 'Nama Partai');
         $sheet6->setCellValue('Q1', 'Lokasi');
         $sheet6->setCellValue('R1', 'Pcs');
@@ -545,7 +545,8 @@ class GudangController extends Controller
         $sheet6->setCellValue('W1', 'Cost Eo');
         $sheet6->setCellValue('X1', 'Cost Cetak');
         $sheet6->setCellValue('Y1', 'Cost Sortir');
-        $sheet6->setCellValue('Z1', 'Total Rp');
+        $sheet6->setCellValue('Z1', 'Cost Oprasional');
+        $sheet6->setCellValue('AA1', 'Total Rp');
 
         $kolom6 = 2;
         foreach ($bk_sinta as $no => $b) {
@@ -572,7 +573,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($bk_stock->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_stock->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -586,7 +588,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($bk_proses->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_proses->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -600,7 +603,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($bk_selesai_siap_ctk->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($bk_selesai_siap_ctk->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_selesai_siap_ctk->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -614,7 +618,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, round($bk_selesai_siap_str->cost_eo ?? 0, 0));
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($bk_selesai_siap_str->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($bk_selesai_siap_str->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_selesai_siap_str->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -628,7 +633,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($cetak_stok->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($cetak_stok->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_stok->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -642,7 +648,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($cetak_proses2->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($cetak_proses2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_proses2->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -656,7 +663,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, round($cetak_selesai2->cost_ctk ?? 0, 0));
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($cetak_selesai2->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($cetak_selesai2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_selesai2->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -670,7 +678,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, round($stock_sortir->cost_eo ?? 0, 0));
             $sheet6->setCellValue('X' . $kolom6, round($stock_sortir->cost_ctk ?? 0, 0));
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($stock_sortir->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($stock_sortir->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($stock_sortir->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -684,7 +693,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, round($sortir_proses2->cost_eo ?? 0, 0));
             $sheet6->setCellValue('X' . $kolom6, round($sortir_proses2->cost_ctk ?? 0, 0));
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($sortir_proses2->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($sortir_proses2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($sortir_proses2->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -698,7 +708,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, round($sortir_selesai2->cost_eo ?? 0, 0));
             $sheet6->setCellValue('X' . $kolom6, round($sortir_selesai2->cost_ctk ?? 0, 0));
             $sheet6->setCellValue('Y' . $kolom6, round($sortir_selesai2->cost_str ?? 0, 0));
-            $sheet6->setCellValue('Z' . $kolom6, round($sortir_selesai2->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($sortir_selesai2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($sortir_selesai2->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -712,7 +723,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, round($grading_stock2->cost_eo ?? 0, 0));
             $sheet6->setCellValue('X' . $kolom6, round($grading_stock2->cost_ctk ?? 0, 0));
             $sheet6->setCellValue('Y' . $kolom6, round($grading_stock2->cost_str ?? 0, 0));
-            $sheet6->setCellValue('Z' . $kolom6, round($grading_stock2->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($grading_stock2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($grading_stock2->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -726,7 +738,8 @@ class GudangController extends Controller
             $sheet6->setCellValue('W' . $kolom6, 0);
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
-            $sheet6->setCellValue('Z' . $kolom6, round($box_belum_kirim->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($box_belum_kirim->ttl_rp ?? 0, 0));
 
             $kolom6++;
 
@@ -741,10 +754,11 @@ class GudangController extends Controller
             $sheet6->setCellValue('X' . $kolom6, 0);
             $sheet6->setCellValue('Y' . $kolom6, 0);
             $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, 0);
 
             $kolom6++;
         }
-        $sheet6->getStyle('P2:Z' . $kolom6 - 1)->applyFromArray($style);
+        $sheet6->getStyle('P2:AA' . $kolom6 - 1)->applyFromArray($style);
 
         // box stock
 
