@@ -35,7 +35,7 @@ class CetakNewController extends Controller
         GROUP BY a.no_box");
 
         $data = [
-            'title' => 'Formulir  Sortir',
+            'title' => 'Formulir  Sortir dsadasda',
             'cetak' => $cetak,
             'users' => $this->getData('users'),
         ];
