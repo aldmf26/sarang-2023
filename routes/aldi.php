@@ -483,7 +483,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('penutup.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/show/{bulan}/{tahun}', 'show')->name('show');
             Route::post('/import', 'import')->name('import');
+            Route::post('/tutup_gaji', 'tutup_gaji')->name('tutup_gaji');
         });
 
     // Route::controller(PackingListController::class)

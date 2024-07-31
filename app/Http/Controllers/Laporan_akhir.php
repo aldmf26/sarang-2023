@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GabungExport;
+use App\Exports\LaporanDetailPartai;
 use App\Models\CetakModel;
 use App\Models\LaporanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Laporan_akhir extends Controller
 {
@@ -59,9 +62,27 @@ class Laporan_akhir extends Controller
     {
         $search = $r->search;
         $data = [
-            'partai' => LaporanModel::LaporanPerPartaiSearch($search)
+            'partai' => LaporanModel::LaporanPerPartaiSearch($search),
+            'search' => $search,
         ];
         return view('home.laporan.lapPerpartaiSearch', $data);
+    }
+
+    public function detail(Request $r)
+    {
+        $nm_partai = $r->nm_partai;
+        $data = [
+            'title' => 'Detail Partai',
+            'partai' => LaporanModel::LaporanDetailPartai($nm_partai),
+            'nm_partai' => $nm_partai
+        ];
+        return view('home.laporan.detail_partai', $data);
+    }
+
+    public function export_partai($nm_partai)
+    {
+        $query = LaporanModel::LaporanDetailPartai($nm_partai);
+        return Excel::download(new LaporanDetailPartai($query), "laporan Detail Partai $nm_partai.xlsx");
     }
 
     public function get_bk_akhir(Request $r)

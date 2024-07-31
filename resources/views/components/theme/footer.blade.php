@@ -259,6 +259,7 @@
         $('#' + namaTable).DataTable({
             "paging": true,
             "pageLength": 10,
+            fixedHeader: true,
             "lengthChange": true,
             "stateSave": true,
             "searching": true,

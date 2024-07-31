@@ -201,6 +201,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/search', 'search')->name('search');
             Route::post('/save_bk_akhir', 'save_bk_akhir')->name('save_bk_akhir');
             Route::get('/get_detail_cetak', 'get_detail_cetak')->name('get_detail_cetak');
+            Route::get('/detail', 'detail')->name('detail');
+            Route::get('/export_partai/{nm_partai}', 'export_partai')->name('export_partai');
             Route::get('/get_detail_cabut', 'get_detail_cabut')->name('get_detail_cabut');
             Route::get('/summaryCetak', 'summaryCetak')->name('summaryCetak');
             Route::get('/get_detail_sortir', 'get_detail_sortir')->name('get_detail_sortir');

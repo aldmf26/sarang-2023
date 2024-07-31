@@ -107,6 +107,13 @@ if (!function_exists('kode')) {
     }
 }
 
+if (!function_exists('formatTglGaji')) {
+    function formatTglGaji($bulan, $tahun)
+    {
+        return date('M Y', strtotime($tahun . '-' . $bulan . '-01'));
+    }
+}
+
 if (!function_exists('buatNota')) {
     function buatNota($tbl, $kolom)
     {
