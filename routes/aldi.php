@@ -32,6 +32,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/403', function () {
         view('error.403');
     })->name('403');
+    Route::get('/503', function () {
+        view('error.503');
+    })->name('503');
     // Route::get('/log', function (Request $r) {
     //     $pengawas = DB::table('users')->select('id as id_pengawas','name')->where('posisi_id', 13)->get();
     //     $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
