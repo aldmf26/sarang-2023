@@ -58,6 +58,7 @@
                             <th class="dhead text-end">Cost eo</th>
                             <th class="dhead text-end">Cost ctk</th>
                             <th class="dhead text-end">Cost str</th>
+                            <th class="dhead text-end">Cost cu</th>
                             <th class="dhead text-end">Cost Oprasional</th>
                             <th class="dhead text-end">Total Rp</th>
                         </tr>
@@ -97,6 +98,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($bk_stock->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ number_format($bk_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -114,6 +116,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($bk_stock->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ number_format($bk_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -131,6 +134,8 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($bk_selesai_siap_ctk->cost_cu ?? 0, 0) }}
+                                </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_ctk->cost_op_cbt ?? 0, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_ctk->ttl_rp ?? 0, 0) }}</td>
@@ -149,6 +154,8 @@
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->cost_eo ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($bk_selesai_siap_str->cost_cu ?? 0, 0) }}
+                                </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->cost_op_cbt ?? 0, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($bk_selesai_siap_str->ttl_rp ?? 0, 0) }}</td>
@@ -167,6 +174,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($cetak_stok->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_stok->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_stok->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -184,6 +192,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($cetak_proses->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_proses->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -201,6 +210,7 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($cetak_selesai->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($cetak_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -218,6 +228,7 @@
                                 <td class="text-end">{{ number_format($stock_sortir->cost_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($stock_sortir->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($stok_sortir->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($stok_sortir->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($stock_sortir->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -235,6 +246,7 @@
                                 <td class="text-end">{{ number_format($sortir_proses->cost_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_proses->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($sortir_proses->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_proses->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_proses->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -252,6 +264,7 @@
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_str ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($sortir_selesai->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($sortir_selesai->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -269,6 +282,7 @@
                                 <td class="text-end">{{ number_format($grading_stock->cost_eo ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->cost_ctk ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->cost_str ?? 0, 0) }}</td>
+                                <td class="text-end">{{ number_format($grading_stock->cost_cu ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->cost_op ?? 0, 0) }}</td>
                                 <td class="text-end">{{ number_format($grading_stock->ttl_rp ?? 0, 0) }}</td>
                             </tr>
@@ -282,6 +296,7 @@
                                     {{ empty($box_belum_kirim->gr) ? 0 : number_format($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0) }}
                                 </td>
                                 <td class="text-end">{{ number_format($box_belum_kirim->cost_bk ?? 0, 0) }}</td>
+                                <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
@@ -301,7 +316,8 @@
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
-                                <td class="text-end">opra</td>
+                                <td class="text-end">0</td>
+                                <td class="text-end">0</td>
                                 <td class="text-end">0</td>
                             </tr>
                         @endforeach
