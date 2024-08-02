@@ -825,7 +825,7 @@ class GudangController extends Controller
         FROM tb_gaji_penutup as a 
         left join bulan as b on b.bulan = a.bulan_dibayar
         left join oprasional as c on c.bulan = a.bulan_dibayar and a.tahun_dibayar = c.tahun
-        group by a.bulan_dibayar and a.tahun_dibayar;");
+        group by a.bulan_dibayar , a.tahun_dibayar;");
 
 
         $sheet7->getStyle("A1:B1")->applyFromArray($style_atas);
