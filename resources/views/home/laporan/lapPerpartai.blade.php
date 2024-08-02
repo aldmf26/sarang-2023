@@ -40,26 +40,26 @@
                             @endforeach
                         </select>
                         <label for="">per halaman</label>
-                    </div>
+                    </div>{{--
                     <div class="d-flex gap-2">
                         <div>
-                            <input type="text" id="search" class="form-control form-control-sm"
-                                style="width: 170px" placeholder="cari partai atau no box">
+                            <input type="text" id="search" class="form-control form-control-sm searchInput"
+                                style="width: 170px" placeholder="cari partai">
                         </div>
-                        <div>
+                         <div>
                             <button class="btn btn-primary btn-sm btnSearch" type="submit"><i
                                     class="fas fa-search"></i>
                                 Cari</button>
-                        </div>
-                    </div>
+                        </div> 
+                    </div> --}}
                 </div>
             </div>
-
+            {{-- disini tablenya --}}
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <div class="tblhide">
-                        <table class="table table-bordered " id="table_cari" width="100%">
-                            <thead>
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead class="sticky">
                                 <tr>
                                     <th class="dhead " rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">partai</th>
@@ -110,7 +110,11 @@
                                 @foreach ($partai as $no => $p)
                                     <tr>
                                         <td>{{ $partai->firstItem() + $no }}</td>
-                                        <td>{{ $p->nm_partai }}</td>
+                                        <td>
+                                            <a class="detailPartai" partai="{{ $p->nm_partai }}" href="#"
+                                                data-bs-target="#detailPartai"
+                                                data-bs-toggle="modal">{{ $p->nm_partai }}</a>
+                                        </td>
                                         {{-- <td>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
                                                 class="detail no_box{{ $p->no_box ?? '-' }}"
@@ -127,20 +131,20 @@
                                         <td class="text-end">
                                             {{ $p->hrga_satuan == 0 || empty($p->gr_cbt) ? 0 : number_format(($p->cost_bk + $p->cost_cbt) / $p->gr_cbt, 0) }}
                                         </td>
-                                        <td class="text-end">{{ number_format($p->sst_cbt ?? 0,) }} %</td>
+                                        <td class="text-end">{{ number_format($p->sst_cbt ?? 0) }} %</td>
 
                                         <td class="text-end">0</td>
                                         <td class="text-end">{{ number_format($p->gr_eo ?? 0, 0) }}</td>
                                         <td class="text-end">
                                             {{ number_format($p->rp_gram_eo ?? 0, 0) }}</td>
-                                        <td class="text-end">{{ number_format($p->sst_eo ?? 0,0) }} %</td>
+                                        <td class="text-end">{{ number_format($p->sst_eo ?? 0, 0) }} %</td>
 
                                         <td class="text-end">{{ number_format($p->pcs_ctk ?? 0, 0) }}</td>
                                         <td class="text-end">{{ number_format($p->gr_ctk ?? 0, 0) }}</td>
                                         <td class="text-end">
                                             {{ $p->hrga_satuan == 0 || empty($p->gr_ctk) ? 0 : number_format(($p->cost_bk + $p->cost_cbt + $p->cost_ctk) / $p->gr_ctk, 0) }}
                                         </td>
-                                        <td class="text-end">{{ number_format($p->sst_ctk ?? 0,0) }} %</td>
+                                        <td class="text-end">{{ number_format($p->sst_ctk ?? 0, 0) }} %</td>
 
                                         <td class="text-end">{{ number_format($p->pcs_str ?? 0, 0) }}</td>
                                         <td class="text-end">{{ number_format($p->gr_str ?? 0, 0) }}</td>
@@ -193,6 +197,12 @@
                 <div class="row">
                     <div id="load_detail"></div>
                 </div>
+            </x-theme.modal>
+
+            <x-theme.modal title="Detail Partai" idModal="detailPartai" size="modal-lg-max" btnSave="T">
+                <div id="load_detail_partai"></div>
+                @include('components.theme.loading')
+
             </x-theme.modal>
 
             <form action="" method="get">
@@ -311,23 +321,66 @@
 
                 // fitur search
                 $('.loading').hide();
+
+                var timer = null;
+                $(document).on('keyup', '.searchInputdsa', function() {
+                    clearTimeout(timer);
+                    var search = $(this).val();
+                    timer = setTimeout(function() {
+                        if (search.length === 0) {
+                            $('.tblhide').show();
+                            $('#loadSearch').hide();
+                        } else {
+                            $('.tblhide').hide();
+                            if ($('.table_cari').length == 0) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "{{ route('laporanakhir.search') }}?search=" + search,
+                                    beforeSend: function() {
+                                        $('.loading').show();
+                                    },
+                                    success: function(r) {
+                                        $('.loading').hide();
+                                        $('#loadSearch').html(r);
+                                    },
+                                    error: function(xhr, ajaxOptions, thrownError) {
+                                        alert(xhr.status + "\n" + xhr.responseText + "\n" +
+                                            thrownError);
+                                    }
+                                });
+                            }
+                        }
+                    }, 500);
+                })
+
                 $(document).on('click', '.btnSearch', function() {
                     var search = $('#search').val();
-                    $('.table_cari').remove();
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ route('laporanakhir.search') }}?search=" + search,
-                        beforeSend: function() {
-                            $('.loading').show();
-                        },
-                        success: function(r) {
-                            $('.loading').hide();
-                            $('#loadSearch').html(r);
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                    clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        if (search.length === 0) {
+                            $('.tblhide').show();
+                            $('#loadSearch').hide();
+                        } else {
+                            $('.tblhide').hide();
+                            if ($('.table_cari').length == 0) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "{{ route('laporanakhir.search') }}?search=" + search,
+                                    beforeSend: function() {
+                                        $('.loading').show();
+                                    },
+                                    success: function(r) {
+                                        $('.loading').hide();
+                                        $('#loadSearch').html(r);
+                                    },
+                                    error: function(xhr, ajaxOptions, thrownError) {
+                                        alert(xhr.status + "\n" + xhr.responseText + "\n" +
+                                            thrownError);
+                                    }
+                                });
+                            }
                         }
-                    });
+                    }, 500);
                 })
 
                 $(document).on("click", ".detail", function() {
@@ -342,6 +395,28 @@
                         },
                         success: function(response) {
                             $("#load_detail").html(response);
+                        }
+                    });
+
+                });
+                $(document).on("click", ".detailPartai", function() {
+                    var partai = $(this).attr("partai");
+
+                    $.ajax({
+                        type: "get",
+                        url: `{{ route('laporanakhir.detail') }}?nm_partai=${partai}`,
+                        beforeSend: function() {
+                            $('.loading').show();
+                            $("#load_detail_partai").hide();
+                        },
+                        success: function(response) {
+                            $('.loading').hide();
+                            $("#load_detail_partai").show()
+                            $("#load_detail_partai").html(response);
+                            loadTable("tblPartai");
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
                         }
                     });
 
