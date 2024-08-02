@@ -19,7 +19,7 @@ class PenutupController extends Controller
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
                 JOIN users as b on a.penerima = b.id
-                WHERE b.lokasi != 'ctk'
+                WHERE b.lokasi != 'ctk' AND b.name not in ('yuli', 'yuli sby', 'siti fatimah')
                 group by b.id");
 
         $datas =  [
@@ -135,6 +135,7 @@ class PenutupController extends Controller
         return view('data_master.penutup.show', [
             'title' => "Data Gaji Penutup " . formatTglGaji($bulan, $tahun),
             'gaji' => $gaji,
+            'bulan' => $bulan,
             'pengawas' => $pengawas,
         ]);
     }
