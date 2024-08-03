@@ -68,7 +68,7 @@ class TotalannewModel extends Model
             ) as z on z.no_box = a.no_box
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join oprasional as c on c.bulan = a.bulan_dibayar
-        where b.nm_partai = '$nm_partai' and a.selesai = 'Y' and  a.pcs_awal != 0
+        where b.nm_partai = '$nm_partai' and a.formulir = 'T' and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak') and a.selesai = 'Y' and  a.pcs_awal != 0
         group by b.nm_partai;
         ");
 
@@ -105,7 +105,7 @@ HAVING a.nm_partai = '$nm_partai';
     {
         $result = DB::selectOne("SELECT a.no_box, b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as pcs, sum((c.hrga_satuan  * c.gr_awal) + d.ttl_rp) as ttl_rp, c.nm_partai
                 FROM formulir_sarang as a 
-                left join users as b on b.id = a.id_penerima
+                left join users as b on b.id = a.id_pemberi
                 left join bk as c on c.no_box = a.no_box
                 left join cabut as d on d.no_box = a.no_box
                 left join users as e on e.id = a.id_pemberi
