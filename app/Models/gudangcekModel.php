@@ -129,7 +129,7 @@ class gudangcekModel extends Model
         $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
                     d.ttl_rp as cost_cbt, c.nm_partai, c.pcs_awal as pcs_bk, (d.gr_akhir * f.rp_gr) as cost_op, z.cost_cu
                 FROM formulir_sarang as a 
-                left join users as b on b.id = a.id_pemberi
+                left join users as b on b.id = a.id_penerima
                 left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
                 left join cabut as d on d.no_box = a.no_box
                 left join oprasional as f on f.bulan = d.bulan_dibayar
