@@ -273,12 +273,13 @@ class CetakNewController extends Controller
     public function getRowData(Request $r)
     {
         $data = [
-            'c' => DB::selectOne("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar,ttl_rp
+            'c' => DB::selectOne("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar,ttl_rp,f.no_box as form, e.kategori as kat_kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pemberi
             left join users as d on d.id = a.id_pengawas
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
+             left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
             where a.id_cetak = '$r->id_cetak'
         "),
             'no' => $r->no,
@@ -306,6 +307,7 @@ class CetakNewController extends Controller
     }
     public function cancel_selesai(Request $r)
     {
+
         DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'T']);
     }
 

@@ -156,7 +156,7 @@ HAVING a.nm_partai = '$nm_partai';
         left join oprasional as h on h.bulan = f.bulan_dibayar
         left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
         where a.selesai = 'Y' and g.kategori = 'CTK'
-        and a.formulir = 'T'  and a.no_box not in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir') and e.nm_partai = '$nm_partai'
+        and a.formulir = 'T'  and e.nm_partai = '$nm_partai'
         group by e.nm_partai;
         ");
 
