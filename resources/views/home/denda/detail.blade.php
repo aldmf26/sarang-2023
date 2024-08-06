@@ -14,10 +14,8 @@
         <label for="">Bulan dibayar</label>
         <select name="bulan_dibayar" class="form-control select2-edit" id="">
             <option value="">- Pilih Bulan -</option>
-            @php
-                $bulan = DB::table('bulan')->get();
-            @endphp
-            @foreach ($bulan as $b)
+          
+            @foreach (getListBulan()  as $b)
                 <option {{$detail->bulan_dibayar == $b->bulan ? 'selected' : ''}} value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}</option>
             @endforeach
         </select>

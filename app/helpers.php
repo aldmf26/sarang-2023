@@ -106,6 +106,14 @@ if (!function_exists('kode')) {
         return str_pad($kode, 5, '0', STR_PAD_LEFT);
     }
 }
+if (!function_exists('getListBulan')) {
+    function getListBulan()
+    {
+        $bulanTerakhir = DB::table('tb_gaji_penutup')->latest('bulan_dibayar')->first();
+        $listBulan = DB::table('bulan')->where('id_bulan', '>', $bulanTerakhir->bulan_dibayar)->get();
+        return $listBulan;
+    }
+}
 
 if (!function_exists('formatTglGaji')) {
     function formatTglGaji($bulan, $tahun)

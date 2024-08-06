@@ -64,7 +64,7 @@
         <select name="" id="" class="form-control bulan_dibayar{{ $d->id_sortir }}"
             {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
             <option value="0">Pilih</option>
-            @foreach ($bulan as $b)
+            @foreach (getListBulan() as $b)
                 <option value="{{ $b->id_bulan }}" {{ $d->bulan == $b->id_bulan ? 'selected' : '' }}>
                     {{ $b->nm_bulan }}</option>
             @endforeach

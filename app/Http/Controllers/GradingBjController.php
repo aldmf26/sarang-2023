@@ -529,4 +529,12 @@ class GradingBjController extends Controller
         DB::table('grading')->where('no_box_grading', $r->no_box)->update(['selesai' => $r->selesai == 'T' ? 'Y' : 'T']);
         return redirect()->back()->with('sukses', 'diselesaikan');
     }
+
+    public function opname(Request $r)
+    {
+        $data = [
+            'title' => 'Grading Opname'
+        ];
+        return view('home.gradingbj.opname',$data);
+    }
 }

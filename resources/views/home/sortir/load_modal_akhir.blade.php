@@ -83,10 +83,8 @@
                         <td>
                             <select name="bulan{{ $i }}[]" class="form-control">
                                 <option value="0">Pilih Bulan</option>
-                                @php
-                                    $listBulan = DB::table('bulan')->get();
-                                @endphp
-                                @foreach ($listBulan as $l)
+                                
+                                @foreach (getListBulan() as $l)
                                     <option value="{{ $l->bulan }}"
                                         {{ $v->bulan == $l->bulan ? 'selected' : '' }}>
                                         {{ substr($l->nm_bulan, 0, 3) }}</option>

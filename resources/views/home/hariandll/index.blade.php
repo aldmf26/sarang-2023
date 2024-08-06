@@ -136,7 +136,7 @@
                                         <select required name="bulan_dibayar" class="form-control select2"
                                             id="">
                                             <option value="">- Pilih -</option>
-                                            @foreach ($bulan as $b)
+                                            @foreach (getListBulan() as $b)
                                                 <option value="{{ $b->bulan }}">{{ strtoupper($b->nm_bulan) }}
                                                 </option>
                                             @endforeach

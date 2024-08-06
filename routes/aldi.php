@@ -465,6 +465,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create', 'create')->name('create');
             Route::post('/createUlang', 'createUlang')->name('createUlang');
             Route::post('/import', 'import')->name('import');
+            Route::get('/opname', 'opname')->name('opname');
             Route::get('/gudang_siap_kirim', 'gudang_siap_kirim')->name('gudang_siap_kirim');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/cancel', 'cancel')->name('cancel');
