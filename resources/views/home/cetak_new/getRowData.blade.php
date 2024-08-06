@@ -150,7 +150,7 @@
             id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
         </button> --}}
 
-        <button {{ auth()->user()->posisi_id == '1' ? '' : 'hidden' }} type="button"
+        <button {{ $c->kat_kelas == 'CU' ? '' : (empty($c->form) ? '' : 'hidden') }} type="button"
             {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-danger btn_cancel"
             id_cetak="{{ $c->id_cetak }}"><i class="fas fa-redo"></i>
         </button>
