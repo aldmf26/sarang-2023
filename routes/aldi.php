@@ -156,6 +156,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/totalan', 'totalan')->name('totalan');
             Route::get('/totalan_new', 'totalan_new')->name('totalan_new');
             Route::get('/export', 'export')->name('export');
+            Route::get('/export2', 'export2')->name('export2');
         });
     Route::controller(BkController::class)
         ->prefix('home/bk')

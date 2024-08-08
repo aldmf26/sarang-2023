@@ -285,6 +285,7 @@
                     $(document).on("click", ".btn_cancel", function(e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
+                        var form = $(this).attr('form');
                         var no = $('.no' + id_cetak).val();
 
                         $.ajax({
@@ -292,6 +293,7 @@
                             url: "{{ route('cetaknew.cancel_selesai') }}",
                             data: {
                                 id_cetak: id_cetak,
+                                form: form,
                             },
                             success: function(response) {
 
@@ -299,7 +301,13 @@
                                 // loadRowData(id_cetak, no)
 
                                 load_cetak();
-                                alertToast('sukses', 'Data berhasil di cancel');
+                                if (form === 'ada') {
+                                    alertToast('sukses',
+                                        'Data gagal di cancel data sudah ada di formulir');
+                                } else {
+                                    alertToast('sukses', 'Data berhasil di cancel');
+                                }
+
                             }
                         });
                     });
