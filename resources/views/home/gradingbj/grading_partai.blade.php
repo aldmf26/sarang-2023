@@ -2,64 +2,64 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
-            <div>
-            </div>
         </div>
     </x-slot>
 
     <x-slot name="cardBody">
-        <form action="{{ route('gradingbj.createUlang') }}" method="post">
+        <form x-data="{
+            cek: [],
+            rows: [],
+            selectedRowIndex: null,
+            pcs: Array().fill(''),
+            gr: Array().fill(''),
+            ttlSum: function(type) {
+                const array = type === 'pcs' ? this.pcs : this.gr;
+                return array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
+            },
+            numberFormat(value) {
+                return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
+            },
+            initSelect2: function() {
+                $('.selectGrade').select2();
+            },
+            removeRow: function(index) {
+                this.rows.splice(index, 1);
+                this.pcs.splice(index, 1);
+                this.gr.splice(index, 1);
+            },
+        }" x-init="initSelect2()" action="{{ route('gradingbj.create_partai') }}"
+            method="post">
             @csrf
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="dhead">Pengawas</th>
-                                <th class="dhead" width="150">No Nota</th>
+                                {{-- <th class="dhead">No Nota</th> --}}
                                 <th class="dhead">Tgl</th>
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="text" readonly value="{{ $admin }}" name="pengawas"
+                                    <input type="text" readonly value="{{ $user }}" name="pengawas"
                                         class="form-control" required>
-                                        <input type="hidden" name="nm_partai" value="{{ $nm_partai }}">
+                                    <input type="hidden" name="nm_partai" value="{{ $nm_partai }}">
                                 </td>
+                                {{-- <td>
+                                    <input type="text" readonly value="{{ $no_nota }}" name="no_nota"
+                                        class="form-control" required>
+                                </td> --}}
                                 <td>
-                                    <input type="text" readonly value="{{ $no_invoice }}" name="no_nota"
+                                    <input readonly type="date" value="{{ date('Y-m-d') }}" name="tgl"
                                         class="form-control" required>
                                 </td>
-                                <td>
-                                    <input readonly type="date" value="{{ $tgl }}" name="tgl"
-                                        class="form-control" required>
-                                </td>
-                              
+
                             </tr>
                         </thead>
                     </table>
                 </div>
             </div>
-            <div class="row" x-data="{
-                rows: {{json_encode($getFormulir) }},
-                selectedRowIndex: null,
-                pcs: {{ json_encode(array_column($getFormulir, 'pcs')) }},
-                gr: {{ json_encode(array_column($getFormulir, 'gr')) }},
-                ttlSum: function(type) {
-                    const array = type === 'pcs' ? this.pcs : this.gr;
-                    return array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
-                },
-                numberFormat(value) {
-                    return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
-                },
-                initSelect2: function() {
-                    $('.selectGrade').select2();
-                },
-                removeRow: function(index) {
-                    this.rows.splice(index, 1);
-                    this.pcs.splice(index, 1);
-                    this.gr.splice(index, 1);
-                },
-            }" x-init="initSelect2()">
+            <div class="row">
                 <div class="col-lg-4">
                     <h6>Box Dipilih <span class="text-success">Partai : {{ $nm_partai }}</span></h6>
                     <table class="table table-bordered table-striped table-hover">
@@ -73,22 +73,39 @@
                         </thead>
                         <thead class="bg-white">
                             <tr>
-                                <th class="text-end"><h6>Total</h6></th>
+                                <th class="text-end">
+                                    <h6>Total</h6>
+                                </th>
                                 <th></th>
-                                <th class="text-end"><h6>{{ array_sum(array_column($getBox, 'pcs')) }}</h6></th>
-                                <th class="text-end"><h6>{{ array_sum(array_column($getBox, 'gr')) }}</h6></th>
+                                @php
+                                    $ttlPcs = array_sum(array_column($getFormulir, 'pcs_awal'));
+                                    $ttlGr = array_sum(array_column($getFormulir, 'gr_awal'))
+                                @endphp
+                                <th class="text-end">
+                                    <h6>
+                                        <input type="hidden" name="tipe" value="{{$getFormulir[0]->tipe}}">
+                                        <input type="hidden" name="ttlPcs" value="{{$ttlPcs}}">
+                                        {{ $ttlPcs }}
+                                    </h6>
+                                </th>
+                                <th class="text-end">
+                                    <h6>
+                                        <input type="hidden" name="ttlGr" value="{{$ttlGr}}">
+                                        {{ $ttlGr }}
+                                    </h6>
+                                </th>
                             </tr>
-                        
+
                         </thead>
                         <tbody>
-                            @foreach ($getBox as $d)
-                                <tr class="pointer"
-                                    >
-                                    <td>{{ $d->no_box }} <input type="hidden" name="no_box[]" value="{{ $d->no_box }}"></td>
+                            @foreach ($getFormulir as $d)
+                                <tr class="pointer">
+                                    <td>{{ $d->no_box }} <input type="hidden" name="no_box[]"
+                                            value="{{ $d->no_box }}"></td>
                                     <td align="center">{{ $d->tipe }}</td>
-                                    <td align="right">{{ $d->pcs }}</td>
-                                    <td align="right">{{ $d->gr }}</td>
-                                   
+                                    <td align="right">{{ $d->pcs_awal }}</td>
+                                    <td align="right">{{ $d->gr_awal }}</td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -118,7 +135,6 @@
                                     <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                                 </td>
                             </tr>
-                           
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr>
                                     <td>
@@ -126,21 +142,21 @@
                                             id="">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($gradeBentuk as $g)
-                                                <option :selected="row.grade === '{{ $g->nm_grade }}'" value="{{ $g->nm_grade }}">{{ strtoupper($g->nm_grade) }} 
+                                                <option value="{{ $g->nm_grade }}">{{ strtoupper($g->nm_grade) }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
-                                        <input onclick="select()"  x-model="pcs[index]" type="text" class="text-end form-control"
+                                        <input x-model="pcs[index]" type="number" class="text-end form-control"
                                             name="pcs[]">
                                     </td>
                                     <td>
-                                        <input onclick="select()"  x-model="gr[index]" required  type="text" class="text-end form-control"
+                                        <input required x-model="gr[index]" type="number" class="text-end form-control"
                                             name="gr[]">
                                     </td>
                                     <td>
-                                        <input onclick="select()" :value="row.box_pengiriman" required type="text" class="form-control text-end" name="box_sp[]">
+                                        <input required type="text" class="form-control" name="box_sp[]">
                                     </td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
@@ -158,13 +174,7 @@
                     </table>
                 </div>
             </div>
-          
             <button type="submit" class="btn btn-md btn-primary float-end">Save</button>
         </form>
-        @section('scripts')
-            <script>
-                clickSelectInput('form-control')
-            </script>
-        @endsection
     </x-slot>
 </x-theme.app>

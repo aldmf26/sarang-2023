@@ -38,7 +38,7 @@ class PackingListController extends Controller
         foreach ($new_array as $d) {
             $tblPengiriman = DB::table('pengiriman')->where('id_pengiriman', $d);
             $cekGr = $tblPengiriman->first()->gr;
-            
+
             DB::table('pengiriman_packing_list')->insert([
                 'tgl' => $r->tgl,
                 'nm_packing' => $r->nm_packing,
@@ -93,8 +93,11 @@ class PackingListController extends Controller
         $detailPacking = DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->first();
         $id_pengiriman = DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->pluck('id_pengiriman')->toArray();
         $id_pengiriman = implode(',', $id_pengiriman);
-        $detail = DB::select("SELECT a.grade,sum(a.pcs) as pcs, sum(a.gr + (a.gr / c.kadar)) as gr 
-, count(*) as box
+        $detail = DB::select("SELECT 
+        a.grade,
+        sum(a.pcs) as pcs, 
+        sum(a.gr + (a.gr / c.kadar)) as gr, 
+        count(*) as box
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.id_pengiriman = c.id_pengiriman
         WHERE a.id_pengiriman in ($id_pengiriman)
@@ -106,9 +109,13 @@ class PackingListController extends Controller
         a.gr,
         a.no_box,
         a.cek_qc as cek_akhir,
-        a.admin
+        a.admin,
+        b.tipe,
+        group_concat(b.nm_partai) as nm_partai
         FROM `pengiriman` as a
+        JOIN grading_partai as b on a.no_box = b.box_pengiriman
         WHERE a.id_pengiriman  in ($id_pengiriman)
+        GROUP BY a.grade
         ORDER by a.grade DESC");
 
         $data = [
@@ -129,5 +136,13 @@ class PackingListController extends Controller
     public function print($no_nota)
     {
         return view('home.packinglist.print', $this->getDetailPrint($no_nota));
+    }
+
+    public function delete($no_nota)
+    {
+        DB::table('pengiriman')->where('no_nota', $no_nota)->delete();
+        DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->delete();
+
+        return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil dihapus');
     }
 }

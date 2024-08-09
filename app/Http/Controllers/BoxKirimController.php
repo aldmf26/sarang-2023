@@ -178,24 +178,25 @@ class BoxKirimController extends Controller
         $no_nota = DB::table('pengiriman')->orderBy('id_pengiriman', 'DESC')->first();
         $no_nota = empty($no_nota) ? 1001 : $no_nota->no_nota + 1;
         foreach (explode(',', $r->no_box) as $d) {
-            $grade = DB::table('grading as a')
-                ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
-                ->where('a.no_box_grading', $d)
-                ->first()
-                ->nm_grade;
-            $ambilBox = DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr FROM `grading` as a
-                    where a.no_box_grading = $d
-                    group by a.no_box_grading");
-            $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
+            // $grade = DB::table('grading as a')
+            //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
+            //     ->where('a.no_box_grading', $d)
+            //     ->first()
+            //     ->nm_grade;
+            $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr FROM `grading_partai` as a
+                    where a.box_pengiriman = $d
+                    group by a.box_pengiriman");
+            // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
+            
             $dataToInsert[] = [
                 'no_box' => $d,
                 'pcs' => $ambilBox->pcs,
                 'gr' => $ambilBox->gr,
                 'admin' => $admin,
-                'grade' => $grade,
+                'grade' => $ambilBox->grade,
                 'tgl_input' => $tgl_input,
                 'no_nota' => $no_nota,
-                'rp_gram' => $rp_gram,
+                'rp_gram' => 1,
             ];
         }
         DB::table('pengiriman')->insert($dataToInsert);

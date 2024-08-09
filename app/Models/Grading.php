@@ -11,11 +11,14 @@ class Grading extends Model
     public static function dapatkanStokBox($jenis, $noBox = null)
     {
         $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
+        $whereBoxPartai = $noBox ? "AND e.nm_partai = '$noBox'  " : '';
+        $groupBoxPartai = $noBox ? ",b.no_box" : '';
+
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
+        b.no_box, b.tanggal, e.tipe,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
-        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'sortir'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
         $whereBox
         LEFT JOIN(
             select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
@@ -28,8 +31,33 @@ class Grading extends Model
         HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
         ORDER BY b.tanggal DESC");
 
+        $formulirGroupBy = DB::select("SELECT 
+        e.nm_partai,
+        count(b.no_box) as no_box,
+        b.no_box as no_box_sortir,
+        b.tanggal,
+        e.tipe,
+        c.name as pemberi,
+        b.no_invoice,
+        SUM(b.pcs_awal) - SUM(d.pcs) as pcs_awal,
+        SUM(b.gr_awal) - SUM(d.gr) as gr_awal
+        FROM grading as a 
+        JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
+        LEFT JOIN(
+            select no_box_sortir as no_box, SUM(pcs) as pcs, SUM(gr) as gr
+            from grading 
+            group by no_box_sortir
+        ) as d on d.no_box = b.no_box
+        JOIN users as c on c.id = b.id_pemberi
+        WHERE a.selesai  = 'T' $whereBoxPartai
+        GROUP BY e.nm_partai $groupBoxPartai
+        HAVING SUM(b.pcs_awal - d.pcs) > 0 OR SUM(b.gr_awal - d.gr) > 0
+        ORDER BY b.tanggal DESC");
+
         $arr = [
             'formulir' => $formulir,
+            'formulirGroupBy' => $formulirGroupBy,
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];
@@ -113,7 +141,7 @@ class Grading extends Model
                     GROUP BY 
                         no_box
                     ) as c ON c.no_box = a.no_box_grading 
-                    LEFT JOIN sortir_data sd ON FIND_IN_SET(sd.no_box, a.no_box_sortir) 
+                    sd.no_box, a.no_box_sortir) 
                 WHERE 
                     a.id_grade IS NOT NULL 
                 GROUP BY 

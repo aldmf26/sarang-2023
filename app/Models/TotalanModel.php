@@ -113,6 +113,7 @@ class TotalanModel extends Model
                         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
                         where b.kategori = 'CU'
                         group by a.no_box
+                        
                     ) as z on z.no_box = a.no_box
                     left join oprasional as d on d.bulan = a.bulan_dibayar
                     left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'

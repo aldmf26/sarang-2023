@@ -67,9 +67,9 @@
                                         <a href="{{ route('packinglist.print', $d->no_nota) }}"
                                             class="btn btn-sm btn-primary" target="_blank"><i
                                                 class="fas fa-print"></i></a>
-                                        {{-- <a onclick="return confirm('Yakin dihapus ?')"
+                                        <a onclick="return confirm('Yakin dihapus ?')"
                                             href="{{ route('packinglist.delete', $d->no_nota) }}"
-                                            class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a> --}}
+                                            class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
 
                                     </td>
                                 </tr>
