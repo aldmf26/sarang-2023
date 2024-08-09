@@ -105,17 +105,17 @@ class PackingListController extends Controller
 
         $pengirimanBox = DB::select("SELECT 
         a.grade,
-        a.pcs,
-        a.gr,
+        sum(b.pcs) as pcs,
+        sum(b.gr) as gr,
         a.no_box,
         a.cek_qc as cek_akhir,
         a.admin,
         b.tipe,
-        group_concat(b.nm_partai) as nm_partai
+        b.nm_partai
         FROM `pengiriman` as a
         JOIN grading_partai as b on a.no_box = b.box_pengiriman
         WHERE a.id_pengiriman  in ($id_pengiriman)
-        GROUP BY a.grade
+        GROUP BY b.box_pengiriman
         ORDER by a.grade DESC");
 
         $data = [
