@@ -286,7 +286,7 @@ class GradingBjController extends Controller
                     'nm_partai' => $nm_partai,
                     'urutan' => $urutan,
                     'grade' => $r->grade[$i],
-                    'grade' => $r->tipe,
+                    'tipe' => $r->tipe,
                     'pcs' => $r->pcs[$i],
                     'gr' => $r->gr[$i],
                     'tgl' => $tgl,
