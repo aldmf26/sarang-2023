@@ -307,8 +307,10 @@ class CetakNewController extends Controller
     }
     public function cancel_selesai(Request $r)
     {
-
-        DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'T']);
+        if ($r->form == 'ada') {
+        } else {
+            DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'T']);
+        }
     }
 
     public function history(Request $r)

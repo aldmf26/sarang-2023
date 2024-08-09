@@ -10,6 +10,27 @@ class gudangcekModel extends Model
 {
     use HasFactory;
 
+    public static function bkstockawal()
+    {
+        $result = DB::select("SELECT a.nm_partai, b.name, a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , 
+        
+        sum(a.gr_awal * a.hrga_satuan + COALESCE(z.cost_cu,0)) as ttl_rp, z.cost_cu
+            FROM bk as a 
+            left join users as b on b.id = a.penerima
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                FROM cetak_new as a 
+                left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                where b.kategori = 'CU'
+                group by a.no_box
+            ) as z on z.no_box = a.no_box
+            where a.kategori ='cabut' and a.baru ='baru' 
+            
+            AND a.baru = 'baru'
+            GROUP by a.no_box;");
+        return $result;
+    }
+
     public static function bkstock()
     {
         $result = DB::select("SELECT a.nm_partai, b.name, a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , 
@@ -83,6 +104,26 @@ class gudangcekModel extends Model
 
         return $result;
     }
+    public static function bkselesai_siap_ctk_diserahkan()
+    {
+        $result = DB::select("SELECT a.no_box, d.name, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(a.ttl_rp,0) + COALESCE(c.rp_gr * a.gr_akhir,0) + COALESCE(z.cost_cu,0)) as ttl_rp, z.cost_cu
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join oprasional as c on c.bulan = a.bulan_dibayar
+        left join users as d on d.id = a.id_pengawas
+        left join (
+            SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where b.kategori = 'CU'
+            group by a.no_box
+        ) as z on z.no_box = a.no_box
+        where a.selesai = 'Y'  and a.no_box  in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'cetak') and a.pcs_awal != 0 and b.baru = 'baru'
+        group by a.no_box;
+        ");
+
+        return $result;
+    }
 
     public static function bkselesai_siap_str()
     {
@@ -116,6 +157,44 @@ class gudangcekModel extends Model
                     ) as z on z.no_box = a.no_box
                     where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
                     and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    
+            ORDER by no_box
+        ");
+
+        return $result;
+    }
+    public static function bkselesai_siap_str_diserahkan()
+    {
+        $result = DB::select("SELECT b.nm_partai, c.name , a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_eo_akhir as gr, a.ttl_rp as ttl_rp_cbt, 0 as ttl_rp_eo, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_eo_akhir) as hrga_satuan, (a.gr_eo_akhir * d.rp_gr) as cost_op_cbt, z.cost_cu
+                    FROM eo as a 
+                    left join oprasional as d on d.bulan = a.bulan_dibayar
+                    left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                    left join users as c on c.id = a.id_pengawas
+                    left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+                    ) as z on z.no_box = a.no_box
+                    where a.selesai ='Y' and b.baru = 'baru'
+                    and a.no_box  in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    
+            UNION ALL
+            SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, 0 as ttl_rp_cbt, a.ttl_rp as ttl_rp_eo, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan, (a.gr_akhir * d.rp_gr) as cost_op_cbt, z.cost_cu
+                    FROM cabut as a 
+                    left join oprasional as d on d.bulan = a.bulan_dibayar
+                    left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                    left join users as c on c.id = a.id_pengawas
+                    left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+                    ) as z on z.no_box = a.no_box
+                    where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
+                    and a.no_box  in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
                     
             ORDER by no_box
         ");

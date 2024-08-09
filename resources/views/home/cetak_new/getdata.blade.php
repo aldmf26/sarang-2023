@@ -179,7 +179,8 @@
 
                     <button {{ $c->kat_kelas == 'CU' ? '' : (empty($c->form) ? '' : 'hidden') }} type="button"
                         {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-danger btn_cancel"
-                        id_cetak="{{ $c->id_cetak }}"><i class="fas fa-redo"></i>
+                        id_cetak="{{ $c->id_cetak }}" form="{{ empty($c->form) ? 'tdk' : 'ada' }}"><i
+                            class="fas fa-redo"></i>
                     </button>
 
                 </td>
