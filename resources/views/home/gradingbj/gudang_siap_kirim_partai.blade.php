@@ -64,7 +64,7 @@
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
-                                @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0)
+                                @if ($d->pcs - $d->pcs_pengiriman > 0 && $d->gr - $d->gr_pengiriman > 0)
                                     <tr @click="
                                             if (cek.includes('{{ $d->no_box }}')) {
                                                 cek = cek.filter(x => x !== '{{ $d->no_box }}'); 
@@ -86,16 +86,6 @@
                                             <input type="checkbox" class="form-check"
                                                 :checked="cek.includes('{{ $d->no_box }}')" name="id[]" id=""
                                                 value="{{ $d->no_box }}">
-        
-                                            @php
-                                                $param = ['no_box' => $d->no_box, 'selesai' => $d->selesai];
-                                            @endphp
-                                            {{-- @if ($d->selesai == 'T')
-                                                <a onclick="return confirm('Yakin dihapus ?')"
-                                                    href="{{ route('gradingbj.cancel', $param) }}">
-                                                    <span class="badge bg-danger">Cancel</span>
-                                                </a>
-                                            @endif --}}
                                         </td>
                                     </tr>
                                 @endif

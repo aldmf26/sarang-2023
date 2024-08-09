@@ -12,8 +12,6 @@
 <body class="container">
     <style>
         @media print {
-
-
             .page {
                 page-break-before: always;
             }
@@ -38,5 +36,4 @@
         window.print()
     </script>
 </body>
-
 </html>

@@ -544,11 +544,19 @@ class GradingBjController extends Controller
             a.grade,
             sum(a.pcs) as pcs, 
             sum(a.gr) as gr,
-            0 as pcs_pengiriman, 
-            sum(a.pcs) as selesai, 
-            0 as gr_pengiriman
+            b.pcs as pcs_pengiriman, 
+            b.gr as gr_pengiriman
             FROM `grading_partai` as a
+            LEFT JOIN (
+                SELECT 
+                no_box as no_box_pengiriman,
+                sum(pcs) as pcs, 
+                sum(gr) as gr 
+                FROM `pengiriman` 
+                GROUP BY no_box
+            )  as b on b.no_box_pengiriman = a.box_pengiriman
             GROUP BY box_pengiriman;");
+            
         $data = [
             'title' => 'Stock Siap Kirim',
             'gudang' => $gudang
