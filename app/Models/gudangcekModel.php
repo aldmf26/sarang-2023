@@ -221,7 +221,30 @@ class gudangcekModel extends Model
                         group by a.no_box
                     ) as z on z.no_box = a.no_box
                 WHERE a.kategori = 'cetak'   
-                and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0)
+                and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
+        ");
+
+        return $result;
+    }
+    public static function cetak_stok_awal()
+    {
+        $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
+                    d.ttl_rp as cost_cbt, c.nm_partai, c.pcs_awal as pcs_bk, (d.gr_akhir * f.rp_gr) as cost_op, z.cost_cu
+                FROM formulir_sarang as a 
+                left join users as b on b.id = a.id_penerima
+                left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
+                left join cabut as d on d.no_box = a.no_box
+                left join oprasional as f on f.bulan = d.bulan_dibayar
+                left join users as e on e.id = a.id_pemberi
+                left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+                    ) as z on z.no_box = a.no_box
+                WHERE a.kategori = 'cetak'   
+                
         ");
 
         return $result;
@@ -274,6 +297,54 @@ class gudangcekModel extends Model
 
         return $result;
     }
+    public static function tdk_cetak_selesai_diserahkan()
+    {
+        $result = DB::select("SELECT j.name, a.no_box, e.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.pcs_tdk_cetak) as pcs_tdk_ctk, sum(a.gr_akhir ) as gr, sum(a.gr_tdk_cetak) as gr_tdk_ctk, sum(e.gr_awal * e.hrga_satuan) as cost_bk, sum(a.ttl_rp) as cost_ctk, sum(f.ttl_rp) as cost_cbt, sum((e.gr_awal * e.hrga_satuan) + a.ttl_rp + f.ttl_rp) as ttl_rp, sum( COALESCE(f.gr_akhir * h.rp_gr,0) + COALESCE(a.gr_akhir * i.rp_gr,0)) as cost_op, z.cost_cu
+        FROM cetak_new as a 
+        left join oprasional as i on i.bulan = a.bulan_dibayar
+        left join users as j on j.id = a.id_pengawas
+        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
+        left join cabut as f on f.no_box = a.no_box
+        left join oprasional as h on h.bulan = f.bulan_dibayar
+        left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+        left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+                    ) as z on z.no_box = a.no_box
+        where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru' and (a.pcs_tdk_cetak + a.gr_tdk_cetak) != 0
+        and a.formulir = 'T'  and a.no_box  in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir') 
+        group by a.no_box;
+        ");
+
+        return $result;
+    }
+    public static function cetak_selesai_diserahkan()
+    {
+        $result = DB::select("SELECT j.name, a.no_box, e.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.pcs_tdk_cetak) as pcs_tdk_ctk, sum(a.gr_akhir ) as gr, sum(a.gr_tdk_cetak) as gr_tdk_ctk, sum(e.gr_awal * e.hrga_satuan) as cost_bk, sum(a.ttl_rp) as cost_ctk, sum(f.ttl_rp) as cost_cbt, sum((e.gr_awal * e.hrga_satuan) + a.ttl_rp + f.ttl_rp) as ttl_rp, sum( COALESCE(f.gr_akhir * h.rp_gr,0) + COALESCE(a.gr_akhir * i.rp_gr,0)) as cost_op, z.cost_cu
+        FROM cetak_new as a 
+        left join oprasional as i on i.bulan = a.bulan_dibayar
+        left join users as j on j.id = a.id_pengawas
+        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
+        left join cabut as f on f.no_box = a.no_box
+        left join oprasional as h on h.bulan = f.bulan_dibayar
+        left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+        left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+                    ) as z on z.no_box = a.no_box
+        where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru' 
+        and a.formulir = 'T'  and a.no_box  in(SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'sortir') 
+        group by a.no_box
+        ");
+
+        return $result;
+    }
 
     public static function stock_sortir()
     {
@@ -303,6 +374,39 @@ class gudangcekModel extends Model
          ) as z on z.no_box = a.no_box
 
         where b.baru = 'baru' and b.kategori ='cabut' and a.kategori='sortir' and a.no_box not in(SELECT b.no_box FROM sortir as b where b.id_anak != 0) 
+        group by b.no_box;
+        ");
+
+        return $result;
+    }
+    public static function stock_sortir_awal()
+    {
+        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
+        sum(COALESCE(c.ttl_rp,0) ) as cost_cbt, sum(COALESCE(d.ttl_rp,0)) as cost_eo, sum(e.ttl_rp) as cost_ctk,
+        sum(COALESCE(c.gr_akhir * f.rp_gr,0) + COALESCE(d.gr_eo_akhir * g.rp_gr,0) + COALESCE(e.cost_op_ctk,0)) as cost_op, z.cost_cu
+        FROM formulir_sarang as a 
+        left join users as h on h.id = a.id_penerima
+        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join cabut as c on c.no_box = a.no_box and b.kategori = 'cabut'
+        left join oprasional as f on f.bulan = c.bulan_dibayar
+        left join eo as d on d.no_box = a.no_box
+        left join oprasional as g on g.bulan = d.bulan_dibayar
+        left join (
+                    SELECT d.no_box, d.ttl_rp ,(d.gr_akhir * f.rp_gr) as cost_op_ctk
+                    FROM cetak_new as d 
+                    left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+                    left join oprasional as f on f.bulan = d.bulan_dibayar
+                    where h.kategori = 'CTK'
+        ) as e on e.no_box = a.no_box
+        left join (
+            SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where b.kategori = 'CU'
+            group by a.no_box
+         ) as z on z.no_box = a.no_box
+
+        where b.baru = 'baru' and b.kategori ='cabut' and a.kategori='sortir' 
         group by b.no_box;
         ");
 
@@ -385,6 +489,53 @@ class gudangcekModel extends Model
                 left join eo as g on g.no_box = a.no_box
                 left join oprasional as j on j.bulan = g.bulan_dibayar
                 WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
+                group by b.no_box;
+        ");
+
+        return $result;
+    }
+    public static function sortir_selesai_diserahkan()
+    {
+        $result = DB::select("SELECT b.nm_partai, a.no_box, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, 
+        sum((b.hrga_satuan * b.gr_awal) + COALESCE(d.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(a.ttl_rp,0)) as ttl_rp, 
+        sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
+        sum(d.ttl_rp ) as cost_cbt, 
+        sum(g.ttl_rp) as cost_eo, 
+        sum(e.ttl_rp) as cost_ctk, 
+        sum(a.ttl_rp) as cost_str,
+
+        sum(COALESCE(a.gr_akhir * h.rp_gr,0) + COALESCE(i.rp_gr * d.gr_akhir,0) + COALESCE(g.gr_eo_akhir * j.rp_gr,0) + COALESCE(e.cost_op_ctk,0) ) as cost_op,
+        sum(a.gr_akhir * h.rp_gr) as cost_op_str,
+        sum(i.rp_gr * d.gr_akhir) as cost_op_cbt,
+        sum(e.cost_op_ctk) as cost_op_ctk,
+        sum(g.gr_eo_akhir * j.rp_gr) as cost_op_eo, f.name, z.cost_cu
+
+                FROM sortir as a 
+                left join oprasional as h on h.bulan = a.bulan
+                left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+                left join cabut as d on d.no_box = a.no_box
+                left join oprasional as i on i.bulan = d.bulan_dibayar
+                left join (
+                    SELECT d.no_box, d.ttl_rp ,(d.gr_akhir * f.rp_gr) as cost_op_ctk
+                    FROM cetak_new as d 
+                    left join kelas_cetak as h on h.id_kelas_cetak = d.id_kelas_cetak
+                    left join oprasional as f on f.bulan = d.bulan_dibayar
+                    where h.kategori = 'CTK'
+                ) as e on e.no_box = a.no_box
+
+                left join (
+                    SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                    where b.kategori = 'CU'
+                    group by a.no_box
+                ) as z on z.no_box = a.no_box
+                
+                left join users as f on f.id = a.id_pengawas
+                left join eo as g on g.no_box = a.no_box
+                left join oprasional as j on j.bulan = g.bulan_dibayar
+                WHERE a.no_box  in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
                 group by b.no_box;
         ");
 

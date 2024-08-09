@@ -917,6 +917,16 @@ class GudangController extends Controller
             $sheet1->setCellValue('H' . $kolom, round($d->ttl_rp + $d->cost_cu, 0));
             $kolom++;
         }
+
+        $stock_cbt_awal = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_cbt_awal'");
+        $sheet1->setCellValue('B' . $kolom, 'suntik');
+        $sheet1->setCellValue('C' . $kolom, 'partai suntik');
+        $sheet1->setCellValue('D' . $kolom, '-');
+        $sheet1->setCellValue('E' . $kolom, $stock_cbt_awal->pcs);
+        $sheet1->setCellValue('F' . $kolom, $stock_cbt_awal->gr);
+        $ttl_rp_ctstok = $stock_cbt_awal->ttl_rp;
+        $sheet1->setCellValue('G' . $kolom, round($ttl_rp_ctstok / $stock_cbt_awal->gr, 0));
+        $sheet1->setCellValue('H' . $kolom, round($ttl_rp_ctstok, 0));
         $sheet1->getStyle('B2:H' . $kolom - 1)->applyFromArray($style);
 
 
@@ -996,7 +1006,16 @@ class GudangController extends Controller
             $sheet1->setCellValue('AI' . $kolom3, round($d->ttl_rp, 0));
             $kolom3++;
         }
-        $sheet1->getStyle('AC2:AI' . $kolom3 - 1)->applyFromArray($style);
+        $stock_siap_cetak_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'");
+        $sheet1->setCellValue('AC' . $kolom3, 'suntik');
+        $sheet1->setCellValue('AD' . $kolom3, 'partai suntik');
+        $sheet1->setCellValue('AE' . $kolom3, '-');
+        $sheet1->setCellValue('AF' . $kolom3, $stock_siap_cetak_diserahkan->pcs);
+        $sheet1->setCellValue('AG' . $kolom3, $stock_siap_cetak_diserahkan->gr);
+        $sheet1->setCellValue('AH' . $kolom3, round($stock_siap_cetak_diserahkan->ttl_rp  / $stock_siap_cetak_diserahkan->gr, 0));
+        $sheet1->setCellValue('AI' . $kolom3, round($stock_siap_cetak_diserahkan->ttl_rp, 0));
+
+        $sheet1->getStyle('AC2:AI' . $kolom3)->applyFromArray($style);
 
 
         $sheet1->getStyle("AL1:AR1")->applyFromArray($style_atas);
@@ -1008,8 +1027,6 @@ class GudangController extends Controller
         $sheet1->setCellValue('AP1', 'Gr');
         $sheet1->setCellValue('AQ1', 'Rp/gr');
         $sheet1->setCellValue('AR1', 'Total Rp');
-
-
 
 
         $bkselesai_siap_str = gudangcekModel::bkselesai_siap_str();
@@ -1052,7 +1069,18 @@ class GudangController extends Controller
             $sheet1->setCellValue('BA' . $kolom4, round($d->ttl_rp + $d->ttl_rp_cbt + $d->ttl_rp_eo + $d->cost_op_cbt, 0));
             $kolom4++;
         }
-        $sheet1->getStyle('AU2:BA' . $kolom4 - 1)->applyFromArray($style);
+        $stock_siap_sortir_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'");
+        $sheet1->setCellValue('AU' . $kolom4, 'suntik');
+        $sheet1->setCellValue('AV' . $kolom4, 'partai disuntik');
+        $sheet1->setCellValue('AW' . $kolom4, '-');
+        $sheet1->setCellValue('AX' . $kolom4, 0);
+        $sheet1->setCellValue('AY' . $kolom4, $stock_siap_sortir_diserahkan->gr);
+        $ttl_rp_eo = $stock_siap_sortir_diserahkan->ttl_rp;
+        $sheet1->setCellValue('AZ' . $kolom4, round($ttl_rp_eo / $stock_siap_sortir_diserahkan->gr));
+        $sheet1->setCellValue('BA' . $kolom4, round($d->ttl_rp, 0));
+
+
+        $sheet1->getStyle('AU2:BA' . $kolom4)->applyFromArray($style);
 
 
         $sheet1->getStyle("BD1:BJ1")->applyFromArray($style_atas);
@@ -1089,7 +1117,7 @@ class GudangController extends Controller
         $sheet2->setTitle('Gudang Cetak');
 
         $sheet2->getStyle("B1:G1")->applyFromArray($style_atas);
-        $sheet2->setCellValue('A1', 'Cetak Stock');
+        $sheet2->setCellValue('A1', 'Cetak Stock Awal');
         $sheet2->setCellValue('B1', 'Pemilik');
         $sheet2->setCellValue('C1', 'Partai');
         $sheet2->setCellValue('D1', 'No Box');
@@ -1097,9 +1125,9 @@ class GudangController extends Controller
         $sheet2->setCellValue('F1', 'Gr');
         $sheet2->setCellValue('G1', 'Rp/gr');
         $sheet2->setCellValue('H1', 'Total Rp');
-        $cetak_stock = gudangcekModel::cetak_stok();
+        $cetak_stok_awal = gudangcekModel::cetak_stok_awal();
         $kolom2 = 2;
-        foreach ($cetak_stock as $d) {
+        foreach ($cetak_stok_awal as $d) {
             $sheet2->setCellValue('B' . $kolom2, $d->name);
             $sheet2->setCellValue('C' . $kolom2, $d->nm_partai);
             $sheet2->setCellValue('D' . $kolom2, $d->no_box);
@@ -1110,7 +1138,19 @@ class GudangController extends Controller
             $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
         }
-        $sheet2->getStyle('B2:H' . $kolom2 - 1)->applyFromArray($style);
+        $stock_cetak_awal = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_awal_stock'");
+        $sheet2->setCellValue('B' . $kolom2, 'suntik');
+        $sheet2->setCellValue('C' . $kolom2, 'partai suntik');
+        $sheet2->setCellValue('D' . $kolom2, '-');
+        $sheet2->setCellValue('E' . $kolom2, $stock_cetak_awal->pcs);
+        $sheet2->setCellValue('F' . $kolom2, $stock_cetak_awal->gr);
+        $ttl_rp_ctstok = $stock_cetak_awal->ttl_rp;
+        $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $stock_cetak_awal->gr, 0));
+        $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
+
+
+        $sheet2->getStyle('B2:H' . $kolom2)->applyFromArray($style);
+
 
 
 
@@ -1140,7 +1180,7 @@ class GudangController extends Controller
         $sheet2->getStyle('K2:Q' . $kolom3 - 1)->applyFromArray($style);
 
         $sheet2->getStyle("T1:Z1")->applyFromArray($style_atas);
-        $sheet2->setCellValue('S1', 'Cetak selesai siap sortir');
+        $sheet2->setCellValue('S1', 'Cetak selesai siap sortir belum serah');
         $sheet2->setCellValue('T1', 'Pemilik');
         $sheet2->setCellValue('U1', 'Partai');
         $sheet2->setCellValue('V1', 'No Box');
@@ -1164,15 +1204,112 @@ class GudangController extends Controller
         }
         $sheet2->getStyle('T2:Z' . $kolom4 - 1)->applyFromArray($style);
 
+
+        $sheet2->getStyle("AD1:AJ1")->applyFromArray($style_atas);
+        $sheet2->setCellValue('AC1', 'Cetak tidak cetak diserahkan');
+        $sheet2->setCellValue('AD1', 'Pemilik');
+        $sheet2->setCellValue('AE1', 'Partai');
+        $sheet2->setCellValue('AF1', 'No Box');
+        $sheet2->setCellValue('AG1', 'Pcs');
+        $sheet2->setCellValue('AH1', 'Gr');
+        $sheet2->setCellValue('AI1', 'Rp/gr');
+        $sheet2->setCellValue('AJ1', 'Total Rp');
+
+        $tdk_cetak_selesai_diserahkan = gudangcekModel::tdk_cetak_selesai_diserahkan();
+        $kolom4 = 2;
+        foreach ($tdk_cetak_selesai_diserahkan as $d) {
+            $sheet2->setCellValue('AD' . $kolom4, $d->name);
+            $sheet2->setCellValue('AE' . $kolom4, $d->nm_partai);
+            $sheet2->setCellValue('AF' . $kolom4, $d->no_box);
+            $sheet2->setCellValue('AG' . $kolom4, $d->pcs_tdk_ctk);
+            $sheet2->setCellValue('AH' . $kolom4, $d->gr_tdk_ctk);
+            $ttl_rpctk_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $sheet2->setCellValue('AI' . $kolom4, round($ttl_rpctk_selesai / $d->gr_tdk_ctk, 0));
+            $sheet2->setCellValue('AJ' . $kolom4, round($ttl_rpctk_selesai, 0));
+            $kolom4++;
+        }
+        $sheet2->getStyle('AD2:AJ' . $kolom4 - 1)->applyFromArray($style);
+
+        $sheet2->getStyle("AM1:AS1")->applyFromArray($style_atas);
+        $sheet2->setCellValue('AL1', 'Cetak selesai siap sortir diserahkan');
+        $sheet2->setCellValue('AM1', 'Pemilik');
+        $sheet2->setCellValue('AN1', 'Partai');
+        $sheet2->setCellValue('AO1', 'No Box');
+        $sheet2->setCellValue('AP1', 'Pcs');
+        $sheet2->setCellValue('AQ1', 'Gr');
+        $sheet2->setCellValue('AR1', 'Rp/gr');
+        $sheet2->setCellValue('AS1', 'Total Rp');
+
+        $cetak_selesai_diserahkan = gudangcekModel::cetak_selesai_diserahkan();
+        $kolom4 = 2;
+        foreach ($cetak_selesai_diserahkan as $d) {
+            $sheet2->setCellValue('AM' . $kolom4, $d->name);
+            $sheet2->setCellValue('AN' . $kolom4, $d->nm_partai);
+            $sheet2->setCellValue('AO' . $kolom4, $d->no_box);
+            $sheet2->setCellValue('AP' . $kolom4, $d->pcs);
+            $sheet2->setCellValue('AQ' . $kolom4, $d->gr);
+            $ttl_rpctk_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $sheet2->setCellValue('AR' . $kolom4, round($ttl_rpctk_selesai / $d->gr, 0));
+            $sheet2->setCellValue('AS' . $kolom4, round($ttl_rpctk_selesai, 0));
+            $kolom4++;
+        }
+        $suntik_ctk_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_serah'");
+        $sheet2->setCellValue('AM' . $kolom4, 'suntik');
+        $sheet2->setCellValue('AN' . $kolom4, 'partai suntik');
+        $sheet2->setCellValue('AO' . $kolom4, '-');
+        $sheet2->setCellValue('AP' . $kolom4,  $suntik_ctk_diserahkan->pcs);
+        $sheet2->setCellValue('AQ' . $kolom4,  $suntik_ctk_diserahkan->gr);
+        $sheet2->setCellValue('AR' . $kolom4, round($suntik_ctk_diserahkan->ttl_rp /  $suntik_ctk_diserahkan->gr, 0));
+        $sheet2->setCellValue('AS' . $kolom4, round($suntik_ctk_diserahkan->ttl_rp, 0));
+        $sheet2->getStyle('AM2:AS' . $kolom4)->applyFromArray($style);
+
+
+
+        $sheet2->getStyle("AV1:BA1")->applyFromArray($style_atas);
+        $sheet2->setCellValue('AU1', 'Cetak sisa pengawas');
+        $sheet2->setCellValue('AV1', 'Pemilik');
+        $sheet2->setCellValue('AW1', 'Partai');
+        $sheet2->setCellValue('AX1', 'No Box');
+        $sheet2->setCellValue('AY1', 'Pcs');
+        $sheet2->setCellValue('AZ1', 'Gr');
+        $sheet2->setCellValue('BA1', 'Rp/gr');
+        $sheet2->setCellValue('BB1', 'Total Rp');
+        $cetak_stock = gudangcekModel::cetak_stok();
+        $kolom2 = 2;
+        foreach ($cetak_stock as $d) {
+            $sheet2->setCellValue('AV' . $kolom2, $d->name);
+            $sheet2->setCellValue('AW' . $kolom2, $d->nm_partai);
+            $sheet2->setCellValue('AX' . $kolom2, $d->no_box);
+            $sheet2->setCellValue('AY' . $kolom2, $d->pcs_awal);
+            $sheet2->setCellValue('AZ' . $kolom2, $d->gr_awal);
+            $ttl_rp_ctstok = $d->ttl_rp + $d->cost_cbt + $d->cost_op + $d->cost_cu;
+            $sheet2->setCellValue('BA' . $kolom2, round($ttl_rp_ctstok / $d->gr_awal, 0));
+            $sheet2->setCellValue('BB' . $kolom2, round($ttl_rp_ctstok, 0));
+            $kolom2++;
+        }
+        $suntik_ctk_sisa = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_sisa'");
+        $sheet2->setCellValue('AV' . $kolom2, 'suntik');
+        $sheet2->setCellValue('AW' . $kolom2, 'partai suntik');
+        $sheet2->setCellValue('AX' . $kolom2, '-');
+        $sheet2->setCellValue('AY' . $kolom2, $suntik_ctk_sisa->pcs);
+        $sheet2->setCellValue('AZ' . $kolom2, $suntik_ctk_sisa->gr);
+        $sheet2->setCellValue('BA' . $kolom2, round($suntik_ctk_sisa->ttl_rp / $suntik_ctk_sisa->gr, 0));
+        $sheet2->setCellValue('BB' . $kolom2, round($suntik_ctk_sisa->ttl_rp, 0));
+
+
+        $sheet2->getStyle('AV2:BB' . $kolom2)->applyFromArray($style);
+
+
+
         // Batas kedua
 
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(2);
         $sheet3 = $spreadsheet->getActiveSheet(2);
-        $sheet3->setTitle('Gudang Sortir');
+        $sheet3->setTitle('Gudang Sortir ');
 
         $sheet3->getStyle("B1:H1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('A1', 'Sortir stock');
+        $sheet3->setCellValue('A1', 'Sortir stock awal');
         $sheet3->setCellValue('B1', 'Pemilik');
         $sheet3->setCellValue('C1', 'Partai');
         $sheet3->setCellValue('D1', 'No Box');
@@ -1181,7 +1318,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('G1', 'Rp/gr');
         $sheet3->setCellValue('H1', 'Total Rp');
 
-        $sortir_stock = gudangcekModel::stock_sortir();
+        $sortir_stock = gudangcekModel::stock_sortir_awal();
         $kolom2 = 2;
         foreach ($sortir_stock as $d) {
             $sheet3->setCellValue('B' . $kolom2, $d->name);
@@ -1194,7 +1331,17 @@ class GudangController extends Controller
             $sheet3->setCellValue('H' . $kolom2, round($ttl_sortir_stock, 0));
             $kolom2++;
         }
-        $sheet3->getStyle('B2:H' . $kolom2 - 1)->applyFromArray($style);
+        $suntik_str_stock_awal = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal'");
+        $sheet3->setCellValue('B' . $kolom2, 'suntik');
+        $sheet3->setCellValue('C' . $kolom2, 'partai suntik');
+        $sheet3->setCellValue('D' . $kolom2, '-');
+        $sheet3->setCellValue('E' . $kolom2, $suntik_str_stock_awal->pcs);
+        $sheet3->setCellValue('F' . $kolom2, $suntik_str_stock_awal->gr);
+        $ttl_sortir_stock = $suntik_str_stock_awal->ttl_rp;
+        $sheet3->setCellValue('G' . $kolom2, round($ttl_sortir_stock / $suntik_str_stock_awal->gr, 0));
+        $sheet3->setCellValue('H' . $kolom2, round($ttl_sortir_stock, 0));
+
+        $sheet3->getStyle('B2:H' . $kolom2)->applyFromArray($style);
 
 
         $sheet3->getStyle("K1:Q1")->applyFromArray($style_atas);
@@ -1222,8 +1369,8 @@ class GudangController extends Controller
         }
         $sheet3->getStyle('K2:Q' . $kolom3 - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("S1:W1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('S1', 'Sortir selesai siap grading');
+        $sheet3->getStyle("T1:Z1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('S1', 'Sortir selesai siap grading belum serah');
         $sheet3->setCellValue('T1', 'Pemilik');
         $sheet3->setCellValue('U1', 'Partai');
         $sheet3->setCellValue('V1', 'No Box');
@@ -1246,6 +1393,70 @@ class GudangController extends Controller
             $kolom4++;
         }
         $sheet3->getStyle('T2:Z' . $kolom4 - 1)->applyFromArray($style);
+
+
+        $sheet3->getStyle("AC1:AI1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AB1', 'Sortir selesai siap grading diserahkan');
+        $sheet3->setCellValue('AC1', 'Pemilik');
+        $sheet3->setCellValue('AD1', 'Partai');
+        $sheet3->setCellValue('AE1', 'No Box');
+        $sheet3->setCellValue('AF1', 'Pcs');
+        $sheet3->setCellValue('AG1', 'Gr');
+        $sheet3->setCellValue('AH1', 'Rp/gr');
+        $sheet3->setCellValue('AI1', 'Total Rp');
+
+        $sortir_selesai_diserahkan = gudangcekModel::sortir_selesai_diserahkan();
+        $kolom4 = 2;
+        foreach ($sortir_selesai_diserahkan as $d) {
+            $sheet3->setCellValue('AC' . $kolom4, $d->name);
+            $sheet3->setCellValue('AD' . $kolom4, $d->nm_partai);
+            $sheet3->setCellValue('AE' . $kolom4, $d->no_box);
+            $sheet3->setCellValue('AF' . $kolom4, $d->pcs);
+            $sheet3->setCellValue('AG' . $kolom4, $d->gr);
+            $ttl_rp_str_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $sheet3->setCellValue('AH' . $kolom4, round($ttl_rp_str_selesai / $d->gr, 0));
+            $sheet3->setCellValue('AI' . $kolom4, round($ttl_rp_str_selesai, 0));
+            $kolom4++;
+        }
+        $suntik_str_stock_diserhkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_selesai_diserahkan'");
+        $sheet3->setCellValue('AC' . $kolom4, 'suntik');
+        $sheet3->setCellValue('AD' . $kolom4, 'partai suntik');
+        $sheet3->setCellValue('AE' . $kolom4, '-');
+        $sheet3->setCellValue('AF' . $kolom4, $suntik_str_stock_diserhkan->pcs);
+        $sheet3->setCellValue('AG' . $kolom4, $suntik_str_stock_diserhkan->gr);
+        $ttl_rp_str_selesai = $suntik_str_stock_diserhkan->ttl_rp;
+        $sheet3->setCellValue('AH' . $kolom4, round($ttl_rp_str_selesai / $suntik_str_stock_diserhkan->gr, 0));
+        $sheet3->setCellValue('AI' . $kolom4, round($ttl_rp_str_selesai, 0));
+
+        $sheet3->getStyle('AC2:AI' . $kolom4)->applyFromArray($style);
+
+        $sheet3->getStyle("AL1:AR1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AK1', 'Sortir sisa pengawas');
+        $sheet3->setCellValue('AL1', 'Pemilik');
+        $sheet3->setCellValue('AM1', 'Partai');
+        $sheet3->setCellValue('AN1', 'No Box');
+        $sheet3->setCellValue('AO1', 'Pcs');
+        $sheet3->setCellValue('AP1', 'Gr');
+        $sheet3->setCellValue('AQ1', 'Rp/gr');
+        $sheet3->setCellValue('AR1', 'Total Rp');
+
+        $stock_sortir_sisa = gudangcekModel::stock_sortir();
+        $kolom4 = 2;
+        foreach ($stock_sortir_sisa as $d) {
+            $sheet3->setCellValue('AL' . $kolom4, $d->name);
+            $sheet3->setCellValue('AM' . $kolom4, $d->nm_partai);
+            $sheet3->setCellValue('AN' . $kolom4, $d->no_box);
+            $sheet3->setCellValue('AO' . $kolom4, $d->pcs);
+            $sheet3->setCellValue('AP' . $kolom4, $d->gr);
+            $ttl_rp_str_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $sheet3->setCellValue('AQ' . $kolom4, round($ttl_rp_str_selesai / $d->gr, 0));
+            $sheet3->setCellValue('AR' . $kolom4, round($ttl_rp_str_selesai, 0));
+            $kolom4++;
+        }
+        $sheet3->getStyle('AM2:AR' . $kolom4)->applyFromArray($style);
+
+
+
 
         // batas ke empat
         $spreadsheet->createSheet();
@@ -1276,7 +1487,18 @@ class GudangController extends Controller
             $sheet4->setCellValue('H' . $kolom2, round($ttlrp_grading, 0));
             $kolom2++;
         }
-        $sheet4->getStyle('B2:H' . $kolom2 - 1)->applyFromArray($style);
+
+        $suntik_grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'grading'");
+        $sheet4->setCellValue('B' . $kolom2, 'suntik');
+        $sheet4->setCellValue('C' . $kolom2, 'partai suntik');
+        $sheet4->setCellValue('D' . $kolom2, '-');
+        $sheet4->setCellValue('E' . $kolom2, $suntik_grading->pcs);
+        $sheet4->setCellValue('F' . $kolom2, $suntik_grading->gr);
+        $ttlrp_grading = $suntik_grading->ttl_rp;
+        $sheet4->setCellValue('G' . $kolom2, round($ttlrp_grading / $suntik_grading->gr, 0));
+        $sheet4->setCellValue('H' . $kolom2, round($ttlrp_grading, 0));
+
+        $sheet4->getStyle('B2:H' . $kolom2)->applyFromArray($style);
 
 
         // batas ke lima
