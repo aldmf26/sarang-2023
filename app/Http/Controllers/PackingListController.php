@@ -96,6 +96,7 @@ class PackingListController extends Controller
         $detail = DB::select("SELECT a.grade,sum(a.pcs) as pcs, sum(a.gr + (a.gr / c.kadar)) as gr 
 , count(*) as box
         FROM `pengiriman` as a 
+        
         JOIN pengiriman_packing_list as c on a.id_pengiriman = c.id_pengiriman
         WHERE a.id_pengiriman in ($id_pengiriman)
         GROUP BY a.grade ORDER BY a.grade ASC");
@@ -106,9 +107,13 @@ class PackingListController extends Controller
         a.gr,
         a.no_box,
         a.cek_qc as cek_akhir,
-        a.admin
+        a.admin,
+        b.tipe,
+        group_concat(b.nm_partai) as nm_partai
         FROM `pengiriman` as a
+        JOIN grading_partai as b on a.no_box = b.box_pengiriman
         WHERE a.id_pengiriman  in ($id_pengiriman)
+        GROUP BY a.grade
         ORDER by a.grade DESC");
 
         $data = [

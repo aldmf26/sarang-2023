@@ -462,7 +462,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/grading', 'grading')->name('grading');
+            Route::post('/grading_partai', 'grading_partai')->name('grading_partai');
             Route::post('/create', 'create')->name('create');
+            Route::post('/create_partai', 'create_partai')->name('create_partai');
             Route::post('/createUlang', 'createUlang')->name('createUlang');
             Route::post('/import', 'import')->name('import');
             Route::get('/opname', 'opname')->name('opname');

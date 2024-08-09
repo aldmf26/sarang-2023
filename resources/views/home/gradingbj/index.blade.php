@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
     <x-slot name="cardHeader">
         @include('home.gradingbj.nav')
     </x-slot>
@@ -16,14 +16,16 @@
                     </div>
 
                     <div class="col-lg-7">
-                        <form action="{{ route('gradingbj.grading') }}" method="post">
+                        <form action="{{ route('gradingbj.grading_partai') }}" method="post">
                             @csrf
-                            <a href="#" data-bs-target="#selisih" data-bs-toggle="modal" class="selisih btn btn-sm btn-primary"
-                                href=""><i class="fa fa-warehouse"></i> Data Selisih</a>
-                            <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
+                            
+                            <a href="#" data-bs-target="#selisih" data-bs-toggle="modal"
+                                class="selisih btn btn-sm btn-primary" href=""><i class="fa fa-warehouse"></i>
+                                Data Selisih</a>
+                            {{-- <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
                                 href="">Import</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
-                                href="" x-show="cek.length">Export</button>
+                                href="" x-show="cek.length">Export</button> --}}
                             <input type="hidden" name="no_box" class="form-control" :value="cek">
                             <button name="submit" value="grading" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-primary" type="submit">
@@ -31,12 +33,12 @@
                                 Grading
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             </button>
-                            <button name="submit" value="selisih" x-transition x-show="cek.length"
+                            {{-- <button name="submit" value="selisih" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-danger" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Selisih
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                            </button>
+                            </button> --}}
                         </form>
                     </div>
                 </div>
@@ -46,12 +48,16 @@
                         <thead>
                             <tr>
                                 <th class="dhead">#</th>
-                                <th class="dhead">Tanggal</th>
-                                {{-- <th class="dhead">No Invoice</th> --}}
-                                <th class="dhead">No Box</th>
-                                <th class="dhead">Pemberi</th>
+                                {{-- <th class="dhead">Tanggal</th> --}}
+                                <th class="dhead">Partai</th>
+                                <th class="dhead text-center">No Box</th>
+                                <th class="dhead">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
+                                @presiden
+                                    <th class="dhead text-end">Rp/Gr</th>
+                                    <th class="dhead text-end">Ttl Rp</th>
+                                @endpresiden
                                 <th class="dhead text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -60,12 +66,16 @@
                                 <tr class="pointer"
                                     @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
                                     <td>{{ $i + 1 }}</td>
-                                    <td>{{ tanggal($d->tanggal) }}</td>
-                                    {{-- <td>{{ $d->no_invoice }}</td> --}}
-                                    <td>{{ $d->no_box }}</td>
-                                    <td>{{ $d->pemberi }}</td>
+                                    {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
+                                    <td>{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td>{{ $d->tipe }}</td>
                                     <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
                                     <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
+                                    @presiden
+                                        <td></td>
+                                        <td></td>
+                                    @endpresiden
                                     <td align="center">
                                         <input type="checkbox" class="form-check"
                                             :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
@@ -88,15 +98,17 @@
         <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
             <div id="loadSelisih"></div>
         </x-theme.modal>
+       
         @section('scripts')
             <script>
+                
                 pencarian('tbl1input', 'tbl1')
-                $(".selisih").click(function (e) { 
+                $(".selisih").click(function(e) {
                     e.preventDefault();
                     $.ajax({
                         type: "GET",
-                        url: "{{route('gradingbj.load_selisih')}}",
-                        success: function (r) {
+                        url: "{{ route('gradingbj.load_selisih') }}",
+                        success: function(r) {
                             $("#loadSelisih").html(r);
                             loadTable('tblSelisih')
                             loadTable('tblSusut')

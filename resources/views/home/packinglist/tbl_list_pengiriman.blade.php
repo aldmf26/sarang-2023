@@ -4,14 +4,14 @@
     @endphp
     <thead>
         <tr>
-            <th class="text-center" {!!$color!!}>Partai</th>
-            <th class="text-center" {!!$color!!}>Grade</th>
-            <th class="text-center" {!!$color!!}>Tipe</th>
-            <th class="text-center" {!!$color!!}>Pcs Akhir</th>
-            <th class="text-center" {!!$color!!}>Pcs Akhir</th>
-            <th class="text-center" {!!$color!!}>No Box</th>
-            <th class="text-center" {!!$color!!}>Cek QC</th>
-            <th class="text-center" {!!$color!!}>Admin</th>
+            <th class="text-center" {!! $color !!}>Partai</th>
+            <th class="text-center" {!! $color !!}>Grade</th>
+            <th class="text-center" {!! $color !!}>Tipe</th>
+            <th class="text-center" {!! $color !!}>Pcs Akhir</th>
+            <th class="text-center" {!! $color !!}>Pcs Akhir</th>
+            <th class="text-center" {!! $color !!}>No Box</th>
+            <th class="text-center" {!! $color !!}>Cek QC</th>
+            <th class="text-center" {!! $color !!}>Admin</th>
         </tr>
 
     </thead>
@@ -26,9 +26,9 @@
                 $ttlGr += $d->gr;
             @endphp
             <tr class="text-center">
-                <td>balum</td>
+                <td>{{ $d->nm_partai }}</td>
                 <td>{{ $d->grade }}</td>
-                <td>balum</td>
+                <td>{{ $d->tipe }}</td>
                 <td>{{ number_format($d->pcs, 0) }}</td>
                 <td>{{ number_format($d->gr, 0) }}</td>
                 <td>{{ $d->no_box }}</td>
@@ -37,10 +37,10 @@
             </tr>
         @endforeach
         <tr>
-            <th colspan="3" class="text-center" {!!$color!!}>TOTAL</th>
-            <th class="text-center" {!!$color!!}>{{ number_format($ttlPcs, 0) }}</th>
-            <th class="text-center" {!!$color!!}>{{ number_format($ttlGr, 0) }}</th>
-            <th colspan="3" class="text-center" {!!$color!!}></th>
+            <th colspan="3" class="text-center" {!! $color !!}>TOTAL</th>
+            <th class="text-center" {!! $color !!}>{{ number_format($ttlPcs, 0) }}</th>
+            <th class="text-center" {!! $color !!}>{{ number_format($ttlGr, 0) }}</th>
+            <th colspan="3" class="text-center" {!! $color !!}></th>
         </tr>
     </tbody>
 
