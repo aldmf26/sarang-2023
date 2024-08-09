@@ -11,6 +11,9 @@
                 <a class="btn btn-sm btn-primary float-end" href="{{ route('gudang.export') }}"><i
                         class="fas fa-print"></i>
                     Export All</a>
+                <a class="btn btn-sm btn-primary float-end me-2" href="{{ route('gudang.export2') }}"><i
+                        class="fas fa-print"></i>
+                    Export Opname</a>
             </div>
         </div>
 
