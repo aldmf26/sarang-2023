@@ -50,20 +50,20 @@
                 <td>
                     <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
                         id_sortir="{{ $d->id_sortir }}">{{ $d->no_box }}</a>
-                    
+
                 </td>
                 <td>
                     @if ($d->selesai == 'Y')
-                        {{$d->nama}}
+                        {{ $d->nama }}
                     @else
-                    <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
-                        {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
-                        <option value="">Pilih Anak</option>
-                        @foreach ($anak as $a)
-                            <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
-                                {{ ucwords($a->nama) }}</option>
-                        @endforeach
-                    </select>
+                        <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
+                            {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
+                            <option value="">Pilih Anak</option>
+                            @foreach ($anak as $a)
+                                <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
+                                    {{ ucwords($a->nama) }}</option>
+                            @endforeach
+                        </select>
                     @endif
                 </td>
                 <td>

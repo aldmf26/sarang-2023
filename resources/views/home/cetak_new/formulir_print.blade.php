@@ -44,11 +44,15 @@
         @foreach ($halaman as $h)
             @php
                 $detail = DB::table('formulir_sarang')
-                    ->leftJoin('users', 'users.id', 'formulir_sarang.id_penerima')
-                    ->where('no_invoice', $no_invoice)
-                    ->where('kategori', 'sortir')
-                    ->where('id_penerima', $h->id_penerima)
+                    ->leftJoin('users', 'users.id', '=', 'formulir_sarang.id_penerima')
+                    ->leftJoin('bk as b', function ($join) {
+                        $join->on('b.no_box', '=', 'formulir_sarang.no_box')->where('b.kategori', '=', 'cabut');
+                    })
+                    ->where('formulir_sarang.no_invoice', $no_invoice)
+                    ->where('formulir_sarang.kategori', 'sortir')
+                    ->where('formulir_sarang.id_penerima', $h->id_penerima)
                     ->get();
+
             @endphp
             <div class="section">
                 <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{ $no_invoice }}</h5>
@@ -61,6 +65,7 @@
                         <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
                             <tr>
                                 <th>Tgl</th>
+                                <th>Nama Partai</th>
                                 <th>No Box</th>
                                 <th>Nama Anak</th>
                                 <th class="text-end">Pcs Awal</th>
@@ -73,6 +78,7 @@
                             @foreach ($detail as $d)
                                 <tr>
                                     <td style="width: 100px"></td>
+                                    <td>{{ $d->nm_partai }}</td>
                                     <td>{{ $d->no_box }}</td>
                                     <td></td>
                                     <td class="text-end">{{ $d->pcs_awal }}</td>

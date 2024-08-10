@@ -35,7 +35,7 @@
                     class="fa-solid fa-print"></i>
                 Print</a>
         </div>
-        <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK : {{$no_invoice}}</h5>
+        <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK : {{ $no_invoice }}</h5>
 
         <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
         <div class="row">
@@ -45,6 +45,7 @@
                         <tr>
                             <th>#</th>
                             <th>Tanggal</th>
+                            <th>Nama Partai</th>
                             <th>No Box</th>
                             <th class="text-end">Pcs Awal</th>
                             <th class="text-end">Gr Awal</th>
@@ -72,6 +73,7 @@
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td></td>
+                                <td>{{ $f->nm_partai }}</td>
                                 <td>{{ $f->no_box }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>

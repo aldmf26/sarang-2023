@@ -296,8 +296,6 @@ class SortirController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
-
-
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
