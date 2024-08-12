@@ -323,7 +323,7 @@ class gudangcekModel extends Model
     }
     public static function cetak_selesai_diserahkan()
     {
-        $result = DB::select("SELECT j.name, a.no_box, e.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.pcs_tdk_cetak) as pcs_tdk_ctk, sum(a.gr_akhir ) as gr, sum(a.gr_tdk_cetak) as gr_tdk_ctk, sum(e.gr_awal * e.hrga_satuan) as cost_bk, sum(a.ttl_rp) as cost_ctk, sum(f.ttl_rp) as cost_cbt, sum((e.gr_awal * e.hrga_satuan) + a.ttl_rp + f.ttl_rp) as ttl_rp, sum( COALESCE(f.gr_akhir * h.rp_gr,0) + COALESCE(a.gr_akhir * i.rp_gr,0)) as cost_op, z.cost_cu
+        $result = DB::select("SELECT j.name, a.no_box, e.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.pcs_tdk_cetak) as pcs_tdk_ctk, sum(a.gr_akhir ) as gr, sum(a.gr_tdk_cetak) as gr_tdk_ctk, sum(e.gr_awal * e.hrga_satuan) as cost_bk, sum(a.ttl_rp) as cost_ctk, sum(f.ttl_rp) as cost_cbt, sum((e.gr_awal * e.hrga_satuan)) as ttl_rp, sum( COALESCE(f.gr_akhir * h.rp_gr,0) + COALESCE(a.gr_akhir * i.rp_gr,0)) as cost_op, z.cost_cu
         FROM cetak_new as a 
         left join oprasional as i on i.bulan = a.bulan_dibayar
         left join users as j on j.id = a.id_pengawas
