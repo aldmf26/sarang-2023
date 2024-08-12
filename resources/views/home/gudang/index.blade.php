@@ -56,6 +56,7 @@
                                         <th class="dhead text-end">Pcs</th>
                                         <th class="dhead text-end">Gr</th>
                                         <th class="dhead text-end">Rp/gr</th>
+                                        <th class="dhead text-end">Ttl Rp</th>
                                     </tr>
                                     @php
                                         if (!function_exists('ttl')) {
@@ -79,6 +80,7 @@
                                         <th class="dheadstock text-end">
                                             {{-- {{ number_format(ttl($bk)['hrga_satuan'], 0) }} --}}
                                         </th>
+                                        <th class="dhadheadstock text-end"></th>
                                         {{-- <th class="dheadstock text-end">
                                     {{ number_format(ttl($bk)['ttl_rp'], 0) }}</th> --}}
                                     </tr>
@@ -93,6 +95,7 @@
                                             <td align="right">{{ $d->pcs }}</td>
                                             <td align="right">{{ $d->gr }}</td>
                                             <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
+                                            <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td>
                                             {{-- <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td> --}}
                                         </tr>
                                     @endforeach
