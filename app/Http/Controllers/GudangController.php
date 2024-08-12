@@ -23,8 +23,6 @@ class GudangController extends Controller
         $id_user = auth()->user()->id;
         $gudang = Cabut::gudang($bulan, $tahun, $id_user);
 
-
-
         $data = [
             'title' => 'Data Gudang Awal',
             'bk' => $gudang->bk,
@@ -914,7 +912,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('E' . $kolom, $d->pcs);
             $sheet1->setCellValue('F' . $kolom, $d->gr);
             $sheet1->setCellValue('G' . $kolom, round($d->ttl_rp == 0 ? 0 : ($d->ttl_rp + $d->cost_cu) / $d->gr, 0));
-            $sheet1->setCellValue('H' . $kolom, round($d->ttl_rp + $d->cost_cu, 0));
+            $sheet1->setCellValue('H' . $kolom, round($d->ttl_rp, 0));
             $kolom++;
         }
 
