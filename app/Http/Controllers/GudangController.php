@@ -1131,7 +1131,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('D' . $kolom2, $d->no_box);
             $sheet2->setCellValue('E' . $kolom2, $d->pcs_awal);
             $sheet2->setCellValue('F' . $kolom2, $d->gr_awal);
-            $ttl_rp_ctstok = $d->ttl_rp + $d->cost_cbt + $d->cost_op + $d->cost_cu;
+            $ttl_rp_ctstok = $d->ttl_rp;
             $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $d->gr_awal, 0));
             $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
@@ -1170,7 +1170,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('M' . $kolom3, $d->no_box);
             $sheet2->setCellValue('N' . $kolom3, $d->pcs_awal);
             $sheet2->setCellValue('O' . $kolom3, $d->gr_awal);
-            $ttl_ctk_proses = $d->ttl_rp + $d->cost_cbt + $d->cost_op + $d->cost_cu;
+            $ttl_ctk_proses = $d->ttl_rp;
             $sheet2->setCellValue('P' . $kolom3, round($ttl_ctk_proses / $d->gr_awal, 0));
             $sheet2->setCellValue('Q' . $kolom3, round($ttl_ctk_proses, 0));
             $kolom3++;
@@ -1195,7 +1195,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('V' . $kolom4, $d->no_box);
             $sheet2->setCellValue('W' . $kolom4, $d->pcs);
             $sheet2->setCellValue('X' . $kolom4, $d->gr);
-            $ttl_rpctk_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rpctk_selesai = $d->ttl_rp;
             $sheet2->setCellValue('Y' . $kolom4, round($ttl_rpctk_selesai / $d->gr, 0));
             $sheet2->setCellValue('Z' . $kolom4, round($ttl_rpctk_selesai, 0));
             $kolom4++;
@@ -1221,7 +1221,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('AF' . $kolom4, $d->no_box);
             $sheet2->setCellValue('AG' . $kolom4, $d->pcs_tdk_ctk);
             $sheet2->setCellValue('AH' . $kolom4, $d->gr_tdk_ctk);
-            $ttl_rpctk_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rpctk_selesai = $d->ttl_rp;
             $sheet2->setCellValue('AI' . $kolom4, round($ttl_rpctk_selesai / $d->gr_tdk_ctk, 0));
             $sheet2->setCellValue('AJ' . $kolom4, round($ttl_rpctk_selesai, 0));
             $kolom4++;
@@ -1246,7 +1246,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('AO' . $kolom4, $d->no_box);
             $sheet2->setCellValue('AP' . $kolom4, $d->pcs);
             $sheet2->setCellValue('AQ' . $kolom4, $d->gr);
-            $ttl_rpctk_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rpctk_selesai = $d->ttl_rp;
             $sheet2->setCellValue('AR' . $kolom4, round($ttl_rpctk_selesai / $d->gr, 0));
             $sheet2->setCellValue('AS' . $kolom4, round($ttl_rpctk_selesai, 0));
             $kolom4++;
@@ -1280,7 +1280,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('AX' . $kolom2, $d->no_box);
             $sheet2->setCellValue('AY' . $kolom2, $d->pcs_awal);
             $sheet2->setCellValue('AZ' . $kolom2, $d->gr_awal);
-            $ttl_rp_ctstok = $d->ttl_rp + $d->cost_cbt + $d->cost_op + $d->cost_cu;
+            $ttl_rp_ctstok = $d->ttl_rp;
             $sheet2->setCellValue('BA' . $kolom2, round($ttl_rp_ctstok / $d->gr_awal, 0));
             $sheet2->setCellValue('BB' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
@@ -1324,7 +1324,7 @@ class GudangController extends Controller
             $sheet3->setCellValue('D' . $kolom2, $d->no_box);
             $sheet3->setCellValue('E' . $kolom2, $d->pcs);
             $sheet3->setCellValue('F' . $kolom2, $d->gr);
-            $ttl_sortir_stock = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_sortir_stock = $d->ttl_rp;
             $sheet3->setCellValue('G' . $kolom2, round($ttl_sortir_stock / $d->gr, 0));
             $sheet3->setCellValue('H' . $kolom2, round($ttl_sortir_stock, 0));
             $kolom2++;
@@ -1360,7 +1360,7 @@ class GudangController extends Controller
             $sheet3->setCellValue('M' . $kolom3, $d->no_box);
             $sheet3->setCellValue('N' . $kolom3, $d->pcs_awal);
             $sheet3->setCellValue('O' . $kolom3, $d->gr_awal);
-            $ttl_rp_sortir_proses = $d->ttl_rp + $d->cost_cbt + $d->cost_ctk + $d->cost_eo + $d->cost_op_cbt + $d->cost_op_ctk + $d->cost_op_eo + $d->cost_cu;
+            $ttl_rp_sortir_proses = $d->ttl_rp;
             $sheet3->setCellValue('P' . $kolom3, round($ttl_rp_sortir_proses / $d->gr_awal, 0));
             $sheet3->setCellValue('Q' . $kolom3, round($ttl_rp_sortir_proses, 0));
             $kolom3++;
@@ -1385,7 +1385,7 @@ class GudangController extends Controller
             $sheet3->setCellValue('V' . $kolom4, $d->no_box);
             $sheet3->setCellValue('W' . $kolom4, $d->pcs);
             $sheet3->setCellValue('X' . $kolom4, $d->gr);
-            $ttl_rp_str_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rp_str_selesai = $d->ttl_rp;
             $sheet3->setCellValue('Y' . $kolom4, round($ttl_rp_str_selesai / $d->gr, 0));
             $sheet3->setCellValue('Z' . $kolom4, round($ttl_rp_str_selesai, 0));
             $kolom4++;
@@ -1411,7 +1411,7 @@ class GudangController extends Controller
             $sheet3->setCellValue('AE' . $kolom4, $d->no_box);
             $sheet3->setCellValue('AF' . $kolom4, $d->pcs);
             $sheet3->setCellValue('AG' . $kolom4, $d->gr);
-            $ttl_rp_str_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rp_str_selesai = $d->ttl_rp;
             $sheet3->setCellValue('AH' . $kolom4, round($ttl_rp_str_selesai / $d->gr, 0));
             $sheet3->setCellValue('AI' . $kolom4, round($ttl_rp_str_selesai, 0));
             $kolom4++;
@@ -1446,7 +1446,7 @@ class GudangController extends Controller
             $sheet3->setCellValue('AN' . $kolom4, $d->no_box);
             $sheet3->setCellValue('AO' . $kolom4, $d->pcs);
             $sheet3->setCellValue('AP' . $kolom4, $d->gr);
-            $ttl_rp_str_selesai = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttl_rp_str_selesai = $d->ttl_rp;
             $sheet3->setCellValue('AQ' . $kolom4, round($ttl_rp_str_selesai / $d->gr, 0));
             $sheet3->setCellValue('AR' . $kolom4, round($ttl_rp_str_selesai, 0));
             $kolom4++;
@@ -1467,7 +1467,7 @@ class GudangController extends Controller
         $sheet4->setCellValue('B1', 'Pemilik');
         $sheet4->setCellValue('C1', 'Partai');
         $sheet4->setCellValue('D1', 'No Box');
-        $sheet4->setCellValue('E1', 'Pcs');
+        $sheet4->setCellValue('E1', 'Pcs'); 
         $sheet4->setCellValue('F1', 'Gr');
         $sheet4->setCellValue('G1', 'Rp/gr');
         $sheet4->setCellValue('H1', 'Total Rp');
