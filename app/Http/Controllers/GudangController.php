@@ -1038,7 +1038,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('AP' . $kolom4, $d->gr);
             $ttl_rp_eo = $d->ttl_rp + $d->ttl_rp_cbt + $d->ttl_rp_eo + $d->cost_op_cbt + $d->cost_cu;
             $sheet1->setCellValue('AQ' . $kolom4, round($ttl_rp_eo / $d->gr));
-            $sheet1->setCellValue('AR' . $kolom4, round($d->ttl_rp + $d->ttl_rp_cbt + $d->ttl_rp_eo, 0));
+            $sheet1->setCellValue('AR' . $kolom4, round($d->ttl_rp, 0));
             $kolom4++;
         }
         $sheet1->getStyle('AL2:AR' . $kolom4 - 1)->applyFromArray($style);
@@ -1064,7 +1064,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('AY' . $kolom4, $d->gr);
             $ttl_rp_eo = $d->ttl_rp + $d->ttl_rp_cbt + $d->ttl_rp_eo + $d->cost_op_cbt + $d->cost_cu;
             $sheet1->setCellValue('AZ' . $kolom4, round($ttl_rp_eo / $d->gr));
-            $sheet1->setCellValue('BA' . $kolom4, round($d->ttl_rp + $d->ttl_rp_cbt + $d->ttl_rp_eo, 0));
+            $sheet1->setCellValue('BA' . $kolom4, round($d->ttl_rp, 0));
             $kolom4++;
         }
         $stock_siap_sortir_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'");
