@@ -370,10 +370,17 @@
                                 datas: selectedRows,
                                 tipe: tipe
                             },
+                            dataType:"json",
                             success: function(r) {
-                                alertToast('sukses', 'Berhasil save')
+                                alertToast(
+                                    r.pesan.includes('box') ? 'error' : 'sukses',
+                                    r.pesan
+                                )
                                 loadHalaman()
                                 $('.btn_tutup').hide();
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus, errorThrown);
                             }
                         });
                     }

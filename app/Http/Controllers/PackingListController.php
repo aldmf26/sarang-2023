@@ -72,7 +72,6 @@ class PackingListController extends Controller
 
         $data = [
             'title' => 'Pengiriman',
-
             'packing' => $packing,
         ];
 
@@ -140,9 +139,10 @@ class PackingListController extends Controller
 
     public function delete($no_nota)
     {
-        DB::table('pengiriman')->where('no_nota', $no_nota)->delete();
-        DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->delete();
-
+        $datas = ['pengiriman', 'pengiriman_packing_list'];
+        foreach($datas as $d){
+            DB::table($d)->where('no_nota', $no_nota)->delete();
+        }
         return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil dihapus');
     }
 }

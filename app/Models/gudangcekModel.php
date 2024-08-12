@@ -14,7 +14,7 @@ class gudangcekModel extends Model
     {
         $result = DB::select("SELECT a.nm_partai, b.name, a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , 
         
-        sum(a.gr_awal * a.hrga_satuan + COALESCE(z.cost_cu,0)) as ttl_rp, z.cost_cu
+        sum(a.gr_awal * a.hrga_satuan) as ttl_rp, z.cost_cu
             FROM bk as a 
             left join users as b on b.id = a.penerima
             left join (

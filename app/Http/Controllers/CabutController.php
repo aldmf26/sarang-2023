@@ -421,11 +421,31 @@ class CabutController extends Controller
 
     public function ditutup(Request $r)
     {
-
         $data = $r->tipe == 'tutup' ? ['penutup' => 'Y'] : ['selesai' => 'T'];
+        $pesan = $r->tipe == 'tutup' ? 'ditutup' : 'dibuka';
+        $boxAda = '';
+
         foreach ($r->datas as $d) {
-            DB::table('cabut')->where('id_cabut', $d)->update($data);
+            $getBox = DB::table('cabut')->where('id_cabut', $d);
+            $no_box = $getBox->first()->no_box;
+
+            if ($r->tipe != 'tutup') {
+                $cekFormulir = DB::table('formulir_sarang')->where('no_box', $no_box)->exists();
+                if ($cekFormulir) {
+                    $boxAda .= $boxAda == '' ? $no_box : ", $no_box";
+                } else {
+                    $getBox->update($data);
+                }
+            }
+
+            if ($r->tipe == 'tutup') {
+                $getBox->update($data);
+            }
         }
+
+        return json_encode([
+            'pesan' => !empty($boxAda) ? "ERROR! box : $boxAda sudah masuk formulir" : "berhasil $pesan"
+        ]);
     }
 
     public function export(Request $r)
@@ -502,7 +522,7 @@ class CabutController extends Controller
         group by b.id");
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
-
+        
 
         $data = [
             'title' => 'Global Rekap',
