@@ -159,11 +159,21 @@ class GudangSarangController extends Controller
 
     public function print_formulir(Request $r)
     {
-        $formulir = DB::table('formulir_sarang')->where('kategori', 'cetak')->where('no_invoice', $r->no_invoice)->get();
-        $ket_formulir = DB::selectOne("SELECT  b.name, c.name as penerima
+        $formulir = DB::table('formulir_sarang')
+            ->leftJoin('bk as b', function ($join) {
+                $join->on('b.no_box', '=', 'formulir_sarang.no_box')
+                    ->where('b.kategori', '=', 'cabut');
+            })
+            ->where('formulir_sarang.kategori', 'cetak')
+            ->where('formulir_sarang.no_invoice', $r->no_invoice)
+            ->get();
+
+
+        $ket_formulir = DB::selectOne("SELECT  b.name, c.name as penerima, d.nm_partai
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
+        left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
         WHERE no_invoice = '$r->no_invoice' and a.kategori = 'cetak'");
         $data = [
             'title' => 'Gudang Sarang',

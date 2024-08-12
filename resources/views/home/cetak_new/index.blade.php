@@ -297,15 +297,14 @@
                             },
                             success: function(response) {
 
-
-                                // loadRowData(id_cetak, no)
-
-                                load_cetak();
-                                if (form === 'ada') {
-                                    alertToast('sukses',
-                                        'Data gagal di cancel data sudah ada di formulir');
-                                } else {
+                                if (response.success) {
+                                    // Berhasil, lakukan sesuatu
                                     alertToast('sukses', 'Data berhasil di cancel');
+                                    load_cetak();
+                                } else {
+                                    // Gagal, tampilkan pesan error
+                                    alertToast('error',
+                                        'Data gagal di cancel data sudah ada di formulir');
                                 }
 
                             }

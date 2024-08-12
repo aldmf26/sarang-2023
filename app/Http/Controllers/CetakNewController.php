@@ -45,6 +45,7 @@ class CetakNewController extends Controller
     {
         $halaman = DB::select("SELECT a.id_pemberi, b.name, a.id_penerima
         FROM formulir_sarang as a 
+        
         left join users as b on b.id = a.id_penerima
         where a.no_invoice = '$no_invoice' and a.kategori = 'sortir'
         group by a.id_penerima
@@ -187,7 +188,8 @@ class CetakNewController extends Controller
                 'gr_awal_ctk' => $r->gr_awal[$x],
                 'id_kelas_cetak' => $r->id_paket[$x],
                 'rp_satuan' => $rp_satuan->rp_pcs,
-                'bulan_dibayar' => $r->bulan_dibayar[$x]
+                'bulan_dibayar' => $r->bulan_dibayar[$x],
+                'tipe_bayar' => $rp_satuan->kategori_hitung
             ];
             DB::table('cetak_new')->insert($data);
         }
@@ -307,9 +309,26 @@ class CetakNewController extends Controller
     }
     public function cancel_selesai(Request $r)
     {
-        if ($r->form == 'ada') {
+        $cek = DB::table('cetak_new')
+            ->leftJoin('kelas_cetak', 'kelas_cetak.id_kelas_cetak', '=', 'cetak_new.id_kelas_cetak')
+            ->where('id_cetak', $r->id_cetak)->first();
+
+
+
+        if ($cek->kategori == 'CTK') {
+
+            $formulir = DB::table('formulir_sarang')->where('no_box', $cek->no_box)->where('kategori', 'sortir')->first();
+
+            if (empty($formulir->no_box)) {
+                DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'T']);
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No Box tidak ditemukan!']);
+            }
         } else {
+
             DB::table('cetak_new')->where('id_cetak', $r->id_cetak)->update(['selesai' => 'T']);
+            return response()->json(['success' => true]);
         }
     }
 
