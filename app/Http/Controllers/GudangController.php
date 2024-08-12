@@ -1593,7 +1593,7 @@ class GudangController extends Controller
         ");
 
         $sheet6->setCellValue('M2', 'bahan baku');
-        $sheet6->setCellValue('N2', 'Ttl Rp');
+        $sheet6->setCellValue('N1', 'Ttl Rp');
         $sheet6->setCellValue('N2', $ttl_bk);
         $sheet6->setCellValue('N3', $op->ttl_gaji + $op->rp_oprasional);
 
@@ -1601,8 +1601,6 @@ class GudangController extends Controller
         $sheet6->setCellValue('O2', '=sum(AC:AC)');
         $sheet6->setCellValue('O3', $op->dll);
         $sheet6->setCellValue('P3', 'gaji dll');
-
-
 
         $kolom5 = 2;
         foreach ($bk_sinta as $no => $b) {
