@@ -35,7 +35,7 @@ class gudangcekModel extends Model
     {
         $result = DB::select("SELECT a.nm_partai, b.name, a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , 
         
-        sum(a.gr_awal * a.hrga_satuan + COALESCE(z.cost_cu,0)) as ttl_rp, z.cost_cu
+        sum(a.gr_awal * a.hrga_satuan) as ttl_rp, z.cost_cu
             FROM bk as a 
             left join users as b on b.id = a.penerima
             left join (
@@ -86,7 +86,7 @@ class gudangcekModel extends Model
 
     public static function bkselesai_siap_ctk()
     {
-        $result = DB::select("SELECT a.no_box, d.name, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(a.ttl_rp,0) + COALESCE(c.rp_gr * a.gr_akhir,0) + COALESCE(z.cost_cu,0)) as ttl_rp, z.cost_cu
+        $result = DB::select("SELECT a.no_box, d.name, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(a.ttl_rp,0) + COALESCE(c.rp_gr * a.gr_akhir,0)) as ttl_rp, z.cost_cu
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join oprasional as c on c.bulan = a.bulan_dibayar
