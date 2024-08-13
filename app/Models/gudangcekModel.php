@@ -348,7 +348,7 @@ class gudangcekModel extends Model
 
     public static function stock_sortir()
     {
-        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
+        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
         sum(COALESCE(c.ttl_rp,0) ) as cost_cbt, sum(COALESCE(d.ttl_rp,0)) as cost_eo, sum(e.ttl_rp) as cost_ctk,
         sum(COALESCE(c.gr_akhir * f.rp_gr,0) + COALESCE(d.gr_eo_akhir * g.rp_gr,0) + COALESCE(e.cost_op_ctk,0)) as cost_op, z.cost_cu
         FROM formulir_sarang as a 
@@ -381,7 +381,10 @@ class gudangcekModel extends Model
     }
     public static function stock_sortir_awal()
     {
-        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
+        $result = DB::select("SELECT 
+        h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , 
+        sum((b.gr_awal * b.hrga_satuan)) as ttl_rp, 
+        sum(b.gr_awal * b.hrga_satuan) as cost_bk,
         sum(COALESCE(c.ttl_rp,0) ) as cost_cbt, sum(COALESCE(d.ttl_rp,0)) as cost_eo, sum(e.ttl_rp) as cost_ctk,
         sum(COALESCE(c.gr_akhir * f.rp_gr,0) + COALESCE(d.gr_eo_akhir * g.rp_gr,0) + COALESCE(e.cost_op_ctk,0)) as cost_op, z.cost_cu
         FROM formulir_sarang as a 
@@ -450,7 +453,7 @@ class gudangcekModel extends Model
     public static function sortir_selesai()
     {
         $result = DB::select("SELECT b.nm_partai, a.no_box, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, 
-        sum((b.hrga_satuan * b.gr_awal) + COALESCE(d.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(a.ttl_rp,0)) as ttl_rp, 
+        sum((b.hrga_satuan * b.gr_awal)) as ttl_rp, 
         sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
         sum(d.ttl_rp ) as cost_cbt, 
         sum(g.ttl_rp) as cost_eo, 
@@ -497,7 +500,7 @@ class gudangcekModel extends Model
     public static function sortir_selesai_diserahkan()
     {
         $result = DB::select("SELECT b.nm_partai, a.no_box, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, 
-        sum((b.hrga_satuan * b.gr_awal) + COALESCE(d.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(a.ttl_rp,0)) as ttl_rp, 
+        sum((b.hrga_satuan * b.gr_awal)) as ttl_rp, 
         sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
         sum(d.ttl_rp ) as cost_cbt, 
         sum(g.ttl_rp) as cost_eo, 
