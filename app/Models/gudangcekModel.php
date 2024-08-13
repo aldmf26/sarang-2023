@@ -381,7 +381,7 @@ class gudangcekModel extends Model
     }
     public static function stock_sortir_awal()
     {
-        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
+        $result = DB::select("SELECT h.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum((b.gr_awal * b.hrga_satuan)) as ttl_rp, sum(b.gr_awal * b.hrga_satuan) as cost_bk,
         sum(COALESCE(c.ttl_rp,0) ) as cost_cbt, sum(COALESCE(d.ttl_rp,0)) as cost_eo, sum(e.ttl_rp) as cost_ctk,
         sum(COALESCE(c.gr_akhir * f.rp_gr,0) + COALESCE(d.gr_eo_akhir * g.rp_gr,0) + COALESCE(e.cost_op_ctk,0)) as cost_op, z.cost_cu
         FROM formulir_sarang as a 
