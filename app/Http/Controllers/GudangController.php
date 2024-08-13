@@ -1146,12 +1146,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $stock_cetak_awal->gr, 0));
         $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
 
-
         $sheet2->getStyle('B2:H' . $kolom2)->applyFromArray($style);
-
-
-
-
         $sheet2->getStyle("K1:Q1")->applyFromArray($style_atas);
         $sheet2->setCellValue('J1', 'Cetak sedang Proses');
         $sheet2->setCellValue('K1', 'Pemilik');
@@ -1467,7 +1462,7 @@ class GudangController extends Controller
         $sheet4->setCellValue('B1', 'Pemilik');
         $sheet4->setCellValue('C1', 'Partai');
         $sheet4->setCellValue('D1', 'No Box');
-        $sheet4->setCellValue('E1', 'Pcs'); 
+        $sheet4->setCellValue('E1', 'Pcs');
         $sheet4->setCellValue('F1', 'Gr');
         $sheet4->setCellValue('G1', 'Rp/gr');
         $sheet4->setCellValue('H1', 'Total Rp');
