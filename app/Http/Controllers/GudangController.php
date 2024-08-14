@@ -23,8 +23,11 @@ class GudangController extends Controller
         $id_user = auth()->user()->id;
         $gudang = Cabut::gudang($bulan, $tahun, $id_user);
 
+        $gudangbk = gudangcekModel::bkstockawal();
+
         $data = [
             'title' => 'Data Gudang Awal',
+            'gudangbk' => $gudangbk,
             'bk' => $gudang->bk,
             'cabut' => $gudang->cabut,
             'cabutSelesai' => $gudang->cabutSelesai,
