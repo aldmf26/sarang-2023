@@ -6,6 +6,8 @@ use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OpnameController extends Controller
 {
@@ -859,5 +861,63 @@ class OpnameController extends Controller
         $blogs = DB::table('blog')->whereIn('id', $randomBlogIds)->get();
 
         return response()->json($blogs);
+    }
+
+    public function export_ibu()
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Summary');
+        $sheet->getStyle("B1:G1")->applyFromArray($style_atas);
+        $sheet->setCellValue('A1', 'Cetak Stock Awal');
+        $sheet->setCellValue('B1', 'Pemilik');
+        $sheet->setCellValue('C1', 'Partai');
+        $sheet->setCellValue('D1', 'No Box');
+        $sheet->setCellValue('E1', 'Pcs');
+        $sheet->setCellValue('F1', 'Gr');
+        $sheet->setCellValue('G1', 'Rp/gr');
+        $sheet->setCellValue('H1', 'Total Rp');
+        $kolom = 2;
+        $sheet->getStyle('A2:B' . $kolom - 1)->applyFromArray($style);
+
+        $namafile = "Summary Gudang.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }

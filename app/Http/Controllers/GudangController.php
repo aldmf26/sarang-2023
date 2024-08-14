@@ -859,7 +859,6 @@ class GudangController extends Controller
         exit();
     }
 
-
     function export2(Request $r)
     {
         $style_atas = array(
@@ -1451,9 +1450,6 @@ class GudangController extends Controller
         }
         $sheet3->getStyle('AL2:AR' . $kolom4)->applyFromArray($style);
 
-
-
-
         // batas ke empat
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(3);
@@ -1480,7 +1476,7 @@ class GudangController extends Controller
             $sheet4->setCellValue('F' . $kolom2, $d->gr);
             $ttlrp_grading = $d->ttl_rp + $d->cost_op + $d->cost_cu;
             $sheet4->setCellValue('G' . $kolom2, round($ttlrp_grading / $d->gr, 0));
-            $sheet4->setCellValue('H' . $kolom2, round($ttlrp_grading, 0));
+            $sheet4->setCellValue('H' . $kolom2, round($d->cost_bk, 0));
             $kolom2++;
         }
 
@@ -1543,7 +1539,7 @@ class GudangController extends Controller
             $sheet5->setCellValue('L' . $kolom4, $d->nm_grade);
             $sheet5->setCellValue('M' . $kolom4, $d->pcs_grading);
             $sheet5->setCellValue('N' . $kolom4, $d->gr_grading);
-            $sheet5->setCellValue('O' . $kolom4, round($d->ttl_rp / $d->gr_grading, 0));
+            $sheet5->setCellValue('O' . $kolom4, round($d->cost_bk, 0));
             $kolom4++;
         }
         $sheet5->getStyle('J2:O' . $kolom4 - 1)->applyFromArray($style);
@@ -1899,4 +1895,6 @@ class GudangController extends Controller
         $writer->save('php://output');
         exit();
     }
+
+    
 }
