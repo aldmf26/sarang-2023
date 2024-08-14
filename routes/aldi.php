@@ -26,12 +26,56 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Activity;
 
 Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/403', function () {
         view('error.403');
     })->name('403');
+    Route::get('/nota', function () {
+        $jsonData = Storage::disk('local')->get('json/data_nota.json');
+        $data = json_decode($jsonData, true);
+        $data = [
+            'title' => 'Nota',
+            'data' => $data
+        ];
+        return view('nota', $data);
+    })->name('nota');
+
+    Route::post('/nota', function (Request $r) {
+        $imageName = time() . '.' . $r->image->extension();
+        $r->image->move(public_path('uploads'), $imageName);
+        // Tentukan nama file JSON
+        $jsonFileName = 'data_nota.json';
+        $ket = $r->ket;
+        $newData  = [
+            'image_name' => $imageName,
+            'ket' => $ket,
+        ];
+
+        // Cek apakah file JSON sudah ada
+        if (Storage::disk('local')->exists('json/' . $jsonFileName)) {
+            // Baca file JSON yang ada
+            $jsonData = Storage::disk('local')->get('json/' . $jsonFileName);
+            $dataArray = json_decode($jsonData, true);
+        } else {
+            // Jika file belum ada, buat array baru
+            $dataArray = [];
+        }
+
+        // Tambahkan data baru ke array
+        $dataArray[] = $newData;
+
+        // Convert array yang sudah diperbarui menjadi JSON
+        $jsonData = json_encode($dataArray, JSON_PRETTY_PRINT);
+
+        // Simpan kembali file JSON
+        Storage::disk('local')->put('json/' . $jsonFileName, $jsonData);
+
+        return redirect('nota')->with('sukses', 'Berhasil tambah Data');
+    })->name('nota');
+
     Route::get('/503', function () {
         view('error.503');
     })->name('503');
@@ -156,6 +200,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/totalan', 'totalan')->name('totalan');
             Route::get('/totalan_new', 'totalan_new')->name('totalan_new');
             Route::get('/export', 'export')->name('export');
+            Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
             Route::get('/export2', 'export2')->name('export2');
         });
     Route::controller(BkController::class)
@@ -484,6 +529,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail', 'detail')->name('detail');
+            Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
+            
         });
     Route::controller(PenutupController::class)
         ->prefix('data_master/penutup')
