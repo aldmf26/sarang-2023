@@ -31,7 +31,7 @@
                 <td>{{ $d->name }}</td>
                 <td>{{ $d->nm_partai }}</td>
                 <td>{{ $d->no_box }}</td>
-                <td align="right">{{ $d->pcs }}</td>
+                <td align="right">{{ $d->pcs ?? '' }}</td>
                 <td align="right">{{ $d->gr }}</td>
                 <td align="right">
                     {{ number_format(round($d->ttl_rp == 0 ? 0 : ($d->ttl_rp + $d->cost_cu) / $d->gr, 0), 0) }}</td>

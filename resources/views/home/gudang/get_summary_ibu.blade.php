@@ -73,7 +73,7 @@
                         $index = 1;
                     @endphp
                     @foreach ($datas as $i => $d)
-                        <tr class="d-none">
+                        <tr >
                             <th class="bg-primary text-white" colspan="17">{{ $i }}</th>
                         </tr>
                         @php
@@ -141,12 +141,11 @@
                                         'crp',
                                     ];
 
-                                    foreach ($keys as $key) {
-                                        if (isset($value[$key])) {
-                                            $sumTtl[$key] += $value[$key];
+                                    foreach ($keys as $isi) {
+                                        if (isset($value[$isi])) {
+                                            $sumTtl[$isi] += $value[$isi];
                                         }
                                     }
-
                                 @endphp
 
                                 <tr class="pointer detail" index="{{ "$index$increment" }}">
@@ -211,10 +210,14 @@
                             @endforeach
                         </tr>
                         <tr>
+                            @php
+                                $b1gr = $sumTtl['agr'] - $sumTtl['cgr'];
+                                $susut =  (1 - ($sumTtl['b2gr'] / $b1gr)) * 100
+                            @endphp
                             <td></td>
                             <th>Susut</th>
                             @for ($i = 0; $i <= 14; $i++)
-                                <th>{{ $i == 7 ? '12%' : '' }}</th>
+                                <th>{{ $i == 7 ? number_format($susut,0). '%' : '' }}</th>
                             @endfor
                         </tr>
 
