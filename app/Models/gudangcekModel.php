@@ -599,4 +599,6 @@ class gudangcekModel extends Model
 
         return $result;
     }
+
+    
 }

@@ -136,6 +136,12 @@ if (!function_exists('tglFormat')) {
         return date('d M y', strtotime($tgl));
     }
 }
+if (!function_exists('sumCol')) {
+    function sumCol($datas, $col)
+    {
+        return array_sum(array_column($datas, $col));
+    }
+}
 
 if (!function_exists('rumusTotalRp ')) {
     function rumusTotalRp($detail)

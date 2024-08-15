@@ -900,7 +900,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('G1', 'Rp/gr');
         $sheet1->setCellValue('H1', 'Total Rp');
 
-        $gudangbk = gudangcekModel::bkstockawal();
+        $gudangbk = $this->getOpname(11);
 
 
         $kolom = 2;
@@ -915,7 +915,7 @@ class GudangController extends Controller
             $kolom++;
         }
 
-        $stock_cbt_awal = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_cbt_awal'");
+        $stock_cbt_awal = $this->getSuntikan(11);
         $sheet1->setCellValue('B' . $kolom, 'suntik');
         $sheet1->setCellValue('C' . $kolom, 'partai suntik');
         $sheet1->setCellValue('D' . $kolom, '-');
@@ -925,11 +925,6 @@ class GudangController extends Controller
         $sheet1->setCellValue('G' . $kolom, round($ttl_rp_ctstok / $stock_cbt_awal->gr, 0));
         $sheet1->setCellValue('H' . $kolom, round($ttl_rp_ctstok, 0));
         $sheet1->getStyle('B2:H' . $kolom - 1)->applyFromArray($style);
-
-
-
-
-
 
         $sheet1->getStyle("K1:Q1")->applyFromArray($style_atas);
         $sheet1->setCellValue('J1', 'Box sedang proses');
@@ -942,7 +937,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('Q1', 'Total Rp');
 
         $kolom2 = 2;
-        $gudangbkproses = gudangcekModel::bksedang_proses();
+        $gudangbkproses = $this->getOpname(12);
         foreach ($gudangbkproses as $d) {
             $sheet1->setCellValue('K' . $kolom2, $d->name);
             $sheet1->setCellValue('L' . $kolom2, $d->nm_partai);
@@ -965,7 +960,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('Y1', 'Rp/gr');
         $sheet1->setCellValue('Z1', 'Total Rp');
 
-        $bkselesai_siap_ctk = gudangcekModel::bkselesai_siap_ctk();
+        $bkselesai_siap_ctk = $this->getOpname(13);
 
         $kolom3 = 2;
         foreach ($bkselesai_siap_ctk as $d) {
@@ -990,7 +985,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AH1', 'Rp/gr');
         $sheet1->setCellValue('AI1', 'Total Rp');
 
-        $bkselesai_siap_ctk_diserahkan = gudangcekModel::bkselesai_siap_ctk_diserahkan();
+        $bkselesai_siap_ctk_diserahkan = $this->getOpname(14);
 
         $kolom3 = 2;
         foreach ($bkselesai_siap_ctk_diserahkan as $d) {
@@ -1003,7 +998,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('AI' . $kolom3, round($d->ttl_rp, 0));
             $kolom3++;
         }
-        $stock_siap_cetak_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'");
+        $stock_siap_cetak_diserahkan = $this->getSuntikan(14);
         $sheet1->setCellValue('AC' . $kolom3, 'suntik');
         $sheet1->setCellValue('AD' . $kolom3, 'partai suntik');
         $sheet1->setCellValue('AE' . $kolom3, '-');
@@ -1026,7 +1021,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AR1', 'Total Rp');
 
 
-        $bkselesai_siap_str = gudangcekModel::bkselesai_siap_str();
+        $bkselesai_siap_str = $this->getOpname(15);
 
         $kolom4 = 2;
         foreach ($bkselesai_siap_str as $d) {
@@ -1052,7 +1047,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AZ1', 'Rp/gr');
         $sheet1->setCellValue('BA1', 'Total Rp');
 
-        $bkselesai_siap_str_diserahkan = gudangcekModel::bkselesai_siap_str_diserahkan();
+        $bkselesai_siap_str_diserahkan = $this->getOpname(16);
 
         $kolom4 = 2;
         foreach ($bkselesai_siap_str_diserahkan as $d) {
@@ -1066,7 +1061,7 @@ class GudangController extends Controller
             $sheet1->setCellValue('BA' . $kolom4, round($d->ttl_rp, 0));
             $kolom4++;
         }
-        $stock_siap_sortir_diserahkan = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'");
+        $stock_siap_sortir_diserahkan = $this->getSuntikan(16);
         $sheet1->setCellValue('AU' . $kolom4, 'suntik');
         $sheet1->setCellValue('AV' . $kolom4, 'partai disuntik');
         $sheet1->setCellValue('AW' . $kolom4, '-');
@@ -1090,7 +1085,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('BI1', 'Rp/gr');
         $sheet1->setCellValue('BJ1', 'Total Rp');
 
-        $gudangbksisa = gudangcekModel::bkstock();
+        $gudangbksisa = $this->getOpname(17);
 
 
         $kolom = 2;
@@ -1893,5 +1888,158 @@ class GudangController extends Controller
         exit();
     }
 
-    
+    public function getSummaryIbu()
+    {
+        $cbtapcs = sumCol($this->getOpname(11), 'pcs') + $this->getSuntikan(11)->pcs;
+        $cbtagr = sumCol($this->getOpname(11), 'gr') + $this->getSuntikan(11)->gr;
+        $cbtarp = sumCol($this->getOpname(11), 'ttl_rp') + $this->getSuntikan(11)->ttl_rp;
+        
+        $cbt = [
+            [
+                'awal' => [
+                    'label' =>  'box stock awal bk',
+                    'apcs' => $cbtapcs,
+                    'agr' => $cbtagr,
+                    'arp' => $cbtarp,
+
+                ],
+                'opname1' => [
+                    'label' =>  'box stock cabut sedang proses',
+
+                    'cpcs' => sumCol($this->getOpname(12), 'pcs'),
+                    'cgr' => sumCol($this->getOpname(12), 'gr'),
+                    'crp' => sumCol($this->getOpname(12), 'ttl_rp'),
+                ],
+                'opname2' => [
+                    'label' =>  'box selesai cabut siap cetak belum serah',      
+
+                    'b2pcs' => sumCol($this->getOpname(13), 'pcs'),
+                    'b2gr' => sumCol($this->getOpname(13), 'gr'),
+                    'b2rp' => sumCol($this->getOpname(13), 'ttl_rp'),
+
+                    'cost_kerja' => 3,
+                    'cost_op' => 3,
+                    'cost_dll' => 3,
+                ],
+                'proses1' => [
+                    'label' =>  'box selesai cabut siap cetak diserahkan',
+                    'b2pcs' => sumCol($this->getOpname(14), 'pcs') + $this->getSuntikan(14)->pcs,
+                    'b2gr' => sumCol($this->getOpname(14), 'gr') + $this->getSuntikan(14)->gr,
+                    'b2rp' => sumCol($this->getOpname(14), 'ttl_rp') + $this->getSuntikan(14)->ttl_rp,
+
+                    'cost_kerja' => 3,
+                    'cost_op' => 3,
+                    'cost_dll' => 3,
+                ],
+                'opname3' => [
+                    'label' =>  'box selesai cbt siap sortir belum serah',
+                    'b2pcs' => 0,
+                    'b2gr' => sumCol($this->getOpname(15), 'gr'),
+                    'b2rp' => sumCol($this->getOpname(15), 'ttl_rp'),
+
+                    'cost_kerja' => 3,
+                    'cost_op' => 3,
+                    'cost_dll' => 3,
+                ],
+                'proses2' => [
+                    'label' =>  'box selesai cbt siap sortir diserahkan',
+                    'b2pcs' => 0,
+                    'b2gr' => sumCol($this->getOpname(16), 'gr') + $this->getSuntikan(16)->gr,
+                    'b2rp' => sumCol($this->getOpname(16), 'ttl_rp') + $this->getSuntikan(16)->ttl_rp,
+
+                    'cost_kerja' => 3,
+                    'cost_op' => 3,
+                    'cost_dll' => 3,
+                ],
+                'opname4' => [
+                    'label' =>  'box cbt sisa pgws',
+                    'cpcs' => sumCol($this->getOpname(17), 'pcs'),
+                    'cgr' => sumCol($this->getOpname(17), 'gr'),
+                    'crp' => sumCol($this->getOpname(17), 'ttl_rp'),
+                ],
+            ],
+        ];
+
+        $ctk = [
+            [
+                'awal' => [
+                    'label' => 'cetak opname'
+                ]
+            ],
+            ['awal' => 'cetak stock awal'],
+            ['opname' => 'cetak sedang proses'],
+            ['opname' => 'cetak selesai siap sortir belum serah'],
+            ['proses' => 'tidak cetak diserahkan'],
+            ['proses' => 'cetak selesai siap sortir diserahkan'],
+            ['opname' => 'cetak sisa pgws'],
+        ];
+
+        $sortir = [
+            ['awal' => 'sortir opname'],
+            ['awal' => 'sortir stock awal'],
+            ['opname' => 'sortir sedang proses'],
+            ['opname' => 'sortir selesai siap grading belum serah'],
+            ['proses' => 'sortir selesai siap grading diserahkan'],
+            ['opname' => 'sortir sisa pgws'],
+        ];
+
+        $pengiriman = [
+            ['awal' => 'siap kirim opname'],
+            ['awal' => 'grading stock'],
+            ['opname' => 'box belum kirim gudang wip'],
+            ['opname' => 'box selesai kirim pengiriman'],
+        ];
+
+        $datas = [
+            'cbt' => $cbt,
+            // 'ctk' => $ctk,
+            // 'sortir' => $sortir,
+            // 'pengiriman' => $pengiriman
+        ];
+
+
+
+        $data = [
+            'title' => 'Data Totalan',
+            'cbt' => $cbt,
+            'datas' => $datas
+        ];
+        return view('home.gudang.get_summary_ibu', $data);
+    }
+
+    public function getOpname($index)
+    {
+        $datas = [
+            11 => gudangcekModel::bkstockawal(),
+            12 => gudangcekModel::bksedang_proses(),
+            13 => gudangcekModel::bkselesai_siap_ctk(),
+            14 => gudangcekModel::bkselesai_siap_ctk_diserahkan(),
+            15 => gudangcekModel::bkselesai_siap_str(),
+            16 => gudangcekModel::bkselesai_siap_str_diserahkan(),
+            17 => gudangcekModel::bkstock(),
+        ];
+        return $datas[$index];
+    }
+    public function getSuntikan($index)
+    {
+        $datas = [
+            11 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_cbt_awal'"),
+            14  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'"),
+            16  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'"),
+        ];
+        return $datas[$index];
+    }
+
+    public function detailSummaryIbu(Request $r)
+    {
+        $index = $r->index;
+
+        $data = [
+            'title' => 'Data Totalan',
+            'index' => $index,
+            'datas' => $this->getOpname($index),
+            // 'suntikan' => $this->getSuntikan($index)
+        ];
+        return view('home.gudang.detail_summary_ibu', $data);
+    }
 }
