@@ -1888,9 +1888,10 @@ class GudangController extends Controller
 
     public function getSummaryIbu()
     {
-        $cbtapcs = $this->getSummary(11)->pcs + $this->getSuntikan(11)->pcs;
-        $cbtagr = $this->getSummary(11)->gr + $this->getSuntikan(11)->gr;
-        $cbtarp = $this->getSummary(11)->ttl_rp + $this->getSuntikan(11)->ttl_rp;
+        $cbtapcs = sumCol($this->getOpname(11), 'pcs') + $this->getSuntikan(11)->pcs;
+        $cbtagr = sumCol($this->getOpname(11), 'gr') + $this->getSuntikan(11)->gr;
+        $cbtarp = sumCol($this->getOpname(11), 'ttl_rp') + $this->getSuntikan(11)->ttl_rp;
+
         $cbt = [
             [
                 'awal' => [
@@ -1908,7 +1909,7 @@ class GudangController extends Controller
                     'crp' => $this->getSummary(12)->ttl_rp,
                 ],
                 'opname2' => [
-                    'label' =>  'box selesai cabut siap cetak belum serah',      
+                    'label' =>  'box selesai cabut siap cetak belum serah',
 
                     'b2pcs' => $this->getSummary(13)->pcs,
                     'b2gr' => $this->getSummary(13)->gr,
@@ -1978,7 +1979,7 @@ class GudangController extends Controller
                 //     'arp' => 3,
 
                 // ],
-              
+
                 // 'opname3' => [
                 //     'label' =>  'cetak selesai siap sortir belum serah',
                 //     'apcs' => $cbtapcs,
@@ -2007,7 +2008,7 @@ class GudangController extends Controller
                 //     'arp' => 3,
 
                 // ],
-                
+
             ],
         ];
 
@@ -2044,7 +2045,7 @@ class GudangController extends Controller
 
     public function getSummaryIbuasd(IbuSUmmary $model)
     {
-        
+
         $data = [
             'title' => 'Data Totalan',
             'a11' => $model::bkstockawal_sum(),
@@ -2069,7 +2070,7 @@ class GudangController extends Controller
             16 => gudangcekModel::bkselesai_siap_str_diserahkan(),
             17 => gudangcekModel::bkstock(),
 
-            21 =>DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_awal_stock'"),
+            21 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_awal_stock'"),
             22 => gudangcekModel::cetak_stok_awal(),
             23 => gudangcekModel::cetak_proses(),
             24 => gudangcekModel::cetak_selesai(),
