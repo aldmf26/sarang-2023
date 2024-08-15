@@ -257,5 +257,6 @@ Route::middleware('auth')->group(function () {
         ->name('summary.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/bk_sisa', 'bk_sisa')->name('bk_sisa');
         });
 });

@@ -1893,7 +1893,7 @@ class GudangController extends Controller
         $cbtapcs = sumCol($this->getOpname(11), 'pcs') + $this->getSuntikan(11)->pcs;
         $cbtagr = sumCol($this->getOpname(11), 'gr') + $this->getSuntikan(11)->gr;
         $cbtarp = sumCol($this->getOpname(11), 'ttl_rp') + $this->getSuntikan(11)->ttl_rp;
-        
+
         $cbt = [
             [
                 'awal' => [
@@ -1911,7 +1911,7 @@ class GudangController extends Controller
                     'crp' => sumCol($this->getOpname(12), 'ttl_rp'),
                 ],
                 'opname2' => [
-                    'label' =>  'box selesai cabut siap cetak belum serah',      
+                    'label' =>  'box selesai cabut siap cetak belum serah',
 
                     'b2pcs' => sumCol($this->getOpname(13), 'pcs'),
                     'b2gr' => sumCol($this->getOpname(13), 'gr'),
