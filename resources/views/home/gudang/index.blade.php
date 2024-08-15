@@ -47,7 +47,7 @@
                             <table id="tbl1" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="dhead text-center" colspan="7">Box Stock</th>
+                                        <th class="dhead text-center" colspan="7">Box Stock Awal</th>
                                     </tr>
                                     <tr>
                                         <th class="dhead text-center">Pemilik</th>
@@ -59,17 +59,13 @@
                                         <th class="dhead text-end">Ttl Rp</th>
                                     </tr>
                                     @php
-                                        $sumTtlRp = 0;
-                                        foreach($bk as $d){
-                                            $sumTtlRp += $d->hrga_satuan * $d->gr;
-                                        }
                                         if (!function_exists('ttl')) {
                                             function ttl($tl)
                                             {
                                                 return [
                                                     'pcs' => array_sum(array_column($tl, 'pcs')),
                                                     'gr' => array_sum(array_column($tl, 'gr')),
-                                                    'hrga_satuan' => array_sum(array_column($tl, 'hrga_satuan')),
+                                                    'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
                                                 ];
                                             }
                                         }
@@ -78,28 +74,31 @@
                                     <tr>
                                         <th class="dheadstock text-center">Total</th>
                                         <th class="dheadstock text-center"></th>
-                                        <th class="dheadstock text-end">{{ count($bk) }}</th>
-                                        <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}</th>
-                                        <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}</th>
-                                        <th class="dheadstock text-end">
-                                            {{-- {{ number_format(ttl($bk)['hrga_satuan'], 0) }} --}}
+                                        <th class="dheadstock text-end">{{ count($gudangbk) }}</th>
+                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['pcs'], 0) }}
                                         </th>
-                                        <th class="dheadstock text-end">{{ number_format($sumTtlRp, 0) }}</th>
-                                        {{-- <th class="dheadstock text-end">
-                                    {{ number_format(ttl($bk)['ttl_rp'], 0) }}</th> --}}
+                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['gr'], 0) }}
+                                        </th>
+                                        <th class="dheadstock text-end">
+                                            0
+                                        </th>
+                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['ttl_rp'], 0) }}
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($bk as $d)
+                                    @foreach ($gudangbk as $d)
                                         <tr>
-                                            <td align="center">{{ $d->penerima }}</td>
+                                            <td align="center">{{ $d->name }}</td>
                                             <td align="center">{{ $d->nm_partai }}</td>
                                             <td align="center">{{ $d->no_box }}</td>
                                             <td align="right">{{ $d->pcs }}</td>
                                             <td align="right">{{ $d->gr }}</td>
-                                            <td align="right">{{ number_format($d->hrga_satuan, 0) }}</td>
-                                            <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td>
+                                            <td align="right">
+                                                {{ number_format($d->ttl_rp == 0 ? 0 : $d->ttl_rp / $d->gr, 0, 0) }}
+                                            </td>
+                                            <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
                                             {{-- <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td> --}}
                                         </tr>
                                     @endforeach
@@ -115,7 +114,7 @@
                         <div style="overflow-y: scroll; height: 400px">
                             @php
                                 $sumTtlCbt = 0;
-                                foreach($cabut as $d){
+                                foreach ($cabut as $d) {
                                     $sumTtlCbt += $d->hrga_satuan * $d->gr;
                                 }
                             @endphp
