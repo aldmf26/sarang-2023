@@ -44,7 +44,20 @@
                         <input type="text" id="tbl1input" class="form-control form-control-sm mb-2"
                             placeholder="cari">
                         <div style="overflow-y: scroll; height: 400px">
-                            <table id="tbl1" class="table table-bordered table-hover table-striped">
+                            @php
+                                        if (!function_exists('ttl')) {
+                                            function ttl($tl)
+                                            {
+                                                return [
+                                                    'pcs' => array_sum(array_column($tl, 'pcs')),
+                                                    'gr' => array_sum(array_column($tl, 'gr')),
+                                                    'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                                ];
+                                            }
+                                        }
+
+                                    @endphp
+                            {{-- <table id="tbl1" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
                                         <th class="dhead text-center" colspan="7">Box Stock Awal</th>
@@ -58,19 +71,7 @@
                                         <th class="dhead text-end">Rp/gr</th>
                                         <th class="dhead text-end">Ttl Rp</th>
                                     </tr>
-                                    @php
-                                        if (!function_exists('ttl')) {
-                                            function ttl($tl)
-                                            {
-                                                return [
-                                                    'pcs' => array_sum(array_column($tl, 'pcs')),
-                                                    'gr' => array_sum(array_column($tl, 'gr')),
-                                                    'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
-                                                ];
-                                            }
-                                        }
-
-                                    @endphp
+                                    
                                     <tr>
                                         <th class="dheadstock text-center">Total</th>
                                         <th class="dheadstock text-center"></th>
@@ -99,11 +100,10 @@
                                                 {{ number_format($d->ttl_rp == 0 ? 0 : $d->ttl_rp / $d->gr, 0, 0) }}
                                             </td>
                                             <td align="right">{{ number_format($d->ttl_rp, 0) }}</td>
-                                            {{-- <td align="right">{{ number_format($d->hrga_satuan * $d->gr, 0) }}</td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                            </table> --}}
                         </div>
                     </div>
                 </div>
