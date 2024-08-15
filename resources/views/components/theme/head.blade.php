@@ -70,12 +70,14 @@
         .scrollable-table table {
             max-width: 100%;
         }
+
         .dheadstock {
             background-color: #FFD1DC !important;
             color: rgb(19, 19, 19)
         }
+
         .dhead {
-            background-color: var(--warnaDhead)   !important;
+            background-color: var(--warnaDhead) !important;
             color: white;
         }
 
@@ -83,18 +85,23 @@
             background-color: var(--warna1) !important;
             border-color: var(--warna1) !important;
         }
+
         .btn-pengiriman {
             background-color: var(--warnaPengiriman) !important;
             border-color: var(--warnaPengiriman) !important;
-            color:black;
+            color: black;
         }
+
         .btn-info {
             background-color: #7e7c7c !important;
             border-color: #7e7c7c !important;
         }
-        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
             background-color: var(--warna1) !important;
         }
+
         .bg-primary {
             background-color: var(--warna1) !important;
         }
@@ -242,6 +249,36 @@
             z-index: 1;
         }
 
+        .judul-sidebar {
+            position: sticky;
+
+            /* Warna latar belakang header yang tetap */
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        .first-column {
+            left: 0;
+            background-color: #FFFFFF !important;
+        }
+
+        .first-column-atas {
+            left: 0;
+            background-color: #f1f1f1 !important;
+        }
+
+        .second-column {
+            left: 65px;
+            background-color: #FFFFFF !important;
+            /* Adjust this value based on the width of the first column */
+        }
+
+        .second-column_atas {
+            left: 65px;
+            background-color: #f1f1f1 !important;
+            /* Adjust this value based on the width of the first column */
+        }
+
         .img-detail {
             width: 50%;
             height: 350px;
@@ -279,11 +316,9 @@
             /* font-size: 12px; */
             width: 170px;
         }
-
-        
     </style>
     @yield('styles')
-    
+
     <livewire:styles />
     <livewire:scripts />
 </head>

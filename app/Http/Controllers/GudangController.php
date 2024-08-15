@@ -1895,6 +1895,4 @@ class GudangController extends Controller
         $writer->save('php://output');
         exit();
     }
-
-    
 }

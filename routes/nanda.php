@@ -14,6 +14,7 @@ use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RekapGajiPeranakController;
+use App\Http\Controllers\SummaryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -250,5 +251,11 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::post('/', 'importperbaikan')->name('index');
             Route::post('/importperbaikansortir', 'importperbaikansortir')->name('importperbaikansortir');
+        });
+    Route::controller(SummaryController::class)
+        ->prefix('home/summary')
+        ->name('summary.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });
