@@ -1959,18 +1959,18 @@ class GudangController extends Controller
 
         $ctk = [
             [
-                // 'awal' => [
-                //     'label' =>  'cetak opname',
-                //     'apcs' => $this->getSummary(21)->pcs,
-                //     'agr' => $this->getSummary(21)->gr,
-                //     'arp' => $this->getSummary(21)->ttl_rp,
-                // ],
-                // 'awal2' => [
-                //     'label' =>  'cetak stock awal',
-                //     'apcs' => $this->getSummary(22)->pcs + $this->getSuntikan(22)->pcs,
-                //     'agr' => $this->getSummary(22)->gr + $this->getSuntikan(22)->gr,
-                //     'arp' => $this->getSummary(22)->ttl_rp + $this->getSuntikan(22)->ttl_rp,
-                // ],
+                'awal' => [
+                    'label' =>  'cetak opname',
+                    'apcs' => $this->getSummary(21)->pcs,
+                    'agr' => $this->getSummary(21)->gr,
+                    'arp' => $this->getSummary(21)->ttl_rp,
+                ],
+                'awal2' => [
+                    'label' =>  'cetak stock awal',
+                    'apcs' => $this->getSummary(22)->pcs + $this->getSuntikan(22)->pcs,
+                    'agr' => $this->getSummary(22)->gr + $this->getSuntikan(22)->gr,
+                    'arp' => $this->getSummary(22)->ttl_rp + $this->getSuntikan(22)->ttl_rp,
+                ],
                 // 'opname' => [
                 //     'label' =>  'cetak sedang proses',
                 //     'apcs' => $cbtapcs,
