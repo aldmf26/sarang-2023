@@ -857,7 +857,7 @@ class GudangController extends Controller
         exit();
     }
 
-    function export2(Request $r)
+    function export2(gudangcekModel $model)
     {
         $style_atas = array(
             'font' => [
@@ -901,7 +901,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('G1', 'Rp/gr');
         $sheet1->setCellValue('H1', 'Total Rp');
 
-        $gudangbk = $this->getOpname(11);
+        $gudangbk = $model::bkstockawal();
 
 
         $kolom = 2;
@@ -938,7 +938,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('Q1', 'Total Rp');
 
         $kolom2 = 2;
-        $gudangbkproses = $this->getOpname(12);
+        $gudangbkproses =$model::bksedang_proses();
         foreach ($gudangbkproses as $d) {
             $sheet1->setCellValue('K' . $kolom2, $d->name);
             $sheet1->setCellValue('L' . $kolom2, $d->nm_partai);
@@ -961,7 +961,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('Y1', 'Rp/gr');
         $sheet1->setCellValue('Z1', 'Total Rp');
 
-        $bkselesai_siap_ctk = $this->getOpname(13);
+        $bkselesai_siap_ctk = $model::bkselesai_siap_ctk();
 
         $kolom3 = 2;
         foreach ($bkselesai_siap_ctk as $d) {
@@ -986,7 +986,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AH1', 'Rp/gr');
         $sheet1->setCellValue('AI1', 'Total Rp');
 
-        $bkselesai_siap_ctk_diserahkan = $this->getOpname(14);
+        $bkselesai_siap_ctk_diserahkan = $model::bkselesai_siap_ctk_diserahkan();
 
         $kolom3 = 2;
         foreach ($bkselesai_siap_ctk_diserahkan as $d) {
@@ -1021,8 +1021,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AQ1', 'Rp/gr');
         $sheet1->setCellValue('AR1', 'Total Rp');
 
-
-        $bkselesai_siap_str = $this->getOpname(15);
+        $bkselesai_siap_str = $model::bkselesai_siap_str();
 
         $kolom4 = 2;
         foreach ($bkselesai_siap_str as $d) {
@@ -1048,7 +1047,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('AZ1', 'Rp/gr');
         $sheet1->setCellValue('BA1', 'Total Rp');
 
-        $bkselesai_siap_str_diserahkan = $this->getOpname(16);
+        $bkselesai_siap_str_diserahkan = $model::bkselesai_siap_str_diserahkan();
 
         $kolom4 = 2;
         foreach ($bkselesai_siap_str_diserahkan as $d) {
@@ -1086,7 +1085,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('BI1', 'Rp/gr');
         $sheet1->setCellValue('BJ1', 'Total Rp');
 
-        $gudangbksisa = $this->getOpname(17);
+        $gudangbksisa = $model::bkstock();
 
 
         $kolom = 2;
@@ -1118,7 +1117,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('F1', 'Gr');
         $sheet2->setCellValue('G1', 'Rp/gr');
         $sheet2->setCellValue('H1', 'Total Rp');
-        $cetak_stok_awal = $this->getSuntikan(22);
+        $cetak_stok_awal = $model::cetak_stok_awal();
         $kolom2 = 2;
         foreach ($cetak_stok_awal as $d) {
             $sheet2->setCellValue('B' . $kolom2, $d->name);
@@ -1131,7 +1130,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
         }
-        $stock_cetak_awal = $this->getSuntikan(21);
+        $stock_cetak_awal = $this->getSuntikan(22);
         $sheet2->setCellValue('B' . $kolom2, 'suntik');
         $sheet2->setCellValue('C' . $kolom2, 'partai suntik');
         $sheet2->setCellValue('D' . $kolom2, '-');
@@ -1152,7 +1151,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('P1', 'Rp/gr');
         $sheet2->setCellValue('Q1', 'Total Rp');
 
-        $cetak_proses = $this->getSuntikan(23);
+        $cetak_proses = $model::cetak_proses();
         $kolom3 = 2;
         foreach ($cetak_proses as $d) {
             $sheet2->setCellValue('K' . $kolom3, $d->name);
@@ -1177,7 +1176,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('Y1', 'Rp/gr');
         $sheet2->setCellValue('Z1', 'Total Rp');
 
-        $cetak_selesai = $this->getSuntikan(24);
+        $cetak_selesai = $model::cetak_selesai();
         $kolom4 = 2;
         foreach ($cetak_selesai as $d) {
             $sheet2->setCellValue('T' . $kolom4, $d->name);
@@ -1203,7 +1202,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('AI1', 'Rp/gr');
         $sheet2->setCellValue('AJ1', 'Total Rp');
 
-        $tdk_cetak_selesai_diserahkan = $this->getOpname(25);
+        $tdk_cetak_selesai_diserahkan = $model::tdk_cetak_selesai_diserahkan();
         $kolom4 = 2;
         foreach ($tdk_cetak_selesai_diserahkan as $d) {
             $sheet2->setCellValue('AD' . $kolom4, $d->name);
@@ -1228,7 +1227,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('AR1', 'Rp/gr');
         $sheet2->setCellValue('AS1', 'Total Rp');
 
-        $cetak_selesai_diserahkan = $this->getOpname(26);
+        $cetak_selesai_diserahkan = $model::cetak_selesai_diserahkan();
         $kolom4 = 2;
         foreach ($cetak_selesai_diserahkan as $d) {
             $sheet2->setCellValue('AM' . $kolom4, $d->name);
@@ -1262,7 +1261,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('AZ1', 'Gr');
         $sheet2->setCellValue('BA1', 'Rp/gr');
         $sheet2->setCellValue('BB1', 'Total Rp');
-        $cetak_stock = $this->getOpname(27);
+        $cetak_stock = $model::cetak_stok();
         $kolom2 = 2;
         foreach ($cetak_stock as $d) {
             $sheet2->setCellValue('AV' . $kolom2, $d->name);
@@ -1303,7 +1302,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('G1', 'Rp/gr');
         $sheet3->setCellValue('H1', 'Total Rp');
 
-        $sortir_stock = gudangcekModel::stock_sortir_awal();
+        $sortir_stock = $model::stock_sortir_awal();
         $kolom2 = 2;
         foreach ($sortir_stock as $d) {
             $sheet3->setCellValue('B' . $kolom2, $d->name);
@@ -1339,7 +1338,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('P1', 'Rp/gr');
         $sheet3->setCellValue('Q1', 'Total Rp');
 
-        $sortir_proses = gudangcekModel::sortir_proses();
+        $sortir_proses = $model::sortir_proses();
         $kolom3 = 2;
         foreach ($sortir_proses as $d) {
             $sheet3->setCellValue('K' . $kolom3, $d->name);
@@ -1364,7 +1363,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('Y1', 'Rp/gr');
         $sheet3->setCellValue('Z1', 'Total Rp');
 
-        $sortir_selesai = gudangcekModel::sortir_selesai();
+        $sortir_selesai = $model::sortir_selesai();
         $kolom4 = 2;
         foreach ($sortir_selesai as $d) {
             $sheet3->setCellValue('T' . $kolom4, $d->name);
@@ -1390,7 +1389,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('AH1', 'Rp/gr');
         $sheet3->setCellValue('AI1', 'Total Rp');
 
-        $sortir_selesai_diserahkan = gudangcekModel::sortir_selesai_diserahkan();
+        $sortir_selesai_diserahkan = $model::sortir_selesai_diserahkan();
         $kolom4 = 2;
         foreach ($sortir_selesai_diserahkan as $d) {
             $sheet3->setCellValue('AC' . $kolom4, $d->name);
@@ -1425,7 +1424,7 @@ class GudangController extends Controller
         $sheet3->setCellValue('AQ1', 'Rp/gr');
         $sheet3->setCellValue('AR1', 'Total Rp');
 
-        $stock_sortir_sisa = gudangcekModel::stock_sortir();
+        $stock_sortir_sisa = $model::stock_sortir();
         $kolom4 = 2;
         foreach ($stock_sortir_sisa as $d) {
             $sheet3->setCellValue('AL' . $kolom4, $d->name);
@@ -1456,7 +1455,7 @@ class GudangController extends Controller
         $sheet4->setCellValue('G1', 'Rp/gr');
         $sheet4->setCellValue('H1', 'Total Rp');
 
-        $grading_stock = gudangcekModel::grading_stock();
+        $grading_stock = $model::grading_stock();
         $kolom2 = 2;
         foreach ($grading_stock as $d) {
             $sheet4->setCellValue('B' . $kolom2, $d->name);
@@ -1886,7 +1885,7 @@ class GudangController extends Controller
         exit();
     }
 
-    public function getSummaryIbu()
+    public function getSummaryIbuasd()
     {
         $cbtapcs = sumCol($this->getOpname(11), 'pcs') + $this->getSuntikan(11)->pcs;
         $cbtagr = sumCol($this->getOpname(11), 'gr') + $this->getSuntikan(11)->gr;
@@ -2043,7 +2042,7 @@ class GudangController extends Controller
         return view('home.gudang.get_summary_ibu', $data);
     }
 
-    public function getSummaryIbuasd(IbuSUmmary $model)
+    public function getSummaryIbu(IbuSUmmary $model)
     {
 
         $data = [

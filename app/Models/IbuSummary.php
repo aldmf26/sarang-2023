@@ -14,16 +14,12 @@ class IbuSummary extends Model
     public static function bkstockawal_sum()
     {
         $result = DB::selectOne("SELECT 
-        a.nm_partai, 
-        b.name, 
-        a.no_box, 
         sum(a.pcs_awal) as pcs, 
         sum(a.gr_awal) as gr , 
         sum(a.gr_awal * a.hrga_satuan) as ttl_rp
-            FROM bk as a 
-            left join users as b on b.id = a.penerima
-            where a.kategori ='cabut' and a.baru ='baru' 
-            AND a.baru = 'baru'
+        FROM bk as a
+        where a.kategori ='cabut' and a.baru ='baru' 
+        AND a.baru = 'baru'
             ");
         return $result;
     }
