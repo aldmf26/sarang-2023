@@ -1885,7 +1885,7 @@ class GudangController extends Controller
         exit();
     }
 
-    public function getSummaryIbu(IbuSUmmary $model)
+    public function getSummaryIbudsa(IbuSUmmary $model)
     {
         $cbtapcs = $model::bkstockawal_sum()->pcs + $this->getSuntikan(11)->pcs;
         $cbtagr = $model::bkstockawal_sum()->gr + $this->getSuntikan(11)->gr;
@@ -2029,7 +2029,7 @@ class GudangController extends Controller
 
         $datas = [
             'cabut' => $cbt,
-            'cetak' => $ctk,
+            // 'cetak' => $ctk,
             // 'sortir' => $sortir,
             // 'pengiriman' => $pengiriman
         ];
@@ -2042,18 +2042,176 @@ class GudangController extends Controller
         return view('home.gudang.get_summary_ibu', $data);
     }
 
-    public function getSummaryIbudsa(IbuSUmmary $model)
+    public function getSummaryIbu(IbuSUmmary $model)
     {
+        // cabut
+            $a11 = $model::bkstockawal_sum();
+            $a11suntik = $this->getSuntikan(11);
+            $a14suntik = $this->getSuntikan(14);
+            $a16suntik = $this->getSuntikan(16);
+
+            $a11pcs = $a11->pcs + $a11suntik->pcs;
+            $a11gr = $a11->gr + $a11suntik->gr;
+            $a11ttlrp = $a11->ttl_rp + $a11suntik->ttl_rp;
+
+            $a12 = $model::bksedang_proses_sum();
+            $a12pcs = $a12->pcs;
+            $a12gr = $a12->gr;
+            $a12ttlrp = $a12->ttl_rp;
+            
+            $a12 = $model::bksedang_proses_sum();
+            $a12pcs = $a12->pcs;
+            $a12gr = $a12->gr;
+            $a12ttlrp = $a12->ttl_rp;
+
+            $a13 = $model::bkselesai_siap_ctk_sum();
+            $a13pcs = $a13->pcs;
+            $a13gr = $a13->gr;
+            $a13ttlrp = $a13->ttl_rp;
+            $a13costkerja = $a13->cost_kerja;
+
+            $a14 = $model::bkselesai_siap_ctk_diserahkan_sum();
+            $a14pcs = $a14->pcs + $a14suntik->pcs;
+            $a14gr = $a14->gr + $a14suntik->gr;
+            $a14ttlrp = $a14->ttl_rp + $a14suntik->ttl_rp;
+            $a14costkerja = $a14->cost_kerja;
+
+
+            $a15 = $model::bkselesai_siap_str_sum();
+            $a15pcs = $a15->pcs ?? 0;
+            $a15gr = $a15->gr;
+            $a15ttlrp = $a15->ttl_rp;
+            $a15costkerja = $a15->cost_kerja;
+
+
+            $a16 = $model::bkselesai_siap_str_diserahkan_sum();
+            $a16pcs = $a16->pcs ?? 0;
+            $a16gr = $a16->gr + $a16suntik->gr;
+            $a16ttlrp = $a16->ttl_rp + $a16suntik->ttl_rp;
+            $a16costkerja = $a16->cost_kerja;
+
+
+            $a17 = $model::bkstock_sum();
+            $a17pcs = $a17->pcs;
+            $a17gr = $a17->gr;
+            $a17ttlrp = $a17->ttl_rp;
+        // ---- end cabut
+
+        // cetak
+            $ca11 = $this->getSuntikan(21);
+            $ca11pcs = $ca11->pcs;
+            $ca11gr = $ca11->gr;
+            $ca11ttlrp = $ca11->ttl_rp;
+            
+            $ca12 = $model::cetak_stok_awal();
+            $ca12suntik = $this->getSuntikan(14);
+            $ca12pcs = $ca12->pcs + $ca12suntik->pcs;
+            $ca12gr = $ca12->gr + $ca12suntik->gr;
+            $ca12ttlrp = $ca12->ttl_rp + $ca12suntik->ttl_rp;
+
+            $ca13 = $model::cetak_proses();
+            $ca13pcs = $ca13->pcs;
+            $ca13gr = $ca13->gr;
+            $ca13ttlrp = $ca13->ttl_rp;
+            $ca13costkerja = $ca13->cost_kerja;
+
+            $ca14 = $model::cetak_selesai();
+            $ca14pcs = $ca14->pcs;
+            $ca14gr = $ca14->gr;
+            $ca14ttlrp = $ca14->ttl_rp;
+            $ca14costkerja = $ca14->cost_kerja;
+
+            $ca15 = $model::tdk_cetak_selesai_diserahkan();
+            $ca15pcs = $ca15->pcs;
+            $ca15gr = $ca15->gr;
+            $ca15ttlrp = $ca15->ttl_rp;
+            $ca15costkerja = $ca15->cost_kerja;
+            
+            $ca16 = $model::cetak_selesai_diserahkan();
+            $ca16suntik = $this->getSuntikan(26);
+            $ca16pcs = $ca16->pcs + $ca16suntik->pcs;
+            $ca16gr = $ca16->gr + $ca16suntik->gr;
+            $ca16ttlrp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+            $ca16costkerja = $ca16->cost_kerja;
+
+            $ca17 = $model::cetak_stok();
+            $ca17suntik = $this->getSuntikan(27);
+
+            $ca17pcs = $ca17->pcs + $ca17suntik->pcs;
+            $ca17gr = $ca17->gr + $ca17suntik->gr;
+            $ca17ttlrp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
+        // ---- end cetak
 
         $data = [
             'title' => 'Data Totalan',
-            'a11' => $model::bkstockawal_sum(),
-            'a12' => $model::bksedang_proses_sum(),
-            'a13' => $model::bkselesai_siap_ctk_sum(),
-            'a14' => $model::bkselesai_siap_ctk_diserahkan_sum(),
-            'a15' => $model::bkselesai_siap_str_sum(),
-            'a16' => $model::bkselesai_siap_str_diserahkan_sum(),
-            'a17' => $model::bkstock_sum(),
+            // cabut
+                'a11pcs' => $a11pcs,
+                'a11gr' => $a11gr,
+                'a11ttlrp' => $a11ttlrp,
+
+                'a12pcs' => $a12pcs,
+                'a12gr' => $a12gr,
+                'a12ttlrp' => $a12ttlrp,
+
+                'a13pcs' => $a13pcs,
+                'a13gr' => $a13gr,
+                'a13ttlrp' => $a13ttlrp,
+                'a13costkerja' => $a13costkerja,
+
+                'a14pcs' => $a14pcs,
+                'a14gr' => $a14gr,
+                'a14ttlrp' => $a14ttlrp,
+                'a14costkerja' => $a14costkerja,
+
+                'a15pcs' => $a15pcs,
+                'a15gr' => $a15gr,
+                'a15ttlrp' => $a15ttlrp,
+                'a15costkerja' => $a15costkerja,
+
+                'a16pcs' => $a16pcs,
+                'a16gr' => $a16gr,
+                'a16ttlrp' => $a16ttlrp,
+                'a16costkerja' => $a16costkerja,
+
+                'a17pcs' => $a17pcs,
+                'a17gr' => $a17gr,
+                'a17ttlrp' => $a17ttlrp,
+            // end cabut
+
+            // cetak
+                'ca11pcs' => $ca11pcs,
+                'ca11gr' => $ca11gr,
+                'ca11ttlrp' => $ca11ttlrp,
+
+                'ca12pcs' => $ca12pcs,
+                'ca12gr' => $ca12gr,
+                'ca12ttlrp' => $ca12ttlrp,
+
+                'ca13pcs' => $ca13pcs,
+                'ca13gr' => $ca13gr,
+                'ca13ttlrp' => $ca13ttlrp,
+                'ca13costkerja' => $ca13costkerja,
+
+                'ca14pcs' => $ca14pcs,
+                'ca14gr' => $ca14gr,
+                'ca14ttlrp' => $ca14ttlrp,
+                'ca14costkerja' => $ca14costkerja,
+
+                'ca15pcs' => $ca15pcs,
+                'ca15gr' => $ca15gr,
+                'ca15ttlrp' => $ca15ttlrp,
+                'ca15costkerja' => $ca15costkerja,
+
+                'ca16pcs' => $ca16pcs,
+                'ca16gr' => $ca16gr,
+                'ca16ttlrp' => $ca16ttlrp,
+                'ca16costkerja' => $ca16costkerja,
+
+                'ca17pcs' => $ca17pcs,
+                'ca17gr' => $ca17gr,
+                'ca17ttlrp' => $ca17ttlrp,
+            // end cetak
+
         ];
         return view('home.gudang.get_summary_ibu2', $data);
     }
@@ -2108,6 +2266,7 @@ class GudangController extends Controller
             14  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'"),
             16  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'"),
             26 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_serah'"),
+            21 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 15"),
             22 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 14"),
             27 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_sisa'"),
         ];
