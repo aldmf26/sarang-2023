@@ -1885,11 +1885,11 @@ class GudangController extends Controller
         exit();
     }
 
-    public function getSummaryIbuasd()
+    public function getSummaryIbu(IbuSUmmary $model)
     {
-        $cbtapcs = sumCol($this->getOpname(11), 'pcs') + $this->getSuntikan(11)->pcs;
-        $cbtagr = sumCol($this->getOpname(11), 'gr') + $this->getSuntikan(11)->gr;
-        $cbtarp = sumCol($this->getOpname(11), 'ttl_rp') + $this->getSuntikan(11)->ttl_rp;
+        $cbtapcs = $model::bkstockawal_sum()->pcs + $this->getSuntikan(11)->pcs;
+        $cbtagr = $model::bkstockawal_sum()->gr + $this->getSuntikan(11)->gr;
+        $cbtarp = $model::bkstockawal_sum()->ttl_rp + $this->getSuntikan(11)->ttl_rp;
 
         $cbt = [
             [
@@ -1903,56 +1903,56 @@ class GudangController extends Controller
                 'opname1' => [
                     'label' =>  'box stock cabut sedang proses',
 
-                    'cpcs' => $this->getSummary(12)->pcs,
-                    'cgr' => $this->getSummary(12)->gr,
-                    'crp' => $this->getSummary(12)->ttl_rp,
+                    'cpcs' => $model::bksedang_proses_sum()->pcs,
+                    'cgr' => $model::bksedang_proses_sum()->gr,
+                    'crp' => $model::bksedang_proses_sum()->ttl_rp,
                 ],
                 'opname2' => [
                     'label' =>  'box selesai cabut siap cetak belum serah',
 
-                    'b2pcs' => $this->getSummary(13)->pcs,
-                    'b2gr' => $this->getSummary(13)->gr,
-                    'b2rp' => $this->getSummary(13)->ttl_rp,
+                    'b2pcs' => $model::bkselesai_siap_ctk_sum()->pcs,
+                    'b2gr' => $model::bkselesai_siap_ctk_sum()->gr,
+                    'b2rp' => $model::bkselesai_siap_ctk_sum()->ttl_rp,
 
-                    'cost_kerja' => $this->getSummary(13)->cost_kerja,
+                    'cost_kerja' => $model::bkselesai_siap_ctk_sum()->cost_kerja,
                     'cost_op' => 3,
                     'cost_dll' => 3,
                 ],
                 'proses1' => [
                     'label' =>  'box selesai cabut siap cetak diserahkan',
-                    'b2pcs' => $this->getSummary(14)->pcs + $this->getSuntikan(14)->pcs,
-                    'b2gr' => $this->getSummary(14)->gr + $this->getSuntikan(14)->gr,
-                    'b2rp' => $this->getSummary(14)->ttl_rp + $this->getSuntikan(14)->ttl_rp,
+                    'b2pcs' => $model::bkselesai_siap_ctk_diserahkan_sum()->pcs + $this->getSuntikan(14)->pcs,
+                    'b2gr' => $model::bkselesai_siap_ctk_diserahkan_sum()->gr + $this->getSuntikan(14)->gr,
+                    'b2rp' => $model::bkselesai_siap_ctk_diserahkan_sum()->ttl_rp + $this->getSuntikan(14)->ttl_rp,
 
-                    'cost_kerja' => $this->getSummary(14)->cost_kerja,
+                    'cost_kerja' => $model::bkselesai_siap_ctk_diserahkan_sum()->cost_kerja,
                     'cost_op' => 3,
                     'cost_dll' => 3,
                 ],
                 'opname3' => [
                     'label' =>  'box selesai cbt siap sortir belum serah',
                     'b2pcs' => 0,
-                    'b2gr' => $this->getSummary(15)->gr,
-                    'b2rp' => $this->getSummary(15)->ttl_rp,
+                    'b2gr' => $model::bkselesai_siap_str_sum()->gr,
+                    'b2rp' => $model::bkselesai_siap_str_sum()->ttl_rp,
 
-                    'cost_kerja' => $this->getSummary(15)->cost_kerja,
+                    'cost_kerja' => $model::bkselesai_siap_str_sum()->cost_kerja,
                     'cost_op' => 3,
                     'cost_dll' => 3,
                 ],
                 'proses2' => [
                     'label' =>  'box selesai cbt siap sortir diserahkan',
                     'b2pcs' => 0,
-                    'b2gr' => $this->getSummary(16)->gr + $this->getSuntikan(16)->gr,
-                    'b2rp' => $this->getSummary(16)->ttl_rp + $this->getSuntikan(16)->ttl_rp,
+                    'b2gr' => $model::bkselesai_siap_str_diserahkan_sum()->gr + $this->getSuntikan(16)->gr,
+                    'b2rp' => $model::bkselesai_siap_str_diserahkan_sum()->ttl_rp + $this->getSuntikan(16)->ttl_rp,
 
-                    'cost_kerja' => $this->getSummary(16)->cost_kerja,
+                    'cost_kerja' => $model::bkselesai_siap_str_diserahkan_sum()->cost_kerja,
                     'cost_op' => 3,
                     'cost_dll' => 3,
                 ],
                 'opname4' => [
                     'label' =>  'box cbt sisa pgws',
-                    'cpcs' => $this->getSummary(17)->pcs,
-                    'cgr' => $this->getSummary(17)->gr,
-                    'crp' => $this->getSummary(17)->ttl_rp,
+                    'cpcs' => $model::bkstock_sum()->pcs,
+                    'cgr' => $model::bkstock_sum()->gr,
+                    'crp' => $model::bkstock_sum()->ttl_rp,
                 ],
             ],
         ];
@@ -1967,9 +1967,9 @@ class GudangController extends Controller
                 ],
                 'awal2' => [
                     'label' =>  'cetak stock awal',
-                    'apcs' => $this->getSummary(22)->pcs + $this->getSuntikan(22)->pcs,
-                    'agr' => $this->getSummary(22)->gr + $this->getSuntikan(22)->gr,
-                    'arp' => $this->getSummary(22)->ttl_rp + $this->getSuntikan(22)->ttl_rp,
+                    'apcs' => $model::cetak_stok_awal()->pcs + $this->getSuntikan(22)->pcs,
+                    'agr' => $model::cetak_stok_awal()->gr + $this->getSuntikan(22)->gr,
+                    'arp' => $model::cetak_stok_awal()->ttl_rp + $this->getSuntikan(22)->ttl_rp,
                 ],
                 // 'opname' => [
                 //     'label' =>  'cetak sedang proses',
@@ -2029,7 +2029,7 @@ class GudangController extends Controller
 
         $datas = [
             'cabut' => $cbt,
-            // 'cetak' => $ctk,
+            'cetak' => $ctk,
             // 'sortir' => $sortir,
             // 'pengiriman' => $pengiriman
         ];
@@ -2042,7 +2042,7 @@ class GudangController extends Controller
         return view('home.gudang.get_summary_ibu', $data);
     }
 
-    public function getSummaryIbu(IbuSUmmary $model)
+    public function getSummaryIbudsa(IbuSUmmary $model)
     {
 
         $data = [
