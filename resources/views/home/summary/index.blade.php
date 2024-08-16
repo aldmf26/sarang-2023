@@ -18,7 +18,8 @@
         <section class="row">
             <div class="col-lg-10"></div>
             <div class="col-lg-2">
-                <a href="" class="btn btn-primary float-end"><i class="fas fa-file-excel"></i> export</a>
+                <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end"><i
+                        class="fas fa-file-excel"></i> export</a>
             </div>
             <div class="col-lg-6 mt-2">
                 <table width="100%" class="table table-bordered">
