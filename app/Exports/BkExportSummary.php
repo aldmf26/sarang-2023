@@ -4,12 +4,13 @@ namespace App\Exports;
 
 use App\Models\SummaryModel;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class BkExportSummary implements FromView
+class BkExportSummary implements FromView, WithEvents
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -63,18 +64,30 @@ class BkExportSummary implements FromView
         ]);
     }
 
-    public function styles(Worksheet $sheet)
+    public function registerEvents(): array
     {
-        // Apply borders to all cells in the sheet
-        $sheet->getStyle('A1:F100')->applyFromArray([
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-            ],
-        ]);
+        return [
+            AfterSheet::class    => function (AfterSheet $event) {
+                $sheet = $event->sheet;
+                $cellRange = 'A1:G1';
+                $cellRangeLoop = 'A1:G11';
+                // $sheet->setAutoFilter($cellRange);
 
-        // You can add more styles as needed
-        return $sheet;
+                $sheet->getStyle($cellRangeLoop)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                    'font' => [
+                        'name'  =>  'Calibri',
+                        'size'  =>  11,
+                        'bold' => false
+                    ]
+                ]);
+                $sheet->getStyle($cellRange)->getFont()->setBold(true);
+            },
+        ];
     }
 }

@@ -157,7 +157,13 @@
         }
 
         .pink-magenta {
-            background-color: #E11583;
+            color: white;
+            background-color: #f6a0e0 !important;
+        }
+
+        .ungu_pengiriman {
+            color: white;
+            background-color: #ce37a8 !important;
         }
 
         label {

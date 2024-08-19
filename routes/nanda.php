@@ -259,5 +259,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/bk_sisa', 'bk_sisa')->name('bk_sisa');
             Route::get('/export_summary', 'export_summary')->name('export_summary');
+            Route::get('/detail_partai', 'detail_partai')->name('detail_partai');
+            Route::get('/detail_box', 'detail_box')->name('detail_box');
+            Route::get('/history_box', 'history_box')->name('history_box');
         });
 });

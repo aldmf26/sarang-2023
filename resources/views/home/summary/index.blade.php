@@ -25,14 +25,14 @@
                 <table width="100%" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="dhead">Ket</th>
-                            <th class="dhead text-end">Bk herry</th>
-                            <th class="dhead text-end">Bk sinta</th>
-                            <th class="dhead text-end">Sst</th>
-                            <th class="dhead text-end">Cost kerja</th>
+                            <th class="dhead">keterangan</th>
+                            <th class="dhead text-end">bk herry</th>
+                            <th class="dhead text-end">bk sinta</th>
+                            <th class="dhead text-end">susut</th>
+                            <th class="dhead text-end">cost kerja</th>
                         </tr>
                     </thead>
-                    <tbody class="clickable-row open-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <tbody class="clickable-row  open_bk_awal" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                         <tr>
                             <td>pcs</td>
                             <td class="text-end">
@@ -75,7 +75,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Total Rp</td>
+                            <td>total rp</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($bk, 'ttl_rp')) + array_sum(array_column($bk_suntik, 'ttl_rp')), 0) }}
                             </td>
@@ -85,8 +85,11 @@
                             <td></td>
                             <td class="text-end">{{ number_format(1815907127.33, 0) }}</td>
                         </tr>
-                        <tr>
-                            <td>Total Rp + cost</td>
+
+                    </tbody>
+                    <tbody>
+                        <tr class="clickable-row open-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <td>total rp + cost</td>
                             <td class="text-end">
                                 0
                             </td>
@@ -224,7 +227,7 @@
                     <thead>
                         <tr>
                             <th class="dhead">kategori</th>
-                            <th class="dhead">ket</th>
+                            <th class="dhead">keterangan</th>
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">rp/gr</th>
@@ -234,7 +237,7 @@
                     <tbody>
 
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>box stock cabut sedang proses</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($box_cabut_sedang_proses, 'pcs')), 0) }}
@@ -245,13 +248,13 @@
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($box_cabut_sedang_proses, 'ttl_rp')) / array_sum(array_column($box_cabut_sedang_proses, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($box_cabut_sedang_proses, 'ttl_rp'), 0) }}
                             </td>
                         </tr>
 
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>box selesai cabut siap cetak belum serah</td>
                             <td class="text-end">
                                 {{ number_format(sumBk($box_cabut_belum_serah, 'pcs'), 0) }}
@@ -264,7 +267,7 @@
                                 {{ number_format(array_sum(array_column($box_cabut_belum_serah, 'ttl_rp')) / array_sum(array_column($box_cabut_belum_serah, 'gr')), 0) }}
                             </td>
 
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($box_cabut_belum_serah, 'ttl_rp') +
                                         $rp_gr_cost_op * $gr_box_s_cetak_belum_serah +
@@ -282,7 +285,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">0</td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($bkselesai_siap_ctk_diserahkan, 'cost_kerja') +
                                         $rp_gr_cost_op * $gr_box_s_cetak_diserahkan +
@@ -292,7 +295,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>box selesai cbt siap sortir belum serah</td>
                             <td class="text-end">
                                 0</td>
@@ -303,7 +306,7 @@
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($bkselesai_siap_str, 'ttl_rp')) / array_sum(array_column($bkselesai_siap_str, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($bkselesai_siap_str, 'ttl_rp') +
                                         $rp_gr_cost_op * $gr_box_s_sortir_belum_serah +
@@ -322,7 +325,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end"> 0</td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($bkselesai_siap_str_diserahkan, 'cost_kerja') +
                                         $rp_gr_cost_op * $gr_box_s_sortir_diserahkan +
@@ -332,7 +335,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>box cbt sisa pgws </td>
                             <td class="text-end">{{ number_format(array_sum(array_column($bk_sisa_pgws, 'pcs')), 0) }}
                             </td>
@@ -341,12 +344,12 @@
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($bk_sisa_pgws, 'ttl_rp')) / array_sum(array_column($bk_sisa_pgws, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($bk_sisa_pgws, 'ttl_rp'), 0) }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>cetak sedang proses </td>
                             <td class="text-end">{{ number_format(array_sum(array_column($cetak_proses, 'pcs')), 0) }}
                             </td>
@@ -355,12 +358,12 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($cetak_proses, 'ttl_rp'))) ? 0 : number_format(array_sum(array_column($cetak_proses, 'ttl_rp')) / array_sum(array_column($cetak_proses, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($cetak_proses, 'ttl_rp'), 0) }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>cetak selesai siap sortir belum serah</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($cetak_selesai_belum_serah, 'pcs')), 0) }}
@@ -372,7 +375,7 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($cetak_selesai_belum_serah, 'ttl_rp'))) ? 0 : number_format(array_sum(array_column($cetak_selesai_belum_serah, 'ttl_rp')) / array_sum(array_column($cetak_selesai_belum_serah, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($cetak_selesai_belum_serah, 'ttl_rp') +
                                         $rp_gr_cost_op * $gr_cetak_selesai_b_serah +
@@ -392,7 +395,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">0</td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format($rp_gr_cost_op * $gr_tdk_cetak + $rp_gr_cu_dll * $gr_tdk_cetak, 0) }}
                             </td>
                         </tr>
@@ -407,7 +410,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">0</td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($cetak_selesai_diserahkan, 'cost_kerja') +
                                         $rp_gr_cost_op * $gr_cetak_selesai_diserahkan +
@@ -418,7 +421,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>cetak sisa pgws </td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($cetak_sisa_pgws, 'pcs')) + $suntik_ctk_sisa->pcs, 0) }}
@@ -429,12 +432,12 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($cetak_sisa_pgws, 'gr'))) ? 0 : number_format(array_sum(array_column($cetak_sisa_pgws, 'ttl_rp')) / array_sum(array_column($cetak_sisa_pgws, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($cetak_sisa_pgws, 'ttl_rp') + $suntik_ctk_sisa->ttl_rp, 0) }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>sortir sedang proses </td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($sortir_proses, 'pcs')), 0) }}
@@ -445,12 +448,12 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($sortir_proses, 'gr'))) ? 0 : number_format(array_sum(array_column($sortir_proses, 'ttl_rp')) / array_sum(array_column($sortir_proses, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($sortir_proses, 'ttl_rp'), 0) }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>sortir selesai siap grading belum serah</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($sortir_selesai, 'pcs')), 0) }}
@@ -462,7 +465,7 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($sortir_selesai, 'gr'))) ? 0 : number_format(array_sum(array_column($sortir_selesai, 'ttl_rp')) / array_sum(array_column($sortir_selesai, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($sortir_selesai, 'ttl_rp') +
                                         $rp_gr_cost_op * $gr_sortir_s_g_belum_serah +
@@ -481,7 +484,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">0</td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(
                                     sumBk($sortir_selesai_diserahkan, 'cost_kerja') +
                                         $rp_gr_cost_op * $gr_sortir_s_g_belum_diserahkan +
@@ -491,7 +494,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
+                            <td class="pink-magenta">opname</td>
                             <td>sortir sisa pgws</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($stock_sortir, 'pcs')), 0) }}
@@ -502,13 +505,13 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($stock_sortir, 'gr'))) ? 0 : number_format(array_sum(array_column($stock_sortir, 'ttl_rp')) / array_sum(array_column($stock_sortir, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($stock_sortir, 'ttl_rp'), 0) }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bg-success text-white">opname</td>
-                            <td>grading stock</td>
+                            <td class="pink-magenta">opname</td>
+                            <td>box belum kirim gudang wip</td>
                             <td class="text-end">
                                 {{ number_format(array_sum(array_column($grading_stock, 'pcs')) + $suntik_grading->pcs, 0) }}
                             </td>
@@ -518,8 +521,24 @@
                             <td class="text-end">
                                 {{ empty(array_sum(array_column($grading_stock, 'gr'))) ? 0 : number_format(array_sum(array_column($grading_stock, 'ttl_rp')) / array_sum(array_column($grading_stock, 'gr')), 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end bg-warning text-white">
                                 {{ number_format(sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp, 0) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ungu_pengiriman">sudah kirim</td>
+                            <td class="ungu_pengiriman">box selesai kirim pengiriman</td>
+                            <td class="ungu_pengiriman text-end">
+                                0
+                            </td>
+                            <td class="ungu_pengiriman text-end">
+                                0
+                            </td>
+                            <td class="ungu_pengiriman text-end">
+                                0
+                            </td>
+                            <td class="ungu_pengiriman text-end">
+                                0
                             </td>
                         </tr>
                     </tbody>
@@ -530,10 +549,10 @@
                         <tr>
                             <td>Total</td>
                             <td></td>
-                            <td class="text-end fw-bold">
+                            <td class="text-end fw-bold pink-magenta">
                                 {{ number_format(array_sum(array_column($box_cabut_sedang_proses, 'pcs')) + array_sum(array_column($box_cabut_belum_serah, 'pcs')) + array_sum(array_column($bk_sisa_pgws, 'pcs')) + array_sum(array_column($cetak_proses, 'pcs')) + array_sum(array_column($cetak_selesai_belum_serah, 'pcs')) + array_sum(array_column($cetak_sisa_pgws, 'pcs')) + array_sum(array_column($sortir_proses, 'pcs')) + array_sum(array_column($sortir_selesai, 'pcs')) + array_sum(array_column($stock_sortir, 'pcs')) + array_sum(array_column($grading_stock, 'pcs')) + $suntik_grading->pcs + $suntik_ctk_sisa->pcs, 0) }}
                             </td>
-                            <td class="text-end fw-bold">
+                            <td class="text-end fw-bold pink-magenta">
                                 {{ number_format(array_sum(array_column($box_cabut_sedang_proses, 'gr')) + array_sum(array_column($box_cabut_belum_serah, 'gr')) + array_sum(array_column($bk_sisa_pgws, 'gr')) + array_sum(array_column($cetak_proses, 'gr')) + array_sum(array_column($cetak_selesai_belum_serah, 'gr')) + array_sum(array_column($cetak_sisa_pgws, 'gr')) + array_sum(array_column($sortir_proses, 'gr')) + array_sum(array_column($sortir_selesai, 'gr')) + array_sum(array_column($stock_sortir, 'gr')) + array_sum(array_column($grading_stock, 'gr')) + array_sum(array_column($bkselesai_siap_str, 'gr')) + $suntik_grading->gr + $suntik_ctk_sisa->gr, 0) }}
                             </td>
                             <td></td>
@@ -553,14 +572,73 @@
             </style>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog  modal-lg-max">
+                <div class="modal-dialog  ">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">BK Awal</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Cost Kerja</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>bulan & tahun</th>
+                                        <th class="text-end">total rp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($uang_cost as $u)
+                                        <tr>
+                                            <td>{{ $u[0] }}</td>
+                                            <td class="text-end">{{ number_format($u[1], 0) }}</td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th class="text-end">
+                                            {{ number_format(sumBk($uang_cost, 1), 0) }}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog  modal-lg-max">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Detail Partai</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="detail_partai"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="opneNo_box" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Detail No Box</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="load_box"></div>
 
                         </div>
 
@@ -575,6 +653,34 @@
                 $(document).ready(function() {
                     $('.open-modal').click(function() {
                         $('#exampleModal').modal('show');
+                    });
+
+                    $('.open_bk_awal').click(function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('summary.detail_partai') }}",
+                            success: function(response) {
+                                $('#detail_partai').html(response);
+                            }
+                        });
+
+
+                    });
+                    $(document).on('click', '.opennNobox', function(e) {
+                        e.preventDefault();
+                        var nm_partai = $(this).attr('nm_partai');
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('summary.detail_box') }}",
+                            data: {
+                                nm_partai: nm_partai
+                            },
+                            success: function(response) {
+                                $("#load_box").html(response);
+                                $('#opneNo_box').modal('show');
+                            }
+                        });
                     });
                 });
             </script>
