@@ -14,12 +14,52 @@
 </head>
 
 <body>
-    <table class="table table-bordered" width="1%">
-        <tr>
-            <th>Partai</th>
-            <th>No Box</th>
-        </tr>
-    </table>
+    <br>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table ">
+                    <tr>
+                        <th>Partai</th>
+                        <th>No Box</th>
+                        <th>tanggal mulai kerja</th>
+                        <th>tanggal selesai kirim</th>
+                    </tr>
+                    <tr>
+                        <td>{{ $nm_partai->nm_partai }}</td>
+                        <td>{{ $no_box }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-12">
+                <table class="table ">
+                    <tr>
+                        <th colspan="50">Bk</th>
+                    </tr>
+                    <tr>
+                        <th>Pengawas</th>
+                        <th>Timbang ulang</th>
+                        <th>pcs awal</th>
+                        <th>gr awal</th>
+                        <th>pcs akhir</th>
+                        <th>gr akhir</th>
+                        <th>susut</th>
+                        <th>total rp</th>
+                    </tr>
+                    <tr>
+                        <td>{{ $nm_partai->nm_partai }}</td>
+                        <td>{{ $no_box }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

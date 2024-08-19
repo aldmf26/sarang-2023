@@ -554,6 +554,7 @@ class SummaryController extends Controller
     public function history_box(Request $r)
     {
         $data = [
+            'nm_partai' => DB::table('bk')->where('no_box', $r->no_box)->where('kategori', 'cabut')->first(),
             'no_box' => $r->no_box,
         ];
         return view('home.summary.history_box', $data);
