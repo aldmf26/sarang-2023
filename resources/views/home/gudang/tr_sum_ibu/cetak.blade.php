@@ -27,7 +27,7 @@
     </tr>
 
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak sedang proses</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -37,7 +37,7 @@
         <td>{{ number_format($ca13ttlrp, 0) }}</td>
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak selesai siap sortir belum serah</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>
@@ -46,7 +46,10 @@
         <td>{{ number_format($ca14gr, 0) }}</td>
         <td>{{ number_format($ca14ttlrp, 0) }}</td>
         <td>{{ number_format($ca14costkerja, 0) }}</td>
-        @for ($i = 0; $i < 5; $i++)
+        <td>{{ number_format($ca14op, 0) }}</td>
+        <td>{{ number_format($ca14dll, 0) }}</td>
+
+        @for ($i = 0; $i < 3; $i++)
             <td></td>
         @endfor
 
@@ -61,7 +64,9 @@
         <td>{{ number_format($ca15gr, 0) }}</td>
         <td>{{ number_format(0, 0) }}</td>
         <td>{{ number_format(0, 0) }}</td>
-        @for ($i = 0; $i < 5; $i++)
+        <td>{{ number_format($ca15op, 0) }}</td>
+        <td>{{ number_format($ca15dll, 0) }}</td>
+        @for ($i = 0; $i < 3; $i++)
             <td></td>
         @endfor
     </tr>
@@ -75,14 +80,16 @@
         <td>{{ number_format($ca16gr, 0) }}</td>
         <td>{{ number_format($ca16ttlrp, 0) }}</td>
         <td>{{ number_format($ca16costkerja, 0) }}</td>
-        @for ($i = 0; $i < 5; $i++)
+        <td>{{ number_format($ca16op, 0) }}</td>
+        <td>{{ number_format($ca16dll, 0) }}</td>
+        @for ($i = 0; $i < 3; $i++)
             <td></td>
         @endfor
 
 
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak sisa pgws</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -105,6 +112,8 @@
             $b2ttlrp =  $ca14ttlrp + $ca16ttlrp;
 
             $cost_kerja = $ca14costkerja + $ca16costkerja;
+            $costOp = $ca14op + $ca16op;
+            $costDll = $ca14dll + $ca16dll;
 
             $sumTtl = [
                 'apcs' => $ca11pcs + $ca12pcs,
@@ -120,8 +129,8 @@
                 'b2ttlrp' => $b2ttlrp,
 
                 'cost_kerja' => $cost_kerja,
-                'cost_op' => 0,
-                'cost_dl' => 0,
+                'cost_op' => $costOp,
+                'cost_dl' => $costDll,
 
                 'cpcs' => $cpcs,
                 'cgr' => $cgr,
