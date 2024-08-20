@@ -26,7 +26,7 @@
     </tr>
 
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>sortir sedang proses</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -36,7 +36,7 @@
         <td>{{ number_format($s3ttlrp, 0) }}</td>
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>sortir selesai siap grading belum serah</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>
@@ -71,7 +71,7 @@
 
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>sortir sisa pgws</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>

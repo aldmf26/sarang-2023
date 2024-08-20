@@ -26,7 +26,7 @@
     </tr>
 
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta  text-white">Opname</td>
         <td>sortir sedang proses</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -37,7 +37,7 @@
     </tr>
     
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta  text-white">Opname</td>
         <td>sortir selesai siap grading diserahkan</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>

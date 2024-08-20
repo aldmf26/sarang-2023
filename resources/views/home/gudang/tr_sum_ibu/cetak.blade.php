@@ -27,7 +27,7 @@
     </tr>
 
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak sedang proses</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -37,7 +37,7 @@
         <td>{{ number_format($ca13ttlrp, 0) }}</td>
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak selesai siap sortir belum serah</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>
@@ -89,7 +89,7 @@
 
     </tr>
     <tr class="pointer detail">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>cetak sisa pgws</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>

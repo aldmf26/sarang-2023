@@ -16,7 +16,7 @@
 
     </tr>
     <tr class="pointer detail" index="12">
-        <td>Opname</td>
+        <td class="pink-magenta text-white">Opname</td>
         <td>box stock cabut sedang proses</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
@@ -27,7 +27,7 @@
     </tr>
 
     <tr class="pointer detail" index="13">
-        <td>Opname</td>
+        <td class="pink-magenta">Opname</td>
         <td>box selesai cabut siap cetak belum serah</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>
@@ -60,7 +60,7 @@
 
     </tr>
     <tr class="pointer detail" index="15">
-        <td>Opname</td>
+        <td class="pink-magenta">Opname</td>
         <td>box selesai cbt siap sortir belum serah</td>
         @for ($i = 0; $i < 7; $i++)
             <td></td>
@@ -92,7 +92,7 @@
 
     </tr>
     <tr class="pointer detail" index="17">
-        <td>Opname</td>
+        <td class="pink-magenta">Opname</td>
         <td>box cbt sisa pgws</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
