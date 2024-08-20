@@ -143,6 +143,13 @@ if (!function_exists('sumCol')) {
     }
 }
 
+if (!function_exists('sumBk')) {
+    function sumBk($kategori, $data)
+    {
+        return array_sum(array_column($kategori, $data));
+    }
+}
+
 if (!function_exists('rumusTotalRp ')) {
     function rumusTotalRp($detail)
     {
