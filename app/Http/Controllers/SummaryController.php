@@ -32,7 +32,7 @@ class SummaryController extends Controller
         // }
         $uang_cost = [
             'uang_cost' => ['juni 2024', 858415522.9],
-            ['juli 2024', 957491604, 74]
+            ['juli 2024', 957491604.74]
         ];
         $data = [
             'title' => 'Data Gudang Awal',
@@ -554,9 +554,75 @@ class SummaryController extends Controller
     public function history_box(Request $r)
     {
         $data = [
-            'nm_partai' => DB::table('bk')->where('no_box', $r->no_box)->where('kategori', 'cabut')->first(),
+            'bk' => DB::table('bk')->where('no_box', $r->no_box)
+                ->leftjoin('users', 'users.id', 'penerima')
+                ->where('kategori', 'cabut')->first(),
             'no_box' => $r->no_box,
+            'cabut' => DB::selectOne("SELECT a.*, b.name, c.nama, (d.hrga_satuan * d.gr_awal) as cost_bk
+            FROM cabut as a 
+            left join users as b on b.id = a.id_pengawas
+            left join tb_anak as c on c.id_anak = a.id_anak
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+            where a.no_box = '$r->no_box';"),
+
+            'cetak' => DB::selectOne("SELECT a.no_box, a.pcs_awal_ctk, a.gr_awal_ctk, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_akhir, a.gr_akhir, 
+            a.ttl_rp as cost_ctk, (b.hrga_satuan * b.gr_awal) as cost_bk, d.ttl_rp as cost_cbt, f.name as nm_serah, g.name as nm_terima, h.nama as nm_anak
+            FROM cetak_new as a 
+            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            left join kelas_cetak as  c on c.id_kelas_cetak = a.id_kelas_cetak
+            left join cabut as d on d.no_box = a.no_box
+            left join formulir_sarang as e on e.no_box = a.no_box and e.kategori = 'cetak'
+            left join users as f on f.id = e.id_pemberi
+            left join users as g on g.id = e.id_penerima
+            left join tb_anak as h on h.id_anak = a.id_anak
+            where c.kategori = 'CTK' and a.no_box = '$r->no_box';"),
+            'sortir' => DB::selectOne("SELECT a.*, c.name as nm_serah, d.name as nm_terima, e.nama as nm_karyawan
+            FROM sortir as a 
+            left join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'sortir'
+            left join users as c on c.id = b.id_pemberi
+            left join users as d on d.id = b.id_penerima
+            left join tb_anak as e on e.id_anak = a.id_anak
+            where a.no_box = '$r->no_box';")
+
         ];
         return view('home.summary.history_box', $data);
+    }
+
+    public function history_partai(Request $r)
+    {
+        $data = [
+            'nm_partai' => $r->nm_partai,
+            'bk' => DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum(a.gr_awal * a.hrga_satuan) as ttl_rp
+            FROM bk as a 
+            where a.nm_partai = '$r->nm_partai' and a.kategori ='cabut' and a.no_box in(SELECT b.no_box FROM cabut as b )
+             "),
+            'bk_sisa' => DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr , sum(a.gr_awal * a.hrga_satuan) as ttl_rp
+            FROM bk as a 
+            where a.nm_partai = '$r->nm_partai' and a.kategori ='cabut' and a.no_box not in(SELECT b.no_box FROM cabut as b )
+             "),
+
+            'cabut' => DB::selectOne("SELECT d.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,  
+            sum(a.pcs_akhir) as pcs_akhir,sum(a.gr_akhir) as gr_akhir,
+            b.name, c.nama, sum(d.hrga_satuan * d.gr_awal) as cost_bk, sum(a.ttl_rp) as cost_cabut
+            FROM cabut as a 
+            left join users as b on b.id = a.id_pengawas
+            left join tb_anak as c on c.id_anak = a.id_anak
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+            where d.nm_partai = '$r->nm_partai' and a.selesai = 'Y'  and a.no_box in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'cetak')
+            group by d.nm_partai
+            "),
+
+            'cabut_sisa' => DB::selectOne("SELECT d.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,  
+            sum(a.pcs_akhir) as pcs_akhir,sum(a.gr_akhir) as gr_akhir,
+            b.name, c.nama, sum(d.hrga_satuan * d.gr_awal) as cost_bk, sum(a.ttl_rp) as cost_cabut
+            FROM cabut as a 
+            left join users as b on b.id = a.id_pengawas
+            left join tb_anak as c on c.id_anak = a.id_anak
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+            where d.nm_partai = '$r->nm_partai' and a.no_box not in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'cetak')
+            group by d.nm_partai
+            "),
+        ];
+        return view('home.summary.history_partai', $data);
     }
 }

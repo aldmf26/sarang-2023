@@ -160,6 +160,7 @@
                     $cost_oprasional = $operasional - $ttl_cost_kerja - $cost_cu_dll;
 
                     $rp_gr_cost_op = $cost_oprasional / $ttl_gr_operasional;
+
                     $rp_gr_cu_dll = $cost_cu_dll / $ttl_gr_operasional;
 
                     $ttlrp1 = sumBk($box_cabut_sedang_proses, 'ttl_rp');
@@ -527,17 +528,17 @@
                         </tr>
                         <tr>
                             <td class="ungu_pengiriman">sudah kirim</td>
-                            <td class="ungu_pengiriman">box selesai kirim pengiriman</td>
-                            <td class="ungu_pengiriman text-end">
+                            <td>box selesai kirim pengiriman</td>
+                            <td class=" text-end">
                                 0
                             </td>
-                            <td class="ungu_pengiriman text-end">
+                            <td class=" text-end">
                                 0
                             </td>
-                            <td class="ungu_pengiriman text-end">
+                            <td class=" text-end">
                                 0
                             </td>
-                            <td class="ungu_pengiriman text-end">
+                            <td class=" text-end bg-warning text-white">
                                 0
                             </td>
                         </tr>

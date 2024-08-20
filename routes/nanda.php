@@ -262,5 +262,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/detail_partai', 'detail_partai')->name('detail_partai');
             Route::get('/detail_box', 'detail_box')->name('detail_box');
             Route::get('/history_box', 'history_box')->name('history_box');
+            Route::get('/history_partai', 'history_partai')->name('history_partai');
         });
 });
