@@ -56,6 +56,8 @@ class SummaryController extends Controller
             'bkselesai_siap_str_diserahkan' => SummaryModel::bkselesai_siap_str_diserahkan(),
             'cetak_selesai_diserahkan' => SummaryModel::cetak_selesai_diserahkan(),
             'sortir_selesai_diserahkan' => SummaryModel::sortir_selesai_diserahkan(),
+            'pengiriman' => DB::selectOne("SELECT sum(a.pcs) as pcs , sum(a.gr) as gr , sum(a.gr * a.rp_gram) as total_rp
+                FROM pengiriman as a;"),
 
             // suntik
             'suntik_ctk_sisa' => SummaryModel::bk_suntik('cetak_sisa'),
@@ -677,7 +679,8 @@ class SummaryController extends Controller
                 where f.kategori = 'CTK'
             ) as e on e.no_box = a.no_box
             where  b.nm_partai = '$r->nm_partai' and a.selesai = 'T'  
-            GROUP by b.nm_partai;")
+            GROUP by b.nm_partai;"),
+
 
 
         ];

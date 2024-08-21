@@ -25,6 +25,10 @@
             font-size: 13px;
             color: #787878;
         }
+
+        .bg_biru {
+            background-color: #87cefa !important;
+        }
     </style>
     <br>
     <div class="container-fluid">
@@ -77,7 +81,11 @@
                         <th class="text-end boder_bottom border_top"></th>
                         <th class="text-end boder_bottom border_top"></th>
                         <th class="text-end boder_bottom border_top"></th>
-                        <th class="text-end boder_bottom border_top"></th>
+                        <th class="text-end boder_bottom border_top border_right"></th>
+                        <th class="text-end boder_bottom border_top">pcs sisa</th>
+                        <th class="text-end boder_bottom border_top">gr sisa</th>
+                        <th class="text-end boder_bottom border_top">rp/gr</th>
+                        <th class="text-end boder_bottom border_top border_right">total rp</th>
                     </tr>
                     <tr>
                         <td class="border_right boder_bottom">{{ $bk->pengawas }}</td>
@@ -87,13 +95,17 @@
                         <td class="text-end boder_bottom">0</td>
                         <td class="text-end boder_bottom border_right">0</td>
                         <td class="text-end boder_bottom border_right">0</td>
-                        <td class="text-end boder_bottom border_right">
+                        <td class="text-end boder_bottom border_right bg_biru">
                             {{ number_format($bk->hrga_satuan * $bk->gr_awal, 0) }}</td>
                         <td class="text-end boder_bottom">{{ number_format($bk->hrga_satuan, 0) }}</td>
                         <td class="boder_bottom"></td>
                         <td class="boder_bottom"></td>
                         <td class="boder_bottom"></td>
+                        <td class="boder_bottom border_right"></td>
                         <td class="boder_bottom"></td>
+                        <td class="boder_bottom"></td>
+                        <td class="boder_bottom"></td>
+                        <td class="boder_bottom border_right"></td>
                     </tr>
                     <tr>
                         <th colspan="50" class="boder_bottom">Cabut</th>
@@ -111,7 +123,11 @@
                         <th class="text-end boder_bottom border_top">cost operasional</th>
                         <th class="text-end boder_bottom border_top">cost dll denda cu</th>
                         <th class="text-end boder_bottom border_top">total rp</th>
+                        <th class="text-end boder_bottom border_top border_right">rp/gr</th>
+                        <th class="text-end boder_bottom border_top">pcs sisa</th>
+                        <th class="text-end boder_bottom border_top">gr sisa</th>
                         <th class="text-end boder_bottom border_top">rp/gr</th>
+                        <th class="text-end boder_bottom border_top border_right">total rp</th>
                     </tr>
                     <tr>
                         <td class="border_right boder_bottom">{{ $cabut->name }}</td>
@@ -122,9 +138,9 @@
                         <td class="text-end boder_bottom border_right">{{ $cabut->gr_akhir }}</td>
                         <td class="text-end boder_bottom border_right">
                             {{ number_format((1 - $cabut->gr_akhir / $cabut->gr_awal) * 100, 1) }} %</td>
-                        <td class="text-end boder_bottom border_right">
+                        <td class="text-end boder_bottom border_right ">
                             {{ number_format($cabut->cost_bk, 0) }}</td>
-                        <td class="text-end boder_bottom">{{ number_format($cabut->ttl_rp, 0) }}</td>
+                        <td class="text-end boder_bottom ">{{ number_format($cabut->ttl_rp, 0) }}</td>
                         <td class="text-end boder_bottom">{{ number_format(1087.362885977 * $cabut->gr_akhir, 0) }}
                         <td class="text-end boder_bottom">{{ number_format(124.36093427769 * $cabut->gr_akhir, 0) }}
                         </td>
@@ -135,11 +151,16 @@
                                 1087.362885977 * $cabut->gr_akhir +
                                 124.36093427769 * $cabut->gr_akhir;
                         @endphp
-                        <td class="text-end boder_bottom">
+                        <td class="text-end boder_bottom bg_biru">
                             {{ number_format($ttl_rp_cabut, 0) }}
                         </td>
-                        <td class="boder_bottom text-end">{{ number_format($ttl_rp_cabut / $cabut->gr_akhir, 0) }}
+                        <td class="boder_bottom text-end border_right">
+                            {{ number_format($ttl_rp_cabut / $cabut->gr_akhir, 0) }}
                         </td>
+                        <td class="text-end  boder_bottom">0</td>
+                        <td class="text-end boder_bottom">0</td>
+                        <td class="text-end boder_bottom">0</td>
+                        <td class="text-end boder_bottom border_right">0</td>
                     </tr>
                     <tr>
                         <th colspan="50" class="boder_bottom">Cetak</th>
@@ -158,7 +179,11 @@
                         <th class="text-end boder_bottom border_top">cost operasional</th>
                         <th class="text-end boder_bottom border_top">cost dll denda cu</th>
                         <th class="text-end boder_bottom border_top">total rp</th>
+                        <th class="text-end boder_bottom border_top border_right">rp/gr</th>
+                        <th class="text-end boder_bottom border_top">pcs sisa</th>
+                        <th class="text-end boder_bottom border_top">gr sisa</th>
                         <th class="text-end boder_bottom border_top">rp/gr</th>
+                        <th class="text-end boder_bottom border_top border_right">total rp</th>
                     </tr>
                     <tr>
                         <td class="border_right boder_bottom">{{ $cetak->nm_serah }}</td>
@@ -170,7 +195,7 @@
                         <td class="text-end boder_bottom border_right">{{ $cetak->gr_akhir + $cetak->gr_tdk_cetak }}
                         </td>
                         <td class="text-end boder_bottom border_right">
-                            {{ number_format((1 - ($cetak->gr_akhir + $cetak->gr_tdk_cetak) / $cabut->gr_awal) * 100, 1) }}
+                            {{ number_format((1 - ($cetak->gr_akhir + $cetak->gr_tdk_cetak) / $cetak->gr_awal_ctk) * 100, 1) }}
                             %</td>
                         <td class="text-end boder_bottom border_right">
                             {{ number_format($ttl_rp_cabut, 0) }}</td>
@@ -187,11 +212,16 @@
                                 1087.362885977 * ($cetak->gr_akhir + $cetak->gr_tdk_cetak) +
                                 124.36093427769 * ($cetak->gr_akhir + $cetak->gr_tdk_cetak);
                         @endphp
-                        <td class="text-end boder_bottom">
+                        <td class="text-end boder_bottom bg_biru">
                             {{ number_format($ttl_rp_cetak, 0) }}
                         </td>
-                        <td class="boder_bottom text-end">{{ number_format($ttl_rp_cetak / $cabut->gr_akhir, 0) }}
+                        <td class="boder_bottom text-end border_right">
+                            {{ number_format($ttl_rp_cetak / $cabut->gr_akhir, 0) }}
                         </td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end border-right">0</td>
                     </tr>
                     <tr>
                         <th colspan="50" class="boder_bottom">Sortir</th>
@@ -210,7 +240,11 @@
                         <th class="text-end boder_bottom border_top">cost operasional</th>
                         <th class="text-end boder_bottom border_top">cost dll denda cu</th>
                         <th class="text-end boder_bottom border_top">total rp</th>
+                        <th class="text-end boder_bottom border_top border_right">rp/gr</th>
+                        <th class="text-end boder_bottom border_top">pcs sisa</th>
+                        <th class="text-end boder_bottom border_top">gr sisa</th>
                         <th class="text-end boder_bottom border_top">rp/gr</th>
+                        <th class="text-end boder_bottom border_top border_right">total rp</th>
                     </tr>
                     <tr>
                         <td class="border_right boder_bottom">{{ $sortir->nm_serah }}</td>
@@ -235,11 +269,16 @@
                                 1087.362885977 * $sortir->gr_akhir +
                                 124.36093427769 * $sortir->gr_akhir;
                         @endphp
-                        <td class="text-end boder_bottom">
+                        <td class="text-end boder_bottom bg_biru">
                             {{ number_format($ttl_rp_sortir, 0) }}
                         </td>
-                        <td class="boder_bottom text-end">{{ number_format($ttl_rp_sortir / $sortir->gr_akhir, 0) }}
+                        <td class="boder_bottom text-end border_right ">
+                            {{ number_format($ttl_rp_sortir / $sortir->gr_akhir, 0) }}
                         </td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end ">0</td>
+                        <td class="boder_bottom text-end border_right">0</td>
                     </tr>
                 </table>
             </div>

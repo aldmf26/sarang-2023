@@ -514,32 +514,32 @@
                             <td class="pink-magenta">opname</td>
                             <td>box belum kirim gudang wip</td>
                             <td class="text-end">
-                                {{ number_format(array_sum(array_column($grading_stock, 'pcs')) + $suntik_grading->pcs, 0) }}
+                                {{ number_format(array_sum(array_column($grading_stock, 'pcs')) + $suntik_grading->pcs - $pengiriman->pcs, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format(array_sum(array_column($grading_stock, 'gr')) + $suntik_grading->gr, 0) }}
+                                {{ number_format(array_sum(array_column($grading_stock, 'gr')) + $suntik_grading->gr - $pengiriman->gr, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ empty(array_sum(array_column($grading_stock, 'gr'))) ? 0 : number_format(array_sum(array_column($grading_stock, 'ttl_rp')) / array_sum(array_column($grading_stock, 'gr')), 0) }}
+                                {{ empty(array_sum(array_column($grading_stock, 'gr'))) ? 0 : number_format((sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp - $pengiriman->total_rp) / (sumBk($grading_stock, 'gr') + $suntik_grading->gr - $pengiriman->gr), 0) }}
                             </td>
                             <td class="text-end bg-warning text-white">
-                                {{ number_format(sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp, 0) }}
+                                {{ number_format(sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp - $pengiriman->total_rp, 0) }}
                             </td>
                         </tr>
                         <tr>
                             <td class="ungu_pengiriman">sudah kirim</td>
                             <td>box selesai kirim pengiriman</td>
                             <td class=" text-end">
-                                0
+                                {{ number_format($pengiriman->pcs, 0) }}
                             </td>
                             <td class=" text-end">
-                                0
+                                {{ number_format($pengiriman->gr, 0) }}
                             </td>
                             <td class=" text-end">
-                                0
+                                {{ number_format($pengiriman->total_rp / $pengiriman->gr, 0) }}
                             </td>
                             <td class=" text-end bg-warning text-white">
-                                0
+                                {{ number_format($pengiriman->total_rp, 0) }}
                             </td>
                         </tr>
                     </tbody>
