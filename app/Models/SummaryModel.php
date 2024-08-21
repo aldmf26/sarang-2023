@@ -462,4 +462,78 @@ class SummaryModel extends Model
         $result = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = '$gudang'");
         return $result;
     }
+    public static function cabut_history($nm_partai)
+    {
+        $result = DB::selectOne("SELECT nm_partai, SUM(pcs) as pcs, SUM(gr) as gr, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as gr_akhir, SUM(cost_bk) as cost_bk, SUM(cost_cabut) as cost_cabut
+            FROM (
+                SELECT 
+                    d.nm_partai, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr,  SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir,SUM(d.hrga_satuan * d.gr_awal) as cost_bk, SUM(a.ttl_rp) as cost_cabut
+                FROM cabut as a 
+                    LEFT JOIN bk as d 
+                        ON d.no_box = a.no_box AND d.kategori = 'cabut'
+                WHERE d.nm_partai = '$nm_partai' AND a.selesai = 'Y'  AND a.no_box IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori IN('cetak','sortir'))
+                GROUP BY 
+                    d.nm_partai
+
+                UNION ALL
+
+                SELECT 
+                    f.nm_partai, 
+                    0 as pcs, 
+                    SUM(e.gr_eo_awal) as gr, 
+                    0 as pcs_akhir, 
+                    SUM(e.gr_eo_akhir) as gr_akhir, 
+                    SUM(f.gr_awal * f.hrga_satuan) as cost_bk, 
+                    SUM(e.ttl_rp) as cost_cabut
+                FROM 
+                    eo as e
+                    LEFT JOIN bk as f 
+                        ON f.no_box = e.no_box
+                WHERE 
+                    f.nm_partai = '$nm_partai' 
+                    AND e.selesai = 'Y' 
+                    AND e.no_box IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori = 'sortir')
+                GROUP BY 
+                    f.nm_partai
+            ) as combined_data
+            GROUP BY nm_partai;");
+        return $result;
+    }
+    public static function cabut_sisa_history($nm_partai)
+    {
+        $result = DB::selectOne("SELECT nm_partai, SUM(pcs) as pcs, SUM(gr) as gr, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as gr_akhir, SUM(cost_bk) as cost_bk, SUM(cost_cabut) as cost_cabut
+            FROM (
+                SELECT 
+                    d.nm_partai, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr,  SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir,SUM(d.hrga_satuan * d.gr_awal) as cost_bk, SUM(a.ttl_rp) as cost_cabut
+                FROM cabut as a 
+                    LEFT JOIN bk as d 
+                        ON d.no_box = a.no_box AND d.kategori = 'cabut'
+                WHERE d.nm_partai = '$nm_partai' AND a.selesai = 'T'  AND a.no_box NOT IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori IN('cetak','sortir'))
+                GROUP BY 
+                    d.nm_partai
+
+                UNION ALL
+
+                SELECT 
+                    f.nm_partai, 
+                    0 as pcs, 
+                    SUM(e.gr_eo_awal) as gr, 
+                    0 as pcs_akhir, 
+                    SUM(e.gr_eo_akhir) as gr_akhir, 
+                    SUM(f.gr_awal * f.hrga_satuan) as cost_bk, 
+                    SUM(e.ttl_rp) as cost_cabut
+                FROM 
+                    eo as e
+                    LEFT JOIN bk as f 
+                        ON f.no_box = e.no_box
+                WHERE 
+                    f.nm_partai = '$nm_partai' 
+                    AND e.selesai = 'T' 
+                    AND e.no_box NOT IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori = 'sortir')
+                GROUP BY 
+                    f.nm_partai
+            ) as combined_data
+            GROUP BY nm_partai;");
+        return $result;
+    }
 }
