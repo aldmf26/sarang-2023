@@ -18,8 +18,10 @@
         @foreach ($bk as $b)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ date('m Y', strtotime($b->tgl)) }}</td>
-                <td><a href="#" class="opennNobox" nm_partai="{{ $b->nm_partai }}">{{ $b->nm_partai }}</a></td>
+                <td>{{ date('F Y', strtotime($b->tgl)) }}</td>
+                <td><a target="_blank"
+                        href="{{ route('summary.history_partai', ['nm_partai' => $b->nm_partai]) }}">{{ $b->nm_partai }}</a>
+                </td>
                 <td>{{ $b->nm_partai_dulu }}</td>
                 <td>{{ $b->grade }}</td>
                 <td>{{ number_format($b->pcs, 0) }}</td>
