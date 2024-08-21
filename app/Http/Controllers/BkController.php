@@ -196,10 +196,11 @@ class BkController extends Controller
                         continue;
                     }
 
-                    
+
                     $tgl = $row[6];
 
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
+
                     if (
                         // $cekBox || 
                         empty($row[0]) ||
@@ -227,7 +228,9 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-                        $nobox = $this->getNoBoxTambah();
+                        // $nobox = $this->getNoBoxTambah();
+                        $nobox = $row[8];
+
                         DB::table('bk')->insert([
                             'no_lot' => '0',
                             'nm_partai' => $row[0],
@@ -236,7 +239,7 @@ class BkController extends Controller
                             'ket' => $row[2],
                             'warna' => $row[3],
                             'tgl' => date('Y-m-d'),
-                            'pengawas' => $row[6] == 'cabut' ? 'sinta' : 'siti fatimah',
+                            'pengawas' => 'sinta',
                             'penerima' => $row[4],
                             'pcs_awal' => $row[5],
                             'gr_awal' => $row[6],
@@ -413,6 +416,4 @@ class BkController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
-    
 }

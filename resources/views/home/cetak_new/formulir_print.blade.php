@@ -43,14 +43,15 @@
         </div>
         @foreach ($halaman as $h)
             @php
-                $detail = DB::table('formulir_sarang')
-                    ->leftJoin('users', 'users.id', '=', 'formulir_sarang.id_penerima')
+                $detail = DB::table('formulir_sarang as a')
+                    ->leftJoin('users', 'users.id', '=', 'a.id_penerima')
                     ->leftJoin('bk as b', function ($join) {
-                        $join->on('b.no_box', '=', 'formulir_sarang.no_box')->where('b.kategori', '=', 'cabut');
+                        $join->on('b.no_box', '=', 'a.no_box')->where('b.kategori', '=', 'cabut');
                     })
-                    ->where('formulir_sarang.no_invoice', $no_invoice)
-                    ->where('formulir_sarang.kategori', 'sortir')
-                    ->where('formulir_sarang.id_penerima', $h->id_penerima)
+                    ->where('a.no_invoice', $no_invoice)
+                    ->where('a.kategori', 'sortir')
+                    ->where('a.id_penerima', $h->id_penerima)
+                    ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
                     ->get();
 
             @endphp

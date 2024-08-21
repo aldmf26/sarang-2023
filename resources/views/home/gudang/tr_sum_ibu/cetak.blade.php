@@ -3,7 +3,7 @@
         <th class="bg-primary text-white" colspan="17">Cetak</th>
     </tr>
 
-    <tr class="pointer detail">
+    <tr class="pointer detail" index="21">
         <td>Awal</td>
         <td>cetak opname</td>
 
@@ -15,7 +15,7 @@
         @endfor
 
     </tr>
-    <tr class="pointer detail">
+    <tr class="pointer detail" index="22">
         <td>Awal</td>
         <td>cetak stock awal</td>
         <td>{{ number_format($ca12pcs, 0) }}</td>
