@@ -53,7 +53,6 @@
                     ->where('a.id_penerima', $h->id_penerima)
                     ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
                     ->get();
-
             @endphp
             <div class="section">
                 <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{ $no_invoice }}</h5>
