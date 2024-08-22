@@ -309,7 +309,8 @@
                         @endphp
                         <td class="text-end boder_bottom bg_biru">{{ number_format($ttl_rp_sortir, 0) }}</td>
                         <td class="text-end border_right boder_bottom">
-                            {{ number_format($ttl_rp_sortir / $sortir->gr_akhir, 0) }}</td>
+                            {{ empty($sortir->gr_akhir) ? 0 : number_format($ttl_rp_sortir / $sortir->gr_akhir, 0) }}
+                        </td>
 
                         <td class="text-end boder_bottom">{{ number_format($sortir_sisa->pcs ?? 0, 0) }}</td>
                         <td class="text-end boder_bottom">{{ number_format($sortir_sisa->gr ?? 0, 0) }}</td>

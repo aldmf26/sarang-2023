@@ -3,9 +3,10 @@
 
 @endphp
 <style>
-    .nav-item.active {
-        background-color: #F7914D;
-        color: white !important;
+    .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+        color: #fff !important;
+        background-color: #F7914D !important;
     }
 
     .nav-link {
@@ -18,12 +19,12 @@
 </style>
 <div class="col-lg-12">
     <ul class="nav nav-pills float-start">
-        <li class="nav-item {{ $rot == 'summary.history_partai' ? 'active' : '' }}">
-            <a class="nav-link" aria-current="page"
+        <li class="nav-item ">
+            <a class="nav-link {{ $rot == 'summary.history_partai' ? 'active' : '' }}" aria-current="page"
                 href="{{ route('summary.history_partai', ['nm_partai' => $nm_partai]) }}">Summary Partai</a>
         </li>
-        <li class="nav-item {{ $rot == 'summary.detail_box' ? 'active' : '' }}">
-            <a class="nav-link" aria-current="page"
+        <li class="nav-item ">
+            <a class="nav-link {{ $rot == 'summary.detail_box' ? 'active' : '' }}" aria-current="page"
                 href="{{ route('summary.detail_box', ['nm_partai' => $nm_partai]) }}">Perbox</a>
         </li>
 

@@ -35,6 +35,19 @@
             background-color: var(--warnaDhead) !important;
             color: white;
         }
+
+        div.dt-container .dt-paging .dt-paging-button.current,
+        div.dt-container .dt-paging .dt-paging-button.current:hover {
+            color: white !important;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.05);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(230, 230, 230, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.05)));
+            background: -webkit-linear-gradient(top, rgba(230, 230, 230, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%);
+            background: -moz-linear-gradient(top, rgba(230, 230, 230, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%);
+            background: -ms-linear-gradient(top, rgba(230, 230, 230, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%);
+            background: -o-linear-gradient(top, rgba(230, 230, 230, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%);
+            background: #F7914E;
+        }
     </style>
     <br>
     <div class="container-fluid">
@@ -47,7 +60,7 @@
                     <thead>
                         <tr>
                             <th class="dhead">#</th>
-                            <th class="dhead">no box</th>
+                            <th class="dhead text-center">no box</th>
                             <th class="dhead">pengawas</th>
                             <th class="dhead">grade</th>
                             <th class="dhead text-end">pcs</th>
@@ -59,7 +72,7 @@
                         @foreach ($bk as $b)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a target="_blank"
+                                <td class="text-center"><a target="_blank"
                                         href="{{ route('summary.history_box', ['no_box' => $b->no_box]) }}">{{ $b->no_box }}</a>
                                 </td>
                                 <td>{{ $b->name }}</td>
