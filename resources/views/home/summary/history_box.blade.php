@@ -96,8 +96,8 @@
                         <td class="text-end boder_bottom border_right">0</td>
                         <td class="text-end boder_bottom border_right">0</td>
                         <td class="text-end boder_bottom border_right bg_biru">
-                            {{ number_format($bk->hrga_satuan * $bk->gr_awal, 0) }}</td>
-                        <td class="text-end boder_bottom">{{ number_format($bk->hrga_satuan, 0) }}</td>
+                            {{ number_format($bk->ttl_rp, 0) }}</td>
+                        <td class="text-end boder_bottom">{{ number_format($bk->ttl_rp / $bk->gr_awal, 0) }}</td>
                         <td class="boder_bottom"></td>
                         <td class="boder_bottom"></td>
                         <td class="boder_bottom"></td>

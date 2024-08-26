@@ -13,6 +13,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>History Partai</title>
 </head>
@@ -44,8 +47,8 @@
                     </tr>
                     <tr>
                         <td>{{ $nm_partai }}</td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ empty($cabut->tgl) ? '-' : tanggal($cabut->tgl) }}</td>
+                        <td>{{ empty($grading->tgl) ? '-' : tanggal($grading->tgl) }}</td>
                     </tr>
                 </table>
             </div>
@@ -323,6 +326,79 @@
 
 
                     </tr>
+                    <tr>
+                        <th colspan="15" class="boder_bottom">Grading</th>
+                    </tr>
+                    <tr>
+                        <th class="text-end boder_bottom border_top">pcs awal</th>
+                        <th class="text-end boder_bottom border_right border_top">gr awal</th>
+                        <th class="text-end boder_bottom border_top">pcs akhir</th>
+                        <th class="text-end boder_bottom border_right border_top">gr akhir</th>
+                        <th class="text-end boder_bottom border_right border_top">susut</th>
+                        <th class="text-end boder_bottom border_right border_top">total rp</th>
+                        <th class="text-end boder_bottom border_top">cost sortir</th>
+                        <th class="text-end boder_bottom border_top">cost operasional</th>
+                        <th class="text-end boder_bottom border_top">cost dll denda cu</th>
+                        <th class="text-end boder_bottom border_top">total rp</th>
+                        <th class="text-end boder_bottom border_top border_right">rp/gr</th>
+                        <th class="text-end boder_bottom ">pcs sisa</th>
+                        <th class="text-end boder_bottom ">gr sisa</th>
+                        <th class="text-end boder_bottom ">rp/gr</th>
+                        <th class="text-end boder_bottom ">total rp</th>
+                    </tr>
+                    <tr>
+                        <td class="text-end boder_bottom">{{ number_format($grading->pcs ?? 0, 0) }}</td>
+                        <td class="text-end border_right boder_bottom">{{ number_format($grading->gr ?? 0, 0) }}</td>
+                        <td class="text-end boder_bottom">{{ number_format($grading->pcs_akhir ?? 0, 0) }}</td>
+                        <td class="text-end border_right boder_bottom">{{ number_format($grading->gr_akhir ?? 0, 0) }}
+                        </td>
+                        <td class="text-end border_right boder_bottom">
+                            {{ empty($grading->gr_akhir) ? 0 : number_format((1 - $grading->gr_akhir / $grading->gr) * 100, 1) }}
+                            %</td>
+                        @php
+                            $ttl_rp_cetak_ke_sortir = empty($sortir->cost_bk)
+                                ? 0
+                                : $sortir->cost_bk +
+                                    $sortir->cost_cabut +
+                                    $sortir->cost_ctk +
+                                    1087.362885977 * $sortir->gr_akhir_ctk +
+                                    124.36093427769 * $sortir->gr_akhir_ctk +
+                                    1087.362885977 * $sortir->gr_akhir_cbt +
+                                    124.36093427769 * $sortir->gr_akhir_cbt;
+                        @endphp
+                        <td class="text-end border_right boder_bottom">{{ number_format($ttl_rp_sortir, 0) }}
+
+                        </td>
+                        <td class="text-end boder_bottom">0</td>
+                        <td class="text-end boder_bottom">
+                            {{ empty($grading->gr_akhir) ? 0 : number_format(1087.362885977 * $grading->gr_akhir, 0) }}
+                        </td>
+                        <td class="text-end boder_bottom">
+                            {{ empty($grading->gr_akhir) ? 0 : number_format(124.36093427769 * $grading->gr_akhir, 0) }}
+                        </td>
+                        @php
+                            $ttl_rp_grading =
+                                $ttl_rp_sortir +
+                                1087.362885977 * $grading->gr_akhir +
+                                124.36093427769 * $grading->gr_akhir;
+
+                        @endphp
+                        <td class="text-end boder_bottom bg_biru">{{ number_format($ttl_rp_grading, 0) }}</td>
+                        <td class="text-end border_right boder_bottom">
+                            {{ empty($grading->gr_akhir) ? 0 : number_format($ttl_rp_grading / $grading->gr_akhir, 0) }}
+                        </td>
+
+                        <td class="text-end boder_bottom">0</td>
+                        <td class="text-end boder_bottom">0</td>
+
+
+                        <td class="text-end boder_bottom">
+                            0
+                        </td>
+                        <td class="text-end boder_bottom">0</td>
+
+
+                    </tr>
 
 
                 </table>
@@ -335,6 +411,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script></script>
 </body>
 
 </html>

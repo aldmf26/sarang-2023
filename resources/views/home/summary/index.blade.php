@@ -16,10 +16,14 @@
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
-            <div class="col-lg-10"></div>
-            <div class="col-lg-2">
+            <div class="col-lg-9"></div>
+            <div class="col-lg-3">
                 <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end"><i
+                        class="fas fa-print"></i> print</a>
+                <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end me-2"><i
                         class="fas fa-file-excel"></i> export</a>
+                <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end me-2"><i
+                        class="fas fa-plus"></i> operasional</a>
             </div>
             <div class="col-lg-6 mt-2">
                 <table width="100%" class="table table-bordered">
@@ -102,6 +106,32 @@
                             </td>
                         </tr>
                     </tbody>
+
+
+                </table>
+                <hr style="border: 1px solid #435EBE">
+                <h6>Cost Operasional</h6>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="dhead">bulan & tahun</th>
+                            <th class="dhead text-end">total rp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($uang_cost as $u)
+                            <tr>
+                                <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-01')) }}</td>
+                                <td class="text-end">{{ number_format($u->total_operasional, 0) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th class="text-end">{{ number_format(sumBk($uang_cost, 'total_operasional')) }}</th>
+                        </tr>
+                    </tfoot>
 
                 </table>
             </div>
@@ -591,8 +621,9 @@
                                 <tbody>
                                     @foreach ($uang_cost as $u)
                                         <tr>
-                                            <td>{{ $u[0] }}</td>
-                                            <td class="text-end">{{ number_format($u[1], 0) }}</td>
+                                            <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '-01')) }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($u->total_operasional, 0) }}</td>
                                         </tr>
                                     @endforeach
 
@@ -601,7 +632,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th class="text-end">
-                                            {{ number_format(sumBk($uang_cost, 1), 0) }}</th>
+                                            {{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</th>
                                     </tr>
                                 </tfoot>
                             </table>
