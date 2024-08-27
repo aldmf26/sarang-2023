@@ -1931,10 +1931,23 @@ class CabutController extends Controller
         }
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
-            $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
-                        FROM cabut 
-                        WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
+            $ambil = DB::selectOne("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
+                        FROM(
+                            SELECT 
+                            sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
+                            FROM cabut 
+                            WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box 
+                        
+                        UNION ALL
+
+                            SELECT 0 as pcs_akhir, SUM(a.gr_akhir) AS gr_akhir, a.no_box
+                            FROM cabut AS a
+                            WHERE a.no_box = '$d' AND a.selesai = 'Y'
+                            GROUP BY a.no_box) as a
+
+                        group by a.no_box
+                        
+                        ");
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
