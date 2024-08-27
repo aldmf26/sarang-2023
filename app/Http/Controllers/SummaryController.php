@@ -30,10 +30,7 @@ class SummaryController extends Controller
         //     ];
         //     DB::table('bk_awal')->insert($data);
         // }
-        $uang_cost = [
-            'uang_cost' => ['juni 2024', 858415522.9],
-            ['juli 2024', 957491604.74]
-        ];
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
         $data = [
             'title' => 'Data Gudang Awal',
             'bk' => SummaryModel::summarybk(),
@@ -154,6 +151,24 @@ class SummaryController extends Controller
             ],
 
         ];
+        $style_rp_kirim = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'CE37A8',  // Warna background dalam format ARGB (contoh: kuning)
+                ],
+            ],
+
+        ];
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->setActiveSheetIndex(0);
@@ -236,6 +251,8 @@ class SummaryController extends Controller
         $sortir_selesai = SummaryModel::sortir_selesai();
         $stock_sortir = SummaryModel::stock_sortir();
         $grading_stock = SummaryModel::grading_stock();
+        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs , sum(a.gr) as gr , sum(a.gr * a.rp_gram) as total_rp
+                FROM pengiriman as a;");
 
         $bkselesai_siap_ctk_diserahkan = SummaryModel::bkselesai_siap_ctk_diserahkan();
         $bkselesai_siap_str_diserahkan = SummaryModel::bkselesai_siap_str_diserahkan();
@@ -367,6 +384,7 @@ class SummaryController extends Controller
         $sheet->getStyle("K16:K17")->applyFromArray($style_opname);
         $sheet->getStyle("M19:N19")->applyFromArray($style_opname);
         $sheet->getStyle("P2:P19")->applyFromArray($style_rp);
+        $sheet->getStyle("K18")->applyFromArray($style_rp_kirim);
 
         $sheet->setCellValue('K1', 'kategori');
         $sheet->setCellValue('L1', 'keterangan');
@@ -492,17 +510,17 @@ class SummaryController extends Controller
 
         $sheet->setCellValue('K17', 'opname');
         $sheet->setCellValue('L17', 'box belum kirim gudang wip');
-        $sheet->setCellValue('M17', sumBk($grading_stock, 'pcs') + $suntik_grading->pcs);
-        $sheet->setCellValue('N17', sumBk($grading_stock, 'gr') + $suntik_grading->gr);
-        $sheet->setCellValue('O17', empty(sumBk($grading_stock, 'gr')) ? 0 : sumBk($grading_stock, 'ttl_rp') / sumBk($grading_stock, 'gr'));
-        $sheet->setCellValue('P17', sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp);
+        $sheet->setCellValue('M17', sumBk($grading_stock, 'pcs') + $suntik_grading->pcs - $pengiriman->pcs);
+        $sheet->setCellValue('N17', sumBk($grading_stock, 'gr') + $suntik_grading->gr - $pengiriman->gr);
+        $sheet->setCellValue('O17', empty(sumBk($grading_stock, 'gr')) ? 0 : (sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp - $pengiriman->total_rp) / (sumBk($grading_stock, 'gr') + $suntik_grading->gr - $pengiriman->gr));
+        $sheet->setCellValue('P17', sumBk($grading_stock, 'ttl_rp') + $suntik_grading->ttl_rp - $pengiriman->total_rp);
 
         $sheet->setCellValue('K18', 'sudah kirim');
         $sheet->setCellValue('L18', 'box selesai kirim pengiriman');
-        $sheet->setCellValue('M18', 0);
-        $sheet->setCellValue('N18', 0);
-        $sheet->setCellValue('O18', 0);
-        $sheet->setCellValue('P18', 0);
+        $sheet->setCellValue('M18', $pengiriman->pcs);
+        $sheet->setCellValue('N18', $pengiriman->gr);
+        $sheet->setCellValue('O18', $pengiriman->total_rp / $pengiriman->gr);
+        $sheet->setCellValue('P18', $pengiriman->total_rp);
 
         $sheet->setCellValue('K19', 'Total');
         $sheet->setCellValue('L19', '');
@@ -556,9 +574,13 @@ class SummaryController extends Controller
     public function history_box(Request $r)
     {
         $data = [
-            'bk' => DB::table('bk')->where('no_box', $r->no_box)
-                ->leftjoin('users', 'users.id', 'penerima')
-                ->where('kategori', 'cabut')->first(),
+            'bk' => DB::selectOne("SELECT a.nm_partai, a.pengawas, b.name,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal , sum(a.gr_awal * a.hrga_satuan) as ttl_rp
+            FROM bk as a 
+            left join users as b on b.id = penerima
+            where a.no_box = '$r->no_box' and a.kategori ='cabut' and a.no_box in( SELECT b.no_box FROM cabut as b 
+                UNION ALL 
+                SELECT b.no_box FROM eo as b  )
+             "),
             'no_box' => $r->no_box,
             'cabut' => DB::selectOne("SELECT a.*, b.name, c.nama, (d.hrga_satuan * d.gr_awal) as cost_bk
             FROM cabut as a 
@@ -611,24 +633,8 @@ class SummaryController extends Controller
 
             'cabut_sisa' => SummaryModel::cabut_sisa_history($r->nm_partai),
 
-            'cetak' => DB::selectOne("SELECT b.nm_partai, 
-            sum(a.pcs_awal_ctk) as pcs, 
-            sum(a.gr_awal_ctk) as gr, 
-            sum(a.pcs_akhir) as pcs_akhir, 
-            sum(a.gr_akhir) as gr_akhir, 
-            sum(a.gr_tdk_cetak) as gr_td_ctk,
-            sum(a.ttl_rp) as cost_ctk,
-            sum(b.gr_awal * b.hrga_satuan) as cost_bk,
-            sum(d.gr_akhir) as gr_akhir_cbt,
-            sum(d.ttl_rp) as cost_cbt
-            FROM cetak_new as a 
-            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-            left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
-            left join cabut as d on d.no_box = a.no_box
-            
-
-            where c.kategori = 'CTK' and b.nm_partai = '$r->nm_partai' and a.no_box in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'sortir')
-            GROUP by b.nm_partai;"),
+            'cetak' => SummaryModel::cetak($r->nm_partai),
+            'cbt_tanpa_pcs' => SummaryModel::cabut_history_lewat($r->nm_partai),
 
             'cetak_sisa' => DB::selectOne("SELECT b.nm_partai, 
             sum(a.pcs_awal_ctk) as pcs, 
@@ -680,6 +686,22 @@ class SummaryController extends Controller
             ) as e on e.no_box = a.no_box
             where  b.nm_partai = '$r->nm_partai' and a.selesai = 'T'  
             GROUP by b.nm_partai;"),
+
+            'grading' => DB::selectOne("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(c.pcs) as pcs_akhir, sum(c.gr) as gr_akhir, a.cost_bk, c.tgl
+                FROM (
+                SELECT b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(b.hrga_satuan * b.gr_awal) as cost_bk
+                FROM formulir_sarang as a
+                    left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                    where b.baru = 'baru' and a.kategori = 'grade'
+                    group by b.nm_partai
+                ) as a
+                left join (
+                SELECT c.nm_partai, sum(c.pcs) as pcs, sum(c.gr) as gr, max(c.tgl) as tgl
+                    FROM grading_partai as c 
+                    group by c.nm_partai
+                ) as c on c.nm_partai = a.nm_partai
+                where a.nm_partai = '$r->nm_partai'
+                group by a.nm_partai;")
 
 
 

@@ -16,8 +16,18 @@
         text-decoration: none;
         transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
     }
+
+    @media print {
+        .print_hilang {
+            display: none;
+        }
+
+        .section {
+            page-break-after: always;
+        }
+    }
 </style>
-<div class="col-lg-12">
+<div class="col-lg-12 print_hilang">
     <ul class="nav nav-pills float-start">
         <li class="nav-item ">
             <a class="nav-link {{ $rot == 'summary.history_partai' ? 'active' : '' }}" aria-current="page"
@@ -30,6 +40,10 @@
 
     </ul>
 </div>
-<div class="col-lg-12">
+<div class="col-lg-12 print_hilang">
     <hr style="border: 1px solid black;">
 </div>
+<div class="col-lg-10 print_hilang"></div>
+<div class="col-lg-2 print_hilang"><a onclick="window.print()" href="#"
+        class="btn btn-sm btn-primary float-end print" {{ $rot == 'summary.detail_box' ? 'hidden' : '' }}><i
+            class="fas fa-print"></i> Print</a></div>
