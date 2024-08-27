@@ -1934,16 +1934,18 @@ class CabutController extends Controller
             $ambil = DB::selectOne("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
                         FROM(
                             SELECT 
-                            sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
-                            FROM cabut 
-                            WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box 
+                            sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir , a.no_box
+                            FROM cabut as a
+                            WHERE a.no_box = $d  AND a.selesai = 'Y' GROUP BY a.no_box 
                         
                         UNION ALL
 
-                            SELECT 0 as pcs_akhir, SUM(a.gr_akhir) AS gr_akhir, a.no_box
-                            FROM cabut AS a
-                            WHERE a.no_box = '$d' AND a.selesai = 'Y'
-                            GROUP BY a.no_box) as a
+                            SELECT 0 as pcs_akhir,
+                            SUM(a.gr_eo_akhir) AS gr_akhir, a.no_box
+                                FROM eo AS a
+                                WHERE a.no_box = '$d' AND a.selesai = 'Y'
+                                GROUP BY a.no_box
+                            ) as a
 
                         group by a.no_box
                         
@@ -1951,6 +1953,7 @@ class CabutController extends Controller
 
             $pcs = $ambil->pcs_akhir;
             $gr = $ambil->gr_akhir;
+
             if ($r->grading) {
                 $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
 
