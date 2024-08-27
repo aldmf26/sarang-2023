@@ -188,9 +188,22 @@
                     </tr>
                     <tr>
                         <td class="text-end boder_bottom">{{ number_format($cetak->pcs ?? 0, 0) }}</td>
-                        <td class="text-end border_right boder_bottom">{{ number_format($cetak->gr ?? 0, 0) }}</td>
+                        @php
+                            $gr_awal_cetak = $cetak->gr ?? 0;
+                            $gr_akhir_cetak = $cetak->gr_akhir ?? 0;
+                            $gr_awal_cbt_n_pcs = $cbt_tanpa_pcs->gr_akhir ?? 0;
+
+                            $ttl_rp_cabutn_pcs =
+                                $cbt_tanpa_pcs->cost_bk +
+                                $cbt_tanpa_pcs->cost_cabut +
+                                1087.362885977 * $cbt_tanpa_pcs->gr_akhir +
+                                124.36093427769 * $cbt_tanpa_pcs->gr_akhir;
+                        @endphp
+                        <td class="text-end border_right boder_bottom">
+                            {{ number_format($gr_awal_cetak + $gr_awal_cbt_n_pcs, 0) }}</td>
                         <td class="text-end boder_bottom">{{ number_format($cetak->pcs_akhir ?? 0, 0) }}</td>
-                        <td class="text-end border_right boder_bottom">{{ number_format($cetak->gr_akhir ?? 0, 0) }}
+                        <td class="text-end border_right boder_bottom">
+                            {{ number_format($gr_akhir_cetak + $gr_awal_cbt_n_pcs, 0) }}
                         </td>
                         <td class="text-end border_right boder_bottom">
                             {{ empty($cetak->gr_akhir) ? 0 : number_format((1 - $cetak->gr_akhir / $cetak->gr) * 100, 1) }}
@@ -203,7 +216,8 @@
                                     1087.362885977 * $cetak->gr_akhir_cbt +
                                     124.36093427769 * $cetak->gr_akhir_cbt;
                         @endphp
-                        <td class="text-end border_right boder_bottom">{{ number_format($ttl_rp_cabut_ke_cetak, 0) }}
+                        <td class="text-end border_right boder_bottom">
+                            {{ number_format($ttl_rp_cabut_ke_cetak + $ttl_rp_cabutn_pcs, 0) }}
                         </td>
                         <td class="text-end boder_bottom">{{ number_format($cetak->cost_ctk ?? 0, 0) }}</td>
                         <td class="text-end boder_bottom">
@@ -227,9 +241,12 @@
                                     1087.362885977 * $cetak_sisa->gr +
                                     124.36093427769 * $cetak_sisa->gr;
                         @endphp
-                        <td class="text-end boder_bottom bg_biru">{{ number_format($ttl_rp_ctk, 0) }}</td>
+                        <td class="text-end boder_bottom bg_biru">
+                            {{ number_format($ttl_rp_ctk + $ttl_rp_cabutn_pcs, 0) }}
+                        </td>
                         <td class="text-end border_right boder_bottom">
-                            {{ empty($cetak->gr_akhir) ? 0 : number_format($ttl_rp_ctk / $cetak->gr_akhir, 0) }}</td>
+                            {{ number_format(($ttl_rp_ctk + $ttl_rp_cabutn_pcs) / ($gr_akhir_cetak + $gr_awal_cbt_n_pcs), 0) }}
+                        </td>
 
                         <td class="text-end boder_bottom">{{ number_format($cetak_sisa->pcs ?? 0, 0) }}</td>
                         <td class="text-end boder_bottom">{{ number_format($cetak_sisa->gr ?? 0, 0) }}</td>

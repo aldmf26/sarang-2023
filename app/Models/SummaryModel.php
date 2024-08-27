@@ -540,10 +540,7 @@ class SummaryModel extends Model
 
     public static function cetak($nm_partai)
     {
-        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir,sum(a.gr_td_ctk) as gr_td_ctk,
-        sum(a.cost_ctk) as cost_ctk, sum(a.cost_bk) as cost_bk, sum(a.gr_akhir_cbt) as gr_akhir_cbt, sum(a.cost_cbt) as cost_cbt
-        FROM(
-        SELECT b.nm_partai, 
+        $result = DB::selectOne("SELECT b.nm_partai, 
         sum(a.pcs_awal_ctk) as pcs, 
         sum(a.gr_awal_ctk) as gr, 
         sum(a.pcs_akhir + a.pcs_tdk_cetak) as pcs_akhir, 
@@ -558,28 +555,45 @@ class SummaryModel extends Model
         left join kelas_cetak as c on c.id_kelas_cetak = a.id_kelas_cetak
         left join cabut as d on d.no_box = a.no_box
         where c.kategori = 'CTK' and b.nm_partai = '$nm_partai' and a.no_box in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'sortir')
-        GROUP by b.nm_partai
-        
-        UNION ALL 
-        
-        SELECT b.nm_partai, 0 as pcs, sum(e.gr_eo_awal) as gr, 0 as pcs_akhir, sum(e.gr_eo_akhir) as gr_akhir, 0 as gr_td_ctk, 
-        sum(e.ttl_rp) as cost_ctk, sum(b.gr_awal * b.hrga_satuan) as cost_bk, 0 as gr_akhir_cbt,  0 as cost_cbt
-        FROM eo as e 
-        left join bk as b on b.no_box = e.no_box and b.kategori = 'cabut'
-        where b.nm_partai = '$nm_partai' and e.no_box in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'sortir')
-        
-        UNION ALL
-        
-        SELECT b.nm_partai, sum(f.pcs_awal) as pcs, sum(f.gr_awal) as gr, sum(f.pcs_akhir) as pcs_akhir, sum(f.gr_akhir) , 0 as gr_td_ctk, sum(f.ttl_rp) as cost_ctk, 
-        sum(b.gr_awal * b.hrga_satuan) as cost_bk, 0 as gr_akhir_cbt,  0 as cost_cbt
-        FROM cabut as f 
-        left join bk as b on b.no_box = f.no_box and b.kategori = 'cabut'
-        where b.nm_partai = '$nm_partai' and f.no_box in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'sortir') and f.pcs_awal = 0
-        
-        ) as a 
-        where a.nm_partai is not null
-        group by a.nm_partai;");
+        GROUP by b.nm_partai");
 
+        return $result;
+    }
+
+    public static function cabut_history_lewat($nm_partai)
+    {
+        $result = DB::selectOne("SELECT min(tgl) as tgl, nm_partai, SUM(pcs) as pcs, SUM(gr) as gr, SUM(pcs_akhir) as pcs_akhir, SUM(gr_akhir) as gr_akhir, SUM(cost_bk) as cost_bk, SUM(cost_cabut) as cost_cabut
+            FROM (
+                SELECT min(a.tgl_terima) as tgl,
+                    d.nm_partai, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr,  SUM(a.pcs_akhir) as pcs_akhir, SUM(a.gr_akhir) as gr_akhir,SUM(d.hrga_satuan * d.gr_awal) as cost_bk, SUM(a.ttl_rp) as cost_cabut
+                FROM cabut as a 
+                    LEFT JOIN bk as d 
+                        ON d.no_box = a.no_box AND d.kategori = 'cabut'
+                WHERE d.nm_partai = '$nm_partai' AND a.selesai = 'Y' AND a.pcs_awal = 0  AND a.no_box IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori IN('cetak','sortir'))
+                GROUP BY 
+                    d.nm_partai
+                UNION ALL
+                SELECT 
+                min(e.tgl_ambil) as tgl,
+                    f.nm_partai, 
+                    0 as pcs, 
+                    SUM(e.gr_eo_awal) as gr, 
+                    0 as pcs_akhir, 
+                    SUM(e.gr_eo_akhir) as gr_akhir, 
+                    SUM(f.gr_awal * f.hrga_satuan) as cost_bk, 
+                    SUM(e.ttl_rp) as cost_cabut
+                FROM 
+                    eo as e
+                    LEFT JOIN bk as f 
+                        ON f.no_box = e.no_box
+                WHERE 
+                    f.nm_partai = '$nm_partai' 
+                    AND e.selesai = 'Y' 
+                    AND e.no_box IN (SELECT b.no_box FROM formulir_sarang as b WHERE b.kategori = 'sortir')
+                GROUP BY 
+                    f.nm_partai
+            ) as combined_data
+            GROUP BY nm_partai;");
         return $result;
     }
 }

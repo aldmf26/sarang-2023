@@ -634,6 +634,7 @@ class SummaryController extends Controller
             'cabut_sisa' => SummaryModel::cabut_sisa_history($r->nm_partai),
 
             'cetak' => SummaryModel::cetak($r->nm_partai),
+            'cbt_tanpa_pcs' => SummaryModel::cabut_history_lewat($r->nm_partai),
 
             'cetak_sisa' => DB::selectOne("SELECT b.nm_partai, 
             sum(a.pcs_awal_ctk) as pcs, 

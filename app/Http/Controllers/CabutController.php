@@ -522,7 +522,7 @@ class CabutController extends Controller
         group by b.id");
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
-        
+
 
         $data = [
             'title' => 'Global Rekap',

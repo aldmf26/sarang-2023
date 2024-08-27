@@ -45,7 +45,8 @@
                         <table id="tbl1" class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">({{count($bk)}}) Box Stock 
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">
+                                        ({{ count($bk) }}) Box Stock
                                     </th>
                                 </tr>
                                 <tr>
@@ -110,7 +111,8 @@
                         <table id="tbl2" class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">({{count($cabut)}}) Box sedang
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">
+                                        ({{ count($cabut) }}) Box sedang
                                         proses </th>
                                 </tr>
                                 <tr>
@@ -161,7 +163,7 @@
                             <thead>
                                 <tr>
                                     <th class="dhead text-center" colspan="{{ $posisi == 1 ? '7' : '6' }}">
-                                        <span>({{count($cabutSelesai)}}) Box selesai siap ctk </span>
+                                        <span>({{ count($cabutSelesai) }}) Box selesai siap ctk </span>
 
                                     </th>
                                 </tr>
@@ -187,7 +189,8 @@
                                     <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($cabutSelesai)['ttl_rp_cbt'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-center"> <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span></th>
+                                    <th class="dheadstock text-center"> <span class="badge bg-primary"
+                                            x-show="cek.length" x-text="cek.length"></span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -206,7 +209,26 @@
                                             <input type="checkbox"
                                                 @change="tambah({{ $d->no_box }}, {{ $d->pcs }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
                                                 value="{{ $d->no_box }}" x-model="cek">
-                                                
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @foreach ($eoSelesai as $d)
+                                    <tr>
+                                        <td align="center" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ $d->pengawas }}</td>
+                                        <td align="center">{{ $d->no_box }}</td>
+                                        <td align="right">0</td>
+                                        <td align="right">{{ $d->gr }}</td>
+                                        <td align="right " class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp, 0) }}</td>
+                                        <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
+                                            {{ number_format($d->ttl_rp_cbt, 0) }}</td>
+                                        <td align="center">
+                                            <input type="checkbox"
+                                                @change="tambah({{ $d->no_box }}, 0, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
+                                                value="{{ $d->no_box }}" x-model="cek">
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -235,7 +257,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                               
+
                                 <div class="col-lg-12">
                                     <table class="table">
                                         <thead>
@@ -309,7 +331,7 @@
                 }">
                     <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
                         placeholder="cari">
-                    <div style="overflow-y: scroll; height: 700px">
+                    {{-- <div style="overflow-y: scroll; height: 700px">
 
                         <table id="tbl3" class="table table-bordered table-hover table-striped">
                             <thead>
@@ -359,13 +381,13 @@
                                             <input type="checkbox"
                                                 @change="tambah2({{ $d->no_box }}, {{ $d->gr }},{{ $d->ttl_rp_cbt }},{{ $d->ttl_rp }})"
                                                 value="{{ $d->no_box }}" x-model="cek">
-                                            
+
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
+                    </div> --}}
 
                     {{-- modal ambil box ke cetak --}}
                     <form action="{{ route('cabut.save_formulir_eo') }}" method="post">
@@ -397,7 +419,7 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                
+
                                 <div class="col-lg-12">
                                     <table class="table">
                                         <thead>
