@@ -22,8 +22,8 @@
                         class="fas fa-print"></i> print</a>
                 <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end me-2"><i
                         class="fas fa-file-excel"></i> export</a>
-                <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end me-2"><i
-                        class="fas fa-plus"></i> operasional</a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
+                    class="btn btn-primary float-end me-2"><i class="fas fa-plus"></i> operasional</a>
             </div>
             <div class="col-lg-6 mt-2">
                 <table width="100%" class="table table-bordered">
@@ -621,7 +621,7 @@
                                 <tbody>
                                     @foreach ($uang_cost as $u)
                                         <tr>
-                                            <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '-01')) }}
+                                            <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '01')) }}
                                             </td>
                                             <td class="text-end">{{ number_format($u->total_operasional, 0) }}</td>
                                         </tr>
@@ -671,6 +671,23 @@
                         </div>
                         <div class="modal-body">
                             <div id="load_box"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="cost_opr_input" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Tambah Operasional</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
 
                         </div>
 
