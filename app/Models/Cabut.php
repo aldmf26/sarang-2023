@@ -720,7 +720,7 @@ class Cabut extends Model
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
         where a.selesai ='Y' and b.baru = 'baru' $penerima2
-        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'cetak')
+        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('cetak','sortir'))
         
 UNION ALL
 SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, a.ttl_rp as ttl_rp_cbt, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan
@@ -728,7 +728,7 @@ SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join users as c on c.id = a.id_pengawas
         where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0 $penerima2
-        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'cetak')
+        and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('cetak','sortir'))
         
  ORDER by no_box;");
     }
