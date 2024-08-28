@@ -257,7 +257,7 @@ class GradingBjController extends Controller
 
     public function create_partai(Request $r)
     {
-        
+
         try {
             DB::beginTransaction();
 
@@ -278,7 +278,7 @@ class GradingBjController extends Controller
                     'tgl' => $tgl,
                 ];
             }
-            
+
 
             for ($i = 0; $i < count($r->grade); $i++) {
                 $data[] = [
@@ -544,6 +544,7 @@ class GradingBjController extends Controller
             a.grade,
             sum(a.pcs) as pcs, 
             sum(a.gr) as gr,
+            a.no_invoice,
             b.pcs as pcs_pengiriman, 
             b.gr as gr_pengiriman
             FROM `grading_partai` as a
@@ -556,7 +557,7 @@ class GradingBjController extends Controller
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
             GROUP BY box_pengiriman;");
-            
+
         $data = [
             'title' => 'Stock Siap Kirim',
             'gudang' => $gudang
@@ -597,7 +598,9 @@ class GradingBjController extends Controller
             tgl,
             admin
             FROM `grading_partai`
-            WHERE no_invoice = '$no_invoice'");
+            WHERE box_pengiriman = '$no_invoice'");
+
+        dd($no_invoice);
 
         $getBox = DB::select("SELECT a.no_box_sortir as no_box, a.pcs,a.gr, b.tipe FROM `grading` as a 
         join bk as b on a.no_box_sortir = b.no_box and b.kategori = 'cabut'
@@ -695,5 +698,40 @@ class GradingBjController extends Controller
             'title' => 'Grading Opname'
         ];
         return view('home.gradingbj.opname', $data);
+    }
+
+    public function detail_pengiriman(Request $r)
+    {
+        $getFormulir = DB::select("SELECT nm_partai,no_invoice,box_pengiriman,grade,pcs,gr,tgl,
+        admin
+        FROM `grading_partai`
+        WHERE no_invoice = '$r->no_invoice'");
+
+        $box_grading = DB::select("SELECT a.no_box_sortir, b.tipe, a.pcs, a.gr, (b.gr_awal * b.hrga_satuan) as cost_bk, c.ttl_rp as cost_cbt, d.ttl_rp as cost_ctk, e.ttl_rp as cost_eo , f.ttl_rp as cost_sortir
+        FROM grading as a 
+        left join bk as b on b.no_box = a.no_box_sortir and b.kategori ='cabut'
+        left join cabut as c on c.no_box = a.no_box_sortir
+        left join (
+        SELECT d.no_box, d.ttl_rp
+            FROM cetak_new as d 
+            left join kelas_cetak as e on e.id_kelas_cetak = d.id_kelas_cetak
+            where e.kategori ='CTK'
+        ) as d on d.no_box = a.no_box_sortir
+        left join eo as e on e.no_box = a.no_box_sortir 
+        left join sortir as f on f.no_box = a.no_box_sortir
+        where a.no_invoice = '$r->no_invoice';
+        ");
+
+
+
+        $data = [
+            'title' => 'Detail Pengiriman',
+            'nm_partai' => $getFormulir[0]->nm_partai,
+            'admin' => $getFormulir[0]->admin,
+            'tgl' => $getFormulir[0]->tgl,
+            'no_invoice' => $getFormulir[0]->no_invoice,
+            'box_grading' => $box_grading
+        ];
+        return view('home.gradingbj.detail_pengiriman', $data);
     }
 }

@@ -524,6 +524,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_selisih', 'load_selisih')->name('load_selisih');
             Route::get('/export_selisih', 'export_selisih')->name('export_selisih');
             Route::get('/export_susut', 'export_susut')->name('export_susut');
+            Route::get('/detail_pengiriman', 'detail_pengiriman')->name('detail_pengiriman');
         });
     Route::controller(OpnameController::class)
         ->prefix('home/opname')
@@ -532,7 +533,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
-            
         });
     Route::controller(PenutupController::class)
         ->prefix('data_master/penutup')
