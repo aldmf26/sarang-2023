@@ -121,13 +121,14 @@
                                 </td>
 
                                 <td>
-                                    <span style="cursor: pointer" class="badge bg-primary selesai"><i
-                                            class="fas fa-check"></i></span>
-                                    <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
-                                            class="fas fa-edit"></i></span>
-                                    <span style="cursor: pointer" class="badge bg-danger delete"><i
-                                            class="fas fa-trash-alt"></i></span>
-
+                                    @if ($b->tgl == date('Y-m-d') || Auth::user()->posisi_id == 1)
+                                        <span style="cursor: pointer" class="badge bg-primary selesai"><i
+                                                class="fas fa-check"></i></span>
+                                        <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
+                                                class="fas fa-edit"></i></span>
+                                        <span style="cursor: pointer" class="badge bg-danger delete"><i
+                                                class="fas fa-trash-alt"></i></span>
+                                    @endif
 
                                 </td>
                             </tr>

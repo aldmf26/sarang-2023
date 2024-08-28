@@ -19,7 +19,7 @@
         <table class="table table-bordered" style="border: 0.5px solid #a0a7c1; font-size: 12px" id="tablealdi2">
             <thead>
                 <tr>
-                    <th class="dhead">Tgl Trma</th>
+                    <th class="dhead">Tgl Terima</th>
                     <th class="dhead" width="60">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="85">Pcs Awal</th>
