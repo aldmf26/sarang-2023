@@ -221,10 +221,10 @@
                         </td>
                         <td class="text-end boder_bottom">{{ number_format($cetak->cost_ctk ?? 0, 0) }}</td>
                         <td class="text-end boder_bottom">
-                            {{ empty($cetak->gr_akhir) ? 0 : number_format(1087.362885977 * $cetak->gr_akhir, 0) }}
+                            {{ empty($cetak->gr_akhir) ? 0 : number_format(1087.362885977 * ($cetak->gr_akhir + $cetak->gr_td_ctk), 0) }}
                         </td>
                         <td class="text-end boder_bottom">
-                            {{ empty($cetak->gr_akhir) ? 0 : number_format(124.36093427769 * $cetak->gr_akhir, 0) }}
+                            {{ empty($cetak->gr_akhir) ? 0 : number_format(124.36093427769 * ($cetak->gr_akhir + $cetak->gr_td_ctk), 0) }}
                         </td>
                         @php
                             $ttl_rp_ctk = empty($cetak->cost_ctk)
@@ -298,6 +298,7 @@
                                     124.36093427769 * $sortir->gr_akhir_ctk +
                                     1087.362885977 * $sortir->gr_akhir_cbt +
                                     124.36093427769 * $sortir->gr_akhir_cbt;
+
                         @endphp
                         <td class="text-end border_right boder_bottom">{{ number_format($ttl_rp_cetak_ke_sortir, 0) }}
 

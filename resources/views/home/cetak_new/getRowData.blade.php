@@ -142,7 +142,7 @@
         </button>
 
         <button style="font-size: 12px" type="button"
-            {{ $c->pcs_akhir == '0' || $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
+            {{ $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
             class="btn btn-sm btn-success btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
         </button>
         {{-- <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
