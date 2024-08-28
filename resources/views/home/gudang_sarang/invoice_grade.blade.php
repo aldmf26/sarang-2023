@@ -37,7 +37,7 @@
                             </td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
-                            <td align="center">{{ $d->ttl_box }}</td>
+                            <td align="right">{{ $d->ttl_box }}</td>
                             <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
@@ -79,7 +79,7 @@
 
         </section>
 
-        <form action="{{ route('gudangsarang.update_invoice') }}" method="post">
+        <form action="{{ route('gudangsarang.update_invoice_grade') }}" method="post">
             @csrf
             <x-theme.modal title="Edit Po" idModal="edit" size="modal-lg">
                 <div class="loading d-none">
@@ -95,11 +95,10 @@
 
                     var no_invoice = $(this).data('no_invoice');
                     var kategori = $(this).data('kategori');
-
                     $("#edit").modal('show')
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('gudangsarang.load_edit_invoice') }}",
+                        url: "{{ route('gudangsarang.load_edit_invoice_grade') }}",
                         data: {
                             no_invoice,
                             kategori,

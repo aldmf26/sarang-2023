@@ -231,8 +231,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/batal', 'batal')->name('batal');
             Route::get('/selesai', 'selesai')->name('selesai');
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
+            Route::get('/load_edit_invoice_grade', 'load_edit_invoice_grade')->name('load_edit_invoice_grade');
             Route::post('/save_formulir_cabut', 'save_formulir_cabut')->name('save_formulir_cabut');
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
+            Route::post('/update_invoice_grade', 'update_invoice_grade')->name('update_invoice_grade');
             Route::get('/invoice_sortir', 'invoice_sortir')->name('invoice_sortir');
             Route::get('/invoice_grade', 'invoice_grade')->name('invoice_grade');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabut;
+use App\Models\Sortir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -183,6 +184,22 @@ class GudangSarangController extends Controller
             'ket_formulir' => $ket_formulir
         ];
         return view('home.gudang_sarang/print_formulir', $data);
+    }
+
+    public function load_edit_invoice_grade(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $no_invoice = $r->no_invoice;
+        $kategori = 'grade';
+
+        $cabutSelesai = Sortir::sortir_selesai($id_user);
+        $formulir = DB::table('formulir_sarang')->where([['kategori', $kategori], ['no_invoice', $no_invoice]])->get();
+        $data = [
+            'title' => 'Gudang Sarang',
+            'cabutSelesai' => $cabutSelesai,
+            'formulir' => $formulir,
+        ];
+        return view('home.gudang_sarang.load_edit_invoice_grade', $data);
     }
 
     public function invoice(Request $r)
@@ -372,6 +389,41 @@ class GudangSarangController extends Controller
         return redirect()->route('gudangsarang.invoice')->with('sukses', 'Data Berhasil');
     }
 
+    public function update_invoice_grade(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        if (!$r->no_box[0]) {
+            return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('error', 'No Box / Penerima Kosong !');
+        }
+        DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'grade']])->delete();
+        $no_box = explode(',', $r->no_box[0]);
+        foreach ($no_box as $d) {
+            $ambil = DB::selectOne("SELECT 
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir 
+                        FROM sortir 
+                        WHERE no_box = $d AND selesai = 'Y' GROUP BY no_box ");
+
+            $pcs = $ambil->pcs_akhir;
+            $gr = $ambil->gr_akhir;
+
+            $data[] = [
+                'no_invoice' => $no_invoice,
+                'no_box' => $d,
+                'id_pemberi' => auth()->user()->id,
+                'id_penerima' => $r->id_penerima,
+                'pcs_awal' => $pcs,
+                'gr_awal' => $gr,
+                'tanggal' => $r->tgl,
+                'kategori' => 'grade',
+            ];
+
+            DB::table('cabut')->where('no_box', $d)->update(['formulir' => 'Y']);
+        }
+
+        DB::table('formulir_sarang')->insert($data);
+        return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('sukses', 'Data Berhasil');
+    }
+    
     public function invoice_sortir(Request $r)
     {
         $tgl = tanggalFilter($r);
