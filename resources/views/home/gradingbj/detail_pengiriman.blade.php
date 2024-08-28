@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
@@ -49,10 +49,21 @@
                             <tr>
                                 <th>Total</th>
                                 <th></th>
+                                <th class="text-end">{{ number_format(sumBk($box_grading, 'pcs'), 0) }}</th>
+                                <th class="text-end">{{ number_format(sumBk($box_grading, 'gr'), 0) }}</th>
                                 <th class="text-end"></th>
-                                <th class="text-end"></th>
-                                <th class="text-end"></th>
-                                <th class="text-end"></th>
+
+                                @php
+                                    $total_rp =
+                                        sumBk($box_grading, 'cost_bk') +
+                                        sumBk($box_grading, 'cost_ctk') +
+                                        sumBk($box_grading, 'cost_sortir') +
+                                        sumBk($box_grading, 'cost_eo') +
+                                        sumBk($box_grading, 'cost_cbt');
+                                @endphp
+                                <th class="text-end">
+                                    {{ number_format($total_rp, 0) }}
+                                </th>
                             </tr>
 
                         </thead>
@@ -63,11 +74,12 @@
                                     <td class="text-center">{{ $b->tipe }}</td>
                                     <td class="text-end">{{ $b->pcs }}</td>
                                     <td class="text-end">{{ $b->gr }}</td>
-                                    <td class="text-end"></td>
                                     @php
                                         $total =
                                             $b->cost_bk + $b->cost_cbt + $b->cost_ctk + $b->cost_eo + $b->cost_sortir;
                                     @endphp
+                                    <td class="text-end">{{ number_format($total / $b->gr, 0) }}</td>
+
                                     <td class="text-end">{{ number_format($total) }}</td>
                                 </tr>
                             @endforeach
@@ -80,27 +92,56 @@
                         <thead>
                             <tr>
                                 <th class="dhead">Grade</th>
-                                <th class="dhead text-end" width="200">Pcs</th>
-                                <th class="dhead text-end" width="200">Gr</th>
-                                <th class="dhead " width="200">Box Sp</th>
-                                <th class="dhead">Aksi</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead ">Box Sp</th>
+                                <th class="dhead">Rp/gr</th>
+                                <th class="dhead">Total Rp</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $rp_satuan =
+                                    ($total_rp - sumBk($grading_susut, 'gr') * $rp_susut->rp_susut) /
+                                    sumBk($grading, 'gr');
+                            @endphp
+                            @foreach ($grading as $g)
+                                <tr>
+                                    <td>{{ $g->grade }}</td>
+                                    <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
+                                    <td class="text-end">{{ number_format($g->gr, 0) }}</td>
+                                    <td class="text-end">{{ $g->box_pengiriman }}</td>
+                                    <td class="text-end">{{ number_format($rp_satuan, 0) }}</td>
+                                    <td class="text-end">{{ number_format($g->gr * $rp_satuan, 0) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <h6>Susut :
+                        {{ number_format((1 - sumBk($grading, 'gr') / sumBk($box_grading, 'gr')) * 100, 1) }}%
+                    </h6>
+                    <table class="table table-bordered">
+                        <thead>
                             <tr>
-                                <td>
-                                    <h6>Total</h6>
-                                </td>
-                                <td class="text-end">
-
-                                </td>
-                                <td class="text-end">
-
-                                </td>
+                                <th class="dhead">Grade</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Box Sp</th>
+                                <th class="dhead text-end">Rp/Gr</th>
+                                <th class="dhead text-end">Total Rp</th>
                             </tr>
-
-
-
+                        </thead>
+                        <tbody>
+                            @foreach ($grading_susut as $g)
+                                <tr>
+                                    <td>{{ $g->grade }}</td>
+                                    <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
+                                    <td class="text-end">{{ number_format($g->gr, 0) }}</td>
+                                    <td class="text-end">{{ $g->box_pengiriman }}</td>
+                                    <td class="text-end">{{ number_format($rp_susut->rp_susut, 0) }}</td>
+                                    <td class="text-end">{{ number_format($g->gr * $rp_susut->rp_susut, 0) }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

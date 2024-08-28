@@ -705,7 +705,12 @@ class GradingBjController extends Controller
         $getFormulir = DB::select("SELECT nm_partai,no_invoice,box_pengiriman,grade,pcs,gr,tgl,
         admin
         FROM `grading_partai`
-        WHERE no_invoice = '$r->no_invoice'");
+        WHERE no_invoice = '$r->no_invoice' and grade != 'susut'");
+
+        $getFormulirSusut = DB::select("SELECT nm_partai,no_invoice,box_pengiriman,grade,pcs,gr,tgl,
+        admin
+        FROM `grading_partai`
+        WHERE no_invoice = '$r->no_invoice' and grade = 'susut'");
 
         $box_grading = DB::select("SELECT a.no_box_sortir, b.tipe, a.pcs, a.gr, (b.gr_awal * b.hrga_satuan) as cost_bk, c.ttl_rp as cost_cbt, d.ttl_rp as cost_ctk, e.ttl_rp as cost_eo , f.ttl_rp as cost_sortir
         FROM grading as a 
@@ -719,7 +724,7 @@ class GradingBjController extends Controller
         ) as d on d.no_box = a.no_box_sortir
         left join eo as e on e.no_box = a.no_box_sortir 
         left join sortir as f on f.no_box = a.no_box_sortir
-        where a.no_invoice = '$r->no_invoice';
+        where a.no_invoice = '$r->no_invoice'
         ");
 
 
@@ -730,7 +735,10 @@ class GradingBjController extends Controller
             'admin' => $getFormulir[0]->admin,
             'tgl' => $getFormulir[0]->tgl,
             'no_invoice' => $getFormulir[0]->no_invoice,
-            'box_grading' => $box_grading
+            'box_grading' => $box_grading,
+            'grading' => $getFormulir,
+            'grading_susut' => $getFormulirSusut,
+            'rp_susut' => DB::selectOne("SELECT  *FROM rp_susut as a ")
         ];
         return view('home.gradingbj.detail_pengiriman', $data);
     }
