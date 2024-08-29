@@ -79,38 +79,40 @@
     </div>
     <div class="col-lg-6">
         <h6>Terpilih</h6>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th class="dhead">No Box</th>
-                    <th class="dhead text-end">Pcs</th>
-                    <th class="dhead text-end">Gr</th>
-                    <th class="dhead text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="scrollable-table">
+            <table class="table table-bordered  table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="dhead">No Box</th>
+                        <th class="dhead text-end">Pcs</th>
+                        <th class="dhead text-end">Gr</th>
+                        <th class="dhead text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                @foreach ($formulir as $d)
-                    <tr>
-                        <td>{{ $d->no_box }}</td>
-                        <td align="right">{{ $d->pcs_awal }}</td>
-                        <td align="right">{{ $d->gr_awal }}</td>
-                        <td align="center">
-                            <input type="checkbox" @change="cancel({{ $d->no_box }})" value="{{ $d->no_box }}"
-                                x-model="cek">
-                        </td>
-                    </tr>
-                @endforeach
-                <template x-for="d in selectedItem">
-                    <tr>
-                        <td x-text="d.no_box"></td>
-                        <td align="right" x-text="d.pcs"></td>
-                        <td align="right" x-text="d.gr"></td>
-                        <td></td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+                    @foreach ($formulir as $d)
+                        <tr>
+                            <td>{{ $d->no_box }}</td>
+                            <td align="right">{{ $d->pcs_awal }}</td>
+                            <td align="right">{{ $d->gr_awal }}</td>
+                            <td align="center">
+                                <input type="checkbox" @change="cancel({{ $d->no_box }})"
+                                    value="{{ $d->no_box }}" x-model="cek">
+                            </td>
+                        </tr>
+                    @endforeach
+                    <template x-for="d in selectedItem">
+                        <tr>
+                            <td x-text="d.no_box"></td>
+                            <td align="right" x-text="d.pcs"></td>
+                            <td align="right" x-text="d.gr"></td>
+                            <td></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
