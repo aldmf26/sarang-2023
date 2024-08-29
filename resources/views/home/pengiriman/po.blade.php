@@ -56,6 +56,7 @@
                         <thead>
                             <tr>
                                 <th class="dhead">No Box</th>
+                                <th class="dhead text-center">Grade</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 <th class="dhead text-end">Pcs Kirim</th>
@@ -66,6 +67,7 @@
                             @foreach ($pengiriman as $d)
                                 <tr>
                                     <td>P{{ $d->no_box }}</td>
+                                    <td align="center">{{ $d->grade }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
                                     <td align="right">{{ $d->pcs }}</td>

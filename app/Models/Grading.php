@@ -15,7 +15,7 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
+        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'

@@ -224,23 +224,21 @@ class GradingBjController extends Controller
         $partaiData = DB::table('bk')
             ->whereIn('no_box', $no_boxPecah)
             ->where('kategori', 'cabut')
-            ->select('nm_partai', 'tipe') // Pastikan 'tipe' adalah kolom yang valid di tabel 'bk'
+            ->select('nm_partai', 'tipe', 'ket') // Pastikan 'tipe' adalah kolom yang valid di tabel 'bk'
             ->get();
 
-        // Dapatkan jumlah partai unik
-        $uniquePartaiCount = $partaiData->pluck('nm_partai')->unique()->count();
+        // Dapatkan jumlah unik untuk partai, tipe, dan ket
+        $uniqueCounts = [
+            'partai' => $partaiData->pluck('nm_partai')->unique()->count(),
+            'tipe' => $partaiData->pluck('tipe')->unique()->count(),
+            'ket' => $partaiData->pluck('ket')->unique()->count(),
+        ];
 
-        // Dapatkan jumlah tipe unik di dalam partai yang sama
-        $uniqueTipeCount = $partaiData->pluck('tipe')->unique()->count();
-
-        // Validasi partai yang berbeda
-        if ($uniquePartaiCount > 1) {
-            return redirect()->back()->with('error', 'Partai harus sama.');
-        }
-
-        // Validasi tipe yang berbeda di dalam partai yang sama
-        if ($uniqueTipeCount > 1) {
-            return redirect()->back()->with('error', 'Tipe partai harus sama.');
+        // Validasi setiap kriteria
+        foreach ($uniqueCounts as $key => $count) {
+            if ($count > 1) {
+                return redirect()->back()->with('error', ucfirst($key) . ' harus sama.');
+            }
         }
 
         $getFormulir = Grading::dapatkanStokBox('formulir', $no_box);
@@ -416,6 +414,7 @@ class GradingBjController extends Controller
 
     public function import(Request $r)
     {
+        
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
@@ -423,29 +422,30 @@ class GradingBjController extends Controller
 
         $admin = auth()->user()->name;
         $tgl = date('Y-m-d');
-
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
-                $nobox = $row[7];
-                $grade = $row[8];
-                $pcs = $row[9];
-                $gr = $row[10];
-                $boxPengiriman = $row[11];
 
-                if (empty($nobox) && empty($grade) && empty($pcs) && empty($gr) && empty($boxPengiriman)) {
+                $tgl = $row[0];
+                $partai = $row[1];
+                $urutan = $row[2];
+                $nobox = $row[3];
+                $grade = $row[6];
+                $pcs = $row[7];
+                $gr = $row[8];
+                $noPengiriman = $row[9];
+
+                if (empty($grade) && empty($pcs) && empty($gr) && empty($noPengiriman)) {
                     continue;
                 }
 
                 if (
-                    empty($nobox) ||
                     empty($grade) ||
                     // empty($pcs) ||
                     empty($gr) ||
-                    empty($boxPengiriman)
+                    empty($noPengiriman)
                 ) {
                     $pesan = [
-                        empty($nobox) => "NO BOX",
                         empty($grade) => "GRADE",
                         // empty($pcs) => "PCS",
                         empty($gr) => "GR",
@@ -463,17 +463,17 @@ class GradingBjController extends Controller
                             ->route('gradingbj.index')
                             ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
                     }
-
-                    DB::table('grading')->insert([
-                        'id_grade' => $cekGrade->id_grade,
-                        'no_box_grading' => $boxPengiriman,
-                        'no_box_sortir' => $nobox,
-                        'pcs' => $pcs,
-                        'gr' => $gr,
-                        'admin' => $admin,
-                        'tgl' => $tgl,
-                        'no_invoice' => $noinvoice,
-                    ]);
+                    $tipe = $cekGrade->tipe;
+                    // DB::table('grading')->insert([
+                    //     'id_grade' => $cekGrade->id_grade,
+                    //     'no_box_grading' => $boxPengiriman,
+                    //     'no_box_sortir' => $nobox,
+                    //     'pcs' => $pcs,
+                    //     'gr' => $gr,
+                    //     'admin' => $admin,
+                    //     'tgl' => $tgl,
+                    //     'no_invoice' => $noinvoice,
+                    // ]);
                 }
             }
             DB::commit();
