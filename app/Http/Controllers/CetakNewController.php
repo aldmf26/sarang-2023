@@ -1029,10 +1029,11 @@ class CetakNewController extends Controller
         }
         DB::table('formulir_sarang')->where('no_invoice', $no_invoice)->where('kategori', 'sortir')->delete();
         $no_box = explode(',', $r->no_box[0]);
+
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
                         cetak_new.id_pengawas,
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        sum(pcs_akhir + pcs_tdk_cetak) as pcs_akhir, sum(gr_akhir + gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi
                         FROM cetak_new 
                         left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
                         WHERE cetak_new.no_box = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box ");

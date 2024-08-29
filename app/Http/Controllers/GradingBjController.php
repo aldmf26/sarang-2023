@@ -455,15 +455,6 @@ class GradingBjController extends Controller
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    // pengecekan nobox sortir tidak ada
-                    $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox],['kategori', 'grade']])->first();
-                    if (!$cekBox) {
-                        DB::rollBack();
-                        return redirect()
-                            ->route('gradingbj.index')
-                            ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
-                    }
-
                     // pengecekan grade jika tidak ada di list tb_grade
                     $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
                     if (!$cekGrade) {
@@ -475,6 +466,29 @@ class GradingBjController extends Controller
 
                     $tipe = $cekGrade->tipe;
                     $no_inv = "$partai-$urutan";
+                    
+                    // pengecekan nobox sortir tidak ada
+                    if (!empty($nobox)) {
+                        $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox], ['kategori', 'grade']])->first();
+                        if (!$cekBox) {
+                            DB::rollBack();
+                            return redirect()
+                                ->route('gradingbj.index')
+                                ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
+                        } else {
+                            DB::table('grading')->insert([
+                                'no_box_sortir' => $nobox,
+                                'pcs' => $pcsSortir,
+                                'gr' => $grSortir,
+                                'no_invoice' => $no_inv,
+                                'tgl' => $tgl,
+                                'admin' => $admin
+                            ]);
+                        }
+                    }
+
+
+
 
                     DB::table('grading_partai')->insert([
                         'nm_partai' => $partai,
@@ -485,15 +499,6 @@ class GradingBjController extends Controller
                         'tipe' => $tipe,
                         'pcs' => $pcs,
                         'gr' => $gr,
-                        'tgl' => $tgl,
-                        'admin' => $admin
-                    ]);
-
-                    DB::table('grading')->insert([
-                        'no_box_sortir' => $nobox,
-                        'pcs' => $pcsSortir,
-                        'gr' => $grSortir,
-                        'no_invoice' => $no_inv,
                         'tgl' => $tgl,
                         'admin' => $admin
                     ]);
