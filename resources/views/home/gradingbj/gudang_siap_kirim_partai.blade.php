@@ -24,7 +24,7 @@
                             <i class="fas fa-plus"></i>
                             Kirim
                             <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                            <span  x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
+                            <span  x-transition><span x-text="Intl.NumberFormat('id-ID').format(ttlPcs)"></span> Pcs <span x-text="Intl.NumberFormat('id-ID').format(ttlGr)"></span> Gr</span>
                         </button>
                     </form>
                 </div>
@@ -54,8 +54,8 @@
                         <tr>
                             <td class=" dheadstock h6">Total</td>
                             <td class="dheadstock"></td>
-                            <td class="text-end dheadstock h6 ">{{ $ttlPcs }}</td>
-                            <td class="text-end dheadstock h6 ">{{ $ttlGr }}</td>
+                            <td class="text-end dheadstock h6">{{ number_format($ttlPcs,0) }}</td>
+                            <td class="text-end dheadstock h6">{{ number_format($ttlGr,0) }}</td>
                             <td class="dheadstock">
                                 {{-- <div x-show="cek.length">
                                     Dipilih <br> Pcs : <span></span> Gr : <span></span>
@@ -96,7 +96,7 @@
             </div>
         </section>
         
-        <x-theme.modal title="Detail" idModal="detail" btnSave="T">
+        <x-theme.modal title="Detail" size="modal-lg" idModal="detail" btnSave="T">
             <div class="loading d-none">
                 <x-theme.loading />
             </div>

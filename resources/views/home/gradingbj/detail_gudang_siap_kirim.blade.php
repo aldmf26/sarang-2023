@@ -21,10 +21,10 @@
                 <tr>
                     <th class="dhead">Nama Partai</th>
                     <th class="dhead">Invoice</th>
-                    <th class="dhead">Grade</th>
-                    <th class="dhead">Pcs</th>
-                    <th class="dhead">Gr</th>
-                    <th class="dhead">Aksi</th>
+                    <th class="dhead text-center">Grade</th>
+                    <th class="dhead text-end">Pcs</th>
+                    <th class="dhead text-end">Gr</th>
+                    <th class="dhead text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,16 +32,16 @@
                     <tr>
                         <td>{{ $d->nm_partai }}</td>
                         <td>{{ $d->no_invoice }}</td>
-                        <td>{{ $d->grade }}</td>
-                        <td>{{ $d->pcs }}</td>
-                        <td>{{ $d->gr }}</td>
-                        <td>
+                        <td align="center">{{ $d->grade }}</td>
+                        <td align="right">{{ $d->pcs }}</td>
+                        <td align="right">{{ $d->gr }}</td>
+                        <td align="center">
                             <form action="{{ route('gradingbj.cancel') }}" method="post">
                                 @csrf
                                 @method('post')
                                 <input type="hidden" name="no_invoice" value="{{ $d->no_invoice }}">
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin di cancel ?')">
-                                    <i class="fas fa-times"></i><span class="badge bg-danger">Cancel</span>
+                                    Cancel
                                 </button>
                             </form>
                         </td>

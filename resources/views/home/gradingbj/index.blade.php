@@ -7,6 +7,7 @@
 
         <section class="row" x-data="{ cek: [] }">
             <div class="col-lg-12">
+                <x-theme.alert pesan="{{ session()->get('error') }}" />
             </div>
             <div class="col-lg-12 mt-2">
                 <div class="row">
@@ -18,12 +19,12 @@
                     <div class="col-lg-7">
                         <form action="{{ route('gradingbj.grading_partai') }}" method="post">
                             @csrf
-                            
+                            <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
+                               href="">Import</a>
+                            {{--
                             <a href="#" data-bs-target="#selisih" data-bs-toggle="modal"
                                 class="selisih btn btn-sm btn-primary" href=""><i class="fa fa-warehouse"></i>
                                 Data Selisih</a>
-                            {{-- <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
-                                href="">Import</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
                                 href="" x-show="cek.length">Export</button> --}}
                             <input type="hidden" name="no_box" class="form-control" :value="cek">
@@ -43,7 +44,6 @@
                     </div>
                 </div>
                 <div style="overflow-y: scroll; height: 500px">
-                    <x-theme.alert pesan="{{ session()->get('error') }}" />
                     <table id="tbl1" class="table table-hover table-striped table-bordered">
                         <thead>
                             <tr>
@@ -51,7 +51,7 @@
                                 {{-- <th class="dhead">Tanggal</th> --}}
                                 <th class="dhead">Partai</th>
                                 <th class="dhead text-center">No Box</th>
-                                <th class="dhead">Tipe</th>
+                                <th width="90" class="dhead">Tipe - Ket</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
                                 @presiden
@@ -69,7 +69,7 @@
                                     {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
                                     <td>{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
-                                    <td>{{ $d->tipe }}</td>
+                                    <td>{{ $d->tipe . ' - ' .$d->ket }}</td>
                                     <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
                                     <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
                                     @presiden
