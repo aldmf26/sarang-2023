@@ -466,7 +466,7 @@ class GradingBjController extends Controller
 
                     $tipe = $cekGrade->tipe;
                     $no_inv = "$partai-$urutan";
-                    
+
                     // pengecekan nobox sortir tidak ada
                     if (!empty($nobox)) {
                         $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox], ['kategori', 'grade']])->first();
@@ -486,9 +486,6 @@ class GradingBjController extends Controller
                             ]);
                         }
                     }
-
-
-
 
                     DB::table('grading_partai')->insert([
                         'nm_partai' => $partai,

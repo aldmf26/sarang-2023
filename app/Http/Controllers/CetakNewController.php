@@ -996,28 +996,37 @@ class CetakNewController extends Controller
 
     public function selesai_po_sortir(Request $r)
     {
-        $formulir =  DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->where('kategori', 'sortir')->get();
+        try {
+            DB::beginTransaction();
+            $formulir =  DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->where('kategori', 'sortir')->get();
 
-        foreach ($formulir as $f) {
-            $data = [
-                'no_box' => $f->no_box,
-                'pcs_awal' => $f->pcs_awal,
-                'gr_awal' => $f->gr_awal,
-                'kategori' => 'sortir',
-                'tgl' => $f->tanggal,
-                'penerima' => $f->id_penerima,
-            ];
-            DB::table('bk')->insert($data);
-            $data = [
-                'no_box' => $f->no_box,
-                'pcs_awal' => $f->pcs_awal,
-                'gr_awal' => $f->gr_awal,
-                'tgl' => $f->tanggal,
-                'id_pengawas' => $f->id_penerima,
-            ];
+            foreach ($formulir as $f) {
+                $databk[] = [
+                    'no_box' => $f->no_box,
+                    'pcs_awal' => $f->pcs_awal,
+                    'gr_awal' => $f->gr_awal,
+                    'kategori' => 'sortir',
+                    'tgl' => $f->tanggal,
+                    'penerima' => $f->id_penerima,
+                ];
+
+                $data[] = [
+                    'no_box' => $f->no_box,
+                    'pcs_awal' => $f->pcs_awal,
+                    'gr_awal' => $f->gr_awal,
+                    'tgl' => $f->tanggal,
+                    'id_pengawas' => $f->id_penerima,
+                ];
+            }
+            DB::table('bk')->insert($databk);
             DB::table('sortir')->insert($data);
+
+            DB::commit();
+            return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('error', $e->getMessage());
         }
-        return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
     }
 
 
