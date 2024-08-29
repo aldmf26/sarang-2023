@@ -19,9 +19,9 @@ class LogUserActivity
 
         // Lakukan sesuatu setelah request diproses
 
-        activity()
-            ->causedBy(auth()->user())
-            ->log('Melakukan aksi ' . $request->method() . ' pada ' . $request->url());
+        // activity()
+        //     ->causedBy(auth()->user())
+        //     ->log('Melakukan aksi ' . $request->method() . ' pada ' . $request->url());
 
         return $response;
     }
