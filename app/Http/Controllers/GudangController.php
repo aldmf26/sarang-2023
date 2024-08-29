@@ -1464,7 +1464,7 @@ class GudangController extends Controller
             $sheet4->setCellValue('E' . $kolom2, $d->pcs);
             $sheet4->setCellValue('F' . $kolom2, $d->gr);
             $ttlrp_grading = $d->ttl_rp + $d->cost_op + $d->cost_cu;
-            $sheet4->setCellValue('G' . $kolom2, round($ttlrp_grading / $d->gr, 0));
+            $sheet4->setCellValue('G' . $kolom2, empty($d->gr) ? 0 : round($ttlrp_grading / $d->gr, 0));
             $sheet4->setCellValue('H' . $kolom2, round($d->cost_bk, 0));
             $kolom2++;
         }
@@ -2099,107 +2099,107 @@ class GudangController extends Controller
         // ---- end cabut
 
         // cetak
-            $ca11 = $this->getSuntikan(21);
-            $ca11pcs = $ca11->pcs;
-            $ca11gr = $ca11->gr;
-            $ca11ttlrp = $ca11->ttl_rp;
+        $ca11 = $this->getSuntikan(21);
+        $ca11pcs = $ca11->pcs;
+        $ca11gr = $ca11->gr;
+        $ca11ttlrp = $ca11->ttl_rp;
 
-            $ca12 = $model::cetak_stok_awal();
-            $ca12suntik = $this->getSuntikan(14);
-            $ca12pcs = $ca12->pcs + $ca12suntik->pcs;
-            $ca12gr = $ca12->gr + $ca12suntik->gr;
-            $ca12ttlrp = $ca12->ttl_rp + $ca12suntik->ttl_rp;
+        $ca12 = $model::cetak_stok_awal();
+        $ca12suntik = $this->getSuntikan(14);
+        $ca12pcs = $ca12->pcs + $ca12suntik->pcs;
+        $ca12gr = $ca12->gr + $ca12suntik->gr;
+        $ca12ttlrp = $ca12->ttl_rp + $ca12suntik->ttl_rp;
 
-            $ca13 = $model::cetak_proses();
-            $ca13pcs = $ca13->pcs;
-            $ca13gr = $ca13->gr;
-            $ca13ttlrp = $ca13->ttl_rp;
-            $ca13costkerja = $ca13->cost_kerja;
+        $ca13 = $model::cetak_proses();
+        $ca13pcs = $ca13->pcs;
+        $ca13gr = $ca13->gr;
+        $ca13ttlrp = $ca13->ttl_rp;
+        $ca13costkerja = $ca13->cost_kerja;
 
-            $ca14 = $model::cetak_selesai();
-            $ca14pcs = $ca14->pcs;
-            $ca14gr = $ca14->gr;
-            $ca14ttlrp = $ca14->ttl_rp;
-            $ca14costkerja = $ca14->cost_kerja;
+        $ca14 = $model::cetak_selesai();
+        $ca14pcs = $ca14->pcs;
+        $ca14gr = $ca14->gr;
+        $ca14ttlrp = $ca14->ttl_rp;
+        $ca14costkerja = $ca14->cost_kerja;
 
-            $ca15 = $model::tdk_cetak_selesai_diserahkan();
-            $ca15pcs = $ca15->pcs;
-            $ca15gr = $ca15->gr;
-            $ca15ttlrp = $ca15->ttl_rp;
-            $ca15costkerja = $ca15->cost_kerja;
+        $ca15 = $model::tdk_cetak_selesai_diserahkan();
+        $ca15pcs = $ca15->pcs;
+        $ca15gr = $ca15->gr;
+        $ca15ttlrp = $ca15->ttl_rp;
+        $ca15costkerja = $ca15->cost_kerja;
 
-            $ca16 = $model::cetak_selesai_diserahkan();
-            $ca16suntik = $this->getSuntikan(26);
-            $ca16pcs = $ca16->pcs + $ca16suntik->pcs;
-            $ca16gr = $ca16->gr + $ca16suntik->gr;
-            $ca16ttlrp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
-            $ca16costkerja = $ca16->cost_kerja;
+        $ca16 = $model::cetak_selesai_diserahkan();
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16pcs = $ca16->pcs + $ca16suntik->pcs;
+        $ca16gr = $ca16->gr + $ca16suntik->gr;
+        $ca16ttlrp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $ca16costkerja = $ca16->cost_kerja;
 
-            $ca17 = $model::cetak_stok();
-            $ca17suntik = $this->getSuntikan(27);
+        $ca17 = $model::cetak_stok();
+        $ca17suntik = $this->getSuntikan(27);
 
-            $ca17pcs = $ca17->pcs + $ca17suntik->pcs;
-            $ca17gr = $ca17->gr + $ca17suntik->gr;
-            $ca17ttlrp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
+        $ca17pcs = $ca17->pcs + $ca17suntik->pcs;
+        $ca17gr = $ca17->gr + $ca17suntik->gr;
+        $ca17ttlrp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
         // ---- end cetak
 
         // sortir
-            $s1 = $this->getSuntikan(31);
-            $s1pcs = $s1->pcs;
-            $s1gr = $s1->gr;
-            $s1ttlrp = $s1->ttl_rp;
+        $s1 = $this->getSuntikan(31);
+        $s1pcs = $s1->pcs;
+        $s1gr = $s1->gr;
+        $s1ttlrp = $s1->ttl_rp;
 
-            $s2 = $model::stock_sortir_awal();
-            $s2suntik = $this->getSuntikan(32);
-            $s2pcs = $s2->pcs + $s2suntik->pcs;
-            $s2gr = $s2->gr + $s2suntik->gr;
-            $s2ttlrp = $s2->ttl_rp + $s2suntik->ttl_rp;
+        $s2 = $model::stock_sortir_awal();
+        $s2suntik = $this->getSuntikan(32);
+        $s2pcs = $s2->pcs + $s2suntik->pcs;
+        $s2gr = $s2->gr + $s2suntik->gr;
+        $s2ttlrp = $s2->ttl_rp + $s2suntik->ttl_rp;
 
-            $s3 = $model::sortir_proses();
-            $s3pcs = $s3->pcs;
-            $s3gr = $s3->gr;
-            $s3ttlrp = $s3->ttl_rp;
+        $s3 = $model::sortir_proses();
+        $s3pcs = $s3->pcs;
+        $s3gr = $s3->gr;
+        $s3ttlrp = $s3->ttl_rp;
 
-            $s4 = $model::sortir_selesai();
-            $s4pcs = $s4->pcs;
-            $s4gr = $s4->gr;
-            $s4ttlrp = $s4->ttl_rp;
-            $s4cost_kerja = $s4->cost_kerja;
+        $s4 = $model::sortir_selesai();
+        $s4pcs = $s4->pcs;
+        $s4gr = $s4->gr;
+        $s4ttlrp = $s4->ttl_rp;
+        $s4cost_kerja = $s4->cost_kerja;
 
-            $s5 = $model::sortir_selesai_diserahkan();
-            $s5suntik = $this->getSuntikan(35);
-            $s5pcs = $s5->pcs + $s5suntik->pcs;
-            $s5gr = $s5->gr + $s5suntik->gr;
-            $s5ttlrp = $s5->ttl_rp + $s5suntik->ttl_rp;
-            $s5cost_kerja = $s5->cost_kerja;
+        $s5 = $model::sortir_selesai_diserahkan();
+        $s5suntik = $this->getSuntikan(35);
+        $s5pcs = $s5->pcs + $s5suntik->pcs;
+        $s5gr = $s5->gr + $s5suntik->gr;
+        $s5ttlrp = $s5->ttl_rp + $s5suntik->ttl_rp;
+        $s5cost_kerja = $s5->cost_kerja;
 
-            $s6 = $model::stock_sortir();
-            $s6pcs = $s6->pcs;
-            $s6gr = $s6->gr;
-            $s6ttlrp = $s6->ttl_rp;
+        $s6 = $model::stock_sortir();
+        $s6pcs = $s6->pcs;
+        $s6gr = $s6->gr;
+        $s6ttlrp = $s6->ttl_rp;
         // ---- end sortir
 
         // pengiriman
-            $p1 = $this->getSuntikan(41);
-            $p1pcs = $p1->pcs;
-            $p1gr = $p1->gr;
-            $p1ttlrp = $p1->ttl_rp;
+        $p1 = $this->getSuntikan(41);
+        $p1pcs = $p1->pcs;
+        $p1gr = $p1->gr;
+        $p1ttlrp = $p1->ttl_rp;
 
-            $p2 = $model::grading_stock();
-            $p2suntik = $this->getSuntikan(42);
-            $p2pcs = $p2->pcs + $p2suntik->pcs;
-            $p2gr = $p2->gr + $p2suntik->gr;
-            $p2ttlrp = $p2->ttl_rp + $p2suntik->ttl_rp;
+        $p2 = $model::grading_stock();
+        $p2suntik = $this->getSuntikan(42);
+        $p2pcs = $p2->pcs + $p2suntik->pcs;
+        $p2gr = $p2->gr + $p2suntik->gr;
+        $p2ttlrp = $p2->ttl_rp + $p2suntik->ttl_rp;
 
-            $p3 = $this->getSuntikan(41);
-            $p3pcs = 8089;
-            $p3gr = 46030;
-            $p3ttlrp = 524883058;
+        $p3 = $this->getSuntikan(41);
+        $p3pcs = 8089;
+        $p3gr = 46030;
+        $p3ttlrp = 524883058;
 
-            $p4 = $this->getSuntikan(41);
-            $p4pcs = 62769;
-            $p4gr = 370722;
-            $p4ttlrp = 4227366871;
+        $p4 = $this->getSuntikan(41);
+        $p4pcs = 62769;
+        $p4gr = 370722;
+        $p4ttlrp = 4227366871;
 
         // ---- end pengiriman
 
