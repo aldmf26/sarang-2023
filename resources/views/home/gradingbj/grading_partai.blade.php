@@ -12,9 +12,21 @@
             selectedRowIndex: null,
             pcs: Array().fill(''),
             gr: Array().fill(''),
+            susut: {
+                pcs: 0,
+                gr: 0
+            },
             ttlSum: function(type) {
                 const array = type === 'pcs' ? this.pcs : this.gr;
-                return array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
+                const total = array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
+        
+                if (type === 'pcs') {
+                    return total + (parseInt(this.susut.pcs) || 0); // Kurangi nilai susut dari total pcs
+                } else if (type === 'gr') {
+                    return total + (parseInt(this.susut.gr) || 0); // Kurangi nilai susut dari total gr jika diperlukan
+                }
+        
+                return total;
             },
             numberFormat(value) {
                 return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
@@ -79,18 +91,18 @@
                                 <th></th>
                                 @php
                                     $ttlPcs = array_sum(array_column($getFormulir, 'pcs_awal'));
-                                    $ttlGr = array_sum(array_column($getFormulir, 'gr_awal'))
+                                    $ttlGr = array_sum(array_column($getFormulir, 'gr_awal'));
                                 @endphp
                                 <th class="text-end">
                                     <h6>
-                                        <input type="hidden" name="tipe" value="{{$getFormulir[0]->tipe}}">
-                                        <input type="hidden" name="ttlPcs" value="{{$ttlPcs}}">
+                                        <input type="hidden" name="tipe" value="{{ $getFormulir[0]->tipe }}">
+                                        <input type="hidden" name="ttlPcs" value="{{ $ttlPcs }}">
                                         {{ $ttlPcs }}
                                     </h6>
                                 </th>
                                 <th class="text-end">
                                     <h6>
-                                        <input type="hidden" name="ttlGr" value="{{$ttlGr}}">
+                                        <input type="hidden" name="ttlGr" value="{{ $ttlGr }}">
                                         {{ $ttlGr }}
                                     </h6>
                                 </th>
@@ -170,6 +182,26 @@
                                         Tambah</button></td>
                             </tr>
                             <!-- Add more rows as needed -->
+
+                            <tr>
+                                <td>Susut
+
+                                    <input type="hidden" class="form-control" name="grade[]" value="62">
+                                </td>
+                                <td>
+                                    <input x-model="susut.pcs" type="number" class="text-end form-control"
+                                        name="pcs[]">
+                                </td>
+                                <td>
+                                    <input x-model="susut.gr" type="number" class="text-end form-control"
+                                        name="gr[]">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="box_sp[]">
+                                </td>
+                                <td></td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>

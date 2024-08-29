@@ -16,20 +16,20 @@ class SummaryController extends Controller
 {
     public function index(Request $r)
     {
-        // $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
-        // $bk = json_decode($bk, TRUE);
-        // DB::table('bk_awal')->truncate();
-        // foreach ($bk as $v) {
-        //     $data = [
-        //         'nm_partai' => $v['ket2'],
-        //         'nm_partai_dulu' => $v['ket'],
-        //         'pcs' => $v['pcs'] ?? 0,
-        //         'gr' => $v['gr'],
-        //         'grade' => $v['nm_grade'],
-        //         'ttl_rp' => $v['total_rp'],
-        //     ];
-        //     DB::table('bk_awal')->insert($data);
-        // }
+        $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
+        $bk = json_decode($bk, TRUE);
+        DB::table('bk_awal')->truncate();
+        foreach ($bk as $v) {
+            $data = [
+                'nm_partai' => $v['ket2'],
+                'nm_partai_dulu' => $v['ket'],
+                'pcs' => $v['pcs'] ?? 0,
+                'gr' => $v['gr'],
+                'grade' => $v['nm_grade'],
+                'ttl_rp' => $v['total_rp'],
+            ];
+            DB::table('bk_awal')->insert($data);
+        }
         $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
         $data = [
             'title' => 'Data Gudang Awal',
@@ -73,6 +73,15 @@ class SummaryController extends Controller
         ];
 
         return view('home.summary.index', $data);
+    }
+
+    public function detail_partai(Request $r)
+    {
+        $data = [
+            'bk' => SummaryModel::summarybk(),
+            'suntik_ctk_sisa' => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr , sum(ttl_rp) as ttl_rp FROM opname_suntik WHERE opname = 'Y'")
+        ];
+        return view('home.summary.detail_partai', $data);
     }
     public function bk_sisa(Request $r)
     {
@@ -549,14 +558,7 @@ class SummaryController extends Controller
         exit();
     }
 
-    public function detail_partai(Request $r)
-    {
-        $data = [
-            'bk' => SummaryModel::summarybk(),
-            'suntik_ctk_sisa' => SummaryModel::bk_suntik('stock_cbt_awal'),
-        ];
-        return view('home.summary.detail_partai', $data);
-    }
+
 
     public function detail_box(Request $r)
     {
