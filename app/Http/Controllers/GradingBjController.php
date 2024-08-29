@@ -414,11 +414,10 @@ class GradingBjController extends Controller
 
     public function import(Request $r)
     {
-        
+
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
-        $noinvoice = $this->getNoInvoiceTambah();
 
         $admin = auth()->user()->name;
         $tgl = date('Y-m-d');
@@ -430,6 +429,8 @@ class GradingBjController extends Controller
                 $partai = $row[1];
                 $urutan = $row[2];
                 $nobox = $row[3];
+                $pcsSortir = $row[4];
+                $grSortir = $row[5];
                 $grade = $row[6];
                 $pcs = $row[7];
                 $gr = $row[8];
@@ -441,13 +442,11 @@ class GradingBjController extends Controller
 
                 if (
                     empty($grade) ||
-                    // empty($pcs) ||
                     empty($gr) ||
                     empty($noPengiriman)
                 ) {
                     $pesan = [
                         empty($grade) => "GRADE",
-                        // empty($pcs) => "PCS",
                         empty($gr) => "GR",
                         empty($boxPengiriman) => "BOX PENGIRIMAN",
                     ];
@@ -456,6 +455,16 @@ class GradingBjController extends Controller
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
+                    // pengecekan nobox sortir tidak ada
+                    $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox],['kategori', 'grade']])->first();
+                    if (!$cekBox) {
+                        DB::rollBack();
+                        return redirect()
+                            ->route('gradingbj.index')
+                            ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
+                    }
+
+                    // pengecekan grade jika tidak ada di list tb_grade
                     $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
                     if (!$cekGrade) {
                         DB::rollBack();
@@ -463,17 +472,31 @@ class GradingBjController extends Controller
                             ->route('gradingbj.index')
                             ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
                     }
+
                     $tipe = $cekGrade->tipe;
-                    // DB::table('grading')->insert([
-                    //     'id_grade' => $cekGrade->id_grade,
-                    //     'no_box_grading' => $boxPengiriman,
-                    //     'no_box_sortir' => $nobox,
-                    //     'pcs' => $pcs,
-                    //     'gr' => $gr,
-                    //     'admin' => $admin,
-                    //     'tgl' => $tgl,
-                    //     'no_invoice' => $noinvoice,
-                    // ]);
+                    $no_inv = "$partai-$urutan";
+
+                    DB::table('grading_partai')->insert([
+                        'nm_partai' => $partai,
+                        'urutan' => $urutan,
+                        'no_invoice' => $no_inv,
+                        'box_pengiriman' => $noPengiriman,
+                        'grade' => $grade,
+                        'tipe' => $tipe,
+                        'pcs' => $pcs,
+                        'gr' => $gr,
+                        'tgl' => $tgl,
+                        'admin' => $admin
+                    ]);
+
+                    DB::table('grading')->insert([
+                        'no_box_sortir' => $nobox,
+                        'pcs' => $pcsSortir,
+                        'gr' => $grSortir,
+                        'no_invoice' => $no_inv,
+                        'tgl' => $tgl,
+                        'admin' => $admin
+                    ]);
                 }
             }
             DB::commit();
