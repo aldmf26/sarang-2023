@@ -228,7 +228,7 @@ HAVING a.nm_partai = '$nm_partai';
     }
     public static function grading_stock($nm_partai)
     {
-        $result = DB::selectOne("SELECT b.nm_partai, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_grading,0)) as pcs, sum(COALESCE(a.gr_awal,0) - COALESCE(c.gr_grading,0)) as gr, 
+        $result = DB::selectOne("SELECT b.nm_partai, sum(COALESCE(a.pcs_awal,0) ) as pcs, sum(COALESCE(a.gr_awal,0) ) as gr, 
             
             sum((b.gr_awal * b.hrga_satuan) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) + COALESCE(g.ttl_rp,0) + COALESCE(h.ttl_rp,0) + COALESCE(z.cost_cu,0) ) as ttl_rp , 
             sum(b.hrga_satuan * b.gr_awal) as cost_bk, 
