@@ -28,11 +28,11 @@ class BkController extends Controller
         }
         $id_user = auth()->user()->id;
         if (in_array(auth()->user()->posisi_id, [1, 12])) {
-            $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            $bk = DB::select("SELECT a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
         } else {
-            $bk = DB::select("SELECT a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            $bk = DB::select("SELECT a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
             left join users as d on d.id = a.penerima 
             WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
         }
@@ -154,6 +154,7 @@ class BkController extends Controller
                         'pcs_awal' => $pcs_awal,
                         'gr_awal' => $gr_awal,
                         'tgl' => $r->tgl_terima[$x],
+                        'pgws_grade' => $r->pgws_grade[$x],
                         'kategori' => $r->kategori
                     ];
                     // if ($cekBox) {
@@ -204,8 +205,8 @@ class BkController extends Controller
                     if (
                         // $cekBox || 
                         empty($row[0]) ||
-                        empty($row[6]) ||
-                        empty($row[7])
+                        empty($row[7]) ||
+                        empty($row[8])
                         // empty($row[9]) ||
                         // empty($row[10])
                     ) {
@@ -213,8 +214,8 @@ class BkController extends Controller
                             // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
                             empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
                             // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                            empty($row[6]) => "GR TIDAK BOLEH KOSONG",
-                            empty($row[7]) => "KATEGORI TIDAK BOLEH KOSONG",
+                            empty($row[7]) => "GR TIDAK BOLEH KOSONG",
+                            empty($row[8]) => "KATEGORI TIDAK BOLEH KOSONG",
                             // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
                         ];
                         DB::rollBack();
@@ -241,8 +242,9 @@ class BkController extends Controller
                             'tgl' => date('Y-m-d'),
                             'pengawas' => 'sinta',
                             'penerima' => $row[4],
-                            'pcs_awal' => $row[5],
-                            'gr_awal' => $row[6],
+                            'penerima' => $row[5],
+                            'pcs_awal' => $row[6],
+                            'gr_awal' => $row[7],
                             'kategori' => 'cabut',
                         ]);
                     }

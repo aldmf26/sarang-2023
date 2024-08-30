@@ -260,7 +260,7 @@
                                     <tr>
                                         <td class="text-end">{{ number_format($cabutGrAkhir, 0) }}</td>
                                         <td class="text-end">{{ number_format($gr_eo_akhir, 0) }}</td>
-                                        <td class="text-end">{{ number_format($ctk, 0) }}</td>
+                                        <td class="text-end">{{ number_format($ctk ?? 0, 0) }}</td>
                                         <td class="text-end">{{ number_format($str, 0) }}</td>
                                         <td class="text-end">{{ number_format($gaji->ttl_gaji, 0) }}</td>
                                         <td class="text-end">{{ number_format($oprasional->rp_oprasional ?? 0, 0) }}
