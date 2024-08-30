@@ -88,13 +88,8 @@
                 </div>
             </div>
         </section>
-
-        <form action="{{ route('gradingbj.import') }}" method="post" enctype="multipart/form-data">
-            @csrf
-            <x-theme.modal title="Import" idModal="import">
-                <input type="file" name="file" class="form-control">
-            </x-theme.modal>
-        </form>
+        <x-theme.import route="gradingbj.import" routeTemplate="gradingbj.template_import" />
+        
         <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
             <div id="loadSelisih"></div>
         </x-theme.modal>

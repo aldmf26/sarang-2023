@@ -28,9 +28,16 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        $redir = auth()->user()->posisi_id == 14 ? 'home/cetaknew' : '/dashboard';
-
+        $datas = [
+            14 => 'home/cetaknew',
+            15 => 'home/gradingbj'
+        ];
+        
+        $posisi_id = auth()->user()->posisi_id;
+        $redir = isset($datas[$posisi_id]) ? $datas[$posisi_id] : '/dashboard';
+        
         return redirect()->intended($redir);
+
     }
 
     /**
