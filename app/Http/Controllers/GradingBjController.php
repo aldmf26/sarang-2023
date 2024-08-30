@@ -352,6 +352,13 @@ class GradingBjController extends Controller
                 ],
             ],
         ];
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
 
         $sheet->getStyle('A1:F1')->applyFromArray($styleBold);
         $styleBackground = [
@@ -410,6 +417,69 @@ class GradingBjController extends Controller
         $cekInvoice = DB::selectOne("SELECT no_invoice FROM `grading` ORDER by no_invoice DESC limit 1;");
         $noinvoice = isset($cekInvoice->no_invoice) ? $cekInvoice->no_invoice + 1 : 1001;
         return $noinvoice;
+    }
+
+    public function template_import()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Template Grading');
+        $koloms = [
+            'A' => 'tgl',
+            'B' => 'partai',
+            'C' => 'urutan',
+            'D' => 'no box',
+            'E' => 'pcs',
+            'F' => 'gr',
+            'G' => 'grade',
+            'H' => 'pcs',
+            'I' => 'gr',
+            'J' => 'no pengiriman',
+
+            'L' => 'grade',
+            'M' => 'tipe',
+
+        ];
+
+        $tbGrade = DB::table('tb_grade')->get();
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+        foreach($tbGrade as $i => $item){
+            $sheet->setCellValue('L' . ($i+2), $item->nm_grade);
+            $sheet->setCellValue('M' . ($i+2), $item->tipe);
+        }
+        $styleBold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+        
+
+        $sheet->getStyle('A1:M1')->applyFromArray($styleBold);
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:J1')->applyFromArray($styleBaris);
+        $sheet->getStyle('L1:M1')->applyFromArray($styleBaris);
+       
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Template Grading";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
     }
 
     public function import(Request $r)

@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 if (!function_exists('tanggalFilter')) {
     function tanggalFilter(Request $r)
     {
@@ -106,6 +105,7 @@ if (!function_exists('kode')) {
         return str_pad($kode, 5, '0', STR_PAD_LEFT);
     }
 }
+
 if (!function_exists('getListBulan')) {
     function getListBulan()
     {
@@ -136,6 +136,7 @@ if (!function_exists('tglFormat')) {
         return date('d M y', strtotime($tgl));
     }
 }
+
 if (!function_exists('sumCol')) {
     function sumCol($datas, $col)
     {
@@ -186,10 +187,6 @@ if (!function_exists('rumusTotalRp ')) {
         return $result;
     }
 }
-
-
-
-
 class Nonaktif
 {
     public static function edit($tbl, $kolom, $kolomValue, $data)
@@ -208,7 +205,6 @@ class Nonaktif
         ]);
     }
 }
-
 class SettingHal
 {
 

@@ -515,7 +515,7 @@ class SortirController extends Controller
             'sortir_proses' => Sortir::sortir_proses($id_user),
             'sortir_selesai' => Sortir::sortir_selesai($id_user),
 
-            'users' => DB::table('users')->where('posisi_id', '!=', '1')->get(),
+            'users' => DB::table('users')->where('posisi_id', '15')->get(),
             'posisi' => auth()->user()->posisi_id
 
         ];
