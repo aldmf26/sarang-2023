@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\gudangcekModel;
 use App\Models\SummaryModel;
+use App\Models\TotalanModel;
+use App\Models\TotalannewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -709,5 +711,386 @@ class SummaryController extends Controller
 
         ];
         return view('home.summary.history_partai', $data);
+    }
+
+    function export2(gudangcekModel $model)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet6 = $spreadsheet->getActiveSheet();
+
+        $sheet6->setTitle('Totalan');
+
+        // box stock
+        $sheet6->getStyle("A1:K1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('A1', 'No');
+        $sheet6->setCellValue('B1', 'Nama Partai');
+        $sheet6->setCellValue('C1', 'Pcs');
+        $sheet6->setCellValue('D1', 'Gr');
+        $sheet6->setCellValue('E1', 'Rp/gr');
+        $sheet6->setCellValue('F1', 'Total Rp');
+        $sheet6->setCellValue('G1', 'Pcs');
+        $sheet6->setCellValue('H1', 'Gr');
+        $sheet6->setCellValue('I1', 'Cost Bk');
+        $sheet6->setCellValue('J1', 'Cek');
+        $sheet6->setCellValue('K1', 'Sst');
+
+        $sheet6->setCellValue('G2', '=SUMIF($Q:$Q,B2,$S:$S)');
+        $sheet6->setCellValue('H2', '=SUMIF($Q:$Q,B2,$T:$T)');
+        $sheet6->setCellValue('I2', '=SUMIF($Q:$Q,B2,$V:$V)');
+        $sheet6->setCellValue('J2', '=I2-F2+C2-G2');
+        $sheet6->setCellValue('K2', '=1-(H2/D2)');
+
+
+        $bk_sinta = TotalanModel::bksinta();
+
+        $ttl_bk = 0;
+        foreach ($bk_sinta as $no => $b) {
+            $ttl_bk += $b->ttl_rp;
+        }
+
+        $op = DB::selectOne("SELECT sum(a.ttl_gaji) as ttl_gaji, sum(a.dll) as dll, c.rp_oprasional, b.nm_bulan
+        FROM tb_gaji_penutup as a 
+        left join bulan as b on b.bulan = a.bulan_dibayar
+        left join oprasional as c on c.bulan = a.bulan_dibayar and a.tahun_dibayar = c.tahun
+        ");
+
+        $sheet6->setCellValue('M2', 'bahan baku');
+        $sheet6->setCellValue('N1', 'Ttl Rp');
+        $sheet6->setCellValue('N2', $ttl_bk);
+        $sheet6->setCellValue('N3', $op->ttl_gaji + $op->rp_oprasional);
+
+        $sheet6->setCellValue('O1', 'Ttl Rp');
+        $sheet6->setCellValue('O2', '=sum(AC:AC)');
+        $sheet6->setCellValue('O3', $op->dll);
+        $sheet6->setCellValue('P3', 'gaji dll');
+
+        $kolom5 = 2;
+        foreach ($bk_sinta as $no => $b) {
+            $sheet6->setCellValue('A' . $kolom5, $no + 1);
+            $sheet6->setCellValue('B' . $kolom5, $b->nm_partai);
+            $sheet6->setCellValue('C' . $kolom5, $b->pcs);
+            $sheet6->setCellValue('D' . $kolom5, $b->gr);
+            $sheet6->setCellValue('E' . $kolom5, round($b->ttl_rp / $b->gr, 0));
+            $sheet6->setCellValue('F' . $kolom5, $b->ttl_rp);
+
+            $kolom5++;
+        }
+        $sheet6->getStyle('A2:K' . $kolom5 - 1)->applyFromArray($style);
+
+
+        $sheet6->getStyle("Q1:AC1")->applyFromArray($style_atas);
+        $sheet6->setCellValue('Q1', 'Nama Partai');
+        $sheet6->setCellValue('R1', 'Lokasi');
+        $sheet6->setCellValue('S1', 'Pcs');
+        $sheet6->setCellValue('T1', 'Gr');
+        $sheet6->setCellValue('U1', 'Rp/gr');
+        $sheet6->setCellValue('V1', 'Cost BK');
+        $sheet6->setCellValue('W1', 'Cost Cabut');
+        $sheet6->setCellValue('X1', 'Cost Eo');
+        $sheet6->setCellValue('Y1', 'Cost Cetak');
+        $sheet6->setCellValue('Z1', 'Cost Sortir');
+        $sheet6->setCellValue('AA1', 'Cost Cu');
+        $sheet6->setCellValue('AB1', 'Cost Oprasional');
+        $sheet6->setCellValue('AC1', 'Total Rp');
+
+        $kolom6 = 2;
+        foreach ($bk_sinta as $no => $b) {
+            $bk_stock = TotalanModel::bkstock($b->nm_partai);
+            $bk_proses = TotalanModel::bksedang_proses($b->nm_partai);
+            $bk_selesai_siap_ctk = TotalannewModel::bkselesai_siap_ctk($b->nm_partai);
+            $bk_selesai_siap_str = TotalanModel::bkselesai_siap_str($b->nm_partai);
+            $cetak_stok = TotalanModel::cetak_stok($b->nm_partai);
+            $cetak_proses2 = TotalanModel::cetak_proses($b->nm_partai);
+            $cetak_selesai2 = TotalannewModel::cetak_selesai($b->nm_partai);
+            $stock_sortir = TotalanModel::stock_sortir($b->nm_partai);
+            $sortir_proses2 = TotalanModel::sortir_proses($b->nm_partai);
+            $sortir_selesai2 = TotalanModel::sortir_selesai($b->nm_partai);
+            $grading_stock2 = TotalannewModel::grading_stock($b->nm_partai);
+            $box_belum_kirim = TotalanModel::box_belum_kirim($b->nm_partai);
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box Stock');
+            $sheet6->setCellValue('S' . $kolom6, round($bk_stock->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($bk_stock->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($bk_stock->gr) ? 0 : round($bk_stock->ttl_rp / $bk_stock->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($bk_stock->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, 0);
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_stock->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, 0);
+            $sheet6->setCellValue('AC' . $kolom6, round($bk_stock->ttl_rp ?? 0, 0) + round($bk_stock->cost_cu ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box sedang proses');
+            $sheet6->setCellValue('S' . $kolom6, round($bk_proses->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($bk_proses->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($bk_proses->gr) ? 0 : round($bk_proses->ttl_rp / $bk_proses->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($bk_proses->ttl_rp ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, 0);
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_proses->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, 0);
+            $sheet6->setCellValue('AC' . $kolom6, round($bk_proses->ttl_rp ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box selesai siap cetak');
+            $sheet6->setCellValue('S' . $kolom6, round($bk_selesai_siap_ctk->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($bk_selesai_siap_ctk->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($bk_selesai_siap_ctk->gr) ? 0 : round($bk_selesai_siap_ctk->ttl_rp / $bk_selesai_siap_ctk->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($bk_selesai_siap_ctk->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($bk_selesai_siap_ctk->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_selesai_siap_ctk->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($bk_selesai_siap_ctk->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($bk_selesai_siap_ctk->ttl_rp ?? 0, 0) + round($bk_selesai_siap_ctk->cost_op_cbt ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box selesai siap sortir');
+            $sheet6->setCellValue('S' . $kolom6, round($bk_selesai_siap_str->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($bk_selesai_siap_str->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($bk_selesai_siap_str->gr) ? 0 : round($bk_selesai_siap_str->ttl_rp / $bk_selesai_siap_str->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($bk_selesai_siap_str->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($bk_selesai_siap_str->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, round($bk_selesai_siap_str->cost_eo ?? 0, 0));
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($bk_selesai_siap_str->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($bk_selesai_siap_str->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($bk_selesai_siap_str->ttl_rp ?? 0, 0) + round($bk_selesai_siap_str->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Cetak Stok');
+            $sheet6->setCellValue('S' . $kolom6, round($cetak_stok->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($cetak_stok->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($cetak_stok->gr) ? 0 : round($cetak_stok->ttl_rp / $cetak_stok->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($cetak_stok->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($cetak_stok->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_stok->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($cetak_stok->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($cetak_stok->ttl_rp ?? 0, 0) + round($cetak_stok->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Cetak sedang proses');
+            $sheet6->setCellValue('S' . $kolom6, round($cetak_proses2->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($cetak_proses2->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($cetak_proses2->gr) ? 0 : round($cetak_proses2->ttl_rp / $cetak_proses2->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($cetak_proses2->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($cetak_proses2->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_proses2->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($cetak_proses2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($cetak_proses2->ttl_rp ?? 0, 0) + round($cetak_proses2->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Cetak selesai siap sortir');
+            $sheet6->setCellValue('S' . $kolom6, round($cetak_selesai2->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($cetak_selesai2->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($cetak_selesai2->gr) ? 0 : round($cetak_selesai2->ttl_rp / $cetak_selesai2->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($cetak_selesai2->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($cetak_selesai2->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, round($cetak_selesai2->cost_ctk ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($cetak_selesai2->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($cetak_selesai2->cost_op ?? 0, 0));
+
+            $sheet6->setCellValue('AC' . $kolom6, round($cetak_selesai2->ttl_rp ?? 0, 0) + round($cetak_selesai2->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Sortir Stok');
+            $sheet6->setCellValue('S' . $kolom6, round($stock_sortir->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($stock_sortir->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($stock_sortir->gr) ? 0 : round($stock_sortir->ttl_rp / $stock_sortir->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($stock_sortir->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($stock_sortir->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, round($stock_sortir->cost_eo ?? 0, 0));
+            $sheet6->setCellValue('Y' . $kolom6, round($stock_sortir->cost_ctk ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($stock_sortir->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($stock_sortir->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($stock_sortir->ttl_rp ?? 0, 0) +  round($stock_sortir->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Sortir sedang proses');
+            $sheet6->setCellValue('S' . $kolom6, round($sortir_proses2->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($sortir_proses2->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($sortir_proses2->gr) ? 0 : round($sortir_proses2->ttl_rp / $sortir_proses2->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($sortir_proses2->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($sortir_proses2->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, round($sortir_proses2->cost_eo ?? 0, 0));
+            $sheet6->setCellValue('Y' . $kolom6, round($sortir_proses2->cost_ctk ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, round($sortir_proses2->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($sortir_proses2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($sortir_proses2->ttl_rp ?? 0, 0) + round($sortir_proses2->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Sortir selesai siap grading');
+            $sheet6->setCellValue('S' . $kolom6, round($sortir_selesai2->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($sortir_selesai2->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($sortir_selesai2->gr) ? 0 : round($sortir_selesai2->ttl_rp / $sortir_selesai2->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($sortir_selesai2->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($sortir_selesai2->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, round($sortir_selesai2->cost_eo ?? 0, 0));
+            $sheet6->setCellValue('Y' . $kolom6, round($sortir_selesai2->cost_ctk ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($sortir_selesai2->cost_str ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($sortir_selesai2->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($sortir_selesai2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($sortir_selesai2->ttl_rp ?? 0, 0) + round($sortir_selesai2->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Grading Stock');
+            $sheet6->setCellValue('S' . $kolom6, round($grading_stock2->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($grading_stock2->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($grading_stock2->gr) ? 0 : round($grading_stock2->ttl_rp / $grading_stock2->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, round($grading_stock2->cost_bk ?? 0, 0));
+            $sheet6->setCellValue('W' . $kolom6, round($grading_stock2->cost_cbt ?? 0, 0));
+            $sheet6->setCellValue('X' . $kolom6, round($grading_stock2->cost_eo ?? 0, 0));
+            $sheet6->setCellValue('Y' . $kolom6, round($grading_stock2->cost_ctk ?? 0, 0));
+            $sheet6->setCellValue('Z' . $kolom6, round($grading_stock2->cost_str ?? 0, 0));
+            $sheet6->setCellValue('AA' . $kolom6, round($grading_stock2->cost_cu ?? 0, 0));
+            $sheet6->setCellValue('AB' . $kolom6, round($grading_stock2->cost_op ?? 0, 0));
+            $sheet6->setCellValue('AC' . $kolom6, round($grading_stock2->ttl_rp ?? 0, 0) + round($grading_stock2->cost_op ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box belum kirim');
+            $sheet6->setCellValue('S' . $kolom6, round($box_belum_kirim->pcs ?? 0, 0));
+            $sheet6->setCellValue('T' . $kolom6, round($box_belum_kirim->gr ?? 0, 0));
+            $sheet6->setCellValue('U' . $kolom6, empty($box_belum_kirim->gr) ? 0 : round($box_belum_kirim->ttl_rp / $box_belum_kirim->gr, 0));
+            $sheet6->setCellValue('V' . $kolom6, 0);
+            $sheet6->setCellValue('W' . $kolom6, 0);
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, 0);
+            $sheet6->setCellValue('AB' . $kolom6, 0);
+            $sheet6->setCellValue('AC' . $kolom6, round($box_belum_kirim->ttl_rp ?? 0, 0));
+
+            $kolom6++;
+
+            $sheet6->setCellValue('Q' . $kolom6, $b->nm_partai);
+            $sheet6->setCellValue('R' . $kolom6, 'Box selesai kirim');
+            $sheet6->setCellValue('S' . $kolom6, 0);
+            $sheet6->setCellValue('T' . $kolom6, 0);
+            $sheet6->setCellValue('U' . $kolom6, 0);
+            $sheet6->setCellValue('V' . $kolom6, 0);
+            $sheet6->setCellValue('W' . $kolom6, 0);
+            $sheet6->setCellValue('X' . $kolom6, 0);
+            $sheet6->setCellValue('Y' . $kolom6, 0);
+            $sheet6->setCellValue('Z' . $kolom6, 0);
+            $sheet6->setCellValue('AA' . $kolom6, 0);
+            $sheet6->setCellValue('AB' . $kolom6, 0);
+            $sheet6->setCellValue('AC' . $kolom6, 0);
+
+            $kolom6++;
+        }
+        $sheet6->getStyle('Q2:AC' . $kolom6 - 1)->applyFromArray($style);
+
+        // box stock
+
+        // batas ke lima
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet7 = $spreadsheet->getActiveSheet(1);
+        $sheet7->setTitle('cost');
+
+        $oprasional = DB::select("SELECT sum(a.ttl_gaji) as ttl_gaji, c.rp_oprasional, b.nm_bulan
+        FROM tb_gaji_penutup as a 
+        left join bulan as b on b.bulan = a.bulan_dibayar
+        left join oprasional as c on c.bulan = a.bulan_dibayar and a.tahun_dibayar = c.tahun
+        group by a.bulan_dibayar , a.tahun_dibayar;");
+
+
+        $sheet7->getStyle("A1:B1")->applyFromArray($style_atas);
+        $sheet7->setCellValue('A1', 'Bulan');
+        $sheet7->setCellValue('B1', 'Rp Oprasional');
+
+        $kolomcost = 2;
+        foreach ($oprasional as $o) {
+            $sheet7->setCellValue('A' . $kolomcost, $o->nm_bulan);
+            $sheet7->setCellValue('B' . $kolomcost, $o->rp_oprasional + $o->ttl_gaji);
+            $kolomcost++;
+        }
+        $sheet7->getStyle('A2:B' . $kolomcost - 1)->applyFromArray($style);
+
+
+
+
+
+
+        // cetak selesai
+
+        $namafile = "Opname Gudang.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }

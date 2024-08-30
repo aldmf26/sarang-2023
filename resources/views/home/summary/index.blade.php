@@ -64,6 +64,9 @@
                                 $ttl_rp =
                                     array_sum(array_column($bk, 'ttl_rp')) +
                                     array_sum(array_column($bk_suntik, 'ttl_rp'));
+                                $ttl_rp2 =
+                                    array_sum(array_column($bk, 'cost_bk')) +
+                                    array_sum(array_column($bk_suntik, 'ttl_rp'));
                             @endphp
                             <td class="text-end">{{ number_format((1 - $bk_akhir / $bk_awal) * 100, 1) }} %</td>
                             <td></td>
@@ -71,7 +74,7 @@
                         <tr>
                             <td>rp/gr</td>
                             <td class="text-end">{{ number_format($ttl_rp / $bk_awal, 0) }}</td>
-                            <td class="text-end">{{ number_format($ttl_rp / $bk_akhir, 0) }}</td>
+                            <td class="text-end">{{ number_format($ttl_rp2 / $bk_akhir, 0) }}</td>
                             <td class="text-end">
 
                             </td>
@@ -84,7 +87,7 @@
                                 {{ number_format(array_sum(array_column($bk, 'ttl_rp')) + array_sum(array_column($bk_suntik, 'ttl_rp')), 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format(array_sum(array_column($bk, 'ttl_rp')) + array_sum(array_column($bk_suntik, 'ttl_rp')), 0) }}
+                                {{ number_format(array_sum(array_column($bk, 'cost_bk')) + array_sum(array_column($bk_suntik, 'ttl_rp')), 0) }}
                             </td>
                             <td></td>
                             <td class="text-end">{{ number_format(1815907127.33, 0) }}</td>
@@ -102,7 +105,7 @@
                             </td>
                             <td></td>
                             <td class="text-end bg-warning text-white">
-                                {{ number_format(array_sum(array_column($bk, 'ttl_rp')) + array_sum(array_column($bk_suntik, 'ttl_rp')) + 1815907127.33, 0) }}
+                                {{ number_format(array_sum(array_column($bk, 'cost_bk')) + array_sum(array_column($bk_suntik, 'ttl_rp')) + 1815907127.33, 0) }}
                             </td>
                         </tr>
                     </tbody>
