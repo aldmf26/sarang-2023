@@ -14,8 +14,7 @@ class PenutupController extends Controller
 
     public function getData($param)
     {
-        $bulan = '7';
-        // $bulan = date('m', strtotime('-1 month'));
+        $bulan = date('m', strtotime('-1 month'));
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
                 JOIN users as b on a.penerima = b.id

@@ -152,7 +152,6 @@
                             <td align="right">{{ number_format($x->eot, 0) }}</td>
                             @php
                                 $susut = empty($x->gr_awal) ? 0 : (1 - ($x->gr_flx + $x->gr_akhir) / $x->gr_awal) * 100;
-
                             @endphp
                             <td align="right">{{ number_format($susut, 0) }} %</td>
 
