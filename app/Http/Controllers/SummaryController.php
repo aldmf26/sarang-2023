@@ -85,7 +85,7 @@ class SummaryController extends Controller
         $data = [
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(a.ttl_gaji) as ttl_gaji
             FROM tb_gaji_penutup as a 
-            where a.bulan_dibayar = '$bulan->bulan + 1' and a.tahun_dibayar  = '$bulan->tahun';"),
+            where a.bulan_dibayar = '$bulan->bulan' and a.tahun_dibayar  = '$bulan->tahun';"),
             'bulan' => $bulan->bulan,
             'tahun' => $bulan->tahun,
             'cost_oprasional' => DB::selectOne("SELECT sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
