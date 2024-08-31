@@ -77,6 +77,9 @@ class SummaryController extends Controller
         return view('home.summary.index', $data);
     }
 
+
+
+
     public function detail_partai(Request $r)
     {
         $data = [
