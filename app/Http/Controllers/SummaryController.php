@@ -671,7 +671,7 @@ class SummaryController extends Controller
                 left join kelas_cetak as f on f.id_kelas_cetak = e.id_kelas_cetak
                 where f.kategori = 'CTK'
             ) as e on e.no_box = a.no_box
-            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'Y' 
+            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'Y' and a.no_box  in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'grade')
             GROUP by b.nm_partai;"),
 
             'sortir_sisa' => DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(e.gr_akhir) as gr_akhir_ctk, sum(COALESCE(d.gr_akhir,0) + COALESCE(f.gr_eo_akhir,0)) as gr_akhir_cbt,
@@ -688,7 +688,7 @@ class SummaryController extends Controller
                 left join kelas_cetak as f on f.id_kelas_cetak = e.id_kelas_cetak
                 where f.kategori = 'CTK'
             ) as e on e.no_box = a.no_box
-            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'T'  
+            where  b.nm_partai = '$r->nm_partai' and a.no_box not in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'grade')    
             GROUP by b.nm_partai;"),
 
             'grading' => DB::selectOne("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(c.pcs) as pcs_akhir, sum(c.gr) as gr_akhir, a.cost_bk, c.tgl

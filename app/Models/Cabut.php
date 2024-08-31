@@ -359,7 +359,12 @@ class Cabut extends Model
         sortir.susut as sortir_susut,
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
-        denda.ttl_rp_denda
+        denda.ttl_rp_denda,
+        ctk.pcs_awal_ctk,
+        ctk.gr_awal_ctk,
+        ctk.pcs_akhir_ctk,
+        ctk.gr_akhir_ctk,
+        ctk.ttl_rp_cetak
         FROM 
             (
                 SELECT id_anak,id_pengawas
@@ -426,6 +431,19 @@ class Cabut extends Model
             FROM `tb_denda` 
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as denda ON a.id_anak = denda.id_anak
+
+        left join (
+         SELECT c.id_anak, sum(c.pcs_awal_ctk) as pcs_awal_ctk, 
+         sum(c.gr_awal_ctk) as gr_awal_ctk, 
+         sum(c.pcs_akhir) as pcs_akhir_ctk, 
+         sum(c.gr_akhir) as gr_akhir_ctk,
+         sum(c.ttl_rp) as ttl_rp_cetak
+            FROM cetak_new as c
+            where c.bulan_dibayar = '$bulan' and YEAR(c.tgl) = '$tahun' and c.selesai ='Y'
+            GROUP by c.id_anak
+        ) as ctk on ctk.id_anak = a.id_anak
+
+
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
     }
     public static function getRekapLaporanHarian($bulan, $tahun, $id_pengawas)

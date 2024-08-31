@@ -317,7 +317,7 @@ class CetakModel extends Model
 
     public static function gaji_global($bulan_dibayar, $tahun_dibayar, $id_pengawas)
     {
-        $result = DB::select("SELECT h.name, a.nama , b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
+        $result = DB::select("SELECT h.name, a.nama , a.id_kelas, b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
         d.pcs_awal_cbt, d.gr_awal_cbt, d.pcs_akhir_cbt, d.gr_akhir_cbt, d.ttl_rp_cbt,
         e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda,
         i.gr_awal_eo, i.gr_eo_akhir, i.ttl_rp_eo

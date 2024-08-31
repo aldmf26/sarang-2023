@@ -99,7 +99,7 @@ class SummaryModel extends Model
                     left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     left join users as c on c.id = a.id_pengawas
                     where a.selesai ='Y' and b.baru = 'baru'
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             UNION ALL
             SELECT b.nm_partai, c.name as pengawas, a.no_box, ((b.hrga_satuan * b.gr_awal) + a.ttl_rp) as ttl_rp, a.gr_akhir as gr,  a.ttl_rp as cost_kerja, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan, (a.gr_akhir * d.rp_gr) as cost_op_cbt, z.cost_cu
@@ -115,7 +115,7 @@ class SummaryModel extends Model
                     left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     left join users as c on c.id = a.id_pengawas
                     where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             ORDER by no_box
             ) as a
