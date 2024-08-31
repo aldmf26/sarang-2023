@@ -331,7 +331,7 @@ class TotalanModel extends Model
                 left join users as f on f.id = a.id_pengawas
                 left join eo as g on g.no_box = a.no_box
                 left join oprasional as j on j.bulan = g.bulan_dibayar
-                WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.nm_partai = '$nm_partai'
+                WHERE  a.selesai = 'Y' and b.nm_partai = '$nm_partai'
                 group by b.nm_partai;
         ");
 

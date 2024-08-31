@@ -690,7 +690,32 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-
+                            <table class="table table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-end">Gr Cabut</th>
+                                        <th class="text-end">Gr Eo</th>
+                                        <th class="text-end">Gr Cetak</th>
+                                        <th class="text-end">Gr Sortir</th>
+                                        <th class="text-end">Total Gaji</th>
+                                        <th class="text-end">Cost Operasional</th>
+                                        <th class="text-end" width="25%">Total Cost Operasional</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">0</td>
+                                        <td class="text-end">
+                                            <input type="text" class="form-control" name="total_cost">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                         </div>
 

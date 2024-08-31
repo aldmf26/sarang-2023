@@ -61,6 +61,7 @@
                                 <th class="dhead">Warna</th>
                                 <th class="dhead">Pgws</th>
                                 <th class="dhead" width="120">Nama</th>
+                                <th class="dhead" width="120">Pgws Grade</th>
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
                                 <th class="dhead text-end">Gr Awal</th>
@@ -113,9 +114,14 @@
                                             id="" class="select3 selectPengawas selectTipe">
                                             <option value="">Pilih Pengawas</option>
                                             @foreach ($pengawas as $p)
-                                                <option {{$id_pengawas == $p->id ? 'selected' : ''}} value="{{ $p->id }}">{{ $p->name }}</option>
+                                                <option {{ $id_pengawas == $p->id ? 'selected' : '' }}
+                                                    value="{{ $p->id }}">{{ $p->name }}</option>
                                             @endforeach
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" count="{{ $i }}" name="pgws_grade[]"
+                                            class="form-control pgws_grade">
                                     </td>
                                     <td>
                                         <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
@@ -234,6 +240,7 @@
             keyupBp('warna')
             keyupBp('nolot')
             keyupBp('namaPartai')
+            keyupBp('pgws_grade')
             // keyupBp('pcsAwal')
             // keyupBp('grAwal')
             keyupBp('nobox', true)

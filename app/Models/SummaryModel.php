@@ -331,7 +331,7 @@ class SummaryModel extends Model
 
     public static function grading_stock()
     {
-        $result = DB::select("SELECT b.nm_partai, a.no_box, l.name, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_grading,0)) as pcs, sum(COALESCE(a.gr_awal,0) - COALESCE(c.gr_grading,0)) as gr, 
+        $result = DB::select("SELECT b.nm_partai, a.no_box, l.name, sum(COALESCE(a.pcs_awal,0)) as pcs, sum(COALESCE(a.gr_awal,0)) as gr, 
             
             sum((b.gr_awal * b.hrga_satuan) ) as ttl_rp , 
             sum(b.hrga_satuan * b.gr_awal) as cost_bk, 

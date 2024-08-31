@@ -62,6 +62,7 @@
                             <th>Tgl terima</th>
                             <th>Pengawas</th>
                             <th>Penerima</th>
+                            <th>Pgws Grade</th>
                             <th class="text-end">Pcs Awal</th>
                             <th class="text-end">Gr Awal</th>
                             <th class="text-end">Susut</th>
@@ -100,8 +101,8 @@
                                 <td>{{ $b->warna }}</td>
                                 <td>{{ tanggal($b->tgl) }}</td>
                                 <td>{{ $b->pengawas }}</td>
-                                <td>{{ $b->name }}
-                                </td>
+                                <td>{{ $b->name }}</td>
+                                <td>{{ $b->pgws_grade }}</td>
                                 <td class="text-end">{{ $b->pcs_awal }}</td>
                                 <td class="text-end">{{ $b->gr_awal }}</td>
                                 <td class="text-end">{{ $b->susut }}</td>
