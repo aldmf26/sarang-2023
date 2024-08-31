@@ -266,5 +266,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/history_box', 'history_box')->name('history_box');
             Route::get('/history_partai', 'history_partai')->name('history_partai');
             Route::get('/export2', 'export2')->name('export2');
+            Route::get('/get_operasional', 'get_operasional')->name('get_operasional');
+            Route::post('/saveoprasional', 'saveoprasional')->name('saveoprasional');
         });
 });

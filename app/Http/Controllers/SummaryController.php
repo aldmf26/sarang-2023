@@ -78,6 +78,23 @@ class SummaryController extends Controller
     }
 
 
+    public function get_operasional(Request $r)
+    {
+        $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
+        FROM tb_gaji_penutup as a;");
+        $data = [
+            'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(a.ttl_gaji) as ttl_gaji
+            FROM tb_gaji_penutup as a 
+            where a.bulan_dibayar = '$bulan->bulan' and a.tahun_dibayar  = '$bulan->tahun';"),
+            'bulan' => $bulan->bulan,
+            'tahun' => $bulan->tahun,
+            'cost_oprasional' => DB::selectOne("SELECT sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
+        ];
+
+        return view('home.summary.operasional', $data);
+    }
+
+
 
 
     public function detail_partai(Request $r)
@@ -1095,5 +1112,28 @@ class SummaryController extends Controller
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit();
+    }
+
+
+    public function saveoprasional(Request $r)
+    {
+        $formattedNumber = $r->biaya_oprasional;
+        // Hapus pemisah ribuan untuk mendapatkan angka mentah
+        $rawNumber = str_replace(',', '', $formattedNumber);
+        // Validasi angka mentah
+        if (!is_numeric($rawNumber)) {
+            return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
+        }
+        DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
+        $data = [
+            'rp_oprasional' => $rawNumber - $r->gaji,
+            'bulan' => $r->bulan,
+            'tahun' => $r->tahun,
+            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'gr' => $r->gr_akhir,
+            'total_operasional' => $rawNumber
+        ];
+        DB::table('oprasional')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
