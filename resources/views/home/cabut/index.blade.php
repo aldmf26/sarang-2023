@@ -716,8 +716,9 @@
                         type: "GET",
                         url: "{{ route('cabut.input_akhir') }}",
                         data: data,
+                        dataType:'json',
                         success: function(r) {
-                            alertToast('sukses', 'Berhasil input akhir')
+                            alertToast(r.status, r.pesan)
                             // $('#inputAkhir').modal('hide')
                             // load_input_akhir()
                             loadHalaman()
