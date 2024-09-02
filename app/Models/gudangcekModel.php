@@ -250,7 +250,7 @@ class gudangcekModel extends Model
                         group by a.no_box
                     ) as z on z.no_box = a.no_box
                     where a.selesai ='Y' and b.baru = 'baru'
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             UNION ALL
             SELECT a.ttl_rp as cost_kerja2,b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, 0 as ttl_rp_cbt, a.ttl_rp as ttl_rp_eo, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan, (a.gr_akhir * d.rp_gr) as cost_op_cbt, z.cost_cu
@@ -266,7 +266,7 @@ class gudangcekModel extends Model
                         group by a.no_box
                     ) as z on z.no_box = a.no_box
                     where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             ORDER by no_box
         ");

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\PenutupImport;
 use App\Models\Cabut;
+use App\Models\CetakModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,11 +15,11 @@ class PenutupController extends Controller
 
     public function getData($param)
     {
-        $bulan = date('m', strtotime('-1 month'));
+        $bulan = '08';
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
                 JOIN users as b on a.penerima = b.id
-                WHERE b.lokasi != 'ctk' AND b.name not in ('yuli', 'yuli sby', 'siti fatimah')
+                WHERE  b.name not in ('yuli', 'yuli sby', 'siti fatimah')
                 group by b.id");
 
         $datas =  [
@@ -52,6 +53,7 @@ class PenutupController extends Controller
                     $data->ttl_rp +
                     $data->eo_ttl_rp +
                     $data->sortir_ttl_rp +
+                    $data->ttl_rp_cetak +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
                 $ttlRp += $ttl;
@@ -77,13 +79,15 @@ class PenutupController extends Controller
         $tahun =  $this->getData('tahun');
         $pengawas = $this->getData('pengawas');
 
+
+
         foreach ($pengawas as $p) {
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl as $data) {
                 $susutCbt = empty($data->gr_akhir) ? 0 : (1 - (($data->gr_akhir + $data->gr_flx) / $data->gr_awal)) * 100;
                 $susutEo =  empty($data->eo_akhir) ? 0 : (1 - ($data->eo_akhir / $data->eo_awal)) * 100;
                 $susutSortir = empty($data->sortir_gr_akhir) ? 0 : (1 - ($data->sortir_gr_akhir / $data->sortir_gr_awal)) * 100;
-                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll - $data->ttl_rp_denda;
+                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $data->ttl_rp_cetak - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
                 $tes[] = [
@@ -99,6 +103,13 @@ class PenutupController extends Controller
                     'cbt_flx' => $data->gr_flx,
                     'cbt_sst' => $susutCbt,
                     'cbt_ttlrp' => $data->ttl_rp,
+
+                    'ctk_pcs_awal' => $data->pcs_awal_ctk,
+                    'ctk_gr_awal' => $data->gr_awal_ctk,
+                    'ctk_pcs_akhir' => $data->pcs_akhir_ctk,
+                    'ctk_gr_akhir' => $data->gr_akhir_ctk,
+                    'ctk_ttl_rp' => $data->ttl_rp_cetak,
+
                     'eo_gr_awal' => $data->eo_awal,
                     'eo_gr_akhir' => $data->eo_akhir,
                     'eo_sst' => $susutEo,

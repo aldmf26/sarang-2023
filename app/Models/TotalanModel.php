@@ -119,7 +119,7 @@ class TotalanModel extends Model
                     left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     left join users as c on c.id = a.id_pengawas
                     where a.selesai ='Y' and b.baru = 'baru'
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             UNION ALL
             SELECT b.nm_partai, c.name as pengawas, a.no_box, (b.hrga_satuan * b.gr_awal) as ttl_rp, a.gr_akhir as gr, 0 as ttl_rp_cbt, a.ttl_rp as ttl_rp_eo, (((b.hrga_satuan * b.gr_awal) + a.ttl_rp) /  a.gr_akhir) as hrga_satuan, (a.gr_akhir * d.rp_gr) as cost_op_cbt, z.cost_cu
@@ -135,7 +135,7 @@ class TotalanModel extends Model
                     left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     left join users as c on c.id = a.id_pengawas
                     where a.selesai ='Y' and b.baru = 'baru' and a.pcs_akhir = 0
-                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori = 'sortir')
+                    and a.no_box not in (SELECT c.no_box FROM formulir_sarang as c where c.kategori in('sortir','cetak'))
                     
             ORDER by no_box
             ) as a
@@ -331,7 +331,7 @@ class TotalanModel extends Model
                 left join users as f on f.id = a.id_pengawas
                 left join eo as g on g.no_box = a.no_box
                 left join oprasional as j on j.bulan = g.bulan_dibayar
-                WHERE  a.selesai = 'Y' and b.nm_partai = '$nm_partai'
+                WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.nm_partai = '$nm_partai'
                 group by b.nm_partai;
         ");
 

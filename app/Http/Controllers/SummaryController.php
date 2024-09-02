@@ -77,6 +77,26 @@ class SummaryController extends Controller
         return view('home.summary.index', $data);
     }
 
+
+    public function get_operasional(Request $r)
+    {
+        $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
+        FROM tb_gaji_penutup as a;");
+        $data = [
+            'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(a.ttl_gaji) as ttl_gaji
+            FROM tb_gaji_penutup as a 
+            where a.bulan_dibayar = '$bulan->bulan' and a.tahun_dibayar  = '$bulan->tahun';"),
+            'bulan' => $bulan->bulan,
+            'tahun' => $bulan->tahun,
+            'cost_oprasional' => DB::selectOne("SELECT sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
+        ];
+
+        return view('home.summary.operasional', $data);
+    }
+
+
+
+
     public function detail_partai(Request $r)
     {
         $data = [
@@ -671,7 +691,7 @@ class SummaryController extends Controller
                 left join kelas_cetak as f on f.id_kelas_cetak = e.id_kelas_cetak
                 where f.kategori = 'CTK'
             ) as e on e.no_box = a.no_box
-            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'Y' 
+            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'Y' and a.no_box  in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'grade')
             GROUP by b.nm_partai;"),
 
             'sortir_sisa' => DB::selectOne("SELECT b.nm_partai, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, sum(e.gr_akhir) as gr_akhir_ctk, sum(COALESCE(d.gr_akhir,0) + COALESCE(f.gr_eo_akhir,0)) as gr_akhir_cbt,
@@ -688,7 +708,7 @@ class SummaryController extends Controller
                 left join kelas_cetak as f on f.id_kelas_cetak = e.id_kelas_cetak
                 where f.kategori = 'CTK'
             ) as e on e.no_box = a.no_box
-            where  b.nm_partai = '$r->nm_partai' and a.selesai = 'T'  
+            where  b.nm_partai = '$r->nm_partai' and a.no_box not in(SELECT b.no_box from formulir_sarang as b where b.kategori = 'grade')    
             GROUP by b.nm_partai;"),
 
             'grading' => DB::selectOne("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(c.pcs) as pcs_akhir, sum(c.gr) as gr_akhir, a.cost_bk, c.tgl
@@ -1092,5 +1112,28 @@ class SummaryController extends Controller
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit();
+    }
+
+
+    public function saveoprasional(Request $r)
+    {
+        $formattedNumber = $r->biaya_oprasional;
+        // Hapus pemisah ribuan untuk mendapatkan angka mentah
+        $rawNumber = str_replace(',', '', $formattedNumber);
+        // Validasi angka mentah
+        if (!is_numeric($rawNumber)) {
+            return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
+        }
+        DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
+        $data = [
+            'rp_oprasional' => $rawNumber - $r->gaji,
+            'bulan' => $r->bulan,
+            'tahun' => $r->tahun,
+            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'gr' => $r->gr_akhir,
+            'total_operasional' => $rawNumber
+        ];
+        DB::table('oprasional')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

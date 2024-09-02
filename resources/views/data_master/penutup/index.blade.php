@@ -1,6 +1,6 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
     <x-slot name="cardHeader">
-    
+
         <h6 class="float-start mt-1">{{ $title }}</h6>
         {{-- @include('home.cabut.view_bulandibayar') --}}
         <button data-bs-toggle="modal" data-bs-target="#tutupGaji" class="btn btn-sm btn-primary float-end"><i

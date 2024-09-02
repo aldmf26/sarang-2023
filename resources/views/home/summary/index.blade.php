@@ -90,7 +90,7 @@
                                 {{ number_format(array_sum(array_column($bk, 'cost_bk')) + array_sum(array_column($bk_suntik, 'ttl_rp')), 0) }}
                             </td>
                             <td></td>
-                            <td class="text-end">{{ number_format(1815907127.33, 0) }}</td>
+                            <td class="text-end">{{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</td>
                         </tr>
 
                     </tbody>
@@ -105,7 +105,7 @@
                             </td>
                             <td></td>
                             <td class="text-end bg-warning text-white">
-                                {{ number_format(array_sum(array_column($bk, 'cost_bk')) + array_sum(array_column($bk_suntik, 'ttl_rp')) + 1815907127.33, 0) }}
+                                {{ number_format(array_sum(array_column($bk, 'cost_bk')) + array_sum(array_column($bk_suntik, 'ttl_rp')) + sumBk($uang_cost, 'total_operasional'), 0) }}
                             </td>
                         </tr>
                     </tbody>
@@ -158,7 +158,7 @@
                         $suntik_sortir_selesai_diserahkan->gr;
                     $gr_tdk_cetak = array_sum(array_column($cetak_selesai_diserahkan, 'gr_tdk_ctk'));
 
-                    $operasional = 1815907127.33;
+                    $operasional = sumBk($uang_cost, 'total_operasional');
                     $ttl_gr_operasional =
                         $gr_box_s_cetak_belum_serah +
                         $gr_box_s_cetak_diserahkan +
@@ -680,48 +680,44 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="cost_opr_input" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog  modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tambah Operasional</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th class="text-end">Gr Cabut</th>
-                                        <th class="text-end">Gr Eo</th>
-                                        <th class="text-end">Gr Cetak</th>
-                                        <th class="text-end">Gr Sortir</th>
-                                        <th class="text-end">Total Gaji</th>
-                                        <th class="text-end">Cost Operasional</th>
-                                        <th class="text-end" width="25%">Total Cost Operasional</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">
-                                            <input type="text" class="form-control" name="total_cost">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <form action="{{ route('summary.saveoprasional') }}" method="post">
+                @csrf
+
+                <div class="modal fade" id="cost_opr_input" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog  modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Tambah Operasional</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="cost_opr"></div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Close</span>
+                                </button>
+
+                                <button type="submit"
+                                    class="float-end btn btn-primary button-save-modal">Save</button>
+                                <button class="float-end btn btn-primary button-save-modal-loading" type="button"
+                                    disabled hidden>
+                                    <span class="spinner-border spinner-border-sm " role="status"
+                                        aria-hidden="true"></span>
+                                    Loading...
+                                </button>
+
+
+                            </div>
 
                         </div>
-
                     </div>
                 </div>
-            </div>
+            </form>
 
 
         </section>
@@ -759,7 +755,33 @@
                             }
                         });
                     });
+
+                    get_opr();
+
+                    function get_opr() {
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('summary.get_operasional') }}",
+                            success: function(response) {
+                                $('#cost_opr').html(response);
+                            }
+                        });
+                    }
                 });
+            </script>
+            <script>
+                function numberFormat(initialValue) {
+                    return {
+                        formattedNumber: new Intl.NumberFormat().format(initialValue),
+                        formatNumber() {
+                            // Hapus karakter non-digit dan simpan nomor mentah
+                            let rawNumber = this.formattedNumber.replace(/\D/g, '');
+
+                            // Format nomor dengan pemisah ribuan
+                            this.formattedNumber = new Intl.NumberFormat().format(rawNumber);
+                        }
+                    };
+                }
             </script>
         @endsection
     </x-slot>
