@@ -43,10 +43,7 @@
                 </div>
                 <div class="col-lg-12">
 
-                    <table style="border:1px solid #97a1c3" class="table table-bordered" id="tablealdi"
-                        x-data="{
-                            openRows: [],
-                        }">
+                    <table style="border:1px solid #97a1c3" class="table table-bordered" id="tablealdi">
                         <thead>
                             <tr>
                                 <th class="dhead">Pengawas </th>
@@ -56,53 +53,23 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach ($pengawas as $i => $d)
-                                <tr>
-                                    <th><a href="#" class="detailAbsen"
-                                            id_pengawas="{{ $d->id }}">{{ $d->name }}</a>
-                                        <span class="badge bg-primary float-end"
-                                            @click="openRows.includes({{ $i }}) ? openRows = openRows.filter(item => item !== {{ $i }}) : openRows.push({{ $i }})">Buka
-                                            <i class="fas fa-caret-down"></i>
-                                        </span>
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>
-                                        <center>
-                                            <input data-category="{{ $i }}" style="text-align: center"
-                                                type="checkbox" class="form-check toggle-category" id="cekSemuaTutup">
-                                        </center>
-                                    </th>
-                                </tr>
+                            @foreach ($anak as $x)
                                 @php
-                                    $query = DB::table('tb_anak as a')
-                                        ->join('users as b', 'a.id_pengawas', 'b.id')
-                                        ->where('a.id_pengawas', $d->id_pengawas)
-                                        ->get();
+                                    $absenHariIni = DB::table('absen')
+                                        ->where([['id_anak', $x->id_anak], ['tgl', $tgl]])
+                                        ->first();
                                 @endphp
-                                @foreach ($query as $x)
-                        <tbody x-show="openRows.includes({{ $i }})">
-
-                            @php
-                                $absenHariIni = DB::table('absen')
-                                    ->where([['id_anak', $x->id_anak], ['tgl', $tgl]])
-                                    ->first();
-                            @endphp
-                            <tr>
-                                <td>{{ $x->name }}</td>
-                                <td>{{ $x->nama }}</td>
-                                <td>{{ $x->id_kelas }}</td>
-                                <td align="center">
-                                    <input {{ !empty($absenHariIni) ? 'checked' : '' }} type="checkbox"
-                                        id_anak="{{ $x->id_anak }}" id_pengawas="{{ $x->id_pengawas }}"
-                                        data-category="{{ $i }}" class="form-check cekTutup"
-                                        name="cekTutup[]">
-                                </td>
-                            </tr>
-                        </tbody>
-                        @endforeach
-                        @endforeach
+                                <tr>
+                                    <td>{{ $x->name }}</td>
+                                    <td>{{ $x->nama }}</td>
+                                    <td>{{ $x->id_kelas }}</td>
+                                    <td align="center">
+                                        <input {{ !empty($absenHariIni) ? 'checked' : '' }} type="checkbox"
+                                            id_anak="{{ $x->id_anak }}" id_pengawas="{{ $x->id_pengawas }}"
+                                            class="form-check cekTutup" name="cekTutup[]">
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -115,7 +82,7 @@
             <div id="loadDetailAbsen"></div>
         </x-theme.modal>
         <form action="{{ route('absen.detailSum') }}" method="get">
-            <x-theme.modal idModal="tambah"  title="Detail Absen">
+            <x-theme.modal idModal="tambah" title="Detail Absen">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
@@ -183,7 +150,7 @@
 
                         });
 
-                        if(!idAnakWadah.length){
+                        if (!idAnakWadah.length) {
                             alertToast('err', 'Isi anak dulu untuk menyimpan data !')
                         } else {
                             $('#loading').modal('show')
@@ -197,7 +164,7 @@
                                 },
                                 success: function(r) {
                                     window.location.reload()
-                                    alertToast('sukses',`Absen Tanggal : ${tgl} berhasil dimasukan`)
+                                    alertToast('sukses', `Absen Tanggal : ${tgl} berhasil dimasukan`)
                                 }
                             });
                         }

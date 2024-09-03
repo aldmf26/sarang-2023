@@ -70,7 +70,7 @@ class SummaryController extends Controller
             'cost_cu' => DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
             FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '8';"),
+            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '9';"),
             'denda' => DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '8';")
         ];
 
