@@ -14,6 +14,7 @@
                         <th>Tgl Masuk</th>
                         <th>Kelas</th>
                         <th>Pengawas</th>
+                        <th>Uang Makan</th>
                         <th width="20%">Aksi</th>
                     </tr>
                 </thead>
@@ -25,11 +26,12 @@
                             <td>{{ tanggal($d->tgl_masuk) }}</td>
                             <td>{{ ucwords($d->kelas) }}</td>
                             <td>{{ ucwords($d->name) }}</td>
+                            <td class="text-end">Rp. {{ number_format($d->nominal, 0) }}</td>
                             <td>
                                 {{-- <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a> --}}
 
-                                <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen" addClass="float-end edit" teks=""
-                                data="id={{ $d->id_anak }}" />
+                                <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen"
+                                    addClass="float-end edit" teks="" data="id={{ $d->id_anak }}" />
                             </td>
                         </tr>
                     @endforeach
@@ -54,7 +56,7 @@
                             <select name="kelas" class="select2" id="">
                                 <option value="">Kelas</option>
                                 @php
-                                    $kelas = [1,2,3];
+                                    $kelas = [1, 2, 3];
                                 @endphp
                                 @foreach ($kelas as $k)
                                     <option value="{{ $k }}">{{ $k }}</option>

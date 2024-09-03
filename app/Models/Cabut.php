@@ -364,7 +364,8 @@ class Cabut extends Model
         ctk.gr_awal_ctk,
         ctk.pcs_akhir_ctk,
         ctk.gr_akhir_ctk,
-        ctk.ttl_rp_cetak
+        ctk.ttl_rp_cetak,
+        umk.nominal as umk_nominal
         FROM 
             (
                 SELECT id_anak,id_pengawas
@@ -443,6 +444,8 @@ class Cabut extends Model
             GROUP by c.id_anak
         ) as ctk on ctk.id_anak = a.id_anak
 
+        left join uang_makan as umk on umk.id_uang_makan = a.id_uang_makan
+
 
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
     }
@@ -479,7 +482,8 @@ class Cabut extends Model
         sortir.ttl_rp as sortir_ttl_rp,
         dll.ttl_rp_dll,
         denda.ttl_rp_denda,
-        cetak.ttl_rp as ctk_ttl_rp
+        cetak.ttl_rp as ctk_ttl_rp,
+        umk.nominal as umk_nominal
         FROM 
             (
                 SELECT id_anak,id_pengawas

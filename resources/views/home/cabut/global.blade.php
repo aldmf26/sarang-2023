@@ -29,9 +29,9 @@
                             ]) }}">{{ $d->name }}</a>
                     </li>
                 @endforeach
-          
+
             </ul>
-           
+
         </div>
 
     </x-slot>
@@ -50,7 +50,7 @@
                 z-index: 1;
             }
         </style>
-       
+
         <section class="row" x-data="{
             cabut: true,
             eo: true,
@@ -112,7 +112,7 @@
                                 class="text-center text-white bg-primary" :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
-                            <th class="text-center {{ $bgDanger }}" colspan="4">Gajih</th>
+                            <th class="text-center {{ $bgDanger }}" colspan="5">Gajih</th>
                         </tr>
                         <tr>
                             <th class="dhead">Pgws</th>
@@ -142,6 +142,7 @@
                             <th x-show="sortir" class="{{ $bgDanger }}">Ttl Rp</th>
 
                             <th class="dhead">Kerja Dll</th>
+                            <th class="dhead">Uang Makan</th>
                             <th class="dhead">Rp Denda</th>
                             <th class="{{ $bgDanger }}">Ttl Gaji</th>
                             <th class="dhead">Rata2</th>
@@ -174,9 +175,10 @@
                             $ttlEoGrAwal = 0;
                             $ttlEoGrAkhir = 0;
                             $ttlEoRp = 0;
+                            $ttlUangMakan = 0;
 
                         @endphp
-                               @foreach ($tbl as $data)
+                                                             @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
@@ -221,12 +223,16 @@
 
 
                             <td>{{ number_format($data->ttl_rp_dll, 0) }}</td>
+                            <td>{{ number_format(empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk, 0) }}
+                            </td>
                             <td>{{ number_format($data->ttl_rp_denda, 0) }}</td>
                             @php
+                                $uang_makan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
                                 $ttl =
                                     $data->ttl_rp +
                                     $data->eo_ttl_rp +
                                     $data->sortir_ttl_rp +
+                                    $uang_makan +
                                     $data->ttl_rp_dll -
                                     $data->ttl_rp_denda;
                                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
@@ -260,6 +266,7 @@
                             $sortirTtlRp += $data->sortir_ttl_rp;
                             $dllTtlRp += $data->ttl_rp_dll;
                             $dendaTtlRp += $data->ttl_rp_denda;
+                            $ttlUangMakan += $uang_makan;
                             $ttlTtlRp += $ttl;
                         @endphp
                         @endforeach
@@ -292,6 +299,7 @@
                             <th x-show="sortir">{{ number_format($ttlSortirRp, 0) }}</th>
 
                             <th>{{ number_format($dllTtlRp, 0) }}</th>
+                            <th>{{ number_format($ttlUangMakan, 0) }}</th>
                             <th>{{ number_format($dendaTtlRp, 0) }}</th>
                             <th>{{ number_format($ttlTtlRp, 0) }}</th>
                             <th></th>
@@ -303,7 +311,6 @@
         </section>
 
         @section('scripts')
-            
             <script>
                 pencarian('pencarian', 'tblAldi')
             </script>

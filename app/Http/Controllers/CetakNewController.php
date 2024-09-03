@@ -1318,9 +1318,10 @@ class CetakNewController extends Controller
             'R' => 'Total Rp Sortir',
 
             'S' => 'Kerja Dll',
-            'T' => 'Rp Denda',
-            'U' => 'Total Gaji',
-            'V' => 'Rata-rata',
+            'T' => 'Uang Makan',
+            'U' => 'Rp Denda',
+            'V' => 'Total Gaji',
+            'W' => 'Rata-rata',
 
         ];
         foreach ($kolom as $k => $v) {
@@ -1356,24 +1357,24 @@ class CetakNewController extends Controller
             $sheet->setCellValue('R' . $no, $item->ttl_rp_str);
 
             $sheet->setCellValue('S' . $no, $item->ttl_harian);
-            $sheet->setCellValue('T' . $no, $item->ttl_rp_denda);
+            $sheet->setCellValue('T' . $no, $item->uang_makan * $item->ttl_hari);
+            $sheet->setCellValue('U' . $no, $item->ttl_rp_denda);
 
-            $sheet->setCellValue('U' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda);
+            $sheet->setCellValue('V' . $no, $item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda + ($item->uang_makan * $item->ttl_hari));
 
-            $sheet->setCellValue('V' . $no, empty($item->ttl_hari) ? 0 : ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda) / $item->ttl_hari);
+            $sheet->setCellValue('W' . $no, empty($item->ttl_hari) ? 0 : ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda + ($item->uang_makan * $item->ttl_hari)) / $item->ttl_hari);
 
             $no++;
         }
 
-
-        $sheet->getStyle('A1:V1')->applyFromArray($style_atas);
-        $sheet->getStyle('A2:V' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:W1')->applyFromArray($style_atas);
+        $sheet->getStyle('A2:W' . $no - 1)->applyFromArray($styleBaris);
 
 
         $writer = new Xlsx($spreadsheet);
 
         // Menggunakan response untuk mengirimkan file ke browser
-        $fileName = "Export Gaji Global";
+        $fileName = "Export Gaji Global Cetak";
         return response()->stream(
             function () use ($writer) {
                 $writer->save('php://output');

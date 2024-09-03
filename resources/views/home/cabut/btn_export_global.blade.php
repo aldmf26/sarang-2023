@@ -16,8 +16,8 @@
     <i class="fas fa-file-excel"></i> Export Sinta
 </a> --}}
 <div class="dropdown float-end ms-2">
-    <button class="btn btn-primary  btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-primary  btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-excel"></i>
         Export
     </button>
