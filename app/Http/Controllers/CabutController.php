@@ -390,7 +390,15 @@ class CabutController extends Controller
 
     public function input_akhir(Request $r)
     {
-        DB::table('cabut')->where('id_cabut', $r->id_cabut)->update([
+        $get = DB::table('cabut')->where('id_cabut', $r->id_cabut);
+        $pcs_awal = $get->first()->pcs_awal;
+        if($pcs_awal != $r->pcs_akhir){
+            return json_encode([
+                'status' => 'error',
+                'pesan' => 'pcs tidak sama dengan awal'
+            ]);
+        }
+        $get->update([
             'pcs_akhir' => $r->pcs_akhir,
             'tgl_serah' => $r->tgl_serah,
             'gr_akhir' => $r->gr_akhir,
@@ -400,6 +408,10 @@ class CabutController extends Controller
             'bulan_dibayar' => $r->bulan,
             'eot' => $r->eot,
             'ttl_rp' => $r->ttl_rp,
+        ]);
+        return json_encode([
+            'status' => 'sukses',
+            'pesan' => 'berhasil save'
         ]);
     }
 

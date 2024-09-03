@@ -13,5 +13,16 @@ class PreventRequestsDuringMaintenance extends Middleware
      */
     protected $except = [
         //
+        'home/absen',
+        'home/absen/create',
+        'home/absen/detailSum',
+        'home/absen/exportDetail',
+        'home/absen/detailAbsen',
+        'home/absen/tabelAbsen',
+        'home/absen/SaveAbsen',
+        'home/absen/delete_absen',
+        'home/absen/create_stgh_hari',
+        'home/absen/tbh_baris',
+        'home/absen/detail',
     ];
 }
