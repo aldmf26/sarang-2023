@@ -434,7 +434,7 @@ class SummaryController extends Controller
         $sheet->setCellValue('L3', 'box selesai cabut siap cetak belum serah');
         $sheet->setCellValue('M3', sumBk($box_cabut_belum_serah, 'pcs'));
         $sheet->setCellValue('N3', sumBk($box_cabut_belum_serah, 'gr'));
-        $sheet->setCellValue('O3', round(sumBk($box_cabut_belum_serah, 'ttl_rp') / sumBk($box_cabut_belum_serah, 'gr'), 0));
+        $sheet->setCellValue('O3', empty(sumBk($box_cabut_belum_serah, 'ttl_rp')) ? 0 : round(sumBk($box_cabut_belum_serah, 'ttl_rp') / sumBk($box_cabut_belum_serah, 'gr'), 0));
         $sheet->setCellValue('P3', sumBk($box_cabut_belum_serah, 'ttl_rp') + $rp_gr_cost_op * $gr_box_s_cetak_belum_serah +
             $rp_gr_cu_dll * $gr_box_s_cetak_belum_serah);
 
