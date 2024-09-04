@@ -240,17 +240,18 @@ class SummaryController extends Controller
 
         $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
 
+
         $sheet->setCellValue('A5', 'total rp');
         $sheet->setCellValue('B5', $ttl_rp);
         $sheet->setCellValue('C5', $ttl_rp);
         $sheet->setCellValue('D5', '');
-        $sheet->setCellValue('E5', sumBk($uang_cost, 'ttl_rp'));
+        $sheet->setCellValue('E5', sumBk($uang_cost, 'total_oprasional'));
 
         $sheet->setCellValue('A6', 'total rp + cost');
         $sheet->setCellValue('B6', 0);
         $sheet->setCellValue('C6', 0);
         $sheet->setCellValue('D6', '');
-        $sheet->setCellValue('E6', $ttl_rp + sumBk($uang_cost, 'ttl_rp'));
+        $sheet->setCellValue('E6', $ttl_rp + sumBk($uang_cost, 'total_oprasional'));
 
 
         $sheet->getStyle("H1:I1")->applyFromArray($style_atas);
