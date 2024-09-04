@@ -1,4 +1,4 @@
-<div class="header-top" style="background-color: #8c8989;">
+<div class="header-top print_hilang" style="background-color: #8c8989;">
     <div class="container">
         <div class="logo">
             <a href="dashboard">
@@ -25,7 +25,7 @@
                                 $nama = ucwords(auth()->user()->name);
                                 $posisi = ucwords(auth()->user()->posisi->nm_posisi);
                             }
-                            
+
                             $gambar = $idPosisi == 1 ? 'Admin' : 'Pengawas';
                         @endphp
                         <img src='{{ asset("img/$gambar.png") }}' alt="Avatar">
@@ -40,7 +40,7 @@
                 @if (empty(auth()->user()->posisi->id_posisi))
                 @else
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="topbarUserDropdown">
-                       
+
                         <li>
                             <form id="myForm" method="post" action="{{ route('logout') }}">
                                 @csrf

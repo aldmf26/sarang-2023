@@ -1,6 +1,6 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
-        <div class="row">
+        <div class="row print_hilang">
             {{-- @include('home.summary.nav') --}}
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">Summary</h6>
@@ -16,16 +16,16 @@
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
-            <div class="col-lg-9"></div>
-            <div class="col-lg-3">
-                <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end"><i
+            <div class="col-lg-9 print_hilang"></div>
+            <div class="col-lg-3 print_hilang mb-2">
+                <a href="#" onclick="window.print()" class="btn btn-primary float-end"><i
                         class="fas fa-print"></i> print</a>
                 <a href="{{ route('summary.export_summary') }}" class="btn btn-primary float-end me-2"><i
                         class="fas fa-file-excel"></i> export</a>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
                     class="btn btn-primary float-end me-2"><i class="fas fa-plus"></i> operasional</a>
             </div>
-            <div class="col-lg-6 mt-2">
+            <div class="col-6 ">
                 <table width="100%" class="table table-bordered">
                     <thead>
                         <tr>
@@ -138,7 +138,7 @@
 
                 </table>
             </div>
-            <div class="col-lg-6 mt-2">
+            <div class="col-6">
                 @php
                     $gr_box_s_cetak_belum_serah = array_sum(array_column($box_cabut_belum_serah, 'gr'));
                     $gr_box_s_cetak_diserahkan =

@@ -18,20 +18,20 @@ class SummaryController extends Controller
 {
     public function index(Request $r)
     {
-        // $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
-        // $bk = json_decode($bk, TRUE);
-        // DB::table('bk_awal')->truncate();
-        // foreach ($bk as $v) {
-        //     $data = [
-        //         'nm_partai' => $v['ket2'],
-        //         'nm_partai_dulu' => $v['ket'],
-        //         'pcs' => $v['pcs'] ?? 0,
-        //         'gr' => $v['gr'],
-        //         'grade' => $v['nm_grade'],
-        //         'ttl_rp' => $v['total_rp'],
-        //     ];
-        //     DB::table('bk_awal')->insert($data);
-        // }
+        $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
+        $bk = json_decode($bk, TRUE);
+        DB::table('bk_awal')->truncate();
+        foreach ($bk as $v) {
+            $data = [
+                'nm_partai' => $v['ket2'],
+                'nm_partai_dulu' => $v['ket'],
+                'pcs' => $v['pcs'] ?? 0,
+                'gr' => $v['gr'],
+                'grade' => $v['nm_grade'],
+                'ttl_rp' => $v['total_rp'],
+            ];
+            DB::table('bk_awal')->insert($data);
+        }
         $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
         $data = [
             'title' => 'Data Gudang Awal',
@@ -238,17 +238,19 @@ class SummaryController extends Controller
         $sheet->setCellValue('D4', '');
         $sheet->setCellValue('E4', '');
 
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+
         $sheet->setCellValue('A5', 'total rp');
         $sheet->setCellValue('B5', $ttl_rp);
         $sheet->setCellValue('C5', $ttl_rp);
         $sheet->setCellValue('D5', '');
-        $sheet->setCellValue('E5', 1815907127.33);
+        $sheet->setCellValue('E5', sumBk($uang_cost, 'ttl_rp'));
 
         $sheet->setCellValue('A6', 'total rp + cost');
         $sheet->setCellValue('B6', 0);
         $sheet->setCellValue('C6', 0);
         $sheet->setCellValue('D6', '');
-        $sheet->setCellValue('E6', $ttl_rp + 1815907127.33);
+        $sheet->setCellValue('E6', $ttl_rp + sumBk($uang_cost, 'ttl_rp'));
 
 
         $sheet->getStyle("H1:I1")->applyFromArray($style_atas);
@@ -256,14 +258,11 @@ class SummaryController extends Controller
         $sheet->setCellValue('H1', 'bulan & tahun');
         $sheet->setCellValue('I1', 'total rp');
 
-        $uang_cost = [
-            'uang_cost' => ['juni 2024', 858415522.9],
-            ['juli 2024', 957491604, 74]
-        ];
+
         $kolom = 2;
         foreach ($uang_cost as $u) {
-            $sheet->setCellValue('H' . $kolom, $u[0]);
-            $sheet->setCellValue('I' . $kolom, $u[1]);
+            $sheet->setCellValue('H' . $kolom, date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-01')));
+            $sheet->setCellValue('I' . $kolom, $u->total_operasional);
             $kolom++;
         }
         $sheet->getStyle("H1:I" . $kolom - 1)->applyFromArray($style);
@@ -323,7 +322,7 @@ class SummaryController extends Controller
             $suntik_sortir_selesai_diserahkan->gr;
         $gr_tdk_cetak = array_sum(array_column($cetak_selesai_diserahkan, 'gr_tdk_ctk'));
 
-        $operasional = 1815907127.33;
+        $operasional = sumBk($uang_cost, 'total_operasional');
         $ttl_gr_operasional =
             $gr_box_s_cetak_belum_serah +
             $gr_box_s_cetak_diserahkan +
@@ -483,7 +482,7 @@ class SummaryController extends Controller
         $sheet->setCellValue('L9', 'cetak selesai siap sortir belum serah');
         $sheet->setCellValue('M9', sumBk($cetak_selesai_belum_serah, 'pcs'));
         $sheet->setCellValue('N9', sumBk($cetak_selesai_belum_serah, 'gr'));
-        $sheet->setCellValue('O9', empty(sumBk($cetak_proses, 'ttl_rp')) ? 0 : round(sumBk($cetak_selesai_belum_serah, 'ttl_rp') / sumBk($cetak_selesai_belum_serah, 'gr'), 0));
+        $sheet->setCellValue('O9', empty(sumBk($cetak_selesai_belum_serah, 'ttl_rp')) ? 0 : round(sumBk($cetak_selesai_belum_serah, 'ttl_rp') / sumBk($cetak_selesai_belum_serah, 'gr'), 0));
         $sheet->setCellValue('P9', sumBk($cetak_selesai_belum_serah, 'ttl_rp') + $rp_gr_cost_op * $gr_cetak_selesai_b_serah +
             $rp_gr_cu_dll * $gr_cetak_selesai_b_serah);
 

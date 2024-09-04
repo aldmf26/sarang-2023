@@ -14,7 +14,7 @@
 
 <div class="content-wrapper  {{ $cont }}">
     <div class="page-content">
-     
+
         @if (count(request()->segments()) != 1)
             <nav aria-label="breadcrumb " style="margin-top: -25px; font-size: 15px;">
                 <ol class="breadcrumb">
@@ -35,15 +35,13 @@
             <div class="row justify-content-center">
                 <div class="col-lg-{{ $sizeCard }}">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header print_hilang">
                             @if ($nav == 'Y')
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <ul class="nav nav-pills">
                                             @php
-                                                $rotName = request()
-                                                    ->route()
-                                                    ->getName();
+                                                $rotName = request()->route()->getName();
                                             @endphp
                                             <li class="nav-item">
                                                 <a class="nav-link {{ $rotName == $rot1 ? 'active' : '' }}"

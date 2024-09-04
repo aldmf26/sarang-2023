@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RekapGajiPeranakController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\UangMakanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -268,5 +269,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/export2', 'export2')->name('export2');
             Route::get('/get_operasional', 'get_operasional')->name('get_operasional');
             Route::post('/saveoprasional', 'saveoprasional')->name('saveoprasional');
+        });
+
+    Route::controller(UangMakanController::class)
+        ->prefix('data_master/uang_makan')
+        ->name('uang_makan.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/tambah_uang_makan', 'tambah_uang_makan')->name('tambah_uang_makan');
+            Route::get('/uang_makan/{id}', 'uang_makan_detail')->name('uang_makan_detail');
+            Route::post('/update', 'update')->name('update');
         });
 });
