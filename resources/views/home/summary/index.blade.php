@@ -298,7 +298,7 @@
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">
-                                {{ number_format(array_sum(array_column($box_cabut_belum_serah, 'ttl_rp')) / array_sum(array_column($box_cabut_belum_serah, 'gr')), 0) }}
+                                {{ empty(sumBk($box_cabut_belum_serah, 'ttl_rp')) ? 0 : number_format(array_sum(array_column($box_cabut_belum_serah, 'ttl_rp')) / array_sum(array_column($box_cabut_belum_serah, 'gr')), 0) }}
                             </td>
 
                             <td class="text-end bg-warning text-white">
