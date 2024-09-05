@@ -122,7 +122,12 @@
                                 </td>
 
                                 <td>
-                                    @if ($b->tgl == date('Y-m-d') || Auth::user()->posisi_id == 1)
+                                    @php
+                                        $idUser = session()->get('id_user');
+                                        $waktu = session()->get('waktu');
+                                        $cek = $waktu == date('Y-m-d') && $idUser == auth()->user()->id;
+                                    @endphp
+                                    @if (Auth::user()->posisi_id == 1)
                                         <span style="cursor: pointer" class="badge bg-primary selesai"><i
                                                 class="fas fa-check"></i></span>
                                         <span style="cursor: pointer" class="badge bg-warning edit_bk"><i

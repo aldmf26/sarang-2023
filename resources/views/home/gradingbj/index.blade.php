@@ -88,7 +88,7 @@
                 </div>
             </div>
         </section>
-        <x-theme.import route="gradingbj.import" routeTemplate="gradingbj.template_import" />
+        <x-theme.import title="Import grading" route="gradingbj.import" routeTemplate="gradingbj.template_import" />
         
         <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
             <div id="loadSelisih"></div>

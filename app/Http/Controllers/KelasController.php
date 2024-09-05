@@ -8,22 +8,19 @@ use Nonaktif;
 
 class KelasController extends Controller
 {
-    public $tipe, $paket;
-    public function __construct()
-    {
-        $this->tipe = DB::table('tipe_cabut')->get();
-        $this->paket = DB::table('paket_cabut')->get();
-    }
     public function index(Request $r)
     {
         $jenis = empty($r->jenis) ? 1 : 2;
+        $datas = DB::select("SELECT * FROM tb_kelas 
+                    WHERE nonaktif = 'T' AND jenis = $jenis AND id_kategori != 3 
+                    ORDER BY id_kategori ASC");
         $data = [
             'title' => 'Data Paket Cabut',
             'jenis' => $jenis,
             'lokasi' => ['alpa', 'mtd', 'sby'],
-            'tipe' => $this->tipe,
+            'tipe' => DB::table('tipe_cabut')->get(),
             'kategori' => DB::table('paket_cabut')->get(),
-            'datas' => DB::table('tb_kelas')->where([['jenis', $jenis], ['nonaktif', 'T'], ['id_kategori', '!=', 3]])->orderBy('id_kategori', 'ASC')->get()
+            'datas' => $datas
         ];
         return view("data_master.kelas.index", $data);
     }
@@ -123,8 +120,8 @@ class KelasController extends Controller
         $data = [
             'title' => 'Kelas Spesial',
             'jenis' => $jenis,
-            'paket' => $this->paket,
-            'tipe' => $this->tipe,
+            'paket' => DB::table('paket_cabut')->get(),
+            'tipe' => DB::table('tipe_cabut')->get(),
             'datas' => DB::table('tb_kelas')->where([['id_kategori', 2], ['jenis', '!=', 2]])->where('nonaktif', 'T')->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.spesial_index', $data);
@@ -203,8 +200,8 @@ class KelasController extends Controller
     {
         $data = [
             'title' => 'Kelas Spesial',
-            'paket' => $this->paket,
-            'tipe' => $this->tipe,
+            'paket' => DB::table('paket_cabut')->get(),
+            'tipe' => DB::table('tipe_cabut')->get(),
             'datas' => DB::table('tb_kelas')->where([['id_kategori', 3], ['nonaktif', 'T']])->orderBy('id_kategori', 'ASC')->get()
         ];
         return view('data_master.kelas.eo_index', $data);
@@ -248,7 +245,7 @@ class KelasController extends Controller
     }
     public function getTipe(Request $r)
     {
-        return response()->json($r->database == 'paket' ? $this->paket : $this->tipe);
+        return response()->json($r->database == 'paket' ? DB::table('paket_cabut')->get() : DB::table('tipe_cabut')->get());
     }
 
     function cetak(Request $r)

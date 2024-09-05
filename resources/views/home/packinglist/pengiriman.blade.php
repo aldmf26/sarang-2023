@@ -1,6 +1,14 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
     <x-slot name="cardHeader">
-        @include('home.gradingbj.nav')
+        <div class="d-flex justify-content-between">
+            <div>
+
+                @include('home.gradingbj.nav')
+            </div>
+            <div >
+                <x-theme.btn_filter/>
+            </div>
+        </div>
     </x-slot>
 
     <x-slot name="cardBody">

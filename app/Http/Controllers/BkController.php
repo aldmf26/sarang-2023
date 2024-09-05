@@ -164,6 +164,9 @@ class BkController extends Controller
                     DB::table('bk')->insert($data);
                 }
             }
+            session()->put('id_user', auth()->user()->id);
+            session()->put('waktu', date('Y-m-d'));
+
             DB::commit();
             return redirect("home/bk?kategori=$r->kategori")->with('sukses', 'Data berhasil ditambahkan');
         } catch (\Exception  $e) {
