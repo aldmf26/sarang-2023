@@ -171,7 +171,7 @@ class GudangSarangController extends Controller
             ->get();
 
 
-        $ket_formulir = DB::selectOne("SELECT  b.name, c.name as penerima, d.nm_partai
+        $ket_formulir = DB::selectOne("SELECT a.tanggal,  b.name, c.name as penerima, d.nm_partai
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
@@ -423,7 +423,7 @@ class GudangSarangController extends Controller
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('sukses', 'Data Berhasil');
     }
-    
+
     public function invoice_sortir(Request $r)
     {
         $tgl = tanggalFilter($r);
