@@ -49,7 +49,11 @@
                                 <th class="dhead">Pengawas </th>
                                 <th class="dhead">Nama Anak</th>
                                 <th class="dhead">Kelas</th>
-                                <th class="dhead text-end">Aksi</th>
+                                <th class="dhead ">
+                                    <center>
+                                        <input type="checkbox" class="form-check toggle-category" id="cekSemuaTutup">
+                                    </center>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -208,6 +212,14 @@
                             }
                         });
                     })
+
+                    $('#cekSemuaTutup').on('change', function() {
+                        // Memeriksa status checkbox
+                        var isChecked = $(this).prop('checked');
+
+                        // Menandai atau meng-uncheck semua checkbox dengan class 'toggle-category'
+                        $('.cekTutup').prop('checked', isChecked);
+                    });
                 });
             </script>
         @endsection

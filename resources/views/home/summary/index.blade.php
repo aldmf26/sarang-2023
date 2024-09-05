@@ -315,7 +315,7 @@
                             <td>box selesai cabut siap cetak diserahkan</td>
                             <td class="text-end">0</td>
                             <td class="text-end">
-                                {{ number_format(array_sum(array_column($bkselesai_siap_ctk_diserahkan, 'gr')) + $suntik_stock_siap_cetak_diserahkan->gr, 0) }}
+                                {{ number_format(sumBk($bkselesai_siap_ctk_diserahkan, 'gr') + $suntik_stock_siap_cetak_diserahkan->gr, 0) }}
                                 {{-- gr pakai --}}
                             </td>
                             <td class="text-end">0</td>

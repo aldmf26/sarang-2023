@@ -215,6 +215,8 @@ class SummaryController extends Controller
         $sheet->setCellValue('E1', 'cost kerja');
         $bk = SummaryModel::summarybk();
         $bk_suntik = DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'");
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+
 
         $sheet->setCellValue('A2', 'pcs');
         $sheet->setCellValue('B2', sumBk($bk, 'pcs') + sumBk($bk_suntik, 'pcs'));
@@ -238,7 +240,7 @@ class SummaryController extends Controller
         $sheet->setCellValue('D4', '');
         $sheet->setCellValue('E4', '');
 
-        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+
 
 
         $sheet->setCellValue('A5', 'total rp');
