@@ -127,14 +127,14 @@
                                         $waktu = session()->get('waktu');
                                         $cek = $waktu == date('Y-m-d') && $idUser == auth()->user()->id;
                                     @endphp
-                                    @if (Auth::user()->posisi_id == 1)
+                                    {{-- @if ($cek || Auth::user()->posisi_id == 1) --}}
                                         <span style="cursor: pointer" class="badge bg-primary selesai"><i
                                                 class="fas fa-check"></i></span>
                                         <span style="cursor: pointer" class="badge bg-warning edit_bk"><i
                                                 class="fas fa-edit"></i></span>
                                         <span style="cursor: pointer" class="badge bg-danger delete"><i
                                                 class="fas fa-trash-alt"></i></span>
-                                    @endif
+                                    {{-- @endif --}}
 
                                 </td>
                             </tr>
