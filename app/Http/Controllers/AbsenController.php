@@ -20,11 +20,16 @@ class AbsenController extends Controller
     public function index(Request $r)
     {
         $tgl = $r->tgl ?? date('Y-m-d');
+        $id_pengawas = auth()->user()->id;
         $data = [
             'title' => 'Form Absensi',
             'tgl' => $tgl,
             'bulan' => DB::table('bulan')->get(),
-            'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get()
+            'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get(),
+            'anak' =>  DB::table('tb_anak as a')
+                ->join('users as b', 'a.id_pengawas', 'b.id')
+                ->where('a.id_pengawas', $id_pengawas)
+                ->get()
         ];
         return view('home.absen.index', $data);
     }
@@ -108,10 +113,10 @@ class AbsenController extends Controller
         $hari = $tgl->day;
         $tahun = $tgl->year;
         $bulan = in_array($hari, [27, 28, 29, 30, 31]) ? $tgl->copy()->subMonth()->month + 1 : $tgl->month;
-        if ($hari >= 27 && $hari <= 30) {
+        if ($hari >= 27 && $hari <= 31) {
             $bulan++;
         }
-        if(!$r->id_anak) {
+        if (!$r->id_anak) {
             return redirect()->route('absen.index')->with('error', 'Pilih Anak Terlebih dahulu');
         }
         DB::table('absen')->where('tgl', $r->tgl)->delete();

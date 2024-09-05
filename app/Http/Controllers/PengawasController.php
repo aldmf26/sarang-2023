@@ -25,6 +25,7 @@ class PengawasController extends Controller
             'user' => DB::table('tb_anak as a')
                 ->leftJoin('users as b', 'a.id_pengawas', 'b.id')
                 ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+                ->leftJoin('uang_makan as d', 'a.id_uang_makan', 'd.id_uang_makan')
                 ->where(function ($query) {
                     $query->where('b.posisi_id', 13)
                         ->orWhereNull('a.id_pengawas');
@@ -33,6 +34,7 @@ class PengawasController extends Controller
                 ->orderBy('a.id_anak', 'DESC')
                 ->get(),
             'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
+            'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
 
         ];
         return view('data_master.pengawas.anak', $data);
@@ -60,10 +62,12 @@ class PengawasController extends Controller
         $data = [
             'detail' => $detail,
             'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
+            'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
+
         ];
         return view("data_master.pengawas.anak_detail", $data);
     }
-    
+
     public function update_anak(Request $r)
     {
         DB::table('tb_anak')->where('id_anak', $r->id)->update([
@@ -71,6 +75,7 @@ class PengawasController extends Controller
             'nama' => $r->nama,
             'id_kelas' => $r->kelas,
             'id_pengawas' => $r->id_pengawas,
+            'id_uang_makan' => $r->id_uang_makan
         ]);
 
         return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');

@@ -323,7 +323,26 @@
             /* font-size: 12px; */
             width: 170px;
         }
+
+        @media print {
+            .print_hilang {
+                display: none;
+            }
+
+            .card .card-body {
+                padding: 0.5rem;
+            }
+
+            .section {
+                page-break-after: always;
+            }
+
+            .table {
+                font-size: 11px
+            }
+        }
     </style>
+
     @yield('styles')
 
     <livewire:styles />

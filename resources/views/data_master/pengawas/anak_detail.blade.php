@@ -15,8 +15,20 @@
     <div class="col-lg-6">
         <div class="form-group">
             <label for="">Tgl Masuk</label>
-            <input required type="date" value="{{ $detail->tgl_masuk }}" name="tgl_masuk"
-                class="form-control">
+            <input required type="date" value="{{ $detail->tgl_masuk }}" name="tgl_masuk" class="form-control">
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="">Uang Makan</label>
+            <select name="id_uang_makan" id="" class="select2-edit">
+                <option value="">- Pilih uang makan -</option>
+                @foreach ($uang_makan as $p)
+                    <option {{ $p->id_uang_makan == $detail->id_uang_makan ? 'selected' : '' }}
+                        value="{{ $p->id_uang_makan }}">
+                        {{ number_format($p->nominal) }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="col-lg-6">
@@ -25,7 +37,8 @@
             <select name="id_pengawas" id="" class="select2-edit">
                 <option value="">- Pilih Pengawas -</option>
                 @foreach ($pengawas as $p)
-                    <option {{$p->id == $detail->id_pengawas ? 'selected' : ''}} value="{{ $p->id }}">{{ ucwords($p->name) }}</option>
+                    <option {{ $p->id == $detail->id_pengawas ? 'selected' : '' }} value="{{ $p->id }}">
+                        {{ ucwords($p->name) }}</option>
                 @endforeach
             </select>
         </div>

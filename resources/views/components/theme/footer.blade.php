@@ -1,5 +1,5 @@
 <footer>
-    <div class="container">
+    <div class="container print_hilang">
         <div class="footer clearfix mb-0 text-sm text-muted">
             <div class="float-start">
                 <p>2023 &copy; PTAGAFOOD</p>

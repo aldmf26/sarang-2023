@@ -150,7 +150,7 @@ class SummaryModel extends Model
 
     public static function cetak_proses()
     {
-        $result = DB::select("SELECT a.no_box, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum((d.gr_awal * d.hrga_satuan) + COALESCE(a.ttl_rp,0)) as ttl_rp , f.ttl_rp as cost_cbt, d.nm_partai, (f.gr_akhir * h.rp_gr) as cost_op, i.name, z.cost_cu
+        $result = DB::select("SELECT a.no_box, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(COALESCE(d.gr_awal * d.hrga_satuan) + COALESCE(a.ttl_rp,0)) as ttl_rp , f.ttl_rp as cost_cbt, d.nm_partai, (f.gr_akhir * h.rp_gr) as cost_op, i.name, z.cost_cu
             FROM cetak_new as a 
             left join users as i on i.id = a.id_pengawas
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
@@ -385,7 +385,7 @@ class SummaryModel extends Model
 
     public static function bkselesai_siap_ctk_diserahkan()
     {
-        $result = DB::select("SELECT sum(a.ttl_rp) as cost_kerja,a.no_box, d.name, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0)) as ttl_rp, z.cost_cu, sum(a.ttl_rp) as cost_kerja
+        $result = DB::select("SELECT a.no_box, d.name, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0)) as ttl_rp, z.cost_cu, sum(a.ttl_rp) as cost_kerja
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join oprasional as c on c.bulan = a.bulan_dibayar
