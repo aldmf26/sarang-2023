@@ -1,10 +1,11 @@
 @props([
     'route' => '',
+    'title' => '',
     'routeTemplate' => '',
 ]);
 <form action="{{ route($route) }}" enctype="multipart/form-data" method="post">
     @csrf
-    <x-theme.modal size="modal-lg" idModal="import" title="Import Bk">
+    <x-theme.modal size="modal-lg" idModal="import" :title="$title">
         <div class="row">
             <table>
                 <tr>

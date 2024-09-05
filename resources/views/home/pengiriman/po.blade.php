@@ -7,7 +7,7 @@
     </x-slot>
 
     <x-slot name="cardBody">
-        <form action="{{route('pengiriman.save_po')}}" method="post">
+        <form action="{{ route('pengiriman.save_po') }}" method="post">
             @csrf
             <div class="row" x-data="{
                 kadar: 0
@@ -28,15 +28,18 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <input class="form-control" type="date" name="tgl" value="{{ $po->tanggal }}">
+                                    <input class="form-control" type="date" name="tgl"
+                                        value="{{ $po->tanggal }}">
                                 </td>
                                 <td>
                                     <input class="form-control" readonly type="text" value="PI {{ $po->no_nota }}">
                                     <input class="form-control" type="hidden" name="no_nota"
                                         value="{{ $po->no_nota }}">
                                 </td>
-                                <td><input type="text" placeholder="nama packinglist" required name="nm_packing" class="form-control"></td>
-                                <td><input type="text" x-model="kadar" required placeholder="kadar %" name="kadar" class="form-control text-end">
+                                <td><input type="text" placeholder="nama packinglist" required name="nm_packing"
+                                        class="form-control"></td>
+                                <td><input type="text" x-model="kadar" required placeholder="kadar %" name="kadar"
+                                        class="form-control text-end">
                                 </td>
                                 <td align="center">
                                     <h6>{{ $po->ttl }}</h6>
@@ -117,6 +120,7 @@
                         }
                     });
                 })
+               
             </script>
         @endsection
     </x-slot>

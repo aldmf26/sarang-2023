@@ -69,9 +69,10 @@ class PackingListController extends Controller
         WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
         GROUP BY a.no_nota
         ORDER BY a.no_nota DESC");
-
+        $tgl1 = tglFormat($tgl1);
+        $tgl2 = tglFormat($tgl2);
         $data = [
-            'title' => 'Pengiriman',
+            'title' => 'Pengiriman ' . "$tgl1 ~ $tgl2",
             'packing' => $packing,
         ];
 

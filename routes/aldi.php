@@ -514,9 +514,11 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create', 'create')->name('create');
             Route::post('/create_partai', 'create_partai')->name('create_partai');
             Route::post('/createUlang', 'createUlang')->name('createUlang');
-            Route::post('/import', 'import')->name('import');
             Route::get('/opname', 'opname')->name('opname');
+            Route::post('/import', 'import')->name('import');
             Route::get('/template_import', 'template_import')->name('template_import');
+            Route::post('/import_gudang_siap_kirim', 'import_gudang_siap_kirim')->name('import_gudang_siap_kirim');
+            Route::get('/template_import_gudang_siap_kirim', 'template_import_gudang_siap_kirim')->name('template_import_gudang_siap_kirim');
             Route::get('/gudang_siap_kirim', 'gudang_siap_kirim')->name('gudang_siap_kirim');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/cancel', 'cancel')->name('cancel');

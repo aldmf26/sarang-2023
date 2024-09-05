@@ -42,8 +42,8 @@
                     <thead>
                         <tr>
                             <th class="dhead" width="15">#</th>
-                            <th class="dhead" width="70">Paket</th>
-                            <th class="dhead" width="80">Kelas</th>
+                            <th class="dhead" width="50">Paket</th>
+                            <th class="dhead" width="140">Kelas</th>
                             <th class="dhead" width="80">Tipe</th>
                             @if ($jenis == 1)
                                 <th class="text-center dhead" width="70">Pcs</th>

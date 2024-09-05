@@ -46,9 +46,11 @@ class PenutupController extends Controller
 
         $datas = [];
         foreach ($pengawas as $p) {
+
             $ttlRp = 0;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl as $data) {
+               
                 $ttl =
                     $data->ttl_rp +
                     $data->eo_ttl_rp +
