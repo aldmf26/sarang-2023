@@ -451,8 +451,8 @@ class GudangController extends Controller
             $sheet4->setCellValue('D' . $kolom2, $d->no_box);
             $sheet4->setCellValue('E' . $kolom2, $d->pcs);
             $sheet4->setCellValue('F' . $kolom2, $d->gr);
-            $ttlrp_grading = $d->ttl_rp + $d->cost_op + $d->cost_cu;
-            $sheet4->setCellValue('G' . $kolom2, round($ttlrp_grading / $d->gr, 0));
+            $ttlrp_grading = empty($d->ttl_rp) ? 0 : $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $sheet4->setCellValue('G' . $kolom2, empty($d->gr) ? 0 : round($ttlrp_grading / $d->gr, 0));
             $sheet4->setCellValue('H' . $kolom2, round($ttlrp_grading, 0));
             $kolom2++;
         }
@@ -466,49 +466,49 @@ class GudangController extends Controller
         $sheet5->setTitle('Pengiriman');
 
 
-        $sheet5->getStyle("B1:G1")->applyFromArray($style_atas);
-        $sheet5->setCellValue('A1', 'Box Belum Kirim');
-        $sheet5->setCellValue('B1', 'Pengawas');
-        $sheet5->setCellValue('C1', 'No Box Kirim');
-        $sheet5->setCellValue('D1', 'Grade');
-        $sheet5->setCellValue('E1', 'Pcs');
-        $sheet5->setCellValue('F1', 'Gr');
-        $sheet5->setCellValue('G1', 'Rp/gr');
+        // $sheet5->getStyle("B1:G1")->applyFromArray($style_atas);
+        // $sheet5->setCellValue('A1', 'Box Belum Kirim');
+        // $sheet5->setCellValue('B1', 'Pengawas');
+        // $sheet5->setCellValue('C1', 'No Box Kirim');
+        // $sheet5->setCellValue('D1', 'Grade');
+        // $sheet5->setCellValue('E1', 'Pcs');
+        // $sheet5->setCellValue('F1', 'Gr');
+        // $sheet5->setCellValue('G1', 'Rp/gr');
 
-        $gradingbox = Grading::gradingbox();
-        $kolom3 = 2;
-        foreach ($gradingbox as $d) {
-            $sheet5->setCellValue('B' . $kolom3, $d->penerima);
-            $sheet5->setCellValue('C' . $kolom3, $d->no_box_grading);
-            $sheet5->setCellValue('D' . $kolom3, $d->nm_grade);
-            $sheet5->setCellValue('E' . $kolom3, $d->pcs_grading);
-            $sheet5->setCellValue('F' . $kolom3, $d->gr_grading);
-            $sheet5->setCellValue('G' . $kolom3, round($d->ttl_rp / $d->gr_grading, 0));
-            $kolom3++;
-        }
-        $sheet5->getStyle('B2:G' . $kolom3 - 1)->applyFromArray($style);
+        // $gradingbox = Grading::gradingbox();
+        // $kolom3 = 2;
+        // foreach ($gradingbox as $d) {
+        //     $sheet5->setCellValue('B' . $kolom3, $d->penerima);
+        //     $sheet5->setCellValue('C' . $kolom3, $d->no_box_grading);
+        //     $sheet5->setCellValue('D' . $kolom3, $d->nm_grade);
+        //     $sheet5->setCellValue('E' . $kolom3, $d->pcs_grading);
+        //     $sheet5->setCellValue('F' . $kolom3, $d->gr_grading);
+        //     $sheet5->setCellValue('G' . $kolom3, round($d->ttl_rp / $d->gr_grading, 0));
+        //     $kolom3++;
+        // }
+        // $sheet5->getStyle('B2:G' . $kolom3 - 1)->applyFromArray($style);
 
-        $sheet5->getStyle("J1:O1")->applyFromArray($style_atas);
-        $sheet5->setCellValue('I1', 'Box Selesai Kirim');
-        $sheet5->setCellValue('J1', 'Pengawas');
-        $sheet5->setCellValue('K1', 'No Box Kirim');
-        $sheet5->setCellValue('L1', 'Grade');
-        $sheet5->setCellValue('M1', 'Pcs');
-        $sheet5->setCellValue('N1', 'Gr');
-        $sheet5->setCellValue('O1', 'Rp/gr');
+        // $sheet5->getStyle("J1:O1")->applyFromArray($style_atas);
+        // $sheet5->setCellValue('I1', 'Box Selesai Kirim');
+        // $sheet5->setCellValue('J1', 'Pengawas');
+        // $sheet5->setCellValue('K1', 'No Box Kirim');
+        // $sheet5->setCellValue('L1', 'Grade');
+        // $sheet5->setCellValue('M1', 'Pcs');
+        // $sheet5->setCellValue('N1', 'Gr');
+        // $sheet5->setCellValue('O1', 'Rp/gr');
 
-        $gradingboxkirim = Grading::gradingboxkirim();
-        $kolom4 = 2;
-        foreach ($gradingboxkirim as $d) {
-            $sheet5->setCellValue('J' . $kolom4, $d->penerima);
-            $sheet5->setCellValue('K' . $kolom4, $d->no_box_grading);
-            $sheet5->setCellValue('L' . $kolom4, $d->nm_grade);
-            $sheet5->setCellValue('M' . $kolom4, $d->pcs_grading);
-            $sheet5->setCellValue('N' . $kolom4, $d->gr_grading);
-            $sheet5->setCellValue('O' . $kolom4, round($d->ttl_rp / $d->gr_grading, 0));
-            $kolom4++;
-        }
-        $sheet5->getStyle('J2:O' . $kolom4 - 1)->applyFromArray($style);
+        // $gradingboxkirim = Grading::gradingboxkirim();
+        // $kolom4 = 2;
+        // foreach ($gradingboxkirim as $d) {
+        //     $sheet5->setCellValue('J' . $kolom4, $d->penerima);
+        //     $sheet5->setCellValue('K' . $kolom4, $d->no_box_grading);
+        //     $sheet5->setCellValue('L' . $kolom4, $d->nm_grade);
+        //     $sheet5->setCellValue('M' . $kolom4, $d->pcs_grading);
+        //     $sheet5->setCellValue('N' . $kolom4, $d->gr_grading);
+        //     $sheet5->setCellValue('O' . $kolom4, round($d->ttl_rp / $d->gr_grading, 0));
+        //     $kolom4++;
+        // }
+        // $sheet5->getStyle('J2:O' . $kolom4 - 1)->applyFromArray($style);
 
         // batas ke enam
         $spreadsheet->createSheet();
