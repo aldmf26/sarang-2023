@@ -511,9 +511,8 @@ class GradingBjController extends Controller
                 }
 
                 if (
-                    empty($grade) ||
-                    empty($gr) ||
-                    empty($noPengiriman)
+                    empty($tgl) ||
+                    empty($partai) 
                 ) {
                     $pesan = [
                         empty($grade) => "GRADE",
