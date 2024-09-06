@@ -27,13 +27,13 @@ class PengawasController extends Controller
                 ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
                 ->leftJoin('uang_makan as d', 'a.id_uang_makan', 'd.id_uang_makan')
                 ->where(function ($query) {
-                    $query->where('b.posisi_id','!=', 1)
+                    $query->where('b.posisi_id', '!=', 1)
                         ->orWhereNull('a.id_pengawas');
                 })
                 ->where('b.id', auth()->user()->id)
                 ->orderBy('a.id_anak', 'DESC')
                 ->get(),
-            'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
+            'pengawas' => User::with('posisi')->whereIn('posisi_id', [13, 14])->get(),
             'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
 
         ];
