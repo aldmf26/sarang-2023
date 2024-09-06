@@ -506,7 +506,7 @@ class GradingBjController extends Controller
                 $gr = $row[8];
                 $noPengiriman = $row[9];
 
-                if (empty($tgl) && empty($partai) && empty($grade) && empty($noPengiriman)) {
+                if (empty($tgl) && empty($partai)) {
                     continue;
                 }
 
