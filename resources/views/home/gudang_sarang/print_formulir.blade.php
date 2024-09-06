@@ -37,7 +37,9 @@
         </div>
         <h5 class="fw-bold text-center" style="text-decoration: underline">PO CETAK : {{ $no_invoice }}</h5>
 
-        <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
+        <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }} | Tanggal :
+            {{ tanggal($ket_formulir->tanggal) }}</h6>
+
         <div class="row">
             <div class="col-lg-12">
                 <table class="table table-bordered" style="font-size: 13px">

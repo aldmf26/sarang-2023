@@ -106,14 +106,15 @@ class CabutController extends Controller
                 $jenis = $r->jenis;
                 break;
         }
-        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where([[$kolom, $jenis], ['id_kategori', '!=', 3]])->where('a.nonaktif', 'T')->get();
+        $lokasi = auth()->user()->lokasi;
+        $get = DB::table('tb_kelas as a')->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')->where([[$kolom, $jenis], ['id_kategori', '!=', 3], ['lokasi', $lokasi]])->where('a.nonaktif', 'T')->get();
         echo "
                 <option value=''>Pilih</option>
             ";
         foreach ($get as $d) {
             $jenis = $d->jenis == 1 ? "$d->pcs pcs" : "$d->gr gr";
             echo "
-                <option value='" . $d->id_kelas . "'>$d->paket $d->kelas ~ $jenis </option>
+                <option value='" . $d->id_kelas . "'>$d->kelas $d->tipe ~ $jenis </option>
             ";
         }
     }

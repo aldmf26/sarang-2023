@@ -370,7 +370,7 @@
                                 datas: selectedRows,
                                 tipe: tipe
                             },
-                            dataType:"json",
+                            dataType: "json",
                             success: function(r) {
                                 alertToast(
                                     r.pesan.includes('box') ? 'error' : 'sukses',
@@ -716,7 +716,7 @@
                         type: "GET",
                         url: "{{ route('cabut.input_akhir') }}",
                         data: data,
-                        dataType:'json',
+                        dataType: 'json',
                         success: function(r) {
                             alertToast(r.status, r.pesan)
                             // $('#inputAkhir').modal('hide')
