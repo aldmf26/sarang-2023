@@ -523,7 +523,7 @@ class GradingBjController extends Controller
                     DB::rollBack();
                     return redirect()
                         ->route('gradingbj.index')
-                        ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
+                        ->with('error', "ERROR! " . $pesan[true] . " : $grade, $gr, $noPengiriman" . 'TIDAK BOLEH KOSONG');
                 } else {
                     // pengecekan grade jika tidak ada di list tb_grade
                     $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
