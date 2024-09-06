@@ -119,9 +119,15 @@ class AbsenController extends Controller
         if (!$r->id_anak) {
             return redirect()->route('absen.index')->with('error', 'Pilih Anak Terlebih dahulu');
         }
-        // DB::table('absen')->where('tgl', $r->tgl)->delete();
-
+        
         for ($i = 0; $i < count($r->id_anak); $i++) {
+            DB::table('absen')->where(
+                [
+                    ['tgl', $r->tgl],
+                    ['id_anak', $r->id_anak[$i]],
+                    ['id_pengawas', $r->id_pengawas[$i]]
+                    ]
+                )->delete();
 
             DB::table('absen')->insert([
                 'id_anak' => $r->id_anak[$i],
