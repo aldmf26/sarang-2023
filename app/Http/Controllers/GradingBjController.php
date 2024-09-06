@@ -847,8 +847,9 @@ class GradingBjController extends Controller
             'A' => 'tgl',
             'B' => 'pcs',
             'C' => 'gr',
-            'D' => 'no pengiriman',
-            'E' => 'no nota',
+            'D' => 'no box grading',
+            'E' => 'no barcode pengiriman',
+            'F' => 'no invoice',
         ];
 
         $tbGrade = DB::table('tb_grade')->get();
@@ -867,7 +868,7 @@ class GradingBjController extends Controller
         ];
         
 
-        $sheet->getStyle('A1:E1')->applyFromArray($styleBold);
+        $sheet->getStyle('A1:F1')->applyFromArray($styleBold);
         $styleBaris = [
             'borders' => [
                 'allBorders' => [
@@ -875,7 +876,7 @@ class GradingBjController extends Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A1:E1')->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:F1')->applyFromArray($styleBaris);
         // $sheet->getStyle('L1:M1')->applyFromArray($styleBaris);
        
         $writer = new Xlsx($spreadsheet);
@@ -897,90 +898,52 @@ class GradingBjController extends Controller
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
-
         $admin = auth()->user()->name;
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
 
                 $tgl = $row[0];
-                $partai = $row[1];
-                $urutan = $row[2];
-                $nobox = $row[3];
-                $pcsSortir = $row[4];
-                $grSortir = $row[5];
-                $grade = $row[6];
-                $pcs = $row[7];
-                $gr = $row[8];
-                $noPengiriman = $row[9];
+                $pcs = $row[1];
+                $gr = $row[2];
+                $noboxGrading = $row[3];
+                $noGradingPengiriman = $row[4];
+                $no_invoice = $row[5];
 
-                if (empty($grade) && empty($pcs) && empty($gr) && empty($noPengiriman)) {
+               
+
+                if (empty($no_invoice) && empty($pcs) && empty($gr) && empty($noboxGrading) && empty($noGradingPengiriman)) {
                     continue;
                 }
 
                 if (
-                    empty($grade) ||
                     empty($gr) ||
-                    empty($noPengiriman)
+                    empty($noGradingPengiriman)
                 ) {
                     $pesan = [
-                        empty($grade) => "GRADE",
                         empty($gr) => "GR",
-                        empty($boxPengiriman) => "BOX PENGIRIMAN",
+                        empty($noGradingPengiriman) => "BOX GRADING PENGIRIMAN",
                     ];
                     DB::rollBack();
                     return redirect()
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    // pengecekan grade jika tidak ada di list tb_grade
-                    $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
-                    if (!$cekGrade) {
-                        DB::rollBack();
-                        return redirect()
-                            ->route('gradingbj.index')
-                            ->with('error', "GRADE " . $grade . ' TIDAK TERDAFTAR');
-                    }
-
-                    $tipe = $cekGrade->tipe;
-                    $no_inv = "$partai-$urutan";
-
-                    // pengecekan nobox sortir tidak ada
-                    if (!empty($nobox)) {
-                        $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox], ['kategori', 'grade']])->first();
-                        if (!$cekBox) {
-                            DB::rollBack();
-                            return redirect()
-                                ->route('gradingbj.index')
-                                ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
-                        } else {
-                            DB::table('grading')->insert([
-                                'no_box_sortir' => $nobox,
-                                'pcs' => $pcsSortir,
-                                'gr' => $grSortir,
-                                'no_invoice' => $no_inv,
-                                'tgl' => $tgl,
-                                'admin' => $admin
-                            ]);
-                        }
-                    }
-
-                    DB::table('grading_partai')->insert([
-                        'nm_partai' => $partai,
-                        'urutan' => $urutan,
-                        'no_invoice' => $no_inv,
-                        'box_pengiriman' => $noPengiriman,
-                        'grade' => $grade,
-                        'tipe' => $tipe,
+                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first()->grade;
+                    DB::table('pengiriman')->insert([
+                        'tgl_input' => $tgl,
                         'pcs' => $pcs,
                         'gr' => $gr,
-                        'tgl' => $tgl,
-                        'admin' => $admin
+                        'no_box' => $noboxGrading,
+                        'no_barcode' => $noGradingPengiriman,
+                        'no_nota' => $no_invoice,
+                        'admin' => $admin,
+                        'grade' => $grade
                     ]);
                 }
             }
             DB::commit();
-            return redirect()->route('gradingbj.index')->with('sukses', 'Data berhasil import');
+            return redirect()->back()->with('sukses', 'Data berhasil import');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
