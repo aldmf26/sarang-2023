@@ -552,7 +552,7 @@ class GradingBjController extends Controller
                             'gr' => $grSortir,
                             'no_invoice' => $no_inv,
                             'tgl' => $tgl,
-                            'admin' => $admin
+                            'admin' => 'import hanyar'
                         ]);
                     }
                    
@@ -566,7 +566,7 @@ class GradingBjController extends Controller
                         'pcs' => $pcs,
                         'gr' => $gr,
                         'tgl' => $tgl,
-                        'admin' => $admin
+                        'admin' => 'import hanyar'
                     ]);
                 }
             }
