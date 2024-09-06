@@ -518,7 +518,7 @@ class GradingBjController extends Controller
                     $pesan = [
                         empty($grade) => "GRADE",
                         empty($gr) => "GR",
-                        empty($boxPengiriman) => "BOX PENGIRIMAN",
+                        empty($noPengiriman) => "BOX PENGIRIMAN",
                     ];
                     DB::rollBack();
                     return redirect()
