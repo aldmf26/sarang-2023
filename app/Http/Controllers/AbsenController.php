@@ -124,7 +124,6 @@ class AbsenController extends Controller
             DB::table('absen')->where(
                 [
                     ['tgl', $r->tgl],
-                    ['id_anak', $r->id_anak[$i]],
                     ['id_pengawas', $r->id_pengawas[$i]]
                     ]
                 )->delete();
