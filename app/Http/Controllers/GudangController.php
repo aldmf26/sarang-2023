@@ -451,7 +451,7 @@ class GudangController extends Controller
             $sheet4->setCellValue('D' . $kolom2, $d->no_box);
             $sheet4->setCellValue('E' . $kolom2, $d->pcs);
             $sheet4->setCellValue('F' . $kolom2, $d->gr);
-            $ttlrp_grading = $d->ttl_rp + $d->cost_op + $d->cost_cu;
+            $ttlrp_grading = empty($d->ttl_rp) ? 0 : $d->ttl_rp + $d->cost_op + $d->cost_cu;
             $sheet4->setCellValue('G' . $kolom2, round($ttlrp_grading / $d->gr, 0));
             $sheet4->setCellValue('H' . $kolom2, round($ttlrp_grading, 0));
             $kolom2++;
