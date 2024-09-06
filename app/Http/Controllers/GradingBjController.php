@@ -490,7 +490,7 @@ class GradingBjController extends Controller
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
         $admin = auth()->user()->name;
-        $tgl = date('Y-m-d');
+        $tglD = date('Y-m-d');
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
@@ -552,7 +552,7 @@ class GradingBjController extends Controller
                             'gr' => $grSortir,
                             'no_invoice' => $no_inv,
                             'tgl' => $tgl,
-                            'admin' => 'import hanyar'
+                            'admin' => "import-$tglD"
                         ]);
                     }
                    
@@ -566,7 +566,7 @@ class GradingBjController extends Controller
                         'pcs' => $pcs,
                         'gr' => $gr,
                         'tgl' => $tgl,
-                        'admin' => 'import hanyar'
+                        'admin' => "import-$tglD"
                     ]);
                 }
             }
@@ -898,6 +898,7 @@ class GradingBjController extends Controller
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
         $admin = auth()->user()->name;
+        $tglHari = date('Y-m-d');
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
@@ -936,7 +937,7 @@ class GradingBjController extends Controller
                         'no_box' => $noboxGrading,
                         'no_barcode' => $noGradingPengiriman,
                         'no_nota' => $no_invoice,
-                        'admin' => $admin,
+                        'admin' => "import-$tglHari",
                         'grade' => $grade
                     ]);
                 }
