@@ -45,19 +45,19 @@
                             placeholder="cari">
                         <div style="overflow-y: scroll; height: 400px">
                             @php
-                                        if (!function_exists('ttl')) {
-                                            function ttl($tl)
-                                            {
-                                                return [
-                                                    'pcs' => array_sum(array_column($tl, 'pcs')),
-                                                    'gr' => array_sum(array_column($tl, 'gr')),
-                                                    'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
-                                                ];
-                                            }
-                                        }
+                                if (!function_exists('ttl')) {
+                                    function ttl($tl)
+                                    {
+                                        return [
+                                            'pcs' => array_sum(array_column($tl, 'pcs')),
+                                            'gr' => array_sum(array_column($tl, 'gr')),
+                                            'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                        ];
+                                    }
+                                }
 
-                                    @endphp
-                            {{-- <table id="tbl1" class="table table-bordered table-hover table-striped">
+                            @endphp
+                            <table id="tbl1" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
                                         <th class="dhead text-center" colspan="7">Box Stock Awal</th>
@@ -71,27 +71,27 @@
                                         <th class="dhead text-end">Rp/gr</th>
                                         <th class="dhead text-end">Ttl Rp</th>
                                     </tr>
-                                    
+
                                     <tr>
                                         <th class="dheadstock text-center">Total</th>
                                         <th class="dheadstock text-center"></th>
-                                        <th class="dheadstock text-end">{{ count($gudangbk) }}</th>
-                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['pcs'], 0) }}
+                                        <th class="dheadstock text-end">{{ count($bk) }}</th>
+                                        <th class="dheadstock text-end">{{ number_format(ttl($bk)['pcs'], 0) }}
                                         </th>
-                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['gr'], 0) }}
+                                        <th class="dheadstock text-end">{{ number_format(ttl($bk)['gr'], 0) }}
                                         </th>
                                         <th class="dheadstock text-end">
                                             0
                                         </th>
-                                        <th class="dheadstock text-end">{{ number_format(ttl($gudangbk)['ttl_rp'], 0) }}
+                                        <th class="dheadstock text-end">{{ number_format(ttl($bk)['ttl_rp'], 0) }}
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($gudangbk as $d)
+                                    @foreach ($bk as $d)
                                         <tr>
-                                            <td align="center">{{ $d->name }}</td>
+                                            <td align="center">{{ $d->penerima }}</td>
                                             <td align="center">{{ $d->nm_partai }}</td>
                                             <td align="center">{{ $d->no_box }}</td>
                                             <td align="right">{{ $d->pcs }}</td>
@@ -103,7 +103,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table> --}}
+                            </table>
                         </div>
                     </div>
                 </div>
