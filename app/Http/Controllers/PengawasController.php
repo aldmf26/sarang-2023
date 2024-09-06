@@ -27,7 +27,7 @@ class PengawasController extends Controller
                 ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
                 ->leftJoin('uang_makan as d', 'a.id_uang_makan', 'd.id_uang_makan')
                 ->where(function ($query) {
-                    $query->where('b.posisi_id', 13)
+                    $query->where('b.posisi_id','!=', 1)
                         ->orWhereNull('a.id_pengawas');
                 })
                 ->where('b.id', auth()->user()->id)
