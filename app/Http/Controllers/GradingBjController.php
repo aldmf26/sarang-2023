@@ -929,7 +929,7 @@ class GradingBjController extends Controller
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first()->grade;
+                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first();
                     DB::table('pengiriman')->insert([
                         'tgl_input' => $tgl,
                         'pcs' => $pcs,
@@ -938,7 +938,7 @@ class GradingBjController extends Controller
                         'no_barcode' => $noGradingPengiriman,
                         'no_nota' => $no_invoice,
                         'admin' => "import-$tglHari",
-                        'grade' => $grade ?? 'opname',
+                        'grade' => !$grade ? 'opname' : $grade->grade,
                     ]);
                 }
             }
