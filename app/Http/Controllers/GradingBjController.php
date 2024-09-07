@@ -446,16 +446,16 @@ class GradingBjController extends Controller
             $sheet->setCellValue($k . '1', $v);
         }
 
-        foreach($tbGrade as $i => $item){
-            $sheet->setCellValue('L' . ($i+2), $item->nm_grade);
-            $sheet->setCellValue('M' . ($i+2), $item->tipe);
+        foreach ($tbGrade as $i => $item) {
+            $sheet->setCellValue('L' . ($i + 2), $item->nm_grade);
+            $sheet->setCellValue('M' . ($i + 2), $item->tipe);
         }
         $styleBold = [
             'font' => [
                 'bold' => true,
             ],
         ];
-        
+
 
         $sheet->getStyle('A1:M1')->applyFromArray($styleBold);
         $styleBaris = [
@@ -467,7 +467,7 @@ class GradingBjController extends Controller
         ];
         $sheet->getStyle('A1:J1')->applyFromArray($styleBaris);
         $sheet->getStyle('L1:M1')->applyFromArray($styleBaris);
-       
+
         $writer = new Xlsx($spreadsheet);
         $fileName = "Template Grading";
         return response()->stream(
@@ -833,7 +833,7 @@ class GradingBjController extends Controller
             'box_grading' => $box_grading,
             'grading' => $getFormulir,
             'grading_susut' => $getFormulirSusut,
-            'rp_susut' => DB::selectOne("SELECT  *FROM rp_susut as a ")
+            'rp_susut' => DB::selectOne("SELECT  * FROM rp_susut as a ")
         ];
         return view('home.gradingbj.detail_pengiriman', $data);
     }
@@ -866,7 +866,7 @@ class GradingBjController extends Controller
                 'bold' => true,
             ],
         ];
-        
+
 
         $sheet->getStyle('A1:F1')->applyFromArray($styleBold);
         $styleBaris = [
@@ -878,7 +878,7 @@ class GradingBjController extends Controller
         ];
         $sheet->getStyle('A1:F1')->applyFromArray($styleBaris);
         // $sheet->getStyle('L1:M1')->applyFromArray($styleBaris);
-       
+
         $writer = new Xlsx($spreadsheet);
         $fileName = "Template Gudang Siap Kirim";
         return response()->stream(
@@ -910,7 +910,7 @@ class GradingBjController extends Controller
                 $noGradingPengiriman = $row[4];
                 $no_invoice = $row[5];
 
-               
+
 
                 if (empty($no_invoice) && empty($pcs) && empty($gr) && empty($noboxGrading) && empty($noGradingPengiriman)) {
                     continue;
