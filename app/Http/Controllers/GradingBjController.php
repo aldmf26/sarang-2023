@@ -490,7 +490,7 @@ class GradingBjController extends Controller
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
         $admin = auth()->user()->name;
-        $tgl = date('Y-m-d');
+        $tglD = date('Y-m-d');
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
@@ -506,24 +506,23 @@ class GradingBjController extends Controller
                 $gr = $row[8];
                 $noPengiriman = $row[9];
 
-                if (empty($grade) && empty($pcs) && empty($gr) && empty($noPengiriman)) {
+                if (empty($tgl) && empty($partai)) {
                     continue;
                 }
 
                 if (
-                    empty($grade) ||
-                    empty($gr) ||
-                    empty($noPengiriman)
+                    empty($tgl) ||
+                    empty($partai) 
                 ) {
                     $pesan = [
                         empty($grade) => "GRADE",
                         empty($gr) => "GR",
-                        empty($boxPengiriman) => "BOX PENGIRIMAN",
+                        empty($noPengiriman) => "BOX PENGIRIMAN",
                     ];
                     DB::rollBack();
                     return redirect()
                         ->route('gradingbj.index')
-                        ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
+                        ->with('error', "ERROR! " . $pesan[true] . " : $grade, $gr, $noPengiriman" . 'TIDAK BOLEH KOSONG');
                 } else {
                     // pengecekan grade jika tidak ada di list tb_grade
                     $cekGrade = DB::table('tb_grade')->where('nm_grade', $grade)->first();
@@ -539,24 +538,24 @@ class GradingBjController extends Controller
 
                     // pengecekan nobox sortir tidak ada
                     if (!empty($nobox)) {
-                        $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox], ['kategori', 'grade']])->first();
-                        if (!$cekBox) {
-                            DB::rollBack();
-                            return redirect()
-                                ->route('gradingbj.index')
-                                ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
-                        } else {
-                            DB::table('grading')->insert([
-                                'no_box_sortir' => $nobox,
-                                'pcs' => $pcsSortir,
-                                'gr' => $grSortir,
-                                'no_invoice' => $no_inv,
-                                'tgl' => $tgl,
-                                'admin' => $admin
-                            ]);
-                        }
+                        // $cekBox = DB::table('formulir_sarang')->where([['no_box', $nobox], ['kategori', 'grade']])->first();
+                        // if (!$cekBox) {
+                        //     DB::rollBack();
+                        //     return redirect()
+                        //         ->route('gradingbj.index')
+                        //         ->with('error', "Box :  " . $nobox . ' BELUM SERAH KE GRADING');
+                        // } else {
+                        // }
+                        DB::table('grading')->insert([
+                            'no_box_sortir' => $nobox,
+                            'pcs' => $pcsSortir,
+                            'gr' => $grSortir,
+                            'no_invoice' => $no_inv,
+                            'tgl' => $tgl,
+                            'admin' => "import-$tglD"
+                        ]);
                     }
-
+                   
                     DB::table('grading_partai')->insert([
                         'nm_partai' => $partai,
                         'urutan' => $urutan,
@@ -567,7 +566,7 @@ class GradingBjController extends Controller
                         'pcs' => $pcs,
                         'gr' => $gr,
                         'tgl' => $tgl,
-                        'admin' => $admin
+                        'admin' => "import-$tglD"
                     ]);
                 }
             }
@@ -899,6 +898,7 @@ class GradingBjController extends Controller
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
         $admin = auth()->user()->name;
+        $tglHari = date('Y-m-d');
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
@@ -929,7 +929,7 @@ class GradingBjController extends Controller
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first()->grade;
+                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first();
                     DB::table('pengiriman')->insert([
                         'tgl_input' => $tgl,
                         'pcs' => $pcs,
@@ -937,8 +937,8 @@ class GradingBjController extends Controller
                         'no_box' => $noboxGrading,
                         'no_barcode' => $noGradingPengiriman,
                         'no_nota' => $no_invoice,
-                        'admin' => $admin,
-                        'grade' => $grade
+                        'admin' => "import-$tglHari",
+                        'grade' => !$grade ? 'opname' : $grade->grade,
                     ]);
                 }
             }
