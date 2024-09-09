@@ -418,4 +418,11 @@ WHERE
 
         return $result;
     }
+    public static function pengiriman()
+    {
+        $result = DB::selectOne("SELECT sum(a.pcs) as pcs , sum(a.gr) as gr , sum(a.gr * a.rp_gram) as total_rp
+                FROM pengiriman as a;");
+
+        return $result;
+    }
 }

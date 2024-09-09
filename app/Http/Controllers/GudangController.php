@@ -1281,7 +1281,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('AX' . $kolom2, '-');
         $sheet2->setCellValue('AY' . $kolom2, $suntik_ctk_sisa->pcs);
         $sheet2->setCellValue('AZ' . $kolom2, $suntik_ctk_sisa->gr);
-        $sheet2->setCellValue('BA' . $kolom2, round($suntik_ctk_sisa->ttl_rp / $suntik_ctk_sisa->gr, 0));
+        $sheet2->setCellValue('BA' . $kolom2, empty($suntik_ctk_sisa->ttl_rp) ? 0 : round($suntik_ctk_sisa->ttl_rp / $suntik_ctk_sisa->gr, 0));
         $sheet2->setCellValue('BB' . $kolom2, round($suntik_ctk_sisa->ttl_rp, 0));
 
         $sheet2->getStyle('AV2:BB' . $kolom2)->applyFromArray($style);
@@ -2193,15 +2193,15 @@ class GudangController extends Controller
         $p2gr = $p2->gr + $p2suntik->gr;
         $p2ttlrp = $p2->ttl_rp + $p2suntik->ttl_rp;
 
-        $p3 = $this->getSuntikan(41);
+        $p3 = $model::pengiriman();
         $p3pcs = 8089;
         $p3gr = 46030;
         $p3ttlrp = 524883058;
 
-        $p4 = $this->getSuntikan(41);
-        $p4pcs = 62769;
-        $p4gr = 370722;
-        $p4ttlrp = 4227366871;
+        $p4 = $model::pengiriman();
+        $p4pcs = $p4->pcs;
+        $p4gr = $p4->gr;
+        $p4ttlrp = $p4->total_rp;
 
         // ---- end pengiriman
 
