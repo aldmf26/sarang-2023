@@ -2667,4 +2667,28 @@ class GudangController extends Controller
 
         return view('home.gudang.detail_summary_ibu', $data);
     }
+
+    public function sum(Request $r)
+    {
+        $data = [
+            'title' => 'Data Totalan Summary Cabut',
+        ];
+        return view('home.gudang.sum.sum', $data);
+    }
+
+    public function sum_cetak(Request $r)
+    {
+        $data = [
+            'title' => 'Data Totalan Summary Cetak',
+        ];
+        return view('home.gudang.sum.sum', $data);
+    }
+
+    public function sum_sortir(Request $r)
+    {
+        $data = [
+            'title' => 'Data Totalan Summary Sortir',
+        ];
+        return view('home.gudang.sum.sum', $data);
+    }
 }
