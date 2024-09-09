@@ -5,7 +5,7 @@
 
     <tr class="pointer detail">
         <td>Awal</td>
-        <td>sortir opname</td>
+        <td>siap kirim opname</td>
 
         <td>{{ number_format($p1pcs, 0) }}</td>
         <td>{{ number_format($p1gr, 0) }}</td>
@@ -16,7 +16,7 @@
     </tr>
     <tr class="pointer detail">
         <td>Awal</td>
-        <td>sortir stock awal</td>
+        <td>grading stock</td>
         <td>{{ number_format($p2pcs, 0) }}</td>
         <td>{{ number_format($p2gr, 0) }}</td>
         <td>{{ number_format($p2ttlrp, 0) }}</td>
@@ -27,7 +27,7 @@
 
     <tr class="pointer detail">
         <td class="pink-magenta  text-white">Opname</td>
-        <td>sortir sedang proses</td>
+        <td>box belum kirim gudang wip</td>
         @for ($i = 0; $i < 12; $i++)
             <td></td>
         @endfor
@@ -38,7 +38,7 @@
     
     <tr class="pointer detail">
         <td class="pink-magenta  text-white">Opname</td>
-        <td>sortir selesai siap grading diserahkan</td>
+        <td>box selesai kirim pengiriman</td>
         @for ($i = 0; $i < 6; $i++)
             <td></td>
         @endfor
