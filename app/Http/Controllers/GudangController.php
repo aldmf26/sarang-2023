@@ -2118,16 +2118,16 @@ class GudangController extends Controller
         $ca13costkerja = $ca13->cost_kerja;
 
         $ca14 = $model::cetak_selesai();
-        $ca14suntik = $this->getSuntikan(23);
+        $ca14suntik = $this->getSuntikan(43);
         $ca14pcs = $ca14->pcs;
         $ca14gr = $ca14->gr;
         $ca14ttlrp = $ca14->ttl_rp;
         $ca14costkerja = $ca14->cost_kerja;
 
         $ca15 = $model::tdk_cetak_selesai_diserahkan();
-        $ca15pcs = $ca15->pcs;
-        $ca15gr = $ca15->gr;
-        $ca15ttlrp = $ca15->ttl_rp;
+        $ca15pcs = $ca15->pcs + $ca14suntik->pcs;
+        $ca15gr = $ca15->gr +$ca14suntik->gr;
+        $ca15ttlrp = $ca15->ttl_rp + $ca14suntik->ttl_rp;
         $ca15costkerja = $ca15->cost_kerja;
 
         $ca16 = $model::cetak_selesai_diserahkan();
@@ -2649,6 +2649,7 @@ class GudangController extends Controller
             35 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_selesai_diserahkan'"),
             41 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'grading' and opname = 'Y'"),
             42 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='grading' and opname = 'T';"),
+            43 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='tidak_cetak' and opname = 'T';"),
         ];
         if (array_key_exists($index, $datas)) {
             return $datas[$index];
