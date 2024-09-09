@@ -2639,7 +2639,7 @@ class GudangController extends Controller
             16  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'"),
             26 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_serah'"),
             21 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 15"),
-            22 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 14"),
+            22 => DB::selectOne("SELECT sum(pcs) as pcs,sum(gr) as gr,sum(ttl_rp) as ttl_rp FROM opname_suntik WHERE a.ket = 'cetak_stok_awal' and opname = 'T'"),
             27 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_sisa'"),
             31 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'Y'"),
             32 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'T'"),
