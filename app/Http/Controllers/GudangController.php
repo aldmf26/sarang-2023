@@ -2118,7 +2118,7 @@ class GudangController extends Controller
         $ca13costkerja = $ca13->cost_kerja;
 
         $ca14 = $model::cetak_selesai();
-        $ca14suntik = $this->getSuntikan(43);
+        // $ca14suntik = $this->getSuntikan(43);
         $ca14pcs = $ca14->pcs;
         $ca14gr = $ca14->gr;
         $ca14ttlrp = $ca14->ttl_rp;
@@ -2132,7 +2132,7 @@ class GudangController extends Controller
 
         $ca16 = $model::cetak_selesai_diserahkan();
         $ca16suntik = $this->getSuntikan(26);
-        $ca16pcs = $ca16->pcs + $ca16suntik->pcs + ;
+        $ca16pcs = $ca16->pcs + $ca16suntik->pcs;
         $ca16gr = $ca16->gr + $ca16suntik->gr;
         $ca16ttlrp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
         $ca16costkerja = $ca16->cost_kerja;
