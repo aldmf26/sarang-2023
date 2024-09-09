@@ -2621,7 +2621,7 @@ class GudangController extends Controller
             16 => IbuSummary::bkselesai_siap_str_diserahkan_sum(),
             17 => IbuSummary::bkstock_sum(),
 
-            21 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 15"),
+            21 => DB::selectOne("SELECT sum(pcs) as pcs,sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM opname_suntik WHERE ket = 'cetak_awal_stock' and opname = 'Y'"),
             22 => IbuSummary::cetak_stok_awal(),
             // 23 => gudangcekModel::cetak_proses(),
             // 24 => gudangcekModel::cetak_selesai(),

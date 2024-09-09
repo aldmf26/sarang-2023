@@ -10,7 +10,7 @@ class IbuSummary extends Model
 {
     use HasFactory;
 
-   
+
     public static function bkstockawal_sum()
     {
         $result = DB::selectOne("SELECT 
@@ -24,7 +24,7 @@ class IbuSummary extends Model
         return $result;
     }
 
-    
+
     public static function bkstock_sum()
     {
         $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 
@@ -38,7 +38,7 @@ class IbuSummary extends Model
         return $result;
     }
 
-    
+
     public static function bksedang_proses_sum()
     {
         $result = DB::selectOne("SELECT 
@@ -62,7 +62,7 @@ FROM (
         return $result;
     }
 
-    
+
     public static function bkselesai_siap_ctk_sum()
     {
         $result = DB::selectOne("SELECT sum(a.ttl_rp) as cost_kerja,a.no_box, b.nm_partai, sum(a.pcs_akhir) as pcs, sum(a.gr_akhir) as gr, sum(COALESCE(b.hrga_satuan * b.gr_awal,0)) as ttl_rp
@@ -74,7 +74,7 @@ FROM (
 
         return $result;
     }
-    
+
 
     public static function bkselesai_siap_ctk_diserahkan_sum()
     {
@@ -87,7 +87,7 @@ FROM (
         return $result;
     }
 
-    
+
     public static function bkselesai_siap_str_sum()
     {
         $result = DB::selectOne("SELECT 
@@ -130,7 +130,7 @@ FROM (
 
         return $result;
     }
-    
+
 
     public static function bkselesai_siap_str_diserahkan_sum()
     {
@@ -385,6 +385,4 @@ WHERE a.no_box in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 
 
         return $result;
     }
-
-    
 }
