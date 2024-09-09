@@ -204,6 +204,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export2', 'export2')->name('export2');
             Route::get('/getSummaryIbu', 'getSummaryIbu')->name('getSummaryIbu');
             Route::get('/detailSummaryIbu', 'detailSummaryIbu')->name('detailSummaryIbu');
+            Route::get('/sum', 'sum')->name('sum');
         });
     Route::controller(BkController::class)
         ->prefix('home/bk')
