@@ -924,7 +924,7 @@ class GudangController extends Controller
         $sheet1->setCellValue('E' . $kolom, $stock_cbt_awal->pcs);
         $sheet1->setCellValue('F' . $kolom, $stock_cbt_awal->gr);
         $ttl_rp_ctstok = $stock_cbt_awal->ttl_rp;
-        $sheet1->setCellValue('G' . $kolom, round($ttl_rp_ctstok / $stock_cbt_awal->gr, 0));
+        $sheet1->setCellValue('G' . $kolom, empty($stock_cbt_awal->gr) ? 0 : round($ttl_rp_ctstok / $stock_cbt_awal->gr, 0));
         $sheet1->setCellValue('H' . $kolom, round($ttl_rp_ctstok, 0));
         $sheet1->getStyle('B2:H' . $kolom - 1)->applyFromArray($style);
 
@@ -1127,7 +1127,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('E' . $kolom2, $d->pcs_awal);
             $sheet2->setCellValue('F' . $kolom2, $d->gr_awal);
             $ttl_rp_ctstok = $d->ttl_rp;
-            $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $d->gr_awal, 0));
+            $sheet2->setCellValue('G' . $kolom2, empty($d->gr_awal) ? 0 : round($ttl_rp_ctstok / $d->gr_awal, 0));
             $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
         }
@@ -1138,7 +1138,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('E' . $kolom2, $stock_cetak_awal->pcs);
         $sheet2->setCellValue('F' . $kolom2, $stock_cetak_awal->gr);
         $ttl_rp_ctstok = $stock_cetak_awal->ttl_rp;
-        $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $stock_cetak_awal->gr, 0));
+        $sheet2->setCellValue('G' . $kolom2, empty($stock_cetak_awal->gr) ? 0 : round($ttl_rp_ctstok / $stock_cetak_awal->gr, 0));
         $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
 
         $sheet2->getStyle('B2:H' . $kolom2)->applyFromArray($style);
@@ -2106,7 +2106,7 @@ class GudangController extends Controller
         $ca11ttlrp = $ca11->ttl_rp;
 
         $ca12 = $model::cetak_stok_awal();
-        $ca12suntik = $this->getSuntikan(14);
+        $ca12suntik = $this->getSuntikan(23);
         $ca12pcs = $ca12->pcs + $ca12suntik->pcs;
         $ca12gr = $ca12->gr + $ca12suntik->gr;
         $ca12ttlrp = $ca12->ttl_rp + $ca12suntik->ttl_rp;
@@ -2621,7 +2621,7 @@ class GudangController extends Controller
             16 => IbuSummary::bkselesai_siap_str_diserahkan_sum(),
             17 => IbuSummary::bkstock_sum(),
 
-            21 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 15"),
+            21 => DB::selectOne("SELECT sum(pcs) as pcs,sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM opname_suntik WHERE ket = 'cetak_awal_stock' and opname = 'Y'"),
             22 => IbuSummary::cetak_stok_awal(),
             // 23 => gudangcekModel::cetak_proses(),
             // 24 => gudangcekModel::cetak_selesai(),
@@ -2638,8 +2638,9 @@ class GudangController extends Controller
             14  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'"),
             16  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'"),
             26 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_serah'"),
-            21 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 15"),
-            22 => DB::selectOne("SELECT pcs,gr,ttl_rp FROM opname_suntik WHERE id_opname_suntik = 14"),
+            21 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' and opname = 'Y'"),
+            22 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' "),
+            23 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' and opname = 'T'"),
             27 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_sisa'"),
             31 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'Y'"),
             32 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'T'"),
