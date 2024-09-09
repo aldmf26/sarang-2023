@@ -1127,7 +1127,7 @@ class GudangController extends Controller
             $sheet2->setCellValue('E' . $kolom2, $d->pcs_awal);
             $sheet2->setCellValue('F' . $kolom2, $d->gr_awal);
             $ttl_rp_ctstok = $d->ttl_rp;
-            $sheet2->setCellValue('G' . $kolom2, round($ttl_rp_ctstok / $d->gr_awal, 0));
+            $sheet2->setCellValue('G' . $kolom2, empty($d->gr_awal) ? 0 : round($ttl_rp_ctstok / $d->gr_awal, 0));
             $sheet2->setCellValue('H' . $kolom2, round($ttl_rp_ctstok, 0));
             $kolom2++;
         }
