@@ -86,10 +86,15 @@
                         </tbody>
                     </table>
                 </div>
+                @php
+                    $rp_satuan =
+                        ($total_rp - sumBk($grading_susut, 'gr') * $rp_susut->rp_susut) / sumBk($grading, 'gr');
+                @endphp
                 <div class="col-lg-6">
                     <h6>Hasil Grading</h6>
                     <table class="table table-bordered">
                         <thead>
+
                             <tr>
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end">Pcs</th>
@@ -98,13 +103,18 @@
                                 <th class="dhead">Rp/gr</th>
                                 <th class="dhead">Total Rp</th>
                             </tr>
+                            <tr>
+                                <td class="fw-bold">Total</td>
+                                <td class="fw-bold text-end">{{ number_format(sumBk($grading, 'pcs'), 0) }}</td>
+                                <td class=" fw-bold text-end">{{ number_format(sumBk($grading, 'gr'), 0) }}</td>
+                                <td class=" fw-bold "></td>
+                                <td class="fw-bold"></td>
+                                <td class="fw-bold text-end">{{ number_format(sumBk($grading, 'gr') * $rp_satuan, 0) }}
+                                </td>
+                            </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $rp_satuan =
-                                    ($total_rp - sumBk($grading_susut, 'gr') * $rp_susut->rp_susut) /
-                                    sumBk($grading, 'gr');
-                            @endphp
+
                             @foreach ($grading as $g)
                                 <tr>
                                     <td>{{ $g->grade }}</td>
