@@ -2377,7 +2377,8 @@ class GudangController extends Controller
                     left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
                     where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '8';")->cost_cu;
         $denda = DB::table('tb_denda')->whereIn('bulan_dibayar', [6, 7, 8])->sum('nominal');
-        $uangCost = 1815907127.33;
+        $uang_cost_query = DB::select("SELECT a.* FROM oprasional as a");
+        $uangCost = sumBk($uang_cost_query, 'total_operasional');
 
         $awal_pcs = $a11pcs + $ca11pcs + $s1pcs + $p1pcs + 2;
         $awal_gr = $a11gr + $ca11gr + $s1gr + $p1gr;
