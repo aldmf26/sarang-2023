@@ -2061,10 +2061,7 @@ class GudangController extends Controller
         $a12gr = $a12->gr;
         $a12ttlrp = $a12->ttl_rp;
 
-        $a12 = $model::bksedang_proses_sum();
-        $a12pcs = $a12->pcs;
-        $a12gr = $a12->gr;
-        $a12ttlrp = $a12->ttl_rp;
+
 
         $a13 = $model::bkselesai_siap_ctk_sum();
         $a13pcs = $a13->pcs;

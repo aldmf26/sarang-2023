@@ -4,6 +4,7 @@ use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
+use App\Http\Controllers\CocokanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
@@ -279,5 +280,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/tambah_uang_makan', 'tambah_uang_makan')->name('tambah_uang_makan');
             Route::get('/uang_makan/{id}', 'uang_makan_detail')->name('uang_makan_detail');
             Route::post('/update', 'update')->name('update');
+        });
+    Route::controller(CocokanController::class)
+        ->prefix('home/cocokan')
+        ->name('cocokan.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/sortir', 'sortir')->name('sortir');
+            Route::get('/grading', 'grading')->name('grading');
         });
 });
