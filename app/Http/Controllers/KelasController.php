@@ -344,4 +344,25 @@ class KelasController extends Controller
         }
         return redirect()->route('kelas.sortir')->with('sukses', 'Data Berhasil ditambahkan');
     }
+
+    public function grade()
+    {
+        $data = [
+            'title' => 'Grade',
+            'grade' => DB::table('tb_grade')->get(),
+        ];
+        return view('data_master.kelas.grade', $data);
+    }
+    public function create_grade(Request $r)
+    {
+        foreach($r->nm_grade as $d){
+            DB::table('tb_grade')->insert([
+                'nm_grade' => $d,
+                'status' => 'bentuk',
+                'tipe' => $d,
+                'urutan' => 1,
+            ]);
+        }
+        return redirect()->back();
+    }
 }

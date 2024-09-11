@@ -417,6 +417,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/cetakCreate', 'cetakCreate')->name('cetakCreate');
             Route::post('/cetakSortir', 'cetakSortir')->name('cetakSortir');
             Route::get('/deleteSortir', 'deleteSortir')->name('deleteSortir');
+            Route::get('/grade', 'grade')->name('grade');
+            Route::post('/grade', 'create_grade')->name('create_grade');
         });
     Route::controller(PermissionController::class)
         ->prefix('data_master/permission')
