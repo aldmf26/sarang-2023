@@ -555,19 +555,20 @@ class GradingBjController extends Controller
                             'admin' => "import-$tglD"
                         ]);
                     }
-                   
-                    DB::table('grading_partai')->insert([
-                        'nm_partai' => $partai,
-                        'urutan' => $urutan,
-                        'no_invoice' => $no_inv,
-                        'box_pengiriman' => $noPengiriman,
-                        'grade' => $grade,
-                        'tipe' => $tipe,
-                        'pcs' => $pcs,
-                        'gr' => $gr,
-                        'tgl' => $tgl,
-                        'admin' => "import-$tglD"
-                    ]);
+                    if(!empty($grade)) {
+                        DB::table('grading_partai')->insert([
+                            'nm_partai' => $partai,
+                            'urutan' => $urutan,
+                            'no_invoice' => $no_inv,
+                            'box_pengiriman' => $noPengiriman,
+                            'grade' => $grade,
+                            'tipe' => $tipe,
+                            'pcs' => $pcs,
+                            'gr' => $gr,
+                            'tgl' => $tgl,
+                            'admin' => "import-$tglD"
+                        ]);
+                    }
                 }
             }
             DB::commit();
