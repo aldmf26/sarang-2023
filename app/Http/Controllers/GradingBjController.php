@@ -555,19 +555,20 @@ class GradingBjController extends Controller
                             'admin' => "import-$tglD"
                         ]);
                     }
-                   
-                    DB::table('grading_partai')->insert([
-                        'nm_partai' => $partai,
-                        'urutan' => $urutan,
-                        'no_invoice' => $no_inv,
-                        'box_pengiriman' => $noPengiriman,
-                        'grade' => $grade,
-                        'tipe' => $tipe,
-                        'pcs' => $pcs,
-                        'gr' => $gr,
-                        'tgl' => $tgl,
-                        'admin' => "import-$tglD"
-                    ]);
+                    if(!empty($grade)) {
+                        DB::table('grading_partai')->insert([
+                            'nm_partai' => $partai,
+                            'urutan' => $urutan,
+                            'no_invoice' => $no_inv,
+                            'box_pengiriman' => $noPengiriman,
+                            'grade' => $grade,
+                            'tipe' => $tipe,
+                            'pcs' => $pcs,
+                            'gr' => $gr,
+                            'tgl' => $tgl,
+                            'admin' => "import-$tglD"
+                        ]);
+                    }
                 }
             }
             DB::commit();
@@ -904,11 +905,12 @@ class GradingBjController extends Controller
             foreach (array_slice($sheetData, 1) as $row) {
 
                 $tgl = $row[0];
-                $pcs = $row[1];
-                $gr = $row[2];
-                $noboxGrading = $row[3];
-                $noGradingPengiriman = $row[4];
-                $no_invoice = $row[5];
+                $grade = $row[1];
+                $pcs = $row[2];
+                $gr = $row[3];
+                $noboxGrading = $row[4];
+                $noGradingPengiriman = $row[5];
+                $no_invoice = $row[6];
 
 
 
@@ -929,7 +931,7 @@ class GradingBjController extends Controller
                         ->route('gradingbj.index')
                         ->with('error', "ERROR! " . $pesan[true] . 'TIDAK BOLEH KOSONG');
                 } else {
-                    $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first();
+                    // $grade = DB::table('grading_partai')->where('box_pengiriman', $noboxGrading)->first();
                     DB::table('pengiriman')->insert([
                         'tgl_input' => $tgl,
                         'pcs' => $pcs,
@@ -938,7 +940,7 @@ class GradingBjController extends Controller
                         'no_barcode' => $noGradingPengiriman,
                         'no_nota' => $no_invoice,
                         'admin' => "import-$tglHari",
-                        'grade' => !$grade ? 'opname' : $grade->grade,
+                        'grade' => $grade,
                     ]);
                 }
             }
