@@ -1281,7 +1281,7 @@ class GudangController extends Controller
         $sheet2->setCellValue('AX' . $kolom2, '-');
         $sheet2->setCellValue('AY' . $kolom2, $suntik_ctk_sisa->pcs);
         $sheet2->setCellValue('AZ' . $kolom2, $suntik_ctk_sisa->gr);
-        $sheet2->setCellValue('BA' . $kolom2, round($suntik_ctk_sisa->ttl_rp / $suntik_ctk_sisa->gr, 0));
+        $sheet2->setCellValue('BA' . $kolom2, empty($suntik_ctk_sisa->ttl_rp) ? 0 : round($suntik_ctk_sisa->ttl_rp / $suntik_ctk_sisa->gr, 0));
         $sheet2->setCellValue('BB' . $kolom2, round($suntik_ctk_sisa->ttl_rp, 0));
 
         $sheet2->getStyle('AV2:BB' . $kolom2)->applyFromArray($style);
@@ -2193,15 +2193,15 @@ class GudangController extends Controller
         $p2gr = $p2->gr + $p2suntik->gr;
         $p2ttlrp = $p2->ttl_rp + $p2suntik->ttl_rp;
 
-        $p3 = $this->getSuntikan(41);
+        $p3 = $model::pengiriman();
         $p3pcs = 8089;
         $p3gr = 46030;
         $p3ttlrp = 524883058;
 
-        $p4 = $this->getSuntikan(41);
-        $p4pcs = 62769;
-        $p4gr = 370722;
-        $p4ttlrp = 4227366871;
+        $p4 = $model::pengiriman();
+        $p4pcs = $p4->pcs;
+        $p4gr = $p4->gr;
+        $p4ttlrp = $p4->total_rp;
 
         // ---- end pengiriman
 
@@ -2377,7 +2377,8 @@ class GudangController extends Controller
                     left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
                     where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '8';")->cost_cu;
         $denda = DB::table('tb_denda')->whereIn('bulan_dibayar', [6, 7, 8])->sum('nominal');
-        $uangCost = 1815907127.33;
+        $uang_cost_query = DB::select("SELECT a.* FROM oprasional as a");
+        $uangCost = sumBk($uang_cost_query, 'total_operasional');
 
         $awal_pcs = $a11pcs + $ca11pcs + $s1pcs + $p1pcs + 2;
         $awal_gr = $a11gr + $ca11gr + $s1gr + $p1gr;
