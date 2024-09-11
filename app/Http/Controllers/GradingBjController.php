@@ -940,7 +940,7 @@ class GradingBjController extends Controller
                         'no_barcode' => $noGradingPengiriman,
                         'no_nota' => $no_invoice,
                         'admin' => "import-$tglHari",
-                        'grade' => !$grade ? 'opname' : $grade->grade,
+                        'grade' => $grade,
                     ]);
                 }
             }
