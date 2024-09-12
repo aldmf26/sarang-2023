@@ -77,7 +77,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sedang Proses</td>
+                        <td style="background-color: #F7A829;color:white">Sedang Proses</td>
                         <td class="text-end">
                             {{ number_format($sedang_proses->pcs, 0) }}
                         </td>
@@ -92,7 +92,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sisa Pengawas</td>
+                        <td style="background-color: #F7A829;color:white">Sisa Pengawas</td>
                         <td class="text-end">
                             {{ number_format($sortir_sisa->pcs, 0) }}
                         </td>

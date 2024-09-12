@@ -71,14 +71,14 @@
                             {{ number_format($cetak_akhir->cost_kerja, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sedang Proses</td>
+                        <td style="background-color: #F7A829;color:white">Sedang Proses</td>
                         <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_proses->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
                         <td class="text-end"></td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sisa Pengawas</td>
+                        <td style="background-color: #F7A829;color:white">Sisa Pengawas</td>
                         <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>

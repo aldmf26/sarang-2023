@@ -57,14 +57,14 @@
 
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sedang proses</td>
+                        <td style="background-color: #F7A829;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sisa pengawas</td>
+                        <td style="background-color: #F7A829;color:white">Sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
