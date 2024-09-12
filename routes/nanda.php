@@ -289,5 +289,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
+            Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
         });
 });

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CocokanModel;
+use App\Models\SummaryModel;
 use Illuminate\Support\Facades\DB;
 use stdClass;
+use Illuminate\Support\Facades\Http;
 
 class CocokanController extends Controller
 {
@@ -239,5 +241,103 @@ class CocokanController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function balancesheet()
+    {
+        // // $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
+        // // $bk = json_decode($bk, TRUE);
+        // // DB::table('bk_awal')->truncate();
+        // foreach ($bk as $v) {
+        //     $data = [
+        //         'nm_partai' => $v['ket2'],
+        //         'nm_partai_dulu' => $v['ket'],
+        //         'pcs' => $v['pcs'] ?? 0,
+        //         'gr' => $v['gr'],
+        //         'grade' => $v['nm_grade'],
+        //         'ttl_rp' => $v['total_rp'],
+        //         'bulan' => date('m', strtotime($v['tgl'])),
+        //         'tahun' => date('Y', strtotime($v['tgl'])),
+        //     ];
+        //     DB::table('bk_awal')->insert($data);
+        // }
+
+        $ca17 = CocokanModel::cetak_stok();
+        $ca17suntik = $this->getSuntikan(27);
+
+        $cetak_sisa = new stdClass();
+        $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
+        $cetak_sisa->gr = $ca17->gr + $ca17suntik->gr;
+        $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
+
+
+        $sa = CocokanModel::akhir_sortir();
+        $p2suntik = $this->getSuntikan(42);
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
+        $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
+        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
+
+        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
+        $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
+
+        $a14suntik = $this->getSuntikan(14);
+        $a16suntik = $this->getSuntikan(16);
+        $a12 = CocokanModel::bkselesai_siap_ctk_diserahkan_sum();
+
+        $bk_akhir = new stdClass();
+        $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
+        $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
+        $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+        $bk_akhir->cost_kerja = $a12->cost_kerja;
+
+        $model = new CocokanModel();
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16 = $model::cetak_selesai();
+        $cetak_akhir = new stdClass();
+        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
+        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
+
+        $s3 = $model::sortir_akhir();
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->cost_kerja = $s3->cost_kerja;
+
+
+        $data = [
+            'title' => 'Balance Sheet ',
+            'bk' => SummaryModel::summarybk(),
+            'bk_suntik' => DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'"),
+            'uang_cost' => DB::select("SELECT a.* FROM oprasional as a"),
+            'bk_akhir' => $bk_akhir,
+            'cbt_proses' => CocokanModel::bksedang_proses_sum(),
+            'cbt_sisa_pgws' => CocokanModel::bksisapgws(),
+            'cetak_proses' => CocokanModel::cetak_proses(),
+            'cetak_sisa' => $cetak_sisa,
+            'sedang_proses' => CocokanModel::sortir_proses(),
+            'sortir_sisa' => CocokanModel::stock_sortir(),
+            'opname' =>  $this->getSuntikan(41),
+            'sortir_akhir' => $sortir_akhir,
+            'pengiriman' => $pengiriman,
+            'grading' => $grading,
+            'ttl_gr' => $ttl_gr,
+            'cost_op' => $cost_op,
+            'cost_dll' => $cost_dll,
+            'cetak_akhir'  => $cetak_akhir,
+            'sortir_akhir' => $sortir_akhir
+
+
+        ];
+        return view('home.cocokan.balance', $data);
     }
 }

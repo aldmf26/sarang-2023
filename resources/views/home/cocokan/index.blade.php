@@ -38,8 +38,9 @@
                         <td class="text-end">
                             {{ number_format($bk_awal->pcs - $cbt_proses->pcs - $cbt_sisa_pgws->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="">
+                                {{ number_format($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr, 0) }}</a>
                         </td>
                         <td class="text-end">
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
@@ -52,7 +53,7 @@
                         <td style="background-color: #F7F700">Cabut akhir</td>
                         <td class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
                         </td>
-                        <td class="text-end">{{ number_format($bk_akhir->gr, 0) }}
+                        <td class="text-end fw-bold"><a href="">{{ number_format($bk_akhir->gr, 0) }}</a>
                         </td>
                         <td class="text-end">
                             {{ number_format($bk_akhir->ttl_rp, 0) }}</td>
@@ -66,14 +67,15 @@
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($cbt_proses->gr, 0) }}</td>
+                        <td class="text-end fw-bold"><a href="">{{ number_format($cbt_proses->gr, 0) }}</a></td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($cbt_sisa_pgws->gr, 0) }}</td>
+                        <td class="text-end fw-bold"><a href="">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
+                        </td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
                         <td></td>
                     </tr>
