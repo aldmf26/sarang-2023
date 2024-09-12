@@ -30,6 +30,8 @@
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
                         <th class="dhead text-end">Cost kerja</th>
+                        <th class="dhead text-end">Cost dll,cu,denda</th>
+                        <th class="dhead text-end">Cost operasional</th>
                     </tr>
                     <tr>
                         <td>Cabut awal</td>
@@ -43,28 +45,33 @@
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
                         </td>
                         <td></td>
+                        <td></td>
+                        <td class="text-end"></td>
                     </tr>
                     <tr>
-                        <td style="background-color: #C7EA46">Cabut akhir</td>
-                        <td style="background-color: #C7EA46" class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
+                        <td style="background-color: #F7F700">Cabut akhir</td>
+                        <td class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
                         </td>
-                        <td style="background-color: #C7EA46" class="text-end">{{ number_format($bk_akhir->gr, 0) }}
+                        <td class="text-end">{{ number_format($bk_akhir->gr, 0) }}
                         </td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td class="text-end">
                             {{ number_format($bk_akhir->ttl_rp, 0) }}</td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td class="text-end">
                             {{ number_format($bk_akhir->cost_kerja, 0) }}</td>
+
+                        <td class="text-end">{{ number_format(($cost_dll / $ttl_gr) * $bk_akhir->gr, 0) }}</td>
+                        <td class="text-end">{{ number_format(($cost_op / $ttl_gr) * $bk_akhir->gr, 0) }}</td>
 
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829;color:white">Sedang proses</td>
+                        <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829;color:white">Sisa pengawas</td>
+                        <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>

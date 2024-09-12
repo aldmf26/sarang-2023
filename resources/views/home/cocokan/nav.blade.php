@@ -17,7 +17,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link  {{ $rot == 'cocokan.grading' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('cocokan.grading') }}">Grading</a>
+                href="{{ route('cocokan.grading') }}">Grading & Pengiriman</a>
         </li>
     </ul>
 </div>

@@ -18,11 +18,12 @@ class CocokanController extends Controller
         $bk_awal->gr = $a11->gr + $a11suntik->gr;
         $bk_awal->ttl_rp = $a11->ttl_rp + $a11suntik->ttl_rp;
 
+
+
+        // akhir
         $a14suntik = $this->getSuntikan(14);
         $a16suntik = $this->getSuntikan(16);
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
-
-        // akhir
 
         $bk_akhir = new stdClass();
         $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
@@ -30,40 +31,9 @@ class CocokanController extends Controller
         $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
         $bk_akhir->cost_kerja = $a12->cost_kerja;
 
-        $ca16suntik = $this->getSuntikan(26);
-        $ca16 = $model::cetak_selesai();
-        $cetak_akhir = new stdClass();
-        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
-        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
-        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
-
-
-        $s3 = $model::sortir_akhir();
-        $s5suntik = $this->getSuntikan(35);
-
-        $sortir_akhir = new stdClass();
-        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
-        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
-
-        $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
-        $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
-        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
-        $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
-
-        $bulan = date('m');
-
-        $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll FROM `tb_gaji_penutup`");
-        $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
-            FROM cetak_new as a 
-            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
-        $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
-
-
-
-
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
 
 
 
@@ -72,7 +42,10 @@ class CocokanController extends Controller
             'bk_awal' => $bk_awal,
             'cbt_proses' => $model::bksedang_proses_sum(),
             'cbt_sisa_pgws' => $model::bksisapgws(),
-            'bk_akhir' => $bk_akhir
+            'bk_akhir' => $bk_akhir,
+            'ttl_gr' => $ttl_gr,
+            'cost_op' => $cost_op,
+            'cost_dll' => $cost_dll
 
         ];
         return view('home.cocokan.index', $data);
@@ -109,13 +82,20 @@ class CocokanController extends Controller
         $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
         $cetak_akhir->cost_kerja = $ca16->cost_kerja;
 
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+
         $data = [
             'title' => 'Cetak',
             'ctk_opname' => $ctk_opname,
             'akhir_cbt' => $akhir_cbt,
             'cetak_proses' => $model::cetak_proses(),
             'cetak_sisa' => $cetak_sisa,
-            'cetak_akhir' => $cetak_akhir
+            'cetak_akhir' => $cetak_akhir,
+            'ttl_gr' => $ttl_gr,
+            'cost_op' => $cost_op,
+            'cost_dll' => $cost_dll
 
         ];
         return view('home.cocokan.cetak', $data);
@@ -138,13 +118,20 @@ class CocokanController extends Controller
         $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
         $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+
         $data = [
             'title' => 'Sortir ',
             'opname' => $this->getSuntikan(31),
             'akhir_cetak' => $akhir_cetak,
             'sedang_proses' => $model::sortir_proses(),
             'sortir_sisa' => $model::stock_sortir(),
-            'sortir_akhir' => $sortir_akhir
+            'sortir_akhir' => $sortir_akhir,
+            'ttl_gr' => $ttl_gr,
+            'cost_op' => $cost_op,
+            'cost_dll' => $cost_dll
 
         ];
         return view('home.cocokan.sortir', $data);
@@ -189,6 +176,63 @@ class CocokanController extends Controller
             41 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'grading' and opname = 'Y'"),
             42 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='grading' and opname = 'T';"),
             // 43 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='cetak_selesai' and opname = 'T';"),
+        ];
+        if (array_key_exists($index, $datas)) {
+            return $datas[$index];
+        } else {
+            return false;
+        }
+    }
+
+    public function getCost(CocokanModel $model, $index)
+    {
+        $a14suntik = $this->getSuntikan(14);
+        $a16suntik = $this->getSuntikan(16);
+        $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
+
+        $bk_akhir = new stdClass();
+        $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
+        $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
+        $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+        $bk_akhir->cost_kerja = $a12->cost_kerja;
+
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16 = $model::cetak_selesai();
+        $cetak_akhir = new stdClass();
+        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
+        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
+
+
+        $s3 = $model::sortir_akhir();
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+
+        $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
+        $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+        $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
+
+
+
+        $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll, max(bulan_dibayar) as bulan FROM `tb_gaji_penutup`");
+        $bulan = $cost_dll->bulan;
+        $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
+        $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
+
+        $datas = [
+            1 => $ttl_cost_kerja,
+            'ttl_gr' => $gr_akhir_all,
+            'dll' => $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda,
+            'cost_op' => $ttl_cost_op - $ttl_cost_kerja - ($cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda)
         ];
         if (array_key_exists($index, $datas)) {
             return $datas[$index];

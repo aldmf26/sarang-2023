@@ -44,7 +44,10 @@
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
-                        <th class="dhead text-end">Cost Kerja</th>
+                        <th class="dhead text-end">Cost kerja</th>
+                        <th class="dhead text-end">Cost dll,cu,denda</th>
+                        <th class="dhead text-end">Cost operasional</th>
+
                     </tr>
                     <tr>
                         <td>Awal Sortir</td>
@@ -62,22 +65,24 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #C7EA46">Akhir Sortir</td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td style="background-color: #F7F700">Akhir Sortir</td>
+                        <td class="text-end">
                             {{ number_format($sortir_akhir->pcs, 0) }}
                         </td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td class="text-end">
                             {{ number_format($sortir_akhir->gr, 0) }}
                         </td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td class="text-end">
                             {{ number_format($sortir_akhir->ttl_rp, 0) }}
                         </td>
-                        <td style="background-color: #C7EA46" class="text-end">
+                        <td class="text-end">
                             {{ number_format($sortir_akhir->cost_kerja, 0) }}
                         </td>
+                        <td class="text-end">{{ number_format(($cost_dll / $ttl_gr) * $sortir_akhir->gr, 0) }}</td>
+                        <td class="text-end">{{ number_format(($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829;color:white">Sedang Proses</td>
+                        <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
                         <td class="text-end">
                             {{ number_format($sedang_proses->pcs, 0) }}
                         </td>
@@ -92,7 +97,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829;color:white">Sisa Pengawas</td>
+                        <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
                         <td class="text-end">
                             {{ number_format($sortir_sisa->pcs, 0) }}
                         </td>

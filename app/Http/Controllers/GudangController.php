@@ -2408,6 +2408,7 @@ class GudangController extends Controller
 
         $ca14dll = $ca14gr * $rp_gr_dll;
         $ca15dll = $ca15gr * $rp_gr_dll;
+
         $ca16dll = $ca16gr * $rp_gr_dll;
 
         $s4dll = $s4gr * $rp_gr_dll;
