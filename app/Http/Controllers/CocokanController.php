@@ -22,10 +22,48 @@ class CocokanController extends Controller
         $a16suntik = $this->getSuntikan(16);
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
 
+        // akhir
+
         $bk_akhir = new stdClass();
         $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
         $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
         $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+        $bk_akhir->cost_kerja = $a12->cost_kerja;
+
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16 = $model::cetak_selesai();
+        $cetak_akhir = new stdClass();
+        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
+        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
+
+
+        $s3 = $model::sortir_akhir();
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+
+        $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
+        $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+        $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
+
+        $bulan = date('m');
+
+        $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll FROM `tb_gaji_penutup`");
+        $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
+        $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
+
+
+
+
 
 
 
@@ -69,6 +107,7 @@ class CocokanController extends Controller
         $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
         $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
         $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
 
         $data = [
             'title' => 'Cetak',
@@ -97,6 +136,7 @@ class CocokanController extends Controller
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
         $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
         $data = [
             'title' => 'Sortir ',

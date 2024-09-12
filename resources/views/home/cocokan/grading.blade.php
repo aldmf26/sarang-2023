@@ -50,19 +50,19 @@
                         <th class="dhead">Rp</th>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Pengiriman</td>
+                        <td style="background-color: #F7A829; color:white">Pengiriman</td>
                         <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($rp_satuan * $pengiriman->gr, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Sisa Grading</td>
+                        <td style="background-color: #F7A829;color:white">Sisa Grading</td>
                         <td class="text-end">{{ number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($grading->gr - $pengiriman->gr, 0) }}</td>
                         <td class="text-end">{{ number_format(($grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7A829">Selisih</td>
+                        <td style="background-color: #F7A829;color:white">Selisih</td>
                         <td class="text-end">{{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0) }}
                         </td>
                         <td class="text-end">{{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr, 0) }}

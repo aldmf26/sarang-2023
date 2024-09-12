@@ -42,8 +42,9 @@
                     <tr>
                         <th class="dhead">Ket</th>
                         <th class="dhead text-end">Pcs</th>
-                        <th class="dhead">Gr</th>
-                        <th class="dhead">Rp</th>
+                        <th class="dhead text-end">Gr</th>
+                        <th class="dhead text-end">Rp</th>
+                        <th class="dhead text-end">Cost Kerja</th>
                     </tr>
                     <tr>
                         <td>Awal Sortir</td>
@@ -55,6 +56,9 @@
                         </td>
                         <td class="text-end">
                             {{ number_format($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp, 0) }}
+                        </td>
+                        <td class="text-end">
+                            0
                         </td>
                     </tr>
                     <tr>
@@ -68,6 +72,9 @@
                         <td style="background-color: #C7EA46" class="text-end">
                             {{ number_format($sortir_akhir->ttl_rp, 0) }}
                         </td>
+                        <td style="background-color: #C7EA46" class="text-end">
+                            {{ number_format($sortir_akhir->cost_kerja, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7A829">Sedang Proses</td>
@@ -79,6 +86,9 @@
                         </td>
                         <td class="text-end">
                             {{ number_format($sedang_proses->ttl_rp, 0) }}
+                        </td>
+                        <td class="text-end">
+                            0
                         </td>
                     </tr>
                     <tr>
@@ -92,6 +102,9 @@
                         <td class="text-end">
                             {{ number_format($sortir_sisa->ttl_rp, 0) }}
                         </td>
+                        <td class="text-end">
+                            0
+                        </td>
                     </tr>
 
                     <tr>
@@ -101,6 +114,7 @@
                         <td class="text-end fw-bold">
                             {{ number_format($sortir_akhir->ttl_rp + $sedang_proses->ttl_rp + $sortir_sisa->ttl_rp, 0) }}
                         </td>
+                        <td class="text-end fw-bold"></td>
                     </tr>
 
 

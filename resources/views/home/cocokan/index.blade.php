@@ -27,8 +27,9 @@
                     <tr>
                         <th class="dhead">Ket</th>
                         <th class="dhead text-end">Pcs</th>
-                        <th class="dhead">Gr</th>
-                        <th class="dhead">Rp</th>
+                        <th class="dhead text-end">Gr</th>
+                        <th class="dhead text-end">Rp</th>
+                        <th class="dhead text-end">Cost kerja</th>
                     </tr>
                     <tr>
                         <td>Cabut awal</td>
@@ -41,6 +42,7 @@
                         <td class="text-end">
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td style="background-color: #C7EA46">Cabut akhir</td>
@@ -50,18 +52,23 @@
                         </td>
                         <td style="background-color: #C7EA46" class="text-end">
                             {{ number_format($bk_akhir->ttl_rp, 0) }}</td>
+                        <td style="background-color: #C7EA46" class="text-end">
+                            {{ number_format($bk_akhir->cost_kerja, 0) }}</td>
+
                     </tr>
                     <tr>
                         <td style="background-color: #F7A829">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7A829">Sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
@@ -70,6 +77,7 @@
                         <td class="text-end fw-bold">
                             {{ number_format($cbt_sisa_pgws->ttl_rp + $cbt_proses->ttl_rp + $bk_akhir->ttl_rp, 0) }}
                         </td>
+                        <td></td>
                     </tr>
 
                 </table>
