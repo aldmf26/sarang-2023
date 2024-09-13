@@ -12,11 +12,12 @@ class SummaryModel extends Model
 
     public static function summarybk()
     {
-        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk
+        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk, b.bulan, b.tahun
         FROM bk as a 
         left join bk_awal as b on b.nm_partai = a.nm_partai
         where a.baru = 'baru' and a.kategori ='cabut' and b.gr is not null
-        group by a.nm_partai;
+        group by a.nm_partai
+        order by b.bulan ASC, a.nm_partai ASC
         ");
 
         return $result;

@@ -69,15 +69,19 @@
                             <th class="dhead">rp</th>
                         </tr>
                     </thead>
-                   
+
                     @foreach (['cabut', 'cetak', 'sortir', 'pengiriman'] as $d)
                         @include("home.gudang.tr_sum_ibu.$d")
                     @endforeach
 
                     <tr>
                         <td colspan="12"></td>
-                        <td class="bg-primary "><h6 class="text-white">{{ number_format($ttlOp, 0) }}</h6></td>
-                        <td colspan="4"><h6>{{ number_format($ttlDll, 0) }}</h6></td>
+                        <td class="bg-primary ">
+                            <h6 class="text-white">{{ number_format($ttlOp, 0) }}</h6>
+                        </td>
+                        <td colspan="4">
+                            <h6>{{ number_format($ttlDll, 0) }}</h6>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -86,69 +90,69 @@
         <div class="d-flex">
             <div>
 
-            <table class="table table-bordered" style="border: 0.5px solid black">
-                <tr>
-                    <th class="text-end">Awal</th>
-                    <th>pcs</th>
-                    <th>gr</th>
-                    <th>rp bk</th>
-                    <th colspan="6">cost input</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>{{ number_format($awal_pcs,0) }}</td>
-                    <td>{{ number_format($awal_gr,0) }}</td>
-                    <td>{{ number_format($awal_rp_bk,0) }}</td>
-                    <td colspan="6">{{ number_format($uangCost,0) }}</td>
-                </tr>
-                <tr>
-                    <td colspan="10"></td>
-                </tr>
-                <tr>
-                    <th class="text-end">Akhir</th>
-                    <th>pcs</th>
-                    <th>gr</th>
-                    <th>rp bk</th>
-                    <th>cost kerja</th>
-                    <th class="bg-primary text-white">cost operasional</th>
-                    <th>total</th>
-                    <th>cost dll</th>
-                    <th>cost cu</th>
-                    <th>denda</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>{{ number_format($akhir_pcs,0) }}</td>
-                    <td>{{ number_format($akhir_gr,0) }}</td>
-                    <td>{{ number_format($akhir_rp_bk,0) }}</td>
-                    <td>{{ number_format($akhir_kerja,0) }}</td>
-                    <td class="bg-primary text-white">{{ number_format($cost_op,0) }}</td>
-                    <td >{{ number_format($uangCost + $awal_rp_bk,0) }}</td>
-                    <td>{{ number_format($cost_dll,0) }}</td>
-                    <td>{{ number_format($cost_cu,0) }}</td>
-                    <td>{{ number_format($denda,0) }}</td>
-                </tr>
-                <tr>
-                    <td colspan="10"></td>
-                </tr>
-                <tr>
-                    <th class="text-end">cost operasional</th>
-                    <th>pcs</th>
-                    <th>gr</th>
-                    <th>rp/gr operasional</th>
-                    <th colspan="6">rp/gr dll cu denda</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>{{ number_format($cost_op_pcs,0) }}</td>
-                    <td>{{ number_format($cost_op_gr,0) }}</td>
-                    <td>{{ number_format($rp_gr_op,0) }}</td>
-                    <td colspan="6">{{ number_format($rp_gr_dll,0) }}</td>
-                </tr>
-            </table>
-            
-          
-        </div>
+                <table class="table table-bordered" style="border: 0.5px solid black">
+                    <tr>
+                        <th class="text-end">Awal</th>
+                        <th>pcs</th>
+                        <th>gr</th>
+                        <th>rp bk</th>
+                        <th colspan="6">cost input</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ number_format($awal_pcs, 0) }}</td>
+                        <td>{{ number_format($awal_gr, 0) }}</td>
+                        <td>{{ number_format($awal_rp_bk, 0) }}</td>
+                        <td colspan="6">{{ number_format($uangCost, 0) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-end">Akhir</th>
+                        <th>pcs</th>
+                        <th>gr</th>
+                        <th>rp bk</th>
+                        <th>cost kerja</th>
+                        <th class="bg-primary text-white">cost operasional</th>
+                        <th>total</th>
+                        <th>cost dll</th>
+                        <th>cost cu</th>
+                        <th>denda</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ number_format($akhir_pcs, 0) }}</td>
+                        <td>{{ number_format($akhir_gr, 0) }}</td>
+                        <td>{{ number_format($akhir_rp_bk, 0) }}</td>
+                        <td>{{ number_format($akhir_kerja, 0) }}</td>
+                        <td class="bg-primary text-white">{{ number_format($cost_op, 0) }}</td>
+                        <td>{{ number_format($uangCost + $awal_rp_bk, 0) }}</td>
+                        <td>{{ number_format($cost_dll, 0) }}</td>
+                        <td>{{ number_format($cost_cu, 0) }}</td>
+                        <td>{{ number_format($denda, 0) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-end">cost operasional</th>
+                        <th>pcs</th>
+                        <th>gr</th>
+                        <th>rp/gr operasional</th>
+                        <th colspan="6">rp/gr dll cu denda</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ number_format($cost_op_pcs, 0) }}</td>
+                        <td>{{ number_format($cost_op_gr, 0) }}</td>
+                        <td>{{ number_format($rp_gr_op, 0) }}</td>
+                        <td colspan="6">{{ number_format($rp_gr_dll, 0) }}</td>
+                    </tr>
+                </table>
+
+
+            </div>
 
         </div>
 

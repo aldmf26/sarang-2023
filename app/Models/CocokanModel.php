@@ -26,16 +26,17 @@ class CocokanModel extends Model
         $result = DB::selectOne("SELECT 
     SUM(sub.pcs) as pcs, 
     SUM(sub.gr) as gr, 
-    SUM(sub.ttl_rp) as ttl_rp
+    SUM(sub.ttl_rp) as ttl_rp,
+    sum(sub.cost_kerja) as cost_kerja
     FROM (
-    SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
+    SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, sum(if(a.ttl_rp < 0 , 0 , a.ttl_rp)) as cost_kerja
     FROM cabut as a
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
     WHERE a.selesai = 'T' AND a.no_box != 9999 and b.baru = 'baru'
     
     UNION ALL
     
-    SELECT 0 as pcs, sum(d.gr_eo_awal) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp
+    SELECT 0 as pcs, sum(d.gr_eo_awal) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp, sum(if(d.ttl_rp < 0 , 0 , d.ttl_rp)) as cost_kerja
     FROM eo as d
     LEFT JOIN bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'
     WHERE d.selesai = 'T' AND d.no_box != 9999 and e.baru = 'baru'
@@ -155,7 +156,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
 
     public static function cetak_proses()
     {
-        $result = DB::selectOne("SELECT sum(a.ttl_rp) as cost_kerja,sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp
+        $result = DB::selectOne("SELECT sum(a.ttl_rp) as cost_kerja,sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(a.ttl_rp) as cost_kerja
             FROM cetak_new as a 
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
@@ -202,7 +203,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
     }
     public static function sortir_proses()
     {
-        $result = DB::selectOne("SELECT SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp
+        $result = DB::selectOne("SELECT SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(a.ttl_rp) as cost_kerja
             FROM sortir as a 
             LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
