@@ -453,6 +453,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/template', 'template')->name('template');
             Route::get('/gudang', 'gudang')->name('gudang');
             Route::post('/kirim', 'kirim')->name('kirim');
+            Route::post('/kirim_grade2', 'kirim_grade2')->name('kirim_grade2');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
@@ -515,6 +516,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/grading', 'grading')->name('grading');
+            Route::get('/gudang', 'gudang')->name('gudang');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/grading_partai', 'grading_partai')->name('grading_partai');
             Route::post('/create', 'create')->name('create');
             Route::post('/create_partai', 'create_partai')->name('create_partai');

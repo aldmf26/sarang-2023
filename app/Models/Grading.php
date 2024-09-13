@@ -249,4 +249,20 @@ class Grading extends Model
 
         return $result;
     }
+
+    public static function selesai($no_box = null)
+    {
+        $whereBox = $no_box ? "AND a.box_pengiriman = $no_box " : '';
+        $select = $no_box ? 'selectOne' : 'select';
+        return DB::$select("SELECT 
+                a.nm_partai,
+                a.box_pengiriman,
+                sum(a.pcs) as pcs,
+                sum(a.gr) as gr,
+                a.grade 
+                FROM grading_partai as a 
+                WHERE a.box_pengiriman NOT IN (select no_box from formulir_sarang where kategori = 'wip')
+                $whereBox 
+                GROUP BY a.box_pengiriman");
+    }
 }

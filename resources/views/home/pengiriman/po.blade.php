@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }} " table="Y" sizeCard="8">
+<x-theme.app title="{{ $title }} " table="Y" sizeCard="10">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
@@ -42,19 +42,19 @@
                                         class="form-control text-end">
                                 </td>
                                 <td align="center">
-                                    <h6>{{ $po->ttl }}</h6>
+                                    <h6>{{ number_format($po->ttl,0) }}</h6>
                                 </td>
                                 <td>
-                                    <h6>{{ $po->pcs }}</h6>
+                                    <h6>{{ number_format($po->pcs,0) }}</h6>
                                 </td>
                                 <td>
-                                    <h6>{{ $po->gr }}</h6>
+                                    <h6>{{ number_format($po->gr,0) }}</h6>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -62,6 +62,12 @@
                                 <th class="dhead text-center">Grade</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
+
+                                <th width="120" class="bg-info text-white text-center">Grade 2</th>
+                                <th width="120" class="bg-info text-white text-end">Pcs 2</th>
+                                <th width="120" class="bg-info text-white text-end">Gr 2</th>
+                                <th width="120" class="bg-info text-white">No Barcode Pengiriman</th>
+
                                 <th class="dhead text-end">Pcs Kirim</th>
                                 <th class="dhead text-end">Gr Kirim</th>
                             </tr>
@@ -73,6 +79,21 @@
                                     <td align="center">{{ $d->grade }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
+
+                                    <td align="center">
+                                        <input name="box_grading[]" required value="{{ $d->no_box }}" type="hidden" class="form-control">
+                                        <input name="grade2[]" required value="{{ $d->grade }}" type="text" class="form-control">
+                                    </td>
+                                    <td align="center">
+                                        <input name="pcs2[]" required value="{{ $d->pcs }}" type="text" class="text-end form-control">
+                                    </td>
+                                    <td align="center">
+                                        <input name="gr2[]" required value="{{ $d->gr }}" type="text" class="text-end form-control">
+                                    </td>
+                                    <td align="center">
+                                        <input name="barcode[]" required value="" placeholder="cth: 10001" type="text" class="form-control">
+                                    </td>
+                                  
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right" x-text="({{ $d->gr }} / kadar) + {{ $d->gr }}">-
                                     </td>

@@ -302,7 +302,14 @@ class GudangSarangController extends Controller
             DB::table('cabut')->where('no_box', $d->no_box)->update(['formulir' => 'T']);
         }
         $getFormulir->delete();
-        return redirect('home/gudangsarang/invoice')->with('sukses', 'Data Berhasil di hapus');
+        return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
+    }
+    public function batal_wip(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]]);
+        $getFormulir->delete();
+        return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
     }
 
     public function selesai_grade(Request $r)
@@ -318,6 +325,17 @@ class GudangSarangController extends Controller
             ];
         }
         DB::table('grading')->insert($data);
+        return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
+    }
+
+    public function selesai_wip(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
+        foreach ($getFormulir as $d) {
+            DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['formulir' => 'Y']);
+        }
+
         return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
     }
 
@@ -479,6 +497,34 @@ class GudangSarangController extends Controller
         return view('home.gudang_sarang.invoice_grade', $data);
     }
 
+    public function invoice_wip(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice_grade";
+
+        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.kategori = 'wip' 
+        group by a.no_invoice
+        order by a.id_formulir DESC
+        ");
+
+        $data = [
+            'title' => 'Po Sortir',
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_wip', $data);
+    }
+
     public function print_formulir_grade(Request $r)
     {
         $formulir = DB::table('formulir_sarang as a')
@@ -500,5 +546,28 @@ class GudangSarangController extends Controller
             'ket_formulir' => $ket_formulir
         ];
         return view('home.gudang_sarang/print_formulir_grade', $data);
+    }
+
+    public function print_formulir_wip(Request $r)
+    {
+        $formulir = DB::table('formulir_sarang as a')
+            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'sortir'], ['a.kategori', 'grade']])
+            ->join('bk as b', 'a.no_box', '=', 'b.no_box')
+            ->groupBy('a.no_box', 'a.kategori')
+            ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
+            ->get();
+
+        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
+        FROM formulir_sarang as a 
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
+
+        $data = [
+            'title' => 'Gudang Sarang',
+            'formulir' => $formulir,
+            'ket_formulir' => $ket_formulir
+        ];
+        return view('home.gudang_sarang.print_formulir_wip', $data);
     }
 }

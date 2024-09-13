@@ -512,7 +512,7 @@ class GradingBjController extends Controller
 
                 if (
                     empty($tgl) ||
-                    empty($partai) 
+                    empty($partai)
                 ) {
                     $pesan = [
                         empty($grade) => "GRADE",
@@ -555,7 +555,7 @@ class GradingBjController extends Controller
                             'admin' => "import-$tglD"
                         ]);
                     }
-                    if(!empty($grade)) {
+                    if (!empty($grade)) {
                         DB::table('grading_partai')->insert([
                             'nm_partai' => $partai,
                             'urutan' => $urutan,
@@ -651,6 +651,7 @@ class GradingBjController extends Controller
                 FROM `pengiriman` 
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
+            where a.formulir = 'Y'
             GROUP BY box_pengiriman;");
 
         $data = [
@@ -949,6 +950,49 @@ class GradingBjController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function gudang()
+    {
+        $posisi = auth()->user()->posisi_id;
+        $data = [
+            'title' => 'Gudang',
+            'posisi' => $posisi,
+            'gradingStok' => Grading::dapatkanStokBox('formulir'),
+            'gradingSelesai' => Grading::selesai(),
+            'users' => DB::table('users')->where('posisi_id', 16)->get(),
+        ];
+        return view('home.gradingbj.gudang', $data);
+    }
+
+    public function save_formulir(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'wip' ORDER by no_invoice DESC limit 1;");
+            $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
+            $no_box = explode(',', $r->no_box[0]);
+            foreach ($no_box as $d) {
+                $cekBox = Grading::selesai($d);
+                $data[] = [
+                    'no_invoice' => $no_invoice,
+                    'no_box' => $d,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => $r->id_penerima,
+                    'pcs_awal' => $cekBox->pcs,
+                    'gr_awal' => $cekBox->gr,
+                    'tanggal' => date('Y-m-d'),
+                    'kategori' => 'wip',
+                ];
+            }
+            DB::table('formulir_sarang')->insert($data);
+
+            DB::commit();
+            return redirect()->back()->with('sukses', 'Data berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('sukses', $e->getMessage());
         }
     }
 }

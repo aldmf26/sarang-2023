@@ -239,8 +239,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/update_invoice_grade', 'update_invoice_grade')->name('update_invoice_grade');
             Route::get('/invoice_sortir', 'invoice_sortir')->name('invoice_sortir');
             Route::get('/invoice_grade', 'invoice_grade')->name('invoice_grade');
+            Route::get('/invoice_wip', 'invoice_wip')->name('invoice_wip');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
+            Route::get('/selesai_wip', 'selesai_wip')->name('selesai_wip');
+            Route::get('/batal_wip', 'batal_wip')->name('batal_wip');
+            Route::get('/print_formulir_wip', 'print_formulir_wip')->name('print_formulir_wip');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')

@@ -20,7 +20,7 @@
                         <form action="{{ route('gradingbj.grading_partai') }}" method="post">
                             @csrf
                             <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
-                               href="">Import</a>
+                                href="">Import</a>
                             {{--
                             <a href="#" data-bs-target="#selisih" data-bs-toggle="modal"
                                 class="selisih btn btn-sm btn-primary" href=""><i class="fa fa-warehouse"></i>
@@ -34,6 +34,10 @@
                                 Grading
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             </button>
+                            <a href="{{ route('gradingbj.gudang') }}" style="color: white;background-color: #D722A9;"
+                                class="btn btn-sm ">
+                                <i class="fas fa-clipboard-list"></i> Gudang
+                            </a>
                             {{-- <button name="submit" value="selisih" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-danger" type="submit">
                                 <i class="fas fa-plus"></i>
@@ -69,7 +73,7 @@
                                     {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
                                     <td>{{ $d->nm_partai }}</td>
                                     <td align="center">{{ $d->no_box }}</td>
-                                    <td>{{ $d->tipe . ' - ' .$d->ket }}</td>
+                                    <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
                                     <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
                                     <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
                                     @presiden
@@ -89,14 +93,13 @@
             </div>
         </section>
         <x-theme.import title="Import grading" route="gradingbj.import" routeTemplate="gradingbj.template_import" />
-        
+
         <x-theme.modal btnSave="T" title="Data Selisih" idModal="selisih">
             <div id="loadSelisih"></div>
         </x-theme.modal>
-       
+
         @section('scripts')
             <script>
-                
                 pencarian('tbl1input', 'tbl1')
                 $(".selisih").click(function(e) {
                     e.preventDefault();
