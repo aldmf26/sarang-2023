@@ -93,7 +93,7 @@
                             {{ number_format($sedang_proses->ttl_rp, 0) }}
                         </td>
                         <td class="text-end">
-                            0
+                            {{ number_format($sedang_proses->cost_kerja, 0) }}
                         </td>
                     </tr>
                     <tr>
@@ -119,7 +119,14 @@
                         <td class="text-end fw-bold">
                             {{ number_format($sortir_akhir->ttl_rp + $sedang_proses->ttl_rp + $sortir_sisa->ttl_rp, 0) }}
                         </td>
-                        <td class="text-end fw-bold"></td>
+                        @php
+                            $modal = $sortir_akhir->ttl_rp + $sedang_proses->ttl_rp + $sortir_sisa->ttl_rp;
+                            $cost_dll = ($cost_dll / $ttl_gr) * $sortir_akhir->gr;
+                            $cost_op = ($cost_op / $ttl_gr) * $sortir_akhir->gr;
+                        @endphp
+                        <td class="text-end fw-bold">
+                            {{ number_format($modal + $sedang_proses->cost_kerja + $sortir_akhir->cost_kerja + $cost_dll + $cost_op, 0) }}
+                        </td>
                     </tr>
 
 

@@ -69,7 +69,7 @@
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a href="">{{ number_format($cbt_proses->gr, 0) }}</a></td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
-                        <td></td>
+                        <td class="text-end">{{ number_format($cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
@@ -86,7 +86,14 @@
                         <td class="text-end fw-bold">
                             {{ number_format($cbt_sisa_pgws->ttl_rp + $cbt_proses->ttl_rp + $bk_akhir->ttl_rp, 0) }}
                         </td>
-                        <td></td>
+                        @php
+                            $modal = $cbt_sisa_pgws->ttl_rp + $cbt_proses->ttl_rp + $bk_akhir->ttl_rp;
+                            $cost_dll = ($cost_dll / $ttl_gr) * $bk_akhir->gr;
+                            $cost_op = ($cost_op / $ttl_gr) * $bk_akhir->gr;
+                        @endphp
+                        <td class="text-end fw-bold">
+                            {{ number_format($modal + $cost_dll + $cost_op + $cbt_proses->cost_kerja + $bk_akhir->cost_kerja, 0) }}
+                        </td>
                     </tr>
 
                 </table>
