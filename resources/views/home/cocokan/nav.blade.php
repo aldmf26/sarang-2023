@@ -23,6 +23,10 @@
             <a class="nav-link  {{ $rot == 'cocokan.balancesheet' ? 'active' : '' }}" aria-current="page"
                 href="{{ route('cocokan.balancesheet') }}">Balance Sheet</a>
         </li>
+        {{-- <li class="nav-item">
+            <a class="nav-link  {{ $rot == 'cocokan.opname' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('cocokan.opname') }}">Opname</a>
+        </li> --}}
     </ul>
 </div>
 <div class="col-lg-12">

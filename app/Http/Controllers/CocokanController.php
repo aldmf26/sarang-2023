@@ -340,4 +340,13 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.balance', $data);
     }
+
+    public function opname(Request $r)
+    {
+        $data = [
+            'title' => 'Opname',
+            'cbt_proses' => CocokanModel::bksedang_proses_sum(),
+        ];
+        return view('home.cocokan.opname', $data);
+    }
 }
