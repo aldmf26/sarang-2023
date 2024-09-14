@@ -12,6 +12,7 @@ use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
+use App\Http\Controllers\OpnameNewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RekapGajiPeranakController;
@@ -295,5 +296,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/grading', 'grading')->name('grading');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::get('/opname', 'opname')->name('opname');
+        });
+    Route::controller(OpnameNewController::class)
+        ->prefix('home/opnamenew')
+        ->name('opnamenew.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
         });
 });

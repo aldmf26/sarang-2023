@@ -91,7 +91,7 @@ class CetakNewController extends Controller
 
         $id_anak = $r->id_anak ?? 'All';
 
-        $tgl1 = $r->tgl1 ??  date('Y-m-27', strtotime('-1 month'));;
+        $tgl1 = $r->tgl1 ??  date('Y-m-d', strtotime('-7 days'));;
         $tgl2 = $r->tgl2 ?? date('Y-m-d');
         $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
 

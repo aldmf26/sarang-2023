@@ -298,6 +298,7 @@
         "paging": false,
         "info": false
     });
+
     $('#tablealdi').DataTable({
         "searching": false,
         scrollY: '400px',
