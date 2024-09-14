@@ -10,7 +10,7 @@
     
         'gradingbj.gudang_siap_kirim' => [
             'route' => 'gradingbj.gudang_siap_kirim',
-            'teks' => 'Pengiriman',
+            'teks' => 'Wip Stock',
             'variant' => 'info',
         ],
         // 'pengiriman.add' => [
@@ -26,10 +26,11 @@
         //     'route' => 'packinglist.index',
         //     'teks' => 'Packinglist',
         // ],
-        // 'packinglist.pengiriman' => [
-        //     'route' => 'packinglist.pengiriman',
-        //     'teks' => 'Pengiriman',
-        // ],
+        'packinglist.pengiriman' => [
+            'route' => 'packinglist.pengiriman',
+            'teks' => 'History Pengiriman',
+            'variant' => 'info',
+        ],
     ];
 @endphp
 

@@ -203,6 +203,13 @@ class BoxKirimController extends Controller
         return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
     }
 
+    public function kirim_grade2(Request $r)
+    {
+        $admin = auth()->user()->name;
+        $tgl_input = date('Y-m-d');
+        dd($r->all());
+    }
+
     public function po($no_nota)
     {
         $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
@@ -235,6 +242,22 @@ class BoxKirimController extends Controller
                 ];
             }
             DB::table('pengiriman_packing_list')->insert($data);
+
+            for ($i=0; $i < count($r->box_grading); $i++) { 
+                $data2 = [
+                    'tgl_input' => $tgl,
+                    'pcs' => $r->pcs2[$i],
+                    'gr' => $r->gr2[$i],
+                    'no_box' => $r->box_grading[$i],
+                    'no_barcode' => $r->barcode[$i],
+                    'grade' => $r->grade2[$i],
+                    'admin' => auth()->user()->name,
+                    'no_nota' => $no_invoice,
+                    'selesai' => 'Y'
+                ];
+                DB::table('pengiriman')->where('no_box', $r->box_grading[$i])->update($data2);
+            }
+
             DB::commit();
             return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil di selesaikan');
         } catch (\Exception $e) {

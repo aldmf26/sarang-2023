@@ -17,13 +17,30 @@
                             href="">Import</a>
                         {{-- <a href="{{ route('pengiriman.gudang') }}" class="btn btn-sm btn-info" href=""><i
                                 class="fa fa-warehouse"></i> Gudang</a> --}}
+                        {{-- <a href="{{ route('packinglist.pengiriman') }}" class="btn btn-sm btn-primary" href=""><i
+                                class="fa fa-clipboard-list"></i> Packinglist</a> --}}
+
+                        <input type="hidden" name="no_box" class="form-control" :value="cek.join(',')">
+                        <button x-transition x-show="cek.length" class="btn btn-sm btn-primary" type="submit">
+                            <i class="fas fa-plus"></i>
+                            Kirim
+                            <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            <span x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
+                        </button>
+                    </form>
+                    <form class="d-none" action="{{ route('pengiriman.kirim_grade2') }}" method="post">
+                        @csrf
+                        <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
+                            href="">Import</a>
+                        {{-- <a href="{{ route('pengiriman.gudang') }}" class="btn btn-sm btn-info" href=""><i
+                                class="fa fa-warehouse"></i> Gudang</a> --}}
                         <a href="{{ route('packinglist.pengiriman') }}" class="btn btn-sm btn-primary" href=""><i
                                 class="fa fa-clipboard-list"></i> Packinglist</a>
 
                         <input type="hidden" name="no_box" class="form-control" :value="cek.join(',')">
                         <button x-transition x-show="cek.length" class="btn btn-sm btn-primary" type="submit">
                             <i class="fas fa-plus"></i>
-                            Kirim
+                            Input Grade 2
                             <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             <span x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
                         </button>

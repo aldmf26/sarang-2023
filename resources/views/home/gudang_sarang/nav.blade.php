@@ -11,6 +11,10 @@
         <a class="nav-link {{ $route == 'gudangsarang.invoice_grade' && $kategori == 'grade' ? 'active' : '' }}"
             aria-current="page" href="{{ route('gudangsarang.invoice_grade', ['kategori' => 'grade']) }}">Grade</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ $route == 'gudangsarang.invoice_wip' && $kategori == 'wip' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}">Wip</a>
+    </li>
 
 
 </ul>

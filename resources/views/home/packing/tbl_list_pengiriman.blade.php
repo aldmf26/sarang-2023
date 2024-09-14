@@ -5,8 +5,8 @@
     <thead>
         <tr>
             <th class="text-center" {!!$color!!}>Partai</th>
-            <th class="text-center" {!!$color!!}>Grade</th>
             <th class="text-center" {!!$color!!}>Tipe</th>
+            <th class="text-center" {!!$color!!}>Grade</th>
             <th class="text-center" {!!$color!!}>Pcs Akhir</th>
             <th class="text-center" {!!$color!!}>Pcs Akhir</th>
             <th class="text-center" {!!$color!!}>No Box</th>
@@ -27,8 +27,8 @@
             @endphp
             <tr class="text-center">
                 <td>{{ $d->partai }}</td>
-                <td>{{ $d->grade }}</td>
                 <td>{{ $d->tipe }}</td>
+                <td>{{ $d->grade }}</td>
                 <td>{{ number_format($d->pcs_akhir, 0) }}</td>
                 <td>{{ number_format($d->gr_akhir, 0) }}</td>
                 <td>{{ $d->no_box }}</td>
