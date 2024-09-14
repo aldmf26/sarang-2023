@@ -290,5 +290,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
+            Route::get('/opname', 'opname')->name('opname');
         });
 });
