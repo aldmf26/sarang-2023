@@ -303,5 +303,6 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/sortir', 'sortir')->name('sortir');
         });
 });

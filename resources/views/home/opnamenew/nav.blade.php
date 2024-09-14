@@ -11,6 +11,10 @@
             <a class="nav-link  {{ $rot == 'opnamenew.cetak' ? 'active' : '' }}" aria-current="page"
                 href="{{ route('opnamenew.cetak') }}">Cetak</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link  {{ $rot == 'opnamenew.sortir' ? 'active' : '' }}" aria-current="page"
+                href="{{ route('opnamenew.sortir') }}">Sortir</a>
+        </li>
 
     </ul>
 </div>

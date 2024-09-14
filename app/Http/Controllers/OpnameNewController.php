@@ -29,4 +29,15 @@ class OpnameNewController extends Controller
         ];
         return view('home.opnamenew.cetak', $data);
     }
+    public function sortir(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box_stock' => $model::cetak_stok(),
+            'box_proses' => $model::cetak_proses(),
+            'box_selesai' => $model::cetak_selesai(),
+
+        ];
+        return view('home.opnamenew.sortir', $data);
+    }
 }

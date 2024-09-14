@@ -290,7 +290,7 @@ class CetakModel extends Model
             $pgws = 'and a.id_pengawas = ' . $id_pengawas;
         }
         if ($hal == 'cetak') {
-            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK')";
+            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK') and f.no_box is null";
         } else {
             $halaman = "and e.kategori = 'CU'";
         }
@@ -301,7 +301,7 @@ class CetakModel extends Model
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' $pgws $halaman and f.no_box is null
+            where a.tgl between '$tgl1' and '$tgl2' $pgws $halaman 
             order by a.tgl DESC, b.nama ASC
             ;");
         } else {
@@ -310,7 +310,7 @@ class CetakModel extends Model
             LEFT join tb_anak as b on b.id_anak = a.id_anak
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' $pgws $halaman and f.no_box is null
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' $pgws $halaman 
             order by a.tgl DESC, b.nama ASC
             ;");
         }
