@@ -281,7 +281,7 @@ class CetakModel extends Model
     }
 
 
-    public static function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas)
+    public static function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas, $hal)
     {
         $user = auth()->user()->posisi_id;
         if ($user == '1') {
@@ -289,26 +289,28 @@ class CetakModel extends Model
         } else {
             $pgws = 'and a.id_pengawas = ' . $id_pengawas;
         }
+        if ($hal == 'cetak') {
+            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK')";
+        } else {
+            $halaman = "and e.kategori = 'CU'";
+        }
+
         if ($id_anak == 'All') {
             $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai,   b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar, a.ttl_rp, f.no_box as form, e.kategori as kat_kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
-            
-            
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' $pgws
+            where a.tgl between '$tgl1' and '$tgl2' $pgws $halaman and f.no_box is null
             order by a.tgl DESC, b.nama ASC
             ;");
         } else {
             $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak , a.pcs_hcr, e.denda_hcr,a.tipe_bayar,a.bulan_dibayar,a.ttl_rp,f.no_box as form, e.kategori as kat_kelas
             From cetak_new as a  
             LEFT join tb_anak as b on b.id_anak = a.id_anak
-            
-            
             left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
             left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' $pgws
+            where a.tgl between '$tgl1' and '$tgl2' and a.id_anak = '$id_anak' $pgws $halaman and f.no_box is null
             order by a.tgl DESC, b.nama ASC
             ;");
         }

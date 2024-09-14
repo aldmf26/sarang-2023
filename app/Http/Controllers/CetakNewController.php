@@ -91,9 +91,11 @@ class CetakNewController extends Controller
 
         $id_anak = $r->id_anak ?? 'All';
 
-        $tgl1 = $r->tgl1 ??  date('Y-m-d', strtotime('-7 days'));;
+        $tgl1 = $r->tgl1 ??  date('Y-m-27', strtotime('-1 month'));;
         $tgl2 = $r->tgl2 ?? date('Y-m-d');
         $anak = DB::table('tb_anak')->where('id_anak', $id_anak)->first();
+
+        $hal = empty($r->hal) ? 'cetak' : $r->hal;
 
         $data = [
             'title' => 'Cetak',
@@ -103,7 +105,8 @@ class CetakNewController extends Controller
             'id_anak' => $id_anak,
             'bulan' => $this->getData('bulan'),
             'tb_anak' => $this->getData('tb_anak'),
-            'anak' => $id_anak == 'All' ? 'Semua Anak' : $anak->nama
+            'anak' => $id_anak == 'All' ? 'Semua Anak' : $anak->nama,
+            'hal' => $hal
         ];
         return view('home.cetak_new.index', $data);
     }
@@ -129,9 +132,10 @@ class CetakNewController extends Controller
 
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
+        $hal = $r->hal;
 
 
-        $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas);
+        $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal);
 
 
         $data = [
@@ -677,7 +681,7 @@ class CetakNewController extends Controller
         $tgl2 = $r->tgl2;
         $id_pengawas = auth()->user()->id;
 
-        $cetak = CetakModel::getCetakQuery('All', $tgl1, $tgl2, $id_pengawas);
+        $cetak = CetakModel::getCetakQuery('All', $tgl1, $tgl2, $id_pengawas, $r->hal);
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $sheet = $spreadsheet->getActiveSheet();

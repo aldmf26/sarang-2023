@@ -90,4 +90,35 @@ class OpnameNewModel extends Model
 
         return $result;
     }
+    public static function cetak_proses()
+    {
+        $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(c.ttl_rp) as cost_kerja , e.name
+            FROM cetak_new as a 
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            left join cabut as c on c.no_box = a.no_box
+            left join users as e on e.id = a.id_pengawas
+            where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
+            group by a.no_box
+            order by e.name ASC;
+        ");
+
+        return $result;
+    }
+    public static function cetak_selesai()
+    {
+        $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(COALESCE(c.ttl_rp,0) + COALESCE(a.ttl_rp,0)) as cost_kerja , e.name
+            FROM cetak_new as a 
+            left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
+            left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            left join cabut as c on c.no_box = a.no_box
+            left join users as e on e.id = a.id_pengawas
+            where a.selesai = 'Y' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
+            and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'sortir')
+            group by a.no_box
+            order by e.name ASC;
+        ");
+
+        return $result;
+    }
 }
