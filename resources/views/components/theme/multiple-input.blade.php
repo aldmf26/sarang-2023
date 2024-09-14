@@ -1,3 +1,6 @@
+@props([
+    'label' => 'Tambah Row',
+])
 <div>
     <div x-data="{
         rows: []
@@ -14,6 +17,6 @@
                 </div>
             </div>
         </template>
-        <button type="button" @click="rows.push({ value: '' })" class="btn btn-primary btn-sm">Tambah Row</button>
+        <button type="button" @click="rows.push({ value: '' })" class="btn btn-primary btn-sm">{{$label}}</button>
     </div>
 </div>
