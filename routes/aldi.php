@@ -399,6 +399,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/eo', 'index')->name('eo');
+            Route::post('/create_gr', 'create_gr')->name('create_gr');
+            Route::get('/delete_gr/{id}', 'delete_gr')->name('delete_gr');
+            Route::post('/update_gr/{id}', 'update_gr')->name('update_gr');
             Route::get('/sortir', 'index')->name('sortir');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/deleteCabut', 'deleteCabut')->name('deleteCabut');

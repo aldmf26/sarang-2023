@@ -64,7 +64,7 @@
                             $ttlPcs = 0;
                             $ttlGr = 0;
                             foreach ($gudang as $d) {
-                                if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman >= 0) {
+                                if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0) {
                                     $ttlPcs += $d->pcs - $d->pcs_pengiriman;
                                     $ttlGr += $d->gr - $d->gr_pengiriman;
                                 }

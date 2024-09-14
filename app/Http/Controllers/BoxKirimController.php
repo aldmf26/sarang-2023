@@ -217,7 +217,7 @@ class BoxKirimController extends Controller
 
         $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->get();
         $data = [
-            'title' => 'Po Pengiriman',
+            'title' => 'Wip siap kirim',
             'po' => $po,
             'no_nota' => $no_nota,
             'pengiriman' => $pengiriman

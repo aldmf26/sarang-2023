@@ -13,7 +13,7 @@ class KelasController extends Controller
         $jenis = empty($r->jenis) ? 1 : 2;
         $datas = DB::select("SELECT * FROM tb_kelas 
                     WHERE nonaktif = 'T' AND jenis = $jenis AND id_kategori != 3 
-                    ORDER BY id_kategori ASC");
+                    ORDER BY id_kelas DESC");
         $data = [
             'title' => 'Data Paket Cabut',
             'jenis' => $jenis,
@@ -22,7 +22,84 @@ class KelasController extends Controller
             'kategori' => DB::table('paket_cabut')->get(),
             'datas' => $datas
         ];
-        return view("data_master.kelas.index", $data);
+        if($jenis == '2') {
+            return view("data_master.kelas.gr", $data);
+        } else {
+            return view("data_master.kelas.index", $data);
+        }
+    }
+
+    public function create_gr(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            for ($i = 0; $i < count($r->gr); $i++) {
+                DB::table('tb_kelas')->insert([
+                    'kelas' => $r->kelas[$i],
+                    'tipe' => $r->paket[$i],
+                    'lokasi' => $r->lokasi[$i],
+                    'id_tipe_brg' => 33,
+                    'id_paket' => 2,
+                    'id_kategori' => 2,
+                    'jenis' => 2,
+                    'pcs' => 0,
+                    'gr' => $r->gr[$i] ?? 0,
+                    'rupiah' => $r->rp[$i],
+                    'rp_bonus' => $r->rp_bonus[$i],
+                    'batas_susut' => $r->batas_susut[$i],
+                    'denda_susut_persen' => $r->denda_susut[$i],
+                    'bonus_susut' => $r->bonus_susut[$i],
+                    'batas_eot' => $r->batas_eot[$i],
+                    'eot' => $r->eot[$i],
+                    'denda_hcr' => $r->denda_hcr[$i],
+                ]);
+            }
+            DB::commit();
+            return redirect()->back()->with('sukses', 'berhasil tambah kelas');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        
+    }
+
+    public function update_gr($id, Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table('tb_kelas')->where('id_kelas', $id)->update([
+                'kelas' => $r->kelas,
+                'tipe' => $r->paket,
+                'lokasi' => $r->lokasi,
+                'id_tipe_brg' => 33,
+                'id_paket' => 2,
+                'id_kategori' => 2,
+                'jenis' => 2,
+                'pcs' => 0,
+                'gr' => $r->gr ?? 0,
+                'rupiah' => $r->rp,
+                'rp_bonus' => $r->rp_bonus,
+                'batas_susut' => $r->batas_susut,
+                'denda_susut_persen' => $r->denda_susut,
+                'bonus_susut' => $r->bonus_susut,
+                'batas_eot' => $r->batas_eot,
+                'eot' => $r->eot,
+                'denda_hcr' => $r->denda_hcr,
+            ]);
+            DB::commit();
+            return redirect()->back()->with('sukses', 'berhasil tambah kelas');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        
+    }
+    public function delete_gr($id)
+    {
+        DB::table('tb_kelas')->where('id_kelas', $id)->delete();
+        return redirect()->back()->with('sukses', 'berhasil hapus kelas');
     }
 
     public function cabutCreate(Request $r)
