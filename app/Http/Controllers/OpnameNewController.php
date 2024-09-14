@@ -33,9 +33,9 @@ class OpnameNewController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box_stock' => $model::cetak_stok(),
-            'box_proses' => $model::cetak_proses(),
-            'box_selesai' => $model::cetak_selesai(),
+            'box_stock' => $model::sortir_stock(),
+            'box_proses' => $model::sortir_proses(),
+            'box_selesai' => $model::sortir_selesai(),
 
         ];
         return view('home.opnamenew.sortir', $data);
