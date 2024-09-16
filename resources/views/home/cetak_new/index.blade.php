@@ -15,7 +15,7 @@
                     addClass="float-end ms-2" teks="Gaji Global" />
                 {{-- @if (!auth()->user()->posisi_id == '1') --}}
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
-                    addClass="float-end tambah_kerja ms-2" teks="Kerja" />
+                    addClass="float-end tambah_kerja ms-2" teks="Kerja CU" />
                 {{-- @endif --}}
 
                 <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end ms-2"
@@ -26,7 +26,7 @@
 
                 <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
                     addClass="float-end" teks="View" />
-                @include('home.cetak_new.btn_import')
+                {{-- @include('home.cetak_new.btn_import') --}}
 
 
             </div>

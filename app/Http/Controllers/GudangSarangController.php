@@ -551,22 +551,21 @@ class GudangSarangController extends Controller
     public function print_formulir_wip(Request $r)
     {
         $formulir = DB::table('formulir_sarang as a')
-            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'sortir'], ['a.kategori', 'grade']])
-            ->join('bk as b', 'a.no_box', '=', 'b.no_box')
-            ->groupBy('a.no_box', 'a.kategori')
-            ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
+            ->join('grading_partai as b', 'a.no_box', '=', 'b.box_pengiriman')
+            ->where([['a.no_invoice', $r->no_invoice], ['a.kategori', 'wip']])
+            ->selectRaw('b.grade,b.tipe,a.tanggal,a.no_box, a.pcs_awal, a.gr_awal, a.id_pemberi,a.id_penerima')
             ->get();
 
-        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
-        FROM formulir_sarang as a 
-        left join users as b on b.id = a.id_pemberi
-        left join users as c on c.id = a.id_penerima
-        WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
+        // $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
+        // FROM formulir_sarang as a 
+        // left join users as b on b.id = a.id_pemberi
+        // left join users as c on c.id = a.id_penerima
+        // WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
 
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
-            'ket_formulir' => $ket_formulir
+            'no_invoice' => $r->no_invoice,
         ];
         return view('home.gudang_sarang.print_formulir_wip', $data);
     }

@@ -10,17 +10,18 @@
         </a>
 
         <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
-            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Sortir <span
-                class="badge bg-danger" id="anakBelum"></span>
+            class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Sortir tanpa po
+            {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
         </a>
 
         {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja --}}
-        <x-theme.button modal="Y" idModal="import" href="#" icon="fa-plus" addClass="float-end me-2"
-            teks="box" />
 
+        {{-- <x-theme.button modal="Y" idModal="import" href="#" icon="fa-plus" addClass="float-end me-2"
+            teks="box" />
         <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end me-2"
-            teks="kry baru" />
+            teks="kry baru" /> --}}
+
         {{-- <x-theme.button href="#" modal="Y" idModal="ambil_box" icon="fa-plus" addClass="float-end"
                 teks="Ambil Box Bk" /> --}}
         <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
