@@ -233,8 +233,8 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-                        // $nobox = $this->getNoBoxTambah();
-                        $nobox = $row[9];
+                        $nobox = $this->getNoBoxTambah();
+                        // $nobox = $row[9];
 
                         DB::table('bk')->insert([
                             'no_lot' => '0',
