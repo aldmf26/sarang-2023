@@ -1,5 +1,8 @@
 <x-theme.app title="{{ $title }} " table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
+        <div class="row">
+            @include('home.cetak_new.nav')
+        </div>
         <div class="d-flex justify-content-between">
             <div>
                 <h6 class="">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
@@ -102,6 +105,7 @@
             <input type="hidden" class="tgl1" value="{{ $tgl1 }}">
             <input type="hidden" class="tgl2" value="{{ $tgl2 }}">
             <input type="hidden" class="id_anak" value="{{ $id_anak }}">
+            <input type="hidden" class="hal" value="{{ $hal }}">
 
 
             <div id="load-cetak"></div>
@@ -159,13 +163,15 @@
                         var tgl1 = $('.tgl1').val();
                         var tgl2 = $('.tgl2').val();
                         var id_anak = $('.id_anak').val();
+                        var hal = $('.hal').val();
 
                         $.ajax({
                             type: "get",
                             data: {
                                 tgl1: tgl1,
                                 tgl2: tgl2,
-                                id_anak: id_anak
+                                id_anak: id_anak,
+                                hal: hal
                             },
                             url: "{{ route('cetaknew.get_cetak') }}",
                             success: function(r) {
