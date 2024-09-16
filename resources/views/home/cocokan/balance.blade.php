@@ -245,8 +245,7 @@
                             <td style="background-color: #F7F700">Cabut akhir</td>
                             <td class="text-end">0
                             </td>
-                            <td class="text-end">0
-                            </td>
+                            <td class="text-end">{{ number_format($bk_akhir->gr, 0) }}</td>
                             <td class="text-end">
                                 {{ number_format($bk_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $bk_akhir->gr + ($cost_op / $ttl_gr) * $bk_akhir->gr, 0) }}
                             </td>
@@ -255,8 +254,7 @@
                             <td style="background-color: #F7F700">Cetak Akhir</td>
                             <td class="text-end">
                                 0</td>
-                            <td class="text-end">0
-                            </td>
+                            <td class="text-end">{{ number_format($cetak_akhir->gr, 0) }}</td>
                             <td class="text-end">
                                 {{ number_format($cetak_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $cetak_akhir->gr + ($cost_op / $ttl_gr) * $cetak_akhir->gr, 0) }}
                             </td>
@@ -268,7 +266,7 @@
                                 0
                             </td>
                             <td class="text-end">
-                                0
+                                {{ number_format($sortir_akhir->gr, 0) }}
                             </td>
                             <td class="text-end">
                                 {{ number_format($sortir_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $sortir_akhir->gr + ($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}

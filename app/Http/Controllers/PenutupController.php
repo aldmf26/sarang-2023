@@ -19,7 +19,7 @@ class PenutupController extends Controller
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
                 JOIN users as b on a.penerima = b.id
-                WHERE  b.name not in ('yuli', 'yuli sby', 'siti fatimah')
+                WHERE  b.name not in ('yuli',  'siti fatimah')
                 group by b.id");
 
         $datas =  [
@@ -50,7 +50,7 @@ class PenutupController extends Controller
             $ttlRp = 0;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl as $data) {
-               
+
                 $ttl =
                     $data->ttl_rp +
                     $data->eo_ttl_rp +

@@ -222,6 +222,8 @@ class CocokanController extends Controller
 
 
 
+
+
         $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll, max(bulan_dibayar) as bulan FROM `tb_gaji_penutup`");
         $bulan = $cost_dll->bulan;
         $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
@@ -230,11 +232,14 @@ class CocokanController extends Controller
             where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
         $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
 
+        $ttl_semua = $ttl_cost_kerja + $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
+
+
         $datas = [
             1 => $ttl_cost_kerja,
             'ttl_gr' => $gr_akhir_all,
             'dll' => $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda,
-            'cost_op' => $ttl_cost_op - $ttl_cost_kerja - ($cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda)
+            'cost_op' => $ttl_cost_op - $ttl_semua
         ];
         if (array_key_exists($index, $datas)) {
             return $datas[$index];
