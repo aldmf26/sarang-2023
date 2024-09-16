@@ -200,7 +200,8 @@ class BkController extends Controller
                         continue;
                     }
 
-
+                    $partai = $row[0];
+                    $partai = $row[0];
                     $tgl = $row[6];
 
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
@@ -232,8 +233,8 @@ class BkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-                        $nobox = $this->getNoBoxTambah();
-                        // $nobox = $row[8];
+                        // $nobox = $this->getNoBoxTambah();
+                        $nobox = $row[9];
 
                         DB::table('bk')->insert([
                             'no_lot' => '0',
@@ -245,7 +246,7 @@ class BkController extends Controller
                             'tgl' => date('Y-m-d'),
                             'pengawas' => 'sinta',
                             'penerima' => $row[4],
-                            'penerima' => $row[5],
+                            'pgws_grade' => $row[5],
                             'pcs_awal' => $row[6],
                             'gr_awal' => $row[7],
                             'kategori' => 'cabut',
