@@ -125,7 +125,7 @@
                                     @php
                                         $idUser = session()->get('id_user');
                                         $waktu = session()->get('waktu');
-                                        $cek = $waktu == date('Y-m-d') && $idUser == auth()->user()->id;
+                                        $cek = date('Y-m-d') == $b->tgl_input;
                                     @endphp
                                     @if ($cek || Auth::user()->posisi_id == 1)
                                         <span style="cursor: pointer" class="badge bg-primary selesai"><i
