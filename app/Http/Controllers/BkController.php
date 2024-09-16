@@ -155,7 +155,8 @@ class BkController extends Controller
                         'gr_awal' => $gr_awal,
                         'tgl' => $r->tgl_terima[$x],
                         'pgws_grade' => $r->pgws_grade[$x],
-                        'kategori' => $r->kategori
+                        'kategori' => $r->kategori,
+                        'tgl_input' => date('Y-m-d'),
                     ];
                     // if ($cekBox) {
                     //     return redirect("home/bk?kategori=$r->kategori")->with('error', "No box : $nobox SUDAH ADA DI BK CABUT");

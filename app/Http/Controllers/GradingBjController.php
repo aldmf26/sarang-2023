@@ -255,7 +255,6 @@ class GradingBjController extends Controller
 
     public function create_partai(Request $r)
     {
-
         try {
             DB::beginTransaction();
 
@@ -279,6 +278,9 @@ class GradingBjController extends Controller
 
 
             for ($i = 0; $i < count($r->grade); $i++) {
+                if(!$r->box_sp[$i]){
+                    continue;
+                }
                 $data[] = [
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
@@ -299,10 +301,22 @@ class GradingBjController extends Controller
             $ttlPcsGrading = array_sum(array_column($data, 'pcs'));
             $ttlGrGrading = array_sum(array_column($data, 'gr'));
 
+            $selisihPcs =  $ttlPcsSortir - $ttlPcsGrading;
+            $selisihGr =  $ttlGrSortir - $ttlGrGrading;
+
+            
             if ($ttlPcsGrading > $ttlPcsSortir || $ttlGrGrading > $ttlGrSortir) {
                 return redirect()->back()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
-
+            if($selisihGr > 0) {
+                DB::table('grading_selisih')->insert([
+                    'no_box' => $no_invoice,
+                    'pcs' => $selisihPcs,
+                    'gr' => $selisihGr,
+                    'admin' => auth()->user()->name,
+                    'tgl' => $tgl,
+                ]);
+            }
             DB::table('grading_partai')->insert($data);
             DB::table('grading')->insert($dataGrading);
 
