@@ -55,7 +55,7 @@ class PackingListController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
-        
+
         $packing = DB::select("SELECT 
         a.no_nota,
         a.no_invoice_manual as no_invoice,
@@ -104,9 +104,12 @@ class PackingListController extends Controller
         GROUP BY a.grade ORDER BY a.grade ASC");
 
         $pengirimanBox = DB::select("SELECT 
-        a.grade,
+        a.grade as grade2,
         sum(b.pcs) as pcs,
         sum(b.gr) as gr,
+        b.grade,
+        sum(a.pcs) as pcs2,
+        sum(a.gr) as gr2,
         a.no_box,
         a.cek_qc as cek_akhir,
         a.admin,
@@ -141,9 +144,30 @@ class PackingListController extends Controller
     public function delete($no_nota)
     {
         $datas = ['pengiriman', 'pengiriman_packing_list'];
-        foreach($datas as $d){
+        foreach ($datas as $d) {
             DB::table($d)->where('no_nota', $no_nota)->delete();
         }
         return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil dihapus');
+    }
+
+    public function check_grade()
+    {
+        $cek = DB::select("SELECT 
+                b.nm_partai,
+                b.box_pengiriman as box_grading,
+                b.grade,
+                b.pcs,
+                b.gr,
+                a.grade as grade2,
+                a.pcs as pcs2,
+                a.gr as gr2 
+                FROM pengiriman as a 
+                join grading_partai as b on a.no_box = b.box_pengiriman 
+                WHERE a.selesai = 'Y';");
+        $data = [
+            'title' => 'Check Grade Berubah',
+            'cek' => $cek,
+        ];
+        return view('home.packinglist.check_grade', $data);
     }
 }

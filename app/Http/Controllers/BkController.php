@@ -21,28 +21,25 @@ class BkController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
 
-        if (empty($r->kategori)) {
-            $kategori = 'cabut';
-        } else {
-            $kategori = $r->kategori;
-        }
+        $kategori = $r->kategori ?? 'cabut';
+
+
         $id_user = auth()->user()->id;
-        if (in_array(auth()->user()->posisi_id, [1, 12])) {
-            $bk = DB::select("SELECT a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
-            left join users as d on d.id = a.penerima 
-            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
-        } else {
-            $bk = DB::select("SELECT a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
-            left join users as d on d.id = a.penerima 
-            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
+        $where = "a.tgl between ? and ? and a.kategori LIKE ? and a.selesai = 'T' ";
+        $params = [$tgl1, $tgl2, "%$kategori%"];
+        if (!in_array(auth()->user()->posisi_id, [1, 12])) {
+            $where .= " and a.penerima = ?";
+            $params[] = $id_user;
         }
+        $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+        left join users as d on d.id = a.penerima 
+        WHERE $where ORDER BY a.id_bk DESC", $params);
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
             'bk' => $bk,
-
         ];
         return view('home.bk.index', $data);
     }
@@ -155,7 +152,8 @@ class BkController extends Controller
                         'gr_awal' => $gr_awal,
                         'tgl' => $r->tgl_terima[$x],
                         'pgws_grade' => $r->pgws_grade[$x],
-                        'kategori' => $r->kategori
+                        'kategori' => $r->kategori,
+                        'tgl_input' => date('Y-m-d'),
                     ];
                     // if ($cekBox) {
                     //     return redirect("home/bk?kategori=$r->kategori")->with('error', "No box : $nobox SUDAH ADA DI BK CABUT");
@@ -200,7 +198,8 @@ class BkController extends Controller
                         continue;
                     }
 
-
+                    $partai = $row[0];
+                    $partai = $row[0];
                     $tgl = $row[6];
 
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
@@ -233,7 +232,7 @@ class BkController extends Controller
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
                         $nobox = $this->getNoBoxTambah();
-                        // $nobox = $row[8];
+                        // $nobox = $row[9];
 
                         DB::table('bk')->insert([
                             'no_lot' => '0',
@@ -245,7 +244,7 @@ class BkController extends Controller
                             'tgl' => date('Y-m-d'),
                             'pengawas' => 'sinta',
                             'penerima' => $row[4],
-                            'penerima' => $row[5],
+                            'pgws_grade' => $row[5],
                             'pcs_awal' => $row[6],
                             'gr_awal' => $row[7],
                             'kategori' => 'cabut',

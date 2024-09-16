@@ -77,12 +77,12 @@
                             <thead>
                                 <tr>
                                     <th class="dhead text-center" colspan="{{ $posisi == 1 ? '6' : '5' }}">
-                                        ({{ count($gradingStok) }}) Grading Sisa
+                                        ({{ count($gradingSisa) }}) Grading Sisa
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="dhead text-center">Partai</th>
-                                    <th class="dhead">Tipe - ket</th>
+                                    <th class="dhead text-center">Invoice</th>
+                                    <th class="dhead">Tipe</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                 </tr>
@@ -90,18 +90,18 @@
                                 <tr>
                                     <th class="dheadstock text-center" colspan="2">Total</th>
                                     <th class="dheadstock text-end">
-                                        {{ number_format(sumCol($gradingStok, 'pcs_awal'), 0) }}</th>
+                                        {{ number_format(sumCol($gradingSisa, 'pcs'), 0) }}</th>
                                     <th class="dheadstock text-end">
-                                        {{ number_format(sumCol($gradingStok, 'gr_awal'), 0) }}</th>
+                                        {{ number_format(sumCol($gradingSisa, 'gr'), 0) }}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($gradingStok as $d)
+                                @foreach ($gradingSisa as $d)
                                     <tr>
-                                        <td>{{ $d->nm_partai }}</td>
-                                        <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                        <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
-                                        <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
+                                        <td>{{ $d->no_invoice }}</td>
+                                        <td>{{ $d->tipe }}</td>
+                                        <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
+                                        <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -558,6 +558,7 @@ class Cabut extends Model
             FROM cetak_new as c 
             WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
         ) as cetak ON a.id_anak = cetak.id_anak
+        left join uang_makan as umk on umk.id_uang_makan = a.id_uang_makan
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
     }
     public static function getPengawasRekap($bulan, $tahun)
