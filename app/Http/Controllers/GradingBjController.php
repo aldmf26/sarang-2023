@@ -975,6 +975,7 @@ class GradingBjController extends Controller
             'posisi' => $posisi,
             'gradingStok' => Grading::dapatkanStokBox('formulir'),
             'gradingSelesai' => Grading::selesai(),
+            'gradingSisa' => Grading::sisa(),
             'users' => DB::table('users')->where('posisi_id', 16)->get(),
         ];
         return view('home.gradingbj.gudang', $data);

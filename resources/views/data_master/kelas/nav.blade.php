@@ -1,31 +1,24 @@
 @php
-    $rot = request()
-        ->route()
-        ->getName();
+    $rot = request()->route()->getName();
+    $menuItems = [
+        // ['route' => 'kelas.index', 'label' => 'Pcs Cbt', 'params' => []],
+        ['route' => 'kelas.index', 'label' => 'Gr Cbt', 'params' => []],
+        // ['route' => 'kelas.spesial', 'label' => 'Spesial', 'params' => []],
+        ['route' => 'kelas.eo', 'label' => 'Eo', 'params' => []],
+        ['route' => 'kelas.cetak', 'label' => 'Cetak', 'params' => []],
+        ['route' => 'kelas.sortir', 'label' => 'Sortir', 'params' => []],
+    ];
 @endphp
+
 <ul class="nav nav-pills float-start">
-    <li class="nav-item">
-        <a class="nav-link  {{ $rot == 'kelas.index' && request()->get('jenis') == '' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('kelas.index') }}">Pcs Cbt</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ $rot == 'kelas.index' && request()->get('jenis') == 'gr' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('kelas.index', ['jenis' => 'gr']) }}">Gr Cbt</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ $rot == 'kelas.spesial' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('kelas.spesial') }}">Spesial</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ $rot == 'kelas.eo' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('kelas.eo') }}">Eo</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ $rot == 'kelas.cetak' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('kelas.cetak') }}">Cetak</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ $rot == 'kelas.sortir' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('kelas.sortir') }}">Sortir</a>
-    </li>
+    @foreach($menuItems as $item)
+        @php
+            $isActive = $rot == $item['route'] && request()->get('jenis') == ($item['params']['jenis'] ?? '');
+        @endphp
+        <li class="nav-item">
+            <a class="nav-link  {{ $isActive ? 'active' : '' }}" href="{{ route($item['route'], $item['params']) }}">
+                {{ $item['label'] }}
+            </a>
+        </li>
+    @endforeach
 </ul>

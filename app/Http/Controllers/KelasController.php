@@ -10,7 +10,7 @@ class KelasController extends Controller
 {
     public function index(Request $r)
     {
-        $jenis = empty($r->jenis) ? 1 : 2;
+        $jenis = 2;
         $datas = DB::select("SELECT * FROM tb_kelas 
                     WHERE nonaktif = 'T' AND jenis = $jenis AND id_kategori != 3 
                     ORDER BY id_kelas DESC");

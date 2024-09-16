@@ -21,28 +21,25 @@ class BkController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
 
-        if (empty($r->kategori)) {
-            $kategori = 'cabut';
-        } else {
-            $kategori = $r->kategori;
-        }
+        $kategori = $r->kategori ?? 'cabut';
+
+
         $id_user = auth()->user()->id;
-        if (in_array(auth()->user()->posisi_id, [1, 12])) {
-            $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
-            left join users as d on d.id = a.penerima 
-            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T'  ORDER BY a.id_bk DESC");
-        } else {
-            $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
-            left join users as d on d.id = a.penerima 
-            WHERE a.tgl between '$tgl1' and '$tgl2' and a.kategori LIKE '%$kategori%' AND a.selesai = 'T' AND a.penerima = $id_user ORDER BY a.id_bk DESC");
+        $where = "a.tgl between ? and ? and a.kategori LIKE ? and a.selesai = 'T' ";
+        $params = [$tgl1, $tgl2, "%$kategori%"];
+        if (!in_array(auth()->user()->posisi_id, [1, 12])) {
+            $where .= " and a.penerima = ?";
+            $params[] = $id_user;
         }
+        $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+        left join users as d on d.id = a.penerima 
+        WHERE $where ORDER BY a.id_bk DESC", $params);
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'kategori' => $kategori,
             'bk' => $bk,
-
         ];
         return view('home.bk.index', $data);
     }
