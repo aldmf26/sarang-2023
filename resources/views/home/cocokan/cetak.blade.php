@@ -53,10 +53,12 @@
                         <td class="text-end">
                             {{ number_format($ctk_opname->pcs + $akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                                {{ number_format($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr, 0) }}
+                            </a>
                         </td>
-                        <td class="text-end">
+                        <td class="text-end fw-bold">
                             {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp, 0) }}
                         </td>
                         <td class="text-end">0</td>
@@ -67,7 +69,10 @@
                         <td style="background-color: #F7F700">Akhir Cetak</td>
                         <td class="text-end">
                             {{ number_format($cetak_akhir->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_akhir->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                                {{ number_format($cetak_akhir->gr, 0) }}
+                            </a>
                         </td>
                         <td class="text-end">
                             {{ number_format($cetak_akhir->ttl_rp, 0) }}</td>
@@ -79,14 +84,22 @@
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
                         <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_proses->gr, 0) }}</td>
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                                {{ number_format($cetak_proses->gr, 0) }}
+                            </a>
+                        </td>
                         <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_proses->cost_kerja, 0) }}</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
                         <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                                {{ number_format($cetak_sisa->gr, 0) }}
+                            </a>
+                        </td>
                         <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
                         <td class="text-end">0</td>
                     </tr>

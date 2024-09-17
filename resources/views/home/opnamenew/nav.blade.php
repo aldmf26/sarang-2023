@@ -25,3 +25,7 @@
 <div class="col-lg-12">
     <hr style="border: 1px solid black;">
 </div>
+<div class="col-lg-12">
+    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary float-end"><i
+            class="fas fa-file-excel"></i>Export</a>
+</div>

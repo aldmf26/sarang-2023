@@ -189,21 +189,25 @@ class OpnameNewModel extends Model
     public static function sortir_proses()
     {
         $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
-sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0)) as cost_op
+sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0)) as cost_op,
+sum(COALESCE(j.rp_gr * d.gr_akhir,0) + COALESCE(k.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll
             FROM sortir as a 
             LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
             
             left join cabut as d on d.no_box = a.no_box
             left join oprasional as h on h.bulan = d.bulan_dibayar
+            left join cost_dll_cu_denda as j on j.bulan_dibayar = d.bulan_dibayar
             
 			left join eo as e on e.no_box = a.no_box
+            left join cost_dll_cu_denda as k on k.bulan_dibayar = e.bulan_dibayar
             left join oprasional as i on i.bulan = e.bulan_dibayar
 left join (
-	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum(a.gr_akhir * i.rp_gr) as cost_op_cetak
+	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum(a.gr_akhir * i.rp_gr) as cost_op_cetak, sum(a.gr_akhir * j.rp_gr) as cost_dll_cetak
             FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
     		left join oprasional as i on i.bulan = a.bulan_dibayar
+            left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
             where b.kategori = 'CTK'
             group by a.no_box
 ) as f on f.no_box = a.no_box
@@ -220,21 +224,26 @@ left join users as g on g.id = a.id_pengawas
     public static function sortir_selesai()
     {
         $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
-sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0) + COALESCE(j.rp_gr * a.gr_akhir,0)) as cost_op
+sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0) + COALESCE(j.rp_gr * a.gr_akhir,0)) as cost_op,
+sum(COALESCE(k.rp_gr * d.gr_akhir,0) + COALESCE(l.rp_gr * e.gr_eo_akhir,0) + COALESCE(m.rp_gr * a.gr_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll
             FROM sortir as a 
+            left join cost_dll_cu_denda as m on m.bulan_dibayar = a.bulan
             left join oprasional as j on j.bulan = a.bulan
             LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
             
             left join cabut as d on d.no_box = a.no_box
             left join oprasional as h on h.bulan = d.bulan_dibayar
+            left join cost_dll_cu_denda as k on k.bulan_dibayar = d.bulan_dibayar
 			left join eo as e on e.no_box = a.no_box
             left join oprasional as i on i.bulan = e.bulan_dibayar
+            left join cost_dll_cu_denda as l on l.bulan_dibayar = e.bulan_dibayar
 left join (
-	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp ,sum(a.gr_akhir * i.rp_gr) as cost_op_cetak
+	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp ,sum(a.gr_akhir * i.rp_gr) as cost_op_cetak, sum(a.gr_akhir * j.rp_gr) as cost_dll_cetak
             FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
     		left join oprasional as i on i.bulan = a.bulan_dibayar
+            left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
             where b.kategori = 'CTK'
             group by a.no_box
 ) as f on f.no_box = a.no_box

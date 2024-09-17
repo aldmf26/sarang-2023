@@ -27,6 +27,7 @@ class CocokanController extends Controller
         $a16suntik = $this->getSuntikan(16);
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
 
+
         $bk_akhir = new stdClass();
         $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
         $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
@@ -112,6 +113,7 @@ class CocokanController extends Controller
         $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
 
         $s3 = $model::sortir_akhir();
+
         $s5suntik = $this->getSuntikan(35);
 
         $sortir_akhir = new stdClass();

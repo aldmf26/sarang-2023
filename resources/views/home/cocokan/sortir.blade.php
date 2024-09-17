@@ -54,11 +54,15 @@
                         <td class="text-end">
                             {{ number_format($akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                                {{ number_format($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr, 0) }}
+                            </a>
                         </td>
                         <td class="text-end">
+
                             {{ number_format($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp, 0) }}
+
                         </td>
                         <td class="text-end">
                             0
@@ -69,8 +73,10 @@
                         <td class="text-end">
                             {{ number_format($sortir_akhir->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($sortir_akhir->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                                {{ number_format($sortir_akhir->gr, 0) }}
+                            </a>
                         </td>
                         <td class="text-end">
                             {{ number_format($sortir_akhir->ttl_rp, 0) }}
@@ -86,8 +92,10 @@
                         <td class="text-end">
                             {{ number_format($sedang_proses->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($sedang_proses->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                                {{ number_format($sedang_proses->gr, 0) }}
+                            </a>
                         </td>
                         <td class="text-end">
                             {{ number_format($sedang_proses->ttl_rp, 0) }}
@@ -101,8 +109,10 @@
                         <td class="text-end">
                             {{ number_format($sortir_sisa->pcs, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format($sortir_sisa->gr, 0) }}
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                                {{ number_format($sortir_sisa->gr, 0) }}
+                            </a>
                         </td>
                         <td class="text-end">
                             {{ number_format($sortir_sisa->ttl_rp, 0) }}

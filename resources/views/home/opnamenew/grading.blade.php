@@ -36,9 +36,10 @@
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($b->gr * 359.03) }}</td>
+                                <td class="text-end">{{ number_format($b->gr * 2666.687696) }}</td>
+                                <td class="text-end">{{ number_format($b->gr * 359.03 + $b->gr * 2666.687696) }}
+                                </td>
                                 <td class="text-end">0</td>
                             </tr>
                         @endforeach
@@ -56,11 +57,13 @@
                             <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">0
                             </th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($box_stock, 'gr') * 359.03, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($box_stock, 'gr') * 2666.687696, 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                0
+                                {{ number_format(sumBk($box_stock, 'gr') * 2666.687696 + sumBk($box_stock, 'gr') * 359.03, 0) }}
                             </th>
                             <th class="dheadstock  text-end">
                                 0
@@ -101,8 +104,8 @@
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">0</td>
                                 <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($b->gr * 359.03, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->gr * 2666.687696, 0) }}</td>
                                 <td class="text-end">0
                                 </td>
                                 <td class="text-end">
@@ -124,8 +127,10 @@
                             <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">0
                             </th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($box_proses, 'gr') * 359.03, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($box_proses, 'gr') * 2666.687696, 0) }}
                             </th>
                             <th class="dheadstock  text-end">
                                 0
