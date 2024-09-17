@@ -36,10 +36,12 @@
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td>
-                                <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr, 0) }}
+                                <td class="text-end">{{ number_format($b->cost_dll, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->cost_op, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja + $b->cost_op, 0) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format(($b->ttl_rp + $b->cost_kerja + $b->cost_op + $b->cost_dll) / $b->gr, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -57,13 +59,14 @@
                             <th class="dheadstock  text-end">{{ number_format(sumBk($box_stock, 'ttl_rp'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($box_stock, 'cost_kerja'), 0) }}
                             </th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($box_stock, 'ttl_rp') + sumBk($box_stock, 'cost_kerja'), 0) }}
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_stock, 'cost_dll'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_stock, 'cost_op'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ number_format((sumBk($box_stock, 'ttl_rp') + sumBk($box_stock, 'cost_kerja')) / sumBk($box_stock, 'gr'), 0) }}
+                                {{ number_format(sumBk($box_stock, 'ttl_rp') + sumBk($box_stock, 'cost_kerja') + sumBk($box_stock, 'cost_op') + sumBk($box_stock, 'cost_dll'), 0) }}
+                            </th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format((sumBk($box_stock, 'ttl_rp') + sumBk($box_stock, 'cost_kerja') + sumBk($box_stock, 'cost_op') + sumBk($box_stock, 'cost_dll')) / sumBk($box_stock, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
@@ -101,10 +104,13 @@
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td>
-                                <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr, 0) }}
+                                <td class="text-end">{{ number_format($b->cost_dll, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->cost_op, 0) }}</td>
+                                <td class="text-end">
+                                    {{ number_format($b->ttl_rp + $b->cost_kerja + $b->cost_dll + $b->cost_op, 0) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format(($b->ttl_rp + $b->cost_kerja + $b->cost_dll + $b->cost_op) / $b->gr, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -122,13 +128,15 @@
                             <th class="dheadstock  text-end">{{ number_format(sumBk($box_proses, 'ttl_rp'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($box_proses, 'cost_kerja'), 0) }}
                             </th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($box_proses, 'ttl_rp') + sumBk($box_proses, 'cost_kerja'), 0) }}
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_proses, 'cost_dll'), 0) }}
+                            </th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_proses, 'cost_op'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ number_format((sumBk($box_proses, 'ttl_rp') + sumBk($box_proses, 'cost_kerja')) / sumBk($box_proses, 'gr'), 0) }}
+                                {{ number_format(sumBk($box_proses, 'ttl_rp') + sumBk($box_proses, 'cost_kerja') + sumBk($box_proses, 'cost_op') + sumBk($box_proses, 'cost_dll'), 0) }}
+                            </th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format((sumBk($box_proses, 'ttl_rp') + sumBk($box_proses, 'cost_kerja') + sumBk($box_proses, 'cost_op') + sumBk($box_proses, 'cost_dll')) / sumBk($box_proses, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
@@ -166,11 +174,13 @@
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->cost_dll, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->cost_op, 0) }}</td>
                                 <td class="text-end">
-                                    {{ empty($b->no_box) ? 0 : number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr, 0) }}
+                                    {{ number_format($b->ttl_rp + $b->cost_kerja + $b->cost_op + $b->cost_dll, 0) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ empty($b->no_box) ? 0 : number_format(($b->ttl_rp + $b->cost_kerja + $b->cost_op + $b->cost_dll) / $b->gr, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -189,13 +199,15 @@
                             </th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($box_selesai, 'cost_kerja'), 0) }}
                             </th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja'), 0) }}
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_selesai, 'cost_dll'), 0) }}
+                            </th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($box_selesai, 'cost_op'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ empty(sumBk($box_selesai, 'pcs')) ? 0 : number_format((sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja')) / sumBk($box_selesai, 'gr'), 0) }}
+                                {{ number_format(sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja') + sumBk($box_selesai, 'cost_op') + sumBk($box_selesai, 'cost_dll'), 0) }}
+                            </th>
+                            <th class="dheadstock  text-end">
+                                {{ empty(sumBk($box_selesai, 'pcs')) ? 0 : number_format((sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja') + sumBk($box_selesai, 'cost_op') + sumBk($box_selesai, 'cost_dll')) / sumBk($box_selesai, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
