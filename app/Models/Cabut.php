@@ -649,8 +649,7 @@ class Cabut extends Model
     {
         $id_user = auth()->user()->id;
         $whereQ = empty($cabut) ? "AND c.no_box = 9999" : '';
-        return DB::select("SELECT c.id_cabut,a.id_anak,a.nama,b.kelas FROM `tb_anak` as a
-        LEFT JOIN tb_kelas as b ON a.id_kelas = b.id_kelas
+        return DB::select("SELECT c.id_cabut,a.id_anak,a.nama,a.id_kelas as kelas FROM `tb_anak` as a
         LEFT JOIN cabut as c ON a.id_anak = c.id_anak AND DATE(c.tgl_terima) = CURDATE()
         WHERE a.id_pengawas = '$id_user' $whereQ AND a.id_anak $cabut IN (
             SELECT id_anak

@@ -449,7 +449,7 @@ class GradingBjController extends Controller
             'H' => 'pcs',
             'I' => 'gr',
             'J' => 'no pengiriman',
-
+ 
             'L' => 'grade',
             'M' => 'tipe',
 
@@ -469,8 +469,6 @@ class GradingBjController extends Controller
                 'bold' => true,
             ],
         ];
-
-
         $sheet->getStyle('A1:M1')->applyFromArray($styleBold);
         $styleBaris = [
             'borders' => [

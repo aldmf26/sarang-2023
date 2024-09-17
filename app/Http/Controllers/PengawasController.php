@@ -24,7 +24,6 @@ class PengawasController extends Controller
             'title' => 'Data Anak',
             'user' => DB::table('tb_anak as a')
                 ->leftJoin('users as b', 'a.id_pengawas', 'b.id')
-                ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
                 ->leftJoin('uang_makan as d', 'a.id_uang_makan', 'd.id_uang_makan')
                 ->where(function ($query) {
                     $query->where('b.posisi_id', '!=', 1)

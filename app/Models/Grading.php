@@ -269,7 +269,7 @@ class Grading extends Model
     public static function sisa()
     {
         return DB::select("SELECT a.no_box as no_invoice, b.nm_partai, a.pcs, a.gr,b.tipe FROM `grading_selisih` as a
-join grading_partai as b on a.no_box = b.no_invoice
-GROUP BY b.no_invoice");
+            join grading_partai as b on a.no_box = b.no_invoice
+            GROUP BY b.no_invoice");
     }
 }

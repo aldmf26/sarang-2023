@@ -24,7 +24,7 @@
                             <td>{{ $no + 1 }}</td>
                             <td>{{ ucwords($d->nama) }}</td>
                             <td>{{ tanggal($d->tgl_masuk) }}</td>
-                            <td>{{ ucwords($d->kelas) }}</td>
+                            <td>{{ ucwords($d->id_kelas) }}</td>
                             <td>{{ ucwords($d->name) }}</td>
                             <td class="text-end">Rp. {{ number_format($d->nominal, 0) }}</td>
                             <td>
