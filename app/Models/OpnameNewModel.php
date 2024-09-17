@@ -81,7 +81,7 @@ class OpnameNewModel extends Model
 
     public static function cetak_stok()
     {
-        $result = DB::select("SELECT e.name, a.no_box, c.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.hrga_satuan  * c.gr_awal) as ttl_rp, sum(COALESCE(d.ttl_rp,0) ) as cost_kerja, sum(COALESCE(a.gr_awal * g.rp_gr,0) + COALESCE(a.gr_awal * h.rp_gr,0)) as cost_op, sum(COALESCE(a.gr_awal * ((i.dll + i.cu - i.denda) / g.gr),0) + COALESCE(a.gr_awal * ((j.dll + j.cu - j.denda) / h.gr),0)) as cost_dll
+        $result = DB::select("SELECT e.name, a.no_box, c.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.hrga_satuan  * c.gr_awal) as ttl_rp, sum(COALESCE(d.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja, sum(COALESCE(a.gr_awal * g.rp_gr,0) + COALESCE(a.gr_awal * h.rp_gr,0)) as cost_op, sum(COALESCE(a.gr_awal * ((i.dll + i.cu - i.denda) / g.gr),0) + COALESCE(a.gr_awal * ((j.dll + j.cu - j.denda) / h.gr),0)) as cost_dll
         FROM formulir_sarang as a 
         left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
         left join cabut as d on d.no_box = a.no_box
@@ -101,7 +101,7 @@ class OpnameNewModel extends Model
     }
     public static function cetak_proses()
     {
-        $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(COALESCE(d.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja , e.name,sum(COALESCE(c.gr_akhir * h.rp_gr,0) + COALESCE(f.gr_eo_akhir * i.rp_gr,0)) as cost_op,
+        $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(COALESCE(c.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja , e.name,sum(COALESCE(c.gr_akhir * h.rp_gr,0) + COALESCE(f.gr_eo_akhir * i.rp_gr,0)) as cost_op,
 
         sum(COALESCE(c.gr_akhir * ((j.dll + j.cu - j.denda) / h.gr),0) + COALESCE(f.gr_eo_akhir * ((k.dll + k.cu - k.denda) / i.gr),0)) as cost_dll
             FROM cetak_new as a 
