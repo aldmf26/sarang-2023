@@ -506,7 +506,6 @@ class GradingBjController extends Controller
         DB::beginTransaction();
         try {
             foreach (array_slice($sheetData, 1) as $row) {
-
                 $tgl = $row[0];
                 $partai = $row[1];
                 $urutan = $row[2];
@@ -978,6 +977,7 @@ class GradingBjController extends Controller
         ];
         return view('home.gradingbj.gudang', $data);
     }
+
 
     public function save_formulir(Request $r)
     {
