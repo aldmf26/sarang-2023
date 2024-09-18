@@ -60,7 +60,7 @@ class PengawasController extends Controller
         }
         $data = [
             'detail' => $detail,
-            'pengawas' => User::with('posisi')->where('posisi_id', 13)->get(),
+            'pengawas' => User::with('posisi')->whereIn('posisi_id', [13, 14])->get(),
             'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
 
         ];
