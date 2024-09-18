@@ -117,12 +117,12 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('D' . $kolom, $d->no_box);
             $sheet1->setCellValue('E' . $kolom, $d->pcs);
             $sheet1->setCellValue('F' . $kolom, $d->gr);
-            $sheet1->setCellValue('G' . $kolom, round($d->ttl_rp, 0));
+            $sheet1->setCellValue('G' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('H' . $kolom, 0);
             $sheet1->setCellValue('I' . $kolom, 0);
             $sheet1->setCellValue('J' . $kolom, 0);
-            $sheet1->setCellValue('K' . $kolom, round($d->ttl_rp, 0));
-            $sheet1->setCellValue('L' . $kolom, round($d->ttl_rp / $d->gr, 0));
+            $sheet1->setCellValue('K' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('L' . $kolom, $d->ttl_rp / $d->gr);
             $kolom++;
         }
 
@@ -152,12 +152,12 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('Q' . $kolom, $d->no_box);
             $sheet1->setCellValue('R' . $kolom, $d->pcs);
             $sheet1->setCellValue('S' . $kolom, $d->gr);
-            $sheet1->setCellValue('T' . $kolom, round($d->ttl_rp, 0));
+            $sheet1->setCellValue('T' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('U' . $kolom, 0);
             $sheet1->setCellValue('V' . $kolom, 0);
             $sheet1->setCellValue('W' . $kolom, 0);
-            $sheet1->setCellValue('X' . $kolom, round($d->ttl_rp, 0));
-            $sheet1->setCellValue('Y' . $kolom, round($d->ttl_rp / $d->gr, 0));
+            $sheet1->setCellValue('X' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('Y' . $kolom, $d->ttl_rp / $d->gr);
             $kolom++;
         }
 
@@ -187,12 +187,12 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('AD' . $kolom, $d->no_box);
             $sheet1->setCellValue('AE' . $kolom, $d->pcs);
             $sheet1->setCellValue('AF' . $kolom, $d->gr);
-            $sheet1->setCellValue('AG' . $kolom, round($d->ttl_rp, 0));
-            $sheet1->setCellValue('AH' . $kolom, round($d->cost_kerja, 0));
-            $sheet1->setCellValue('AI' . $kolom, round($d->cost_dll, 0));
-            $sheet1->setCellValue('AJ' . $kolom, round($d->cost_op, 0));
-            $sheet1->setCellValue('AK' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet1->setCellValue('AL' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet1->setCellValue('AG' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AH' . $kolom, $d->cost_kerja);
+            $sheet1->setCellValue('AI' . $kolom, $d->cost_dll);
+            $sheet1->setCellValue('AJ' . $kolom, $d->cost_op);
+            $sheet1->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet1->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet1->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
@@ -246,12 +246,12 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('D' . $kolom, $d->no_box);
             $sheet2->setCellValue('E' . $kolom, $d->pcs);
             $sheet2->setCellValue('F' . $kolom, $d->gr);
-            $sheet2->setCellValue('G' . $kolom, round($d->ttl_rp, 0));
-            $sheet2->setCellValue('H' . $kolom, round($d->cost_kerja, 0));
-            $sheet2->setCellValue('I' . $kolom, round($d->cost_dll, 0));
-            $sheet2->setCellValue('J' . $kolom, round($d->cost_op, 0));
-            $sheet2->setCellValue('K' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet2->setCellValue('L' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet2->setCellValue('G' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
+            $sheet2->setCellValue('I' . $kolom, $d->cost_dll);
+            $sheet2->setCellValue('J' . $kolom, $d->cost_op);
+            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
@@ -278,12 +278,12 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('Q' . $kolom, $d->no_box);
             $sheet2->setCellValue('R' . $kolom, $d->pcs);
             $sheet2->setCellValue('S' . $kolom, $d->gr);
-            $sheet2->setCellValue('T' . $kolom, round($d->ttl_rp, 0));
-            $sheet2->setCellValue('U' . $kolom, round($d->cost_kerja, 0));
-            $sheet2->setCellValue('V' . $kolom, round($d->cost_dll, 0));
-            $sheet2->setCellValue('W' . $kolom, round($d->cost_op, 0));
-            $sheet2->setCellValue('X' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet2->setCellValue('Y' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet2->setCellValue('T' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('U' . $kolom, $d->cost_kerja);
+            $sheet2->setCellValue('V' . $kolom, $d->cost_dll);
+            $sheet2->setCellValue('W' . $kolom, $d->cost_op);
+            $sheet2->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet2->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
@@ -310,12 +310,12 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('AD' . $kolom, $d->no_box);
             $sheet2->setCellValue('AE' . $kolom, $d->pcs);
             $sheet2->setCellValue('AF' . $kolom, $d->gr);
-            $sheet2->setCellValue('AG' . $kolom, round($d->ttl_rp, 0));
-            $sheet2->setCellValue('AH' . $kolom, round($d->cost_kerja, 0));
-            $sheet2->setCellValue('AI' . $kolom, round($d->cost_dll, 0));
-            $sheet2->setCellValue('AJ' . $kolom, round($d->cost_op, 0));
-            $sheet2->setCellValue('AK' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet2->setCellValue('AL' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet2->setCellValue('AG' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('AH' . $kolom, $d->cost_kerja);
+            $sheet2->setCellValue('AI' . $kolom, $d->cost_dll);
+            $sheet2->setCellValue('AJ' . $kolom, $d->cost_op);
+            $sheet2->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet2->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
@@ -349,12 +349,12 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('D' . $kolom, $d->no_box);
             $sheet3->setCellValue('E' . $kolom, $d->pcs);
             $sheet3->setCellValue('F' . $kolom, $d->gr);
-            $sheet3->setCellValue('G' . $kolom, round($d->ttl_rp, 0));
-            $sheet3->setCellValue('H' . $kolom, round($d->cost_kerja, 0));
-            $sheet3->setCellValue('I' . $kolom, round($d->cost_dll, 0));
-            $sheet3->setCellValue('J' . $kolom, round($d->cost_op, 0));
-            $sheet3->setCellValue('K' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet3->setCellValue('L' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet3->setCellValue('G' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('H' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('I' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('J' . $kolom, $d->cost_op);
+            $sheet3->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet3->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
@@ -381,12 +381,12 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('Q' . $kolom, $d->no_box);
             $sheet3->setCellValue('R' . $kolom, $d->pcs);
             $sheet3->setCellValue('S' . $kolom, $d->gr);
-            $sheet3->setCellValue('T' . $kolom, round($d->ttl_rp, 0));
-            $sheet3->setCellValue('U' . $kolom, round($d->cost_kerja, 0));
-            $sheet3->setCellValue('V' . $kolom, round($d->cost_dll, 0));
-            $sheet3->setCellValue('W' . $kolom, round($d->cost_op, 0));
-            $sheet3->setCellValue('X' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet3->setCellValue('Y' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet3->setCellValue('T' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('V' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('W' . $kolom, $d->cost_op);
+            $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
@@ -413,12 +413,12 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('AD' . $kolom, $d->no_box);
             $sheet3->setCellValue('AE' . $kolom, $d->pcs);
             $sheet3->setCellValue('AF' . $kolom, $d->gr);
-            $sheet3->setCellValue('AG' . $kolom, round($d->ttl_rp, 0));
-            $sheet3->setCellValue('AH' . $kolom, round($d->cost_kerja, 0));
-            $sheet3->setCellValue('AI' . $kolom, round($d->cost_dll, 0));
-            $sheet3->setCellValue('AJ' . $kolom, round($d->cost_op, 0));
-            $sheet3->setCellValue('AK' . $kolom, round($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op, 0));
-            $sheet3->setCellValue('AL' . $kolom, round(($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr, 0));
+            $sheet3->setCellValue('AG' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('AH' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('AI' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('AJ' . $kolom, $d->cost_op);
+            $sheet3->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
+            $sheet3->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
