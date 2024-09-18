@@ -165,7 +165,7 @@ class OpnameNewController extends Controller
 
 
         $sheet1->getStyle("AB1:AL1")->applyFromArray($style_atas);
-        $sheet1->setCellValue('AA1', 'Cabut akhir');
+        $sheet1->setCellValue('AA1', 'Cabut selesai siap cetak');
         $sheet1->setCellValue('AB1', 'partai');
         $sheet1->setCellValue('AC1', 'pengawas');
         $sheet1->setCellValue('AD1', 'no box');
