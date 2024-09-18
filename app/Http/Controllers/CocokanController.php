@@ -219,6 +219,8 @@ class CocokanController extends Controller
 
         $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
         $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
+
+
         $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
         $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
 
@@ -235,6 +237,8 @@ class CocokanController extends Controller
         $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
 
         $ttl_semua = $ttl_cost_kerja + $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
+        $dll = $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
+        $cost_op = $ttl_cost_op - $ttl_semua;
 
 
         $datas = [
