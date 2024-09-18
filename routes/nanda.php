@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\CabutDetailController;
 use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
@@ -305,6 +306,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
+            Route::get('/export', 'export')->name('export');
+        });
+    Route::controller(CabutDetailController::class)
+        ->prefix('home/cabutdetail')
+        ->name('cabutdetail.')
+        ->group(function () {
             Route::get('/export', 'export')->name('export');
         });
 });

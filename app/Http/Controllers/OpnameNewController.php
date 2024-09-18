@@ -192,7 +192,7 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('AI' . $kolom, $d->cost_dll);
             $sheet1->setCellValue('AJ' . $kolom, $d->cost_op);
             $sheet1->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
-            $sheet1->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
+            $sheet1->setCellValue('AL' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet1->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
