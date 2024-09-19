@@ -19,14 +19,10 @@ class CocokanController extends Controller
         $bk_awal->pcs = $a11->pcs + $a11suntik->pcs;
         $bk_awal->gr = $a11->gr + $a11suntik->gr;
         $bk_awal->ttl_rp = $a11->ttl_rp + $a11suntik->ttl_rp;
-
-
-
         // akhir
         $a14suntik = $this->getSuntikan(14);
         $a16suntik = $this->getSuntikan(16);
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
-
 
         $bk_akhir = new stdClass();
         $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;

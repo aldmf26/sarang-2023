@@ -163,7 +163,7 @@
                                 <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja + $b->cost_op, 0) }}
                                 </td>
                                 <td class="text-end">
-                                    {{ number_format(($b->ttl_rp + $b->cost_kerja + +$b->cost_op) / $b->gr, 0) }}
+                                    {{ empty($b->no_box) ? 0 : number_format(($b->ttl_rp + $b->cost_kerja + +$b->cost_op) / $b->gr, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -190,7 +190,7 @@
                                 {{ number_format(sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja') + sumBk($box_selesai, 'cost_op') + sumBk($box_selesai, 'cost_dll'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ number_format((sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja') + sumBk($box_selesai, 'cost_op') + sumBk($box_selesai, 'cost_dll')) / sumBk($box_selesai, 'gr'), 0) }}
+                                {{ empty(sumBk($box_selesai, 'gr')) ? 0 : number_format((sumBk($box_selesai, 'ttl_rp') + sumBk($box_selesai, 'cost_kerja') + sumBk($box_selesai, 'cost_op') + sumBk($box_selesai, 'cost_dll')) / sumBk($box_selesai, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
