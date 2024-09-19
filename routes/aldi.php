@@ -10,6 +10,7 @@ use App\Http\Controllers\AksesController;
 use App\Http\Controllers\BoxKirimController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\EoController;
+use App\Http\Controllers\ExportCocokanController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
@@ -476,6 +477,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/print/{no_nota}', 'print')->name('print');
             Route::get('/delete/{no_nota}', 'delete')->name('delete');
+        });
+    Route::controller(ExportCocokanController::class)
+        ->prefix('home/cocokan/export')
+        ->name('cocokan.')
+        ->group(function () {
+            Route::get('/', 'index')->name('export');
         });
     Route::controller(SiapKirimController::class)
         ->prefix('home/siapkirim')

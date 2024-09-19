@@ -248,7 +248,7 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('F' . $kolom, $d->gr);
             $sheet2->setCellValue('G' . $kolom, $d->ttl_rp);
             $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
-            $sheet2->setCellValue('I' . $kolom, $d->cost_dll);
+            $sheet2->setCellValue('I' . $kolom, $d->cu);
             $sheet2->setCellValue('J' . $kolom, $d->cost_op);
             $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
             $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
@@ -280,7 +280,7 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('S' . $kolom, $d->gr);
             $sheet2->setCellValue('T' . $kolom, $d->ttl_rp);
             $sheet2->setCellValue('U' . $kolom, $d->cost_kerja);
-            $sheet2->setCellValue('V' . $kolom, $d->cost_dll);
+            $sheet2->setCellValue('V' . $kolom, $d->cu);
             $sheet2->setCellValue('W' . $kolom, $d->cost_op);
             $sheet2->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
             $sheet2->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
@@ -351,7 +351,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('F' . $kolom, $d->gr);
             $sheet3->setCellValue('G' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('H' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('I' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('I' . $kolom, $d->cu);
             $sheet3->setCellValue('J' . $kolom, $d->cost_op);
             $sheet3->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
             $sheet3->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
@@ -383,7 +383,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('S' . $kolom, $d->gr);
             $sheet3->setCellValue('T' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('V' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('V' . $kolom, $d->cu);
             $sheet3->setCellValue('W' . $kolom, $d->cost_op);
             $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
             $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);
@@ -415,7 +415,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('AF' . $kolom, $d->gr);
             $sheet3->setCellValue('AG' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('AH' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('AI' . $kolom, $d->cost_dll);
+            $sheet3->setCellValue('AI' . $kolom, $d->cu);
             $sheet3->setCellValue('AJ' . $kolom, $d->cost_op);
             $sheet3->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op);
             $sheet3->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_dll + $d->cost_op) / $d->gr);

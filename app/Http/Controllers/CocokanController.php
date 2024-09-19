@@ -38,8 +38,6 @@ class CocokanController extends Controller
         $cost_op = $this->getCost($model, 'cost_op');
         $cost_dll = $this->getCost($model, 'dll');
 
-
-
         $data = [
             'title' => 'Cabut',
             'bk_awal' => $bk_awal,
@@ -88,8 +86,9 @@ class CocokanController extends Controller
         $ttl_gr = $this->getCost($model, 'ttl_gr');
         $cost_op = $this->getCost($model, 'cost_op');
         $cost_dll = $this->getCost($model, 'dll');
-
+       
         $data = [
+            
             'title' => 'Cetak',
             'ctk_opname' => $ctk_opname,
             'akhir_cbt' => $akhir_cbt,

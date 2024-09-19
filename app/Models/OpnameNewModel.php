@@ -94,7 +94,7 @@ class OpnameNewModel extends Model
         sum(COALESCE(d.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja, 
         sum(COALESCE(d.gr_akhir * g.rp_gr,0) + COALESCE(f.gr_eo_awal * h.rp_gr,0)) as cost_op, 
         sum(COALESCE(d.gr_awal * i.rp_gr,0) + COALESCE(f.gr_eo_awal * j.rp_gr,0)) as cost_dll,
-        sum(d.gr_akhir) as gr_akhir_cabut, sum(f.gr_eo_akhir) as gr_eo_akhir_cabut
+        sum(d.gr_akhir) as gr_akhir_cabut, sum(f.gr_eo_akhir) as gr_eo_akhir_cabut, sum(z.ttl_rp) as cu
         FROM formulir_sarang as a 
         left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
         left join cabut as d on d.no_box = a.no_box
@@ -104,6 +104,15 @@ class OpnameNewModel extends Model
         left join oprasional as h on h.bulan = f.bulan_dibayar
         left join cost_dll_cu_denda as i on i.bulan_dibayar = d.bulan_dibayar
         left join cost_dll_cu_denda as j on j.bulan_dibayar = f.bulan_dibayar
+        left join (
+            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum((a.gr_akhir + a.gr_tdk_cetak) * i.rp_gr) as cost_op_cetak, sum((a.gr_akhir + a.gr_tdk_cetak) * j.rp_gr) as cost_dll_cetak
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                    left join oprasional as i on i.bulan = a.bulan_dibayar
+                    left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
+                    where b.kategori = 'CU'
+                    group by a.no_box
+        ) as z on z.no_box = a.no_box
         WHERE a.kategori = 'cetak'   
         and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
         group by a.no_box
@@ -121,7 +130,7 @@ class OpnameNewModel extends Model
         sum(COALESCE(c.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja , 
         sum(COALESCE(c.gr_akhir * h.rp_gr,0) + COALESCE(f.gr_eo_akhir * i.rp_gr,0)) as cost_op,
         sum(COALESCE(c.gr_akhir * j.rp_gr,0) + COALESCE(f.gr_eo_akhir * k.rp_gr,0)) as cost_dll,
-        sum(c.gr_akhir) as gr_akhir_cabut, sum(f.gr_eo_akhir) as gr_eo_akhir_cabut
+        sum(c.gr_akhir) as gr_akhir_cabut, sum(f.gr_eo_akhir) as gr_eo_akhir_cabut,sum(z.ttl_rp) as cu
 
             FROM cetak_new as a 
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
@@ -133,6 +142,15 @@ class OpnameNewModel extends Model
             left join oprasional as i on i.bulan = f.bulan_dibayar
             left join cost_dll_cu_denda as j on j.bulan_dibayar = c.bulan_dibayar
             left join cost_dll_cu_denda as k on k.bulan_dibayar = f.bulan_dibayar
+            left join (
+            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum((a.gr_akhir + a.gr_tdk_cetak) * i.rp_gr) as cost_op_cetak, sum((a.gr_akhir + a.gr_tdk_cetak) * j.rp_gr) as cost_dll_cetak
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                    left join oprasional as i on i.bulan = a.bulan_dibayar
+                    left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
+                    where b.kategori = 'CU'
+                    group by a.no_box
+        ) as z on z.no_box = a.no_box
             where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
             group by a.no_box
             order by e.name ASC;
@@ -174,7 +192,7 @@ class OpnameNewModel extends Model
         sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as cost_kerja, 
         sum(COALESCE(c.gr_akhir * g.rp_gr,0) + COALESCE(h.rp_gr * d.gr_eo_akhir,0) + COALESCE(e.cost_op_ctk,0)) as cost_op,
         sum(COALESCE(c.gr_akhir * i.rp_gr,0) + COALESCE(j.rp_gr * d.gr_eo_akhir,0) + COALESCE(e.cost_dll_ctk,0)) as cost_dll,
-        sum(c.gr_akhir) as gr_akhir_cabut, sum(d.gr_eo_akhir) as gr_eo_akhir_cabut
+        sum(c.gr_akhir) as gr_akhir_cabut, sum(d.gr_eo_akhir) as gr_eo_akhir_cabut, sum(z.ttl_rp) as cu
         FROM formulir_sarang as a 
         LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join cabut as c on c.no_box = a.no_box
@@ -192,6 +210,15 @@ class OpnameNewModel extends Model
                     where b.kategori = 'CTK' and a.selesai = 'Y'
                     group by a.no_box
         ) as e on e.no_box = a.no_box
+        left join (
+            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum((a.gr_akhir + a.gr_tdk_cetak) * h.rp_gr) as cost_op_ctk, sum((a.gr_akhir + a.gr_tdk_cetak) * j.rp_gr) as cost_dll_ctk
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            		left join oprasional as h on h.bulan = a.bulan_dibayar
+                    left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
+                    where b.kategori = 'CU' and a.selesai = 'Y'
+                    group by a.no_box
+        ) as z on z.no_box = a.no_box
 
         left join users as f on f.id = a.id_penerima
 
@@ -212,7 +239,7 @@ class OpnameNewModel extends Model
         $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, 
         sum( COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
         sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0)) as cost_op,
-        sum(COALESCE(j.rp_gr * d.gr_akhir,0) + COALESCE(k.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll
+        sum(COALESCE(j.rp_gr * d.gr_akhir,0) + COALESCE(k.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll, sum(z.ttl_rp) as cu
             FROM sortir as a 
             LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
             JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
@@ -233,6 +260,15 @@ left join (
             where b.kategori = 'CTK'
             group by a.no_box
 ) as f on f.no_box = a.no_box
+left join (
+            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum((a.gr_akhir + a.gr_tdk_cetak) * i.rp_gr) as cost_op_cetak, sum((a.gr_akhir + a.gr_tdk_cetak) * j.rp_gr) as cost_dll_cetak
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                    left join oprasional as i on i.bulan = a.bulan_dibayar
+                    left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
+                    where b.kategori = 'CU'
+                    group by a.no_box
+        ) as z on z.no_box = a.no_box
 left join users as g on g.id = a.id_pengawas
             
             WHERE a.selesai = 'T' AND a.id_anak != 0
@@ -248,7 +284,7 @@ left join users as g on g.id = a.id_pengawas
         $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
 
 sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0) + COALESCE(j.rp_gr * a.gr_akhir,0)) as cost_op,
-sum(COALESCE(k.rp_gr * d.gr_akhir,0) + COALESCE(l.rp_gr * e.gr_eo_akhir,0) + COALESCE(m.rp_gr * a.gr_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll
+sum(COALESCE(k.rp_gr * d.gr_akhir,0) + COALESCE(l.rp_gr * e.gr_eo_akhir,0) + COALESCE(m.rp_gr * a.gr_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll, sum(z.ttl_rp) as cu
             FROM sortir as a 
             left join cost_dll_cu_denda as m on m.bulan_dibayar = a.bulan
             left join oprasional as j on j.bulan = a.bulan
@@ -270,6 +306,15 @@ left join (
             where b.kategori = 'CTK'
             group by a.no_box
 ) as f on f.no_box = a.no_box
+left join (
+            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp, sum((a.gr_akhir + a.gr_tdk_cetak) * h.rp_gr) as cost_op_ctk, sum((a.gr_akhir + a.gr_tdk_cetak) * j.rp_gr) as cost_dll_ctk
+                    FROM cetak_new as a 
+                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            		left join oprasional as h on h.bulan = a.bulan_dibayar
+                    left join cost_dll_cu_denda as j on j.bulan_dibayar = a.bulan_dibayar
+                    where b.kategori = 'CU' and a.selesai = 'Y'
+                    group by a.no_box
+        ) as z on z.no_box = a.no_box
 left join users as g on g.id = a.id_pengawas
             
             WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
