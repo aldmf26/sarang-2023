@@ -100,7 +100,7 @@ class CabutDetailController extends Controller
         $sheet1->getStyle('B2:K' . $kolom)->applyFromArray($style);
 
         $sheet1->getStyle("N1:W1")->applyFromArray($style_atas);
-        $sheet1->setCellValue('M1', 'Cabut awal');
+        $sheet1->setCellValue('M1', 'Cabut akhir');
         $sheet1->setCellValue('N1', 'partai');
         $sheet1->setCellValue('O1', 'pengawas');
         $sheet1->setCellValue('P1', 'no box');
@@ -113,103 +113,104 @@ class CabutDetailController extends Controller
         $sheet1->setCellValue('W1', 'rp/gr');
 
         $gdcabutawal = $model2::bkstockawal_sum();
-        $a11suntik = $this->getSuntikan(11);
+        $a14suntik = $this->getSuntikan(14);
+        $a16suntik = $this->getSuntikan(16);
         $kolom = 2;
         foreach ($gdcabutawal as $d) {
-            $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
-            $sheet1->setCellValue('C' . $kolom, $d->name);
-            $sheet1->setCellValue('D' . $kolom, $d->no_box);
-            $sheet1->setCellValue('E' . $kolom, $d->pcs);
-            $sheet1->setCellValue('F' . $kolom, $d->gr_awal);
-            $sheet1->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('H' . $kolom, 0);
-            $sheet1->setCellValue('I' . $kolom, 0);
-            $sheet1->setCellValue('J' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('K' . $kolom, ($d->ttl_rp) / $d->gr_awal);
+            $sheet1->setCellValue('N' . $kolom, $d->nm_partai);
+            $sheet1->setCellValue('O' . $kolom, $d->name);
+            $sheet1->setCellValue('P' . $kolom, $d->no_box);
+            $sheet1->setCellValue('Q' . $kolom, $d->pcs);
+            $sheet1->setCellValue('R' . $kolom, $d->gr_akhir);
+            $sheet1->setCellValue('S' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('T' . $kolom, $d->cost_kerja);
+            $sheet1->setCellValue('U' . $kolom, 0);
+            $sheet1->setCellValue('V' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet1->setCellValue('W' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr_akhir);
             $kolom++;
         }
 
-        $sheet1->setCellValue('B' . $kolom, 'partai suntik');
-        $sheet1->setCellValue('C' . $kolom, '-');
-        $sheet1->setCellValue('D' . $kolom, 'suntik');
-        $sheet1->setCellValue('E' . $kolom, $a11suntik->pcs);
-        $sheet1->setCellValue('F' . $kolom, $a11suntik->gr);
-        $sheet1->setCellValue('G' . $kolom, $a11suntik->ttl_rp);
-        $sheet1->setCellValue('H' . $kolom, 0);
-        $sheet1->setCellValue('I' . $kolom, 0);
-        $sheet1->setCellValue('J' . $kolom, $a11suntik->ttl_rp);
-        $sheet1->setCellValue('K' . $kolom, ($a11suntik->ttl_rp) / ($a11suntik->gr));
+        $sheet1->setCellValue('N' . $kolom, 'partai suntik');
+        $sheet1->setCellValue('O' . $kolom, '-');
+        $sheet1->setCellValue('P' . $kolom, 'suntik');
+        $sheet1->setCellValue('Q' . $kolom, $a14suntik->pcs + $a16suntik->pcs);
+        $sheet1->setCellValue('R' . $kolom, $a14suntik->gr + $a16suntik->gr);
+        $sheet1->setCellValue('S' . $kolom, $a14suntik->ttl_rp + $a16suntik->ttl_rp);
+        $sheet1->setCellValue('T' . $kolom, 0);
+        $sheet1->setCellValue('U' . $kolom, 0);
+        $sheet1->setCellValue('V' . $kolom, $a14suntik->ttl_rp + $a16suntik->ttl_rp);
+        $sheet1->setCellValue('W' . $kolom, ($a14suntik->ttl_rp + $a16suntik->ttl_rp) / ($a14suntik->gr + $a16suntik->gr));
 
-        $sheet1->getStyle('B2:K' . $kolom)->applyFromArray($style);
+        $sheet1->getStyle('N2:W' . $kolom)->applyFromArray($style);
 
-        // $sheet1->getStyle("B1:L1")->applyFromArray($style_atas);
-        // $sheet1->setCellValue('A1', 'Cabut sedang proses');
-        // $sheet1->setCellValue('B1', 'partai');
-        // $sheet1->setCellValue('C1', 'pengawas');
-        // $sheet1->setCellValue('D1', 'no box');
-        // $sheet1->setCellValue('E1', 'pcs');
-        // $sheet1->setCellValue('F1', 'gr');
-        // $sheet1->setCellValue('G1', 'ttl rp bk');
-        // $sheet1->setCellValue('H1', 'cost kerja');
-        // $sheet1->setCellValue('I1', 'cost cu dll');
-        // $sheet1->setCellValue('J1', 'cost operasional');
-        // $sheet1->setCellValue('K1', 'ttl rp');
-        // $sheet1->setCellValue('L1', 'rp/gr');
+        $sheet1->getStyle("Z1:AJ1")->applyFromArray($style_atas);
+        $sheet1->setCellValue('Y1', 'Cabut sedang proses');
+        $sheet1->setCellValue('Z1', 'partai');
+        $sheet1->setCellValue('AA1', 'pengawas');
+        $sheet1->setCellValue('AB1', 'no box');
+        $sheet1->setCellValue('AC1', 'pcs');
+        $sheet1->setCellValue('AD1', 'gr');
+        $sheet1->setCellValue('AE1', 'ttl rp bk');
+        $sheet1->setCellValue('AF1', 'cost kerja');
+        $sheet1->setCellValue('AG1', 'cost cu dll');
+        $sheet1->setCellValue('AH1', 'cost operasional');
+        $sheet1->setCellValue('AI1', 'ttl rp');
+        $sheet1->setCellValue('AJ1', 'rp/gr');
 
-        // $gudangbk = $model::bksedang_proses_sum();
+        $gudangbk = $model::bksedang_proses_sum();
 
-        // $kolom = 2;
-        // foreach ($gudangbk as $d) {
-        //     $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
-        //     $sheet1->setCellValue('C' . $kolom, $d->name);
-        //     $sheet1->setCellValue('D' . $kolom, $d->no_box);
-        //     $sheet1->setCellValue('E' . $kolom, $d->pcs);
-        //     $sheet1->setCellValue('F' . $kolom, $d->gr);
-        //     $sheet1->setCellValue('G' . $kolom, $d->ttl_rp);
-        //     $sheet1->setCellValue('H' . $kolom, 0);
-        //     $sheet1->setCellValue('I' . $kolom, 0);
-        //     $sheet1->setCellValue('J' . $kolom, 0);
-        //     $sheet1->setCellValue('K' . $kolom, $d->ttl_rp);
-        //     $sheet1->setCellValue('L' . $kolom, $d->ttl_rp / $d->gr);
-        //     $kolom++;
-        // }
+        $kolom = 2;
+        foreach ($gudangbk as $d) {
+            $sheet1->setCellValue('Z' . $kolom, $d->nm_partai);
+            $sheet1->setCellValue('AA' . $kolom, $d->name);
+            $sheet1->setCellValue('AB' . $kolom, $d->no_box);
+            $sheet1->setCellValue('AC' . $kolom, $d->pcs);
+            $sheet1->setCellValue('AD' . $kolom, $d->gr);
+            $sheet1->setCellValue('AE' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AF' . $kolom, 0);
+            $sheet1->setCellValue('AG' . $kolom, 0);
+            $sheet1->setCellValue('AH' . $kolom, 0);
+            $sheet1->setCellValue('AI' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AJ' . $kolom, $d->ttl_rp / $d->gr);
+            $kolom++;
+        }
 
-        // $sheet1->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('Z2:AJ' . $kolom - 1)->applyFromArray($style);
 
 
-        // $sheet1->getStyle("O1:Y1")->applyFromArray($style_atas);
-        // $sheet1->setCellValue('N1', 'Cabut sisa pengawas');
-        // $sheet1->setCellValue('O1', 'partai');
-        // $sheet1->setCellValue('P1', 'pengawas');
-        // $sheet1->setCellValue('Q1', 'no box');
-        // $sheet1->setCellValue('R1', 'pcs');
-        // $sheet1->setCellValue('S1', 'gr');
-        // $sheet1->setCellValue('T1', 'ttl rp bk');
-        // $sheet1->setCellValue('U1', 'cost kerja');
-        // $sheet1->setCellValue('V1', 'cost cu dll');
-        // $sheet1->setCellValue('W1', 'cost operasional');
-        // $sheet1->setCellValue('X1', 'ttl rp');
-        // $sheet1->setCellValue('Y1', 'rp/gr');
+        $sheet1->getStyle("AM1:Y1")->applyFromArray($style_atas);
+        $sheet1->setCellValue('AL1', 'Cabut sisa pengawas');
+        $sheet1->setCellValue('AM1', 'partai');
+        $sheet1->setCellValue('AN1', 'pengawas');
+        $sheet1->setCellValue('AO1', 'no box');
+        $sheet1->setCellValue('AP1', 'pcs');
+        $sheet1->setCellValue('AQ1', 'gr');
+        $sheet1->setCellValue('AR1', 'ttl rp bk');
+        $sheet1->setCellValue('AS1', 'cost kerja');
+        $sheet1->setCellValue('AT1', 'cost cu dll');
+        $sheet1->setCellValue('AU1', 'cost operasional');
+        $sheet1->setCellValue('AV1', 'ttl rp');
+        $sheet1->setCellValue('AW1', 'rp/gr');
 
-        // $gudangbksisa = $model::bksisapgws();
+        $gudangbksisa = $model::bksisapgws();
 
-        // $kolom = 2;
-        // foreach ($gudangbksisa as $d) {
-        //     $sheet1->setCellValue('O' . $kolom, $d->nm_partai);
-        //     $sheet1->setCellValue('P' . $kolom, $d->name);
-        //     $sheet1->setCellValue('Q' . $kolom, $d->no_box);
-        //     $sheet1->setCellValue('R' . $kolom, $d->pcs);
-        //     $sheet1->setCellValue('S' . $kolom, $d->gr);
-        //     $sheet1->setCellValue('T' . $kolom, $d->ttl_rp);
-        //     $sheet1->setCellValue('U' . $kolom, 0);
-        //     $sheet1->setCellValue('V' . $kolom, 0);
-        //     $sheet1->setCellValue('W' . $kolom, 0);
-        //     $sheet1->setCellValue('X' . $kolom, $d->ttl_rp);
-        //     $sheet1->setCellValue('Y' . $kolom, $d->ttl_rp / $d->gr);
-        //     $kolom++;
-        // }
+        $kolom = 2;
+        foreach ($gudangbksisa as $d) {
+            $sheet1->setCellValue('AM' . $kolom, $d->nm_partai);
+            $sheet1->setCellValue('AN' . $kolom, $d->name);
+            $sheet1->setCellValue('AO' . $kolom, $d->no_box);
+            $sheet1->setCellValue('AP' . $kolom, $d->pcs);
+            $sheet1->setCellValue('AQ' . $kolom, $d->gr);
+            $sheet1->setCellValue('AR' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AS' . $kolom, 0);
+            $sheet1->setCellValue('AT' . $kolom, 0);
+            $sheet1->setCellValue('AU' . $kolom, 0);
+            $sheet1->setCellValue('AV' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AW' . $kolom, $d->ttl_rp / $d->gr);
+            $kolom++;
+        }
 
-        // $sheet1->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('AM2:AW' . $kolom - 1)->applyFromArray($style);
 
 
 
