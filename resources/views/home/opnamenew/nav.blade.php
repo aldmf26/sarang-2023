@@ -1,31 +1,51 @@
 @php
     $rot = request()->route()->getName();
+
+    $navMenu = [
+        [
+            'rot' => 'detail.cabut.cabut_awal',
+            'rotAktif' => [
+                'detail.cabut.cabut_awal',
+                'detail.cabut.cabut_akhir',
+                'detail.cabut.proses',
+                'detail.cabut.sisa',
+            ],
+            'nama' => 'Cabut',
+        ],
+        [
+            'rot' => 'opnamenew.cetak',
+            'rotAktif' => [
+                'opnamenew.cetak',
+            ],
+            'nama' => 'Cetak',
+        ],
+        [
+            'rot' => 'opnamenew.sortir',
+            'rotAktif' => [
+                'opnamenew.cetak',
+            ],
+            'nama' => 'Sortir',
+        ],
+        [
+            'rot' => 'opnamenew.grading',
+            'rotAktif' => [
+                'opnamenew.cetak',
+            ],
+            'nama' => 'Grading & Pengiriman',
+        ],
+    ];
 @endphp
 <div class="col-lg-12">
     <ul class="nav nav-pills float-start">
+        @foreach ($navMenu as $d)
         <li class="nav-item">
-            <a class="nav-link  {{ $rot == 'opnamenew.index' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('opnamenew.index') }}">Cabut</a>
+            <a class="nav-link  {{ in_array($rot, $d['rotAktif']) ? 'active' : '' }}" aria-current="page"
+                href="{{ route($d['rot']) }}">{{ $d['nama'] }}</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link  {{ $rot == 'opnamenew.cetak' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('opnamenew.cetak') }}">Cetak</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link  {{ $rot == 'opnamenew.sortir' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('opnamenew.sortir') }}">Sortir</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link  {{ $rot == 'opnamenew.grading' ? 'active' : '' }}" aria-current="page"
-                href="{{ route('opnamenew.grading') }}">grading & Pengiriman</a>
-        </li>
-
+        @endforeach
     </ul>
 </div>
 <div class="col-lg-12">
     <hr style="border: 1px solid black;">
 </div>
-<div class="col-lg-12">
-    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary float-end"><i
-            class="fas fa-file-excel"></i>Export</a>
-</div>
+

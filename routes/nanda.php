@@ -302,7 +302,7 @@ Route::middleware('auth')->group(function () {
         ->prefix('home/opnamenew')
         ->name('opnamenew.')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/cabut', 'index')->name('index');
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
@@ -313,5 +313,18 @@ Route::middleware('auth')->group(function () {
         ->name('cabutdetail.')
         ->group(function () {
             Route::get('/export', 'export')->name('export');
+        });
+
+    Route::controller(CabutDetailController::class)
+        ->prefix('home/cocokan/detail')
+        ->name('detail.')
+        ->group(function () {
+            Route::get('/cabut', 'cabut_cabutAwal')->name('cabut.cabut_awal');
+            Route::get('/cabut/akhir', 'cabut_cabutAkhir')->name('cabut.cabut_akhir');
+            Route::get('/cabut/proses', 'cabut_cabutProses')->name('cabut.proses');
+            Route::get('/cabut/sisa', 'cabut_cabutSisa')->name('cabut.sisa');
+
+            Route::get('/cetak', 'cetak_cetakAwal')->name('cetak.cetak_awal');
+            Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
         });
 });

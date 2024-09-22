@@ -115,7 +115,6 @@ class OpnameNewModel extends Model
         ) as z on z.no_box = a.no_box
         WHERE a.kategori = 'cetak'   
         and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
-        group by a.no_box
         order by e.name ASC
         ");
 
@@ -153,11 +152,12 @@ class OpnameNewModel extends Model
         ) as z on z.no_box = a.no_box
             where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
             group by a.no_box
-            order by e.name ASC;
+            order by e.name ASC
         ");
 
         return $result;
     }
+
     public static function cetak_selesai()
     {
         $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp,  e.name, 

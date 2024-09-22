@@ -39,7 +39,7 @@
                             {{ number_format($bk_awal->pcs - $cbt_proses->pcs - $cbt_sisa_pgws->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.index') }}" target="_blank">
+                            <a href="{{ route('detail.cabut.cabut_awal') }}" target="_blank">
                                 {{ number_format($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr, 0) }}</a>
                         </td>
                         <td class="text-end">

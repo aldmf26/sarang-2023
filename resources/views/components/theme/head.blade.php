@@ -106,6 +106,7 @@
         .bg-primary {
             background-color: var(--warna1) !important;
         }
+        
 
         .pointer {
             cursor: pointer;
