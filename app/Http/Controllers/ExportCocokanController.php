@@ -379,7 +379,7 @@ class ExportCocokanController extends Controller
         
         // awal ctk
         $s1 = $model2::stok_awal();
-        $s1_akhir = $model2::stok_seesai();
+        $s1_akhir = $model2::stok_selesai();
         $s1suntik = $this->getSuntikan(31);
         $s1suntik2 = $this->getSuntikan(32);
         $s1suntik_akhir = $this->getSuntikan(35);
