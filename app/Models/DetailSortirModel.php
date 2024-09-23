@@ -44,5 +44,4 @@ class DetailSortirModel extends Model
 
         return $result;
     }
-  
 }
