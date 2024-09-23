@@ -200,7 +200,9 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
+        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        $this->rekap($spreadsheet, $style_atas, $style, $model);
 
 
         $namafile = "Opname Gudang.xlsx";
@@ -427,8 +429,8 @@ class OpnameNewController extends Controller
     private function datapengiriman($spreadsheet, $style_atas, $style, $model)
     {
         $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(3);
-        $sheet3 = $spreadsheet->getActiveSheet(3);
+        $spreadsheet->setActiveSheetIndex(4);
+        $sheet3 = $spreadsheet->getActiveSheet(4);
         $sheet3->setTitle('Gudang grading & pengiriman');
 
         $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
@@ -533,6 +535,154 @@ class OpnameNewController extends Controller
 
         $sheet3->getStyle('AB2:AI2')->applyFromArray($style);
     }
+    private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $sheet4 = $spreadsheet->getActiveSheet(3);
+        $sheet4->setTitle('Sortir selesai');
+
+        $sheet4->getStyle("B1:N1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A1', 'Sortir Selesai');
+        $sheet4->setCellValue('B1', 'partai');
+        $sheet4->setCellValue('C1', 'no box');
+        $sheet4->setCellValue('D1', 'tipe');
+        $sheet4->setCellValue('E1', 'ket');
+        $sheet4->setCellValue('F1', 'pengawas');
+        $sheet4->setCellValue('G1', 'pcs');
+        $sheet4->setCellValue('H1', 'gr');
+        $sheet4->setCellValue('I1', 'ttl rp bk');
+        $sheet4->setCellValue('J1', 'cost kerja');
+        $sheet4->setCellValue('K1', 'cost cu');
+        $sheet4->setCellValue('L1', 'cost operasional');
+        $sheet4->setCellValue('M1', 'total rp');
+        $sheet4->setCellValue('N1', 'rp/gr');
+
+        $cetak_selesai = $model::sortir_selesai_akhir();
+        $kolom = 2;
+        foreach ($cetak_selesai  as $d) {
+            $sheet4->setCellValue('B' . $kolom, $d->nm_partai);
+            $sheet4->setCellValue('C' . $kolom, $d->no_box);
+            $sheet4->setCellValue('D' . $kolom, $d->tipe);
+            $sheet4->setCellValue('E' . $kolom, $d->ket);
+            $sheet4->setCellValue('F' . $kolom, $d->name);
+            $sheet4->setCellValue('G' . $kolom, $d->pcs);
+            $sheet4->setCellValue('H' . $kolom, $d->gr);
+            $sheet4->setCellValue('I' . $kolom, $d->ttl_rp);
+            $sheet4->setCellValue('J' . $kolom, $d->cost_kerja);
+            $sheet4->setCellValue('K' . $kolom,  $d->cost_cu);
+            $sheet4->setCellValue('L' . $kolom, 0);
+            $sheet4->setCellValue('M' . $kolom, 0);
+            $sheet4->setCellValue('N' . $kolom, 0);
+            $kolom++;
+        }
+        $s5suntik = $this->getSuntikan(35);
+        $sheet4->setCellValue('B' . $kolom, 'partai suntik');
+        $sheet4->setCellValue('C' . $kolom, 'suntik');
+        $sheet4->setCellValue('D' . $kolom, '-');
+        $sheet4->setCellValue('E' . $kolom, '-');
+        $sheet4->setCellValue('F' . $kolom, '-');
+        $sheet4->setCellValue('G' . $kolom,  $s5suntik->pcs);
+        $sheet4->setCellValue('H' . $kolom,  $s5suntik->gr);
+        $sheet4->setCellValue('I' . $kolom,  $s5suntik->ttl_rp);
+        $sheet4->setCellValue('J' . $kolom, 0);
+        $sheet4->setCellValue('K' . $kolom,  0);
+        $sheet4->setCellValue('L' . $kolom, 0);
+        $sheet4->setCellValue('M' . $kolom, 0);
+        $sheet4->setCellValue('N' . $kolom, 0);
+
+        $p2suntik = $this->getSuntikan(41);
+        $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
+        $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
+        $sheet4->setCellValue('D' . $kolom + 1, '-');
+        $sheet4->setCellValue('E' . $kolom + 1, '-');
+        $sheet4->setCellValue('F' . $kolom + 1, '-');
+        $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
+        $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
+        $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
+        $sheet4->setCellValue('J' . $kolom + 1, 0);
+        $sheet4->setCellValue('K' . $kolom + 1,  0);
+        $sheet4->setCellValue('L' . $kolom + 1, 0);
+        $sheet4->setCellValue('M' . $kolom + 1, 0);
+        $sheet4->setCellValue('N' . $kolom + 1, 0);
+
+        $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
+    }
+
+    private function rekap($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(5);
+        $sheet4 = $spreadsheet->getActiveSheet(5);
+        $sheet4->setTitle('Rekap');
+
+        $sheet4->getStyle("A1:H1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('B1', 'pcs');
+        $sheet4->setCellValue('C1', 'gr');
+        $sheet4->setCellValue('D1', 'rp');
+        $sheet4->setCellValue('E1', 'cost kerja');
+        $sheet4->setCellValue('F1', 'cost cu');
+        $sheet4->setCellValue('G1', 'cost operasional');
+        $sheet4->setCellValue('H1', 'ttl rp');
+
+
+        $sheet4->setCellValue('A2', 'Cabut sedang proses');
+        $sheet4->setCellValue('A3', 'Cabut sisa pengawas');
+        $sheet4->setCellValue('A4', 'Cabut selesai siap cetak');
+        $sheet4->setCellValue('A5', 'Cetak sedang proses');
+        $sheet4->setCellValue('A6', 'Cetak sisa pengawas');
+        $sheet4->setCellValue('A7', 'Cetak selesai siap sortir');
+        $sheet4->setCellValue('A8', 'Sortir sedang proses');
+        $sheet4->setCellValue('A9', 'Sortir sisa pengawas');
+        $sheet4->setCellValue('A10', 'Sortir selesai siap grading');
+        $sheet4->setCellValue('A11', 'sortir selesai sudah grading');
+
+        $sheet4->setCellValue('B2', "=SUM('Gudang Cabut'!E:E)");
+        $sheet4->setCellValue('B3', "=SUM('Gudang Cabut'!R:R)");
+        $sheet4->setCellValue('B4', "=SUM('Gudang Cabut'!AE:AE)");
+        $sheet4->setCellValue('B5', "=SUM('Gudang Cetak'!E:E)");
+        $sheet4->setCellValue('B6', "=SUM('Gudang Cetak'!R:R)");
+        $sheet4->setCellValue('B7', "=SUM('Gudang Cetak'!AE:AE)");
+        $sheet4->setCellValue('B8', "=SUM('Gudang Sortir'!E:E)");
+        $sheet4->setCellValue('B9', "=SUM('Gudang Sortir'!R:R)");
+        $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AE:AE)");
+        $sheet4->setCellValue('B11', "=SUM('Sortir selesai'!G:G)");
+
+        $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
+        $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
+        $sheet4->setCellValue('C4', "=SUM('Gudang Cabut'!AF:AF)");
+        $sheet4->setCellValue('C5', "=SUM('Gudang Cetak'!F:F)");
+        $sheet4->setCellValue('C6', "=SUM('Gudang Cetak'!S:S)");
+        $sheet4->setCellValue('C7', "=SUM('Gudang Cetak'!AF:AF)");
+        $sheet4->setCellValue('C8', "=SUM('Gudang Sortir'!F:F)");
+        $sheet4->setCellValue('C9', "=SUM('Gudang Sortir'!S:S)");
+        $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AF:AF)");
+        $sheet4->setCellValue('C11', "=SUM('Sortir selesai'!H:H)");
+
+        $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
+        $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!T:T)");
+        $sheet4->setCellValue('D4', "=SUM('Gudang Cabut'!AG:AG)");
+        $sheet4->setCellValue('D5', "=SUM('Gudang Cetak'!G:G)");
+        $sheet4->setCellValue('D6', "=SUM('Gudang Cetak'!T:T)");
+        $sheet4->setCellValue('D7', "=SUM('Gudang Cetak'!AG:AG)");
+        $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!G:G)");
+        $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!T:T)");
+        $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
+        $sheet4->setCellValue('D11', "=SUM('Sortir selesai'!I:I)");
+
+        $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!H:H)");
+        $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!U:U)");
+        $sheet4->setCellValue('D4', "=SUM('Gudang Cabut'!AH:AH)");
+        $sheet4->setCellValue('D5', "=SUM('Gudang Cetak'!H:H)");
+        $sheet4->setCellValue('D6', "=SUM('Gudang Cetak'!U:U)");
+        $sheet4->setCellValue('D7', "=SUM('Gudang Cetak'!AH:AH)");
+        $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!H:H)");
+        $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!U:U)");
+        $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
+        $sheet4->setCellValue('D11', "=SUM('Sortir selesai'!J:J)");
+    }
+
+
 
 
     public function getSuntikan($index)
