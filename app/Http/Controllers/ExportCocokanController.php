@@ -14,6 +14,50 @@ use App\Models\OpnameNewModel;
 
 class ExportCocokanController extends Controller
 {
+
+    public function cetak_cetakakhir()
+    {
+        $model2 = new DetailCetakModel();
+
+        $ca2 = $model2::cetak_stok_awal();
+        $ca16suntik = $this->getSuntikan(26);
+
+        $model2 = new DetailCabutModel();
+        $data = [
+            'title' => 'Cetak Akhir',
+            'query' => $ca2,
+            'suntik' => $ca16suntik,
+        ];
+        return view('home.opnamenew.cetak.cetak_akhir', $data);
+    }
+    public function cetak_sedangproses()
+    {
+        $model2 = new OpnameNewModel();
+
+        $ca2 = $model2::cetak_proses();
+
+
+        $model2 = new DetailCabutModel();
+        $data = [
+            'title' => 'Cetak sedang proses',
+            'query' => $ca2,
+        ];
+        return view('home.opnamenew.cetak.cetak_sedang_proses', $data);
+    }
+    public function cetak_sisa()
+    {
+        $model = new OpnameNewModel();
+
+        $ca2 = $model::cetak_stok();
+
+
+        $model2 = new DetailCabutModel();
+        $data = [
+            'title' => 'Cetak sedang proses',
+            'query' => $ca2,
+        ];
+        return view('home.opnamenew.cetak.cetak_sisa', $data);
+    }
     public function cabut($spreadsheet, $style_atas, $style, $model)
     {
         $model2 = new DetailCabutModel();
@@ -177,7 +221,7 @@ class ExportCocokanController extends Controller
 
         $sheet1->getStyle('AM2:AW' . $kolom - 1)->applyFromArray($style);
     }
-    public function cetak($spreadsheet, $style_atas, $style,$model)
+    public function cetak($spreadsheet, $style_atas, $style, $model)
     {
         $model2 = new DetailCetakModel();
         $spreadsheet->createSheet();
@@ -231,14 +275,15 @@ class ExportCocokanController extends Controller
         $ca11 = $this->getSuntikan(21);
         $ca12suntik = $this->getSuntikan(23);
 
+
         // dd($ca11, $ca2, $ca12suntik);
         $row = 2;
-        foreach($ca2 as $i => $v){
+        foreach ($ca2 as $i => $v) {
             $sheet->setCellValue("B$row", $v->nm_partai);
             $sheet->setCellValue("C$row", $v->name);
             $sheet->setCellValue("D$row", $v->no_box);
             $sheet->setCellValue("E$row", $v->pcs_awal);
-            $sheet->setCellValue("F$row", $i == 200  ? $v->gr_awal + 418 : $v->gr_awal );
+            $sheet->setCellValue("F$row", $v->gr_awal);
             $sheet->setCellValue("G$row", $v->ttl_rp);
             $sheet->setCellValue("H$row", 0);
 
@@ -266,7 +311,7 @@ class ExportCocokanController extends Controller
         $ca2_selesai = $model2::stok_selesai();
 
         $row = 2;
-        foreach($ca2_selesai as $v){
+        foreach ($ca2_selesai as $v) {
             $sheet->setCellValue("K$row", $v->nm_partai);
             $sheet->setCellValue("L$row", $v->name);
             $sheet->setCellValue("M$row", $v->no_box);
@@ -298,7 +343,7 @@ class ExportCocokanController extends Controller
         // proses ctk
         $proses = $model::cetak_proses();
         $row = 2;
-        foreach($proses as $v){
+        foreach ($proses as $v) {
             $sheet->setCellValue("T$row", $v->nm_partai);
             $sheet->setCellValue("U$row", $v->name);
             $sheet->setCellValue("V$row", $v->no_box);
@@ -309,12 +354,12 @@ class ExportCocokanController extends Controller
 
             $row++;
         }
-        $sheet->getStyle('T2:Z' . $row )->applyFromArray($style);
+        $sheet->getStyle('T2:Z' . $row)->applyFromArray($style);
 
         // proses ctk
         $proses = $model::cetak_stok();
         $row = 2;
-        foreach($proses as $v){
+        foreach ($proses as $v) {
             $sheet->setCellValue("AC$row", $v->nm_partai);
             $sheet->setCellValue("AD$row", $v->name);
             $sheet->setCellValue("AE$row", $v->no_box);
@@ -376,7 +421,7 @@ class ExportCocokanController extends Controller
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
         }
-        
+
         // awal ctk
         $s1 = $model2::stok_awal();
         $s1_akhir = $model2::stok_selesai();
@@ -386,7 +431,7 @@ class ExportCocokanController extends Controller
 
 
         $row = 2;
-        foreach($s1 as $v){
+        foreach ($s1 as $v) {
             $sheet->setCellValue("B$row", $v->nm_partai);
             $sheet->setCellValue("C$row", $v->name);
             $sheet->setCellValue("D$row", $v->no_box);
@@ -420,7 +465,7 @@ class ExportCocokanController extends Controller
 
         // akhir sortir
         $row = 2;
-        foreach($s1_akhir as $v){
+        foreach ($s1_akhir as $v) {
             $sheet->setCellValue("K$row", $v->nm_partai);
             $sheet->setCellValue("L$row", $v->name);
             $sheet->setCellValue("M$row", $v->no_box);
@@ -428,7 +473,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("O$row", $v->gr);
             $sheet->setCellValue("P$row", $v->ttl_rp);
             $sheet->setCellValue("Q$row", $v->cost_kerja);
-            
+
 
             $row++;
         }
@@ -446,7 +491,7 @@ class ExportCocokanController extends Controller
         // proses ctk
         $cetak_proses = $model::sortir_proses();
         $row = 2;
-        foreach($cetak_proses as $v){
+        foreach ($cetak_proses as $v) {
             $sheet->setCellValue("T$row", $v->nm_partai);
             $sheet->setCellValue("U$row", $v->name);
             $sheet->setCellValue("V$row", $v->no_box);
@@ -463,7 +508,7 @@ class ExportCocokanController extends Controller
         // proses ctk
         $cetak_proses = $model::sortir_stock();
         $row = 2;
-        foreach($cetak_proses as $v){
+        foreach ($cetak_proses as $v) {
             $sheet->setCellValue("AC$row", $v->nm_partai);
             $sheet->setCellValue("AD$row", $v->name);
             $sheet->setCellValue("AE$row", $v->no_box);
@@ -480,7 +525,7 @@ class ExportCocokanController extends Controller
 
     public function pengiriman($spreadsheet, $style_atas, $style, $model)
     {
-      
+
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(3);
         $sheet3 = $spreadsheet->getActiveSheet();

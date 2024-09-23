@@ -300,7 +300,7 @@ class CabutDetailController extends Controller
         return view('home.opnamenew.cabut.cabut_sisa', $data);
     }
 
-    
+
 
     public function cetak_cetakAwal()
     {

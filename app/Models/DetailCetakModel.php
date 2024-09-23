@@ -32,7 +32,7 @@ class DetailCetakModel extends Model
             and g.kategori = 'CTK' 
             and e.baru = 'baru' 
         group by a.no_box
-            ") ;
+            ");
         return $result;
     }
 
@@ -55,5 +55,4 @@ class DetailCetakModel extends Model
             ");
         return $result;
     }
-
 }
