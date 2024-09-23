@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CocokanModel;
 use App\Models\DetailCabutModel;
+use App\Models\DetailCetakModel;
 use App\Models\OpnameNewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -300,54 +301,20 @@ class CabutDetailController extends Controller
 
     
 
-    public function cetak_cetakAwal(CocokanModel $model)
+    public function cetak_cetakAwal()
     {
+        $model2 = new DetailCetakModel();
+
+        $ca2 = $model2::cetak_stok_awal();
         $ca11 = $this->getSuntikan(21);
-        $ctk_opname = new stdClass();
-        $ctk_opname->pcs = $ca11->pcs;
-        $ctk_opname->gr = $ca11->gr;
-        $ctk_opname->ttl_rp = $ca11->ttl_rp;
-
-        $ca2 = $model::cetak_stok_awal();
         $ca12suntik = $this->getSuntikan(23);
-        $akhir_cbt = new stdClass();
-        $akhir_cbt->pcs = $ca2->pcs + $ca12suntik->pcs;
-        $akhir_cbt->gr = $ca2->gr + $ca12suntik->gr;
-        $akhir_cbt->ttl_rp = $ca2->ttl_rp + $ca12suntik->ttl_rp;
 
-
-        $ca17 = $model::cetak_stok();
-        $ca17suntik = $this->getSuntikan(27);
-
-        $cetak_sisa = new stdClass();
-        $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
-        $cetak_sisa->gr = $ca17->gr + $ca17suntik->gr;
-        $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
-
-        $ca16suntik = $this->getSuntikan(26);
-        $ca16 = $model::cetak_selesai();
-        $cetak_akhir = new stdClass();
-        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
-        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
-        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
-
-        $ttl_gr = $this->getCost($model, 'ttl_gr');
-        $cost_op = $this->getCost($model, 'cost_op');
-        $cost_dll = $this->getCost($model, 'dll');
-
+        $model2 = new DetailCabutModel();
         $data = [
-
-            'title' => 'Cetak',
-            'ctk_opname' => $ctk_opname,
-            'akhir_cbt' => $akhir_cbt,
-            'cetak_proses' => $model::cetak_proses(),
-            'cetak_sisa' => $cetak_sisa,
-            'cetak_akhir' => $cetak_akhir,
-            'ttl_gr' => $ttl_gr,
-            'cost_op' => $cost_op,
-            'cost_dll' => $cost_dll
-
+            'title' => 'Cetak Awal',
+            'query' => $ca2,
+            'suntik' => $ca11,
+            'suntik2' => $ca12suntik,
         ];
         return view('home.opnamenew.cetak.cetak_awal', $data);
     }

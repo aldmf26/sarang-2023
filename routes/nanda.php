@@ -325,6 +325,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/cabut/sisa', 'cabut_cabutSisa')->name('cabut.sisa');
 
             Route::get('/cetak', 'cetak_cetakAwal')->name('cetak.cetak_awal');
-            Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
+            Route::get('/cetak/akhir', 'cetak_cetakAkhir')->name('cetak.cetak_akhir');
+            Route::get('/cetak/proses', 'cetak_cetakProses')->name('cetak.proses');
+            Route::get('/cetak/sisa', 'cetak_cetakSisa')->name('cetak.sisa');
+
+            // Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
         });
+
 });

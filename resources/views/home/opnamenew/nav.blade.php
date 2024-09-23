@@ -13,9 +13,9 @@
             'nama' => 'Cabut',
         ],
         [
-            'rot' => 'opnamenew.cetak',
+            'rot' => 'detail.cetak.cetak_awal',
             'rotAktif' => [
-                'opnamenew.cetak',
+                'detail.cetak.cetak_awal',
             ],
             'nama' => 'Cetak',
         ],
