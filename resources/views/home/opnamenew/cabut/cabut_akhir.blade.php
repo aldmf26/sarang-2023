@@ -11,7 +11,7 @@
             <div class="col-lg-12">
 
                 <h5 for="" class="fw-bold text-decoration-underline">{{ $title }}</h5>
-                <table class="table table-bordered " id="tableScroll">
+                <table class="table table-bordered " id="bk_stock">
                     <thead>
                         <tr>
                             <th class="dhead">no</th>
@@ -22,8 +22,8 @@
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp bk</th>
                             <th class="dhead text-end">cost kerja</th>
-                            <th class="dhead text-end">cost cu dll</th>
-                            <th class="dhead text-end">cost operasional</th>
+                            {{-- <th class="dhead text-end">cost cu dll</th>
+                            <th class="dhead text-end">cost operasional</th> --}}
                             <th class="dhead text-end">ttl rp</th>
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
@@ -40,8 +40,8 @@
                                 <td class="text-end">{{ number_format($b->gr_akhir, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
-                                <td class="text-end">0</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td>
+                                {{-- <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td> --}}
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
                             </tr>
@@ -55,8 +55,8 @@
                             <td class="text-end">{{ number_format($a14suntik->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($a14suntik->ttl_rp, 0) }}</td>
                             <td class="text-end">0</td>
-                            <td class="text-end">0</td>
-                            <td class="text-end">0</td>
+                            {{--  <td class="text-end">0</td>
+                            <td class="text-end">0</td> --}}
                             <td class="text-end">{{ number_format($a14suntik->ttl_rp, 0) }}</td>
                             <td class="text-end">{{ number_format($a14suntik->ttl_rp / $a14suntik->gr, 0) }}</td>
                         </tr>
@@ -69,8 +69,8 @@
                             <td class="text-end">{{ number_format($a16suntik->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($a16suntik->ttl_rp, 0) }}</td>
                             <td class="text-end">0</td>
-                            <td class="text-end">0</td>
-                            <td class="text-end">0</td>
+                            {{-- <td class="text-end">0</td>
+                            <td class="text-end">0</td> --}}
                             <td class="text-end">{{ number_format($a16suntik->ttl_rp, 0) }}</td>
                             <td class="text-end">{{ number_format($a16suntik->ttl_rp / $a16suntik->gr, 0) }}</td>
                         </tr>
@@ -94,8 +94,8 @@
                             <th class="dheadstock  text-end">{{ number_format($total_gr, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">{{number_format($total_cost,0)}}</th>
-                            <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">{{number_format(0,0)}}</th>
+                            {{-- <th class="dheadstock  text-end">0</th>
+                            <th class="dheadstock  text-end">{{number_format(0,0)}}</th> --}}
                             <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">
                                 {{ number_format($total_ttl_rp / $total_gr, 0) }}
@@ -111,25 +111,7 @@
             <script>
                 $('#bk_stock').DataTable({
                     "searching": true,
-                    scrollY: '700px',
-                    scrollX: false,
-                    scrollCollapse: true,
-                    "autoWidth": true,
-                    "paging": false,
-                    "info": false
-                });
-                $('#bk_proses').DataTable({
-                    "searching": true,
-                    scrollY: '200px',
-                    scrollX: false,
-                    scrollCollapse: true,
-                    "autoWidth": true,
-                    "paging": false,
-                    "info": false
-                });
-                $('#bk_selesai').DataTable({
-                    "searching": true,
-                    scrollY: '200px',
+                    scrollY: '500px',
                     scrollX: false,
                     scrollCollapse: true,
                     "autoWidth": true,

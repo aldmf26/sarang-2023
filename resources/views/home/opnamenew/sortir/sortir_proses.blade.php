@@ -6,8 +6,10 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.opnamenew.nav')
-            @include('home.opnamenew.cetak.nav')
+            @include('home.opnamenew.sortir.nav')
+
             <div class="col-lg-12">
+
                 <h5 for="" class="fw-bold text-decoration-underline">{{ $title }}</h5>
                 <table class="table table-bordered " id="bk_stock">
                     <thead>
@@ -20,12 +22,13 @@
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp bk</th>
                             <th class="dhead text-end">cost kerja</th>
-                            <th class="dhead text-end">cost cu dll</th>
-                            <th class="dhead text-end">cost operasional</th>
+                            {{-- <th class="dhead text-end">cost cu dll</th>
+                            <th class="dhead text-end">cost operasional</th> --}}
                             <th class="dhead text-end">ttl rp</th>
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
+                
                     <tbody>
                         @foreach ($query as $b)
                             <tr>
@@ -36,18 +39,14 @@
                                 <td class="text-end">{{ number_format($b->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->cost_dll, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->cost_op, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja + $b->cost_op, 0) }}
-                                </td>
-                                <td class="text-end">
-                                    {{ number_format(($b->ttl_rp + $b->cost_kerja + $b->cost_op + $b->cost_dll) / $b->gr, 0) }}
-                                </td>
+                                <td class="text-end">0</td>
+                                {{-- <td class="text-end">0</td>
+                                <td class="text-end">0</td> --}}
+                                <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->ttl_rp / $b->gr, 0) }}</td>
                             </tr>
                         @endforeach
-
-
+                        
                     </tbody>
                     <tfoot>
                         <tr>
@@ -58,16 +57,12 @@
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_kerja'), 0) }}
-                            </th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_dll'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_op'), 0) }}
-                            </th>
+                            <th class="dheadstock  text-end">0</th>
+                            {{-- <th class="dheadstock  text-end">0</th>
+                            <th class="dheadstock  text-end">0</th> --}}
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_op') + sumBk($query, 'cost_dll'), 0) }}
-                            </th>
-                            <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'gr') > 0 ? (sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_op') + sumBk($query, 'cost_dll')) / sumBk($query, 'gr') : 0, 0) }}
+                                {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>

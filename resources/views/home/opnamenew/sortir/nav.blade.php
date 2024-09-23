@@ -3,19 +3,19 @@
 
     $navMenu = [
         [
-            'rot' => 'detail.cabut.cabut_awal',
-            'nama' => 'Cabut awal',
+            'rot' => 'detail.sortir.sortir_awal',
+            'nama' => 'Sortir awal',
         ],
         [
-            'rot' => 'opnamenew.cetak',
-            'nama' => 'Cabut akhir',
+            'rot' => 'detail.sortir.sortir_akhir',
+            'nama' => 'Sortir akhir',
         ],
         [
-            'rot' => 'opnamenew.sortir',
+            'rot' => 'detail.sortir.proses',
             'nama' => 'Sedang proses',
         ],
         [
-            'rot' => 'opnamenew.grading',
+            'rot' => 'detail.sortir.sisa',
             'nama' => 'Sisa pengawas',
         ],
     ];
@@ -29,10 +29,9 @@
                     href="{{ route($d['rot']) }}">{{ $d['nama'] }}</a>
             </li>
         @endforeach
-        +
     </ul>
 </div>
 <div class="col-lg-4 mb-3">
-    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end"><i
+    <a href="{{ route('cocokan.export') }}" class="btn btn-primary btn-sm float-end"><i
             class="fas fa-file-excel"></i>Export</a>
 </div>

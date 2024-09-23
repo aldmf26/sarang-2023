@@ -16,15 +16,20 @@
             'rot' => 'detail.cetak.cetak_awal',
             'rotAktif' => [
                 'detail.cetak.cetak_awal',
-                'cocokan.cetak_cetakakhir',
-                'cocokan.cetak_sedangproses',
-                'cocokan.cetak_sisa',
+                'detail.cetak.cetak_akhir',
+                'detail.cetak.proses',
+                'detail.cetak.sisa',
             ],
             'nama' => 'Cetak',
         ],
         [
-            'rot' => 'opnamenew.sortir',
-            'rotAktif' => ['opnamenew.cetak'],
+            'rot' => 'detail.sortir.sortir_awal',
+            'rotAktif' => [
+                'detail.sortir.sortir_awal',
+                'detail.sortir.sortir_akhir',
+                'detail.sortir.proses',
+                'detail.sortir.sisa',
+            ],
             'nama' => 'Sortir',
         ],
         [
