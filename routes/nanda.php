@@ -329,6 +329,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak/proses', 'cetak_cetakProses')->name('cetak.proses');
             Route::get('/cetak/sisa', 'cetak_cetakSisa')->name('cetak.sisa');
 
+            Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
+            Route::get('/sortir/akhir', 'sortir_sortirAkhir')->name('sortir.sortir_akhir');
+            Route::get('/sortir/proses', 'sortir_sortirProses')->name('sortir.proses');
+            Route::get('/sortir/sisa', 'sortir_sortirSisa')->name('sortir.sisa');
+
             // Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
         });
 

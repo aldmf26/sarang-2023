@@ -16,13 +16,19 @@
             'rot' => 'detail.cetak.cetak_awal',
             'rotAktif' => [
                 'detail.cetak.cetak_awal',
+                'detail.cetak.cetak_akhir',
+                'detail.cetak.proses',
+                'detail.cetak.sisa',
             ],
             'nama' => 'Cetak',
         ],
         [
-            'rot' => 'opnamenew.sortir',
+            'rot' => 'detail.sortir.sortir_awal',
             'rotAktif' => [
-                'opnamenew.cetak',
+                'detail.sortir.sortir_awal',
+                'detail.sortir.sortir_akhir',
+                'detail.sortir.proses',
+                'detail.sortir.sisa',
             ],
             'nama' => 'Sortir',
         ],

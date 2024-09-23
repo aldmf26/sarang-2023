@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CocokanModel;
 use App\Models\DetailCabutModel;
 use App\Models\DetailCetakModel;
+use App\Models\DetailSortirModel;
 use App\Models\OpnameNewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -317,5 +318,84 @@ class CabutDetailController extends Controller
             'suntik2' => $ca12suntik,
         ];
         return view('home.opnamenew.cetak.cetak_awal', $data);
+    }
+
+    public function cetak_cetakAkhir()
+    {
+        $model2 = new DetailCetakModel();
+
+        $ca2 = $model2::stok_selesai();
+        $ca11 = $this->getSuntikan(21);
+        $ca12suntik = $this->getSuntikan(23);
+
+        $model2 = new DetailCabutModel();
+        $data = [
+            'title' => 'Cetak Akhir',
+            'query' => $ca2,
+            'suntik' => $ca11,
+            'suntik2' => $ca12suntik,
+        ];
+        return view('home.opnamenew.cetak.cetak_akhir', $data);
+    }
+
+    public function cetak_cetakProses()
+    {
+        $model2 = new OpnameNewModel();
+        $data = [ 
+            'title' => 'Cetak Proses',
+            'query' => $model2::cetak_proses(),
+        ];
+        return view('home.opnamenew.cetak.cetak_proses', $data);
+    }
+
+    public function cetak_cetakSisa()
+    {
+        $model2 = new OpnameNewModel();
+        $data = [
+            'title' => 'Cetak Sisa Pengawas',
+            'query' => $model2::cetak_stok(),
+        ];
+        return view('home.opnamenew.cetak.cetak_sisa', $data);
+    }
+
+    public function sortir_sortirAwal()
+    {
+        $model2 = new DetailSortirModel();
+
+        $data = [ 
+            'title' => 'Sortir Awal',
+            'query' => $model2::stok_awal(),
+            'suntik' => $this->getSuntikan(31),
+            'suntik2' => $this->getSuntikan(32),
+        ];
+        return view('home.opnamenew.sortir.sortir_awal', $data);
+    }
+    public function sortir_sortirAkhir()
+    {
+        $model2 = new DetailSortirModel();
+        $data = [ 
+            'title' => 'Sortir Akhir',
+            'query' => $model2::stok_selesai(),
+            'suntik' => $this->getSuntikan(35),
+        ];
+        return view('home.opnamenew.sortir.sortir_akhir', $data);
+    }
+    public function sortir_sortirProses()
+    {
+        $model2 = new OpnameNewModel();
+        $data = [ 
+            'title' => 'Sortir Proses',
+            'query' => $model2::sortir_proses(),
+        ];
+        return view('home.opnamenew.sortir.sortir_proses', $data);
+    }
+    public function sortir_sortirSisa()
+    {
+        $model2 = new OpnameNewModel();
+        $data = [ 
+            'title' => 'Sortir Sisa',
+            'query' => $model2::sortir_stock(),
+        ];
+        return view('home.opnamenew.sortir.sortir_sisa', $data);
     }
 }

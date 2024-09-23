@@ -39,11 +39,11 @@
                                 <td class="text-end">{{ number_format($b->pcs_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->gr_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                <td class="text-end">0</td>
+                                <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
                                 {{-- <td class="text-end">0</td>
-                                <td class="text-end">0</td> --}}
+                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td> --}}
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp / $b->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
                             </tr>
                         @endforeach
                         <tr>
@@ -76,20 +76,28 @@
                         </tr>
                     </tbody>
                     <tfoot>
+                        @php
+                            $total_cost = sumBk($query, 'cost_kerja');
+                            $total_cost_op = sumBk($query, 'cost_kerja') + sumBk($query, 'ttl_rp');
+                            $total_pcs = sumBk($query, 'pcs_akhir') + $suntik->pcs + $suntik2->pcs;
+                            $total_gr = sumBk($query, 'gr_akhir') + $suntik->gr + $suntik2->gr;
+                            $total_ttl_rp = sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp;
+                        @endphp
+                       
                         <tr>
                             <th class="dheadstock ">Box : {{ count($query) }}</th>
                             <th class="dheadstock "></th>
                             <th class="dheadstock "></th>
                             <th class="dheadstock "></th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs_awal') + $suntik->pcs + $suntik2->pcs, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr_awal') + $suntik->gr + $suntik2->gr, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}</th>
-                            <th class="dheadstock  text-end">0</th>
+                            <th class="dheadstock  text-end">{{ number_format($total_pcs, 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format($total_gr, 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">{{number_format($total_cost,0)}}</th>
                             {{-- <th class="dheadstock  text-end">0</th>
-                            <th class="dheadstock  text-end">0</th> --}}
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">{{number_format(0,0)}}</th> --}}
+                            <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr_awal'), 0) }}
+                                {{ number_format($total_ttl_rp / $total_gr, 0) }}
                             </th>
                         </tr>
                     </tfoot>
@@ -109,7 +117,6 @@
                     "paging": false,
                     "info": false
                 });
-               
             </script>
         @endsection
     </x-slot>
