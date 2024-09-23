@@ -7,15 +7,15 @@
             'nama' => 'Cetak awal',
         ],
         [
-            'rot' => 'detail.cetak.cetak_akhir',
+            'rot' => 'cocokan.cetak_cetakakhir',
             'nama' => 'Cetak akhir',
         ],
         [
-            'rot' => 'detail.cetak.proses',
+            'rot' => 'cocokan.cetak_sedangproses',
             'nama' => 'Sedang proses',
         ],
         [
-            'rot' => 'detail.cetak.sisa',
+            'rot' => 'cocokan.cetak_sisa',
             'nama' => 'Sisa pengawas',
         ],
     ];

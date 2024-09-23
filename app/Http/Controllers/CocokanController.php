@@ -56,6 +56,7 @@ class CocokanController extends Controller
         $ctk_opname->ttl_rp = $ca11->ttl_rp;
 
         $ca2 = $model::cetak_stok_awal();
+
         $ca12suntik = $this->getSuntikan(23);
         $akhir_cbt = new stdClass();
         $akhir_cbt->pcs = $ca2->pcs + $ca12suntik->pcs;
@@ -63,8 +64,10 @@ class CocokanController extends Controller
         $akhir_cbt->ttl_rp = $ca2->ttl_rp + $ca12suntik->ttl_rp;
 
 
+
         $ca17 = $model::cetak_stok();
         $ca17suntik = $this->getSuntikan(27);
+
 
         $cetak_sisa = new stdClass();
         $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
@@ -82,9 +85,9 @@ class CocokanController extends Controller
         $ttl_gr = $this->getCost($model, 'ttl_gr');
         $cost_op = $this->getCost($model, 'cost_op');
         $cost_dll = $this->getCost($model, 'dll');
-       
+
         $data = [
-            
+
             'title' => 'Cetak',
             'ctk_opname' => $ctk_opname,
             'akhir_cbt' => $akhir_cbt,

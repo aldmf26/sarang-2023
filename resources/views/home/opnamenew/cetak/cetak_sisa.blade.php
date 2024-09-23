@@ -34,16 +34,16 @@
                                 <td>{{ $b->nm_partai }}</td>
                                 <td>{{ $b->name }}</td>
                                 <td>{{ $b->no_box }}</td>
-                                <td class="text-end">{{ number_format($b->pcs_awal, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->pcs, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                                 <td class="text-end">0</td>
 
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->ttl_rp / $b->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->ttl_rp / $b->gr, 0) }}</td>
                             </tr>
                         @endforeach
-                        <tr>
+                        {{-- <tr>
                             <td></td>
                             <td>partai suntik</td>
                             <td>-</td>
@@ -55,20 +55,8 @@
 
                             <td class="text-end">{{ number_format($suntik->ttl_rp, 0) }}</td>
                             <td class="text-end">{{ number_format($suntik->ttl_rp / $suntik->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>partai suntik</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-end">{{ number_format($suntik2->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp, 0) }}</td>
-                            <td class="text-end">0</td>
+                        </tr> --}}
 
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp / $suntik2->gr, 0) }}</td>
-                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
@@ -77,19 +65,19 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'pcs_awal') + $suntik->pcs + $suntik2->pcs, 0) }}</th>
+                                {{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'gr_awal') + $suntik->gr + $suntik2->gr, 0) }}</th>
+                                {{ number_format(sumBk($query, 'gr'), 0) }}</th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}
+                                {{ number_format(sumBk($query, 'ttl_rp'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">0</th>
 
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}
+                                {{ number_format(sumBk($query, 'ttl_rp'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr_awal'), 0) }}
+                                {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>

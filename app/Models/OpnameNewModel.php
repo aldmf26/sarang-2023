@@ -76,7 +76,7 @@ class OpnameNewModel extends Model
     left join users as c on c.id = d.id_pengawas
     left join oprasional as f on f.bulan = d.bulan_dibayar
     left join cost_dll_cu_denda as g on g.bulan_dibayar = d.bulan_dibayar
-    WHERE d.selesai = 'Y' and d.penutup = 'T' and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
+    WHERE d.selesai = 'Y'  and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
     group by d.no_box
 
    
@@ -115,6 +115,7 @@ class OpnameNewModel extends Model
         ) as z on z.no_box = a.no_box
         WHERE a.kategori = 'cetak'   
         and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
+        group by a.no_box
         order by e.name ASC
         ");
 
@@ -320,6 +321,42 @@ left join users as g on g.id = a.id_pengawas
             WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
             group by a.no_box
             order by g.name ASC;
+        ");
+
+        return $result;
+    }
+
+
+    public static function cetak_stok_awal()
+    {
+        $result = DB::select("SELECT a.no_box, a.nm_partai, a.name, sum(a.pcs) as pcs, sum(a.gr_awal) as gr_awal, sum(a.gr_akhir) as gr_akhir, sum(a.ttl_rp) as ttl_rp, sum(a.cost) as cost_kerja
+FROM (
+        SELECT a.no_box, b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+    	left join formulir_sarang as d on d.no_box = a.no_box and d.kategori = 'cetak'
+        left join users as c on c.id = d.id_penerima
+        where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
+
+        UNION ALL
+
+        SELECT a.no_box, b.nm_partai, c.name,  a.ttl_rp as cost, 0 as pcs, a.gr_eo_awal as gr_awal, a.gr_eo_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+        FROM eo as a 
+        LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join formulir_sarang as d on d.no_box = a.no_box and d.kategori = 'cetak'
+        left join users as c on c.id = d.id_penerima
+        WHERE a.selesai = 'Y' AND b.baru = 'baru'
+
+        UNION ALL 
+        SELECT a.no_box, b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        left join formulir_sarang as d on d.no_box = a.no_box and d.kategori = 'cetak'
+        left join users as c on c.id = d.id_penerima
+        where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
+
+) as a
+group by a.no_box;
         ");
 
         return $result;

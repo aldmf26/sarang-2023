@@ -16,21 +16,20 @@
             'rot' => 'detail.cetak.cetak_awal',
             'rotAktif' => [
                 'detail.cetak.cetak_awal',
+                'cocokan.cetak_cetakakhir',
+                'cocokan.cetak_sedangproses',
+                'cocokan.cetak_sisa',
             ],
             'nama' => 'Cetak',
         ],
         [
             'rot' => 'opnamenew.sortir',
-            'rotAktif' => [
-                'opnamenew.cetak',
-            ],
+            'rotAktif' => ['opnamenew.cetak'],
             'nama' => 'Sortir',
         ],
         [
             'rot' => 'opnamenew.grading',
-            'rotAktif' => [
-                'opnamenew.cetak',
-            ],
+            'rotAktif' => ['opnamenew.cetak'],
             'nama' => 'Grading & Pengiriman',
         ],
     ];
@@ -38,14 +37,13 @@
 <div class="col-lg-12">
     <ul class="nav nav-pills float-start">
         @foreach ($navMenu as $d)
-        <li class="nav-item">
-            <a class="nav-link  {{ in_array($rot, $d['rotAktif']) ? 'active' : '' }}" aria-current="page"
-                href="{{ route($d['rot']) }}">{{ $d['nama'] }}</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ in_array($rot, $d['rotAktif']) ? 'active' : '' }}" aria-current="page"
+                    href="{{ route($d['rot']) }}">{{ $d['nama'] }}</a>
+            </li>
         @endforeach
     </ul>
 </div>
 <div class="col-lg-12">
     <hr style="border: 1px solid black;">
 </div>
-
