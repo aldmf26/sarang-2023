@@ -190,9 +190,9 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('AG' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('AH' . $kolom, $d->cost_kerja);
             $sheet1->setCellValue('AI' . $kolom, 0);
-            $sheet1->setCellValue('AJ' . $kolom,0);
+            $sheet1->setCellValue('AJ' . $kolom, 0);
             $sheet1->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet1->setCellValue('AL' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet1->setCellValue('AL' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet1->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
@@ -252,8 +252,8 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('I' . $kolom, 0);
             $sheet2->setCellValue('J' . $kolom, 0);
-            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
@@ -284,8 +284,8 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('U' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('V' . $kolom, 0);
             $sheet2->setCellValue('W' . $kolom, 0);
-            $sheet2->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet2->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet2->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
@@ -316,8 +316,8 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('AH' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('AI' . $kolom, 0);
             $sheet2->setCellValue('AJ' . $kolom, 0);
-            $sheet2->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet2->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet2->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
@@ -355,8 +355,8 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('H' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('I' . $kolom, 0);
             $sheet3->setCellValue('J' . $kolom, 0);
-            $sheet3->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet3->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet3->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
@@ -387,8 +387,8 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('V' . $kolom, 0);
             $sheet3->setCellValue('W' . $kolom, 0);
-            $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
@@ -417,10 +417,10 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('AF' . $kolom, $d->gr);
             $sheet3->setCellValue('AG' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('AH' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('AI' . $kolom,0);
+            $sheet3->setCellValue('AI' . $kolom, 0);
             $sheet3->setCellValue('AJ' . $kolom, 0);
-            $sheet3->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja );
-            $sheet3->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja ) / $d->gr);
+            $sheet3->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
@@ -542,6 +542,20 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(3);
         $sheet4->setTitle('Sortir selesai');
 
+        $cetak_selesai = $model::sortir_selesai_akhir();
+        $model_cost = new CocokanModel();
+        $cost_kerja = $this->getCost($model_cost, 1);
+        $cost_op = $this->getCost($model_cost, 'cost_op');
+        $ttl_gr =  sumBk($cetak_selesai, 'gr');
+        $cost_cu =  sumBk($cetak_selesai, 'cost_cu');
+        $s5suntik = $this->getSuntikan(35);
+        $p2suntik = $this->getSuntikan(41);
+        $tl_gr = $ttl_gr + $s5suntik->gr + $p2suntik->gr;
+        $ttl_rp_operasional = $cost_op -  $cost_kerja - $cost_cu;
+        $rp_gr_operasional = $ttl_rp_operasional / $tl_gr;
+
+
+
         $sheet4->getStyle("B1:N1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'Sortir Selesai');
         $sheet4->setCellValue('B1', 'partai');
@@ -558,7 +572,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('M1', 'total rp');
         $sheet4->setCellValue('N1', 'rp/gr');
 
-        $cetak_selesai = $model::sortir_selesai_akhir();
+
         $kolom = 2;
         foreach ($cetak_selesai  as $d) {
             $sheet4->setCellValue('B' . $kolom, $d->nm_partai);
@@ -571,12 +585,12 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('I' . $kolom, $d->ttl_rp);
             $sheet4->setCellValue('J' . $kolom, $d->cost_kerja);
             $sheet4->setCellValue('K' . $kolom,  $d->cost_cu);
-            $sheet4->setCellValue('L' . $kolom, 0);
-            $sheet4->setCellValue('M' . $kolom, 0);
-            $sheet4->setCellValue('N' . $kolom, 0);
+            $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $d->gr);
+            $sheet4->setCellValue('M' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr));
+            $sheet4->setCellValue('N' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr)) / $d->gr);
             $kolom++;
         }
-        $s5suntik = $this->getSuntikan(35);
+
         $sheet4->setCellValue('B' . $kolom, 'partai suntik');
         $sheet4->setCellValue('C' . $kolom, 'suntik');
         $sheet4->setCellValue('D' . $kolom, '-');
@@ -587,11 +601,13 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('I' . $kolom,  $s5suntik->ttl_rp);
         $sheet4->setCellValue('J' . $kolom, 0);
         $sheet4->setCellValue('K' . $kolom,  0);
-        $sheet4->setCellValue('L' . $kolom, 0);
-        $sheet4->setCellValue('M' . $kolom, 0);
-        $sheet4->setCellValue('N' . $kolom, 0);
+        $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $s5suntik->gr);
+        $sheet4->setCellValue('M' . $kolom, $s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr));
+        $sheet4->setCellValue('N' . $kolom, ($s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr)) / $s5suntik->gr);
 
-        $p2suntik = $this->getSuntikan(41);
+
+
+
         $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
         $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
         $sheet4->setCellValue('D' . $kolom + 1, '-');
@@ -602,9 +618,9 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
         $sheet4->setCellValue('J' . $kolom + 1, 0);
         $sheet4->setCellValue('K' . $kolom + 1,  0);
-        $sheet4->setCellValue('L' . $kolom + 1, 0);
-        $sheet4->setCellValue('M' . $kolom + 1, 0);
-        $sheet4->setCellValue('N' . $kolom + 1, 0);
+        $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
+        $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
+        $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
         $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
     }
@@ -716,22 +732,19 @@ class OpnameNewController extends Controller
         $total = 0;
         foreach ($operasional as $o) {
             $total += $o->total_operasional;
-            $sheet4->setCellValue('K'.$kolom, date('F Y', strtotime($o->tahun . '-' . $o->bulan . '-' . '01')));
-            $sheet4->setCellValue('L'.$kolom, "$o->total_operasional");
+            $sheet4->setCellValue('K' . $kolom, date('F Y', strtotime($o->tahun . '-' . $o->bulan . '-' . '01')));
+            $sheet4->setCellValue('L' . $kolom, "$o->total_operasional");
             $kolom++;
         }
-        $sheet4->setCellValue('K'.$kolom, "Total");
-        $sheet4->setCellValue('L'.$kolom, "$total");
-        $sheet4->getStyle("K2:L".$kolom-1)->applyFromArray($style);
-        $sheet4->getStyle("K" . $kolom . ":L".$kolom)->applyFromArray($style_atas);
+        $sheet4->setCellValue('K' . $kolom, "Total");
+        $sheet4->setCellValue('L' . $kolom, "$total");
+        $sheet4->getStyle("K2:L" . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle("K" . $kolom . ":L" . $kolom)->applyFromArray($style_atas);
 
-        $sheet4->setCellValue('K'.$kolom+2, "cost operasional");
-        $sheet4->setCellValue('L'.$kolom+2, "=$total - E12 - F12");
-        $sheet4->setCellValue('K'.$kolom+3, "rp/gr cost operasional");
-        $sheet4->setCellValue('L'.$kolom+3, "=($total - E12 - F12) / C11");
-
-
-
+        $sheet4->setCellValue('K' . $kolom + 2, "cost operasional");
+        $sheet4->setCellValue('L' . $kolom + 2, "=$total - E12 - F12");
+        $sheet4->setCellValue('K' . $kolom + 3, "rp/gr cost operasional");
+        $sheet4->setCellValue('L' . $kolom + 3, "=($total - E12 - F12) / C11");
     }
 
 
@@ -755,6 +768,73 @@ class OpnameNewController extends Controller
             41 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'grading' and opname = 'Y'"),
             42 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='grading' and opname = 'T';"),
             // 43 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='cetak_selesai' and opname = 'T';"),
+        ];
+        if (array_key_exists($index, $datas)) {
+            return $datas[$index];
+        } else {
+            return false;
+        }
+    }
+
+    public function getCost(CocokanModel $model, $index)
+    {
+        $a14suntik = $this->getSuntikan(14);
+        $a16suntik = $this->getSuntikan(16);
+        $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
+
+        $bk_akhir = new stdClass();
+        $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
+        $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
+        $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+        $bk_akhir->cost_kerja = $a12->cost_kerja;
+
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16 = $model::cetak_selesai();
+        $cetak_akhir = new stdClass();
+        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
+        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
+
+
+        $s3 = $model::sortir_akhir();
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+
+        $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
+        $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
+
+
+
+        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+        $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
+
+
+
+
+
+        $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll, max(bulan_dibayar) as bulan FROM `tb_gaji_penutup`");
+        $bulan = $cost_dll->bulan;
+        $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
+        $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
+
+        $ttl_semua = $ttl_cost_kerja + $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
+        $dll = $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
+        $cost_op = $ttl_cost_op - $ttl_semua;
+
+
+        $datas = [
+            1 => $ttl_cost_kerja,
+            'ttl_gr' => $gr_akhir_all,
+            'dll' => $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda,
+            'cost_op' => $ttl_cost_op
         ];
         if (array_key_exists($index, $datas)) {
             return $datas[$index];
