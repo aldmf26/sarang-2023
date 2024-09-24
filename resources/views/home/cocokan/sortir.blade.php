@@ -55,7 +55,7 @@
                             {{ number_format($akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                            <a href="{{ route('detail.sortir.sortir_awal') }}" target="_blank">
                                 {{ number_format($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr, 0) }}
                             </a>
                         </td>
@@ -74,7 +74,7 @@
                             {{ number_format($sortir_akhir->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                            <a href="{{ route('detail.sortir.sortir_akhir') }}" target="_blank">
                                 {{ number_format($sortir_akhir->gr, 0) }}
                             </a>
                         </td>
@@ -93,7 +93,7 @@
                             {{ number_format($sedang_proses->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                            <a href="{{ route('detail.sortir.proses') }}" target="_blank">
                                 {{ number_format($sedang_proses->gr, 0) }}
                             </a>
                         </td>
@@ -110,7 +110,7 @@
                             {{ number_format($sortir_sisa->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.sortir') }}" target="_blank">
+                            <a href="{{ route('detail.sortir.sisa') }}" target="_blank">
                                 {{ number_format($sortir_sisa->gr, 0) }}
                             </a>
                         </td>

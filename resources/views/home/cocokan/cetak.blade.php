@@ -54,7 +54,7 @@
                             {{ number_format($ctk_opname->pcs + $akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                            <a href="{{ route('detail.cetak.cetak_awal') }}" target="_blank">
                                 {{ number_format($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr, 0) }}
                             </a>
                         </td>
@@ -70,7 +70,7 @@
                         <td class="text-end">
                             {{ number_format($cetak_akhir->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                            <a href="{{ route('detail.cetak.cetak_akhir') }}" target="_blank">
                                 {{ number_format($cetak_akhir->gr, 0) }}
                             </a>
                         </td>
@@ -85,7 +85,7 @@
                         <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
                         <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                            <a href="{{ route('detail.cetak.proses') }}" target="_blank">
                                 {{ number_format($cetak_proses->gr, 0) }}
                             </a>
                         </td>
@@ -96,7 +96,7 @@
                         <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
                         <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.cetak') }}" target="_blank">
+                            <a href="{{ route('detail.cetak.sisa') }}" target="_blank">
                                 {{ number_format($cetak_sisa->gr, 0) }}
                             </a>
                         </td>
