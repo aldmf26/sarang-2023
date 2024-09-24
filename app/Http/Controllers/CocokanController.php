@@ -219,6 +219,7 @@ class CocokanController extends Controller
         $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
 
 
+
         $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
         $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
 

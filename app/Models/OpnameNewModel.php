@@ -76,7 +76,7 @@ class OpnameNewModel extends Model
     left join users as c on c.id = d.id_pengawas
     left join oprasional as f on f.bulan = d.bulan_dibayar
     left join cost_dll_cu_denda as g on g.bulan_dibayar = d.bulan_dibayar
-    WHERE d.selesai = 'Y'  and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
+    WHERE d.selesai = 'Y' and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
     group by d.no_box
 
    
@@ -357,6 +357,47 @@ FROM (
 
 ) as a
 group by a.no_box;
+        ");
+
+        return $result;
+    }
+
+
+
+    public static function sortir_selesai_akhir()
+    {
+        $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, 
+            b.tipe, b.ket,
+            SUM(a.pcs_akhir) as pcs, 
+            SUM(a.gr_akhir) as gr, 
+            SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, 
+            sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
+            sum(z.cost_cu) as cost_cu
+            FROM sortir as a 
+            LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
+            left join cabut as d on d.no_box = a.no_box
+			left join eo as e on e.no_box = a.no_box
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as ttl_rp 
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+
+                        where b.kategori = 'CTK'
+                        group by a.no_box
+            ) as f on f.no_box = a.no_box
+            left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                                FROM cetak_new as a 
+                                left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                                where b.kategori = 'CU' and a.selesai = 'Y'
+                                group by a.no_box
+                    ) as z on z.no_box = a.no_box
+            left join users as g on g.id = a.id_pengawas
+            
+            WHERE  a.selesai = 'Y' and b.baru = 'baru'
+            group by a.no_box
+            order by g.name ASC;
         ");
 
         return $result;
