@@ -1191,7 +1191,7 @@ class CabutController extends Controller
         $cabut = Cabut::getCabut();
         foreach ($cabut as $d) {
             $hasil = rumusTotalRp($d);
-            DB::table('cabut')->where('id_cabut', $d->id_cabut)->update([
+            DB::table('cabut')->where([['id_cabut', $d->id_cabut],['bulan_dibayar', 9]])->update([
                 'ttl_rp' => $hasil->ttl_rp
             ]);
         }
