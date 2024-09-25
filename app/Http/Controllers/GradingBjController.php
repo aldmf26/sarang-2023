@@ -278,7 +278,7 @@ class GradingBjController extends Controller
 
 
             for ($i = 0; $i < count($r->grade); $i++) {
-                if(!$r->box_sp[$i]){
+                if (!$r->box_sp[$i]) {
                     continue;
                 }
                 $data[] = [
@@ -304,11 +304,11 @@ class GradingBjController extends Controller
             $selisihPcs =  $ttlPcsSortir - $ttlPcsGrading;
             $selisihGr =  $ttlGrSortir - $ttlGrGrading;
 
-            
+
             if ($ttlPcsGrading > $ttlPcsSortir || $ttlGrGrading > $ttlGrSortir) {
                 return redirect()->back()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
-            if($selisihGr > 0) {
+            if ($selisihGr > 0) {
                 DB::table('grading_selisih')->insert([
                     'no_box' => $no_invoice,
                     'pcs' => $selisihPcs,
@@ -449,7 +449,7 @@ class GradingBjController extends Controller
             'H' => 'pcs',
             'I' => 'gr',
             'J' => 'no pengiriman',
- 
+
             'L' => 'grade',
             'M' => 'tipe',
 

@@ -128,7 +128,6 @@ class OpnameNewController extends Controller
 
         $sheet1->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 
-
         $sheet1->getStyle("O1:Y1")->applyFromArray($style_atas);
         $sheet1->setCellValue('N1', 'Cabut sisa pengawas');
         $sheet1->setCellValue('O1', 'partai');

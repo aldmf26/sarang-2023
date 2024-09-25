@@ -290,7 +290,7 @@ class CetakModel extends Model
             $pgws = 'and a.id_pengawas = ' . $id_pengawas;
         }
         if ($hal == 'cetak') {
-            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK') and f.no_box is null";
+            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK') ";
         } else {
             $halaman = "and e.kategori = 'CU'";
         }
