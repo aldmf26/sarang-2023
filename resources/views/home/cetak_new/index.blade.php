@@ -267,11 +267,17 @@
                         var pcs_tdk_ctk = $('.pcs_tdk_ctk' + id_cetak).val();
                         var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
 
+                        var gr_awal = $('.gr_awal' + id_cetak).val();
+                        var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
+                        var gr_akhir = $('.gr_akhir' + id_cetak).val();
+
+                        var ttl_gr_akhir = parseFloat(gr_akhir) + parseFloat(gr_tdk_ctk);
+
                         var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
 
 
-                        if (pcs_awal != ttl_pcs) {
-                            alertToast('error', 'Jumlah Pcs tidak sama');
+                        if (pcs_awal != ttl_pcs || gr_awal < ttl_gr_akhir) {
+                            alertToast('error', 'Cek kembali pcs dan gr sebelum diselesaikan');
                         } else {
                             $.ajax({
                                 type: "get",
