@@ -496,7 +496,6 @@ class GradingBjController extends Controller
 
     public function import(Request $r)
     {
-
         $file = $r->file('file');
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
@@ -516,6 +515,7 @@ class GradingBjController extends Controller
                 $pcs = $row[7];
                 $gr = $row[8];
                 $noPengiriman = $row[9];
+                $ttl_rp = $row[10];
 
                 if (empty($tgl) && empty($partai)) {
                     continue;
@@ -577,6 +577,7 @@ class GradingBjController extends Controller
                             'pcs' => $pcs,
                             'gr' => $gr,
                             'tgl' => $tgl,
+                            'ttl_rp' => $ttl_rp,
                             'admin' => "import-$tglD"
                         ]);
                     }
@@ -923,6 +924,7 @@ class GradingBjController extends Controller
                 $noboxGrading = $row[4];
                 $noGradingPengiriman = $row[5];
                 $no_invoice = $row[6];
+                $ttl_rp = $row[7];
 
 
 
@@ -953,6 +955,7 @@ class GradingBjController extends Controller
                         'no_nota' => $no_invoice,
                         'admin' => "import-$tglHari",
                         'grade' => $grade,
+                        'ttl_rp' => $ttl_rp,
                     ]);
                 }
             }

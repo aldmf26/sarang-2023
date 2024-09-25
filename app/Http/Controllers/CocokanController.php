@@ -147,14 +147,17 @@ class CocokanController extends Controller
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
-        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
-        $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
+        $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+            JOIN grading_partai as b on a.no_box = b.box_pengiriman");
 
+        $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
+        $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
         $data = [
             'title' => 'Grading ',
             'opname' =>  $this->getSuntikan(41),
             'sortir_akhir' => $sortir_akhir,
             'pengiriman' => $pengiriman,
+            'sumTtlRpPengiriman' => $sumTtlRpPengiriman,
             'grading' => $grading
         ];
         return view('home.cocokan.grading', $data);

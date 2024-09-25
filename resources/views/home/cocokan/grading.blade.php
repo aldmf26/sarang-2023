@@ -57,7 +57,7 @@
                                 {{ number_format($pengiriman->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($rp_satuan * $pengiriman->gr, 0) }}</td>
+                        <td class="text-end">{{ number_format($sumTtlRpPengiriman->ttl_rp, 0) }}</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa Grading</td>
@@ -67,7 +67,7 @@
                                 {{ number_format($grading->gr - $pengiriman->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format(($grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->ttl_rp, 0) }}</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Selisih</td>
@@ -93,7 +93,7 @@
                             {{ number_format($sortir_akhir->gr + $opname->gr, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format(($sortir_akhir->gr + $opname->gr) * $rp_satuan, 0) }}
+                            {{ number_format($sumTtlRpPengiriman->ttl_rp + $grading->ttl_rp, 0) }}
                         </td>
                     </tr>
 
