@@ -432,22 +432,23 @@ class OpnameNewController extends Controller
         $sheet3 = $spreadsheet->getActiveSheet(4);
         $sheet3->setTitle('Gudang grading & pengiriman');
 
-        $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
+        $sheet3->getStyle("B1:H1")->applyFromArray($style_atas);
         $sheet3->setCellValue('A1', 'Pengiriman');
         $sheet3->setCellValue('B1', 'Tanggal pengiriman');
         $sheet3->setCellValue('C1', 'no pengiriman');
         $sheet3->setCellValue('D1', 'grade');
         $sheet3->setCellValue('E1', 'pcs');
         $sheet3->setCellValue('F1', 'gr');
-        $sheet3->setCellValue('G1', 'ttl rp bk');
-        $sheet3->setCellValue('H1', 'cost kerja');
-        $sheet3->setCellValue('I1', 'cost cu dll');
-        $sheet3->setCellValue('J1', 'cost operasional');
-        $sheet3->setCellValue('K1', 'ttl rp');
-        $sheet3->setCellValue('L1', 'rp/gr');
+        $sheet3->setCellValue('G1', 'ttl rp');
+        $sheet3->setCellValue('H1', 'rp/gr');
 
-        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr 
+        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, b.pcs as pcs, b.gr as gr , sum(a.ttl_rp) as total_rp
         FROM pengiriman as a 
+        left join  (
+        SELECT sum(b.pcs) as pcs, sum(b.gr) as gr, b.box_pengiriman
+        FROM grading_partai as b
+        group by b.box_pengiriman
+        ) as b on b.box_pengiriman = a.no_box
         group by a.id_pengiriman;");
         $kolom = 2;
         foreach ($pengiriman  as $d) {
@@ -456,47 +457,35 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('D' . $kolom, $d->grade);
             $sheet3->setCellValue('E' . $kolom, $d->pcs);
             $sheet3->setCellValue('F' . $kolom, $d->gr);
-            $sheet3->setCellValue('G' . $kolom, 0);
-            $sheet3->setCellValue('H' . $kolom, 0);
-            $sheet3->setCellValue('I' . $kolom, 0);
-            $sheet3->setCellValue('J' . $kolom, 0);
-            $sheet3->setCellValue('K' . $kolom, 0);
-            $sheet3->setCellValue('L' . $kolom, 0);
+            $sheet3->setCellValue('G' . $kolom, $d->total_rp);
+            $sheet3->setCellValue('H' . $kolom, $d->total_rp / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('B2:H' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('N1', 'Sisa grading');
-        $sheet3->setCellValue('O1', 'box grading');
-        $sheet3->setCellValue('P1', 'pengawas');
-        $sheet3->setCellValue('Q1', 'grade');
-        $sheet3->setCellValue('R1', 'pcs');
-        $sheet3->setCellValue('S1', 'gr');
-        $sheet3->setCellValue('T1', 'ttl rp bk');
-        $sheet3->setCellValue('U1', 'cost kerja');
-        $sheet3->setCellValue('V1', 'cost cu dll');
-        $sheet3->setCellValue('W1', 'cost operasional');
-        $sheet3->setCellValue('X1', 'ttl rp');
-        $sheet3->setCellValue('Y1', 'rp/gr');
+        $sheet3->getStyle("J1:Q1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('J1', 'Sisa grading');
+        $sheet3->setCellValue('K1', 'box grading');
+        $sheet3->setCellValue('L1', 'pengawas');
+        $sheet3->setCellValue('M1', 'grade');
+        $sheet3->setCellValue('N1', 'pcs');
+        $sheet3->setCellValue('O1', 'gr');
+        $sheet3->setCellValue('P1', 'ttl rp');
+        $sheet3->setCellValue('Q1', 'rp/gr');
 
         $grading = DB::select("SELECT * FROM `grading_partai` WHERE `box_pengiriman` not in(SELECT a.no_box FROM pengiriman as a )");
         $kolom = 2;
         foreach ($grading  as $d) {
-            $sheet3->setCellValue('O' . $kolom, $d->box_pengiriman);
-            $sheet3->setCellValue('P' . $kolom, $d->admin);
-            $sheet3->setCellValue('Q' . $kolom, $d->grade);
-            $sheet3->setCellValue('R' . $kolom, $d->pcs);
-            $sheet3->setCellValue('S' . $kolom, $d->gr);
-            $sheet3->setCellValue('T' . $kolom, 0);
-            $sheet3->setCellValue('U' . $kolom, 0);
-            $sheet3->setCellValue('V' . $kolom, 0);
-            $sheet3->setCellValue('W' . $kolom, 0);
-            $sheet3->setCellValue('X' . $kolom, 0);
-            $sheet3->setCellValue('Y' . $kolom, 0);
+            $sheet3->setCellValue('K' . $kolom, $d->box_pengiriman);
+            $sheet3->setCellValue('L' . $kolom, $d->admin);
+            $sheet3->setCellValue('M' . $kolom, $d->grade);
+            $sheet3->setCellValue('N' . $kolom, $d->pcs);
+            $sheet3->setCellValue('O' . $kolom, $d->gr);
+            $sheet3->setCellValue('P' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('Q' . $kolom, $d->ttl_rp / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('K2:Q' . $kolom - 1)->applyFromArray($style);
 
         $sheet3->getStyle("AB1:AI1")->applyFromArray($style_atas);
         $sheet3->setCellValue('AA1', 'selisih');
