@@ -228,6 +228,8 @@ class ExportCocokanController extends Controller
         $spreadsheet->setActiveSheetIndex(1);
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Gudang Cetak');
+        
+
         $koloms = [
             'A' => 'awal cetak',
             'B' => 'nama partai',
@@ -237,36 +239,45 @@ class ExportCocokanController extends Controller
             'F' => 'gr',
             'G' => 'ttl rp bk',
             'H' => 'cost kerja',
+            'I' => 'ttl rp',
+            'J' => 'rp/gr',
 
-            'J' => 'akhir cetak',
-            'K' => 'nama partai',
-            'L' => 'pengawas',
-            'M' => 'no box',
-            'N' => 'pcs',
-            'O' => 'gr',
-            'P' => 'ttl rp bk',
-            'Q' => 'cost kerja',
+            'L' => 'akhir cetak',
+            'M' => 'nama partai',
+            'N' => 'pengawas',
+            'O' => 'no box',
+            'P' => 'pcs',
+            'Q' => 'gr',
+            'R' => 'ttl rp bk',
+            'S' => 'cost kerja',
+            'T' => 'ttl rp',
+            'U' => 'rp/gr',
 
-            'S' => 'sedang proses',
-            'T' => 'nama partai',
-            'U' => 'pengawas',
-            'V' => 'no box',
-            'W' => 'pcs',
-            'X' => 'gr',
-            'Y' => 'ttl rp bk',
-            'Z' => 'cost kerja',
+            'W' => 'sedang proses',
+            'X' => 'nama partai',
+            'Y' => 'pengawas',
+            'Z' => 'no box',
+            'AA' => 'pcs',
+            'AB' => 'gr',
+            'AC' => 'ttl rp bk',
+            'AD' => 'cost kerja',
+            'AE' => 'ttl rp',
+            'AF' => 'rp/gr',
 
-            'AB' => 'sisa pengawas',
-            'AC' => 'nama partai',
-            'AD' => 'pengawas',
-            'AE' => 'no box',
-            'AF' => 'pcs',
-            'AG' => 'gr',
-            'AH' => 'ttl rp bk',
-            'AI' => 'cost kerja',
+            'AH' => 'sisa cetak',
+            'AI' => 'nama partai',
+            'AJ' => 'pengawas',
+            'AK' => 'no box',
+            'AL' => 'pcs',
+            'AM' => 'gr',
+            'AN' => 'ttl rp bk',
+            'AO' => 'cost kerja',
+            'AP' => 'ttl rp',
+            'AQ' => 'rp/gr',
 
         ];
         foreach ($koloms as $k => $v) {
+            $sheet->getStyle($k . "1" . ":$k" . "1")->applyFromArray($style_atas);
             $sheet->setCellValue($k . '1', $v);
         }
 
@@ -286,6 +297,8 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("F$row", $v->gr_awal);
             $sheet->setCellValue("G$row", $v->ttl_rp);
             $sheet->setCellValue("H$row", 0);
+            $sheet->setCellValue("I$row", $v->ttl_rp);
+            $sheet->setCellValue("J$row", $v->ttl_rp / $v->gr_awal);
 
             $row++;
         }
@@ -296,6 +309,9 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("F" . $row, $ca11->gr);
         $sheet->setCellValue("G" . $row, $ca11->ttl_rp);
         $sheet->setCellValue("H" . $row, 0);
+        $sheet->setCellValue("I$row", $ca11->ttl_rp);
+        $sheet->setCellValue("J$row", $ca11->ttl_rp / $v->gr_awal);
+
         $row = $row + 1;
         $sheet->setCellValue("B" . $row, 'suntikan');
         $sheet->setCellValue("C" . $row, 'suntikan');
@@ -304,73 +320,85 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("F" . $row, $ca12suntik->gr);
         $sheet->setCellValue("G" . $row, $ca12suntik->ttl_rp);
         $sheet->setCellValue("H" . $row, 0);
+        $sheet->setCellValue("I$row", $ca12suntik->ttl_rp);
+        $sheet->setCellValue("J$row", $ca12suntik->ttl_rp / $v->gr_awal);
 
-        $sheet->getStyle('B2:H' . $row)->applyFromArray($style);
+        $sheet->getStyle('B2:J' . $row)->applyFromArray($style);
 
         // akhir ctk
         $ca2_selesai = $model2::stok_selesai();
 
         $row = 2;
         foreach ($ca2_selesai as $v) {
-            $sheet->setCellValue("K$row", $v->nm_partai);
-            $sheet->setCellValue("L$row", $v->name);
-            $sheet->setCellValue("M$row", $v->no_box);
-            $sheet->setCellValue("N$row", $v->pcs_akhir);
-            $sheet->setCellValue("O$row", $v->gr_akhir);
-            $sheet->setCellValue("P$row", $v->ttl_rp);
-            $sheet->setCellValue("Q$row", $v->cost_kerja);
+            $sheet->setCellValue("M$row", $v->nm_partai);
+            $sheet->setCellValue("N$row", $v->name);
+            $sheet->setCellValue("O$row", $v->no_box);
+            $sheet->setCellValue("P$row", $v->pcs_akhir);
+            $sheet->setCellValue("Q$row", $v->gr_akhir);
+            $sheet->setCellValue("R$row", $v->ttl_rp);
+            $sheet->setCellValue("S$row", $v->cost_kerja);
+            $sheet->setCellValue("T$row", $v->ttl_rp + $v->cost_kerja);
+            $sheet->setCellValue("U$row", $v->ttl_rp / $v->gr_akhir);
 
             $row++;
         }
-        $sheet->setCellValue("K" . $row, 'suntikan');
-        $sheet->setCellValue("L" . $row, 'suntikan');
-        $sheet->setCellValue("M" . $row, '-');
-        $sheet->setCellValue("N" . $row, $ca11->pcs);
-        $sheet->setCellValue("O" . $row, $ca11->gr);
-        $sheet->setCellValue("P" . $row, $ca11->ttl_rp);
-        $sheet->setCellValue("Q" . $row, 0);
+        $sheet->setCellValue("M" . $row, 'suntikan');
+        $sheet->setCellValue("N" . $row, 'suntikan');
+        $sheet->setCellValue("O" . $row, '-');
+        $sheet->setCellValue("P" . $row, $ca11->pcs);
+        $sheet->setCellValue("Q" . $row, $ca11->gr);
+        $sheet->setCellValue("R" . $row, $ca11->ttl_rp);
+        $sheet->setCellValue("S" . $row, 0);
+        $sheet->setCellValue("T$row", $ca11->ttl_rp);
+        $sheet->setCellValue("U$row", $ca11->ttl_rp / $ca11->gr);
         $row = $row + 1;
 
-        $sheet->setCellValue("K" . $row, 'suntikan');
-        $sheet->setCellValue("L" . $row, 'suntikan');
-        $sheet->setCellValue("M" . $row, '-');
-        $sheet->setCellValue("N" . $row, $ca12suntik->pcs);
-        $sheet->setCellValue("O" . $row, $ca12suntik->gr);
-        $sheet->setCellValue("P" . $row, $ca12suntik->ttl_rp);
-        $sheet->setCellValue("Q" . $row, 0);
-        $sheet->getStyle('K2:Q' . $row)->applyFromArray($style);
+        $sheet->setCellValue("M" . $row, 'suntikan');
+        $sheet->setCellValue("N" . $row, 'suntikan');
+        $sheet->setCellValue("O" . $row, '-');
+        $sheet->setCellValue("P" . $row, $ca12suntik->pcs);
+        $sheet->setCellValue("Q" . $row, $ca12suntik->gr);
+        $sheet->setCellValue("R" . $row, $ca12suntik->ttl_rp);
+        $sheet->setCellValue("S" . $row, 0);
+        $sheet->setCellValue("T$row", $ca12suntik->ttl_rp);
+        $sheet->setCellValue("U$row", $ca12suntik->ttl_rp / $ca12suntik->gr);
+        $sheet->getStyle('M2:U' . $row)->applyFromArray($style);
 
         // proses ctk
         $proses = $model::cetak_proses();
         $row = 2;
         foreach ($proses as $v) {
-            $sheet->setCellValue("T$row", $v->nm_partai);
-            $sheet->setCellValue("U$row", $v->name);
-            $sheet->setCellValue("V$row", $v->no_box);
-            $sheet->setCellValue("W$row", $v->pcs);
-            $sheet->setCellValue("X$row", $v->gr);
-            $sheet->setCellValue("Y$row", $v->ttl_rp);
-            $sheet->setCellValue("Z$row", 0);
+            $sheet->setCellValue("X$row", $v->nm_partai);
+            $sheet->setCellValue("Y$row", $v->name);
+            $sheet->setCellValue("Z$row", $v->no_box);
+            $sheet->setCellValue("AA$row", $v->pcs);
+            $sheet->setCellValue("AB$row", $v->gr);
+            $sheet->setCellValue("AC$row", $v->ttl_rp);
+            $sheet->setCellValue("AD$row", 0);
+            $sheet->setCellValue("AE$row", $v->ttl_rp);
+            $sheet->setCellValue("AF$row", $v->ttl_rp / $v->gr);
 
             $row++;
         }
-        $sheet->getStyle('T2:Z' . $row)->applyFromArray($style);
+        $sheet->getStyle('X2:AF' . $row)->applyFromArray($style);
 
         // proses ctk
         $proses = $model::cetak_stok();
         $row = 2;
         foreach ($proses as $v) {
-            $sheet->setCellValue("AC$row", $v->nm_partai);
-            $sheet->setCellValue("AD$row", $v->name);
-            $sheet->setCellValue("AE$row", $v->no_box);
-            $sheet->setCellValue("AF$row", $v->pcs);
-            $sheet->setCellValue("AG$row", $v->gr);
-            $sheet->setCellValue("AH$row", $v->ttl_rp);
-            $sheet->setCellValue("AI$row", 0);
+            $sheet->setCellValue("AI$row", $v->nm_partai);
+            $sheet->setCellValue("AJ$row", $v->name);
+            $sheet->setCellValue("AK$row", $v->no_box);
+            $sheet->setCellValue("AL$row", $v->pcs);
+            $sheet->setCellValue("AM$row", $v->gr);
+            $sheet->setCellValue("AN$row", $v->ttl_rp);
+            $sheet->setCellValue("AO$row", 0);
+            $sheet->setCellValue("AP$row", 0);
+            $sheet->setCellValue("AQ$row", 0);
 
             $row++;
         }
-        $sheet->getStyle('AC2:AI' . $row)->applyFromArray($style);
+        $sheet->getStyle('AI2:AQ' . $row)->applyFromArray($style);
     }
 
     public function sortir($spreadsheet, $style_atas, $style, $model)

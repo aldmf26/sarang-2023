@@ -54,7 +54,7 @@
                         <td class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold"><a target="_blank"
-                                href="{{ route('opnamenew.index') }}">{{ number_format($bk_akhir->gr, 0) }}</a>
+                                href="{{ route('detail.cabut.cabut_akhir') }}">{{ number_format($bk_akhir->gr, 0) }}</a>
                         </td>
                         <td class="text-end">
                             {{ number_format($bk_akhir->ttl_rp, 0) }}</td>
@@ -69,7 +69,7 @@
                         <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a target="_blank"
-                                href="{{ route('opnamenew.index') }}">{{ number_format($cbt_proses->gr, 0) }}</a></td>
+                                href="{{ route('detail.cabut.proses') }}">{{ number_format($cbt_proses->gr, 0) }}</a></td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
@@ -77,7 +77,7 @@
                         <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a
-                                href="{{ route('opnamenew.index') }}">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
+                                href="{{ route('detail.cabut.sisa') }}">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
                         </td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
                         <td></td>

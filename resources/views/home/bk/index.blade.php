@@ -2,7 +2,9 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="mt-1">{{ $title }}</h6>
-            <div class="d-flex gap-1">
+            <div class="d-flex gap-1 ">
+                <div class="{{auth()->user()->posisi_id != 13 ? '' : 'd-none'}}">
+
                 <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
                 <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
                     class="btn btn-sm btn-primary">
@@ -12,6 +14,8 @@
                 <div>
                     @include('home.bk.btn_import')
                 </div>
+            </div>
+
                 <x-theme.btn_filter />
             </div>
         </div>

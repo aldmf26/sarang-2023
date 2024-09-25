@@ -7,19 +7,18 @@
             'nama' => 'Cetak awal',
         ],
         [
-            'rot' => 'cocokan.cetak_cetakakhir',
+            'rot' => 'detail.cetak.cetak_akhir',
             'nama' => 'Cetak akhir',
         ],
         [
-            'rot' => 'cocokan.cetak_sedangproses',
+            'rot' => 'detail.cetak.proses',
             'nama' => 'Sedang proses',
         ],
         [
-            'rot' => 'cocokan.cetak_sisa',
+            'rot' => 'detail.cetak.sisa',
             'nama' => 'Sisa pengawas',
         ],
     ];
-
 @endphp
 <div class="col-lg-8">
     <ul class="nav nav-pills float-start">
