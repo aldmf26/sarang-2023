@@ -15,7 +15,7 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal
+        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, g.ttl_rp as cost_bk, g.cost_cbt, g.cost_eo, g.cost_ctk, g.cost_str, g.cost_cu
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
@@ -26,6 +26,29 @@ class Grading extends Model
             group by no_box_sortir
         ) as d on d.no_box = b.no_box
         JOIN users as c on c.id = b.id_pemberi
+        left join(
+        SELECT a.no_box, (a.gr_awal * a.hrga_satuan) as ttl_rp, b.ttl_rp as cost_cbt, c.ttl_rp as cost_eo, d.cost_ctk, e.ttl_rp as cost_str, f.cost_cu
+            FROM bk as a 
+            left JOIN cabut as b on b.no_box = a.no_box
+            left JOIN eo as c on c.no_box = a.no_box
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as cost_ctk 
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CTK'
+                        group by a.no_box
+            ) as d on d.no_box = a.no_box
+            left join sortir as e on e.no_box = a.no_box
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+            ) as f on f.no_box = a.no_box
+            where a.baru = 'baru' and a.kategori ='cabut'
+            group by a.no_box
+        ) as g on g.no_box = a.no_box_sortir
         WHERE a.selesai  = 'T'
         GROUP BY b.no_box
         HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0

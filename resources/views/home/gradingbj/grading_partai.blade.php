@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <h6>Box Dipilih <span class="text-success">Partai : {{ $nm_partai }}</span></h6>
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -81,6 +81,8 @@
                                 <th class="dhead text-center">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Rp/gr</th>
+                                <th class="dhead text-end">Total Rp</th>
                             </tr>
                         </thead>
                         <thead class="bg-white">
@@ -106,6 +108,16 @@
                                         {{ $ttlGr }}
                                     </h6>
                                 </th>
+                                <th class="text-end">
+                                    <h6>
+
+                                    </h6>
+                                </th>
+                                <th class="text-end">
+                                    <h6>
+                                        {{ number_format(sumBk($getFormulir, 'cost_bk') + sumBk($getFormulir, 'cost_cbt') + sumBk($getFormulir, 'cost_str') + sumBk($getFormulir, 'cost_eo') + sumBk($getFormulir, 'cost_ctk') + sumBk($getFormulir, 'cost_cu'), 0) }}
+                                    </h6>
+                                </th>
                             </tr>
 
                         </thead>
@@ -117,13 +129,26 @@
                                     <td align="center">{{ $d->tipe }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
+                                    @php
+                                        $ttl_rp =
+                                            $d->cost_bk +
+                                            $d->cost_cbt +
+                                            $d->cost_ctk +
+                                            $d->cost_eo +
+                                            $d->cost_str +
+                                            $d->cost_cu;
+                                    @endphp
+                                    <td align="right">{{ number_format($ttl_rp / $d->gr_awal, 0) }}</td>
+                                    <td align="right">
+                                        {{ number_format($ttl_rp, 0) }}
+                                    </td>
 
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-7">
                     <h6>Hasil Grading</h6>
                     <table class="table table-bordered">
                         <thead>
