@@ -45,8 +45,7 @@
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
                         <th class="dhead text-end">Cost kerja</th>
-                        <th class="dhead text-end">Cost dll,cu,denda</th>
-                        <th class="dhead text-end">Cost operasional</th>
+                        <th class="dhead text-end">Total rp</th>
 
                     </tr>
                     <tr>
@@ -63,6 +62,9 @@
 
                             {{ number_format($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp, 0) }}
 
+                        </td>
+                        <td class="text-end">
+                            0
                         </td>
                         <td class="text-end">
                             0
@@ -84,8 +86,8 @@
                         <td class="text-end">
                             {{ number_format($sortir_akhir->cost_kerja, 0) }}
                         </td>
-                        <td class="text-end">{{ number_format(($cost_dll / $ttl_gr) * $sortir_akhir->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format(($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}</td>
+                        <td class="text-end">{{ number_format($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
@@ -101,7 +103,7 @@
                             {{ number_format($sedang_proses->ttl_rp, 0) }}
                         </td>
                         <td class="text-end">
-                            {{ number_format($sedang_proses->cost_kerja, 0) }}
+                            0
                         </td>
                     </tr>
                     <tr>
@@ -135,7 +137,10 @@
                             $cost_op = ($cost_op / $ttl_gr) * $sortir_akhir->gr;
                         @endphp
                         <td class="text-end fw-bold">
-                            {{ number_format($modal + $sedang_proses->cost_kerja + $sortir_akhir->cost_kerja + $cost_dll + $cost_op, 0) }}
+                            {{ number_format($sortir_akhir->cost_kerja, 0) }}
+                        </td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($modal + $sortir_akhir->cost_kerja, 0) }}
                         </td>
                     </tr>
 
