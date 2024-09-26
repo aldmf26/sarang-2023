@@ -181,8 +181,8 @@ class CocokanController extends Controller
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp + $sa->cost_kerja;
 
-        $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
-            JOIN grading_partai as b on a.no_box = b.box_pengiriman");
+            $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+                JOIN grading_partai as b on a.no_box = b.box_pengiriman");
 
         $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
         $grading_sisa = DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr FROM grading as a left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir WHERE a.selesai = 'T';");
