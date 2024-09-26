@@ -229,7 +229,7 @@ class ExportCocokanController extends Controller
         $spreadsheet->setActiveSheetIndex(1);
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Gudang Cetak');
-        
+
 
         $koloms = [
             'A' => 'awal cetak',
@@ -590,12 +590,13 @@ class ExportCocokanController extends Controller
         $sheet->getStyle("B1:H1")->applyFromArray($style_atas);
         $sheet->getStyle("K1:Q1")->applyFromArray($style_atas);
         $sheet->getStyle("T1:Z1")->applyFromArray($style_atas);
+        $sheet->getStyle("AC1:AF1")->applyFromArray($style_atas);
         $koloms = [
             'A' => 'awal grading',
             'B' => 'nama partai',
             'C' => 'pengawas',
             'D' => 'no box',
-            'E' => 'pcs', 
+            'E' => 'pcs',
             'F' => 'gr',
             'G' => 'ttl rp',
             'H' => 'rp/gr',
@@ -617,6 +618,12 @@ class ExportCocokanController extends Controller
             'X' => 'gr',
             'Y' => 'ttl rp',
             'Z' => 'rp/gr',
+
+            'AB' => 'selisih',
+            'AC' => 'pcs',
+            'AD' => 'gr',
+            'AE' => 'ttl rp',
+            'AF' => 'rp/gr',
         ];
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
@@ -631,7 +638,13 @@ class ExportCocokanController extends Controller
 
         $sumTtlRp = $s1suntik_akhir->ttl_rp + $s1suntik2->ttl_rp;
         $sumTtlGr = $s1suntik_akhir->gr + $s1suntik2->gr;
-        
+        $sumttlPcs = $s1suntik_akhir->pcs + $s1suntik2->pcs;
+
+
+        $sumTtlRp2 = 0;
+        $sumTtlGr2 = 0;
+        $sumTtlPcs2 = 0;
+
         // akhir sortir
         $row = 2;
         foreach ($s1_akhir as $v) {
@@ -644,9 +657,9 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("H$row", ($v->ttl_rp +  $v->cost_kerja) / $v->gr);
             $sumTtlRp += $v->ttl_rp +  $v->cost_kerja;
             $sumTtlGr += $v->gr;
+            $sumttlPcs += $v->pcs;
 
             $row++;
-
         }
         $hrgaSatuan = $sumTtlRp / $sumTtlGr;
         session()->put('hrga_satuan', $hrgaSatuan);
@@ -657,7 +670,7 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("F" . $row, $s1suntik_akhir->gr);
         $sheet->setCellValue("G$row", $s1suntik_akhir->ttl_rp);
         $sheet->setCellValue("H$row", $s1suntik_akhir->ttl_rp / $s1suntik_akhir->gr);
-        
+
         $row = $row + 1;
         $sheet->setCellValue("B" . $row, 'suntikan');
         $sheet->setCellValue("C" . $row, 'suntikan');
@@ -691,11 +704,22 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("X$row", $v->gr);
             $sheet->setCellValue("Y$row", $hrgaSatuan * $v->gr);
             $sheet->setCellValue("Z$row", ($hrgaSatuan * $v->gr) / $v->gr);
+
+            $sumTtlRp2 += $hrgaSatuan * $v->gr;
+            $sumTtlGr2 += $v->gr;
+            $sumTtlPcs2 += $v->pcs; 
+
             $row++;
         }
         $sheet->getStyle('T2:Z' . $row - 1)->applyFromArray($style);
 
-       
+        $sheet->setCellValue("AC2", $sumttlPcs - $sumTtlPcs2);
+        $sheet->setCellValue("AD2", $sumTtlGr - $sumTtlGr2);
+        $sheet->setCellValue("AE2", round($sumTtlRp - $sumTtlRp2));
+        $sheet->setCellValue("AF2", ($sumTtlGr - $sumTtlGr2) == 0 ? 0 : ($sumTtlRp - $sumTtlRp2) / ($sumTtlGr - $sumTtlGr2));
+
+        $sheet->getStyle('AC1:AF2')->applyFromArray($style);
+
     }
 
     public function pengiriman($spreadsheet, $style_atas, $style, $model)
@@ -808,7 +832,7 @@ class ExportCocokanController extends Controller
 
         $sheet3->getStyle('AB2:AI2')->applyFromArray($style);
     }
-    
+
     public function pengiriman2($spreadsheet, $style_atas, $style, $model)
     {
         $model2 = new DetailSortirModel();
@@ -859,7 +883,6 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("H$row", ($hrgaSatuan * $v->gr) / $v->gr);
 
             $row++;
-
         }
         $sheet->getStyle('B2:H' . $row - 1)->applyFromArray($style);
 
@@ -877,8 +900,6 @@ class ExportCocokanController extends Controller
         }
 
         $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
-        
-       
     }
 
     public function index(OpnameNewModel $model)
