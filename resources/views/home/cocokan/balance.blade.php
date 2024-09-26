@@ -7,6 +7,8 @@
         <section class="row">
             @include('home.cocokan.nav')
             <div class="col-lg-6">
+                <h6>Bk Kerja</h6>
+
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -66,6 +68,7 @@
                 </table>
             </div>
             <div class="col-lg-2">
+                <h6>Cost Perbulan</h6>
 
                 <table class="table table-bordered">
                     <thead>
@@ -101,6 +104,7 @@
                 </table>
             </div>
             <div class="col-lg-4">
+                <h6>Bk Rp</h6>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -231,6 +235,7 @@
                 </table>
 
                 <br>
+                <h6>Cost Kerja</h6>
                 <table class="table table-bordered">
                     <thead>
                         <tr>

@@ -294,7 +294,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("C$row", $v->name);
             $sheet->setCellValue("D$row", $v->no_box);
             $sheet->setCellValue("E$row", $v->pcs_awal);
-            $sheet->setCellValue("F$row", $v->gr_awal);
+            $sheet->setCellValue("F$row", $i == 200 ? $v->gr_awal + 418 : $v->gr_awal);
             $sheet->setCellValue("G$row", $v->ttl_rp);
             $sheet->setCellValue("H$row", 0);
             $sheet->setCellValue("I$row", $v->ttl_rp);
