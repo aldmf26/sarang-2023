@@ -842,10 +842,9 @@ class ExportCocokanController extends Controller
         }
 
         // awal ctk
-        $pengiriman = DB::select("SELECT b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
-                JOIN grading_partai as b on a.no_box = b.box_pengiriman GROUP BY a.no_box");
+        $pengiriman = Grading::pengirimanAll();
 
-        $belumKirim = DB::select("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
+        $belumKirim = Grading::belumKirimAll();
 
         $hrgaSatuan = session()->get('hrga_satuan');
         // akhir sortir
@@ -866,17 +865,17 @@ class ExportCocokanController extends Controller
 
         $row = 2;
         foreach ($belumKirim as $v) {
-            $sheet->setCellValue("B$row", $v->nm_partai);
-            $sheet->setCellValue("C$row", $v->no_box);
-            $sheet->setCellValue("D$row", $v->grade);
-            $sheet->setCellValue("E$row", $v->pcs);
-            $sheet->setCellValue("F$row", $v->gr);
-            $sheet->setCellValue("G$row", $hrgaSatuan * $v->gr);
-            $sheet->setCellValue("H$row", ($hrgaSatuan * $v->gr) / $v->gr);
+            $sheet->setCellValue("K$row", $v->nm_partai);
+            $sheet->setCellValue("L$row", $v->no_box);
+            $sheet->setCellValue("M$row", $v->grade);
+            $sheet->setCellValue("N$row", $v->pcs);
+            $sheet->setCellValue("O$row", $v->gr);
+            $sheet->setCellValue("P$row", $hrgaSatuan * $v->gr);
+            $sheet->setCellValue("Q$row", ($hrgaSatuan * $v->gr) / $v->gr);
 
             $row++;
         }
-        
+
         $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
         
        

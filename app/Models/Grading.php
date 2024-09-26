@@ -375,4 +375,25 @@ class Grading extends Model
             join grading_partai as b on a.no_box = b.no_invoice
             GROUP BY b.no_invoice");
     }
+
+    public static function pengirimanAll()
+    {
+        return DB::select("SELECT b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+                JOIN grading_partai as b on a.no_box = b.box_pengiriman GROUP BY a.no_box");
+    }
+
+    public static function belumKirimAll()
+    {
+        return DB::select("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
+    }
+    public static function pengirimanSum()
+    {
+        return DB::selectOne("SELECT b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+                JOIN grading_partai as b on a.no_box = b.box_pengiriman ");
+    }
+
+    public static function belumKirimSum()
+    {
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+    }
 }
