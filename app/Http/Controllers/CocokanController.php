@@ -140,27 +140,68 @@ class CocokanController extends Controller
     }
     public function grading(CocokanModel $model)
     {
-        $sa = $model::akhir_sortir();
+        $s3 = $model::sortir_akhir();
+
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp + $s3->cost_kerja;
+
+
+        // $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+        //     JOIN grading_partai as b on a.no_box = b.box_pengiriman");
+
+        $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
+        $grading_sisa = DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr FROM grading as a left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir WHERE a.selesai = 'T';");
+
+        $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
+
+        $data = [
+            'title' => 'Grading ',
+            'opname' =>  $this->getSuntikan(41),
+            'sortir_akhir' => $sortir_akhir,
+            // 'pengiriman' => $pengiriman,
+            'sumTtlRpPengiriman' => $sumTtlRpPengiriman,
+            'grading' => $grading,
+            'grading_sisa' => $grading_sisa,
+        ];
+        return view('home.cocokan.grading', $data);
+    }
+
+
+    public function pengiriman(CocokanModel $model)
+    {
+        $sa = $model::sortir_akhir();
+
         $p2suntik = $this->getSuntikan(42);
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
-        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
+        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp + $sa->cost_kerja;
 
         $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
             JOIN grading_partai as b on a.no_box = b.box_pengiriman");
 
         $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
+        $grading_sisa = DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr FROM grading as a left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir WHERE a.selesai = 'T';");
+
         $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
+
+        $belum_kirim = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+
         $data = [
-            'title' => 'Grading ',
+            'title' => 'Pengiriman ',
             'opname' =>  $this->getSuntikan(41),
             'sortir_akhir' => $sortir_akhir,
             'pengiriman' => $pengiriman,
             'sumTtlRpPengiriman' => $sumTtlRpPengiriman,
-            'grading' => $grading
+            'grading' => $grading,
+            'grading_sisa' => $grading_sisa,
+            'belum_kirim' => $belum_kirim
         ];
-        return view('home.cocokan.grading', $data);
+        return view('home.cocokan.pengiriman', $data);
     }
 
     public function getSuntikan($index)
@@ -291,7 +332,8 @@ class CocokanController extends Controller
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
-        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
+        $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+            JOIN grading_partai as b on a.no_box = b.box_pengiriman");
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
 
         $a14suntik = $this->getSuntikan(14);

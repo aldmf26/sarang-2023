@@ -295,6 +295,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
+            Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::get('/opname', 'opname')->name('opname');
         });
@@ -336,5 +337,4 @@ Route::middleware('auth')->group(function () {
 
             // Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
         });
-
 });

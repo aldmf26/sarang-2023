@@ -94,11 +94,20 @@
                                 @php
                                     $ttlPcs = array_sum(array_column($getFormulir, 'pcs_awal'));
                                     $ttlGr = array_sum(array_column($getFormulir, 'gr_awal'));
+                                    $ttlRp =
+                                        sumBk($getFormulir, 'cost_bk') +
+                                        sumBk($getFormulir, 'cost_cbt') +
+                                        sumBk($getFormulir, 'cost_str') +
+                                        sumBk($getFormulir, 'cost_eo') +
+                                        sumBk($getFormulir, 'cost_ctk') +
+                                        sumBk($getFormulir, 'cost_cu');
+                                    $rp_gr = $ttlRp / $ttlGr;
                                 @endphp
                                 <th class="text-end">
                                     <h6>
                                         <input type="hidden" name="tipe" value="{{ $getFormulir[0]->tipe }}">
                                         <input type="hidden" name="ttlPcs" value="{{ $ttlPcs }}">
+                                        <input type="hidden" name="rpGr" value="{{ $rp_gr }}">
                                         {{ $ttlPcs }}
                                     </h6>
                                 </th>
@@ -208,7 +217,7 @@
                             </tr>
                             <!-- Add more rows as needed -->
 
-                            <tr>
+                            {{-- <tr>
                                 <td>Susut
 
                                     <input type="hidden" class="form-control" name="grade[]" value="62">
@@ -225,7 +234,7 @@
                                     <input type="text" class="form-control" name="box_sp[]">
                                 </td>
                                 <td></td>
-                            </tr>
+                            </tr> --}}
 
                         </tbody>
                     </table>
