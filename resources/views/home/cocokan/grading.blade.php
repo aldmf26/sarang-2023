@@ -61,14 +61,17 @@
                     </tr> --}}
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Awal Grading</td>
-                        <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs), 0) }}
+                        </td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('opnamenew.grading') }}" target="_blank">
-                                {{ number_format($grading->gr, 0) }}
+                                {{ number_format($grading->gr + ($sortir_akhir->gr + $opname->gr - $grading->gr), 0) }}
                             </a>
                         </td>
                         <td class="text-end">{{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}</td>
                     </tr>
+
                     <tr>
                         <td style="background-color: #F7F700;">Akhir Grading</td>
                         <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
@@ -78,16 +81,6 @@
                             </a>
                         </td>
                         <td class="text-end">{{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
-                        <td class="text-end">{{ number_format($grading_sisa->pcs, 0) }}</td>
-                        <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
-                                {{ number_format($grading_sisa->gr, 0) }}
-                            </a>
-                        </td>
-                        <td class="text-end">0</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Selisih pcs</td>
@@ -102,6 +95,17 @@
                             {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr) * $rp_satuan, 0) }}
                         </td>
                     </tr>
+                    <tr>
+                        <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
+                        <td class="text-end">{{ number_format($grading_sisa->pcs, 0) }}</td>
+                        <td class="text-end fw-bold">
+                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                                {{ number_format($grading_sisa->gr, 0) }}
+                            </a>
+                        </td>
+                        <td class="text-end">0</td>
+                    </tr>
+
 
 
                     <tr>
