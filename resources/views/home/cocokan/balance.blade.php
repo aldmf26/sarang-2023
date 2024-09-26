@@ -190,8 +190,17 @@
                             <td class="text-end">{{ number_format($sortir_sisa->ttl_rp, 0) }}</td>
 
                         </tr>
+                        <tr>
+                            <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
+                            <td class="text-end">{{ number_format($grading_sisa->pcs, 0) }}</td>
+                            <td class="text-end">{{ number_format($grading_sisa->gr, 0) }}</td>
+                            <td class="text-end">0</td>
+
+                        </tr>
                         @php
-                            $rp_satuan = ($sortir_akhir->ttl_rp + $opname->ttl_rp) / ($sortir_akhir->gr + $opname->gr);
+                            $rp_satuan =
+                                ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja + $opname->ttl_rp) /
+                                ($sortir_akhir->gr + $opname->gr);
                         @endphp
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
@@ -200,7 +209,7 @@
                             <td class="text-end">{{ number_format($rp_satuan * $pengiriman->gr, 0) }}</td>
                         </tr>
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Sisa Grading</td>
+                            <td style="background-color: #F7BAC5;color:white">Sisa belum kirim</td>
                             <td class="text-end">{{ number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($grading->gr - $pengiriman->gr, 0) }}</td>
                             <td class="text-end">{{ number_format(($grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}
@@ -208,12 +217,13 @@
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Selisih</td>
-                            <td class="text-end">
+                            <td class="text-end text-danger fw-bold">
                                 {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0) }}
                             </td>
-                            <td class="text-end">{{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr, 0) }}
+                            <td class="text-end text-danger fw-bold">
+                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr, 0) }}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end text-danger fw-bold">
                                 {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr) * $rp_satuan, 0) }}
                             </td>
                         </tr>
@@ -274,7 +284,7 @@
                                 {{ number_format($sortir_akhir->gr, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format($sortir_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $sortir_akhir->gr + ($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}
+                                {{ number_format(($cost_dll / $ttl_gr) * $sortir_akhir->gr + ($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}
                             </td>
                         </tr>
                     </tbody>
@@ -288,9 +298,7 @@
                             ($cost_dll / $ttl_gr) * $cetak_akhir->gr +
                             ($cost_op / $ttl_gr) * $cetak_akhir->gr;
                         $str_akhir =
-                            $sortir_akhir->cost_kerja +
-                            ($cost_dll / $ttl_gr) * $sortir_akhir->gr +
-                            ($cost_op / $ttl_gr) * $sortir_akhir->gr;
+                            ($cost_dll / $ttl_gr) * $sortir_akhir->gr + ($cost_op / $ttl_gr) * $sortir_akhir->gr;
                     @endphp
                     <tfoot>
                         <tr>

@@ -84,14 +84,15 @@
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Selisih pcs</td>
-                        <td class="text-end">{{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0) }}
+                        <td class="text-end text-danger fw-bold">
+                            {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0) }}
                         </td>
-                        <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                        <td class="text-end fw-bold text-danger ">
+                            <a href="{{ route('opnamenew.grading') }}" target="_blank" class="text-danger">
                                 {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">
+                        <td class="text-end text-danger fw-bold">
                             {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr) * $rp_satuan, 0) }}
                         </td>
                     </tr>

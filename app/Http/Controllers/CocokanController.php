@@ -369,6 +369,9 @@ class CocokanController extends Controller
         $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
 
+        $grading_sisa = DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr FROM grading as a left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir WHERE a.selesai = 'T';");
+
+
         $data = [
             'title' => 'Balance Sheet ',
             'bk' => SummaryModel::summarybk(),
@@ -389,7 +392,8 @@ class CocokanController extends Controller
             'cost_op' => $cost_op,
             'cost_dll' => $cost_dll,
             'cetak_akhir'  => $cetak_akhir,
-            'sortir_akhir' => $sortir_akhir
+            'sortir_akhir' => $sortir_akhir,
+            'grading_sisa' => $grading_sisa
 
 
         ];

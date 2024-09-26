@@ -45,7 +45,7 @@
                         <th class="dhead text-end">Rp</th>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5; color:white">Sudah dikirim</td>
+                        <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
                         <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('opnamenew.grading') }}" target="_blank">
@@ -55,7 +55,7 @@
                         <td class="text-end">{{ number_format($rp_gr * $pengiriman->gr, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5; color:white">Belum dikirim</td>
+                        <td style="background-color: #F7BAC5; color:white">Sisa belum kirim</td>
                         <td class="text-end">{{ number_format($belum_kirim->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('opnamenew.grading') }}" target="_blank">
