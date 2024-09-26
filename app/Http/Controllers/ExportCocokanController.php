@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\DetailCabutModel;
 use App\Models\DetailCetakModel;
 use App\Models\DetailSortirModel;
+use App\Models\Grading;
 use App\Models\OpnameNewModel;
 
 class ExportCocokanController extends Controller
@@ -505,8 +506,8 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("F" . $row, $s1suntik2->gr);
         $sheet->setCellValue("G" . $row, $s1suntik2->ttl_rp);
         $sheet->setCellValue("H$row", 0);
-        $sheet->setCellValue("I$row", $s1suntik->ttl_rp);
-        $sheet->setCellValue("J$row", $s1suntik->ttl_rp / $s1suntik2->gr);
+        $sheet->setCellValue("I$row", $s1suntik2->ttl_rp);
+        $sheet->setCellValue("J$row", $s1suntik2->ttl_rp / $s1suntik2->gr);
 
 
         $sheet->getStyle('B2:J' . $row - 1)->applyFromArray($style);
@@ -577,6 +578,116 @@ class ExportCocokanController extends Controller
             $row++;
         }
         $sheet->getStyle('AK2:AS' . $row - 1)->applyFromArray($style);
+    }
+
+    public function grading($spreadsheet, $style_atas, $style, $model)
+    {
+        $model2 = new DetailSortirModel();
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Gudang Grading');
+        $sheet->getStyle("B1:H1")->applyFromArray($style_atas);
+        $sheet->getStyle("K1:Q1")->applyFromArray($style_atas);
+        $sheet->getStyle("T1:Z1")->applyFromArray($style_atas);
+        $koloms = [
+            'A' => 'awal grading',
+            'B' => 'nama partai',
+            'C' => 'pengawas',
+            'D' => 'no box',
+            'E' => 'pcs',
+            'F' => 'gr',
+            'G' => 'ttl rp',
+            'H' => 'rp/gr',
+
+            'J' => 'sisa grading',
+            'K' => 'nama partai',
+            'L' => 'pengawas',
+            'M' => 'no box',
+            'N' => 'pcs',
+            'O' => 'gr',
+            'P' => 'ttl rp',
+            'Q' => 'rp/gr',
+
+            'S' => 'akhir grading',
+            'T' => 'nama partai',
+            'U' => 'pengawas',
+            'V' => 'no box',
+            'W' => 'pcs',
+            'X' => 'gr',
+            'Y' => 'ttl rp',
+            'Z' => 'rp/gr',
+        ];
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+
+        // awal ctk
+        $s1_akhir = $model2::stok_selesai();
+        $s1suntik2 = $this->getSuntikan(41);
+        $s1suntik_akhir = $this->getSuntikan(35);
+        $sisaGrading = Grading::dapatkanStokBox('formulir');
+        $selesaiGrading = Grading::selesai();
+
+        // akhir sortir
+        $row = 2;
+        foreach ($s1_akhir as $v) {
+            $sheet->setCellValue("B$row", $v->nm_partai);
+            $sheet->setCellValue("C$row", $v->name);
+            $sheet->setCellValue("D$row", $v->no_box);
+            $sheet->setCellValue("E$row", $v->pcs);
+            $sheet->setCellValue("F$row", $v->gr);
+            $sheet->setCellValue("G$row", $v->ttl_rp +  $v->cost_kerja);
+            $sheet->setCellValue("H$row", ($v->ttl_rp +  $v->cost_kerja) / $v->gr);
+            $row++;
+        }
+
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik_akhir->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik_akhir->gr);
+        $sheet->setCellValue("G$row", $s1suntik_akhir->ttl_rp);
+        $sheet->setCellValue("H$row", $s1suntik_akhir->ttl_rp / $s1suntik_akhir->gr);
+        
+        $row = $row + 1;
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik2->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik2->gr);
+        $sheet->setCellValue("G$row", $s1suntik2->ttl_rp);
+        $sheet->setCellValue("H$row", $s1suntik2->ttl_rp / $s1suntik2->gr);
+
+        $sheet->getStyle('B2:H' . $row - 1)->applyFromArray($style);
+
+        $row = 2;
+        foreach ($sisaGrading as $v) {
+            $sheet->setCellValue("K$row", $v->nm_partai);
+            $sheet->setCellValue("L$row", $v->pemberi);
+            $sheet->setCellValue("M$row", $v->no_box);
+            $sheet->setCellValue("N$row", $v->pcs_awal);
+            $sheet->setCellValue("O$row", $v->gr_awal);
+            $sheet->setCellValue("P$row", $v->ttl_rp +  $v->cost_kerja);
+            $sheet->setCellValue("Q$row", !$v->gr_awal ? 0 : ($v->ttl_rp +  $v->cost_kerja) / $v->gr_awal);
+            $row++;
+        }
+        $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
+
+        $row = 2;
+        foreach ($selesaiGrading as $v) {
+            $sheet->setCellValue("T$row", $v->nm_partai);
+            $sheet->setCellValue("U$row", $v->name);
+            $sheet->setCellValue("V$row", $v->no_box);
+            $sheet->setCellValue("W$row", $v->pcs);
+            $sheet->setCellValue("X$row", $v->gr);
+            // $sheet->setCellValue("P$row", $v->ttl_rp +  $v->cost_kerja);
+            // $sheet->setCellValue("Q$row", !$v->gr ? 0 : ($v->ttl_rp +  $v->cost_kerja) / $v->gr);
+            $row++;
+        }
+        $sheet->getStyle('T2:X' . $row - 1)->applyFromArray($style);
+
+       
     }
 
     public function pengiriman($spreadsheet, $style_atas, $style, $model)
@@ -724,6 +835,7 @@ class ExportCocokanController extends Controller
         $this->cabut($spreadsheet, $style_atas, $style, $model);
         $this->cetak($spreadsheet, $style_atas, $style, $model);
         $this->sortir($spreadsheet, $style_atas, $style, $model);
+        $this->grading($spreadsheet, $style_atas, $style, $model);
         // $this->pengiriman($spreadsheet, $style_atas, $style, $model);
 
         $namafile = "Opname Gudang.xlsx";
