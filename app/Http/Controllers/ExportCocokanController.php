@@ -338,7 +338,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("R$row", $v->ttl_rp);
             $sheet->setCellValue("S$row", $v->cost_kerja);
             $sheet->setCellValue("T$row", $v->ttl_rp + $v->cost_kerja);
-            $sheet->setCellValue("U$row", $v->ttl_rp / $v->gr_akhir);
+            $sheet->setCellValue("U$row", ($v->ttl_rp + $v->cost_kerja) / $v->gr_akhir);
 
             $row++;
         }
