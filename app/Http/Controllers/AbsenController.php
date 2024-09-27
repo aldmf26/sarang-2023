@@ -39,7 +39,7 @@ class AbsenController extends Controller
         $absen = DB::select("SELECT b.name,c.nama,a.id_anak FROM `absen` as a 
        JOIN users as b on a.id_pengawas = b.id
        JOIN tb_anak as c on a.id_anak = c.id_anak
-       WHERE a.tgl BETWEEN '$bulan' and '$tahun' $pengawas GROUP BY a.id_anak;");
+       WHERE a.bulan_dibayar = 9 $pengawas GROUP BY a.id_anak;");
 
         return $absen;
     }
