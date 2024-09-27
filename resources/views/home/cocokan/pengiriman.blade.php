@@ -48,7 +48,7 @@
                         <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
                         <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                            <a href="{{ route('detail.pengiriman.awal') }}" target="_blank">
                                 {{ number_format($pengiriman->gr, 0) }}
                             </a>
                         </td>
@@ -58,7 +58,7 @@
                         <td style="background-color: #F7BAC5; color:white">Sisa belum kirim</td>
                         <td class="text-end">{{ number_format($belum_kirim->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                            <a href="{{ route('detail.pengiriman.sisa') }}" target="_blank">
                                 {{ number_format($belum_kirim->gr, 0) }}
                             </a>
                         </td>

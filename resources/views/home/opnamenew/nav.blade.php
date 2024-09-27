@@ -32,10 +32,27 @@
             ],
             'nama' => 'Sortir',
         ],
+        // [
+        //     'rot' => 'opnamenew.grading',
+        //     'rotAktif' => ['opnamenew.cetak'],
+        //     'nama' => 'Grading & Pengiriman',
+        // ],
         [
-            'rot' => 'opnamenew.grading',
-            'rotAktif' => ['opnamenew.cetak'],
-            'nama' => 'Grading & Pengiriman',
+            'rot' => 'detail.grading.awal',
+            'rotAktif' => [
+                'detail.grading.awal',
+                'detail.grading.akhir',
+                'detail.grading.sisa',
+            ],
+            'nama' => 'Grading',
+        ],
+        [
+            'rot' => 'detail.pengiriman.awal',
+            'rotAktif' => [
+                'detail.pengiriman.awal',
+                'detail.pengiriman.sisa',
+            ],
+            'nama' => 'Pengiriman',
         ],
     ];
 @endphp

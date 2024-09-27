@@ -6,6 +6,7 @@ use App\Models\CocokanModel;
 use App\Models\DetailCabutModel;
 use App\Models\DetailCetakModel;
 use App\Models\DetailSortirModel;
+use App\Models\Grading;
 use App\Models\OpnameNewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -397,5 +398,23 @@ class CabutDetailController extends Controller
             'query' => $model2::sortir_stock(),
         ];
         return view('home.opnamenew.sortir.sortir_sisa', $data);
+    }
+
+    public function gradingAwal()
+    {
+        $model2 = new DetailSortirModel();
+        $gradingAwal = $model2::stok_selesai();
+        $s1suntik2 = $this->getSuntikan(41);
+        $s1suntik_akhir = $this->getSuntikan(35);
+        $sisaGrading = Grading::dapatkanStokBox('formulir');
+        $selesaiGrading = Grading::selesai();
+
+        $data = [ 
+            'title' => 'Grading Awal',
+            'query' => $gradingAwal,
+            'suntik' => $s1suntik_akhir,
+            'suntik2' => $s1suntik2,
+        ];
+        return view('home.opnamenew.grading.awal', $data);
     }
 }
