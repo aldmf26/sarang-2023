@@ -76,7 +76,7 @@ class OpnameNewModel extends Model
     left join users as c on c.id = d.id_pengawas
     left join oprasional as f on f.bulan = d.bulan_dibayar
     left join cost_dll_cu_denda as g on g.bulan_dibayar = d.bulan_dibayar
-    WHERE d.selesai = 'Y' and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
+    WHERE d.selesai = 'Y' and d.penutup = 'T' and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
     group by d.no_box
 
    

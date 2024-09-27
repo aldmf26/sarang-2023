@@ -27,8 +27,9 @@
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
-                
+
                     <tbody>
+
                         @foreach ($cabut_awal as $b)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -38,7 +39,7 @@
                                 <td class="text-end">{{ number_format($b->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->gr_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                 <td class="text-end">0</td>
+                                <td class="text-end">0</td>
                                 {{-- <td class="text-end">0</td>
                                 <td class="text-end">0</td> --}}
                                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
@@ -53,7 +54,7 @@
                             <td class="text-end">{{ number_format($a11suntik->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($a11suntik->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($a11suntik->ttl_rp, 0) }}</td>
-                             <td class="text-end">0</td>
+                            <td class="text-end">0</td>
                             {{-- <td class="text-end">0</td>
                             <td class="text-end">0</td> --}}
                             <td class="text-end">{{ number_format($a11suntik->ttl_rp, 0) }}</td>
@@ -67,13 +68,17 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock "></th>
                             <th class="dheadstock "></th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($cabut_awal, 'pcs') + $a11suntik->pcs, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($cabut_awal, 'gr_awal') + $a11suntik->gr, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($cabut_awal, 'ttl_rp') + $a11suntik->ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($cabut_awal, 'pcs') + $a11suntik->pcs, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($cabut_awal, 'gr_awal') + $a11suntik->gr, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($cabut_awal, 'ttl_rp') + $a11suntik->ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                             {{-- <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">0</th> --}}
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($cabut_awal, 'ttl_rp') + $a11suntik->ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($cabut_awal, 'ttl_rp') + $a11suntik->ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">
                                 {{ number_format(sumBk($cabut_awal, 'ttl_rp') / sumBk($cabut_awal, 'gr_awal'), 0) }}
                             </th>
@@ -88,7 +93,7 @@
             <script>
                 $('#bk_stock').DataTable({
                     "searching": true,
-                    scrollY: '500px',
+                    scrollY: '450px',
                     scrollX: false,
                     scrollCollapse: true,
                     "autoWidth": true,

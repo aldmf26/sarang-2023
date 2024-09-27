@@ -91,7 +91,9 @@
                             <th class="dheadstock  text-end">0</th>
                             {{-- <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">0</th> --}}
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">
+                                {{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}
+                            </th>
                             <th class="dheadstock  text-end">
                                 {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr_awal'), 0) }}
                             </th>
@@ -113,7 +115,6 @@
                     "paging": false,
                     "info": false
                 });
-               
             </script>
         @endsection
     </x-slot>

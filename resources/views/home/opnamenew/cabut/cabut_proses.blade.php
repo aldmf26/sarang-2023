@@ -73,14 +73,13 @@
             <script>
                 $('#bk_stock').DataTable({
                     "searching": true,
-                    scrollY: '500px',
+                    scrollY: '450px',
                     scrollX: false,
                     scrollCollapse: true,
                     "autoWidth": true,
                     "paging": false,
                     "info": false
                 });
-                
             </script>
         @endsection
     </x-slot>

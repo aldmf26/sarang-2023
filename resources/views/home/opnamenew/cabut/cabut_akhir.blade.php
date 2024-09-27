@@ -28,7 +28,7 @@
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
-                
+
                     <tbody>
                         @foreach ($cabut_awal as $b)
                             <tr>
@@ -42,8 +42,9 @@
                                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
                                 {{-- <td class="text-end">0</td>
                                 <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td> --}}
-                                <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
-                                <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->ttl_rp + $b->cost_kerja, 0) }}</td>
+                                <td class="text-end">
+                                    {{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
                             </tr>
                         @endforeach
                         <tr>
@@ -82,9 +83,10 @@
                             $total_cost_op = sumBk($cabut_awal, 'cost_kerja') + sumBk($cabut_awal, 'ttl_rp');
                             $total_pcs = sumBk($cabut_awal, 'pcs') + $a14suntik->pcs + $a16suntik->pcs;
                             $total_gr = sumBk($cabut_awal, 'gr_akhir') + $a14suntik->gr + $a16suntik->gr;
-                            $total_ttl_rp = sumBk($cabut_awal, 'ttl_rp') + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+                            $total_ttl_rp =
+                                sumBk($cabut_awal, 'ttl_rp') + $a14suntik->ttl_rp + $a16suntik->ttl_rp + $total_cost;
                         @endphp
-                       
+
                         <tr>
                             <th class="dheadstock ">Box : {{ count($cabut_awal) }}</th>
                             <th class="dheadstock "></th>
@@ -93,7 +95,7 @@
                             <th class="dheadstock  text-end">{{ number_format($total_pcs, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format($total_gr, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
-                            <th class="dheadstock  text-end">{{number_format($total_cost,0)}}</th>
+                            <th class="dheadstock  text-end">{{ number_format($total_cost, 0) }}</th>
                             {{-- <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">{{number_format(0,0)}}</th> --}}
                             <th class="dheadstock  text-end">{{ number_format($total_ttl_rp, 0) }}</th>
@@ -111,7 +113,7 @@
             <script>
                 $('#bk_stock').DataTable({
                     "searching": true,
-                    scrollY: '500px',
+                    scrollY: '450px',
                     scrollX: false,
                     scrollCollapse: true,
                     "autoWidth": true,

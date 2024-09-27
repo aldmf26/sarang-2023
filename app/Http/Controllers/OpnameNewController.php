@@ -487,16 +487,12 @@ class OpnameNewController extends Controller
         }
         $sheet3->getStyle('K2:Q' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("AB1:AI1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AA1', 'selisih');
-        $sheet3->setCellValue('AB1', 'pcs');
-        $sheet3->setCellValue('AC1', 'gr');
-        $sheet3->setCellValue('AD1', 'ttl rp bk');
-        $sheet3->setCellValue('AE1', 'cost kerja');
-        $sheet3->setCellValue('AF1', 'cost cu dll');
-        $sheet3->setCellValue('AG1', 'cost operasional');
-        $sheet3->setCellValue('AH1', 'ttl rp');
-        $sheet3->setCellValue('AI1', 'rp/gr');
+        $sheet3->getStyle("T1:W1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('S1', 'selisih');
+        $sheet3->setCellValue('T1', 'pcs');
+        $sheet3->setCellValue('U1', 'gr');
+        $sheet3->setCellValue('V1', 'ttl rp');
+        $sheet3->setCellValue('W1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
         $p2suntik = $this->getSuntikan(42);
@@ -511,17 +507,13 @@ class OpnameNewController extends Controller
 
         $kolom = 2;
 
-        $sheet3->setCellValue('AB' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0));
-        $sheet3->setCellValue('AC' . $kolom, round($sortir_akhir->gr + $opname->gr - $grading->gr, 0));
-        $sheet3->setCellValue('AD' . $kolom, 0);
-        $sheet3->setCellValue('AE' . $kolom, 0);
-        $sheet3->setCellValue('AF' . $kolom, 0);
-        $sheet3->setCellValue('AG' . $kolom, 0);
-        $sheet3->setCellValue('AH' . $kolom, 0);
-        $sheet3->setCellValue('AI' . $kolom, 0);
+        $sheet3->setCellValue('T' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0));
+        $sheet3->setCellValue('U' . $kolom, round($sortir_akhir->gr + $opname->gr - $grading->gr, 0));
+        $sheet3->setCellValue('V' . $kolom, 0);
+        $sheet3->setCellValue('W' . $kolom, 0);
 
 
-        $sheet3->getStyle('AB2:AI2')->applyFromArray($style);
+        $sheet3->getStyle('T2:W2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
@@ -640,7 +632,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('A8', 'Sortir sedang proses');
         $sheet4->setCellValue('A9', 'Sortir sisa pengawas');
         $sheet4->setCellValue('A10', 'Sortir selesai siap grading');
-        $sheet4->setCellValue('A11', 'sortir selesai sudah grading');
+        $sheet4->setCellValue('A11', 'Sisa belum grading');
+        $sheet4->setCellValue('A12', 'Pengiriman');
+        $sheet4->setCellValue('A13', 'Sisa belum kirim');
+        $sheet4->setCellValue('A14', 'Selisih');
 
         $sheet4->setCellValue('B2', "=SUM('Gudang Cabut'!E:E)");
         $sheet4->setCellValue('B3', "=SUM('Gudang Cabut'!R:R)");
@@ -651,7 +646,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('B8', "=SUM('Gudang Sortir'!E:E)");
         $sheet4->setCellValue('B9', "=SUM('Gudang Sortir'!R:R)");
         $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AE:AE)");
-        $sheet4->setCellValue('B11', "=SUM('Sortir selesai'!G:G)");
+        $sheet4->setCellValue('B11', "0");
+        $sheet4->setCellValue('B12', "=SUM('Gudang grading & pengiriman'!E:E)");
+        $sheet4->setCellValue('B13', "=SUM('Gudang grading & pengiriman'!N:N)");
+        $sheet4->setCellValue('B14', "=SUM('Gudang grading & pengiriman'!T:T)");
 
         $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
         $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
@@ -662,7 +660,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('C8', "=SUM('Gudang Sortir'!F:F)");
         $sheet4->setCellValue('C9', "=SUM('Gudang Sortir'!S:S)");
         $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AF:AF)");
-        $sheet4->setCellValue('C11', "=SUM('Sortir selesai'!H:H)");
+        $sheet4->setCellValue('C11', "0");
+        $sheet4->setCellValue('C12', "=SUM('Gudang grading & pengiriman'!F:F)");
+        $sheet4->setCellValue('C13', "=SUM('Gudang grading & pengiriman'!O:O)");
+        $sheet4->setCellValue('C14', "=SUM('Gudang grading & pengiriman'!U:U)");
 
         $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
         $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!T:T)");
@@ -673,7 +674,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!G:G)");
         $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!T:T)");
         $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
-        $sheet4->setCellValue('D11', "=SUM('Sortir selesai'!I:I)");
+        $sheet4->setCellValue('D11', "0");
+        $sheet4->setCellValue('D12', "=SUM('Gudang grading & pengiriman'!G:H)");
+        $sheet4->setCellValue('D13', "=SUM('Gudang grading & pengiriman'!P:P)");
+        $sheet4->setCellValue('D14', "0");
 
         $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!H:H)");
         $sheet4->setCellValue('E3', "=SUM('Gudang Cabut'!U:U)");
@@ -684,10 +688,11 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('E8', "=SUM('Gudang Sortir'!H:H)");
         $sheet4->setCellValue('E9', "=SUM('Gudang Sortir'!U:U)");
         $sheet4->setCellValue('E10', "=SUM('Gudang Sortir'!AG:AG)");
-        $sheet4->setCellValue('E11', "=SUM('Sortir selesai'!J:J)");
+        $sheet4->setCellValue('E11', "0");
+        $sheet4->setCellValue('E12', "0");
+        $sheet4->setCellValue('E13', "0");
+        $sheet4->setCellValue('E14', "0");
 
-        $sheet4->setCellValue('F11', "=SUM('Sortir selesai'!K:K)");
-        $sheet4->setCellValue('G11', "=L7");
 
 
         $sheet4->setCellValue('H2', "=D2+E2+F2+G2");
@@ -700,39 +705,42 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H9', "=D9+E9+F9+G9");
         $sheet4->setCellValue('H10', "=D10+E10+F10+G10");
         $sheet4->setCellValue('H11', "=D11+E11+F11+G11");
+        $sheet4->setCellValue('H12', "=D12+E12+F12+G12");
+        $sheet4->setCellValue('H13', "=D13+E13+F13+G13");
+        $sheet4->setCellValue('H14', "=D13+E13+F13+G13");
 
-        $sheet4->getStyle("A12:H12")->applyFromArray($style_atas);
-        $sheet4->setCellValue('A12', "Total");
-        $sheet4->setCellValue('B12', "=SUM(B2:B11)");
-        $sheet4->setCellValue('C12', "=SUM(C2:C11)");
-        $sheet4->setCellValue('D12', "=SUM(D2:D11)");
-        $sheet4->setCellValue('E12', "=SUM(E2:E11)");
-        $sheet4->setCellValue('F12', "=SUM(F2:F11)");
-        $sheet4->setCellValue('G12', "=SUM(G2:G11)");
-        $sheet4->setCellValue('H12', "=SUM(H2:H11)");
+        $sheet4->getStyle("A15:H15")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A15', "Total");
+        $sheet4->setCellValue('B15', "=SUM(B2:B14)");
+        $sheet4->setCellValue('C15', "=SUM(C2:C14)");
+        $sheet4->setCellValue('D15', "=SUM(D2:D14)");
+        $sheet4->setCellValue('E15', "=SUM(E2:E14)");
+        $sheet4->setCellValue('F15', "=SUM(F2:F14)");
+        $sheet4->setCellValue('G15', "=SUM(G2:G14)");
+        $sheet4->setCellValue('H15', "=SUM(H2:H14)");
 
-        $operasional = DB::table('oprasional')->get();
-        $sheet4->getStyle("K1:L1")->applyFromArray($style_atas);
-        $sheet4->setCellValue('K1', "bulan & tahun");
-        $sheet4->setCellValue('L1', "total rp");
+        // $operasional = DB::table('oprasional')->get();
+        // $sheet4->getStyle("K1:L1")->applyFromArray($style_atas);
+        // $sheet4->setCellValue('K1', "bulan & tahun");
+        // $sheet4->setCellValue('L1', "total rp");
 
-        $kolom = 2;
-        $total = 0;
-        foreach ($operasional as $o) {
-            $total += $o->total_operasional;
-            $sheet4->setCellValue('K' . $kolom, date('F Y', strtotime($o->tahun . '-' . $o->bulan . '-' . '01')));
-            $sheet4->setCellValue('L' . $kolom, "$o->total_operasional");
-            $kolom++;
-        }
-        $sheet4->setCellValue('K' . $kolom, "Total");
-        $sheet4->setCellValue('L' . $kolom, "$total");
-        $sheet4->getStyle("K2:L" . $kolom - 1)->applyFromArray($style);
-        $sheet4->getStyle("K" . $kolom . ":L" . $kolom)->applyFromArray($style_atas);
+        // $kolom = 2;
+        // $total = 0;
+        // foreach ($operasional as $o) {
+        //     $total += $o->total_operasional;
+        //     $sheet4->setCellValue('K' . $kolom, date('F Y', strtotime($o->tahun . '-' . $o->bulan . '-' . '01')));
+        //     $sheet4->setCellValue('L' . $kolom, "$o->total_operasional");
+        //     $kolom++;
+        // }
+        // $sheet4->setCellValue('K' . $kolom, "Total");
+        // $sheet4->setCellValue('L' . $kolom, "$total");
+        // $sheet4->getStyle("K2:L" . $kolom - 1)->applyFromArray($style);
+        // $sheet4->getStyle("K" . $kolom . ":L" . $kolom)->applyFromArray($style_atas);
 
-        $sheet4->setCellValue('K' . $kolom + 2, "cost operasional");
-        $sheet4->setCellValue('L' . $kolom + 2, "=$total - E12 - F12");
-        $sheet4->setCellValue('K' . $kolom + 3, "rp/gr cost operasional");
-        $sheet4->setCellValue('L' . $kolom + 3, "=($total - E12 - F12) / C11");
+        // $sheet4->setCellValue('K' . $kolom + 2, "cost operasional");
+        // $sheet4->setCellValue('L' . $kolom + 2, "=$total - E12 - F12");
+        // $sheet4->setCellValue('K' . $kolom + 3, "rp/gr cost operasional");
+        // $sheet4->setCellValue('L' . $kolom + 3, "=($total - E12 - F12) / C11");
     }
 
 

@@ -154,7 +154,9 @@
                             <td style="background-color: #F7BAC5;color:white">Cetak sedang Proses</td>
                             <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_proses->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format($cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja, 0) }}
+                            </td>
 
                         </tr>
                         <tr>
@@ -180,21 +182,23 @@
                             <td style="background-color: #F7BAC5;color:white">Sortir sedang Proses</td>
                             <td class="text-end">{{ number_format($sedang_proses->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($sedang_proses->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($sedang_proses->ttl_rp, 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format($sedang_proses->ttl_rp + $sedang_proses->cost_kerja, 0) }}</td>
 
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sortir sisa Pengawas</td>
                             <td class="text-end">{{ number_format($sortir_sisa->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($sortir_sisa->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($sortir_sisa->ttl_rp, 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja, 0) }}</td>
 
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
-                            <td class="text-end">{{ number_format($grading_sisa->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($grading_sisa->gr, 0) }}</td>
-                            <td class="text-end">0</td>
+                            <td class="text-end">{{ number_format($grading_sisa->pcs ?? 0, 0) }}</td>
+                            <td class="text-end">{{ number_format($grading_sisa->gr ?? 0, 0) }}</td>
+                            <td class="text-end">{{ number_format($grading_sisa->cost_kerja_dll ?? 0, 0) }}</td>
 
                         </tr>
                         @php
@@ -206,45 +210,47 @@
                             <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
                             <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($rp_satuan * $pengiriman->gr, 0) }}</td>
+                            <td class="text-end">{{ number_format($pengiriman->ttl_rp, 0) }}</td>
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sisa belum kirim</td>
-                            <td class="text-end">{{ number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($grading->gr - $pengiriman->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format(($grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}
+                            <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
+                            <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
+                            <td class="text-end">{{ number_format($grading->total_rp, 0) }}
                             </td>
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Selisih</td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0) }}
+                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr, 0) }}
+                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr - $pengiriman->gr, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr) * $rp_satuan, 0) }}
+                                {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        <td class="dhead">Total</td>
-                        <td class="dhead text-end">
+                        <td class="dhead fw-bold">Total</td>
+                        <td class="dhead text-end fw-bold">
                             {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + $cetak_proses->pcs + $cetak_sisa->pcs + $sedang_proses->pcs + $sortir_sisa->pcs + $grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs), 0) }}
                         </td>
-                        <td class="dhead text-end">
+                        <td class="dhead text-end fw-bold">
                             {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + ($sortir_akhir->gr + $opname->gr - $grading->gr), 0) }}
                         </td>
-
-                        <td class="dhead text-end">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sortir_sisa->ttl_rp + $rp_satuan * $pengiriman->gr + ($grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}
+                        @php
+                            $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+                        @endphp
+                        <td class="dhead text-end fw-bold">
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $pengiriman->ttl_rp + $grading->total_rp + $grading_sisa, 0) }}
                         </td>
                     </tfoot>
 
                 </table>
 
-                <br>
+                {{-- <br>
                 <h6>Cost Kerja</h6>
                 <table class="table table-bordered">
                     <thead>
@@ -330,7 +336,7 @@
                         </tr>
                     </tfoot>
 
-                </table>
+                </table> --}}
             </div>
 
 
