@@ -6,6 +6,7 @@ use App\Models\CocokanModel;
 use App\Models\DetailCabutModel;
 use App\Models\DetailCetakModel;
 use App\Models\DetailSortirModel;
+use App\Models\Grading;
 use App\Models\OpnameNewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -397,5 +398,69 @@ class CabutDetailController extends Controller
             'query' => $model2::sortir_stock(),
         ];
         return view('home.opnamenew.sortir.sortir_sisa', $data);
+    }
+
+    public function gradingAwal()
+    {
+        $model2 = new DetailSortirModel();
+        $gradingAwal = $model2::stok_selesai();
+        $s1suntik2 = $this->getSuntikan(41);
+        $s1suntik_akhir = $this->getSuntikan(35);
+
+        $data = [ 
+            'title' => 'Grading Awal',
+            'query' => $gradingAwal,
+            'suntik' => $s1suntik_akhir,
+            'suntik2' => $s1suntik2,
+        ];
+        return view('home.opnamenew.grading.awal', $data);
+    }
+
+    public function gradingSisa()
+    {
+        $sisaGrading = Grading::dapatkanStokBox('formulir');
+
+        $data = [ 
+            'title' => 'Grading Awal',
+            'query' => $sisaGrading,
+        ];
+        return view('home.opnamenew.grading.sisa', $data);
+    }
+    
+    public function gradingAkhir()
+    {
+        $selesaiGrading = Grading::selesai();
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
+
+        $data = [ 
+            'title' => 'Grading akhir',
+            'query' => $selesaiGrading,
+            'hrgaSatuan' => $hrgaSatuan,
+        ];
+        return view('home.opnamenew.grading.akhir', $data);
+    }
+    public function pengirimanAwal()
+    {
+        $pengiriman = Grading::pengirimanAll();
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
+
+        $data = [ 
+            'title' => 'Pengiriman',
+            'query' => $pengiriman,
+            'hrgaSatuan' => $hrgaSatuan,
+        ];
+        return view('home.opnamenew.pengiriman.awal', $data);
+    }
+    public function pengirimanSisa()
+    {
+        $belumKirim = Grading::belumKirimAll();
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
+
+        $data = [ 
+            'title' => 'Pengiriman Sisa',
+            'query' => $belumKirim,
+            'hrgaSatuan' => $hrgaSatuan,
+        ];
+        return view('home.opnamenew.pengiriman.sisa', $data);
     }
 }

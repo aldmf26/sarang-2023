@@ -335,6 +335,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/sortir/proses', 'sortir_sortirProses')->name('sortir.proses');
             Route::get('/sortir/sisa', 'sortir_sortirSisa')->name('sortir.sisa');
 
+            Route::get('/grading', 'gradingAwal')->name('grading.awal');
+            Route::get('/grading/akhir', 'gradingAkhir')->name('grading.akhir');
+            Route::get('/grading/sisa', 'gradingSisa')->name('grading.sisa');
+
+            Route::get('/pengiriman', 'pengirimanAwal')->name('pengiriman.awal');
+            Route::get('/pengiriman/sisa', 'pengirimanSisa')->name('pengiriman.sisa');
+
             // Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
         });
 });

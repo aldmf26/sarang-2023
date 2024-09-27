@@ -65,7 +65,7 @@
                             {{ number_format($grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs), 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                            <a href="{{ route('detail.grading.awal') }}" target="_blank">
                                 {{ number_format($grading->gr + ($sortir_akhir->gr + $opname->gr - $grading->gr), 0) }}
                             </a>
                         </td>
@@ -76,7 +76,7 @@
                         <td style="background-color: #F7F700;">Akhir Grading</td>
                         <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                            <a href="{{ route('detail.grading.akhir') }}" target="_blank">
                                 {{ number_format($grading->gr, 0) }}
                             </a>
                         </td>
@@ -100,7 +100,7 @@
                         <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
                         <td class="text-end">{{ number_format($grading_sisa->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank">
+                            <a href="{{ route('detail.grading.sisa') }}" target="_blank">
                                 {{ number_format($grading_sisa->gr, 0) }}
                             </a>
                         </td>

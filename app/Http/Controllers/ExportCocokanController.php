@@ -630,7 +630,7 @@ class ExportCocokanController extends Controller
         }
 
         // awal ctk
-        $s1_akhir = $model2::stok_selesai();
+        $gradingAwal = $model2::stok_selesai();
         $s1suntik2 = $this->getSuntikan(41);
         $s1suntik_akhir = $this->getSuntikan(35);
         $sisaGrading = Grading::dapatkanStokBox('formulir');
@@ -647,7 +647,7 @@ class ExportCocokanController extends Controller
 
         // akhir sortir
         $row = 2;
-        foreach ($s1_akhir as $v) {
+        foreach ($gradingAwal as $v) {
             $sheet->setCellValue("B$row", $v->nm_partai);
             $sheet->setCellValue("C$row", $v->name);
             $sheet->setCellValue("D$row", $v->no_box);
@@ -870,7 +870,7 @@ class ExportCocokanController extends Controller
 
         $belumKirim = Grading::belumKirimAll();
 
-        $hrgaSatuan = session()->get('hrga_satuan');
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
         // akhir sortir
         $row = 2;
         foreach ($pengiriman as $v) {

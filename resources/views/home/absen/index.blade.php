@@ -86,20 +86,32 @@
             <div id="loadDetailAbsen"></div>
         </x-theme.modal>
         <form action="{{ route('absen.detailSum') }}" method="get">
-            <x-theme.modal idModal="tambah" title="Detail Absen">
+            <x-theme.modal idModal="tambah" size="modal-lg" title="Detail Absen">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Dari</label>
                             <input type="date" name="tgl1" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Sampai</label>
                             <input type="date" name="tgl2" class="form-control">
 
                         </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Bulan</label>
+                        <select name="bulan" id="bulan" class="select2 bulan">
+                            @php
+                                $listBulan = DB::table('bulan')->get();
+                            @endphp
+                            @foreach ($listBulan as $l)
+                                <option value="{{ $l->bulan }}" {{ (int) date('m') == $l->bulan ? 'selected' : '' }}>
+                                    {{ $l->nm_bulan }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-lg-4">
                         <label for="">Pengawas</label>
