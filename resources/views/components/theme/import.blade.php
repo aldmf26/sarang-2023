@@ -2,7 +2,7 @@
     'route' => '',
     'title' => '',
     'routeTemplate' => '',
-]);
+])
 <form action="{{ route($route) }}" enctype="multipart/form-data" method="post">
     @csrf
     <x-theme.modal size="modal-lg" idModal="import" :title="$title">

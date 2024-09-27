@@ -56,7 +56,7 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Grading',
-            'formulir' => Grading::dapatkanStokBox('formulir')
+            'formulir' => Grading::dapatkanStokBoxYANGLAMA('formulir')
         ];
         return view('home.gradingbj.index', $data);
     }
@@ -241,7 +241,7 @@ class GradingBjController extends Controller
             }
         }
 
-        $getFormulir = Grading::dapatkanStokBox('formulir', $no_box);
+        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
         $data = [
             'title' => ' Grading Partai',

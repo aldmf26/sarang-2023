@@ -135,7 +135,7 @@
                                 <tr class="pointer">
                                     <td>{{ $d->no_box }} <input type="hidden" name="no_box[]"
                                             value="{{ $d->no_box }}"></td>
-                                    <td align="center">{{ $d->tipe }}</td>
+                                    <td align="center">{{ $d->tipe }}-{{ $d->ket }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
                                     @php
