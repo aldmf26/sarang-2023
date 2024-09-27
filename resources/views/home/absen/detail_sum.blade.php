@@ -72,7 +72,7 @@
                                         $tahunH = $date->format('Y');
 
                                         $getTgl = DB::table('absen')
-                                            ->where([['id_anak', $d->id_anak], ['bulan_dibayar', "9"]])
+                                            ->where([['id_anak', $d->id_anak], ['tgl', "$tahunH-$bulanH-$hari"]])
                                             ->count();
                                         $ttl += $getTgl ?? 0;
                                     @endphp
