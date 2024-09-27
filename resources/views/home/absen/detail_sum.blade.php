@@ -76,7 +76,7 @@
                                             ->count();
                                         $ttl += $getTgl ?? 0;
                                     @endphp
-                                    <td class="text-center">{{ empty($getTgl) ? '-' : $getTgl }}</td>
+                                    <td class="text-center"><span class="text-warning">{{ "$tahunH-$bulanH-$hari" }}</span>{{ empty($getTgl) ? '-' : $getTgl }}</td>
                                 @endforeach
                                 <td class="text-center">{{ $ttl }}</td>
                             </tr>
