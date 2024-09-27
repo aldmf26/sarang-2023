@@ -66,25 +66,18 @@
                                     $ttl = 0;
                                 @endphp
                                 @foreach ($period as $date)
-                                @php
-                                    $hari = $date->format('d');
-                                    $bulanH = $date->format('m');
-                                    $tahunH = $date->format('Y');
-                            
-                                    // Validasi tanggal
-                                    if (checkdate($bulanH, $hari, $tahunH)) {
+                                    @php
+                                        $hari = $date->format('d');
+                                        $bulanH = $date->format('m');
+                                        $tahunH = $date->format('Y');
+
                                         $getTgl = DB::table('absen')
-                                            ->where([['id_anak', $d->id_anak], ['tgl', "$tahunH-$bulanH-$hari"]])
+                                            ->where([['id_anak', $d->id_anak], ['tgl', "$tahunH-$bulanH-$hari"],['bulan_dibayar', 9]])
                                             ->count();
                                         $ttl += $getTgl ?? 0;
-                                    } else {
-                                        $getTgl = 0;
-                                    }
-                                @endphp
-                                <td class="text-center">
-                                    <span class="text-warning">{{ "$tahunH-$bulanH-$hari" }} == {{ $getTgl }}</span>{{ empty($getTgl) ? '-' : $getTgl }}
-                                </td>
-                            @endforeach
+                                    @endphp
+                                    <td class="text-center"><span class="text-warning">{{ "$tahunH-$bulanH-$hari" }} == {{ $getTgl }}</span>{{ empty($getTgl) ? '-' : $getTgl }}</td>
+                                @endforeach
                                 <td class="text-center">{{ $ttl }}</td>
                             </tr>
                         @endforeach
