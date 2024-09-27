@@ -3,18 +3,13 @@
 
     $navMenu = [
         [
-            'rot' => 'detail.grading.awal',
-            'nama' => 'Grading awal',
+            'rot' => 'detail.pengiriman.awal',
+            'nama' => 'Pengiriman awal',
         ],
         [
-            'rot' => 'detail.grading.sisa',
-            'nama' => 'Grading Sisa',
+            'rot' => 'detail.pengiriman.sisa',
+            'nama' => 'Pengiriman Sisa',
         ],
-        [
-            'rot' => 'detail.grading.akhir',
-            'nama' => 'Grading Akhir',
-        ],
-        
     ];
 
 @endphp

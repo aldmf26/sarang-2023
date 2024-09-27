@@ -396,4 +396,49 @@ class Grading extends Model
     {
         return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
     }
+
+    public static function gradingSum()
+    {
+        return DB::selectOne("SELECT SUM(pcs) as pcs, SUM(gr) as gr, SUM(ttl_rp) as ttl_rp, (sum(ttl_rp) / sum(gr)) as hrga_satuan
+        FROM (
+            -- Query 1
+            SELECT 
+                SUM(a.pcs_akhir) as pcs, 
+                SUM(a.gr_akhir) as gr, 
+                (SUM(a.ttl_rp) + SUM(b.gr_awal * b.hrga_satuan)) as ttl_rp
+            FROM sortir as a
+            LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
+            LEFT JOIN users as c on a.id_pengawas = c.id
+            WHERE a.no_box IN (
+                SELECT a.no_box
+                FROM formulir_sarang as a 
+                LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                LEFT JOIN users as c on a.id_penerima = c.id
+                WHERE a.kategori = 'grade'
+                GROUP BY a.no_box
+            ) 
+            AND a.selesai = 'Y'
+
+            UNION ALL
+
+            -- Query 2
+            SELECT 
+                SUM(a.pcs) as pcs, 
+                SUM(a.gr) as gr, 
+                SUM(a.ttl_rp) as ttl_rp
+            FROM opname_suntik as a 
+            WHERE a.ket = 'sortir_selesai_diserahkan'
+
+            UNION ALL
+
+            -- Query 3
+            SELECT 
+                SUM(a.pcs) as pcs, 
+                SUM(a.gr) as gr, 
+                SUM(a.ttl_rp) as ttl_rp
+            FROM opname_suntik as a 
+            WHERE a.ket = 'grading' 
+            AND opname = 'Y'
+        ) as combined_data;");
+    }
 }

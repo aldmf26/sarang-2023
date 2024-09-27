@@ -870,7 +870,7 @@ class ExportCocokanController extends Controller
 
         $belumKirim = Grading::belumKirimAll();
 
-        $hrgaSatuan = session()->get('hrga_satuan');
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
         // akhir sortir
         $row = 2;
         foreach ($pengiriman as $v) {
