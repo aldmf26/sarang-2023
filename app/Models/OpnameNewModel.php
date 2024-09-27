@@ -402,4 +402,47 @@ group by a.no_box;
 
         return $result;
     }
+
+    public static function grading_sisa()
+    {
+        $result = DB::select("SELECT e.nm_partai, a.no_box_sortir, e.tipe,e.ket, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr ,
+        sum(g.ttl_rp) as cost_bk,
+        sum(g.cost_cu) as cost_cu,
+        sum( COALESCE(g.cost_cbt,0) + COALESCE(g.cost_eo,0) + COALESCE(g.cost_ctk,0) + COALESCE(g.cost_str,0) ) as cost_kerja
+        FROM grading as a 
+        left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' 
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' 
+        LEFT JOIN( 
+            select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir 
+        ) as d on d.no_box = a.no_box_sortir 
+
+        left join(
+                SELECT a.no_box, (a.gr_awal * a.hrga_satuan) as ttl_rp, b.ttl_rp as cost_cbt, c.ttl_rp as cost_eo, d.cost_ctk, e.ttl_rp as cost_str, f.cost_cu
+                    FROM bk as a 
+                    left JOIN cabut as b on b.no_box = a.no_box
+                    left JOIN eo as c on c.no_box = a.no_box
+                    left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_ctk 
+                                FROM cetak_new as a 
+                                left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                                where b.kategori = 'CTK'
+                                group by a.no_box
+                    ) as d on d.no_box = a.no_box
+                    left join sortir as e on e.no_box = a.no_box
+                    left join (
+                        SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                                FROM cetak_new as a 
+                                left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                                where b.kategori = 'CU'
+                                group by a.no_box
+                    ) as f on f.no_box = a.no_box
+                    where a.baru = 'baru' and a.kategori ='cabut'
+                    group by a.no_box
+                ) as g on g.no_box = a.no_box_sortir
+        WHERE a.selesai = 'T'
+        group by a.no_box_sortir
+        having gr != 0;");
+
+        return $result;
+    }
 }

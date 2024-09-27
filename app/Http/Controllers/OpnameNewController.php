@@ -199,7 +199,7 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
+        $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         $this->rekap($spreadsheet, $style_atas, $style, $model);
 
@@ -432,7 +432,7 @@ class OpnameNewController extends Controller
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(4);
         $sheet3 = $spreadsheet->getActiveSheet(4);
-        $sheet3->setTitle('Gudang grading & pengiriman');
+        $sheet3->setTitle('Pengiriman');
 
         $sheet3->getStyle("B1:H1")->applyFromArray($style_atas);
         $sheet3->setCellValue('A1', 'Pengiriman');
@@ -466,7 +466,7 @@ class OpnameNewController extends Controller
         $sheet3->getStyle('B2:H' . $kolom - 1)->applyFromArray($style);
 
         $sheet3->getStyle("J1:Q1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('J1', 'Sisa grading');
+        $sheet3->setCellValue('J1', 'Sisa belum grading');
         $sheet3->setCellValue('K1', 'box grading');
         $sheet3->setCellValue('L1', 'pengawas');
         $sheet3->setCellValue('M1', 'grade');
@@ -513,8 +513,6 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('U' . $kolom, round($sortir_akhir->gr + $opname->gr - $grading->gr, 0));
         $sheet3->setCellValue('V' . $kolom, 0);
         $sheet3->setCellValue('W' . $kolom, 0);
-
-
         $sheet3->getStyle('T2:W2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
@@ -606,6 +604,41 @@ class OpnameNewController extends Controller
 
         $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
     }
+    private function gudang_grading($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $sheet4 = $spreadsheet->getActiveSheet(3);
+        $sheet4->setTitle('Gudang grading');
+
+        $sheet4->getStyle("B1:N1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A1', 'Sisa belum grading');
+        $sheet4->setCellValue('B1', 'partai');
+        $sheet4->setCellValue('C1', 'no box');
+        $sheet4->setCellValue('D1', 'tipe');
+        $sheet4->setCellValue('E1', 'ket');
+        $sheet4->setCellValue('F1', 'pcs');
+        $sheet4->setCellValue('G1', 'gr');
+        $sheet4->setCellValue('H1', 'ttl rp bk');
+        $sheet4->setCellValue('I1', 'cost kerja');
+        $sheet4->setCellValue('J1', 'rp/gr');
+
+        $belum_grading = OpnameNewModel::grading_sisa();
+        $kolom = 2;
+        foreach ($belum_grading  as $d) {
+            $sheet4->setCellValue('B' . $kolom, $d->nm_partai ?? '-');
+            $sheet4->setCellValue('C' . $kolom, $d->no_box);
+            $sheet4->setCellValue('D' . $kolom, $d->tipe);
+            $sheet4->setCellValue('E' . $kolom, $d->ket);
+            $sheet4->setCellValue('F' . $kolom, $d->pcs);
+            $sheet4->setCellValue('G' . $kolom, $d->gr);
+            $sheet4->setCellValue('H' . $kolom, $d->ttl_rp);
+            $sheet4->setCellValue('I' . $kolom, $d->cost_kerja);
+            $sheet4->setCellValue('J' . $kolom, ($d->cost_kerja + $d->ttl_rp) / $d->gr);
+            $kolom++;
+        }
+        $sheet4->getStyle('B2:J' . $kolom - 1)->applyFromArray($style);
+    }
 
     private function rekap($spreadsheet, $style_atas, $style, $model)
     {
@@ -648,10 +681,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('B8', "=SUM('Gudang Sortir'!E:E)");
         $sheet4->setCellValue('B9', "=SUM('Gudang Sortir'!R:R)");
         $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AE:AE)");
-        $sheet4->setCellValue('B11', "0");
-        $sheet4->setCellValue('B12', "=SUM('Gudang grading & pengiriman'!E:E)");
-        $sheet4->setCellValue('B13', "=SUM('Gudang grading & pengiriman'!N:N)");
-        $sheet4->setCellValue('B14', "=SUM('Gudang grading & pengiriman'!T:T)");
+        $sheet4->setCellValue('B11', "=SUM('Gudang grading'!F:F)");
+        $sheet4->setCellValue('B12', "=SUM('Pengiriman'!E:E)");
+        $sheet4->setCellValue('B13', "=SUM('Pengiriman'!N:N)");
+        $sheet4->setCellValue('B14', "=SUM('Pengiriman'!T:T)");
 
         $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
         $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
@@ -662,10 +695,10 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('C8', "=SUM('Gudang Sortir'!F:F)");
         $sheet4->setCellValue('C9', "=SUM('Gudang Sortir'!S:S)");
         $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AF:AF)");
-        $sheet4->setCellValue('C11', "0");
-        $sheet4->setCellValue('C12', "=SUM('Gudang grading & pengiriman'!F:F)");
-        $sheet4->setCellValue('C13', "=SUM('Gudang grading & pengiriman'!O:O)");
-        $sheet4->setCellValue('C14', "=SUM('Gudang grading & pengiriman'!U:U)");
+        $sheet4->setCellValue('C11', "=SUM('Gudang grading'!G:G)");
+        $sheet4->setCellValue('C12', "=SUM('Pengiriman'!F:F)");
+        $sheet4->setCellValue('C13', "=SUM('Pengiriman'!O:O)");
+        $sheet4->setCellValue('C14', "0");
 
         $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
         $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!T:T)");
@@ -676,9 +709,9 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!G:G)");
         $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!T:T)");
         $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
-        $sheet4->setCellValue('D11', "0");
-        $sheet4->setCellValue('D12', "=SUM('Gudang grading & pengiriman'!G:G)");
-        $sheet4->setCellValue('D13', "=SUM('Gudang grading & pengiriman'!P:P)");
+        $sheet4->setCellValue('D11', "=SUM('Gudang grading'!H:H)");
+        $sheet4->setCellValue('D12', "=SUM('Pengiriman'!G:G)");
+        $sheet4->setCellValue('D13', "=SUM('Pengiriman'!P:P)");
         $sheet4->setCellValue('D14', "0");
 
         $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!H:H)");
@@ -690,7 +723,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('E8', "=SUM('Gudang Sortir'!H:H)");
         $sheet4->setCellValue('E9', "=SUM('Gudang Sortir'!U:U)");
         $sheet4->setCellValue('E10', "=SUM('Gudang Sortir'!AG:AG)");
-        $sheet4->setCellValue('E11', "0");
+        $sheet4->setCellValue('E11', "=SUM('Gudang grading'!I:I)");
         $sheet4->setCellValue('E12', "0");
         $sheet4->setCellValue('E13', "0");
         $sheet4->setCellValue('E14', "0");
