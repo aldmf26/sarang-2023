@@ -149,7 +149,7 @@ class CocokanController extends Controller
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp + $s3->cost_kerja;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
 
 
         // $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
@@ -181,7 +181,7 @@ class CocokanController extends Controller
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
-        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp + $sa->cost_kerja;
+        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
         $pengiriman = Grading::pengirimanSum();
 
