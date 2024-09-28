@@ -285,7 +285,7 @@ class CetakModel extends Model
     {
         $user = auth()->user()->posisi_id;
         if ($user == '1') {
-            $pgws = '';
+            $pgws = 'and a.id_pengawas = ' . $id_pengawas;;
         } else {
             $pgws = 'and a.id_pengawas = ' . $id_pengawas;
         }
