@@ -871,7 +871,6 @@ class ExportCocokanController extends Controller
         $belumKirim = Grading::belumKirimAll();
 
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
-        dd($hrgaSatuan);
         // akhir sortir
         $row = 2;
         foreach ($pengiriman as $v) {
