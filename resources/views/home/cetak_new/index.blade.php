@@ -110,7 +110,7 @@
 
             <div id="load-cetak"></div>
 
-            <form id="save_awal">
+            <form method="post" action="{{ route('cetaknew.save_target') }}">
                 @csrf
                 <x-theme.modal idModal="tambah" title="Tambah Kerjaan" size="modal-lg-max" btnSave="Y">
                     <div class="row">
@@ -176,7 +176,7 @@
                             url: "{{ route('cetaknew.get_cetak') }}",
                             success: function(r) {
                                 $("#load-cetak").html(r);
-                                $('.select2_add').select2({});
+                                // $('.select2_add').select2({});
                                 $('#tableHalaman').DataTable({
                                     "searching": true,
                                     scrollY: '400px',
