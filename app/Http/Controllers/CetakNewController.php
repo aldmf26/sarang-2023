@@ -127,8 +127,8 @@ class CetakNewController extends Controller
 
     public function get_cetak(Request $r)
     {
-        $tgl1 = $r->tgl1 ?? date('2024-08-27');
-        $tgl2 = $r->tgl2 ?? date('2024-09-28');
+        $tgl1 = $r->tgl1 ?? date('Y-m-d');
+        $tgl2 = $r->tgl2 ?? date('Y-m-t');
 
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
@@ -136,6 +136,7 @@ class CetakNewController extends Controller
 
 
         $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal);
+
 
 
         $data = [
