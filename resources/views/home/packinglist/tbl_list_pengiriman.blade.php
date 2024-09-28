@@ -22,11 +22,17 @@
         @php
             $ttlPcs = 0;
             $ttlGr = 0;
+            
+            $ttlPcs2 = 0;
+            $ttlGr2 = 0;
         @endphp
         @foreach ($pengirimanBox as $d)
             @php
                 $ttlPcs += $d->pcs;
                 $ttlGr += $d->gr;
+
+                $ttlPcs2 += $d->pcs2;
+                $ttlGr2 += $d->gr2;
 
                 $cekGrade = $d->grade != $d->grade2;
                 $cekPcs = $d->pcs != $d->pcs2;
@@ -54,8 +60,8 @@
             <th class="text-center" {!! $color !!}>{{ number_format($ttlGr, 0) }}</th>
             <th class="text-center" {!! $color !!}></th>
 
-            <th class="text-center" {!! $color !!}>{{ number_format($ttlPcs, 0) }}</th>
-            <th class="text-center" {!! $color !!}>{{ number_format($ttlGr, 0) }}</th>
+            <th class="text-center" {!! $color !!}>{{ number_format($ttlPcs2, 0) }}</th>
+            <th class="text-center" {!! $color !!}>{{ number_format($ttlGr2, 0) }}</th>
             <th colspan="3" class="text-center" {!! $color !!}></th>
         </tr>
     </tbody>

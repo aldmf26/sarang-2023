@@ -19,6 +19,7 @@
                                 <th class="dhead">Tgl</th>
                                 <th width="120" class="dhead">No Packinglist</th>
                                 <th class="dhead">Nama Packinglist</th>
+                                <th class="dhead">Tujuan Ke</th>
                                 <th class="dhead text-center" width="100">Kadar Air %</th>
                                 <th class="dhead text-center">Ttl Box</th>
                                 <th class="dhead">Pcs</th>
@@ -37,6 +38,8 @@
                                         value="{{ $po->no_nota }}">
                                 </td>
                                 <td><input type="text" placeholder="nama packinglist" required name="nm_packing"
+                                        class="form-control"></td>
+                                <td><input type="text" placeholder="tujuan cth: hk" required name="tujuan"
                                         class="form-control"></td>
                                 <td><input type="text" x-model="kadar" required placeholder="kadar %" name="kadar"
                                         class="form-control text-end">
@@ -59,9 +62,9 @@
                         <thead>
                             <tr>
                                 <th class="dhead">No Box</th>
-                                <th class="dhead text-center">Grade</th>
-                                <th class="dhead text-end">Pcs</th>
-                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-center">Grade 1</th>
+                                <th class="dhead text-end">Pcs 1</th>
+                                <th class="dhead text-end">Gr 1</th>
 
                                 <th width="120" class="bg-info text-white text-center">Grade 2</th>
                                 <th width="120" class="bg-info text-white text-end">Pcs 2</th>
@@ -69,12 +72,14 @@
                                 <th width="120" class="bg-info text-white">No Barcode Pengiriman</th>
 
                                 <th class="dhead text-end">Pcs Kirim</th>
-                                <th class="dhead text-end">Gr Kirim</th>
+                                <th class="dhead text-end">Gr Kirim air %</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($pengiriman as $d)
-                                <tr>
+                                <tr x-data="{
+                                    gr2:{{ $d->gr }},
+                                }">
                                     <td>P{{ $d->no_box }}</td>
                                     <td align="center">{{ $d->grade }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
@@ -88,14 +93,16 @@
                                         <input name="pcs2[]" required value="{{ $d->pcs }}" type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
-                                        <input name="gr2[]" required value="{{ $d->gr }}" type="text" class="text-end form-control">
+                                        <input name="gr2[]" x-model="gr2" required value="{{ $d->gr }}" type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
                                         <input name="barcode[]" required value="" placeholder="cth: 10001" type="text" class="form-control">
                                     </td>
                                   
-                                    <td align="right">{{ $d->pcs }}</td>
-                                    <td align="right" x-text="({{ $d->gr }} / kadar) + {{ $d->gr }}">-
+                                    <td align="right">
+                                        {{ $d->pcs }}
+                                    </td>
+                                    <td align="right" x-text="(Number(gr2) / Number(kadar)) + Number(gr2)">-
                                     </td>
                                 </tr>
                             @endforeach

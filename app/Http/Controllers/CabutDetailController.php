@@ -463,4 +463,16 @@ class CabutDetailController extends Controller
         ];
         return view('home.opnamenew.pengiriman.sisa', $data);
     }
+    public function list_pengiriman()
+    {
+        $belumKirim = Grading::belumKirimAll();
+        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
+
+        $data = [ 
+            'title' => 'Pengiriman Sisa',
+            'query' => $belumKirim,
+            'hrgaSatuan' => $hrgaSatuan,
+        ];
+        return view('home.opnamenew.list_pengiriman.awal', $data);
+    }
 }

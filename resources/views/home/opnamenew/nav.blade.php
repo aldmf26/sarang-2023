@@ -54,6 +54,13 @@
             ],
             'nama' => 'Pengiriman',
         ],
+        [
+            'rot' => 'detail.list_pengiriman',
+            'rotAktif' => [
+                'detail.list_pengiriman',
+            ],
+            'nama' => 'List Pengiriman',
+        ],
     ];
 @endphp
 <div class="col-lg-12">

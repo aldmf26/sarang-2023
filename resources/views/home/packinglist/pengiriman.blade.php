@@ -38,6 +38,7 @@
                                     <th class="dhead">No Packinglist</th>
                                     {{-- <th class="dhead">No Invoice</th> --}}
                                     <th class="dhead">Nama Packing List</th>
+                                    <th class="dhead">Tujuan</th>
                                     <th class="dhead text-end">Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
@@ -70,6 +71,7 @@
 
                                     </td> --}}
                                         <td>{{ ucwords($d->nm_packing) }}</td>
+                                        <td>{{ strtoupper($d->tujuan) }}</td>
                                         <td align="right">{{ $d->ttl_box }}</td>
                                         <td align="right">{{ number_format($d->pcs, 0) }}</td>
                                         <td align="right">{{ number_format($d->gr, 0) }}</td>
