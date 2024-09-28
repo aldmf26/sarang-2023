@@ -1027,8 +1027,8 @@ class ExportCocokanController extends Controller
 
             'pengiriman' => [
                 'pcs' => "=SUM('Gudang Pengiriman'!E:E)",
-                'gr' => "=SUM('Gudang Pengiriman'!E:E)",
-                'rp' => "=SUM('Gudang Pengiriman'!F:F)",
+                'gr' => "=SUM('Gudang Pengiriman'!F:F)",
+                'rp' => "=SUM('Gudang Pengiriman'!G:G)",
                 'cost_kerja' => "=SUM('Gudang Pengiriman'!T:T)",
             ],
             'belum kirim' => [
@@ -1061,6 +1061,20 @@ class ExportCocokanController extends Controller
             $row++;
         }
         $sheet->getStyle('A1:H19')->applyFromArray($style);
+
+        $warnai = [
+            'A4:A5',
+            'A8:A9',
+            'A12:A13',
+            'A17:A19',
+        ];
+        foreach($warnai as $w){
+            $sheet->getStyle($w)
+                ->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('f6a0e0');
+        }
     }
 
     public function index(OpnameNewModel $model)
