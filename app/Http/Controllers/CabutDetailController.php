@@ -342,7 +342,7 @@ class CabutDetailController extends Controller
     public function cetak_cetakProses()
     {
         $model2 = new OpnameNewModel();
-        $data = [ 
+        $data = [
             'title' => 'Cetak Proses',
             'query' => $model2::cetak_proses(),
         ];
@@ -363,7 +363,7 @@ class CabutDetailController extends Controller
     {
         $model2 = new DetailSortirModel();
 
-        $data = [ 
+        $data = [
             'title' => 'Sortir Awal',
             'query' => $model2::stok_awal(),
             'suntik' => $this->getSuntikan(31),
@@ -374,7 +374,7 @@ class CabutDetailController extends Controller
     public function sortir_sortirAkhir()
     {
         $model2 = new DetailSortirModel();
-        $data = [ 
+        $data = [
             'title' => 'Sortir Akhir',
             'query' => $model2::stok_selesai(),
             'suntik' => $this->getSuntikan(35),
@@ -384,7 +384,7 @@ class CabutDetailController extends Controller
     public function sortir_sortirProses()
     {
         $model2 = new OpnameNewModel();
-        $data = [ 
+        $data = [
             'title' => 'Sortir Proses',
             'query' => $model2::sortir_proses(),
         ];
@@ -393,7 +393,7 @@ class CabutDetailController extends Controller
     public function sortir_sortirSisa()
     {
         $model2 = new OpnameNewModel();
-        $data = [ 
+        $data = [
             'title' => 'Sortir Sisa',
             'query' => $model2::sortir_stock(),
         ];

@@ -32,7 +32,7 @@
                 </td>
                 <td>{{ $c->no_box }}</td>
                 <td>
-                    <select name="" id="" class="select2_add id_anak{{ $c->id_cetak }}"
+                    <select name="" id="" class="form-control id_anak{{ $c->id_cetak }}"
                         {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
                         <option value="">Pilih anak</option>
                         @foreach ($tb_anak as $t)
@@ -51,7 +51,7 @@
                     </select>
                 </td>
                 <td>
-                    <select name="id_paket[]" id="" class="select2_add id_paket{{ $c->id_cetak }}"
+                    <select name="id_paket[]" id="" class="form-control id_paket{{ $c->id_cetak }}"
                         {{ $c->selesai == 'Y' ? 'disabled' : '' }}>
                         @if ($c->id_kelas_cetak == 0)
                             <option value="">Pilih Paket</option>
@@ -172,10 +172,15 @@
                         {{ $c->selesai == 'Y' || $c->bulan_dibayar == 0 || empty($c->capai) || $c->id_kelas_cetak == 0 ? 'hidden' : '' }}
                         class="btn btn-sm btn-success btn_selesai" id_cetak="{{ $c->id_cetak }}">selesai
                     </button>
-                    {{-- <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
-                        class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}"
-                        id_cetak="{{ $c->id_cetak }}" id_paket={{ $c->id_paket }}><i class="fas fa-trash-alt"></i>
-                    </button> --}}
+                    @if ($hal == 'cu')
+                        <button type="button" {{ $c->selesai == 'Y' ? 'hidden' : '' }}
+                            class="btn btn-sm btn-danger btn_hapus btn_hapus{{ $c->id_cetak }}"
+                            id_cetak="{{ $c->id_cetak }}" id_paket={{ $c->id_paket }}><i
+                                class="fas fa-trash-alt"></i>
+                        </button>
+                    @else
+                    @endif
+
 
                     <button {{ $c->kat_kelas == 'CU' ? '' : (empty($c->form) ? '' : 'hidden') }} type="button"
                         {{ $c->selesai == 'T' ? 'hidden' : '' }} class="btn btn-sm btn-danger btn_cancel"

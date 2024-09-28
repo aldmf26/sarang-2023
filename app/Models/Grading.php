@@ -83,7 +83,7 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, g.ttl_rp as cost_bk,e.ttl_rp as ttl_rp, g.cost_cbt, g.cost_eo, g.cost_ctk, g.cost_str, g.cost_cu,akhir_sortir.ttl_rp as ttl_rp_sortir, akhir_sortir.cost_kerja as cost_kerja_sortir
+        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, g.ttl_rp as cost_bk, g.cost_cbt, g.cost_eo, g.cost_ctk, g.cost_str, g.cost_cu,akhir_sortir.ttl_rp as ttl_rp_sortir, akhir_sortir.cost_kerja as cost_kerja_sortir
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'

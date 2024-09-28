@@ -138,12 +138,14 @@ class CetakNewController extends Controller
         $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal);
 
 
+
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
             'tb_anak' => $this->getData('tb_anak'),
             'paket' => $this->getData('paket'),
             'bulan' => $this->getData('bulan'),
+            'hal' => $hal
 
 
         ];
@@ -197,6 +199,7 @@ class CetakNewController extends Controller
             ];
             DB::table('cetak_new')->insert($data);
         }
+        return redirect()->route('cetaknew', ['hal', 'cu'])->with('sukses', 'Data berhasil disimpan');
     }
 
     public function save_akhir(Request $r)

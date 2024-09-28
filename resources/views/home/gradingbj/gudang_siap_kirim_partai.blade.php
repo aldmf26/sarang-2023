@@ -80,6 +80,7 @@
                                     Dipilih <br> Pcs : <span></span> Gr : <span></span>
                                 </div> --}}
                             </td>
+                            <td class="dheadstock"></td>
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
@@ -87,13 +88,13 @@
                                     <tr
                                         @click="
                                             if (cek.includes('{{ $d->no_box }}')) {
-                                                cek = cek.filter(x => x !== '{{ $d->no_box }}'); 
-                                                ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}; 
-                                                ttlGr -= {{ $d->gr - $d->gr_pengiriman }};
+                                                cek = cek.filter(x => x !== '{{ $d->no_box }}')
+                                                ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}
+                                                ttlGr -= {{ $d->gr - $d->gr_pengiriman }}
                                             } else {
-                                                cek.push('{{ $d->no_box }}'); 
-                                                ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}; 
-                                                ttlGr += {{ $d->gr - $d->gr_pengiriman }};
+                                                cek.push('{{ $d->no_box }}')
+                                                ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
+                                                ttlGr += {{ $d->gr - $d->gr_pengiriman }}
                                             }
                                         ">
                                         <td>P{{ $d->no_box }}</td>
