@@ -394,7 +394,7 @@ class Grading extends Model
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as ttl_rp,sum(a.cost_cu) as cost_cu,,sum(a.cost_op) as cost_op FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as ttl_rp,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
     }
 
     public static function gradingSum()
