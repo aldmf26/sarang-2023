@@ -378,23 +378,23 @@ class Grading extends Model
 
     public static function pengirimanAll()
     {
-        return DB::select("SELECT b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as ttl_rp,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
                 JOIN grading_partai as b on a.no_box = b.box_pengiriman GROUP BY a.no_box");
     }
 
     public static function belumKirimAll()
     {
-        return DB::select("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
+        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as ttl_rp,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+        return DB::selectOne("SELECT a.cost_op,a.cost_cu,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr,sum(a.cost_bk) as ttl_rp FROM pengiriman as a
                 JOIN grading_partai as b on a.no_box = b.box_pengiriman ");
     }
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as ttl_rp,sum(a.cost_cu) as cost_cu,,sum(a.cost_op) as cost_op FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
     }
 
     public static function gradingSum()

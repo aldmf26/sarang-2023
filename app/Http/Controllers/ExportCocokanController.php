@@ -689,8 +689,8 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("M$row", $v->no_box);
             $sheet->setCellValue("N$row", $v->pcs_awal);
             $sheet->setCellValue("O$row", $v->gr_awal);
-            $sheet->setCellValue("P$row", $v->ttl_rp +  $v->cost_kerja);
-            $sheet->setCellValue("Q$row", !$v->gr_awal ? 0 : ($v->ttl_rp +  $v->cost_kerja) / $v->gr_awal);
+            $sheet->setCellValue("P$row", $v->ttl_rp);
+            $sheet->setCellValue("Q$row", !$v->gr_awal ? 0 : ($v->ttl_rp) / $v->gr_awal);
             $row++;
         }
         $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
@@ -722,117 +722,6 @@ class ExportCocokanController extends Controller
 
     }
 
-    public function pengiriman($spreadsheet, $style_atas, $style, $model)
-    {
-
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(3);
-        $sheet3 = $spreadsheet->getActiveSheet();
-        $sheet3->setTitle('Gudang grading & pengiriman');
-
-        $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('A1', 'Pengiriman');
-        $sheet3->setCellValue('B1', 'Tanggal pengiriman');
-        $sheet3->setCellValue('C1', 'no pengiriman');
-        $sheet3->setCellValue('D1', 'grade');
-        $sheet3->setCellValue('E1', 'pcs');
-        $sheet3->setCellValue('F1', 'gr');
-        $sheet3->setCellValue('G1', 'ttl rp bk');
-        $sheet3->setCellValue('H1', 'cost kerja');
-        $sheet3->setCellValue('I1', 'cost cu dll');
-        $sheet3->setCellValue('J1', 'cost operasional');
-        $sheet3->setCellValue('K1', 'ttl rp');
-        $sheet3->setCellValue('L1', 'rp/gr');
-
-        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr 
-        FROM pengiriman as a 
-        group by a.id_pengiriman;");
-        $kolom = 2;
-        foreach ($pengiriman  as $d) {
-            $sheet3->setCellValue('B' . $kolom, $d->tgl_input);
-            $sheet3->setCellValue('C' . $kolom, $d->no_barcode);
-            $sheet3->setCellValue('D' . $kolom, $d->grade);
-            $sheet3->setCellValue('E' . $kolom, $d->pcs);
-            $sheet3->setCellValue('F' . $kolom, $d->gr);
-            $sheet3->setCellValue('G' . $kolom, 0);
-            $sheet3->setCellValue('H' . $kolom, 0);
-            $sheet3->setCellValue('I' . $kolom, 0);
-            $sheet3->setCellValue('J' . $kolom, 0);
-            $sheet3->setCellValue('K' . $kolom, 0);
-            $sheet3->setCellValue('L' . $kolom, 0);
-            $kolom++;
-        }
-        $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
-
-        $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('N1', 'Sisa Belum grading');
-        $sheet3->setCellValue('O1', 'box grading');
-        $sheet3->setCellValue('P1', 'pengawas');
-        $sheet3->setCellValue('Q1', 'grade');
-        $sheet3->setCellValue('R1', 'pcs');
-        $sheet3->setCellValue('S1', 'gr');
-        $sheet3->setCellValue('T1', 'ttl rp bk');
-        $sheet3->setCellValue('U1', 'cost kerja');
-        $sheet3->setCellValue('V1', 'cost cu dll');
-        $sheet3->setCellValue('W1', 'cost operasional');
-        $sheet3->setCellValue('X1', 'ttl rp');
-        $sheet3->setCellValue('Y1', 'rp/gr');
-
-        $grading = DB::select("SELECT * FROM `grading_partai` WHERE `box_pengiriman` not in(SELECT a.no_box FROM pengiriman as a )");
-        $kolom = 2;
-        foreach ($grading  as $d) {
-            $sheet3->setCellValue('O' . $kolom, $d->box_pengiriman);
-            $sheet3->setCellValue('P' . $kolom, $d->admin);
-            $sheet3->setCellValue('Q' . $kolom, $d->grade);
-            $sheet3->setCellValue('R' . $kolom, $d->pcs);
-            $sheet3->setCellValue('S' . $kolom, $d->gr);
-            $sheet3->setCellValue('T' . $kolom, 0);
-            $sheet3->setCellValue('U' . $kolom, 0);
-            $sheet3->setCellValue('V' . $kolom, 0);
-            $sheet3->setCellValue('W' . $kolom, 0);
-            $sheet3->setCellValue('X' . $kolom, 0);
-            $sheet3->setCellValue('Y' . $kolom, 0);
-            $kolom++;
-        }
-        $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
-
-        $sheet3->getStyle("AB1:AI1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AA1', 'selisih');
-        $sheet3->setCellValue('AB1', 'pcs');
-        $sheet3->setCellValue('AC1', 'gr');
-        $sheet3->setCellValue('AD1', 'ttl rp bk');
-        $sheet3->setCellValue('AE1', 'cost kerja');
-        $sheet3->setCellValue('AF1', 'cost cu dll');
-        $sheet3->setCellValue('AG1', 'cost operasional');
-        $sheet3->setCellValue('AH1', 'ttl rp');
-        $sheet3->setCellValue('AI1', 'rp/gr');
-
-        $sa = CocokanModel::akhir_sortir();
-        $p2suntik = $this->getSuntikan(42);
-        $sortir_akhir = (object)[];
-        $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
-        $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
-        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
-
-        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
-        $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
-        $opname = $this->getSuntikan(41);
-
-        $kolom = 2;
-
-        $sheet3->setCellValue('AB' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0));
-        $sheet3->setCellValue('AC' . $kolom, round($sortir_akhir->gr + $opname->gr - $grading->gr, 0));
-        $sheet3->setCellValue('AD' . $kolom, 0);
-        $sheet3->setCellValue('AE' . $kolom, 0);
-        $sheet3->setCellValue('AF' . $kolom, 0);
-        $sheet3->setCellValue('AG' . $kolom, 0);
-        $sheet3->setCellValue('AH' . $kolom, 0);
-        $sheet3->setCellValue('AI' . $kolom, 0);
-
-
-        $sheet3->getStyle('AB2:AI2')->applyFromArray($style);
-    }
-
     public function pengiriman2($spreadsheet, $style_atas, $style, $model)
     {
         $model2 = new DetailSortirModel();
@@ -850,16 +739,20 @@ class ExportCocokanController extends Controller
             'E' => 'pcs',
             'F' => 'gr',
             'G' => 'ttl rp',
-            'H' => 'rp/gr',
+            'H' => 'cost cu',
+            'I' => 'cost operasional',
+            'J' => 'rp/gr',
 
-            'J' => 'sisa belum kirim',
-            'K' => 'nama partai',
-            'L' => 'box grading',
-            'M' => 'grade',
-            'N' => 'pcs',
-            'O' => 'gr',
-            'P' => 'ttl rp',
-            'Q' => 'rp/gr',
+            'L' => 'sisa belum kirim',
+            'M' => 'nama partai',
+            'N' => 'box grading',
+            'O' => 'grade',
+            'P' => 'pcs',
+            'Q' => 'gr',
+            'R' => 'ttl rp',
+            'S' => 'cost cu',
+            'T' => 'cost operasional',
+            'U' => 'rp/gr',
         ];
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
@@ -879,27 +772,31 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("D$row", $v->grade);
             $sheet->setCellValue("E$row", $v->pcs);
             $sheet->setCellValue("F$row", $v->gr);
-            $sheet->setCellValue("G$row", $hrgaSatuan * $v->gr);
-            $sheet->setCellValue("H$row", ($hrgaSatuan * $v->gr) / $v->gr);
+            $sheet->setCellValue("G$row", $v->ttl_rp);
+            $sheet->setCellValue("H$row", $v->cost_cu);
+            $sheet->setCellValue("I$row", $v->cost_op);
+            $sheet->setCellValue("J$row", ($v->ttl_rp) / $v->gr);
 
             $row++;
         }
-        $sheet->getStyle('B2:H' . $row - 1)->applyFromArray($style);
+        $sheet->getStyle('B2:J' . $row - 1)->applyFromArray($style);
 
         $row = 2;
         foreach ($belumKirim as $v) {
-            $sheet->setCellValue("K$row", $v->nm_partai);
-            $sheet->setCellValue("L$row", $v->no_box);
-            $sheet->setCellValue("M$row", $v->grade);
-            $sheet->setCellValue("N$row", $v->pcs);
-            $sheet->setCellValue("O$row", $v->gr);
-            $sheet->setCellValue("P$row", $hrgaSatuan * $v->gr);
-            $sheet->setCellValue("Q$row", ($hrgaSatuan * $v->gr) / $v->gr);
+            $sheet->setCellValue("M$row", $v->nm_partai);
+            $sheet->setCellValue("N$row", $v->no_box);
+            $sheet->setCellValue("O$row", $v->grade);
+            $sheet->setCellValue("P$row", $v->pcs);
+            $sheet->setCellValue("Q$row", $v->gr);
+            $sheet->setCellValue("R$row", $v->ttl_rp);
+            $sheet->setCellValue("S$row", $v->cost_cu);
+            $sheet->setCellValue("T$row", $v->cost_op);
+            $sheet->setCellValue("U$row", ($v->ttl_rp) / $v->gr);
 
             $row++;
         }
 
-        $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
+        $sheet->getStyle('K2:U' . $row - 1)->applyFromArray($style);
     }
 
     public function rekap($spreadsheet, $style_atas, $style, $model)
@@ -938,18 +835,21 @@ class ExportCocokanController extends Controller
                 'gr' => "=SUM('Gudang Cabut'!R:R)",
                 'rp' => "=SUM('Gudang Cabut'!S:S)",
                 'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+                'ttl_rp' => "=E3",
             ],
             'cabut sedang proses' => [
                 'pcs' => "=SUM('Gudang Cabut'!AC:AC)",
                 'gr' => "=SUM('Gudang Cabut'!AD:AD)",
                 'rp' => "=SUM('Gudang Cabut'!AE:AE)",
                 'cost_kerja' => "=SUM('Gudang Cabut'!AF:AF)",
+                'ttl_rp' => "=D4",
             ],
             'cabut sisa pengawas' => [
                 'pcs' => "=SUM('Gudang Cabut'!AP:AP)",
                 'gr' => "=SUM('Gudang Cabut'!AQ:AQ)",
                 'rp' => "=SUM('Gudang Cabut'!AR:AR)",
                 'cost_kerja' => "=SUM('Gudang Cabut'!AS:AS)",
+                'ttl_rp' => "=D5",
             ],
 
             // cetak
@@ -964,18 +864,24 @@ class ExportCocokanController extends Controller
                 'gr' => "=SUM('Gudang Cetak'!Q:Q)",
                 'rp' => "=SUM('Gudang Cetak'!R:R)",
                 'cost_kerja' => "=SUM('Gudang Cetak'!S:S)",
+                'ttl_rp' => "=E7",
+
             ],
             'cetak sedang proses' => [
                 'pcs' => "=SUM('Gudang Cetak'!AA:AA)",
                 'gr' => "=SUM('Gudang Cetak'!AB:AB)",
                 'rp' => "=SUM('Gudang Cetak'!AC:AC)",
                 'cost_kerja' => "=SUM('Gudang Cetak'!AD:AD)",
+                'ttl_rp' => "=D8",
+
             ],
             'cetak sisa pengawas' => [
                 'pcs' => "=SUM('Gudang Cetak'!AL:AL)",
                 'gr' => "=SUM('Gudang Cetak'!AM:AM)",
                 'rp' => "=SUM('Gudang Cetak'!AN:AN)",
                 'cost_kerja' => "=SUM('Gudang Cetak'!AO:AO)",
+                'ttl_rp' => "=D9",
+
             ],
 
             // sortir
@@ -990,18 +896,24 @@ class ExportCocokanController extends Controller
                 'gr' => "=SUM('Gudang Sortir'!Q:Q)",
                 'rp' => "=SUM('Gudang Sortir'!R:R)",
                 'cost_kerja' => "=SUM('Gudang Sortir'!S:S)",
+                'ttl_rp' => "=E11",
+
             ],
             'sortir sedang proses' => [
                 'pcs' => "=SUM('Gudang Sortir'!AC:AC)",
                 'gr' => "=SUM('Gudang Sortir'!AD:AD)",
                 'rp' => "=SUM('Gudang Sortir'!AE:AE)",
                 'cost_kerja' => "=SUM('Gudang Sortir'!AF:AF)",
+                'ttl_rp' => "=D12",
+
             ],
             'sortir sisa pengawas' => [
                 'pcs' => "=SUM('Gudang Sortir'!AN:AN)",
                 'gr' => "=SUM('Gudang Sortir'!AO:AO)",
                 'rp' => "=SUM('Gudang Sortir'!AP:AP)",
                 'cost_kerja' => "=SUM('Gudang Sortir'!AQ:AQ)",
+                'ttl_rp' => "=D13",
+
             ],
 
             // grading
@@ -1029,19 +941,27 @@ class ExportCocokanController extends Controller
                 'pcs' => "=SUM('Gudang Pengiriman'!E:E)",
                 'gr' => "=SUM('Gudang Pengiriman'!F:F)",
                 'rp' => "=SUM('Gudang Pengiriman'!G:G)",
-                'cost_kerja' => "=SUM('Gudang Pengiriman'!T:T)",
+                'cost_kerja' => 0,
+                'cu' => "=SUM('Gudang Pengiriman'!H:H)",
+                'op' => "=SUM('Gudang Pengiriman'!I:I)",
+                'ttl_rp' => "=SUM(D17:G17)",
+
             ],
             'belum kirim' => [
-                'pcs' => "=SUM('Gudang Pengiriman'!N:N)",
-                'gr' => "=SUM('Gudang Pengiriman'!O:O)",
-                'rp' => "=SUM('Gudang Pengiriman'!P:P)",
-                'cost_kerja' => "=SUM('Gudang Pengiriman'!T:T)",
+                'pcs' => "=SUM('Gudang Pengiriman'!P:P)",
+                'gr' => "=SUM('Gudang Pengiriman'!Q:Q)",
+                'rp' => "=SUM('Gudang Pengiriman'!R:R)",
+                'cost_kerja' => 0,
+                'cu' => "=SUM('Gudang Pengiriman'!S:S)",
+                'op' => "=SUM('Gudang Pengiriman'!T:T)",
+                'ttl_rp' => "=SUM(D18:G18)",
+
             ],
             'selisih' => [
                 'pcs' => "=SUM('Gudang Grading'!AC:AC)",
                 'gr' => "=SUM('Gudang Grading'!AD:AD)",
                 'rp' => "=SUM('Gudang Grading'!AE:AE)",
-                'cost_kerja' => "=SUM('Gudang Grading'!T:T)",
+                'cost_kerja' => 0,
             ],
 
             'total' => [
@@ -1049,6 +969,9 @@ class ExportCocokanController extends Controller
                 'gr' => "=C4+C5+C8+C9+C12+C13+C17+C18+C19",
                 'rp' => "=D4+D5+D8+D9+D12+D13+D17+D18+D19",
                 'cost_kerja' => "=SUM(E2:E19)",
+                'cu' => "=SUM(F2:F19)",
+                'op' => "=SUM(G2:G19)",
+                'ttl_rp' => "=SUM(D20:G20)",
             ],
         ];
         $row = 2;
@@ -1058,6 +981,9 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("C$row", $v['gr']);
             $sheet->setCellValue("D$row", $v['rp']);
             $sheet->setCellValue("E$row", $v['cost_kerja']);
+            $sheet->setCellValue("F$row", $v['cu'] ?? 0);
+            $sheet->setCellValue("G$row", $v['op'] ?? 0) ;
+            $sheet->setCellValue("H$row", $v['ttl_rp'] ?? 0);
             $row++;
         }
         $sheet->getStyle('A1:H19')->applyFromArray($style);
