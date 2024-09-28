@@ -238,6 +238,7 @@ class BoxKirimController extends Controller
                     'tgl' => $tgl,
                     'no_nota' => $no_invoice,
                     'nm_packing' => $r->nm_packing,
+                    'tujuan' => $r->tujuan,
                     'kadar' => $r->kadar,
                 ];
             }

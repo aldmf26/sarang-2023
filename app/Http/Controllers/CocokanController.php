@@ -408,4 +408,27 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.opname', $data);
     }
+
+    public function list_pengiriman(Request $r)
+    {
+        $query = DB::select("SELECT 
+        a.no_nota,
+        a.no_invoice_manual as no_invoice,
+        a.nm_packing,
+        a.tujuan,
+        a.tgl,
+        count(*) as ttl_box,
+        sum(b.pcs) as pcs,
+        sum(b.gr + (b.gr / a.kadar)) as gr 
+        FROM `pengiriman_packing_list` as a
+        JOIN pengiriman as b on a.id_pengiriman = b.id_pengiriman
+        GROUP BY a.no_nota
+        ORDER BY a.no_nota DESC");
+
+        $data = [
+            'title' => 'List Pengiriman',
+            'query' => $query,
+        ];
+        return view('home.cocokan.list_pengiriman', $data);
+    }
 }

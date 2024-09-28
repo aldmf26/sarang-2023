@@ -298,6 +298,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::get('/opname', 'opname')->name('opname');
+            Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
         });
     Route::controller(OpnameNewController::class)
         ->prefix('home/opnamenew')
@@ -342,6 +343,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengiriman', 'pengirimanAwal')->name('pengiriman.awal');
             Route::get('/pengiriman/sisa', 'pengirimanSisa')->name('pengiriman.sisa');
 
-            // Route::get('/sortir', 'sortir_sortirAwal')->name('sortir.sortir_awal');
+            Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
         });
 });
