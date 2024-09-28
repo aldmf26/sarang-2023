@@ -3,7 +3,7 @@
         <a class="nav-link active" id="sum-tab" data-bs-toggle="tab" href="#sum" role="tab" aria-controls="home" aria-selected="true">Summary</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="list-tab" data-bs-toggle="tab" href="#list" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">List Box</a>
+        <a class="nav-link" id="list-tab" data-bs-toggle="tab" href="#list" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">List Grade</a>
     </li>
 
 </ul>

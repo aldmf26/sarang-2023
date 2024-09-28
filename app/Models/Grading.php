@@ -405,7 +405,7 @@ class Grading extends Model
             SELECT 
                 SUM(a.pcs_akhir) as pcs, 
                 SUM(a.gr_akhir) as gr, 
-                (SUM(a.ttl_rp) + SUM(b.gr_awal * b.hrga_satuan)) as ttl_rp
+                (SUM(a.ttl_rp) ) as ttl_rp
             FROM sortir as a
             LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
             LEFT JOIN users as c on a.id_pengawas = c.id

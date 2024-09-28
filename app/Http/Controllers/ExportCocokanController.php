@@ -653,9 +653,9 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("D$row", $v->no_box);
             $sheet->setCellValue("E$row", $v->pcs);
             $sheet->setCellValue("F$row", $v->gr);
-            $sheet->setCellValue("G$row", $v->ttl_rp +  $v->cost_kerja);
-            $sheet->setCellValue("H$row", ($v->ttl_rp +  $v->cost_kerja) / $v->gr);
-            $sumTtlRp += $v->ttl_rp +  $v->cost_kerja;
+            $sheet->setCellValue("G$row", $v->ttl_rp );
+            $sheet->setCellValue("H$row", ($v->ttl_rp ) / $v->gr);
+            $sumTtlRp += $v->ttl_rp;
             $sumTtlGr += $v->gr;
             $sumttlPcs += $v->pcs;
 
@@ -871,6 +871,7 @@ class ExportCocokanController extends Controller
         $belumKirim = Grading::belumKirimAll();
 
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
+        dd($hrgaSatuan);
         // akhir sortir
         $row = 2;
         foreach ($pengiriman as $v) {
@@ -900,6 +901,167 @@ class ExportCocokanController extends Controller
         }
 
         $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
+    }
+
+    public function rekap($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(5);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Rekap');
+        $sheet->getStyle("B1:H1")->applyFromArray($style_atas);
+        $sheet->getStyle("A20:H20")->applyFromArray($style_atas);
+
+        $koloms = [
+            'A' => '',
+            'B' => 'pcs',
+            'C' => 'gr',
+            'D' => 'rp',
+            'E' => 'cost kerja',
+            'F' => 'cost cu',
+            'G' => 'cost operasional',
+            'H' => 'ttl rp',
+        ];
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+       
+        $kolomRekap = [
+            // cabut
+            'awal cabut' => [
+                'pcs' => "=SUM('Gudang Cabut'!E:E)",
+                'gr' => "=SUM('Gudang Cabut'!F:F)",
+                'rp' => "=SUM('Gudang Cabut'!G:G)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!H:H)",
+            ],
+            'akhir cabut' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+            'cabut sedang proses' => [
+                'pcs' => "=SUM('Gudang Cabut'!AC:AC)",
+                'gr' => "=SUM('Gudang Cabut'!AD:AD)",
+                'rp' => "=SUM('Gudang Cabut'!AE:AE)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AF:AF)",
+            ],
+            'cabut sisa pengawas' => [
+                'pcs' => "=SUM('Gudang Cabut'!AP:AP)",
+                'gr' => "=SUM('Gudang Cabut'!AQ:AQ)",
+                'rp' => "=SUM('Gudang Cabut'!AR:AR)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AS:AS)",
+            ],
+
+            // cetak
+            'awal cetak' => [
+                'pcs' => "=SUM('Gudang Cetak'!E:E)",
+                'gr' => "=SUM('Gudang Cetak'!F:F)",
+                'rp' => "=SUM('Gudang Cetak'!G:G)",
+                'cost_kerja' => "=SUM('Gudang Cetak'!H:H)",
+            ],
+            'akhir cetak' => [
+                'pcs' => "=SUM('Gudang Cetak'!P:P)",
+                'gr' => "=SUM('Gudang Cetak'!Q:Q)",
+                'rp' => "=SUM('Gudang Cetak'!R:R)",
+                'cost_kerja' => "=SUM('Gudang Cetak'!S:S)",
+            ],
+            'cetak sedang proses' => [
+                'pcs' => "=SUM('Gudang Cabut'!AA:AA)",
+                'gr' => "=SUM('Gudang Cabut'!AB:AB)",
+                'rp' => "=SUM('Gudang Cabut'!AC:AC)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AD:AD)",
+            ],
+            'cetak sisa pengawas' => [
+                'pcs' => "=SUM('Gudang Cabut'!AL:AL)",
+                'gr' => "=SUM('Gudang Cabut'!AM:AM)",
+                'rp' => "=SUM('Gudang Cabut'!AN:AN)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AO:AO)",
+            ],
+
+            // sortir
+            'awal sortir' => [
+                'pcs' => "=SUM('Gudang Sortir'!E:E)",
+                'gr' => "=SUM('Gudang Sortir'!F:F)",
+                'rp' => "=SUM('Gudang Sortir'!G:G)",
+                'cost_kerja' => "=SUM('Gudang Sortir'!H:H)",
+            ],
+            'akhir sortir' => [
+                'pcs' => "=SUM('Gudang Sortir'!P:P)",
+                'gr' => "=SUM('Gudang Sortir'!Q:Q)",
+                'rp' => "=SUM('Gudang Sortir'!R:R)",
+                'cost_kerja' => "=SUM('Gudang Sortir'!S:S)",
+            ],
+            'sortir sedang proses' => [
+                'pcs' => "=SUM('Gudang Cabut'!AC:AC)",
+                'gr' => "=SUM('Gudang Cabut'!AD:AD)",
+                'rp' => "=SUM('Gudang Cabut'!AE:AE)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AF:AF)",
+            ],
+            'sortir sisa pengawas' => [
+                'pcs' => "=SUM('Gudang Cabut'!AN:AN)",
+                'gr' => "=SUM('Gudang Cabut'!AO:AO)",
+                'rp' => "=SUM('Gudang Cabut'!AP:AP)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AQ:AQ)",
+            ],
+
+            // grading
+            'awal grading' => [
+                'pcs' => "=SUM('Gudang Grading'!E:E)",
+                'gr' => "=SUM('Gudang Grading'!F:F)",
+                'rp' => "=SUM('Gudang Grading'!G:G)",
+                'cost_kerja' => "=SUM('Gudang Grading'!T:T)",
+            ],
+            'akhir grading' => [
+                'pcs' => "=SUM('Gudang Cabut'!W:W)",
+                'gr' => "=SUM('Gudang Cabut'!X:X)",
+                'rp' => "=SUM('Gudang Cabut'!Y:Y)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+            'sisa belum grading' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+
+
+            'pengiriman' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+            'belum kirim' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+            'selisih' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+
+            'total' => [
+                'pcs' => "=SUM('Gudang Cabut'!Q:Q)",
+                'gr' => "=SUM('Gudang Cabut'!R:R)",
+                'rp' => "=SUM('Gudang Cabut'!S:S)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!T:T)",
+            ],
+        ];
+        $row = 2;
+        foreach ($kolomRekap as $k => $v) {
+            $sheet->setCellValue("A$row", $k);
+            $sheet->setCellValue("B$row", $v['pcs']);
+            $sheet->setCellValue("C$row", $v['gr']);
+            $sheet->setCellValue("D$row", $v['rp']);
+            $sheet->setCellValue("E$row", $v['cost_kerja']);
+            $row++;
+        }
+        $sheet->getStyle('A1:H19')->applyFromArray($style);
     }
 
     public function index(OpnameNewModel $model)
@@ -938,7 +1100,7 @@ class ExportCocokanController extends Controller
         $this->sortir($spreadsheet, $style_atas, $style, $model);
         $this->grading($spreadsheet, $style_atas, $style, $model);
         $this->pengiriman2($spreadsheet, $style_atas, $style, $model);
-        // $this->pengiriman($spreadsheet, $style_atas, $style, $model);
+        $this->rekap($spreadsheet, $style_atas, $style, $model);
 
         $namafile = "Opname Gudang.xlsx";
 

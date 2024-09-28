@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
 
-            <div class="col-lg-7">
+            <div class="col-lg-8">
                 <table class="table table-bordered" id="table1">
                     <thead>
                         <tr>
