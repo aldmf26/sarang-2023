@@ -383,13 +383,13 @@ class Grading extends Model
 
     public static function pengirimanAll()
     {
-        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as ttl_rp,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
+        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
                 JOIN grading_partai as b on a.no_box = b.box_pengiriman GROUP BY a.no_box");
     }
 
     public static function belumKirimAll()
     {
-        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as ttl_rp,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
+        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
     }
     public static function pengirimanSum()
     {

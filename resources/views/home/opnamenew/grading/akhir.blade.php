@@ -64,14 +64,11 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
-                            @php
-                                $sumCol = sumBk($query, 'cost_bk') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_cu') + sumBk($query, 'cost_op');
-                            @endphp
-                            <th class="dheadstock  text-end">{{ number_format($sumCol, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_kerja') , 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_bk'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_kerja') , 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_cu'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_op'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + sumBk($query, 'cost_bk'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                         </tr>
                     </tfoot>
