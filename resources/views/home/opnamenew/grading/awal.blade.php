@@ -27,7 +27,7 @@
                     <tbody>
                         @foreach ($query as $d)
                         @php
-                            $ttlRp = $d->ttl_rp +  $d->cost_kerja;
+                            $ttlRp = $d->cost_kerja;
                         @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -73,7 +73,7 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs') + $suntik->pcs + $suntik2->pcs, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr') + $suntik->gr + $suntik2->gr, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                         </tr>
                     </tfoot>

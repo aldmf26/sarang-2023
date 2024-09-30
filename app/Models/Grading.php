@@ -362,6 +362,8 @@ class Grading extends Model
                 a.box_pengiriman,
                 sum(a.pcs) as pcs,
                 sum(a.gr) as gr,
+                sum(a.ttl_rp) as ttl_rp,
+                sum(a.cost_bk) as cost_bk,
                 a.grade 
                 FROM grading_partai as a 
                 WHERE a.box_pengiriman NOT IN (select no_box from formulir_sarang where kategori = 'wip')
