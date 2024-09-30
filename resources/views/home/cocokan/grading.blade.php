@@ -48,6 +48,10 @@
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
+                        <th class="dhead text-end">Cost Kerja</th>
+                        <th class="dhead text-end">Cost Cu</th>
+                        <th class="dhead text-end">Cost Operasional</th>
+                        <th class="dhead text-end">Total Rp</th>
                     </tr>
                     {{-- <tr>
                         <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
@@ -80,7 +84,13 @@
                                 {{ number_format($grading->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_bk, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_kerja, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_cu, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_op, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($grading->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Selisih pcs</td>
@@ -136,6 +146,33 @@
 
 
         @section('scripts')
+            <script>
+                get_opr();
+
+                function get_opr() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summary.get_operasional') }}",
+                        success: function(response) {
+                            $('#cost_opr').html(response);
+                        }
+                    });
+                }
+            </script>
+            <script>
+                function numberFormat(initialValue) {
+                    return {
+                        formattedNumber: new Intl.NumberFormat().format(initialValue),
+                        formatNumber() {
+                            // Hapus karakter non-digit dan simpan nomor mentah
+                            let rawNumber = this.formattedNumber.replace(/\D/g, '');
+
+                            // Format nomor dengan pemisah ribuan
+                            this.formattedNumber = new Intl.NumberFormat().format(rawNumber);
+                        }
+                    };
+                }
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>
