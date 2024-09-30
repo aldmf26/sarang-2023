@@ -4,11 +4,11 @@
     $navMenu = [
         [
             'rot' => 'detail.pengiriman.awal',
-            'nama' => 'Pengiriman awal',
+            'nama' => 'Pengiriman',
         ],
         [
             'rot' => 'detail.pengiriman.sisa',
-            'nama' => 'Pengiriman Sisa',
+            'nama' => 'Sisa belum kirim',
         ],
     ];
 
