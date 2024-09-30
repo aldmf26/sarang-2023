@@ -228,14 +228,16 @@ class BoxKirimController extends Controller
 
     public function save_po(Request $r)
     {
+
         try {
             DB::beginTransaction();
             $no_invoice = $r->no_nota;
             $tgl = $r->tgl;
             $getFormulir = DB::table('pengiriman')->where('no_nota', $no_invoice)->get();
+
             foreach ($getFormulir as $d) {
                 $data[] = [
-                    'id_pengiriman' => $d->id_pengiriman,
+                    'id_pengiriman' => $d->no_box,
                     'tgl' => $tgl,
                     'no_nota' => $no_invoice,
                     'nm_packing' => $r->nm_packing,
@@ -294,7 +296,7 @@ class BoxKirimController extends Controller
     public function print_formulir_grade(Request $r)
     {
         $formulir = DB::table('pengiriman_packing_list as a')
-            ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
+            ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.no_box')
             ->where('a.no_nota', $r->no_invoice)
             ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'a.tgl')
             ->get();
@@ -314,7 +316,7 @@ class BoxKirimController extends Controller
     public function gudang(Request $r)
     {
         $selesai = DB::table('pengiriman_packing_list as a')
-            ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.id_pengiriman')
+            ->join('pengiriman as b', 'a.id_pengiriman', '=', 'b.no_box')
             ->select('b.no_box', 'b.pcs', 'b.gr', 'b.grade', 'b.rp_gram')
             ->get();
 

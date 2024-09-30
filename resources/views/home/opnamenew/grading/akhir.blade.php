@@ -30,7 +30,7 @@
                         @endphp
                         @foreach ($query as $d)
                         @php
-                            $ttlRp = $hrgaSatuan * $d->gr;
+                            $ttlRp = $d->cost_bk;
                             $sumTtlRp += $ttlRp;
                         @endphp
                             <tr>

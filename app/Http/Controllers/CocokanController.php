@@ -432,7 +432,7 @@ class CocokanController extends Controller
         sum(b.pcs) as pcs,
         sum(b.gr + (b.gr / a.kadar)) as gr 
         FROM `pengiriman_packing_list` as a
-        JOIN pengiriman as b on a.id_pengiriman = b.id_pengiriman
+        JOIN pengiriman as b on a.id_pengiriman = b.no_box
         GROUP BY a.no_nota
         ORDER BY a.no_nota DESC");
 

@@ -21,7 +21,7 @@ class PackingListController extends Controller
             'title' => 'Packing list',
             'pengiriman' => $pengiriman
         ];
-
+        
         return view('home.packinglist.index', $data);
     }
 
@@ -66,7 +66,7 @@ class PackingListController extends Controller
         sum(b.pcs) as pcs,
         sum(b.gr + (b.gr / a.kadar)) as gr 
         FROM `pengiriman_packing_list` as a
-        JOIN pengiriman as b on a.id_pengiriman = b.id_pengiriman
+        JOIN pengiriman as b on a.id_pengiriman = b.no_box
         WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
         GROUP BY a.no_nota
         ORDER BY a.no_nota DESC");
@@ -102,8 +102,8 @@ class PackingListController extends Controller
         sum(a.gr + (a.gr / c.kadar)) as gr, 
         count(*) as box
         FROM `pengiriman` as a 
-        JOIN pengiriman_packing_list as c on a.id_pengiriman = c.id_pengiriman
-        WHERE a.id_pengiriman in ($id_pengiriman)
+        JOIN pengiriman_packing_list as c on a.no_box = c.id_pengiriman
+        WHERE a.no_box in ($id_pengiriman)
         GROUP BY a.grade ORDER BY a.grade ASC");
 
         $pengirimanBox = DB::select("SELECT 
@@ -120,7 +120,7 @@ class PackingListController extends Controller
         b.nm_partai
         FROM `pengiriman` as a
         JOIN grading_partai as b on a.no_box = b.box_pengiriman
-        WHERE a.id_pengiriman  in ($id_pengiriman)
+        WHERE a.no_box  in ($id_pengiriman)
         GROUP BY b.box_pengiriman
         ORDER by a.grade DESC");
 
