@@ -158,6 +158,33 @@
 
 
         @section('scripts')
+            <script>
+                get_opr();
+
+                function get_opr() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summary.get_operasional') }}",
+                        success: function(response) {
+                            $('#cost_opr').html(response);
+                        }
+                    });
+                }
+            </script>
+            <script>
+                function numberFormat(initialValue) {
+                    return {
+                        formattedNumber: new Intl.NumberFormat().format(initialValue),
+                        formatNumber() {
+                            // Hapus karakter non-digit dan simpan nomor mentah
+                            let rawNumber = this.formattedNumber.replace(/\D/g, '');
+
+                            // Format nomor dengan pemisah ribuan
+                            this.formattedNumber = new Intl.NumberFormat().format(rawNumber);
+                        }
+                    };
+                }
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>

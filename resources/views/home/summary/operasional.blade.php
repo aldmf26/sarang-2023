@@ -1,4 +1,4 @@
-<h6>Operasional bulan : {{ $bulan }}/{{ $tahun }}</h6>
+<h6>Operasional bulan : {{ date('F', strtotime('01-' . $bulan . '-' . $tahun)) }} {{ $tahun }}</h6>
 <br>
 <table class="table table-bordered" width="100%">
     <thead>
@@ -30,6 +30,7 @@
 
                 <input type="hidden" class="form-control" name="bulan" value="{{ $bulan }}">
                 <input type="hidden" class="form-control" name="tahun" value="{{ $tahun }}">
+
             </td>
         </tr>
     </tbody>
