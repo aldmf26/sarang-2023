@@ -21,6 +21,10 @@
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp</th>
+                            <th class="dhead text-end">cost kerja</th>
+                            <th class="dhead text-end">cost cu</th>
+                            <th class="dhead text-end">cost op</th>
+                            <th class="dhead text-end">ttl rp</th>
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
@@ -30,8 +34,10 @@
                         @endphp
                         @foreach ($query as $d)
                         @php
-                            $ttlRp = $d->cost_bk;
+                            $ttlRp = $d->ttl_rp;
                             $sumTtlRp += $ttlRp;
+
+                            $total = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
                         @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -41,7 +47,11 @@
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
                                 <td class="text-end">{{ number_format($ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format($ttlRp / $d->gr) }}</td>
+                                <td class="text-end">{{ number_format($d->cost_kerja,0) }}</td>
+                                <td class="text-end">{{ number_format($d->cost_cu,0) }}</td>
+                                <td class="text-end">{{ number_format($d->cost_op,0) }}</td>
+                                <td class="text-end">{{ number_format($d->cost_bk + $ttlRp,0) }}</td>
+                                <td class="text-end">{{ number_format(($total) / $d->gr) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -54,7 +64,14 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp, 0) }}</th>
+                            @php
+                                $sumCol = sumBk($query, 'cost_bk') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_cu') + sumBk($query, 'cost_op');
+                            @endphp
+                            <th class="dheadstock  text-end">{{ number_format($sumCol, 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_kerja') , 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_bk'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_op'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + sumBk($query, 'cost_bk'), 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                         </tr>
                     </tfoot>
