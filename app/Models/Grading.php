@@ -452,4 +452,12 @@ class Grading extends Model
             AND opname = 'Y'
         ) as combined_data;");
     }
+
+    public static function listPengiriman()
+    {
+        return DB::select("SELECT b.cost_op,b.cost_cu,b.cost_bk as cost_bk,b.ttl_rp,b.cost_kerja,b.no_box,b.grade,c.nm_partai,sum(b.pcs) as pcs, (sum(b.gr) / a.kadar) + sum(b.gr) as gr FROM pengiriman_packing_list as a 
+        JOIN pengiriman as b on a.id_pengiriman = b.no_box 
+        LEFT JOIN grading_partai as c on b.no_box = c.box_pengiriman 
+        group by b.no_box");
+    }
 }

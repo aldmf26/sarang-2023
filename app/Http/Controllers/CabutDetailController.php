@@ -465,7 +465,7 @@ class CabutDetailController extends Controller
     }
     public function list_pengiriman()
     {
-        $belumKirim = Grading::belumKirimAll();
+        $belumKirim = Grading::listPengiriman();
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
         $data = [ 

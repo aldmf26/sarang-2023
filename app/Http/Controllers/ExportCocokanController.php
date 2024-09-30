@@ -741,18 +741,20 @@ class ExportCocokanController extends Controller
             'G' => 'ttl rp',
             'H' => 'cost cu',
             'I' => 'cost operasional',
-            'J' => 'rp/gr',
+            'J' => 'ttl rp',
+            'K' => 'rp/gr',
 
-            'L' => 'sisa belum kirim',
-            'M' => 'nama partai',
-            'N' => 'box grading',
-            'O' => 'grade',
-            'P' => 'pcs',
-            'Q' => 'gr',
-            'R' => 'ttl rp',
-            'S' => 'cost cu',
-            'T' => 'cost operasional',
-            'U' => 'rp/gr',
+            'M' => 'sisa belum kirim',
+            'N' => 'nama partai',
+            'O' => 'box grading',
+            'P' => 'grade',
+            'Q' => 'pcs',
+            'R' => 'gr',
+            'S' => 'ttl rp',
+            'T' => 'cost cu',
+            'U' => 'cost operasional',
+            'V' => 'ttl rp',
+            'W' => 'rp/gr',
         ];
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
@@ -772,31 +774,35 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("D$row", $v->grade);
             $sheet->setCellValue("E$row", $v->pcs);
             $sheet->setCellValue("F$row", $v->gr);
-            $sheet->setCellValue("G$row", $v->ttl_rp);
+            $sheet->setCellValue("G$row", $v->cost_bk);
             $sheet->setCellValue("H$row", $v->cost_cu);
             $sheet->setCellValue("I$row", $v->cost_op);
-            $sheet->setCellValue("J$row", ($v->ttl_rp) / $v->gr);
+            $tl  = ($v->cost_bk) + ($v->cost_cu) + ($v->cost_op);
+            $sheet->setCellValue("J$row", $tl);
+            $sheet->setCellValue("K$row", ($tl) / $v->gr);
 
             $row++;
         }
-        $sheet->getStyle('B2:J' . $row - 1)->applyFromArray($style);
+        $sheet->getStyle('B2:K' . $row - 1)->applyFromArray($style);
 
         $row = 2;
         foreach ($belumKirim as $v) {
-            $sheet->setCellValue("M$row", $v->nm_partai);
-            $sheet->setCellValue("N$row", $v->no_box);
-            $sheet->setCellValue("O$row", $v->grade);
-            $sheet->setCellValue("P$row", $v->pcs);
-            $sheet->setCellValue("Q$row", $v->gr);
-            $sheet->setCellValue("R$row", $v->ttl_rp);
-            $sheet->setCellValue("S$row", $v->cost_cu);
-            $sheet->setCellValue("T$row", $v->cost_op);
-            $sheet->setCellValue("U$row", ($v->ttl_rp) / $v->gr);
+            $sheet->setCellValue("N$row", $v->nm_partai);
+            $sheet->setCellValue("O$row", $v->no_box);
+            $sheet->setCellValue("P$row", $v->grade);
+            $sheet->setCellValue("Q$row", $v->pcs);
+            $sheet->setCellValue("R$row", $v->gr);
+            $sheet->setCellValue("S$row", $v->cost_bk);
+            $sheet->setCellValue("T$row", $v->cost_cu);
+            $sheet->setCellValue("U$row", $v->cost_op);
+            $tl  = ($v->cost_bk) + ($v->cost_cu) + ($v->cost_op);
+            $sheet->setCellValue("V$row", $tl);
+            $sheet->setCellValue("W$row", ($tl) / $v->gr);
 
             $row++;
         }
 
-        $sheet->getStyle('K2:U' . $row - 1)->applyFromArray($style);
+        $sheet->getStyle('N2:W' . $row - 1)->applyFromArray($style);
     }
 
     public function rekap($spreadsheet, $style_atas, $style, $model)
@@ -950,10 +956,10 @@ class ExportCocokanController extends Controller
             'belum kirim' => [
                 'pcs' => "=SUM('Gudang Pengiriman'!P:P)",
                 'gr' => "=SUM('Gudang Pengiriman'!Q:Q)",
-                'rp' => "=SUM('Gudang Pengiriman'!R:R)",
+                'rp' => "=SUM('Gudang Pengiriman'!S:S)",
                 'cost_kerja' => 0,
-                'cu' => "=SUM('Gudang Pengiriman'!S:S)",
-                'op' => "=SUM('Gudang Pengiriman'!T:T)",
+                'cu' => "=SUM('Gudang Pengiriman'!T:T)",
+                'op' => "=SUM('Gudang Pengiriman'!U:U)",
                 'ttl_rp' => "=SUM(D18:G18)",
 
             ],
