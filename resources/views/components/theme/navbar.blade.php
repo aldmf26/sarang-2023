@@ -3,12 +3,7 @@
     <nav class="main-navbar " style="background-color: #F7914D; ">
         <div class="container font-bold">
             <ul>
-                <li class="menu-item">
-                    <a href="{{ route('dashboard.index') }}"
-                        class='menu-link {{ request()->route()->getName() == 'dashboard.index' ? 'active_navbar_new' : '' }}'>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                
                 @php
                     $navbar = DB::table('navbar')->orderBy('urutan', 'ASC')->get();
                 @endphp
@@ -26,6 +21,18 @@
                         </a>
                     </li>
                 @endforeach
+                {{-- <li class="menu-item">
+                    <a href="{{ route('dashboard.index') }}"
+                        class='menu-link {{ request()->route()->getName() == 'dashboard.index' ? 'active_navbar_new' : '' }}'>
+                        <span>Laporan Proses</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('dashboard.index') }}"
+                        class='menu-link {{ request()->route()->getName() == 'dashboard.index' ? 'active_navbar_new' : '' }}'>
+                        <span>Summary</span>
+                    </a>
+                </li> --}}
             </ul>
         </div>
     </nav>
