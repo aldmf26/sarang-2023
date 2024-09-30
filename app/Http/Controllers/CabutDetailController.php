@@ -457,7 +457,7 @@ class CabutDetailController extends Controller
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
         $data = [ 
-            'title' => 'Pengiriman Sisa',
+            'title' => 'Sisa Belum Kirim',
             'query' => $belumKirim,
             'hrgaSatuan' => $hrgaSatuan,
         ];
@@ -469,7 +469,7 @@ class CabutDetailController extends Controller
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
         $data = [ 
-            'title' => 'Pengiriman Sisa',
+            'title' => 'List pengiriman',
             'query' => $belumKirim,
             'hrgaSatuan' => $hrgaSatuan,
         ];
