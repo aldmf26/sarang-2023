@@ -271,6 +271,7 @@
                         var gr_awal = $('.gr_awal' + id_cetak).val();
                         var gr_tdk_ctk = $('.gr_tdk_ctk' + id_cetak).val();
                         var gr_akhir = $('.gr_akhir' + id_cetak).val();
+                        var id_anak = $('.id_anak' + id_cetak).val();
 
                         var ttl_gr_akhir = parseFloat(gr_akhir) + parseFloat(gr_tdk_ctk);
 
@@ -280,17 +281,22 @@
                         if (pcs_awal != ttl_pcs || gr_awal < ttl_gr_akhir) {
                             alertToast('error', 'Cek kembali pcs dan gr sebelum diselesaikan');
                         } else {
-                            $.ajax({
-                                type: "get",
-                                url: "{{ route('cetaknew.save_selesai') }}",
-                                data: {
-                                    id_cetak: id_cetak,
-                                },
-                                success: function(response) {
-                                    loadRowData(id_cetak, no)
-                                    alertToast('sukses', 'Berhasil ditambahkan');
-                                }
-                            });
+                            if (id_anak != 0) {
+                                $.ajax({
+                                    type: "get",
+                                    url: "{{ route('cetaknew.save_selesai') }}",
+                                    data: {
+                                        id_cetak: id_cetak,
+                                    },
+                                    success: function(response) {
+                                        loadRowData(id_cetak, no)
+                                        alertToast('sukses', 'Berhasil ditambahkan');
+                                    }
+                                });
+                            } else {
+                                alertToast('error', 'Nama anak masih kosong');
+                            }
+
                         }
 
 

@@ -69,7 +69,8 @@
                         <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a target="_blank"
-                                href="{{ route('detail.cabut.proses') }}">{{ number_format($cbt_proses->gr, 0) }}</a></td>
+                                href="{{ route('detail.cabut.proses') }}">{{ number_format($cbt_proses->gr, 0) }}</a>
+                        </td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
@@ -111,6 +112,19 @@
 
 
         @section('scripts')
+            <script>
+                get_opr();
+
+                function get_opr() {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summary.get_operasional') }}",
+                        success: function(response) {
+                            $('#cost_opr').html(response);
+                        }
+                    });
+                }
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>
