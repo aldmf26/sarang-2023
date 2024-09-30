@@ -293,7 +293,10 @@ class GradingBjController extends Controller
                     'admin' => auth()->user()->name,
                     'box_pengiriman' => $r->box_sp[$i],
                     'ttl_rp' => $r->rpGr * $r->gr[$i],
-                    ''
+                    'cost_bk' => $r->rpBk * $r->gr[$i],
+                    'cost_kerja' => $r->rpGrKerja * $r->gr[$i],
+                    'cost_kerja' => $r->rpGrKerja * $r->gr[$i],
+                    'cost_cu' => $r->rpGrCu * $r->gr[$i],
                 ];
             }
 

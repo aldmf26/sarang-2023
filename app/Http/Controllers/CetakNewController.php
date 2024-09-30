@@ -295,6 +295,7 @@ class CetakNewController extends Controller
             'tb_anak' => $this->getData('tb_anak'),
             'bulan' => $this->getData('bulan'),
             'paket' => $this->getData('paket'),
+            'hal' => $r->hal
         ];
 
         return view('home.cetak_new.getRowData', $data);

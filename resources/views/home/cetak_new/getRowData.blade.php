@@ -69,6 +69,7 @@
         <input type="hidden" class="rp_satuan{{ $c->id_cetak }}" value="{{ $c->rp_satuan }}">
         {{-- <input type="hidden" class="id_paket{{ $c->id_cetak }}" value="{{ $c->id_paket }}"> --}}
         <input type="hidden" class="no{{ $c->id_cetak }}" value="{{ $no + 1 }}">
+        <input type="hidden" class="hal" value="{{ $hal }}">
     </td>
     <td class="text-end">
         <input type="text" class="form-control text-end gr_akhir{{ $c->id_cetak }}" name="gr_akhir[]"

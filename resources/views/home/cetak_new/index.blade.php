@@ -205,6 +205,7 @@
                         var tipe_bayar = $('.tipe_bayar' + id_cetak).val();
                         var bulan_dibayar = $('.bulan_dibayar' + id_cetak).val();
                         var tgl = $('.tgl' + id_cetak).val();
+                        var hal = $('.hal').val();
 
 
                         $.ajax({
@@ -227,7 +228,7 @@
                                 gr_awal: gr_awal
                             },
                             success: function(response) {
-                                loadRowData(id_cetak, no)
+                                loadRowData(id_cetak, no, hal)
                                 alertToast('sukses', 'Berhasil ditambahkan');
                             }
                         });
