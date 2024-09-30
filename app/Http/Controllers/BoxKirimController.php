@@ -183,9 +183,14 @@ class BoxKirimController extends Controller
             //     ->where('a.no_box_grading', $d)
             //     ->first()
             //     ->nm_grade;
-            $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp FROM `grading_partai` as a
+            $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
+            sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
+            
+            FROM `grading_partai` as a
                     where a.box_pengiriman = $d
                     group by a.box_pengiriman");
+
+
             // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
 
             $dataToInsert[] = [
@@ -198,6 +203,9 @@ class BoxKirimController extends Controller
                 'no_nota' => $no_nota,
                 'rp_gram' => 1,
                 'ttl_rp' => $ambilBox->ttl_rp,
+                'cost_bk' => $ambilBox->cost_bk,
+                'cost_kerja' => $ambilBox->cost_kerja,
+                'cost_cu' => $ambilBox->cost_cu,
             ];
         }
         DB::table('pengiriman')->insert($dataToInsert);
