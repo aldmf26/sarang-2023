@@ -699,7 +699,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AE:AE)");
         $sheet4->setCellValue('B11', "=SUM('Gudang grading'!F:F)");
         $sheet4->setCellValue('B12', "=SUM('Pengiriman'!E:E)");
-        $sheet4->setCellValue('B13', "=SUM('Pengiriman'!Q:Q)");
+        $sheet4->setCellValue('B13', "=SUM('Pengiriman'!R:R)");
         $sheet4->setCellValue('B14', "=SUM('Pengiriman'!Z:Z)");
 
         $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
@@ -713,7 +713,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AF:AF)");
         $sheet4->setCellValue('C11', "=SUM('Gudang grading'!G:G)");
         $sheet4->setCellValue('C12', "=SUM('Pengiriman'!F:F)");
-        $sheet4->setCellValue('C13', "=SUM('Pengiriman'!R:R)");
+        $sheet4->setCellValue('C13', "=SUM('Pengiriman'!S:S)");
         $sheet4->setCellValue('C14', "0");
 
         $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
@@ -727,7 +727,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
         $sheet4->setCellValue('D11', "=SUM('Gudang grading'!H:H)");
         $sheet4->setCellValue('D12', "=SUM('Pengiriman'!G:G)");
-        $sheet4->setCellValue('D13', "=SUM('Pengiriman'!S:S)");
+        $sheet4->setCellValue('D13', "=SUM('Pengiriman'!T:T)");
         $sheet4->setCellValue('D14', "0");
 
         $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!H:H)");
@@ -741,13 +741,13 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('E10', "=SUM('Gudang Sortir'!AG:AG)");
         $sheet4->setCellValue('E11', "=SUM('Gudang grading'!I:I)");
         $sheet4->setCellValue('E12', "=SUM('Pengiriman'!H:H)");
-        $sheet4->setCellValue('E13', "=SUM('Pengiriman'!T:T)");
+        $sheet4->setCellValue('E13', "=SUM('Pengiriman'!U:U)");
         $sheet4->setCellValue('E14', "0");
 
         $sheet4->setCellValue('F12', "=SUM('Pengiriman'!I:I)");
-        $sheet4->setCellValue('F13', "=SUM('Pengiriman'!U:U)");
+        $sheet4->setCellValue('F13', "=SUM('Pengiriman'!V:V)");
         $sheet4->setCellValue('G12', "=SUM('Pengiriman'!J:J)");
-        $sheet4->setCellValue('G13', "=SUM('Pengiriman'!V:V)");
+        $sheet4->setCellValue('G13', "=SUM('Pengiriman'!W:W)");
 
         $sheet4->setCellValue('H2', "=D2+E2+F2+G2");
         $sheet4->setCellValue('H3', "=D3+E3+F3+G3");
