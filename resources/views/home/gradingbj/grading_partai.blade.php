@@ -101,13 +101,27 @@
                                         sumBk($getFormulir, 'cost_eo') +
                                         sumBk($getFormulir, 'cost_ctk') +
                                         sumBk($getFormulir, 'cost_cu');
+
+                                    $cost_bk = sumBk($getFormulir, 'cost_bk');
+                                    $cost_kerja =
+                                        sumBk($getFormulir, 'cost_cbt') +
+                                        sumBk($getFormulir, 'cost_str') +
+                                        sumBk($getFormulir, 'cost_eo') +
+                                        sumBk($getFormulir, 'cost_ctk');
+                                    $cost_cu = sumBk($getFormulir, 'cost_cu');
                                     $rp_gr = $ttlRp / $ttlGr;
+                                    $rp_gr_bk = $cost_bk / $ttlGr;
+                                    $rp_gr_kerja = $cost_kerja / $ttlGr;
+                                    $rp_gr_cu = $cost_cu / $ttlGr;
                                 @endphp
                                 <th class="text-end">
                                     <h6>
                                         <input type="hidden" name="tipe" value="{{ $getFormulir[0]->tipe }}">
                                         <input type="hidden" name="ttlPcs" value="{{ $ttlPcs }}">
                                         <input type="hidden" name="rpGr" value="{{ $rp_gr }}">
+                                        <input type="hidden" name="rpGrBk" value="{{ $rp_gr_bk }}">
+                                        <input type="hidden" name="rpGrKerja" value="{{ $rp_gr_kerja }}">
+                                        <input type="hidden" name="rpGrCu" value="{{ $rp_gr_cu }}">
                                         {{ $ttlPcs }}
                                     </h6>
                                 </th>
