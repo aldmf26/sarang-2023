@@ -179,7 +179,7 @@
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end" width="200">Pcs</th>
                                 <th class="dhead text-end" width="200">Gr</th>
-                                <th class="dhead " width="200">Box Sp</th>
+                                <th class="dhead " width="200">Box Grade</th>
                                 <th class="dhead">Aksi</th>
                             </tr>
                         </thead>

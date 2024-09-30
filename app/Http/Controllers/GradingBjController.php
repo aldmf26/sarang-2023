@@ -219,7 +219,8 @@ class GradingBjController extends Controller
 
     public function grading_partai(Request $r)
     {
-        $no_box = $r->no_box; //split string to array
+        $no_box = $r->no_box;
+        //split string to array
         $no_boxPecah = explode(',', $no_box); //split string to array
         $partaiData = DB::table('bk')
             ->whereIn('no_box', $no_boxPecah)
@@ -243,13 +244,37 @@ class GradingBjController extends Controller
 
         $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
+        session()->flash('success', 'Data berhasil diproses.');
+
+        // Redirect ke rute yang akan ditampilkan sebagai GET
+        return redirect()->route('gradingbj.grading_partai_result', [
+            'no_box' => $no_box, // Kirim data yang diperlukan ke halaman GET,
+        ]);
+    }
+
+    public function gradingPartaiResult(Request $r)
+    {
+        $no_box = $r->no_box;
+
+        // Ambil data yang sama seperti pada POST
+        $partaiData = DB::table('bk')
+            ->whereIn('no_box', explode(',', $no_box))
+            ->where('kategori', 'cabut')
+            ->select('nm_partai', 'tipe', 'ket')
+            ->get();
+
+        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $no_box);
+        $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
+
         $data = [
-            'title' => ' Grading Partai',
+            'title' => 'Grading Partai',
             'user' => auth()->user()->name,
             'nm_partai' => $partaiData->first()->nm_partai,
             'getFormulir' => $getFormulir,
             'gradeBentuk' => $tb_grade,
+            'no_box' => $no_box
         ];
+
         return view('home.gradingbj.grading_partai', $data);
     }
 
@@ -281,7 +306,7 @@ class GradingBjController extends Controller
                 if (!$r->box_sp[$i]) {
                     continue;
                 }
-                $data[] = [
+                $data = [
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
                     'urutan' => $urutan,
@@ -293,18 +318,34 @@ class GradingBjController extends Controller
                     'admin' => auth()->user()->name,
                     'box_pengiriman' => $r->box_sp[$i],
                     'ttl_rp' => $r->rpGr * $r->gr[$i],
-                    'cost_bk' => $r->rpBk * $r->gr[$i],
+                    'cost_bk' => $r->rpGrBk * $r->gr[$i],
                     'cost_kerja' => $r->rpGrKerja * $r->gr[$i],
                     'cost_kerja' => $r->rpGrKerja * $r->gr[$i],
                     'cost_cu' => $r->rpGrCu * $r->gr[$i],
                 ];
+
+                $data2[] = $data;
+
+                $boxsp = $r->box_sp[$i];
+                $getBoxkirim = DB::selectOne("SELECT a.box_pengiriman, a.grade
+                FROM grading_partai as a 
+                where `box_pengiriman` = '$boxsp';");
+
+                if (empty($getBoxkirim)) {
+                    # code...
+                } else {
+                    if ($getBoxkirim->grade != $r->grade[$i]) {
+                        return redirect()->back()->with('error', 'Box grading tidak boleh lebih dari satu grade');
+                    }
+                }
+                DB::table('grading_partai')->insert($data);
             }
 
             $ttlPcsSortir = $r->ttlPcs;
             $ttlGrSortir = $r->ttlGr;
 
-            $ttlPcsGrading = array_sum(array_column($data, 'pcs'));
-            $ttlGrGrading = array_sum(array_column($data, 'gr'));
+            $ttlPcsGrading = array_sum(array_column($data2, 'pcs'));
+            $ttlGrGrading = array_sum(array_column($data2, 'gr'));
 
             $selisihPcs =  $ttlPcsSortir - $ttlPcsGrading;
             $selisihGr =  $ttlGrSortir - $ttlGrGrading;
@@ -313,6 +354,8 @@ class GradingBjController extends Controller
             if ($ttlPcsGrading > $ttlPcsSortir || $ttlGrGrading > $ttlGrSortir) {
                 return redirect()->back()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
+
+
             if ($selisihGr > 0) {
                 DB::table('grading_selisih')->insert([
                     'no_box' => $no_invoice,
@@ -322,7 +365,7 @@ class GradingBjController extends Controller
                     'tgl' => $tgl,
                 ]);
             }
-            DB::table('grading_partai')->insert($data);
+
             DB::table('grading')->insert($dataGrading);
 
             DB::commit();
