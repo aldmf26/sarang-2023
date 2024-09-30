@@ -37,6 +37,13 @@ class NavbarController extends Controller
         $title = 'Data Master';
         return view('navbar.data_master', compact(['data', 'title']));
     }
+    public function summary()
+    {
+        $data = $this->queryNavbar(2);
+
+        $title = 'Data Summary';
+        return view('navbar.data_master', compact(['data', 'title']));
+    }
 
     public function testing(Request $r)
     {
