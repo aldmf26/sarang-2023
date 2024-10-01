@@ -50,13 +50,13 @@ class PenutupController extends Controller
             $ttlRp = 0;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl as $data) {
-
+                $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
                 $ttl =
                     $data->ttl_rp +
                     $data->eo_ttl_rp +
                     $data->sortir_ttl_rp +
                     $data->ttl_rp_cetak +
-                    $data->umk_nominal +
+                    $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
                 $ttlRp += $ttl;
