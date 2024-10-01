@@ -95,9 +95,9 @@ class PenutupController extends Controller
                 $susutCbt = empty($data->gr_akhir) ? 0 : (1 - (($data->gr_akhir + $data->gr_flx) / $data->gr_awal)) * 100;
                 $susutEo =  empty($data->eo_akhir) ? 0 : (1 - ($data->eo_akhir / $data->eo_awal)) * 100;
                 $susutSortir = empty($data->sortir_gr_akhir) ? 0 : (1 - ($data->sortir_gr_akhir / $data->sortir_gr_awal)) * 100;
-                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $data->ttl_rp_cetak - $data->ttl_rp_denda;
+                $ttl = $data->umk_nominal + $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $data->ttl_rp_cetak - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
-
+                $uangMakan = $data->umk_nominal * $data->hariMasuk;
                 $tes[] = [
                     'pgws' => $data->pgws,
                     'hari_masuk' => $data->hariMasuk,
@@ -129,6 +129,7 @@ class PenutupController extends Controller
                     'srt_sst' => $susutSortir,
                     'srt_ttlrp' => $data->sortir_ttl_rp,
                     'dll' => $data->ttl_rp_dll,
+                    'uang_makan' => $uangMakan,
                     'denda' => $data->ttl_rp_denda,
                     'ttl_gaji' => $ttl,
                     'ratarata' => $rata,
