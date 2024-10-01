@@ -17,9 +17,9 @@ class PenutupController extends Controller
     {
         $bulan = 9;
         $tahun = date('Y');
-        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
-                WHERE  b.lokasi is not null
+                WHERE  b.lokasi != ''
                 group by b.id");
 
         $datas =  [
@@ -61,7 +61,12 @@ class PenutupController extends Controller
                     $data->ttl_rp_denda;
                 $ttlRp += $ttl;
             }
-            $datas[$p->name] = $ttlRp;
+            $datas[] = [
+                'pgws' => $p->name,
+                'lokasi' => $p->lokasi,
+                'ttlRp' => $ttlRp
+            ];
+            // $datas[$p->name] = $ttlRp;
         }
 
 

@@ -18,23 +18,32 @@
                         <thead>
                             <tr>
                                 <th class="dhead">Pgws</th>
+                                <th class="dhead">Lokasi</th>
                                 <th class="dhead text-end">Ttl Rp</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($datas as $pgws => $ttl_rp)
-                                @if ($ttl_rp > 0)
+                            @php
+                                $ttlRp = 0;
+                            @endphp
+                            @foreach ($datas as $pgws => $d)
+                                @if ($d['ttlRp'] > 0)
                                     <tr>
-                                        <td>{{ $pgws }}</td>
-                                        <td align="right" class="h6">{{ number_format($ttl_rp, 0) }}</td>
+                                        <td>{{ $d['pgws'] }}</td>
+                                        <td>{{ $d['lokasi'] }}</td>
+                                        <td align="right" class="h6">{{ number_format($d['ttlRp'], 0) }}</td>
                                     </tr>
+                                    @php
+                                        $ttlRp += $d['ttlRp'];
+                                    @endphp
                                 @endif
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr class="bg-primary text-white">
                                 <th>Total</th>
-                                <th class="text-white text-end h6">{{ number_format(array_sum($datas), 0) }}</th>
+                                <th></th>
+                                <th class="text-white text-end h6">{{ number_format($ttlRp, 0) }}</th>
                             </tr>
                         </tfoot>
                     </table>
