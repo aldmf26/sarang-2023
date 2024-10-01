@@ -18,7 +18,7 @@
                         <a href="{{ route($d->route) }}"
                             class='menu-link 
                                     {{ in_array($nameRoute, $array) ? ' active_navbar_new' : '' }}'>
-                            <span>{{ ucwords($d->nama) }}  - -- {{$nameRoute}}</span>
+                            <span>{{ ucwords($d->nama) }}</span>
                         </a>
                     </li>
                 @endforeach
