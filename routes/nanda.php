@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(NavbarController::class)->group(function () {
         Route::get('/data_master', 'data_master')->name('data_master');
         Route::get('/home', 'home')->name('home');
+        Route::get('/summary', 'summary')->name('summary');
     });
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/profile', 'edit')->name('profile.edit');

@@ -70,7 +70,7 @@
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_cu'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_op'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
-                            <th class="dheadstock  text-end">0</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0)}}</th>
                         </tr>
                     </tfoot>
                 </table>
