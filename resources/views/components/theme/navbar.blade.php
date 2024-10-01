@@ -12,12 +12,13 @@
                         $string = $d->isi;
                         $string = str_replace(['[', ']', "'"], '', $string);
                         $array = explode(', ', $string);
+                        $nameRoute = request()->route()->getName();
                     @endphp
                     <li class="menu-item">
                         <a href="{{ route($d->route) }}"
                             class='menu-link 
-                                    {{ in_array(request()->route()->getName(), $array) ? ' active_navbar_new' : '' }}'>
-                            <span>{{ ucwords($d->nama) }}</span>
+                                    {{ in_array($nameRoute, $array) ? ' active_navbar_new' : '' }}'>
+                            <span>{{ ucwords($d->nama) }}  - -- {{$nameRoute}}</span>
                         </a>
                     </li>
                 @endforeach
