@@ -56,6 +56,7 @@ class PenutupController extends Controller
                     $data->eo_ttl_rp +
                     $data->sortir_ttl_rp +
                     $data->ttl_rp_cetak +
+                    $data->umk_nominal +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
                 $ttlRp += $ttl;
