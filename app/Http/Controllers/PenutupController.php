@@ -19,7 +19,7 @@ class PenutupController extends Controller
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
                 JOIN users as b on a.penerima = b.id
-                WHERE  b.name not in ('yuli',  'siti fatimah')
+                WHERE  b.lokasi is not null
                 group by b.id");
 
         $datas =  [
