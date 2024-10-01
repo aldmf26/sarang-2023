@@ -129,7 +129,7 @@ class PenutupController extends Controller
                     'srt_sst' => $susutSortir,
                     'srt_ttlrp' => $data->sortir_ttl_rp,
                     'dll' => $data->ttl_rp_dll,
-                    'uang_makan' => $uangMakan,
+                    'uang_makan' => $uangMakan ?? 0,
                     'denda' => $data->ttl_rp_denda,
                     'ttl_gaji' => $ttl,
                     'ratarata' => $rata,
