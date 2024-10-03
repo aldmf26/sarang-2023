@@ -50,6 +50,8 @@ class PackingListController extends Controller
         }
         return redirect()->route('packinglist.index', ['kategori' => 'packing'])->with('sukses', 'Data Berhasil dimasukan');
     }
+
+    
     public function pengiriman(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -146,10 +148,9 @@ class PackingListController extends Controller
 
     public function delete($no_nota)
     {
-        $datas = ['pengiriman', 'pengiriman_packing_list'];
-        foreach ($datas as $d) {
-            DB::table($d)->where('no_nota', $no_nota)->delete();
-        }
+        DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->delete();
+        DB::table('pengiriman')->where('no_nota', $no_nota)->update(['selesai' => 'T']);
+
         return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil dihapus');
     }
 
@@ -167,6 +168,7 @@ class PackingListController extends Controller
                 FROM pengiriman as a 
                 join grading_partai as b on a.no_box = b.box_pengiriman 
                 WHERE a.selesai = 'Y';");
+                
         $data = [
             'title' => 'Check Grade Berubah',
             'cek' => $cek,

@@ -96,7 +96,7 @@
                                         <input name="gr2[]" x-model="gr2" required value="{{ $d->gr }}" type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
-                                        <input name="barcode[]" required value="" placeholder="cth: 10001" type="text" class="form-control">
+                                        <input name="barcode[]" required value="{{ $d->no_barcode }}" placeholder="cth: 10001" type="text" class="form-control">
                                     </td>
                                   
                                     <td align="right">
@@ -111,8 +111,8 @@
                 </div>
             </div>
             <div class="d-flex gap-2 float-end">
-                <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin dihapus ?')"
-                    href="{{ route('pengiriman.batal', ['no_invoice' => $no_nota]) }}">
+                <a class="btn btn-danger btn-sm" 
+                    href="{{ route('pengiriman.list_po') }}">
                     Cancel
                 </a>
                 <button class="btn btn-primary btn-sm" type="submit">Save</button>

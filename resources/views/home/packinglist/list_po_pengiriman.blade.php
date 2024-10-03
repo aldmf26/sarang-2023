@@ -28,15 +28,12 @@
                 <div class="col-lg-12" x-data="{
                     tbhInvoice: false,
                 }">
-                        <table class="table table-stripped" id="tablealdi">
+                        <table class="table table-stripped" id="table1">
                             <thead>
                                 <tr>
                                     <th class="dhead">#</th>
-                                    <th class="dhead">Tgl Kirim</th>
-                                    <th class="dhead">No Packinglist</th>
-                                    {{-- <th class="dhead">No Invoice</th> --}}
-                                    <th class="dhead">Nama Packing List</th>
-                                    <th class="dhead">Tujuan</th>
+                                    <th class="dhead">Tgl Input</th>
+                                    <th class="dhead">No Nota</th>
                                     <th class="dhead text-end">Box</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
@@ -50,40 +47,15 @@
                                 @foreach ($packing as $i => $d)
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
-                                        <td>{{ tanggal($d->tgl) }}</td>
+                                        <td>{{ tanggal($d->tgl_input) }}</td>
                                         <td>PI {{ $d->no_nota }}</td>
-                                        {{-- <td class="tambah_invoice" no_invoice="{{ $d->no_nota }}">
-                                        @if (!$d->no_invoice)
-                                            @csrf
-                                            <span @click="tbhInvoice = !tbhInvoice"
-                                                class="badge bg-primary">Tambah</span>
-                                            <div x-show="tbhInvoice">
-                                                <input style="width:80px;" type="text" name="no_invoice[]"
-                                                    class="mt-1 form-control form-control-sm">
-                                                <input type="hidden" name="no_nota[]" value="{{ $d->no_nota }}">
-                                                <button class="mt-1 btn btn-sm btn-primary" type="submit">Save</button>
-                                            </div>
-                                        @else
-                                            {{ $d->no_invoice }}
-                                        @endif
-
-                                    </td> --}}
-                                        <td>{{ ucwords($d->nm_packing) }}</td>
-                                        <td>{{ strtoupper($d->tujuan) }}</td>
                                         <td align="right">{{ $d->ttl_box }}</td>
                                         <td align="right">{{ number_format($d->pcs, 0) }}</td>
                                         <td align="right">{{ number_format($d->gr, 0) }}</td>
-                                        {{-- <td align="right">{{ number_format($d->rp_gram * $d->gr, 0) }}</td> --}}
                                         <td align="center">
-                                            <button class="btn btn-sm btn-primary detail" no_nota="{{ $d->no_nota }}"
-                                                type="button"><i class="fas fa-eye"></i></button>
-                                            <a href="{{ route('packinglist.print', $d->no_nota) }}"
-                                                class="btn btn-sm btn-primary" target="_blank"><i
-                                                    class="fas fa-print"></i></a>
-                                            <a onclick="return confirm('Yakin dihapus ?')"
-                                                href="{{ route('packinglist.delete', $d->no_nota) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-
+                                            <a href="{{ route('pengiriman.po', $d->no_nota) }}"
+                                                class="btn btn-sm btn-info" target="_blank"><i
+                                                    class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

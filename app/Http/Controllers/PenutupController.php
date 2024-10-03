@@ -98,6 +98,7 @@ class PenutupController extends Controller
                 $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
                 $ttl = $uangMakan + $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $data->ttl_rp_cetak - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
+                
                 $tes[] = [
                     'pgws' => $data->pgws,
                     'hari_masuk' => $data->hariMasuk,
