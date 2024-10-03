@@ -59,9 +59,7 @@
                             </a>
                         </td>
                         <td class="text-end">
-
                             {{ number_format($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp, 0) }}
-
                         </td>
                         <td class="text-end">
                             0

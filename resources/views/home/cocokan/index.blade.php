@@ -30,8 +30,7 @@
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
                         <th class="dhead text-end">Cost kerja</th>
-                        <th class="dhead text-end">Cost dll,cu,denda</th>
-                        <th class="dhead text-end">Cost operasional</th>
+                        <th class="dhead text-end">Total Rp</th>
                     </tr>
                     <tr>
                         <td>Cabut awal</td>
@@ -45,9 +44,12 @@
                         <td class="text-end">
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td class="text-end"></td>
+                        <td class="text-end">
+                            0
+                        </td>
+                        <td class="text-end">
+                            {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7F700">Cabut akhir</td>
@@ -61,8 +63,8 @@
                         <td class="text-end">
                             {{ number_format($bk_akhir->cost_kerja, 0) }}</td>
 
-                        <td class="text-end">{{ number_format(($cost_dll / $ttl_gr) * $bk_akhir->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format(($cost_op / $ttl_gr) * $bk_akhir->gr, 0) }}</td>
+                        <td class="text-end">{{ number_format($bk_akhir->ttl_rp + $bk_akhir->cost_kerja, 0) }}</td>
+
 
                     </tr>
                     <tr>
@@ -81,7 +83,8 @@
                                 href="{{ route('detail.cabut.sisa') }}">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
                         </td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
-                        <td></td>
+                        <td class="text-end">0</td>
+                        <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
@@ -92,11 +95,10 @@
                         </td>
                         @php
                             $modal = $cbt_sisa_pgws->ttl_rp + $cbt_proses->ttl_rp + $bk_akhir->ttl_rp;
-                            $cost_dll = ($cost_dll / $ttl_gr) * $bk_akhir->gr;
-                            $cost_op = ($cost_op / $ttl_gr) * $bk_akhir->gr;
+
                         @endphp
                         <td class="text-end fw-bold">
-                            {{ number_format($modal + $cost_dll + $cost_op + $cbt_proses->cost_kerja + $bk_akhir->cost_kerja, 0) }}
+                            {{ number_format($modal + $cbt_proses->cost_kerja + $bk_akhir->cost_kerja, 0) }}
                         </td>
                     </tr>
 

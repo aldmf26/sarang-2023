@@ -481,6 +481,7 @@ class GradingBjController extends Controller
         return $noinvoice;
     }
 
+
     public function template_import()
     {
         $spreadsheet = new Spreadsheet();
@@ -497,9 +498,12 @@ class GradingBjController extends Controller
             'H' => 'pcs',
             'I' => 'gr',
             'J' => 'no pengiriman',
+            'K' => 'cost bk',
+            'L' => 'cost kerja',
+            'M' => 'cost cu',
 
-            'L' => 'grade',
-            'M' => 'tipe',
+            'O' => 'grade',
+            'P' => 'tipe',
 
         ];
 
@@ -509,8 +513,8 @@ class GradingBjController extends Controller
         }
 
         foreach ($tbGrade as $i => $item) {
-            $sheet->setCellValue('L' . ($i + 2), $item->nm_grade);
-            $sheet->setCellValue('M' . ($i + 2), $item->tipe);
+            $sheet->setCellValue('O' . ($i + 2), $item->nm_grade);
+            $sheet->setCellValue('P' . ($i + 2), $item->tipe);
         }
         $styleBold = [
             'font' => [
@@ -525,8 +529,8 @@ class GradingBjController extends Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A1:J1')->applyFromArray($styleBaris);
-        $sheet->getStyle('L1:M1')->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:M1')->applyFromArray($styleBaris);
+        $sheet->getStyle('O1:P1')->applyFromArray($styleBaris);
 
         $writer = new Xlsx($spreadsheet);
         $fileName = "Template Grading";
@@ -563,7 +567,9 @@ class GradingBjController extends Controller
                 $pcs = $row[7];
                 $gr = $row[8];
                 $noPengiriman = $row[9];
-                $ttl_rp = $row[10];
+                $costbk = $row[10];
+                $costkerja = $row[11];
+                $costcu = $row[12];
 
                 if (empty($tgl) && empty($partai)) {
                     continue;
@@ -625,7 +631,9 @@ class GradingBjController extends Controller
                             'pcs' => $pcs,
                             'gr' => $gr,
                             'tgl' => $tgl,
-                            'ttl_rp' => $ttl_rp,
+                            'costbk' => $costbk,
+                            'costkerja' => $costkerja,
+                            'costcu' => $costcu,
                             'admin' => "import-$tglD"
                         ]);
                     }

@@ -45,8 +45,7 @@
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
                         <th class="dhead text-end">Cost kerja</th>
-                        <th class="dhead text-end">Cost dll,cu,denda</th>
-                        <th class="dhead text-end">Cost operasional</th>
+                        <th class="dhead text-end">Total Rp</th>
                     </tr>
                     <tr>
                         <td>Awal Cetak</td>
@@ -61,9 +60,12 @@
                         <td class="text-end fw-bold">
                             {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp, 0) }}
                         </td>
-                        <td class="text-end">0</td>
-                        <td class="text-end">0</td>
-                        <td class="text-end">0</td>
+                        <td class="text-end">
+                            0
+                        </td>
+                        <td class="text-end">
+                            {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7F700">Akhir Cetak</td>
@@ -78,8 +80,9 @@
                             {{ number_format($cetak_akhir->ttl_rp, 0) }}</td>
                         <td class="text-end">
                             {{ number_format($cetak_akhir->cost_kerja, 0) }}</td>
-                        <td class="text-end">{{ number_format(($cost_dll / $ttl_gr) * $cetak_akhir->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format(($cost_op / $ttl_gr) * $cetak_akhir->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($cetak_akhir->ttl_rp + $cetak_akhir->cost_kerja, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
@@ -91,6 +94,8 @@
                         </td>
                         <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_proses->cost_kerja, 0) }}</td>
+                        <td class="text-end">{{ number_format($cetak_proses->cost_kerja + $cetak_proses->ttl_rp, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
@@ -102,6 +107,7 @@
                         </td>
                         <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
                         <td class="text-end">0</td>
+                        <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
@@ -112,11 +118,12 @@
                         </td>
                         @php
                             $modal = $cetak_akhir->ttl_rp + $cetak_proses->ttl_rp + $cetak_sisa->ttl_rp;
-                            $cost_dll = ($cost_dll / $ttl_gr) * $cetak_akhir->gr;
-                            $cost_op = ($cost_op / $ttl_gr) * $cetak_akhir->gr;
                         @endphp
                         <td class="text-end fw-bold">
-                            {{ number_format($modal + $cost_dll + $cost_op + $cetak_akhir->cost_kerja + $cetak_proses->cost_kerja, 0) }}
+                            0
+                        </td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($modal + $cetak_akhir->cost_kerja + $cetak_proses->cost_kerja, 0) }}
                         </td>
                     </tr>
 

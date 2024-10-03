@@ -1119,6 +1119,11 @@ class SummaryController extends Controller
 
     public function saveoprasional(Request $r)
     {
+        $pengiriman = DB::select("SELECT * FROM pengiriman as a where a.cost_op_cek is null");
+        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.cost_op_cek is null");
+        $ttl_gr = sumBk($grading_partai, 'gr') + sumBk($pengiriman, 'gr');
+
+
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
@@ -1127,6 +1132,9 @@ class SummaryController extends Controller
             return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
+
+        $rp_gr = $rawNumber - $r->gaji / $ttl_gr;
+
         $data = [
             'rp_oprasional' => $rawNumber - $r->gaji,
             'bulan' => $r->bulan,
@@ -1136,6 +1144,25 @@ class SummaryController extends Controller
             'total_operasional' => $rawNumber
         ];
         DB::table('oprasional')->insert($data);
+
+        foreach ($pengiriman as $p) {
+            $data = [
+                'cost_op' => $p->gr * $rp_gr,
+                'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
+            ];
+            DB::table('pengiriman')->whereNull('cost_op_cek')->update($data);
+        }
+        foreach ($grading_partai as $p) {
+            $data = [
+                'cost_op' => $p->gr * $rp_gr,
+                'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
+            ];
+            DB::table('grading_partai')->whereNull('cost_op_cek')->update($data);
+        }
+
+
+
+
         return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }

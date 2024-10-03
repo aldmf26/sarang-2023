@@ -643,14 +643,14 @@ class OpnameNewController extends Controller
         $kolom = 2;
         foreach ($belum_grading  as $d) {
             $sheet4->setCellValue('B' . $kolom, $d->nm_partai ?? '-');
-            $sheet4->setCellValue('C' . $kolom, $d->no_box);
+            $sheet4->setCellValue('C' . $kolom, $d->no_box_sortir);
             $sheet4->setCellValue('D' . $kolom, $d->tipe);
             $sheet4->setCellValue('E' . $kolom, $d->ket);
             $sheet4->setCellValue('F' . $kolom, $d->pcs);
             $sheet4->setCellValue('G' . $kolom, $d->gr);
-            $sheet4->setCellValue('H' . $kolom, $d->ttl_rp);
+            $sheet4->setCellValue('H' . $kolom, $d->cost_bk);
             $sheet4->setCellValue('I' . $kolom, $d->cost_kerja);
-            $sheet4->setCellValue('J' . $kolom, ($d->cost_kerja + $d->ttl_rp) / $d->gr);
+            $sheet4->setCellValue('J' . $kolom, ($d->cost_kerja + $d->cost_bk) / $d->gr);
             $kolom++;
         }
         $sheet4->getStyle('B2:J' . $kolom - 1)->applyFromArray($style);
