@@ -567,9 +567,9 @@ class GradingBjController extends Controller
                 $pcs = $row[7];
                 $gr = $row[8];
                 $noPengiriman = $row[9];
-                $costbk = $row[10];
-                $costkerja = $row[11];
-                $costcu = $row[12];
+                $costbk = $row[10] ?? 0;
+                $costkerja = $row[11] ?? 0;
+                $costcu = $row[12] ?? 0;
 
                 if (empty($tgl) && empty($partai)) {
                     continue;
