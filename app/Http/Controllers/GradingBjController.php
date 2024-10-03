@@ -631,9 +631,9 @@ class GradingBjController extends Controller
                             'pcs' => $pcs,
                             'gr' => $gr,
                             'tgl' => $tgl,
-                            'costbk' => $costbk,
-                            'costkerja' => $costkerja,
-                            'costcu' => $costcu,
+                            'cost_bk' => $costbk,
+                            'cost_kerja' => $costkerja,
+                            'cost_cu' => $costcu,
                             'admin' => "import-$tglD"
                         ]);
                     }
