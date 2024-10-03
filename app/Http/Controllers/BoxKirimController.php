@@ -218,7 +218,31 @@ class BoxKirimController extends Controller
         $tgl_input = date('Y-m-d');
         dd($r->all());
     }
+    public function list_po(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
 
+        $packing = DB::select("SELECT 
+            a.no_nota,
+            count(*) as ttl_box,
+            a.tgl_input,
+            sum(a.pcs) as pcs,
+            sum(a.gr) as gr  
+            FROM `pengiriman` as a
+            WHERE selesai = 'T' GROUP BY a.no_nota order by a.no_nota DESC");
+
+        
+        $tgl1 = tglFormat($tgl1);
+        $tgl2 = tglFormat($tgl2);
+        $data = [
+            'title' => 'List Po ',
+            'packing' => $packing,
+        ];
+
+        return view('home.packinglist.list_po_pengiriman', $data);
+    }
     public function po($no_nota)
     {
         $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
@@ -236,7 +260,6 @@ class BoxKirimController extends Controller
 
     public function save_po(Request $r)
     {
-
         try {
             DB::beginTransaction();
             $no_invoice = $r->no_nota;

@@ -451,6 +451,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/po/{no_nota}', 'po')->name('po');
+            Route::get('/po/', 'list_po')->name('list_po');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');
             Route::post('/save_po', 'save_po')->name('save_po');

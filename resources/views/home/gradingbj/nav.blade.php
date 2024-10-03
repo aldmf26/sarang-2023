@@ -5,7 +5,7 @@
         'gradingbj.index' => [
             'route' => 'gradingbj.index',
             'teks' => 'Grading',
-            'variant' => 'pengiriman',
+            'variant' => 'info',
         ],
     
         'gradingbj.gudang_siap_kirim' => [
@@ -13,11 +13,12 @@
             'teks' => 'Wip Stock',
             'variant' => 'info',
         ],
-        // 'pengiriman.add' => [
-        //     'route' => 'pengiriman.add',
-        //     'teks' => 'Buat box kirim',
-        //     'icon' => 'fa-box-open',
-        // ],
+        'pengiriman.list_po' => [
+            'route' => 'pengiriman.list_po',
+            'teks' => 'List Po Pengiriman',
+            'variant' => 'info',
+
+        ],
         // 'pengiriman.index' => [
         //     'route' => 'pengiriman.index',
         //     'teks' => 'Box kirim',
@@ -37,7 +38,7 @@
 @foreach ($routes as $key => $route)
 
     {{-- @if ($namaRoute != $key) --}}
-    <x-theme.button variant="{{$route['variant'] ?? 'primary'}}" href="{{ route($route['route']) }}"
+    <x-theme.button variant="{{$namaRoute == $route['route'] ? 'primary' : $route['variant']}}" href="{{ route($route['route']) }}"
         icon="{{ $route['icon'] ?? 'fa-warehouse' }}" teks="{{ $route['teks'] }}" />
     {{-- @endif --}}
 @endforeach
