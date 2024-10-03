@@ -138,6 +138,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
                 left join users as b on b.id = a.id_penerima
                 left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
                 left join cabut as d on d.no_box = a.no_box
+                left join eo as g on g.no_box = a.no_box
                 left join oprasional as f on f.bulan = d.bulan_dibayar
                 left join users as e on e.id = a.id_pemberi
                 left join (

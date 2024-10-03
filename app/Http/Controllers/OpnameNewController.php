@@ -240,7 +240,6 @@ class OpnameNewController extends Controller
         $sheet2->setCellValue('L1', 'rp/gr');
 
         $cetak_proses = $model::cetak_proses();
-        $rp_gr =   456250 / sumBk($cetak_proses, 'gr');
         // kena diatas dihapus 
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
@@ -250,11 +249,11 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('E' . $kolom, $d->pcs);
             $sheet2->setCellValue('F' . $kolom, $d->gr);
             $sheet2->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja + ($rp_gr * $d->gr));
+            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('I' . $kolom, 0);
             $sheet2->setCellValue('J' . $kolom, 0);
-            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + ($rp_gr * $d->gr));
-            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + ($rp_gr * $d->gr)) / $d->gr);
+            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
