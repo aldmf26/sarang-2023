@@ -369,7 +369,7 @@ class Grading extends Model
                 sum(a.cost_op) as cost_op,
                 a.grade 
                 FROM grading_partai as a 
-                WHERE a.box_pengiriman NOT IN (select no_box from formulir_sarang where kategori = 'wip')
+                WHERE a.formulir = 'T'
                 $whereBox 
                 GROUP BY a.box_pengiriman");
     }
