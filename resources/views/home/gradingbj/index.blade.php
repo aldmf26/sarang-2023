@@ -78,7 +78,7 @@
                                     <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
                                     @presiden
                                         <td class="text-end">
-                                            {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }}
+                                            {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
                                         </td>
                                         <td class="text-end">
                                             {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }}
