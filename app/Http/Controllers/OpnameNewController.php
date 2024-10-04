@@ -199,8 +199,8 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
-        $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        // $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
+        // $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         // $this->rekap($spreadsheet, $style_atas, $style, $model);
 
 
@@ -499,7 +499,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('V' . $kolom, $d->cost_cu);
             $sheet3->setCellValue('W' . $kolom, $d->cost_op);
             $sheet3->setCellValue('X' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('Y' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : $d->ttl_rp / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
