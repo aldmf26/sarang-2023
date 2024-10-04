@@ -388,7 +388,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('V' . $kolom, 0);
             $sheet3->setCellValue('W' . $kolom, 0);
             $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
