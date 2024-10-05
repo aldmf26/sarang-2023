@@ -20,10 +20,6 @@
             .print_hilang {
                 display: none;
             }
-
-            .page-break {
-                page-break-after: always;
-            }
         }
     </style>
 </head>

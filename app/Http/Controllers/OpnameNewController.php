@@ -200,7 +200,7 @@ class OpnameNewController extends Controller
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
         $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
-        $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        // $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         // $this->rekap($spreadsheet, $style_atas, $style, $model);
 
 
@@ -240,7 +240,6 @@ class OpnameNewController extends Controller
         $sheet2->setCellValue('L1', 'rp/gr');
 
         $cetak_proses = $model::cetak_proses();
-        $rp_gr =   456250 / sumBk($cetak_proses, 'gr');
         // kena diatas dihapus 
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
@@ -250,11 +249,11 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('E' . $kolom, $d->pcs);
             $sheet2->setCellValue('F' . $kolom, $d->gr);
             $sheet2->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja + ($rp_gr * $d->gr));
+            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('I' . $kolom, 0);
             $sheet2->setCellValue('J' . $kolom, 0);
-            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja + ($rp_gr * $d->gr));
-            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja + ($rp_gr * $d->gr)) / $d->gr);
+            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
@@ -389,7 +388,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('V' . $kolom, 0);
             $sheet3->setCellValue('W' . $kolom, 0);
             $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
@@ -500,7 +499,7 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('V' . $kolom, $d->cost_cu);
             $sheet3->setCellValue('W' . $kolom, $d->cost_op);
             $sheet3->setCellValue('X' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('Y' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : $d->ttl_rp / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);

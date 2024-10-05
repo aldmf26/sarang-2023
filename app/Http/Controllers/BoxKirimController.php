@@ -233,7 +233,7 @@ class BoxKirimController extends Controller
             FROM `pengiriman` as a
             WHERE selesai = 'T' GROUP BY a.no_nota order by a.no_nota DESC");
 
-        
+
         $tgl1 = tglFormat($tgl1);
         $tgl2 = tglFormat($tgl2);
         $data = [

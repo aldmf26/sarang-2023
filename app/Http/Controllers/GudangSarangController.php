@@ -534,11 +534,14 @@ class GudangSarangController extends Controller
             ->selectRaw('a.id_pemberi,a.id_penerima,a.tanggal,b.nm_partai,b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
             ->get();
 
-        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
+        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name  as penerima,a.no_invoice
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
         WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
+
+
+
 
         $data = [
             'title' => 'Po Grading',
