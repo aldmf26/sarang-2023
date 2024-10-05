@@ -527,23 +527,23 @@ class GudangSarangController extends Controller
 
     public function print_formulir_grade(Request $r)
     {
-        $formulir = DB::table('formulir_sarang as a')
-            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'sortir'], ['a.kategori', 'grade']])
-            ->join('bk as b', 'a.no_box', '=', 'b.no_box')
-            ->groupBy('a.no_box', 'a.kategori')
-            ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
-            ->get();
+        $formulir = DB::select("SELECT b.nm_partai, b.tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal FROM formulir_sarang as a left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' WHERE a.kategori = 'grade' and a.no_invoice ='$r->no_invoice';
+        ");
 
-        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
+        $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name  as penerima,a.no_invoice
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
         WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
 
+
+
+
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
-            'ket_formulir' => $ket_formulir
+            'ket_formulir' => $ket_formulir,
+            'no_invoice' => $r->no_invoice
         ];
         return view('home.gudang_sarang/print_formulir_grade', $data);
     }

@@ -20,90 +20,56 @@
             .print_hilang {
                 display: none;
             }
-
-            .page-break {
-                page-break-after: always;
-            }
         }
     </style>
 </head>
 
 <body>
-    @foreach ($formulir as $i => $d)
-        @php
-            $pageBreak = ($i + 1) % 2 == 0;
-        @endphp
-        <div class="container-fluid {{ $pageBreak ? 'page-break' : '' }}">
-            <div class="d-flex justify-content-between print_hilang">
-                <a href="#"></a>
-                <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary">
-                    <i class="fa-solid fa-print"></i> Print
-                </a>
-            </div>
-            <div class="{{ $pageBreak ? 'd-none' : '' }}">
-                <h5 class="fw-bold text-center " style="text-decoration: underline">PO GRADE
-                </h5>
-
-                <h6 class="fw-bold">Tanggal : {{ tanggal($ket_formulir->tanggal) }}</h6>
-                <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }}</h6>
-                <h6>Po : </h6>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No Box</th>
-                                <th>Tipe</th>
-                                <th>Pcs</th>
-                                <th>Gr</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ $d->no_box }}</td>
-                                <td>{{ $d->tipe }} {{ $d->ket }}</td>
-                                <td>{{ $d->pcs }}</td>
-                                <td>{{ $d->gr }}</td>
-                            </tr>
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-8">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Grade</th>
-                                <th>Pcs</th>
-                                <th>Gr</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for ($i = 1; $i <= 8; $i++)
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            @endfor
-
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3">Total :</th>
-                            </tr>
-                            <tr>
-                                <th colspan="3">Susut :</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-
+    <br>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between print_hilang">
+            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i
+                    class="fa-solid fa-print"></i>
+                Print</a>
         </div>
-    @endforeach
+        <h5 class="fw-bold text-center" style="text-decoration: underline">PO GRADE : {{ $no_invoice }}</h5>
+
+        <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }} | Tanggal :
+            {{ tanggal($ket_formulir->tanggal) }}</h6>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered" style="font-size: 13px">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nama Partai</th>
+                            <th>Tipe</th>
+                            <th>Ket</th>
+                            <th class="text-center">No Box</th>
+                            <th class="text-end">Pcs </th>
+                            <th class="text-end">Gr </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($formulir as $f)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $f->nm_partai }}</td>
+                                <td>{{ $f->tipe }}</td>
+                                <td>{{ $f->ket }}</td>
+                                <td class="text-center">{{ $f->no_box }}</td>
+                                <td class="text-end">{{ $f->pcs_awal }}</td>
+                                <td class="text-end">{{ $f->gr_awal }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
 
 </body>
 
