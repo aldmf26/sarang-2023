@@ -552,7 +552,7 @@ class GradingBjController extends Controller
         $spreadsheet = IOFactory::load($file);
         $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
-        $admin = auth()->user()->name;
+        $admin = auth()->user()->name . "aa";
         $tglD = date('Y-m-d');
         DB::beginTransaction();
         try {
@@ -708,6 +708,7 @@ class GradingBjController extends Controller
             sum(a.pcs) as pcs, 
             sum(a.gr) as gr,
             a.no_invoice,
+            a.urutan,
             b.pcs as pcs_pengiriman, 
             b.gr as gr_pengiriman
             FROM `grading_partai` as a
@@ -720,7 +721,7 @@ class GradingBjController extends Controller
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
             where a.formulir = 'Y'
-            GROUP BY box_pengiriman;");
+            GROUP BY box_pengiriman ORDER BY a.grade Desc");
 
         $data = [
             'title' => 'Stock Siap Kirim',
@@ -890,7 +891,6 @@ class GradingBjController extends Controller
         left join sortir as f on f.no_box = a.no_box_sortir
         where a.no_invoice = '$r->no_invoice'
         ");
-
 
 
         $data = [

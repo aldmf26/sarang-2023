@@ -528,10 +528,10 @@ class GudangSarangController extends Controller
     public function print_formulir_grade(Request $r)
     {
         $formulir = DB::table('formulir_sarang as a')
-            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'sortir'], ['a.kategori', 'grade']])
+            ->where([['a.no_invoice', $r->no_invoice], ['b.kategori', 'cabut'], ['a.kategori', 'grade']])
             ->join('bk as b', 'a.no_box', '=', 'b.no_box')
             ->groupBy('a.no_box', 'a.kategori')
-            ->selectRaw('b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
+            ->selectRaw('a.id_pemberi,a.id_penerima,a.tanggal,b.nm_partai,b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr')
             ->get();
 
         $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
@@ -541,8 +541,9 @@ class GudangSarangController extends Controller
         WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
 
         $data = [
-            'title' => 'Gudang Sarang',
+            'title' => 'Po Grading',
             'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
             'ket_formulir' => $ket_formulir
         ];
         return view('home.gudang_sarang/print_formulir_grade', $data);

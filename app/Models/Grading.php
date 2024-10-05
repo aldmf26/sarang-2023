@@ -83,7 +83,23 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, g.ttl_rp as cost_bk, g.cost_cbt, g.cost_eo, g.cost_ctk, g.cost_str, g.cost_cu,akhir_sortir.ttl_rp as ttl_rp_sortir, akhir_sortir.cost_kerja as cost_kerja_sortir
+        b.no_box,
+        b.tanggal,
+        e.tipe,
+        e.ket,
+        e.nm_partai,
+        c.name as pemberi,
+        b.no_invoice,
+        (b.pcs_awal - d.pcs) as pcs_awal,
+        (b.gr_awal - d.gr) as gr_awal,
+        g.ttl_rp as cost_bk,
+        g.cost_cbt,
+        g.cost_eo,
+        g.cost_ctk,
+        g.cost_str,
+        g.cost_cu,
+        akhir_sortir.ttl_rp as ttl_rp_sortir,
+        akhir_sortir.cost_kerja as cost_kerja_sortir
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
@@ -118,9 +134,9 @@ class Grading extends Model
             group by a.no_box
         ) as g on g.no_box = a.no_box_sortir
         LEFT JOIN (
-            SELECT sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, b.no_box,c.name,b.nm_partai,sum(a.pcs_akhir) as pcs,sum(a.gr_akhir) as gr FROM sortir as a
+            SELECT sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
+            FROM sortir as a
                 LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
-                left join users as c on a.id_pengawas = c.id
                 WHERE a.no_box in (SELECT a.no_box
                             FROM formulir_sarang as a 
                             left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
@@ -367,11 +383,12 @@ class Grading extends Model
                 sum(a.cost_kerja) as cost_kerja,
                 sum(a.cost_cu) as cost_cu,
                 sum(a.cost_op) as cost_op,
-                a.grade 
+                a.grade, 
+                a.urutan
                 FROM grading_partai as a 
-                WHERE a.formulir = 'T'
+                WHERE a.formulir = 'T' AND a.box_pengiriman not in (select no_box from formulir_sarang where kategori = 'wip')
                 $whereBox 
-                GROUP BY a.box_pengiriman");
+                GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
     }
 
     public static function sisa()

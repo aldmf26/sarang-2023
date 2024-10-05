@@ -119,6 +119,7 @@
                                     </th>
                                 </tr>
                                 <tr>
+                                    <th class="dhead text-center">Urutan</th>
                                     <th class="dhead text-center">Partai</th>
                                     <th class="dhead">Box Pengiriman</th>
                                     <th class="dhead">Grade</th>
@@ -128,6 +129,7 @@
                                 </tr>
 
                                 <tr>
+                                    <th></th>
                                     <th class="dheadstock text-center" colspan="3">Total</th>
                                     <th class="dheadstock text-end">
                                         {{ number_format(sumCol($gradingSelesai, 'pcs'), 0) }}</th>
@@ -140,6 +142,7 @@
                             <tbody>
                                 @foreach ($gradingSelesai as $d)
                                     <tr>
+                                        <td>{{ $d->urutan }}</td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->box_pengiriman }}</td>
                                         <td>{{ $d->grade }}</td>

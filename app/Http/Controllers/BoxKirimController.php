@@ -248,7 +248,7 @@ class BoxKirimController extends Controller
         $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
                 WHERE a.no_nota = $no_nota GROUP by a.no_nota;");
 
-        $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->get();
+        $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->orderBy('grade', 'DESC')->get();
         $data = [
             'title' => 'Wip siap kirim',
             'po' => $po,
