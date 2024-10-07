@@ -135,7 +135,7 @@ class Grading extends Model
             group by a.no_box
         ) as g on g.no_box = a.no_box_sortir
         LEFT JOIN (
-            SELECT sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
+            SELECT a.no_box,sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
             FROM sortir as a
                 LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
                 WHERE a.no_box in (SELECT a.no_box
