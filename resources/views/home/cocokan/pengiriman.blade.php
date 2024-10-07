@@ -19,13 +19,13 @@
                         <td>Grading akhir</td>
                         <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_bk, 0) }}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
                         <td class="text-end fw-bold">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end fw-bold">{{ number_format($grading->gr, 0) }}</td>
-                        <td class="text-end fw-bold">{{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}
+                        <td class="text-end fw-bold">{{ number_format($grading->cost_bk, 0) }}
                         </td>
                     </tr>
 

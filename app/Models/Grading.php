@@ -99,8 +99,7 @@ class Grading extends Model
         g.cost_str,
         g.cost_cu,
         akhir_sortir.ttl_rp as ttl_rp_sortir,
-        akhir_sortir.cost_kerja as cost_kerja_sortir,
-        akhir_sortir.no_box as no_box
+        akhir_sortir.cost_kerja as cost_kerja_sortir
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
@@ -135,7 +134,7 @@ class Grading extends Model
             group by a.no_box
         ) as g on g.no_box = a.no_box_sortir
         LEFT JOIN (
-            SELECT a.no_box,sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
+            SELECT sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp
             FROM sortir as a
                 LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
                 WHERE a.no_box in (SELECT a.no_box
@@ -411,13 +410,7 @@ class Grading extends Model
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT a.cost_op,a.cost_cu,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(if(a.baru = 'baru' , a.pcs,b.pcs) ) as pcs, sum(b.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a
-                JOIN 
-                (
-                    SELECT b.box_pengiriman, b.nm_partai, b.grade, sum(b.pcs) as pcs, sum(b.gr) as gr
-                    FROM grading_partai as b 
-                    group by b.box_pengiriman
-                ) as b on b.box_pengiriman = a.no_box
+        return DB::selectOne("SELECT a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a
                 ");
     }
 
