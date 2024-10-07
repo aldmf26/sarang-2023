@@ -99,7 +99,8 @@ class Grading extends Model
         g.cost_str,
         g.cost_cu,
         akhir_sortir.ttl_rp as ttl_rp_sortir,
-        akhir_sortir.cost_kerja as cost_kerja_sortir
+        akhir_sortir.cost_kerja as cost_kerja_sortir,
+        akhir_sortir.no_box as no_box
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
