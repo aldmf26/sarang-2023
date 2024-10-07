@@ -410,7 +410,7 @@ class Grading extends Model
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT a.cost_op,a.cost_cu,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a
+        return DB::selectOne("SELECT a.cost_op,a.cost_cu,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(if(a.baru = 'baru' , a.pcs,b.pcs) ) as pcs, sum(b.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a
                 JOIN 
                 (
                     SELECT b.box_pengiriman, b.nm_partai, b.grade, sum(b.pcs) as pcs, sum(b.gr) as gr
@@ -422,7 +422,7 @@ class Grading extends Model
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op FROM grading_partai as a where a.sudah_kirim = 'T'");
     }
 
     public static function gradingSum()
