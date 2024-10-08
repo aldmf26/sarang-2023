@@ -371,9 +371,7 @@ WHERE a.selesai = 'T' ;");
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
         $pengiriman = Grading::pengirimanSum();
-        $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.ttl_rp) as total_rp
-        FROM grading_partai as a 
-        where a.box_pengiriman not in (SELECT b.no_box FROM pengiriman as b );");
+        $grading = Grading::belumKirimSum();
 
         $a14suntik = $this->getSuntikan(14);
         $a16suntik = $this->getSuntikan(16);
@@ -407,6 +405,12 @@ WHERE a.selesai = 'T' ;");
         $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
         $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
+        $grading_akhir = $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
+        sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
+        FROM grading_partai as a 
+        
+        ");
+
 
 
         $data = [
@@ -431,7 +435,8 @@ WHERE a.selesai = 'T' ;");
             'cost_dll' => $cost_dll,
             'cetak_akhir'  => $cetak_akhir,
             'sortir_akhir' => $sortir_akhir,
-            'grading_sisa' => CocokanModel::grading_sisa()
+            'grading_sisa' => CocokanModel::grading_sisa(),
+            'grading_akhir' => $grading_akhir
 
 
         ];

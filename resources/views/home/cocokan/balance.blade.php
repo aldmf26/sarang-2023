@@ -199,7 +199,7 @@
                             <td class="text-end">{{ number_format($grading_sisa->pcs ?? 0, 0) }}</td>
                             <td class="text-end">{{ number_format($grading_sisa->gr ?? 0, 0) }}</td>
                             <td class="text-end">
-                                {{ number_format($grading_sisa->cost_kerja + $grading_sisa->cost_bk ?? 0, 0) }}</td>
+                                {{ number_format($grading_sisa->cost_kerja + $grading_sisa->cost_bk, 0) }}</td>
 
                         </tr>
                         @php
@@ -211,25 +211,28 @@
                             <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
                             <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($pengiriman->ttl_rp, 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
+                            </td>
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sisa belum kirim</td>
                             <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($grading->total_rp, 0) }}
+                            <td class="text-end">
+                                {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op, 0) }}
                             </td>
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Selisih</td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs, 0) }}
+                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $grading_sisa->pcs, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr - $pengiriman->gr, 0) }}
+                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading_akhir->gr - $grading_sisa->gr, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr - $pengiriman->gr) * $rp_satuan, 0) }}
+                                {{ number_format(($sortir_akhir->gr + $opname->gr - $grading_akhir->gr - $grading_sisa->gr) * $rp_satuan, 0) }}
                             </td>
                         </tr>
                     </tbody>
