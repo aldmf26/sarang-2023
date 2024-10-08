@@ -603,19 +603,19 @@ class OpnameNewController extends Controller
 
 
 
-        $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
-        $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
-        $sheet4->setCellValue('D' . $kolom + 1, '-');
-        $sheet4->setCellValue('E' . $kolom + 1, '-');
-        $sheet4->setCellValue('F' . $kolom + 1, '-');
-        $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
-        $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
-        $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
-        $sheet4->setCellValue('J' . $kolom + 1, 0);
-        $sheet4->setCellValue('K' . $kolom + 1,  0);
-        $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
-        $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
-        $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
+        // $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
+        // $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
+        // $sheet4->setCellValue('D' . $kolom + 1, '-');
+        // $sheet4->setCellValue('E' . $kolom + 1, '-');
+        // $sheet4->setCellValue('F' . $kolom + 1, '-');
+        // $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
+        // $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
+        // $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
+        // $sheet4->setCellValue('J' . $kolom + 1, 0);
+        // $sheet4->setCellValue('K' . $kolom + 1,  0);
+        // $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
+        // $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
+        // $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
         $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
     }

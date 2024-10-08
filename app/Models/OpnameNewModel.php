@@ -395,7 +395,7 @@ group by a.no_box;
                     ) as z on z.no_box = a.no_box
             left join users as g on g.id = a.id_pengawas
             
-            WHERE  a.selesai = 'Y' and b.baru = 'baru'
+            WHERE  a.selesai = 'Y' and b.baru = 'baru' 
             group by a.no_box
             order by g.name ASC;
         ");
