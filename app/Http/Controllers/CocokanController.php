@@ -119,7 +119,7 @@ class CocokanController extends Controller
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp - 613;
         $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
