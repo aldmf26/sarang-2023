@@ -81,7 +81,7 @@ class CocokanController extends Controller
         $cetak_akhir = new stdClass();
         $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
         $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp - 613;
         $cetak_akhir->cost_kerja = $ca16->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
@@ -110,7 +110,7 @@ class CocokanController extends Controller
         $akhir_cetak = new stdClass();
         $akhir_cetak->pcs = $s1->pcs + $s2suntik->pcs;
         $akhir_cetak->gr = $s1->gr + $s2suntik->gr;
-        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
+        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp - 613;
 
         $s3 = $model::sortir_akhir();
 
