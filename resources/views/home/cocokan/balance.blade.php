@@ -8,8 +8,14 @@
             @include('home.cocokan.nav')
             
             <div class="col-lg-6">
-                <h6>Bk Kerja</h6>
-                <input type="text" id="tbl1input" class="form-control form-control-sm">
+                <div class="d-flex justify-content-between mb-2">
+                    <div>
+                        <h6>Bk Kerja</h6>
+                    </div>
+                    <div>
+                        <input placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
+                    </div>
+            </div>
                 <table class="table table-bordered" id="tbl1">
                     <thead>
                         <tr>
