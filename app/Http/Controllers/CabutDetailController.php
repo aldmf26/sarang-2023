@@ -418,7 +418,7 @@ class CabutDetailController extends Controller
 
     public function gradingSisa()
     {
-        $sisaGrading = Grading::dapatkanStokBox('formulir');
+        $sisaGrading = Grading::dapatkanStokBoxYANGLAMA('formulir');
 
         $data = [ 
             'title' => 'Grading Awal',
