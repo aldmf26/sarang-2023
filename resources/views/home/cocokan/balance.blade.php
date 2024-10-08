@@ -6,10 +6,18 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
+            
             <div class="col-lg-6">
-                <h6>Bk Kerja</h6>
-
-                <table class="table table-bordered">
+                <div class="d-flex justify-content-between mb-2">
+                    <div>
+                        <h6>Bk Kerja</h6>
+                    </div>
+                    <div>
+                        <input autofocus placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
+                    </div>
+            </div>
+            <div style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-bordered" id="tbl1">
                     <thead>
                         <tr>
                             <th class="dhead">No</th>
@@ -66,6 +74,7 @@
 
                     </tbody>
                 </table>
+            </div>
             </div>
             <div class="col-lg-2">
                 <h6>Cost Perbulan</h6>
@@ -367,6 +376,9 @@
 
 
         @section('scripts')
+        <script>
+            pencarian('tbl1input', 'tbl1')
+        </script>
         @endsection
     </x-slot>
 </x-theme.app>

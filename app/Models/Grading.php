@@ -15,10 +15,10 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, akhir_sortir.ttl_rp, akhir_sortir.cost_kerja 
+        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, akhir_sortir.ttl_rp, akhir_sortir 
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
-        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'number_foat
         $whereBox
         LEFT JOIN(
             select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
@@ -372,7 +372,7 @@ class Grading extends Model
 
     public static function selesai($no_box = null)
     {
-        $whereBox = $no_box ? "AND a.box_pengiriman = $no_box " : '';
+        $whereBox = $no_box ? "a.box_pengiriman = $no_box " : '';
         $select = $no_box ? 'selectOne' : 'select';
         return DB::$select("SELECT 
                 a.nm_partai,
@@ -387,7 +387,6 @@ class Grading extends Model
                 a.grade, 
                 a.urutan
                 FROM grading_partai as a 
-                WHERE a.formulir = 'T' AND a.box_pengiriman not in (select no_box from formulir_sarang where kategori = 'wip')
                 $whereBox 
                 GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
     }
@@ -402,7 +401,7 @@ class Grading extends Model
     public static function pengirimanAll()
     {
         return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
-                JOIN grading_partai as b on a.no_box = b.box_pengiriman GROUP BY a.no_box");
+                 GROUP BY a.no_box");
     }
 
     public static function belumKirimAll()
