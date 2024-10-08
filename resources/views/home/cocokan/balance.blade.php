@@ -242,10 +242,10 @@
                             {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + $cetak_proses->pcs + $cetak_sisa->pcs + $sedang_proses->pcs + $sortir_sisa->pcs + $grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs), 0) }}
                         </td>
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + ($sortir_akhir->gr + $opname->gr - $grading->gr), 0) }}
+                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grading_sisa->gr + $pengiriman->gr, 0) }}
                         </td>
                         @php
-                            $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+
                             $ttl_sisa_belum_kirim =
                                 $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
 
@@ -254,9 +254,14 @@
                                 $pengiriman->cost_kerja +
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
+
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_kerja + $grading_sisa->cost_bk;
+
+                            $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+
                         @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $ttl_pengiriman + $ttl_sisa_belum_kirim + $grading_sisa, 0) }}
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $ttl_pengiriman + $ttl_sisa_belum_kirim + $grading_sisa + $ttl_sisa_blum_grading, 0) }}
                         </td>
                     </tfoot>
 
