@@ -242,7 +242,7 @@
                             {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + ($sortir_akhir->gr + $opname->gr - $grading->gr), 0) }}
                         </td>
                         @php
-                            $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+                            $grading_sisa->cost_kerja_dll = $grading_sisa->cost_kerja_dll ?? 0;
                         @endphp
                         <td class="dhead text-end fw-bold">
                             {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $pengiriman->ttl_rp + $grading->total_rp + $grading_sisa, 0) }}
