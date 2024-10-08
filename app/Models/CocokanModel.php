@@ -17,7 +17,6 @@ class CocokanModel extends Model
         sum(a.gr_awal * a.hrga_satuan) as ttl_rp
         FROM bk as a
         where a.kategori ='cabut' and a.baru ='baru' 
-        AND a.baru = 'baru'
             ");
         return $result;
     }
@@ -427,7 +426,7 @@ left join users as g on g.id = a.id_pengawas
 
     public static function grading_sisa()
     {
-        $return =  DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr , 100 as cost_kerja_dll, sum(g.ttl_rp) as cost_bk, sum(COALESCE(g.cost_cbt,0) + COALESCE(g.cost_eo,0) + COALESCE(g.cost_ctk,0) + COALESCE(g.cost_str,0) ) as cost_kerja
+        $return =  DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr , sum(g.ttl_rp) as cost_bk, sum(COALESCE(g.cost_cbt,0) + COALESCE(g.cost_eo,0) + COALESCE(g.cost_ctk,0) + COALESCE(g.cost_str,0) ) as cost_kerja
 FROM grading as a 
 left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' 
 JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' 

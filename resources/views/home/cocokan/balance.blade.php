@@ -257,11 +257,11 @@
 
                             $ttl_sisa_blum_grading = $grading_sisa->cost_kerja + $grading_sisa->cost_bk;
 
-                            $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+                            // $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
 
                         @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $ttl_pengiriman + $ttl_sisa_belum_kirim + $grading_sisa + $ttl_sisa_blum_grading, 0) }}
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $grading_sisa->cost_kerja + $grading_sisa->cost_bk + $ttl_pengiriman + $ttl_sisa_belum_kirim, 0) }}
                         </td>
                     </tfoot>
 

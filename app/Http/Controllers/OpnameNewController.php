@@ -199,9 +199,9 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
-        // $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
-        // $this->rekap($spreadsheet, $style_atas, $style, $model);
+        $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
+        $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        $this->rekap($spreadsheet, $style_atas, $style, $model);
 
 
         $namafile = "Opname Gudang.xlsx";
@@ -447,7 +447,7 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('K1', 'total rp');
         $sheet3->setCellValue('L1', 'rp/gr');
 
-        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, b.pcs as pcs, b.gr as gr , 
+        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, a.pcs as pcs, a.gr as gr , 
         sum(a.cost_bk) as total_rp, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a 
         left join  (
         SELECT sum(b.pcs) as pcs, sum(b.gr) as gr, b.box_pengiriman
@@ -486,7 +486,7 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('X1', 'total rp');
         $sheet3->setCellValue('Y1', 'rp/gr');
 
-        $grading = DB::select("SELECT * FROM `grading_partai` WHERE `box_pengiriman` not in(SELECT a.no_box FROM pengiriman as a )");
+        $grading = DB::select("SELECT * FROM `grading_partai` WHERE sudah_kirim = 'T'");
         $kolom = 2;
         foreach ($grading  as $d) {
             $sheet3->setCellValue('O' . $kolom, $d->box_pengiriman);
@@ -504,12 +504,12 @@ class OpnameNewController extends Controller
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("Z1:AC1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('Y1', 'selisih');
-        $sheet3->setCellValue('Z1', 'pcs');
-        $sheet3->setCellValue('AA1', 'gr');
-        $sheet3->setCellValue('AB1', 'ttl rp');
-        $sheet3->setCellValue('AC1', 'rp/gr');
+        $sheet3->getStyle("AB1:AE1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AA1', 'selisih');
+        $sheet3->setCellValue('AB1', 'pcs');
+        $sheet3->setCellValue('AC1', 'gr');
+        $sheet3->setCellValue('AD1', 'ttl rp');
+        $sheet3->setCellValue('AE1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
         $p2suntik = $this->getSuntikan(42);
@@ -521,14 +521,15 @@ class OpnameNewController extends Controller
         $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
         $opname = $this->getSuntikan(41);
+        $belum_grading = OpnameNewModel::grading_sisa();
 
         $kolom = 2;
 
-        $sheet3->setCellValue('Z' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs, 0));
-        $sheet3->setCellValue('AA' . $kolom, round($sortir_akhir->gr + $opname->gr - $grading->gr, 0));
-        $sheet3->setCellValue('AB' . $kolom, 0);
+        $sheet3->setCellValue('AB' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs - sumBk($belum_grading, 'pcs'), 0));
         $sheet3->setCellValue('AC' . $kolom, 0);
-        $sheet3->getStyle('Z2:AC2')->applyFromArray($style);
+        $sheet3->setCellValue('AD' . $kolom, 0);
+        $sheet3->setCellValue('AE' . $kolom, 0);
+        $sheet3->getStyle('AB2:AE2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
@@ -603,19 +604,19 @@ class OpnameNewController extends Controller
 
 
 
-        // $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
-        // $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
-        // $sheet4->setCellValue('D' . $kolom + 1, '-');
-        // $sheet4->setCellValue('E' . $kolom + 1, '-');
-        // $sheet4->setCellValue('F' . $kolom + 1, '-');
-        // $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
-        // $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
-        // $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
-        // $sheet4->setCellValue('J' . $kolom + 1, 0);
-        // $sheet4->setCellValue('K' . $kolom + 1,  0);
-        // $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
-        // $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
-        // $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
+        $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
+        $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
+        $sheet4->setCellValue('D' . $kolom + 1, '-');
+        $sheet4->setCellValue('E' . $kolom + 1, '-');
+        $sheet4->setCellValue('F' . $kolom + 1, '-');
+        $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
+        $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
+        $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
+        $sheet4->setCellValue('J' . $kolom + 1, 0);
+        $sheet4->setCellValue('K' . $kolom + 1,  0);
+        $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
+        $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
+        $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
         $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
     }
@@ -699,7 +700,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('B11', "=SUM('Gudang grading'!F:F)");
         $sheet4->setCellValue('B12', "=SUM('Pengiriman'!E:E)");
         $sheet4->setCellValue('B13', "=SUM('Pengiriman'!R:R)");
-        $sheet4->setCellValue('B14', "=SUM('Pengiriman'!Z:Z)");
+        $sheet4->setCellValue('B14', "=SUM(Pengiriman!AB:AB)");
 
         $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
         $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
