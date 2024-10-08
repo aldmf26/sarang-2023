@@ -6,10 +6,11 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
+            
             <div class="col-lg-6">
                 <h6>Bk Kerja</h6>
-
-                <table class="table table-bordered">
+                <input type="text" id="tbl1input" class="form-control form-control-sm">
+                <table class="table table-bordered" id="tbl1">
                     <thead>
                         <tr>
                             <th class="dhead">No</th>
@@ -367,6 +368,9 @@
 
 
         @section('scripts')
+        <script>
+            pencarian('tbl1input', 'tbl1')
+        </script>
         @endsection
     </x-slot>
 </x-theme.app>
