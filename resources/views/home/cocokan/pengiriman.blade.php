@@ -89,7 +89,7 @@
                             {{ number_format($pengiriman->gr + $belum_kirim->gr, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($rp_gr * ($pengiriman->gr + $belum_kirim->gr), 0) }}
+                            {{ number_format($pengiriman->cost_bk + $belum_kirim->cost_bk, 0) }}
                         </td>
                         <td></td>
                         <td></td>
