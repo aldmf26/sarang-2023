@@ -421,7 +421,7 @@ class CabutDetailController extends Controller
         $sisaGrading = Grading::dapatkanStokBoxYANGLAMA('formulir');
 
         $data = [ 
-            'title' => 'Grading Awal',
+            'title' => 'Grading Sisa',
             'query' => $sisaGrading,
         ];
         return view('home.opnamenew.grading.sisa', $data);

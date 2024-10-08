@@ -13,7 +13,7 @@
                         <h6>Bk Kerja</h6>
                     </div>
                     <div>
-                        <input placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
+                        <input autofocus placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
                     </div>
             </div>
                 <table class="table table-bordered" id="tbl1">
