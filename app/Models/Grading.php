@@ -410,8 +410,8 @@ class Grading extends Model
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a
-                ");
+        return DB::selectOne("SELECT a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp FROM pengiriman as a
+        ");
     }
 
     public static function belumKirimSum()

@@ -114,7 +114,8 @@
                                 {{ number_format($grading_sisa->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">0</td>
+                        <td class="text-end">{{ number_format($grading_sisa->cost_bk, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading_sisa->cost_kerja, 0) }}</td>
                     </tr>
 
 
