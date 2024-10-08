@@ -338,7 +338,7 @@ class CocokanController extends Controller
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
-        $pengiriman = DB::selectOne("SELECT sum(if(a.baru = 'baru' , a.pcs,b.pcs) ) as pcs, sum(b.gr) as gr , sum(a.ttl_rp) as ttl_rp 
+        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(b.gr) as gr , sum(a.ttl_rp) as ttl_rp 
         FROM pengiriman as a
             JOIN (
             SELECT b.box_pengiriman, sum(b.pcs) as pcs, sum(b.gr) as gr
