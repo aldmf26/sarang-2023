@@ -28,6 +28,7 @@
                             <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @php
                             $sumTtlRp = 0;
@@ -51,7 +52,7 @@
                                 <td class="text-end">{{ number_format($d->cost_cu,0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_op,0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk + $ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format(($total) / $d->gr) }}</td>
+                                <td class="text-end">{{ number_format($d->gr  ?  $total / $d->gr : 0,0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

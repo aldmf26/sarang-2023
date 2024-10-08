@@ -38,7 +38,7 @@
                             $sumTtlRp += $ttlRp;
 
                             $total = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
-
+                        
                         @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -52,7 +52,7 @@
                                 <td class="text-end">{{ number_format($d->cost_cu,0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_op,0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk + $ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format(($total) / $d->gr) }}</td>
+                                <td class="text-end">{{ number_format($d->gr != 0 ? ($total) / $d->gr : 0,0number)fat) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
