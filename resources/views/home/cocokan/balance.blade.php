@@ -16,6 +16,7 @@
                         <input autofocus placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
                     </div>
             </div>
+            <div style="max-height: 500px; overflow-y: auto;">
                 <table class="table table-bordered" id="tbl1">
                     <thead>
                         <tr>
@@ -73,6 +74,7 @@
 
                     </tbody>
                 </table>
+            </div>
             </div>
             <div class="col-lg-2">
                 <h6>Cost Perbulan</h6>
