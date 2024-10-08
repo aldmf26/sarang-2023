@@ -246,9 +246,17 @@
                         </td>
                         @php
                             $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
+                            $ttl_sisa_belum_kirim =
+                                $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
+
+                            $ttl_pengiriman =
+                                $pengiriman->cost_bk +
+                                $pengiriman->cost_kerja +
+                                $pengiriman->cost_cu +
+                                $pengiriman->cost_op;
                         @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $pengiriman->ttl_rp + $grading->total_rp + $grading_sisa, 0) }}
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $ttl_pengiriman + $ttl_sisa_belum_kirim + $grading_sisa, 0) }}
                         </td>
                     </tfoot>
 
