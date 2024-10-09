@@ -283,14 +283,12 @@ class BoxKirimController extends Controller
                     'tgl_input' => $tgl,
                     'pcs' => $r->pcs2[$i],
                     'gr' => $r->gr2[$i],
-                    'no_box' => $r->box_grading[$i],
                     'no_barcode' => $r->barcode[$i],
                     'grade' => $r->grade2[$i],
-                    'admin' => auth()->user()->name,
                     'no_nota' => $no_invoice,
-                    'selesai' => 'Y'
                 ];
                 DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
+                DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']); 
             }
 
             DB::commit();

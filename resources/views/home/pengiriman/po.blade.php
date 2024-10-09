@@ -61,6 +61,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th class="dhead">No</th>
                                 <th class="dhead">No Box</th>
                                 <th class="dhead text-center">Grade 1</th>
                                 <th class="dhead text-end">Pcs 1</th>
@@ -76,17 +77,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pengiriman as $d)
+                            @foreach ($pengiriman as $i => $d)
                                 <tr x-data="{
                                     gr2:{{ $d->gr }},
                                 }">
+                                    <td>{{ $i + 1 }} </td>
                                     <td>P{{ $d->no_box }}</td>
                                     <td align="center">{{ $d->grade }}</td>
                                     <td align="right">{{ $d->pcs }}</td>
                                     <td align="right">{{ $d->gr }}</td>
 
                                     <td align="center">
-                                        <input name="box_grading[]" required value="{{ $d->no_box }}" type="hidden" class="form-control">
                                         <input name="grade2[]" required value="{{ $d->grade }}" type="text" class="form-control">
                                     </td>
                                     <td align="center">

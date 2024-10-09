@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grading;
 use App\Models\PengirimanModel;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -58,20 +59,7 @@ class PackingListController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
 
-        $packing = DB::select("SELECT 
-        a.no_nota,
-        a.no_invoice_manual as no_invoice,
-        a.nm_packing,
-        a.tujuan,
-        a.tgl,
-        count(*) as ttl_box,
-        sum(b.pcs) as pcs,
-        sum(b.gr + (b.gr / a.kadar)) as gr 
-        FROM `pengiriman_packing_list` as a
-        JOIN pengiriman as b on a.id_pengiriman = b.no_box
-        WHERE a.tgl BETWEEN '$tgl1' AND '$tgl2'
-        GROUP BY a.no_nota
-        ORDER BY a.no_nota DESC");
+        $packing = Grading::list_pengiriman_sum();
 
         
         $tgl1 = tglFormat($tgl1);

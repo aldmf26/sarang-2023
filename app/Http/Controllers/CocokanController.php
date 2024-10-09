@@ -454,20 +454,7 @@ WHERE a.selesai = 'T' ;");
 
     public function list_pengiriman(Request $r)
     {
-        $query = DB::select("SELECT 
-        a.no_nota,
-        a.no_invoice_manual as no_invoice,
-        a.nm_packing,
-        a.tujuan,
-        a.tgl,
-        count(*) as ttl_box,
-        sum(b.pcs) as pcs,
-        sum(b.gr + (b.gr / a.kadar)) as gr_naik ,
-        sum(b.gr) as gr
-        FROM `pengiriman_packing_list` as a
-        JOIN pengiriman as b on a.id_pengiriman = b.no_box
-        GROUP BY a.no_nota
-        ORDER BY a.no_nota DESC");
+        $query = Grading::list_pengiriman_sum();
 
         $data = [
             'title' => 'List Pengiriman',

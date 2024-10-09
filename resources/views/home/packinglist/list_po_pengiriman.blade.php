@@ -41,6 +41,15 @@
                                     <th width="100" class="dhead text-center">Aksi</th>
                                 </tr>
                             </thead>
+                            <thead>
+                                <tr>
+                                    <th class="" colspan="3">Total</th>
+                                    <th class=" text-end">{{number_format(sumCol($packing, 'ttl_box'),0)}}</th>
+                                    <th class=" text-end">{{number_format(sumCol($packing, 'pcs'),0)}}</th>
+                                    <th class=" text-end">{{number_format(sumCol($packing, 'gr'),0)}}</th>
+                                    <th class=" text-end"></th>
+                                </tr>
+                            </thead>
 
                             <tbody>
 
