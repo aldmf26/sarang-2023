@@ -93,6 +93,7 @@
                                         <input name="pcs2[]" required value="{{ $d->pcs }}" type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
+                                        <input name="id_pengiriman[]" required value="{{ $d->id_pengiriman }}" type="hidden">
                                         <input name="gr2[]" x-model="gr2" required value="{{ $d->gr }}" type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">

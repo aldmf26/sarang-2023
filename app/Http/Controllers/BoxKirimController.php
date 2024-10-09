@@ -278,7 +278,7 @@ class BoxKirimController extends Controller
             }
             DB::table('pengiriman_packing_list')->insert($data);
 
-            for ($i = 0; $i < count($r->box_grading); $i++) {
+            for ($i = 0; $i < count($r->id_pengiriman); $i++) {
                 $data2 = [
                     'tgl_input' => $tgl,
                     'pcs' => $r->pcs2[$i],
@@ -290,7 +290,7 @@ class BoxKirimController extends Controller
                     'no_nota' => $no_invoice,
                     'selesai' => 'Y'
                 ];
-                DB::table('pengiriman')->where('no_box', $r->box_grading[$i])->update($data2);
+                DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
             }
 
             DB::commit();
