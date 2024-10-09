@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CocokanModel;
 use App\Models\OpnameNewModel;
+use App\Models\SummaryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -202,6 +203,7 @@ class OpnameNewController extends Controller
         $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         $this->rekap($spreadsheet, $style_atas, $style, $model);
+        $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
 
 
         $namafile = "Opname Gudang.xlsx";
@@ -803,14 +805,47 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(6);
         $sheet4->setTitle('Bk Sinta');
 
-        $sheet4->getStyle("A1:H1")->applyFromArray($style_atas);
-        $sheet4->setCellValue('B1', 'pcs');
-        $sheet4->setCellValue('C1', 'gr');
-        $sheet4->setCellValue('D1', 'rp');
-        $sheet4->setCellValue('E1', 'cost kerja');
-        $sheet4->setCellValue('F1', 'cost cu');
-        $sheet4->setCellValue('G1', 'cost operasional');
-        $sheet4->setCellValue('H1', 'ttl rp');
+        $sheet4->getStyle("A1:P1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A1', 'No');
+        $sheet4->setCellValue('B1', 'bulan kerja');
+        $sheet4->setCellValue('C1', 'nama partai');
+        $sheet4->setCellValue('D1', 'grade');
+        $sheet4->setCellValue('E1', 'pcs bk');
+        $sheet4->setCellValue('F1', 'gr bk');
+        $sheet4->setCellValue('G1', 'total rp bk');
+        $sheet4->setCellValue('H1', 'rata2');
+        $sheet4->setCellValue('I1', 'pcs diambil');
+        $sheet4->setCellValue('J1', 'gr diambil');
+        $sheet4->setCellValue('K1', 'ttl rp sudah diambil');
+        $sheet4->setCellValue('L1', 'rata2');
+        $sheet4->setCellValue('M1', 'pcs di sinta');
+        $sheet4->setCellValue('N1', 'gr di sinta');
+        $sheet4->setCellValue('O1', 'total rp');
+        $sheet4->setCellValue('P1', 'rata2');
+
+        $bk_sinta = SummaryModel::summarybk();
+
+        $kolom = 2;
+        foreach ($bk_sinta  as $no => $b) {
+            $sheet4->setCellValue('A' . $kolom, $no + 1);
+            $sheet4->setCellValue('B' . $kolom, date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)));
+            $sheet4->setCellValue('C' . $kolom, $b->nm_partai);
+            $sheet4->setCellValue('D' . $kolom, $b->grade);
+            $sheet4->setCellValue('E' . $kolom, $b->pcs);
+            $sheet4->setCellValue('F' . $kolom, $b->gr);
+            $sheet4->setCellValue('G' . $kolom, $b->ttl_rp);
+            $sheet4->setCellValue('H' . $kolom, $b->ttl_rp / $b->gr);
+            $sheet4->setCellValue('I' . $kolom, $b->pcs_bk);
+            $sheet4->setCellValue('J' . $kolom, $b->gr_bk);
+            $sheet4->setCellValue('K' . $kolom, $b->cost_bk);
+            $sheet4->setCellValue('L' . $kolom, $b->cost_bk / $b->gr_bk);
+            $sheet4->setCellValue('M' . $kolom, "=IF(O$kolom < 1,0,E$kolom-I$kolom)");
+            $sheet4->setCellValue('N' . $kolom, "=IF(O$kolom < 1,0,F$kolom-J$kolom)");
+            $sheet4->setCellValue('O' . $kolom, "=G$kolom-K$kolom");
+            $sheet4->setCellValue('O' . $kolom, "=IF(O$kolom < 1,0,O$kolom/N$kolom)");
+            $kolom++;
+        }
+        $sheet4->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
     }
 
 
