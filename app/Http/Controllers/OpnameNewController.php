@@ -89,6 +89,7 @@ class OpnameNewController extends Controller
                 ],
             ],
         ];
+
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->setActiveSheetIndex(0);
@@ -774,29 +775,6 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('F15', "=SUM(F2:F14)");
         $sheet4->setCellValue('G15', "=SUM(G2:G14)");
         $sheet4->setCellValue('H15', "=SUM(H2:H14)");
-
-        // $operasional = DB::table('oprasional')->get();
-        // $sheet4->getStyle("K1:L1")->applyFromArray($style_atas);
-        // $sheet4->setCellValue('K1', "bulan & tahun");
-        // $sheet4->setCellValue('L1', "total rp");
-
-        // $kolom = 2;
-        // $total = 0;
-        // foreach ($operasional as $o) {
-        //     $total += $o->total_operasional;
-        //     $sheet4->setCellValue('K' . $kolom, date('F Y', strtotime($o->tahun . '-' . $o->bulan . '-' . '01')));
-        //     $sheet4->setCellValue('L' . $kolom, "$o->total_operasional");
-        //     $kolom++;
-        // }
-        // $sheet4->setCellValue('K' . $kolom, "Total");
-        // $sheet4->setCellValue('L' . $kolom, "$total");
-        // $sheet4->getStyle("K2:L" . $kolom - 1)->applyFromArray($style);
-        // $sheet4->getStyle("K" . $kolom . ":L" . $kolom)->applyFromArray($style_atas);
-
-        // $sheet4->setCellValue('K' . $kolom + 2, "cost operasional");
-        // $sheet4->setCellValue('L' . $kolom + 2, "=$total - E12 - F12");
-        // $sheet4->setCellValue('K' . $kolom + 3, "rp/gr cost operasional");
-        // $sheet4->setCellValue('L' . $kolom + 3, "=($total - E12 - F12) / C11");
     }
     private function bk_sinta($spreadsheet, $style_atas, $style, $model)
     {
@@ -846,6 +824,17 @@ class OpnameNewController extends Controller
             $kolom++;
         }
         $sheet4->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+
+        $style2 = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFF00', // Contoh warna kuning
+                ],
+            ],
+        ];
+
+        $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
     }
 
 
