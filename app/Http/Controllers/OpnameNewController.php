@@ -842,7 +842,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('M' . $kolom, "=IF(O$kolom < 1,0,E$kolom-I$kolom)");
             $sheet4->setCellValue('N' . $kolom, "=IF(O$kolom < 1,0,F$kolom-J$kolom)");
             $sheet4->setCellValue('O' . $kolom, "=G$kolom-K$kolom");
-            $sheet4->setCellValue('O' . $kolom, "=IF(O$kolom < 1,0,O$kolom/N$kolom)");
+            $sheet4->setCellValue('P' . $kolom, "=IF(O$kolom < 1,0,O$kolom/N$kolom)");
             $kolom++;
         }
         $sheet4->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
