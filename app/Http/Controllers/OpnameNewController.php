@@ -796,6 +796,22 @@ class OpnameNewController extends Controller
         // $sheet4->setCellValue('K' . $kolom + 3, "rp/gr cost operasional");
         // $sheet4->setCellValue('L' . $kolom + 3, "=($total - E12 - F12) / C11");
     }
+    private function bk_sinta($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(6);
+        $sheet4 = $spreadsheet->getActiveSheet(6);
+        $sheet4->setTitle('Bk Sinta');
+
+        $sheet4->getStyle("A1:H1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('B1', 'pcs');
+        $sheet4->setCellValue('C1', 'gr');
+        $sheet4->setCellValue('D1', 'rp');
+        $sheet4->setCellValue('E1', 'cost kerja');
+        $sheet4->setCellValue('F1', 'cost cu');
+        $sheet4->setCellValue('G1', 'cost operasional');
+        $sheet4->setCellValue('H1', 'ttl rp');
+    }
 
 
 

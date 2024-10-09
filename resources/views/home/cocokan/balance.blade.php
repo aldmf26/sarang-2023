@@ -6,75 +6,76 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
-            
+
             <div class="col-lg-6">
                 <div class="d-flex justify-content-between mb-2">
                     <div>
                         <h6>Bk Kerja</h6>
                     </div>
                     <div>
-                        <input autofocus placeholder="pencarian" type="text" id="tbl1input" class="form-control form-control-sm">
+                        <input autofocus placeholder="pencarian" type="text" id="tbl1input"
+                            class="form-control form-control-sm">
                     </div>
-            </div>
-            <div style="max-height: 500px; overflow-y: auto;">
-                <table class="table table-bordered" id="tbl1">
-                    <thead>
-                        <tr>
-                            <th class="dhead">No</th>
-                            <th class="dhead">Bulan kerja</th>
-                            <th class="dhead">Nama partai</th>
-                            <th class="dhead">Grade</th>
-                            <th class="text-end dhead">Pcs</th>
-                            <th class="text-end dhead">Gr</th>
-                            <th class="text-end dhead">Ttl Rp</th>
-                        </tr>
-                        <tr>
-                            <td class="dhead"></td>
-                            <td class="dhead">Total</td>
-                            <td class="dhead"></td>
-                            <td class="dhead"></td>
-                            <td class="text-end dhead">
-                                {{ number_format(sumBk($bk, 'pcs_bk') + sumBk($bk_suntik, 'pcs'), 0) }}</td>
-                            <td class="text-end dhead">
-                                {{ number_format(sumBk($bk, 'gr_bk') + sumBk($bk_suntik, 'gr'), 0) }}</td>
-                            <td class="text-end dhead">
-                                {{ number_format(sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
+                </div>
+                <div style="max-height: 500px; overflow-y: auto;">
+                    <table class="table table-bordered" id="tbl1">
+                        <thead>
+                            <tr>
+                                <th class="dhead">No</th>
+                                <th class="dhead">Bulan kerja</th>
+                                <th class="dhead">Nama partai</th>
+                                <th class="dhead">Grade</th>
+                                <th class="text-end dhead">Pcs</th>
+                                <th class="text-end dhead">Gr</th>
+                                <th class="text-end dhead">Ttl Rp</th>
+                            </tr>
+                            <tr>
+                                <td class="dhead"></td>
+                                <td class="dhead">Total</td>
+                                <td class="dhead"></td>
+                                <td class="dhead"></td>
+                                <td class="text-end dhead">
+                                    {{ number_format(sumBk($bk, 'pcs_bk') + sumBk($bk_suntik, 'pcs'), 0) }}</td>
+                                <td class="text-end dhead">
+                                    {{ number_format(sumBk($bk, 'gr_bk') + sumBk($bk_suntik, 'gr'), 0) }}</td>
+                                <td class="text-end dhead">
+                                    {{ number_format(sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
 
-                        </tr>
+                            </tr>
 
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
 
-                        @php
-                            $no = 0;
-                        @endphp
-                        @foreach ($bk as $b)
+                            @php
+                                $no = 0;
+                            @endphp
+                            @foreach ($bk as $b)
+                                <tr>
+                                    <td>{{ $no + 1 }}</td>
+                                    <td>{{ date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}</td>
+                                    <td>{{ $b->nm_partai }}</td>
+                                    <td>{{ $b->grade }}</td>
+                                    <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>
+                                    <td class="text-end">{{ number_format($b->gr_bk, 0) }}</td>
+                                    <td class="text-end">{{ number_format($b->cost_bk, 0) }}</td>
+                                </tr>
+                                @php
+                                    $no++;
+                                @endphp
+                            @endforeach
                             <tr>
                                 <td>{{ $no + 1 }}</td>
-                                <td>{{ date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}</td>
-                                <td>{{ $b->nm_partai }}</td>
-                                <td>{{ $b->grade }}</td>
-                                <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->gr_bk, 0) }}</td>
-                                <td class="text-end">{{ number_format($b->cost_bk, 0) }}</td>
+                                <td>0</td>
+                                <td>Partai suntik</td>
+                                <td></td>
+                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'pcs'), 0) }}</td>
+                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'gr'), 0) }}</td>
+                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
                             </tr>
-                            @php
-                                $no++;
-                            @endphp
-                        @endforeach
-                        <tr>
-                            <td>{{ $no + 1 }}</td>
-                            <td>0</td>
-                            <td>Partai suntik</td>
-                            <td></td>
-                            <td class="text-end">{{ number_format(sumBk($bk_suntik, 'pcs'), 0) }}</td>
-                            <td class="text-end">{{ number_format(sumBk($bk_suntik, 'gr'), 0) }}</td>
-                            <td class="text-end">{{ number_format(sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
-                        </tr>
 
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="col-lg-2">
                 <h6>Cost Perbulan</h6>
@@ -225,7 +226,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Sisa belum kirim</td>
+                            <td style="background-color: #F7BAC5;color:white">Sisa belum kirim ( sisa + qc)</td>
                             <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
                             <td class="text-end">
@@ -376,9 +377,9 @@
 
 
         @section('scripts')
-        <script>
-            pencarian('tbl1input', 'tbl1')
-        </script>
+            <script>
+                pencarian('tbl1input', 'tbl1')
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>
