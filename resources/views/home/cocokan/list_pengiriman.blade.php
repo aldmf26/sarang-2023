@@ -19,6 +19,7 @@
                             <th class="dhead text-end">Box</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Gr + Kadar</th>
                         </tr>
                     </thead>
 
@@ -34,6 +35,7 @@
                                 <td align="center">{{ $d->ttl_box }}</td>
                                 <td align="right">{{ number_format($d->pcs, 0) }}</td>
                                 <td align="right"><a href="{{ route('detail.list_pengiriman') }}">{{ number_format($d->gr, 0) }}</a></td>
+                                <td align="right"><a href="{{ route('detail.list_pengiriman') }}">{{ number_format($d->gr_naik, 0) }}</a></td>
                             </tr>
                         @endforeach
                     </tbody>

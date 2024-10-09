@@ -462,7 +462,8 @@ WHERE a.selesai = 'T' ;");
         a.tgl,
         count(*) as ttl_box,
         sum(b.pcs) as pcs,
-        sum(b.gr + (b.gr / a.kadar)) as gr 
+        sum(b.gr + (b.gr / a.kadar)) as gr_naik ,
+        sum(b.gr) as gr
         FROM `pengiriman_packing_list` as a
         JOIN pengiriman as b on a.id_pengiriman = b.no_box
         GROUP BY a.no_nota
