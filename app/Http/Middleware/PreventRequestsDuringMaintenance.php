@@ -24,5 +24,6 @@ class PreventRequestsDuringMaintenance extends Middleware
         'home/absen/create_stgh_hari',
         'home/absen/tbh_baris',
         'home/absen/detail',
+        'api/*',
     ];
 }

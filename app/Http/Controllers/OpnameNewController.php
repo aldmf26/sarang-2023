@@ -473,7 +473,7 @@ class OpnameNewController extends Controller
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 
         $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('N1', 'Sisa belum grading');
+        $sheet3->setCellValue('N1', 'Sisa belum kirim');
         $sheet3->setCellValue('O1', 'box grading');
         $sheet3->setCellValue('P1', 'pengawas');
         $sheet3->setCellValue('Q1', 'grade');
