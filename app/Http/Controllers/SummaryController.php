@@ -739,7 +739,7 @@ class SummaryController extends Controller
     {
         $style_atas = array(
             'font' => [
-                'bold' => true, // Mengatur teks menjadi tebal
+                'bold' => true,
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -1122,11 +1122,6 @@ class SummaryController extends Controller
         $pengiriman = DB::select("SELECT * FROM pengiriman as a where a.cost_op_cek is null");
         $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.cost_op_cek is null and a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
 
-
-
-
-
-
         $ttl_gr = sumBk($grading_partai, 'gr') + sumBk($pengiriman, 'gr');
 
 
@@ -1139,7 +1134,7 @@ class SummaryController extends Controller
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
 
-        $rp_gr = $rawNumber - $r->gaji / $ttl_gr;
+        $rp_gr = ($rawNumber - $r->gaji) / $ttl_gr;
 
         $data = [
             'rp_oprasional' => $rawNumber - $r->gaji,
