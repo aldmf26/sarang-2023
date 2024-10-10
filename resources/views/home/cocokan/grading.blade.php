@@ -103,7 +103,7 @@
                             </a>
                         </td>
                         <td class="text-end text-danger fw-bold">
-                            {{ number_format(($sortir_akhir->gr + $opname->gr - $grading->gr - $grading_sisa->gr) * $rp_satuan, 0) }}
+                            0
                         </td>
                     </tr>
                     <tr>
