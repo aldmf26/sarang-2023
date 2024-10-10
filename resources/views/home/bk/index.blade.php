@@ -2,21 +2,32 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="mt-1">{{ $title }}</h6>
-            <div class="d-flex gap-1 ">
-                <div class="{{auth()->user()->posisi_id != 13 ? '' : 'd-none'}}">
-
-                <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
+            <div class="d-flex gap-1">
+                {{-- <div class="{{ auth()->user()->posisi_id != 13 ? '' : 'd-none' }}"> --}}
+                {{-- <div class="">
+                    <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
+                        class="btn btn-sm btn-primary">
+                        <i class="fas fa-file-excel"></i> Export
+                    </a>
+                    <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus"
+                        teks="Tambah" />
+                    <div>
+                        @include('home.bk.btn_import')
+                    </div>
+                </div> --}}
+                <div>
+                    @include('home.bk.btn_import')
+                </div>
+                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus"
+                    teks="Tambah" />
                 <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
                     class="btn btn-sm btn-primary">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
-                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" teks="Tambah" />
+                <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
                 <div>
-                    @include('home.bk.btn_import')
+                    <x-theme.btn_filter />
                 </div>
-            </div>
-
-                <x-theme.btn_filter />
             </div>
         </div>
 
