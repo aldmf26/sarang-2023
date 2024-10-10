@@ -201,10 +201,11 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
+        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
-        $this->rekap($spreadsheet, $style_atas, $style, $model);
-        $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
+        // $this->rekap($spreadsheet, $style_atas, $style, $model);
+        // $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
+        // $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
 
 
         $namafile = "Opname Gudang.xlsx";
@@ -835,6 +836,59 @@ class OpnameNewController extends Controller
         ];
 
         $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
+    }
+    private function lis_pengiriman($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(7);
+        $sheet4 = $spreadsheet->getActiveSheet(7);
+        $sheet4->setTitle('List Pengiriman');
+
+        $sheet4->getStyle("A1:I1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A1', 'No');
+        $sheet4->setCellValue('B1', 'tgl kirim');
+        $sheet4->setCellValue('C1', 'no packing list');
+        $sheet4->setCellValue('D1', 'nama packing list');
+        $sheet4->setCellValue('E1', 'tujuan');
+        $sheet4->setCellValue('F1', 'box');
+        $sheet4->setCellValue('G1', 'pcs');
+        $sheet4->setCellValue('H1', 'gr');
+        $sheet4->setCellValue('I1', 'gr + kadar');
+
+        $bk_sinta = SummaryModel::summarybk();
+
+        // $kolom = 2;
+        // foreach ($bk_sinta  as $no => $b) {
+        //     $sheet4->setCellValue('A' . $kolom, $no + 1);
+        //     $sheet4->setCellValue('B' . $kolom, date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)));
+        //     $sheet4->setCellValue('C' . $kolom, $b->nm_partai);
+        //     $sheet4->setCellValue('D' . $kolom, $b->grade);
+        //     $sheet4->setCellValue('E' . $kolom, $b->pcs);
+        //     $sheet4->setCellValue('F' . $kolom, $b->gr);
+        //     $sheet4->setCellValue('G' . $kolom, $b->ttl_rp);
+        //     $sheet4->setCellValue('H' . $kolom, $b->ttl_rp / $b->gr);
+        //     $sheet4->setCellValue('I' . $kolom, $b->pcs_bk);
+        //     $sheet4->setCellValue('J' . $kolom, $b->gr_bk);
+        //     $sheet4->setCellValue('K' . $kolom, $b->cost_bk);
+        //     $sheet4->setCellValue('L' . $kolom, $b->cost_bk / $b->gr_bk);
+        //     $sheet4->setCellValue('M' . $kolom, "=IF(O$kolom < 1,0,E$kolom-I$kolom)");
+        //     $sheet4->setCellValue('N' . $kolom, "=IF(O$kolom < 1,0,F$kolom-J$kolom)");
+        //     $sheet4->setCellValue('O' . $kolom, "=G$kolom-K$kolom");
+        //     $sheet4->setCellValue('P' . $kolom, "=IF(O$kolom < 1,0,O$kolom/N$kolom)");
+        //     $kolom++;
+        // }
+        // $sheet4->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+
+        // $style2 = [
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        //         'startColor' => [
+        //             'argb' => 'FFFF00', // Contoh warna kuning
+        //         ],
+        //     ],
+        // ];
+
+        // $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
     }
 
 
