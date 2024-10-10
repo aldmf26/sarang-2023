@@ -301,8 +301,6 @@ class CabutDetailController extends Controller
         return view('home.opnamenew.cabut.cabut_sisa', $data);
     }
 
-
-
     public function cetak_cetakAwal()
     {
         $model2 = new DetailCetakModel();
@@ -407,7 +405,7 @@ class CabutDetailController extends Controller
         $s1suntik2 = $this->getSuntikan(41);
         $s1suntik_akhir = $this->getSuntikan(35);
 
-        $data = [ 
+        $data = [
             'title' => 'Grading Awal',
             'query' => $gradingAwal,
             'suntik' => $s1suntik_akhir,
@@ -420,19 +418,19 @@ class CabutDetailController extends Controller
     {
         $sisaGrading = Grading::dapatkanStokBoxYANGLAMA('formulir');
 
-        $data = [ 
+        $data = [
             'title' => 'Grading Sisa',
             'query' => $sisaGrading,
         ];
         return view('home.opnamenew.grading.sisa', $data);
     }
-    
+
     public function gradingAkhir()
     {
         $selesaiGrading = Grading::selesai();
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
-        $data = [ 
+        $data = [
             'title' => 'Grading akhir',
             'query' => $selesaiGrading,
             'hrgaSatuan' => $hrgaSatuan,
@@ -444,7 +442,7 @@ class CabutDetailController extends Controller
         $pengiriman = Grading::pengirimanAll();
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
-        $data = [ 
+        $data = [
             'title' => 'Pengiriman',
             'query' => $pengiriman,
             'hrgaSatuan' => $hrgaSatuan,
@@ -456,22 +454,24 @@ class CabutDetailController extends Controller
         $belumKirim = Grading::belumKirimAll();
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
-        $data = [ 
+        $data = [
             'title' => 'Sisa Belum Kirim',
             'query' => $belumKirim,
             'hrgaSatuan' => $hrgaSatuan,
         ];
         return view('home.opnamenew.pengiriman.sisa', $data);
     }
-    public function list_pengiriman()
+    public function list_pengiriman(Request $r)
     {
-        $belumKirim = Grading::listPengiriman();
-        $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
-
-        $data = [ 
+        $no_nota = $r->no_nota;
+        if(!$no_nota){
+            return redirect()->route('cocokan.list_pengiriman')->with('error', 'No. nota harus dipilih');
+        }
+        $belumKirim = Grading::list_pengiriman_sum_detail($no_nota);
+        $data = [
             'title' => 'List pengiriman',
             'query' => $belumKirim,
-            'hrgaSatuan' => $hrgaSatuan,
+            'no_nota' => $no_nota,
         ];
         return view('home.opnamenew.list_pengiriman.awal', $data);
     }

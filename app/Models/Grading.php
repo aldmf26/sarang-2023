@@ -464,11 +464,41 @@ class Grading extends Model
         ) as combined_data;");
     }
 
-    public static function listPengiriman()
+    public static function listPengiriman($no_nota)
     {
         return DB::select("SELECT b.cost_op,b.cost_cu,b.cost_bk as cost_bk,b.ttl_rp,b.cost_kerja,b.no_box,b.grade,c.nm_partai,sum(b.pcs) as pcs, (sum(b.gr) / a.kadar) + sum(b.gr) as gr FROM pengiriman_packing_list as a 
         JOIN pengiriman as b on a.id_pengiriman = b.no_box 
         LEFT JOIN grading_partai as c on b.no_box = c.box_pengiriman 
         group by b.no_box");
+    }
+
+    public static function list_pengiriman_sum()
+    {
+        return DB::select("SELECT 
+            a.no_nota,
+            b.nm_packing,
+            b.tujuan,
+            b.tgl,
+            count(*) as ttl_box,
+            sum(a.pcs) as pcs,
+            sum(a.gr + (a.gr / b.kadar)) as gr_naik,
+            sum(a.gr) as gr
+        from pengiriman as a 
+        join (
+            select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
+        ) as b on a.no_nota = b.no_nota
+        GROUP by a.no_nota order by a.no_nota desc");
+    }
+
+    public static function list_pengiriman_sum_detail($no_nota)
+    {
+        return DB::select("SELECT b.nm_partai,a.no_box,a.grade,a.pcs,a.gr,a.ttl_rp,a.cost_kerja,a.cost_cu,a.cost_op,a.cost_bk,a.gr + (a.gr / c.kadar) as gr_naik FROM `pengiriman` as a
+        left join (
+            select box_pengiriman,nm_partai from grading_partai GROUP BY box_pengiriman
+        ) as b on a.no_box = b.box_pengiriman
+        join (
+            select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
+        ) as c on a.no_nota = c.no_nota
+        WHERE a.no_nota = $no_nota;");
     }
 }

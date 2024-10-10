@@ -6,7 +6,7 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.opnamenew.nav')
-            @include('home.opnamenew.pengiriman.nav')
+            {{-- @include('home.opnamenew.pengiriman.nav') --}}
 
             <div class="col-lg-12">
 
@@ -15,17 +15,12 @@
                     <thead>
                         <tr>
                             <th class="dhead">no</th>
+                            <th class="dhead">No Nota</th>
                             <th class="dhead">partai</th>
                             <th class="dhead">box grading</th>
                             <th class="dhead">grade</th>
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
-                            <th class="dhead text-end">ttl rp</th>
-                            <th class="dhead text-end">cost kerja</th>
-                            <th class="dhead text-end">cost cu</th>
-                            <th class="dhead text-end">cost op</th>
-                            <th class="dhead text-end">ttl rp</th>
-                            <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,35 +36,21 @@
                         @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $no_nota }}</td>
                                 <td>{{ $d->nm_partai }}</td>
                                 <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->grade }}</td>
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
-                                <td class="text-end">{{ number_format($ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format($d->cost_kerja,0) }}</td>
-                                <td class="text-end">{{ number_format($d->cost_cu,0) }}</td>
-                                <td class="text-end">{{ number_format($d->cost_op,0) }}</td>
-                                <td class="text-end">{{ number_format($d->cost_bk + $ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format(($total) / $d->gr) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                    
                     <tfoot>
                         <tr>
-                            <th class="dheadstock ">Box : {{ count($query) }}</th>
-                            <th class="dheadstock "></th>
-                            <th class="dheadstock "></th>
-                            <th class="dheadstock "></th>
+                            <th class="dheadstock " colspan="5">Box : {{ count($query) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_bk'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_kerja') , 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_cu'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'cost_op'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
-                            <th class="dheadstock  text-end">0</th>
                         </tr>
                     </tfoot>
                 </table>
