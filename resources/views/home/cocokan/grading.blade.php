@@ -99,7 +99,7 @@
                         </td>
                         <td class="text-end fw-bold text-danger ">
                             <a href="{{ route('opnamenew.grading') }}" target="_blank" class="text-danger">
-                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading->gr - $grading_sisa->gr, 0) }}
+                               0
                             </a>
                         </td>
                         <td class="text-end text-danger fw-bold">
