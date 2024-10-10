@@ -239,7 +239,7 @@
                                 {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $grading_sisa->pcs, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading_akhir->gr - $grading_sisa->gr, 0) }}
+                               0
                             </td>
                             <td class="text-end text-danger fw-bold">
                                 {{ number_format(($sortir_akhir->gr + $opname->gr - $grading_akhir->gr - $grading_sisa->gr) * $rp_satuan, 0) }}
