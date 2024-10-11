@@ -63,32 +63,56 @@
                     <div class="col-lg-12">
 
                         <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
-                            <tr>
-                                <th>Tgl</th>
-                                <th>Nama Partai</th>
-                                <th>No Box</th>
-                                <th>Nama Anak</th>
-                                <th class="text-end">Pcs Awal</th>
-                                <th class="text-end"> Gr Awal</th>
-                                <th class="text-end">Pcs Akhir</th>
-                                <th class="text-end">Gr Akhir</th>
-                                <th class="text-end">Susut %</th>
-                                <th class="text-end">Total Rp</th>
-                            </tr>
-                            @foreach ($detail as $d)
+                            <thead>
                                 <tr>
-                                    <td style="width: 100px"></td>
-                                    <td>{{ $d->nm_partai }}</td>
-                                    <td>{{ $d->no_box }}</td>
-                                    <td></td>
-                                    <td class="text-end">{{ $d->pcs_awal }}</td>
-                                    <td class="text-end">{{ $d->gr_awal }}</td>
+                                    <th>Tgl</th>
+                                    <th>Nama Partai</th>
+                                    <th>No Box</th>
+                                    <th>Nama Anak</th>
+                                    <th class="text-end">Pcs Awal</th>
+                                    <th class="text-end"> Gr Awal</th>
+                                    <th class="text-end">Pcs Akhir</th>
+                                    <th class="text-end">Gr Akhir</th>
+                                    <th class="text-end">Susut %</th>
+                                    <th class="text-end">Total Rp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $ttlPcs = 0;
+                                    $ttlGr = 0;
+                                @endphp
+                                @foreach ($detail as $d)
+                                    @php
+                                        $ttlPcs += $d->pcs_awal;
+                                        $ttlGr += $d->gr_awal;
+                                    @endphp
+                                    <tr>
+                                        <td style="width: 100px"></td>
+                                        <td>{{ $d->nm_partai }}</td>
+                                        <td>{{ $d->no_box }}</td>
+                                        <td></td>
+                                        <td class="text-end">{{ $d->pcs_awal }}</td>
+                                        <td class="text-end">{{ $d->gr_awal }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">Total</th>
+                                    <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
+                                    <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
-                            @endforeach
+                            </tfoot>
+
                         </table>
                     </div>
                 </div>

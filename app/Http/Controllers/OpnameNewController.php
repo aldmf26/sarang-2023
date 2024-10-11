@@ -785,7 +785,7 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(6);
         $sheet4->setTitle('Bk Sinta');
 
-        $sheet4->getStyle("A1:P1")->applyFromArray($style_atas);
+        $sheet4->getStyle("A1:S1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'No');
         $sheet4->setCellValue('B1', 'bulan kerja');
         $sheet4->setCellValue('C1', 'nama partai');
@@ -798,10 +798,16 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('J1', 'gr diambil');
         $sheet4->setCellValue('K1', 'ttl rp sudah diambil');
         $sheet4->setCellValue('L1', 'rata2');
-        $sheet4->setCellValue('M1', 'pcs di sinta');
-        $sheet4->setCellValue('N1', 'gr di sinta');
-        $sheet4->setCellValue('O1', 'total rp');
-        $sheet4->setCellValue('P1', 'rata2');
+
+        $sheet4->setCellValue('M1', 'pcs susut');
+        $sheet4->setCellValue('N1', 'gr susut');
+        $sheet4->setCellValue('O1', 'susut%');
+
+        $sheet4->setCellValue('P1', 'pcs di sinta');
+        $sheet4->setCellValue('Q1', 'gr di sinta');
+        $sheet4->setCellValue('R1', 'total rp');
+        $sheet4->setCellValue('S1', 'rata2');
+
 
         $bk_sinta = SummaryModel::summarybk();
 
@@ -819,24 +825,33 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('J' . $kolom, $b->gr_bk);
             $sheet4->setCellValue('K' . $kolom, $b->cost_bk);
             $sheet4->setCellValue('L' . $kolom, $b->cost_bk / $b->gr_bk);
-            $sheet4->setCellValue('M' . $kolom, "=IF(O$kolom < 1,0,E$kolom-I$kolom)");
-            $sheet4->setCellValue('N' . $kolom, "=IF(O$kolom < 1,0,F$kolom-J$kolom)");
-            $sheet4->setCellValue('O' . $kolom, "=G$kolom-K$kolom");
-            $sheet4->setCellValue('P' . $kolom, "=IF(O$kolom < 1,0,O$kolom/N$kolom)");
+
+            $sheet4->setCellValue('M' . $kolom, is_null($b->pcs_susut) ? 'belum selesai' : $b->pcs_susut);
+            $sheet4->setCellValue('N' . $kolom, is_null($b->gr_susut) ? 'belum selesai' : $b->gr_susut);
+            $sheet4->setCellValue('O' . $kolom, is_null($b->pcs_susut) ? 'belum selesai' : (1 - ($b->gr / $b->gr_bk)) * 100);
+
+
+
+
+
+            $sheet4->setCellValue('P' . $kolom, "=IF(M$kolom =" . '"belum selesai"' . ",E$kolom-I$kolom,0)");
+            $sheet4->setCellValue('Q' . $kolom, "=IF(N$kolom =" . '"belum selesai"' . ",F$kolom-J$kolom,0)");
+            $sheet4->setCellValue('R' . $kolom, "=IF(O$kolom =" . '"belum selesai"' . ",G$kolom-K$kolom,0)");
+            $sheet4->setCellValue('S' . $kolom, "=IF(M$kolom=" . '"belum selesai"' . ",R$kolom/Q$kolom,0)");
             $kolom++;
         }
-        $sheet4->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle('A2:S' . $kolom - 1)->applyFromArray($style);
 
-        $style2 = [
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => [
-                    'argb' => 'FFFF00', // Contoh warna kuning
-                ],
-            ],
-        ];
+        // $style2 = [
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        //         'startColor' => [
+        //             'argb' => 'FFFF00', // Contoh warna kuning
+        //         ],
+        //     ],
+        // ];
 
-        $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
+        // $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
     }
     private function lis_pengiriman($spreadsheet, $style_atas, $style, $model)
     {
