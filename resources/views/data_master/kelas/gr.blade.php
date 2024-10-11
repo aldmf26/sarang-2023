@@ -1,14 +1,30 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
     <x-slot name="cardHeader">
         <h6 class="">{{ $title }}</h6>
-        @include('data_master.kelas.nav')
-
+        <div class="d-flex justify-content-between">
+            <div>
+                @include('data_master.kelas.nav')
+            </div>
+            <div>
+                <span class="btn btn-sm btn-primary" data-bs-target="#import"
+                        data-bs-toggle="modal"><i class="fas fa-file-excel"></i>Import</span>
+                    <x-theme.import title="Import paket" route="kelas.import"
+                        routeTemplate="kelas.template_import" />
+            </div>
+        </div>
     </x-slot>
 
     <x-slot name="cardBody">
+
         <form method="post" action="{{ route('kelas.create_gr') }}" x-data="{ tambah: false }">
-            <button type="button" class="btn btn-sm btn-info mb-3" @click="tambah = !tambah"><i class="fas fa-plus"></i>
-                data</button>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-info mb-3" @click="tambah = !tambah"><i
+                        class="fas fa-plus"></i>
+                    data</button>
+                {{-- <div>
+                    
+                </div> --}}
+            </div>
             @csrf
             <div x-show="tambah">
                 <x-theme.multiple-input label="Tambah Baris">
@@ -113,7 +129,7 @@
             </table>
         </section>
         @foreach ($datas as $d)
-            <form action="{{ route('kelas.update_gr', $d->id_kelas ) }}" method="post">
+            <form action="{{ route('kelas.update_gr', $d->id_kelas) }}" method="post">
                 @csrf
                 <x-theme.modal title="Edit Kelas" size="modal-lg-max" idModal="edit{{ $d->id_kelas }}">
                     <div class="row">

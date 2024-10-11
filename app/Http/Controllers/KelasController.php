@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PaketImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Nonaktif;
 
 class KelasController extends Controller
@@ -26,6 +28,84 @@ class KelasController extends Controller
             return view("data_master.kelas.gr", $data);
         } else {
             return view("data_master.kelas.index", $data);
+        }
+    }
+
+    public function importExcel(Request $r)
+    {
+        try {
+            // Load Excel file
+            $file = $r->file('file'); // Pastikan file di-upload melalui form
+            $data = Excel::toArray([], $file);
+            
+            $kelasData = [];
+
+            // Memproses setiap baris di Excel
+            foreach ($data[0] as $row) {
+                // Pecah 'paket' menjadi 'kelas' dan 'tipe'
+                preg_match('/^(\d+)\s*(\w+)/', $row[0], $matches);
+                $kelas = $matches[1] ?? '';
+                $tipe = $matches[2] ?? '';
+
+                $kelasData[] = [
+                    'kelas' => $kelas,
+                    'paket' => $tipe,
+                    'lokasi' => $row[1],
+                    'gr' => $row[2],
+                    'rp' => $row[3],
+                    'denda_susut' => str_replace('%', '', $row[4]),
+                    'batas_susut' => $row[5],
+                    'bonus_susut' => $row[6],
+                    'rp_bonus' => $row[7],
+                    'batas_eot' => $row[8],
+                    'eot' => $row[9],
+                    'denda_hcr' => $row[10]
+                ];
+            }
+
+            // Kirim array $kelasData ke function create_gr
+            $this->create_gr_from_excel($kelasData);
+
+            return redirect()->back()->with('success', 'Data berhasil di-import');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function create_gr_from_excel(array $data)
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($data as $row) {
+                DB::table('tb_kelas')->insert([
+                    'kelas' => $row['kelas'],
+                    'tipe' => $row['paket'],
+                    'lokasi' => $row['lokasi'],
+                    'id_tipe_brg' => 33,
+                    'id_paket' => 2,
+                    'id_kategori' => 2,
+                    'jenis' => 2,
+                    'pcs' => 0,
+                    'gr' => $row['gr'] ?? 0,
+                    'rupiah' => $row['rp'],
+                    'rp_bonus' => $row['rp_bonus'],
+                    'batas_susut' => $row['batas_susut'],
+                    'denda_susut_persen' => $row['denda_susut'],
+                    'bonus_susut' => $row['bonus_susut'],
+                    'batas_eot' => $row['batas_eot'],
+                    'eot' => $row['eot'],
+                    'denda_hcr' => $row['denda_hcr'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('sukses', 'Data berhasil dimasukkan');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -62,6 +142,12 @@ class KelasController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
         
+    }
+
+    public function import(Request $r)
+    {
+        Excel::import(new PaketImport, 'users.xlsx');
+        return redirect()->back()->with('sukses', 'berhasil tambah kelas');
     }
 
     public function update_gr($id, Request $r)
