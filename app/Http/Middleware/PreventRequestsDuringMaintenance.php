@@ -12,7 +12,6 @@ class PreventRequestsDuringMaintenance extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
         'home/absen',
         'home/absen/create',
         'home/absen/detailSum',

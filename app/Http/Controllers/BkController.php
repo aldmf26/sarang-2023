@@ -120,7 +120,7 @@ class BkController extends Controller
 
     public function getNoBoxTambah()
     {
-        $cekBox = DB::selectOne("SELECT no_box FROM `bk` WHERE kategori like '%cabut%' ORDER by no_box DESC limit 1;");
+        $cekBox = DB::selectOne("SELECT CAST(no_box AS UNSIGNED) as no_box FROM `bk` WHERE kategori like '%cabut%' and baru = 'baru' ORDER BY CAST(no_box AS UNSIGNED) DESC LIMIT 1;");
         $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
         return $nobox;
     }
