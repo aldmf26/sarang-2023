@@ -81,7 +81,7 @@ class CocokanController extends Controller
         $cetak_akhir = new stdClass();
         $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
         $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp - 613;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
         $cetak_akhir->cost_kerja = $ca16->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
@@ -110,7 +110,7 @@ class CocokanController extends Controller
         $akhir_cetak = new stdClass();
         $akhir_cetak->pcs = $s1->pcs + $s2suntik->pcs;
         $akhir_cetak->gr = $s1->gr + $s2suntik->gr;
-        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp - 613;
+        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
 
         $s3 = $model::sortir_akhir();
 
@@ -119,7 +119,7 @@ class CocokanController extends Controller
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp - 613;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
         $sortir_akhir->cost_kerja = $s3->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
@@ -149,7 +149,7 @@ class CocokanController extends Controller
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp - 613;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
 
 
         // $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
