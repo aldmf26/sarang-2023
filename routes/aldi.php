@@ -209,6 +209,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/sum_cetak', 'sum_cetak')->name('sum_cetak');
             Route::get('/sum_sortir', 'sum_sortir')->name('sum_sortir');
         });
+        Route::post('/import-excel', [KelasController::class, 'importExcel'])->name('import-excel');
+
     Route::controller(BkController::class)
         ->prefix('home/bk')
         ->name('bk.')
@@ -423,6 +425,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/deleteSortir', 'deleteSortir')->name('deleteSortir');
             Route::get('/grade', 'grade')->name('grade');
             Route::post('/grade', 'create_grade')->name('create_grade');
+            Route::get('/import', 'import')->name('import');
+            Route::get('/template_import', 'template_import')->name('template_import');
         });
     Route::controller(PermissionController::class)
         ->prefix('data_master/permission')
