@@ -202,6 +202,8 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
+        // $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
+
         $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         $this->rekap($spreadsheet, $style_atas, $style, $model);
@@ -586,42 +588,45 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('I' . $kolom, $d->ttl_rp);
             $sheet4->setCellValue('J' . $kolom, $d->cost_kerja);
             $sheet4->setCellValue('K' . $kolom,  $d->cost_cu);
-            $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $d->gr);
-            $sheet4->setCellValue('M' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr));
-            $sheet4->setCellValue('N' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr)) / $d->gr);
+            $sheet4->setCellValue('L' . $kolom, 0);
+            $sheet4->setCellValue('M' . $kolom, 0);
+            $sheet4->setCellValue('N' . $kolom, 0);
+            // $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $d->gr);
+            // $sheet4->setCellValue('M' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr));
+            // $sheet4->setCellValue('N' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr)) / $d->gr);
             $kolom++;
         }
 
-        $sheet4->setCellValue('B' . $kolom, 'partai suntik');
-        $sheet4->setCellValue('C' . $kolom, 'suntik');
-        $sheet4->setCellValue('D' . $kolom, '-');
-        $sheet4->setCellValue('E' . $kolom, '-');
-        $sheet4->setCellValue('F' . $kolom, '-');
-        $sheet4->setCellValue('G' . $kolom,  $s5suntik->pcs);
-        $sheet4->setCellValue('H' . $kolom,  $s5suntik->gr);
-        $sheet4->setCellValue('I' . $kolom,  $s5suntik->ttl_rp);
-        $sheet4->setCellValue('J' . $kolom, 0);
-        $sheet4->setCellValue('K' . $kolom,  0);
-        $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $s5suntik->gr);
-        $sheet4->setCellValue('M' . $kolom, $s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr));
-        $sheet4->setCellValue('N' . $kolom, ($s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr)) / $s5suntik->gr);
+        // $sheet4->setCellValue('B' . $kolom, 'partai suntik');
+        // $sheet4->setCellValue('C' . $kolom, 'suntik');
+        // $sheet4->setCellValue('D' . $kolom, '-');
+        // $sheet4->setCellValue('E' . $kolom, '-');
+        // $sheet4->setCellValue('F' . $kolom, '-');
+        // $sheet4->setCellValue('G' . $kolom,  $s5suntik->pcs);
+        // $sheet4->setCellValue('H' . $kolom,  $s5suntik->gr);
+        // $sheet4->setCellValue('I' . $kolom,  $s5suntik->ttl_rp);
+        // $sheet4->setCellValue('J' . $kolom, 0);
+        // $sheet4->setCellValue('K' . $kolom,  0);
+        // $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $s5suntik->gr);
+        // $sheet4->setCellValue('M' . $kolom, $s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr));
+        // $sheet4->setCellValue('N' . $kolom, ($s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr)) / $s5suntik->gr);
 
 
 
 
-        $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
-        $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
-        $sheet4->setCellValue('D' . $kolom + 1, '-');
-        $sheet4->setCellValue('E' . $kolom + 1, '-');
-        $sheet4->setCellValue('F' . $kolom + 1, '-');
-        $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
-        $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
-        $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
-        $sheet4->setCellValue('J' . $kolom + 1, 0);
-        $sheet4->setCellValue('K' . $kolom + 1,  0);
-        $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
-        $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
-        $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
+        // $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
+        // $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
+        // $sheet4->setCellValue('D' . $kolom + 1, '-');
+        // $sheet4->setCellValue('E' . $kolom + 1, '-');
+        // $sheet4->setCellValue('F' . $kolom + 1, '-');
+        // $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
+        // $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
+        // $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
+        // $sheet4->setCellValue('J' . $kolom + 1, 0);
+        // $sheet4->setCellValue('K' . $kolom + 1,  0);
+        // $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
+        // $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
+        // $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
         $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
     }
@@ -695,7 +700,7 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('B2', "=SUM('Gudang Cabut'!E:E)");
         $sheet4->setCellValue('B3', "=SUM('Gudang Cabut'!R:R)");
-        $sheet4->setCellValue('B4', "0");
+        $sheet4->setCellValue('B4', "=SUM('Gudang Cabut'!AE:AE)");
         $sheet4->setCellValue('B5', "=SUM('Gudang Cetak'!E:E)");
         $sheet4->setCellValue('B6', "=SUM('Gudang Cetak'!R:R)");
         $sheet4->setCellValue('B7', "=SUM('Gudang Cetak'!AE:AE)");
@@ -709,7 +714,7 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
         $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
-        $sheet4->setCellValue('C4', "0");
+        $sheet4->setCellValue('C4', "=SUM('Gudang Cabut'!AF:AF)");
         $sheet4->setCellValue('C5', "=SUM('Gudang Cetak'!F:F)");
         $sheet4->setCellValue('C6', "=SUM('Gudang Cetak'!S:S)");
         $sheet4->setCellValue('C7', "=SUM('Gudang Cetak'!AF:AF)");
@@ -723,7 +728,7 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
         $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!T:T)");
-        $sheet4->setCellValue('D4', "0");
+        $sheet4->setCellValue('D4', "=SUM('Gudang Cabut'!AG:AG)");
         $sheet4->setCellValue('D5', "=SUM('Gudang Cetak'!G:G)");
         $sheet4->setCellValue('D6', "=SUM('Gudang Cetak'!T:T)");
         $sheet4->setCellValue('D7', "=SUM('Gudang Cetak'!AG:AG)");
@@ -737,8 +742,8 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!H:H)");
         $sheet4->setCellValue('E3', "=SUM('Gudang Cabut'!U:U)");
-        $sheet4->setCellValue('E4', "");
-        $sheet4->setCellValue('E5', "=SUM('Gudang Cetak'!H:H) +  SUM('Gudang Cabut'!AH:AH)");
+        $sheet4->setCellValue('E4', "=SUM('Gudang Cabut'!AH:AH)");
+        $sheet4->setCellValue('E5', "=SUM('Gudang Cetak'!H:H) ");
         $sheet4->setCellValue('E6', "=SUM('Gudang Cetak'!U:U)");
         $sheet4->setCellValue('E7', "=SUM('Gudang Cetak'!AH:AH)");
         $sheet4->setCellValue('E8', "=SUM('Gudang Sortir'!H:H)");
@@ -756,7 +761,7 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('H2', "=D2+E2+F2+G2");
         $sheet4->setCellValue('H3', "=D3+E3+F3+G3");
-        $sheet4->setCellValue('H4', "0");
+        $sheet4->setCellValue('H4', "=D4+E4+F4+G4");
         $sheet4->setCellValue('H5', "=D5+E5+F5+G5");
         $sheet4->setCellValue('H6', "=D6+E6+F6+G6");
         $sheet4->setCellValue('H7', "=D7+E7+F7+G7");

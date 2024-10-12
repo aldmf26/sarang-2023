@@ -230,7 +230,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
                     FROM sortir as a 
                     LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
-                    WHERE  a.selesai = 'Y' AND b.baru = 'baru';
+                    WHERE  a.selesai = 'Y' AND b.baru = 'baru' and a.no_box in (SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'grade');
         ");
 
         return $result;

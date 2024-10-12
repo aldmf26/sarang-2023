@@ -32,7 +32,7 @@ class OpnameNewModel extends Model
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
     left join users as c on c.id = a.id_pengawas
     WHERE a.selesai = 'T' AND a.no_box != 9999 and b.baru = 'baru'
-    group by a.no_box
+    group by a.id_cabut
     
     UNION ALL
     
@@ -41,7 +41,7 @@ class OpnameNewModel extends Model
     LEFT JOIN bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'
     left join users as c on c.id = d.id_pengawas
     WHERE d.selesai = 'T' AND d.no_box != 9999 and e.baru = 'baru'
-    group by d.no_box
+    group by d.id_eo
 
    
 
@@ -60,8 +60,8 @@ class OpnameNewModel extends Model
     left join users as c on c.id = a.id_pengawas
     left join oprasional as d on d.bulan = a.bulan_dibayar
     left join cost_dll_cu_denda as e on e.bulan_dibayar = a.bulan_dibayar
-    WHERE a.selesai = 'Y' and a.formulir = 'Y' and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND a.no_box != 9999 and b.baru = 'baru'
-    group by a.no_box
+    WHERE a.selesai = 'Y' and a.formulir = 'T' and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a group by a.no_box) AND a.no_box != 9999 and b.baru = 'baru'
+    group by a.id_cabut
     
     UNION ALL
     
@@ -115,7 +115,7 @@ class OpnameNewModel extends Model
         ) as z on z.no_box = a.no_box
         WHERE a.kategori = 'cetak'   
         and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
-        group by a.no_box
+        group by a.id_formulir
         order by e.name ASC
         ");
 
@@ -152,7 +152,7 @@ class OpnameNewModel extends Model
                     group by a.no_box
         ) as z on z.no_box = a.no_box
             where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
-            group by a.no_box
+            group by a.id_cetak
             order by e.name ASC
         ");
 
@@ -181,7 +181,7 @@ class OpnameNewModel extends Model
 
             where a.selesai = 'Y' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
             and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'sortir')
-            group by a.no_box
+            group by a.id_cetak
             order by e.name ASC;
         ");
 
@@ -228,7 +228,7 @@ class OpnameNewModel extends Model
         AND a.kategori = 'sortir' 
         AND a.no_box NOT IN (SELECT b.no_box FROM sortir as b WHERE b.id_anak != 0)
 
-        group by a.no_box
+        group by a.id_formulir
         order by f.name ASC;
         ");
 
@@ -274,7 +274,7 @@ left join users as g on g.id = a.id_pengawas
             
             WHERE a.selesai = 'T' AND a.id_anak != 0
             
-            group by a.no_box
+            group by a.id_sortir
             order by g.name ASC;
         ");
 
@@ -319,7 +319,7 @@ left join (
 left join users as g on g.id = a.id_pengawas
             
             WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
-            group by a.no_box
+            group by a.id_sortir
             order by g.name ASC;
         ");
 
