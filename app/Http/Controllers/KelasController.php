@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PaketTemplateExport;
 use App\Imports\PaketImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,7 @@ class KelasController extends Controller
 
     public function template_import()
     {
-        
+        return Excel::download(new PaketTemplateExport, 'Paket Sarang.xlsx');
     }
 
     public function import(Request $r)

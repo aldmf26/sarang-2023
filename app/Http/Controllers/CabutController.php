@@ -407,7 +407,7 @@ class CabutController extends Controller
             'pcs_hcr' => $r->pcs_hcr,
             'ket_hcr' => $r->ket_hcr,
             'bulan_dibayar' => $r->bulan,
-            'eot' => $r->eot,
+            'eot' => $r->eot ?? 0,
             'ttl_rp' => $r->ttl_rp,
         ]);
         return json_encode([
