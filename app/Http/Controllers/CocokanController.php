@@ -350,6 +350,8 @@ WHERE a.selesai = 'T' ;");
                 'ttl_rp' => $v['total_rp'],
                 'bulan' => date('m', strtotime($v['tgl'])),
                 'tahun' => date('Y', strtotime($v['tgl'])),
+                'pcs_susut' => $v['pcs_susut'],
+                'gr_susut' => $v['gr_susut'],
             ];
             DB::table('bk_awal')->insert($data);
         }

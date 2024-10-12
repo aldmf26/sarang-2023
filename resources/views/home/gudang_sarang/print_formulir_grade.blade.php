@@ -35,16 +35,20 @@
                     class="fa-solid fa-print"></i>
                 Print</a>
         </div>
-          
-            <div class="section">
-                <h5 class="fw-bold text-center" style="text-decoration: underline">{{$title}} : {{ $no_invoice }}</h5>
 
-                <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($formulir[0]->id_pemberi)->name }} ~
-                    {{ auth()->user()->find($formulir[0]->id_penerima)->name }} | Tanggal : {{tanggal($formulir[0]->tanggal)}}</h6>
-                <div class="row">
-                    <div class="col-lg-12">
+        <div class="section">
+            <h5 class="fw-bold text-center" style="text-decoration: underline">{{ $title }} : {{ $no_invoice }}
+            </h5>
 
-                        <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
+            <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($formulir[0]->id_pemberi)->name }} ~
+                {{ auth()->user()->find($formulir[0]->id_penerima)->name }} | Tanggal :
+                {{ tanggal($formulir[0]->tanggal) }}</h6>
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
+                        <thead>
+
                             <tr>
                                 <th>Partai</th>
                                 <th>No Box</th>
@@ -52,7 +56,17 @@
                                 <th class="text-end">Pcs </th>
                                 <th class="text-end"> Gr </th>
                             </tr>
-                            @foreach ($formulir as $d)
+                        </thead>
+                        @php
+                            $ttlPcs = 0;
+                            $ttlGr = 0;
+                        @endphp
+                        @foreach ($formulir as $d)
+                            @php
+                                $ttlPcs += $d->pcs;
+                                $ttlGr += $d->gr;
+                            @endphp
+                            <tbody>
                                 <tr>
                                     <td>{{ $d->nm_partai }}</td>
                                     <td>{{ $d->no_box }}</td>
@@ -60,11 +74,19 @@
                                     <td class="text-end">{{ $d->pcs }}</td>
                                     <td class="text-end">{{ $d->gr }}</td>
                                 </tr>
-                            @endforeach
-                        </table>
-                    </div>
+                            </tbody>
+                        @endforeach
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
+        </div>
 
 
     </div>
