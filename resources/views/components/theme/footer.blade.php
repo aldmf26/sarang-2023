@@ -309,6 +309,14 @@
         "paging": false,
     });
 
+    $('.button-save-modal').click(function(e) {
+        $('.button-save-modal').hide();
+        $(".button-save-modal-loading").removeAttr("hidden").show();
+
+
+
+    });
+
     function alertToast(jenis = 'sukses', pesan) {
         var ava = jenis == 'sukses' ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" :
             "https://cdn-icons-png.flaticon.com/512/564/564619.png"
