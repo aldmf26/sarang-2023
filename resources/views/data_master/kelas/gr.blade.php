@@ -1,17 +1,7 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <h6 class="">{{ $title }}</h6>
-        <div class="d-flex justify-content-between">
-            <div>
-                @include('data_master.kelas.nav')
-            </div>
-            <div>
-                <span class="btn btn-sm btn-primary" data-bs-target="#import"
-                        data-bs-toggle="modal"><i class="fas fa-file-excel"></i>Import</span>
-                    <x-theme.import title="Import paket" route="kelas.import"
-                        routeTemplate="kelas.template_import" />
-            </div>
-        </div>
+        @include('data_master.kelas.nav')
     </x-slot>
 
     <x-slot name="cardBody">
