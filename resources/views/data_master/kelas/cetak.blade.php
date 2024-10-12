@@ -1,20 +1,8 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <div class="row justify-content-end">
-            <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
-            </div>
-
-            <div class="col-lg-6">
-                {{-- <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Tambah" /> --}}
-            </div>
-            <div class="col-lg-12">
-                <hr style="border: 2px solid #435EBE">
-            </div>
-            <ul class="nav nav-pills float-start">
-                @include('data_master.kelas.nav')
-            </ul>
-        </div>
+        <h6 class="float-start mt-1">{{ $title }}</h6>
+        @include('data_master.kelas.nav')
+   
 
     </x-slot>
 

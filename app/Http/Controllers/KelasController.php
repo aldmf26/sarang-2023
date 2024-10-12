@@ -144,10 +144,30 @@ class KelasController extends Controller
         
     }
 
+    public function template_import()
+    {
+        
+    }
+
     public function import(Request $r)
     {
-        Excel::import(new PaketImport, 'users.xlsx');
-        return redirect()->back()->with('sukses', 'berhasil tambah kelas');
+        try {
+            DB::beginTransaction();
+            DB::table('tb_kelas')
+                ->where('nonaktif', 'T')
+                ->update(['edit_import' => now(), 'nonaktif' => 'Y']);
+    
+            DB::table('tb_kelas_sortir')
+                ->where('nonaktif', 'T')
+                ->update(['edit_import' => now(), 'nonaktif' => 'Y']);
+    
+            Excel::import(new PaketImport, $r->file);
+            DB::commit();
+            return redirect()->back()->with('sukses', 'berhasil tambah kelas');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function update_gr($id, Request $r)
@@ -382,7 +402,7 @@ class KelasController extends Controller
         if (!empty($r->rupiah_tambah[0])) {
             for ($i = 0; $i < count($r->rupiah_tambah); $i++) {
                 DB::table('tb_kelas')->insert([
-                    'id_paket' => $r->id_paket_tambah[$i],
+                    // 'id_paket' => $r->id_paket_tambah[$i],
                     'kelas' => $r->kelas_tambah[$i],
                     'id_tipe_brg' => $r->id_tipe_brg_tambah[$i],
                     'rupiah' => $r->rupiah_tambah[$i],
@@ -395,7 +415,7 @@ class KelasController extends Controller
         if (!empty($r->rupiah[0])) {
             for ($i = 0; $i < count($r->rupiah); $i++) {
                 DB::table('tb_kelas')->where('id_kelas', $r->id_kelas[$i])->update([
-                    'id_paket' => $r->id_paket[$i],
+                    // 'id_paket' => $r->id_paket[$i],
                     'kelas' => $r->kelas[$i],
                     'id_tipe_brg' => $r->id_tipe_brg[$i],
                     'rupiah' => $r->rupiah[$i],

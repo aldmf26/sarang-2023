@@ -9,10 +9,9 @@
             <i class="fas fa-file-excel"></i> Export
         </a>
 
-        <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
+        {{-- <a href="#" data-bs-target="#tambah2" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> Sortir tanpa po
-            {{-- <span class="badge bg-danger" id="anakBelum"></span> --}}
-        </a>
+        </a> --}}
 
         {{-- <a href="#" data-bs-target="#tambahAnak" data-bs-toggle="modal"
             class="btn btn-primary btn-sm float-end me-2"><i class="fas fa-plus"></i> kry kerja --}}

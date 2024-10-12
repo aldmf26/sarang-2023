@@ -425,7 +425,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/deleteSortir', 'deleteSortir')->name('deleteSortir');
             Route::get('/grade', 'grade')->name('grade');
             Route::post('/grade', 'create_grade')->name('create_grade');
-            Route::get('/import', 'import')->name('import');
+            Route::post('/import', 'import')->name('import');
             Route::get('/template_import', 'template_import')->name('template_import');
         });
     Route::controller(PermissionController::class)

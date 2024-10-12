@@ -1,20 +1,8 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
-        <div class="row justify-content-end">
-            <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }}</h6>
-            </div>
-
-            <div class="col-lg-6">
-                {{-- <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Tambah" /> --}}
-            </div>
-            <div class="col-lg-12">
-                <hr style="border: 2px solid #435EBE">
-            </div>
-            <ul class="nav nav-pills float-start">
-                @include('data_master.kelas.nav')
-            </ul>
-        </div>
+        <h6 class="mt-1">{{ $title }}</h6>
+        @include('data_master.kelas.nav')
+        
 
     </x-slot>
 
@@ -42,7 +30,7 @@
                         <thead>
                             <tr>
                                 <th class="dhead" width="15">#</th>
-                                <th class="dhead" width="100">Paket</th>
+                                {{-- <th class="dhead" width="100">Paket</th> --}}
                                 <th class="dhead" width="100">Kelas</th>
                                 <th class="dhead" width="100">Tipe</th>
                                 <th class="text-end dhead" width="150">Rp</th>
@@ -53,11 +41,11 @@
 
                             <tr class="bg-info">
                                 <td></td>
-                                <td>
+                                {{-- <td>
                                     <select database="paket" x-model="selectedOption" x-init="initSelect2()"
                                         class="select2-alpine" name="id_paket_tambah[]" id="">
                                     </select>
-                                </td>
+                                </td> --}}
 
                                 <td>
                                     <input type="text" name="kelas_tambah[]" class="form-control">
@@ -83,7 +71,7 @@
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr class="bg-info">
                                     <td></td>
-                                    <td>
+                                    {{-- <td>
                                         <select database="paket" x-model="selectedOption" x-init="initSelect2()"
                                             class="select2-alpine" name="id_paket_tambah[]" id="">
                                             <option value="">Paket</option>
@@ -93,7 +81,7 @@
                                             @endforeach
                                             <option value="tambah">+ Paket</option>
                                         </select>
-                                    </td>
+                                    </td> --}}
 
                                     <td>
                                         <input type="text" name="kelas_tambah[]" class="form-control">
@@ -123,7 +111,7 @@
                                 <input type="hidden" name="id_kelas[]" value="{{ $d->id_kelas }}">
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <select database="paket" x-data="{ selectedTipeKategori: {{ $d->id_paket }} }" x-model="selectedTipeKategori"
                                             x-init="initSelect2()" class="select2-alpine-data" name="id_paket[]"
                                             id="">
@@ -134,7 +122,7 @@
                                             @endforeach
                                             <option value="tambah">+ Paket</option>
                                         </select>
-                                    </td>
+                                    </td> --}}
 
                                     <td>
                                         <input type="text" value="{{ $d->kelas }}" name="kelas[]"
