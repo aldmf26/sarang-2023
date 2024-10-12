@@ -149,6 +149,15 @@
                             <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
 
                         </tr>
+                        <tr>
+                            <td style="background-color: #F7BAC5;color:white">Cabut selesai siap cetak belum kirim</td>
+                            <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'pcs'), 0) }}</td>
+                            <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format(sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
+                            </td>
+
+                        </tr>
                         {{-- <tr>
                             <td style="background-color: #F7F700">Cetak Akhir</td>
                             <td class="text-end">
@@ -174,6 +183,15 @@
                             <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
+
+                        </tr>
+                        <tr>
+                            <td style="background-color: #F7BAC5;color:white">Cetak selesai siap sortir belum kirim</td>
+                            <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'pcs'), 0) }}</td>
+                            <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'gr'), 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format(sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'), 0) }}
+                            </td>
 
                         </tr>
                         {{-- <tr>
@@ -202,6 +220,16 @@
                             <td class="text-end">{{ number_format($sortir_sisa->gr, 0) }}</td>
                             <td class="text-end">
                                 {{ number_format($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja, 0) }}</td>
+
+                        </tr>
+                        <tr>
+                            <td style="background-color: #F7BAC5;color:white">Sortir selesai siap grading belum kirim
+                            </td>
+                            <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'pcs'), 0) }}</td>
+                            <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'gr'), 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format(sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'), 0) }}
+                            </td>
 
                         </tr>
                         <tr>
@@ -239,20 +267,21 @@
                                 {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $grading_sisa->pcs, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
-                               0
+                                0
                             </td>
                             <td class="text-end text-danger fw-bold">
-                               0 
+                                0
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <td class="dhead fw-bold">Total</td>
+
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + $cetak_proses->pcs + $cetak_sisa->pcs + $sedang_proses->pcs + $sortir_sisa->pcs + $grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs), 0) }}
+                            {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + $cetak_proses->pcs + $cetak_sisa->pcs + $sedang_proses->pcs + $sortir_sisa->pcs + $grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs) + sumBk($cabut_selesai_siap_cetak, 'pcs') + sumBk($sortir_selesai, 'pcs') + sumBk($cetak_selesai, 'pcs'), 0) }}
                         </td>
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grading_sisa->gr + $pengiriman->gr, 0) }}
+                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grading_sisa->gr + $pengiriman->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + sumBk($sortir_selesai, 'gr') + sumBk($cetak_selesai, 'gr'), 0) }}
                         </td>
                         @php
 
@@ -271,7 +300,7 @@
 
                         @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $grading_sisa->cost_kerja + $grading_sisa->cost_bk + $ttl_pengiriman + $ttl_sisa_belum_kirim, 0) }}
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja + $cetak_sisa->ttl_rp + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + $grading_sisa->cost_kerja + $grading_sisa->cost_bk + $ttl_pengiriman + $ttl_sisa_belum_kirim + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($sortir_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + sumBk($sortir_selesai, 'cost_kerja') + sumBk($cetak_selesai, 'cost_kerja'), 0) }}
                         </td>
                     </tfoot>
 
