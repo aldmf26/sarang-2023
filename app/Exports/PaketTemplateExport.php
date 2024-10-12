@@ -22,13 +22,14 @@ class PaketTemplateExport implements WithMultipleSheets
             new SheetCabut(),
             new SheetEo(),
             new SheetCetak(),
-            // new SheetSortir(),
+            new SheetSortir(),
         ];
     }
 }
 
 trait ExcelStyling
 {
+
     public function styles(Worksheet $sheet)
     {
         return [
@@ -151,6 +152,31 @@ class SheetCetak implements FromCollection, WithTitle, WithHeadings,WithStyles
             'kategori hitung',
             'rp target susut',
             'kategori',
+        ];
+    }
+}
+
+class SheetSortir implements FromQuery, WithTitle, WithHeadings,WithStyles
+{
+    use ExcelStyling;
+    public function query()
+    {
+        return DB::table('tb_kelas_sortir')
+            ->selectRaw("kelas, rupiah, denda_susut,denda as denda_rp")->where('nonaktif', 'T')->get();
+    }
+
+    public function title(): string
+    {
+        return 'Sortir';
+    }
+
+    public function headings(): array
+    {
+        return [
+            'kelas',
+            'rupiah',
+            'denda susut',
+            'denda rp',
         ];
     }
 }

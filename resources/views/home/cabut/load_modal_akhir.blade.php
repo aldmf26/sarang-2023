@@ -101,7 +101,7 @@
                                 count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->eot }}" name="eot{{ $i + 1 }}[]" type="text"
+                            <input value="{{ $d->eot }}" value="0" name="eot{{ $i + 1 }}[]" type="text"
                                 class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
@@ -150,6 +150,7 @@
                             <a style="font-size: 12px"
                                 class="d-none btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
                                 href="#" id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
+
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
                                 type="button" count="{{ $i + 1 }}"
                                 id_cabut="{{ $d->id_cabut }}">Cancel</button>
