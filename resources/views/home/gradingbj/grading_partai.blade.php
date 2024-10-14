@@ -39,8 +39,9 @@
                 this.pcs.splice(index, 1);
                 this.gr.splice(index, 1);
             },
-        }" x-init="initSelect2()" action="{{ route('gradingbj.create_partai') }}"
-            method="post">
+            formHandler(),
+        }" x-init="initSelect2()" action="{{ route('gradingbj.create_partai') }}" method="post"
+            @submit.prevent="submitForm">
             @csrf
             <div class="row">
                 <div class="col-lg-5">
@@ -212,8 +213,8 @@
                                             name="pcs[]">
                                     </td>
                                     <td>
-                                        <input required x-model="gr[index]" type="number" class="text-end form-control"
-                                            name="gr[]">
+                                        <input required x-model="gr[index]" type="number"
+                                            class="text-end form-control" name="gr[]">
                                     </td>
                                     <td>
                                         <input required type="text" class="form-control" name="box_sp[]">
