@@ -81,8 +81,8 @@
                                 <th class="dhead text-center">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                {{-- <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total Rp</th> --}}
+                                <th class="dhead text-end">Rp/gr</th>
+                                <th class="dhead text-end">Total Rp</th>
                             </tr>
                         </thead>
                         <thead class="bg-white">
