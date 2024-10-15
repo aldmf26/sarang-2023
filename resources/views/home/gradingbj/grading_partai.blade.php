@@ -39,6 +39,7 @@
                 this.pcs.splice(index, 1);
                 this.gr.splice(index, 1);
             },
+        
         }" x-init="initSelect2()" action="{{ route('gradingbj.create_partai') }}"
             method="post">
             @csrf

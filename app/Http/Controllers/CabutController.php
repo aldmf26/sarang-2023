@@ -1196,7 +1196,7 @@ class CabutController extends Controller
         $cabut = Cabut::getCabut();
         foreach ($cabut as $d) {
             $hasil = rumusTotalRp($d);
-            DB::table('cabut')->where([['id_cabut', $d->id_cabut],['bulan_dibayar', 9]])->update([
+            DB::table('cabut')->where([['id_cabut', $d->id_cabut], ['bulan_dibayar', 9]])->update([
                 'ttl_rp' => $hasil->ttl_rp
             ]);
         }
@@ -1947,6 +1947,7 @@ class CabutController extends Controller
 
     public function save_formulir(Request $r)
     {
+
         $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
         $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
         if (!$r->no_box[0] || !$r->id_penerima) {

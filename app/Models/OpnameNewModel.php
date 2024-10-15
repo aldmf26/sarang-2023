@@ -51,7 +51,7 @@ class OpnameNewModel extends Model
     }
     public static function bksedang_selesai_sum()
     {
-        $result = DB::select("SELECT  c.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_akhir) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 
+        $result = DB::select("SELECT  c.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 
         sum(a.ttl_rp) as cost_kerja, 
         sum(a.gr_akhir * d.rp_gr) as cost_op, 
         sum(a.gr_akhir * e.rp_gr) as cost_dll

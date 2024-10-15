@@ -335,7 +335,7 @@ class GradingBjController extends Controller
                     # code...
                 } else {
                     if ($getBoxkirim->grade != $r->grade[$i]) {
-                        return redirect()->back()->with('error', 'Box grading tidak boleh lebih dari satu grade');
+                        return redirect()->back()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
                     }
                 }
                 DB::table('grading_partai')->insert($data);

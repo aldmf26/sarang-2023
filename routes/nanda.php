@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\Bk_baruController;
 use App\Http\Controllers\CabutDetailController;
 use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
@@ -345,5 +346,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengiriman/sisa', 'pengirimanSisa')->name('pengiriman.sisa');
 
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
+        });
+
+    Route::controller(Bk_baruController::class)
+        ->prefix('home/bkbaru')
+        ->name('bkbaru.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/create', 'create')->name('create');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
         });
 });

@@ -37,6 +37,8 @@
         </div>
 
         <div class="section">
+            <br>
+            <br>
             <h5 class="fw-bold text-center" style="text-decoration: underline">{{ $title }} : {{ $no_invoice }}
             </h5>
 
