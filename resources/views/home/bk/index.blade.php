@@ -18,8 +18,7 @@
                 <div>
                     @include('home.bk.btn_import')
                 </div>
-                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus"
-                    teks="Tambah" />
+                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" teks="Tambah" />
                 <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
                     class="btn btn-sm btn-primary">
                     <i class="fas fa-file-excel"></i> Export

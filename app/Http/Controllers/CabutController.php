@@ -1942,6 +1942,7 @@ class CabutController extends Controller
 
     public function save_formulir(Request $r)
     {
+
         $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
         $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
         if (!$r->no_box[0] || !$r->id_penerima) {

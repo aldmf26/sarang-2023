@@ -179,9 +179,11 @@
                                 <tr>
                                     <th class="dheadstock text-center">Total</th>
                                     <th class="dheadstock text-center {{ $posisi == 1 ? '' : 'd-none' }}"></th>
-                                    <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['pcs'], 0) }}
+                                    <th class="dheadstock text-end">
+                                        {{ number_format(ttl($cabutSelesai)['pcs'], 0) }}
                                     </th>
-                                    <th class="dheadstock text-end">{{ number_format(ttl($cabutSelesai)['gr'], 0) }}
+                                    <th class="dheadstock text-end">
+                                        {{ number_format(ttl($cabutSelesai)['gr'] + sumBk($eoSelesai, 'gr'), 0) }}
                                     </th>
                                     <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format(ttl($cabutSelesai)['ttl_rp'], 0) }}
