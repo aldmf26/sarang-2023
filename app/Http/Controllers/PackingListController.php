@@ -94,7 +94,7 @@ class PackingListController extends Controller
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.no_box = c.id_pengiriman
         WHERE a.no_box in ($id_pengiriman)
-        GROUP BY a.grade ORDER BY a.grade ASC");
+        GROUP BY a.grade,a.no_barcode ORDER BY a.grade ASC");
 
         $pengirimanBox = DB::select("SELECT 
         a.grade as grade2,

@@ -781,7 +781,7 @@
                 ]
                 clickSelectInput(inputNya)
 
-                $(document).on('input', '.eotKeyup', function() {
+                $(document).on('input', '.grAkhirKeyup', function() {
                     const val = $(this).val()
                     const count = $(this).attr('count')
                     $(".selesai" + count).toggleClass('d-none', !(val > 0));
