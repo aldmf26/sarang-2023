@@ -488,10 +488,10 @@ class Grading extends Model
             select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
         ) as b on a.no_nota = b.no_nota
         join (
-            SELECT grade, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+            SELECT no_nota, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
             FROM `pengiriman`
-            GROUP BY grade
-        ) as c on a.grade = c.grade
+            GROUP BY no_nota
+        ) as c on a.no_nota = c.no_nota
         GROUP by a.no_nota order by a.no_nota desc");
     }
 
