@@ -479,7 +479,7 @@ class Grading extends Model
             b.nm_packing,
             b.tujuan,
             b.tgl,
-            count(*) as ttl_box,
+            c.box as ttl_box,
             sum(a.pcs) as pcs,
             sum(a.gr + (a.gr / b.kadar)) as gr_naik,
             sum(a.gr) as gr
@@ -487,6 +487,11 @@ class Grading extends Model
         join (
             select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
         ) as b on a.no_nota = b.no_nota
+        join (
+            SELECT grade, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+            FROM `pengiriman`
+            GROUP BY grade
+        ) as c on a.grade = c.grade
         GROUP by a.no_nota order by a.no_nota desc");
     }
 
