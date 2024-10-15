@@ -90,7 +90,8 @@ class PackingListController extends Controller
         a.grade,
         sum(a.pcs) as pcs,
         a.grade,
-        sum(a.gr + (a.gr / c.kadar)) as gr
+        sum(a.gr + (a.gr / c.kadar)) as gr,
+        b.no_box
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.no_nota = c.no_nota
         join (
