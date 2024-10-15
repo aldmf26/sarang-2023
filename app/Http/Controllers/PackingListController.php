@@ -90,11 +90,16 @@ class PackingListController extends Controller
         a.grade,
         sum(a.pcs) as pcs, 
         sum(a.gr + (a.gr / c.kadar)) as gr, 
-        count(*) as box
+        b.box
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.no_box = c.id_pengiriman
+        join (
+        SELECT grade, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+        FROM `pengiriman`
+        GROUP BY grade;
+        ) as b on a.grade = b.grade
         WHERE a.no_box in ($id_pengiriman)
-        GROUP BY a.no_barcode ORDER BY a.grade ASC");
+        GROUP BY a.grade ORDER BY a.grade ASC");
 
         $pengirimanBox = DB::select("SELECT 
         a.grade as grade2,
