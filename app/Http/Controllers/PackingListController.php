@@ -98,7 +98,7 @@ class PackingListController extends Controller
             FROM `pengiriman`
             GROUP BY grade
         ) as b on a.grade = b.grade
-        WHERE a.no_nota = $id_pengiriman 
+        WHERE a.no_nota = $no_nota 
         GROUP by a.grade
         ORDER BY a.grade ASC
         ");
