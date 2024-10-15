@@ -89,7 +89,8 @@ class PackingListController extends Controller
         $detail = DB::select("SELECT 
         a.grade,
         sum(a.pcs) as pcs,
-        sum(a.gr + (a.gr / c.kadar)) as gr, 
+        a.grade,
+        sum(a.gr + (a.gr / c.kadar)) as gr
         FROM `pengiriman` as a 
         JOIN pengiriman_packing_list as c on a.no_nota = c.no_nota
         join (
