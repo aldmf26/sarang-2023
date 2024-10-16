@@ -103,10 +103,57 @@
                             <th class="text-end">
                                 {{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</th>
                         </tr>
+                        @php
+                            $ttl_sisa_belum_kirim =
+                                $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
+
+                            $ttl_pengiriman =
+                                $pengiriman->cost_bk +
+                                $pengiriman->cost_kerja +
+                                $pengiriman->cost_cu +
+                                $pengiriman->cost_op;
+
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_kerja + $grading_sisa->cost_bk;
+
+                            $ttl_cost_berjalan =
+                                $cbt_proses->ttl_rp +
+                                $cbt_sisa_pgws->ttl_rp +
+                                $cetak_proses->ttl_rp +
+                                $cetak_proses->cost_kerja +
+                                $cbt_blm_kirim->cost_kerja +
+                                $cetak_sisa->ttl_rp +
+                                $sedang_proses->ttl_rp +
+                                $sedang_proses->cost_kerja +
+                                $sortir_sisa->ttl_rp +
+                                $sortir_sisa->cost_kerja +
+                                $grading_sisa->cost_kerja +
+                                $grading_sisa->cost_bk +
+                                $ttl_pengiriman +
+                                $ttl_sisa_belum_kirim +
+                                sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
+                                sumBk($sortir_selesai, 'ttl_rp') +
+                                sumBk($cetak_selesai, 'ttl_rp') +
+                                sumBk($cabut_selesai_siap_cetak, 'cost_kerja') +
+                                sumBk($sortir_selesai, 'cost_kerja') +
+                                sumBk($cetak_selesai, 'cost_kerja');
+
+                            $ttl_berjalan =
+                                $ttl_cost_berjalan -
+                                sumBk($uang_cost, 'total_operasional') -
+                                sumBk($bk, 'cost_bk') -
+                                sumBk($bk_suntik, 'ttl_rp');
+                        @endphp
                         <tr>
-                            <th class="dhead">Total Bk + Operasional</th>
+                            <th>Cost Berjalan</th>
+                            <th class="text-end">
+                                {{ number_format($ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'), 0) }}
+
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="dhead">Total Bk + Operasional + cost berjalan</th>
                             <th class="text-end dhead">
-                                {{ number_format(sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp'), 0) }}
+                                {{ number_format(sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan, 0) }}
                             </th>
                         </tr>
 
