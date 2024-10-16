@@ -27,7 +27,7 @@
                 }
             }">
                 <div class="d-flex justify-content-between">
-                    <h6 class="mt-1">{{ $title }}</h6>
+                    <h6 class="mt-1">{{ $title }} : {{ $bk_terakhir }}</h6>
                     <div class="d-flex gap-1">
                         {{-- <div class="{{ auth()->user()->posisi_id != 13 ? '' : 'd-none' }}"> --}}
                         {{-- <div class="">
