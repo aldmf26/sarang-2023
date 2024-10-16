@@ -343,6 +343,7 @@ class CabutController extends Controller
 
             // Lanjutkan dengan memasukkan data ke database
             for ($x = 0; $x < count($r->no_box); $x++) {
+
                 if ($r->no_box[$x] == $no_box) {
                     $data = [
                         'no_box' => $r->no_box[$x],
@@ -355,7 +356,9 @@ class CabutController extends Controller
                         'tgl_terima' => $r->tgl_terima[$x],
                     ];
                     $id_cabut = $r->id_cabut[$x];
-                    if ($id_cabut == 9999) {
+                    $cek = DB::table('cabut')->where([['no_box', $no_box],['id_pengawas', $r->id_pengawas[$x]]])->exists();
+                    
+                    if ($id_cabut == 9999 && !$cek) {
                         DB::table('cabut')->insert($data);
                     } else {
                         DB::table('cabut')->where('id_cabut', $id_cabut)->update($data);
@@ -427,8 +430,10 @@ class CabutController extends Controller
 
     public function selesai_cabut(Request $r)
     {
-
-        DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
+        $cek = DB::table('cabut')->where('id_cabut', $r->id_cabut)->first();
+        if ($cek->gr_akhir > 0) {
+            DB::table('cabut')->where('id_cabut', $r->id_cabut)->update(['selesai' => 'Y']);
+        }
         return redirect()->route('cabut.index')->with('sukses', 'Data telah diselesaikan');
     }
 

@@ -148,7 +148,7 @@
                             @endif  --}}
 
                             <a style="font-size: 12px"
-                                class="btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
+                                class="d-none btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
                                 href="#" id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
 
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"

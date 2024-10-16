@@ -372,7 +372,7 @@ class Grading extends Model
 
     public static function selesai($no_box = null)
     {
-        $whereBox = $no_box ? "a.box_pengiriman = $no_box " : '';
+        $whereBox = $no_box ? "AND a.box_pengiriman = $no_box " : '';
         $select = $no_box ? 'selectOne' : 'select';
         return DB::$select("SELECT 
                 a.nm_partai,
@@ -386,7 +386,8 @@ class Grading extends Model
                 sum(a.cost_op) as cost_op,
                 a.grade, 
                 a.urutan
-                FROM grading_partai as a 
+                FROM grading_partai as a
+                WHERE a.formulir = 'T' 
                 $whereBox 
                 GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
     }
@@ -479,7 +480,7 @@ class Grading extends Model
             b.nm_packing,
             b.tujuan,
             b.tgl,
-            count(*) as ttl_box,
+            c.box as ttl_box,
             sum(a.pcs) as pcs,
             sum(a.gr + (a.gr / b.kadar)) as gr_naik,
             sum(a.gr) as gr
@@ -487,6 +488,11 @@ class Grading extends Model
         join (
             select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
         ) as b on a.no_nota = b.no_nota
+        join (
+            SELECT no_nota, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+            FROM `pengiriman`
+            GROUP BY no_nota
+        ) as c on a.no_nota = c.no_nota
         GROUP by a.no_nota order by a.no_nota desc");
     }
 

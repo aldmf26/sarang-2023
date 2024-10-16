@@ -191,9 +191,7 @@
                     </thead>
                     <tbody>
                         <template x-for="(item,index) in selectedItem" :key="index">
-
                             <tr>
-
                                 <td x-text="item.grade"></td>
                                 <td x-text="item.box"></td>
                                 <td x-text="item.pcs"></td>

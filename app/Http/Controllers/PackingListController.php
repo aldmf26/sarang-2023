@@ -87,14 +87,21 @@ class PackingListController extends Controller
         $id_pengiriman = DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->pluck('id_pengiriman')->toArray();
         $id_pengiriman = implode(',', $id_pengiriman);
         $detail = DB::select("SELECT 
-        a.grade,
-        sum(a.pcs) as pcs, 
-        sum(a.gr + (a.gr / c.kadar)) as gr, 
-        count(*) as box
-        FROM `pengiriman` as a 
-        JOIN pengiriman_packing_list as c on a.no_box = c.id_pengiriman
-        WHERE a.no_box in ($id_pengiriman)
-        GROUP BY a.grade ORDER BY a.grade ASC");
+            a.grade,
+            sum(a.pcs) as pcs,
+            sum(a.gr + (a.gr / b.kadar)) as gr,
+            c.box
+            from pengiriman as a
+            join (
+                select no_nota,kadar from pengiriman_packing_list group by no_nota
+            ) as b on a.no_nota = b.no_nota
+            join (
+                        SELECT grade, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+                        FROM `pengiriman`
+                        GROUP BY grade
+                    ) as c on a.grade = c.grade
+            where a.no_nota = $no_nota
+            GROUP by a.grade");
 
         $pengirimanBox = DB::select("SELECT 
         a.grade as grade2,

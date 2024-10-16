@@ -334,7 +334,10 @@ class EoController extends Controller
 
     public function selesai(Request $r)
     {
-        DB::table('eo')->where('id_eo', $r->id_cabut)->update(['selesai' => empty($r->batal) ? 'Y' : 'T']);
+        $cek = DB::table('eo')->where('id_eo', $r->id_cabut)->first();
+        if ($cek->gr_eo_akhir > 0) {
+            DB::table('eo')->where('id_eo', $r->id_cabut)->update(['selesai' => empty($r->batal) ? 'Y' : 'T']);
+        }
         return redirect()->route('eo.index')->with('sukses', 'Data telah diselesaikan');
     }
 
