@@ -155,19 +155,9 @@ class BoxKirimController extends Controller
 
     public function delete(Request $r)
     {
-        $token = $r->token;
-        if (!$token || $token !== Session::get('delete_token')) {
-            return redirect()->route('pengiriman.index')->with('error', 'Invalid token.');
-        }
-        // Dapatkan dan validasi id_pengiriman
-        $id_pengiriman = explode(',', $r->id_pengiriman);
-        if (empty($id_pengiriman)) {
-            return redirect()->route('pengiriman.index')->with('error', 'Invalid id_pengiriman.');
-        }
-
         // Hapus data
-        DB::table('pengiriman')->whereIn('id_pengiriman', $id_pengiriman)->delete();
-        return redirect()->route('pengiriman.index')->with('success', 'Data dihapus');
+        DB::table('pengiriman')->where('id_pengiriman', $r->id)->delete();
+        return redirect()->back()->with('success', 'Data dihapus');
     }
 
 
@@ -177,6 +167,8 @@ class BoxKirimController extends Controller
         $tgl_input = date('Y-m-d');
         $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
         $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
+        // $r->no_nota didapat dari po lsit pengiriman, jika dari sana maka notanya di ambil
+        $no_nota = $r->no_nota ?? $no_nota;
         foreach (explode(',', $r->no_box) as $d) {
             // $grade = DB::table('grading as a')
             //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
@@ -247,12 +239,16 @@ class BoxKirimController extends Controller
     {
         $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
                 WHERE a.no_nota = $no_nota GROUP by a.no_nota;");
-
+        if (empty($po)) {
+            return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', 'data tidak ditemukan');
+        }
+        $gudang = Grading::stock_wip();
         $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->orderBy('grade', 'DESC')->get();
         $data = [
             'title' => 'Wip siap kirim',
             'po' => $po,
             'no_nota' => $no_nota,
+            'gudang' => $gudang,
             'pengiriman' => $pengiriman
         ];
         return view('home.pengiriman.po', $data);
@@ -266,6 +262,7 @@ class BoxKirimController extends Controller
             $tgl = $r->tgl;
             $getFormulir = DB::table('pengiriman')->where('no_nota', $no_invoice)->get();
 
+            
             foreach ($getFormulir as $d) {
                 $data[] = [
                     'id_pengiriman' => $d->no_box,
@@ -288,7 +285,7 @@ class BoxKirimController extends Controller
                     'no_nota' => $no_invoice,
                 ];
                 DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
-                DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']); 
+                DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']);
                 DB::table('grading_partai')->where('box_pengiriman', $r->box_grading[$i])->update(['sudah_kirim' => 'Y']);
             }
 
