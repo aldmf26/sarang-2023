@@ -175,8 +175,8 @@ class BoxKirimController extends Controller
     {
         $admin = auth()->user()->name;
         $tgl_input = date('Y-m-d');
-        $no_nota = DB::table('pengiriman')->orderBy('id_pengiriman', 'DESC')->first();
-        $no_nota = empty($no_nota) ? 1001 : $no_nota->no_nota + 1;
+        $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
+        $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
         foreach (explode(',', $r->no_box) as $d) {
             // $grade = DB::table('grading as a')
             //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
@@ -289,6 +289,7 @@ class BoxKirimController extends Controller
                 ];
                 DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
                 DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']); 
+                DB::table('grading_partai')->where('box_pengiriman', $r->box_grading[$i])->update(['sudah_kirim' => 'Y']);
             }
 
             DB::commit();
@@ -336,9 +337,9 @@ class BoxKirimController extends Controller
         return view('home.pengiriman.print_po', $data);
     }
 
-    public function batal(Request $r)
+    public function batal($no_nota)
     {
-        DB::table('pengiriman')->where('no_nota', $r->no_invoice)->delete();
+        DB::table('pengiriman')->where('no_nota', $no_nota)->delete();
         return redirect()->route('gradingbj.gudang_siap_kirim')->with('sukses', 'Data Berhasil di selesaikan');
     }
 

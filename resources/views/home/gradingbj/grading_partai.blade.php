@@ -177,6 +177,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th class="dhead">No</th>
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end" width="200">Pcs</th>
                                 <th class="dhead text-end" width="200">Gr</th>
@@ -186,6 +187,7 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td></td>
                                 <td>
                                     <h6>Total</h6>
                                 </td>
@@ -198,6 +200,7 @@
                             </tr>
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr>
+                                    <td x-text="index + 1"></td>
                                     <td>
                                         <select x-init="initSelect2" required name="grade[]" class="selectGrade"
                                             id="">

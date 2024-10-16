@@ -7,7 +7,8 @@
             </div>
             <div class="d-flex gap-1">
                 <div>
-                    <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan Grade</a>
+                    <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan
+                        Grade</a>
                 </div>
                 <div>
                     <x-theme.btn_filter />
@@ -28,49 +29,50 @@
                 <div class="col-lg-12" x-data="{
                     tbhInvoice: false,
                 }">
-                        <table class="table table-stripped" id="table1">
-                            <thead>
+                    <table class="table table-stripped" id="table1">
+                        <thead>
+                            <tr>
+                                <th class="dhead">#</th>
+                                <th class="dhead">Tgl Input</th>
+                                <th class="dhead">No Nota</th>
+                                <th class="dhead text-end">Box</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                {{-- <th class="text-end">Ttl Rp</th> --}}
+                                <th width="130" class="dhead text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th class="" colspan="3">Total</th>
+                                <th class=" text-end">{{ number_format(sumCol($packing, 'ttl_box'), 0) }}</th>
+                                <th class=" text-end">{{ number_format(sumCol($packing, 'pcs'), 0) }}</th>
+                                <th class=" text-end">{{ number_format(sumCol($packing, 'gr'), 0) }}</th>
+                                <th class=" text-end"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach ($packing as $i => $d)
                                 <tr>
-                                    <th class="dhead">#</th>
-                                    <th class="dhead">Tgl Input</th>
-                                    <th class="dhead">No Nota</th>
-                                    <th class="dhead text-end">Box</th>
-                                    <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
-                                    {{-- <th class="text-end">Ttl Rp</th> --}}
-                                    <th width="100" class="dhead text-center">Aksi</th>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ tanggal($d->tgl_input) }}</td>
+                                    <td>PI {{ $d->no_nota }}</td>
+                                    <td align="right">{{ $d->ttl_box }}</td>
+                                    <td align="right">{{ number_format($d->pcs, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr, 0) }}</td>
+                                    <td align="center">
+                                        <a onclick="return confirm("yakin di cancel ?")" href="{{ route('pengiriman.batal', $d->no_nota) }}"
+                                            class="btn btn-sm btn-danger">Cancel</a>
+                                        <a href="{{ route('pengiriman.po', $d->no_nota) }}" class="btn btn-sm btn-info"
+                                            target="_blank">Lanjutkan</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <thead>
-                                <tr>
-                                    <th class="" colspan="3">Total</th>
-                                    <th class=" text-end">{{number_format(sumCol($packing, 'ttl_box'),0)}}</th>
-                                    <th class=" text-end">{{number_format(sumCol($packing, 'pcs'),0)}}</th>
-                                    <th class=" text-end">{{number_format(sumCol($packing, 'gr'),0)}}</th>
-                                    <th class=" text-end"></th>
-                                </tr>
-                            </thead>
+                            @endforeach
+                        </tbody>
 
-                            <tbody>
-
-                                @foreach ($packing as $i => $d)
-                                    <tr>
-                                        <td>{{ $i + 1 }}</td>
-                                        <td>{{ tanggal($d->tgl_input) }}</td>
-                                        <td>PI {{ $d->no_nota }}</td>
-                                        <td align="right">{{ $d->ttl_box }}</td>
-                                        <td align="right">{{ number_format($d->pcs, 0) }}</td>
-                                        <td align="right">{{ number_format($d->gr, 0) }}</td>
-                                        <td align="center">
-                                            <a href="{{ route('pengiriman.po', $d->no_nota) }}"
-                                                class="btn btn-sm btn-info" target="_blank"><i
-                                                    class="fas fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-
-                        </table>
+                    </table>
                 </div>
             </form>
 

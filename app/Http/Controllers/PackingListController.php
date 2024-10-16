@@ -143,8 +143,11 @@ class PackingListController extends Controller
 
     public function delete($no_nota)
     {
+        $get = DB::table('pengiriman')->where('no_nota', $no_nota);
+        $getBox = $get->pluck('no_box');
+        $get->update(['selesai' => 'T']);
         DB::table('pengiriman_packing_list')->where('no_nota', $no_nota)->delete();
-        DB::table('pengiriman')->where('no_nota', $no_nota)->update(['selesai' => 'T']);
+        DB::table('grading_partai')->whereIn('box_pengiriman', $getBox)->update(['sudah_kirim' => 'T']);
 
         return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil dihapus');
     }
