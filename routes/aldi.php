@@ -468,7 +468,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
-            Route::get('/batal', 'batal')->name('batal');
+            Route::get('/batal/{no_nota}', 'batal')->name('batal');
         });
     Route::controller(PackingListController::class)
         ->prefix('home/gradingbj/packinglist')

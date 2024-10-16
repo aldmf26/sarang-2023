@@ -75,11 +75,7 @@
                             <td class="dheadstock"></td>
                             <td class="text-end dheadstock h6 ">{{ number_format($ttlPcs, 0) }}</td>
                             <td class="text-end dheadstock h6 ">{{ number_format($ttlGr, 0) }}</td>
-                            <td class="dheadstock">
-                                {{-- <div x-show="cek.length">
-                                    Dipilih <br> Pcs : <span></span> Gr : <span></span>
-                                </div> --}}
-                            </td>
+                           
                             <td class="dheadstock"></td>
                         </tr>
                         <tbody>

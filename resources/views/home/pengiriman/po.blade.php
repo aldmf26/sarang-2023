@@ -45,20 +45,21 @@
                                         class="form-control text-end">
                                 </td>
                                 <td align="center">
-                                    <h6>{{ number_format($po->ttl,0) }}</h6>
+                                    <h6>{{ number_format($po->ttl, 0) }}</h6>
                                 </td>
                                 <td>
-                                    <h6>{{ number_format($po->pcs,0) }}</h6>
+                                    <h6>{{ number_format($po->pcs, 0) }}</h6>
                                 </td>
                                 <td>
-                                    <h6>{{ number_format($po->gr,0) }}</h6>
+                                    <h6>{{ number_format($po->gr, 0) }}</h6>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-lg-12">
-                    <table class="table table-bordered">
+                    <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
+                    <table class="table table-bordered" id="tbl3">
                         <thead>
                             <tr>
                                 <th class="dhead">No</th>
@@ -79,7 +80,7 @@
                         <tbody>
                             @foreach ($pengiriman as $i => $d)
                                 <tr x-data="{
-                                    gr2:{{ $d->gr }},
+                                    gr2: {{ $d->gr }},
                                 }">
                                     <td>{{ $i + 1 }} </td>
                                     <td>P{{ $d->no_box }}</td>
@@ -88,19 +89,26 @@
                                     <td align="right">{{ $d->gr }}</td>
 
                                     <td align="center">
-                                        <input name="grade2[]" required value="{{ $d->grade }}" type="text" class="form-control">
+                                        <input onclick="$(this).select()" name="grade2[]" required value="{{ $d->grade }}" type="text"
+                                            class="form-control">
+                                        <input name="box_grading[]" required value="{{ $d->no_box }}" type="hidden"
+                                            class="form-control">
                                     </td>
                                     <td align="center">
-                                        <input name="pcs2[]" required value="{{ $d->pcs }}" type="text" class="text-end form-control">
+                                        <input onclick="$(this).select()" name="pcs2[]" required value="{{ $d->pcs }}" type="text"
+                                            class="text-end form-control">
                                     </td>
                                     <td align="center">
-                                        <input name="id_pengiriman[]" required value="{{ $d->id_pengiriman }}" type="hidden">
-                                        <input name="gr2[]" x-model="gr2" required value="{{ $d->gr }}" type="text" class="text-end form-control">
+                                        <input name="id_pengiriman[]" required value="{{ $d->id_pengiriman }}"
+                                            type="hidden">
+                                        <input onclick="$(this).select()" name="gr2[]" x-model="gr2" required value="{{ $d->gr }}"
+                                            type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
-                                        <input name="barcode[]" required value="{{ $d->no_barcode }}" placeholder="cth: 10001" type="text" class="form-control">
+                                        <input onclick="$(this).select()" name="barcode[]" required value="{{ $d->no_barcode }}"
+                                            placeholder="cth: 10001" type="text" class="form-control">
                                     </td>
-                                  
+
                                     <td align="right">
                                         {{ $d->pcs }}
                                     </td>
@@ -113,9 +121,8 @@
                 </div>
             </div>
             <div class="d-flex gap-2 float-end">
-                <a class="btn btn-danger btn-sm" 
-                    href="{{ route('pengiriman.list_po') }}">
-                    Cancel
+                <a class="btn btn-info btn-sm" href="{{ route('pengiriman.list_po') }}">
+                    Kembali
                 </a>
                 <button class="btn btn-primary btn-sm" type="submit">Save</button>
             </div>
@@ -125,6 +132,29 @@
 
         @section('scripts')
             <script>
+                $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
+                    const $currentCell = $(this).closest('td');
+                    const columnIndex = $currentCell.index();
+                    const $currentRow = $currentCell.parent();
+
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            const $nextRow = $currentRow.next('tr');
+                            if ($nextRow.length) {
+                                $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            const $prevRow = $currentRow.prev('tr');
+                            if ($prevRow.length) {
+                                $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                    }
+                });
+                pencarian('tbl3input', 'tbl3')
                 $(document).on('click', '.edit', function(e) {
                     e.preventDefault();
 
@@ -150,7 +180,6 @@
                         }
                     });
                 })
-               
             </script>
         @endsection
     </x-slot>
