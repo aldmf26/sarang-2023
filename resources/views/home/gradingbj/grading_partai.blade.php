@@ -72,7 +72,7 @@
                     </table>
                 </div>
             </div>
-            <x-theme.alert :pesan="{{ session()->get('error') }}" />
+            <x-theme.alert pesan="{{ session()->get('error') }}" />
             <div class="row">
                 <div class="col-lg-5">
                     <h6>Box Dipilih <span class="text-success">Partai : {{ $nm_partai }}</span></h6>
