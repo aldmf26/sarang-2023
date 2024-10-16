@@ -72,6 +72,7 @@
                     </table>
                 </div>
             </div>
+            <x-theme.alert :pesan="{{ session()->get('error') }}" />
             <div class="row">
                 <div class="col-lg-5">
                     <h6>Box Dipilih <span class="text-success">Partai : {{ $nm_partai }}</span></h6>
@@ -181,7 +182,7 @@
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end" width="200">Pcs</th>
                                 <th class="dhead text-end" width="200">Gr</th>
-                                <th class="dhead " width="200">Box Grade</th>
+                                <th class="dhead " width="300">Box Grade</th>
                                 <th class="dhead">Aksi</th>
                             </tr>
                         </thead>
