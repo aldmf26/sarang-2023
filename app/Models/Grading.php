@@ -372,7 +372,7 @@ class Grading extends Model
 
     public static function selesai($no_box = null)
     {
-        $whereBox = $no_box ? "a.box_pengiriman = $no_box " : '';
+        $whereBox = $no_box ? "AND a.box_pengiriman = $no_box " : '';
         $select = $no_box ? 'selectOne' : 'select';
         return DB::$select("SELECT 
                 a.nm_partai,
@@ -386,7 +386,8 @@ class Grading extends Model
                 sum(a.cost_op) as cost_op,
                 a.grade, 
                 a.urutan
-                FROM grading_partai as a 
+                FROM grading_partai as a
+                WHERE a.formulir = 'T' 
                 $whereBox 
                 GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
     }
