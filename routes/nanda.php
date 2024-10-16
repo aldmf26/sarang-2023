@@ -354,7 +354,15 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
+            Route::get('/invoice', 'invoice')->name('invoice');
+            Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
+            Route::get('/batal', 'batal')->name('batal');
+            Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
+
+
             Route::post('/create', 'create')->name('create');
+            Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::get('/selesai', 'selesai')->name('selesai');
         });
 });

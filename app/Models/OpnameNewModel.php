@@ -441,7 +441,7 @@ group by a.no_box;
                 ) as g on g.no_box = a.no_box_sortir
         WHERE a.selesai = 'T'
         group by a.no_box_sortir
-        having gr != 0;");
+        having pcs != 0;");
 
         return $result;
     }
