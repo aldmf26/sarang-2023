@@ -174,7 +174,7 @@
                 </div>
                 <div class="col-lg-7">
                     <h6>Hasil Grading</h6>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="tbl3">
                         <thead>
                             <tr>
                                 <th class="dhead">No</th>
@@ -212,15 +212,15 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input x-model="pcs[index]" type="number" class="text-end form-control"
+                                        <input x-model="pcs[index]" type="text" autocomplete="off" class="text-end form-control"
                                             name="pcs[]">
                                     </td>
                                     <td>
-                                        <input required x-model="gr[index]" type="number" class="text-end form-control"
+                                        <input required x-model="gr[index]" type="text" autocomplete="off" class="text-end form-control"
                                             name="gr[]">
                                     </td>
                                     <td>
-                                        <input required type="text" class="form-control" name="box_sp[]">
+                                        <input required type="text" autocomplete="off" class="form-control" name="box_sp[]">
                                     </td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
@@ -260,5 +260,33 @@
             </div>
             <button type="submit" class="btn btn-md btn-primary float-end">Save</button>
         </form>
+        @section('scripts')
+            
+        <script>
+            $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
+                    const $currentCell = $(this).closest('td');
+                    const columnIndex = $currentCell.index();
+                    const $currentRow = $currentCell.parent();
+
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            const $nextRow = $currentRow.next('tr');
+                            if ($nextRow.length) {
+                                $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            const $prevRow = $currentRow.prev('tr');
+                            if ($prevRow.length) {
+                                $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                    }
+                });
+        </script>
+        @endsection
+
     </x-slot>
 </x-theme.app>
