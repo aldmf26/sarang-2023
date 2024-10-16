@@ -79,9 +79,9 @@ class CocokanController extends Controller
         $ca16suntik = $this->getSuntikan(26);
         $ca16 = $model::cetak_selesai();
         $cetak_akhir = new stdClass();
-        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
-        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->pcs = $ca16->pcs;
+        $cetak_akhir->gr = $ca16->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp;
         $cetak_akhir->cost_kerja = $ca16->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
