@@ -54,7 +54,7 @@
                                 <th class="dhead text-center">Grade</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                <th class="dhead text-center">Detail</th>
+                                {{-- <th class="dhead text-center">Detail</th> --}}
                                 <th class="dhead text-center">Aksi</th>
                             </tr>
 
@@ -104,10 +104,10 @@
                                         </td>
                                         <td class="text-end">{{ number_format($d->pcs - $d->pcs_pengiriman, 0) }}</td>
                                         <td class="text-end">{{ number_format($d->gr - $d->gr_pengiriman, 0) }}</td>
-                                        <td class="text-center"><a
+                                        {{-- <td class="text-center"><a
                                                 href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}"
                                                 target="_blank" class="badge bg-primary"><i class=" fas fa-eye"></i></a>
-                                        </td>
+                                        </td> --}}
                                         <td align="right" class="d-flex justify-content-evenly">
                                             <input type="checkbox" class="form-check"
                                                 :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
