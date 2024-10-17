@@ -167,7 +167,7 @@ class GudangSarangController extends Controller
             })
             ->where('a.kategori', 'cetak')
             ->where('a.no_invoice', $r->no_invoice)
-            ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
+            ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal', 'b.tipe', 'b.ket')
             ->get();
 
 

@@ -49,6 +49,7 @@
                             <th>Tanggal</th>
                             <th>Nama Partai</th>
                             <th>No Box</th>
+                            <th>Grade</th>
                             <th class="text-end">Pcs Awal</th>
                             <th class="text-end">Gr Awal</th>
                             <th class="text-end">Pcs Tidak Ctk</th>
@@ -77,6 +78,7 @@
                                 <td></td>
                                 <td>{{ $f->nm_partai }}</td>
                                 <td>{{ $f->no_box }}</td>
+                                <td>{{ $f->tipe }}-{{ $f->ket }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
                                 @for ($i = 0; $i < 9; $i++)
@@ -87,7 +89,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="text-center" colspan="4">Total</th>
+                            <th class="text-center" colspan="5">Total</th>
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             @for ($i = 0; $i < 9; $i++)
