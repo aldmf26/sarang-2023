@@ -232,7 +232,7 @@ class CetakModel extends Model
             d.ttl_rp as cost_cbt, c.nm_partai
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
-        left join bk as c on c.no_box = a.no_box
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
         left join cabut as d on d.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
         WHERE a.kategori = 'cetak'  
@@ -242,7 +242,7 @@ class CetakModel extends Model
             $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal,(c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_pemberi
-        left join bk as c on c.no_box = a.no_box
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
         left join cabut as d on d.no_box = a.no_box
         left join users as e on e.id = a.id_pemberi
         WHERE a.kategori = 'cetak' 
