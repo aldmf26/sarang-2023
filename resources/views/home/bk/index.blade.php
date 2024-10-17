@@ -66,13 +66,13 @@
                 {{-- @include('home.bk.nav', ['name' => 'index']) --}}
             </div>
             <div class="col-lg-4 mb-2">
-                <table class="float-end">
+                {{-- <table class="float-end">
                     <td>Pencarian :</td>
                     <td><input type="text" id="pencarian" class="form-control float-end"></td>
-                </table>
+                </table> --}}
             </div>
             <div class="col-lg-12">
-                <table class="table" id="tblPenc">
+                <table class="table" id="tablealdi">
                     <thead>
                         <tr>
                             <th>#</th>
