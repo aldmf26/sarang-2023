@@ -45,7 +45,6 @@ class CetakNewController extends Controller
     {
         $halaman = DB::select("SELECT a.id_pemberi, b.name, a.id_penerima
         FROM formulir_sarang as a 
-        
         left join users as b on b.id = a.id_penerima
         where a.no_invoice = '$no_invoice' and a.kategori = 'sortir'
         group by a.id_penerima
