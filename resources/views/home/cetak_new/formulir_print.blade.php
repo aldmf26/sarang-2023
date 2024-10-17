@@ -51,7 +51,7 @@
                     ->where('a.no_invoice', $no_invoice)
                     ->where('a.kategori', 'sortir')
                     ->where('a.id_penerima', $h->id_penerima)
-                    ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
+                    ->select('b.nm_partai','b.tipe','b.ket', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
                     ->get();
             @endphp
             <div class="section">
@@ -68,6 +68,7 @@
                                     <th>Tgl</th>
                                     <th>Nama Partai</th>
                                     <th>No Box</th>
+                                    <th>Grade</th>
                                     <th>Nama Anak</th>
                                     <th class="text-end">Pcs Awal</th>
                                     <th class="text-end"> Gr Awal</th>
@@ -91,6 +92,7 @@
                                         <td style="width: 100px"></td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
+                                        <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
                                         <td></td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
@@ -103,7 +105,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4">Total</th>
+                                    <th colspan="5">Total</th>
                                     <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                                     <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                                     <td></td>
