@@ -15,6 +15,7 @@
                         @include('home.bk.btn_import')
                     </div>
                 </div> --}}
+                @if (auth()->user()->posisi_id != 13)
                 <div>
                     @include('home.bk.btn_import')
                 </div>
@@ -27,6 +28,13 @@
                 <div>
                     <x-theme.btn_filter />
                 </div>
+                @endif
+                @if (auth()->user()->posisi_id == 13)
+                <div>
+                    <x-theme.btn_filter />
+                </div> 
+                @endif
+
             </div>
         </div>
 
@@ -58,10 +66,10 @@
                 {{-- @include('home.bk.nav', ['name' => 'index']) --}}
             </div>
             <div class="col-lg-4 mb-2">
-                <table class="float-end">
+                {{-- <table class="float-end">
                     <td>Pencarian :</td>
                     <td><input type="text" id="pencarian" class="form-control float-end"></td>
-                </table>
+                </table> --}}
             </div>
             <div class="col-lg-12">
                 <table class="table" id="tablealdi">
@@ -175,7 +183,7 @@
             $(document).ready(function() {
 
                 inputChecked('cekSemuaTutup', 'cek_bayar')
-                pencarian('pencarian', 'tablealdi')
+                pencarian('pencarian', 'tblPenc')
 
                 function clickCekKirim(kelas, link, formDelete = null) {
                     $(document).on('click', `${kelas}`, function(e) {
