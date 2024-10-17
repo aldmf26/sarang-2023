@@ -52,7 +52,8 @@
                             @foreach ($bk as $b)
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
-                                    <td>{{ date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}</td>
+                                    <td>{{ empty($b->bulan) ? '-' : date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}
+                                    </td>
                                     <td>{{ $b->nm_partai }}</td>
                                     <td>{{ $b->grade }}</td>
                                     <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>

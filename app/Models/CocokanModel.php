@@ -185,6 +185,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
         FROM cetak_new as a 
         left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
         left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+        join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
         where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru';
         ");
 
