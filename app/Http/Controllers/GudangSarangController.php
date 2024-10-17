@@ -211,14 +211,8 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice";
 
-        $formulir = DB::select("SELECT count(a.no_box) as ttlbox, group_concat(a.no_box) as no_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
-        FROM formulir_sarang as a
-        left join users as b on b.id = a.id_pemberi
-        left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = '$kategori' 
-        group by a.no_invoice
-        order by a.id_formulir DESC
-        ");
+        $formulir = $this->getFormulirKategori($kategori);
+
 
         $data = [
             'title' => 'Po ' . ucwords($kategori),
@@ -312,6 +306,15 @@ class GudangSarangController extends Controller
         return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
     }
 
+
+    public function batal_grading(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]]);
+        $getFormulir->delete();
+        return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
+    }
+
     public function selesai_grade(Request $r)
     {
         $no_invoice = $r->no_invoice;
@@ -339,6 +342,13 @@ class GudangSarangController extends Controller
         return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
     }
 
+    public function selesai_grading(Request $r)
+    {
+        $no_invoice = $r->no_invoice;
+        $getBox = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'grading']])->pluck('no_box')->toArray();
+        $hasil = implode(',', $getBox);
+        return redirect()->route('gradingbj.grading_partai.post', ['no_box' => $hasil])->with('sukses', 'Data Berhasil');
+    }
     public function selesai(Request $r)
     {
         $no_invoice = $r->no_invoice;
@@ -442,6 +452,18 @@ class GudangSarangController extends Controller
         return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('sukses', 'Data Berhasil');
     }
 
+    public function getFormulirKategori($kategori)
+    {
+        return DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join users as b on b.id = a.id_pemberi
+        left join users as c on c.id = a.id_penerima
+        WHERE a.kategori = '$kategori' 
+        group by a.no_invoice
+        order by a.id_formulir DESC
+        ");
+    }
+
     public function invoice_sortir(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -451,14 +473,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_sortir";
 
-        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
-        FROM formulir_sarang as a
-        left join users as b on b.id = a.id_pemberi
-        left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'sortir' 
-        group by a.no_invoice
-        order by a.id_formulir DESC
-        ");
+        $formulir = $this->getFormulirKategori('sortir');
 
         $data = [
             'title' => 'Po Sortir',
@@ -478,14 +493,8 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grade";
 
-        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
-        FROM formulir_sarang as a
-        left join users as b on b.id = a.id_pemberi
-        left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'grade' 
-        group by a.no_invoice
-        order by a.id_formulir DESC
-        ");
+        $formulir = $this->getFormulirKategori('grade');
+
 
         $data = [
             'title' => 'Po Sortir',
@@ -506,15 +515,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grade";
 
-        $formulir = DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
-        FROM formulir_sarang as a
-        left join users as b on b.id = a.id_pemberi
-        left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = 'wip' 
-        group by a.no_invoice
-        order by a.id_formulir DESC
-        ");
-
+        $formulir = $this->getFormulirKategori('wip');
         $data = [
             'title' => 'Po Sortir',
             'formulir' => $formulir,
@@ -523,6 +524,28 @@ class GudangSarangController extends Controller
             'routeSekarang' => $routeSekarang,
         ];
         return view('home.gudang_sarang.invoice_wip', $data);
+    }
+
+    public function invoice_grading(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice_grading";
+
+        $formulir = $this->getFormulirKategori('grading');
+
+
+        $data = [
+            'title' => 'Po Grading',
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_grading', $data);
     }
 
     public function print_formulir_grade(Request $r)
@@ -572,5 +595,26 @@ class GudangSarangController extends Controller
             'no_invoice' => $r->no_invoice,
         ];
         return view('home.gudang_sarang.print_formulir_wip', $data);
+    }
+
+    public function print_formulir_grading(Request $r)
+    {
+        $formulir = DB::select("SELECT c.pgws,a.tanggal,b.nm_partai,b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a 
+        join bk as b on b.no_box = a.no_box
+        join (
+            select a.no_box,b.name as pgws from formulir_sarang as a
+            join users as b on a.id_pemberi = b.id
+            where a.kategori = 'grade'
+        ) as c on c.no_box = a.no_box
+        where a.no_invoice = '$r->no_invoice' and b.kategori = 'cabut' and a.kategori = 'grading'
+        group by a.no_box, a.kategori;");
+
+        $data = [
+            'title' => 'Po Grading',
+            'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
+        ];
+        return view('home.gudang_sarang.print_formulir_grading', $data);
     }
 }

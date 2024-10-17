@@ -61,6 +61,11 @@ class GradingBjController extends Controller
         return view('home.gradingbj.index', $data);
     }
 
+    public function po(Request $r)
+    {
+
+    }
+
     public function load_selisih()
     {
         $selisih = $this->getDataMaster('selisih');
@@ -242,9 +247,32 @@ class GradingBjController extends Controller
             }
         }
 
-        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
         session()->flash('success', 'Data berhasil diproses.');
+
+        if ($r->submit == 'serah') {
+            $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
+            $urutanInvoice = DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->max('no_invoice');
+
+            $no_invoice = $urutanInvoice ? $urutanInvoice + 1 : 1001;
+
+            foreach ($getFormulir as $d) {
+                $data[] = [
+                    'no_box' => $d->no_box,
+                    'pcs_awal' => $d->pcs_awal,
+                    'gr_awal' => $d->gr_awal,
+                    'tanggal' => date('Y-m-d'),
+                    'kategori' => 'grading',
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => auth()->user()->id,
+                    'no_invoice' => $no_invoice
+                ];
+            }
+            DB::table('formulir_sarang')->insert($data);
+            return redirect()->back()->with('sukses', 'berhasil di po');
+        }
 
         // Redirect ke rute yang akan ditampilkan sebagai GET
         return redirect()->route('gradingbj.grading_partai_result', [
@@ -255,15 +283,13 @@ class GradingBjController extends Controller
     public function gradingPartaiResult(Request $r)
     {
         $no_box = $r->no_box;
-
         // Ambil data yang sama seperti pada POST
         $partaiData = DB::table('bk')
             ->whereIn('no_box', explode(',', $no_box))
             ->where('kategori', 'cabut')
             ->select('nm_partai', 'tipe', 'ket')
             ->get();
-
-        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $no_box);
+        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $r->no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
 
         $data = [
