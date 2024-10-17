@@ -8,10 +8,10 @@
             <th class="text-center" {!! $color !!}>Tipe</th>
             <th class="text-center" {!! $color !!}>Grade</th>
             <th class="text-center" {!! $color !!}>Pcs</th>
-            <th class="text-center" {!! $color !!}>Pcs</th>
+            <th class="text-center" {!! $color !!}>Gr</th>
             <th class="text-center" {!! $color !!}>Grade 2</th>
             <th class="text-center" {!! $color !!}>Pcs 2</th>
-            <th class="text-center" {!! $color !!}>Pcs 2</th>
+            <th class="text-center" {!! $color !!}>Gr 2</th>
             <th class="text-center" {!! $color !!}>No Box</th>
             <th class="text-center" {!! $color !!}>Cek QC</th>
             <th class="text-center" {!! $color !!}>Admin</th>

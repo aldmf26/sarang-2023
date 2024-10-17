@@ -105,9 +105,9 @@ class PackingListController extends Controller
 
         $pengirimanBox = DB::select("SELECT 
         a.grade as grade2,
-        sum(b.pcs) as pcs,
-        sum(b.gr) as gr,
-        b.grade,
+        b.pcs,
+        b.gr,
+        a.grade,
         sum(a.pcs) as pcs2,
         sum(a.gr) as gr2,
         a.no_box,
@@ -116,7 +116,9 @@ class PackingListController extends Controller
         b.tipe,
         b.nm_partai
         FROM `pengiriman` as a
-        JOIN grading_partai as b on a.no_box = b.box_pengiriman
+        JOIN (
+            SELECT box_pengiriman,sum(pcs) as pcs,sum(gr) as gr,tipe,nm_partai FROM grading_partai group by box_pengiriman
+        )  as b on a.no_box = b.box_pengiriman
         WHERE a.no_box  in ($id_pengiriman)
         GROUP BY b.box_pengiriman
         ORDER by a.grade DESC");

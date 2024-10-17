@@ -7,8 +7,8 @@
             </div>
             <div class="d-flex gap-1">
                 <div>
-                    <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan
-                        Grade</a>
+                    {{-- <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan
+                        Grade</a> --}}
                 </div>
                 <div>
                     <x-theme.btn_filter />
