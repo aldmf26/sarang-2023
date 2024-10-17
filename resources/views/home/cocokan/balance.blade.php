@@ -312,8 +312,11 @@
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Selisih</td>
+                            @php
+                                $pcs_sisa_grading = $grading_sisa->pcs ?? 0;
+                            @endphp
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs, 0) }}
+                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $pcs_sisa_grading, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
                                 0
