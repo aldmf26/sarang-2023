@@ -312,8 +312,11 @@
                         </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Selisih</td>
+                            @php
+                                $pcs_sisa_grading = $grading_sisa->pcs ?? 0;
+                            @endphp
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $grading_sisa->pcs, 0) }}
+                                {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $pcs_sisa_grading, 0) }}
                             </td>
                             <td class="text-end text-danger fw-bold">
                                 0
@@ -329,8 +332,11 @@
                         <td class="dhead text-end fw-bold">
                             {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + $cetak_proses->pcs + $cetak_sisa->pcs + $sedang_proses->pcs + $sortir_sisa->pcs + $grading->pcs + ($sortir_akhir->pcs + $opname->pcs - $grading->pcs) + sumBk($cabut_selesai_siap_cetak, 'pcs') + sumBk($sortir_selesai, 'pcs') + sumBk($cetak_selesai, 'pcs'), 0) }}
                         </td>
+                        @php
+                            $grding_sisa_gr = $grading_sisa->gr ?? 0;
+                        @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grading_sisa->gr + $pengiriman->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + sumBk($sortir_selesai, 'gr') + sumBk($cetak_selesai, 'gr'), 0) }}
+                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grding_sisa_gr + $pengiriman->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + sumBk($sortir_selesai, 'gr') + sumBk($cetak_selesai, 'gr'), 0) }}
                         </td>
                         @php
 
