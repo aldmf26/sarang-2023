@@ -199,6 +199,30 @@ class Grading extends Model
         return $gudang;
     }
 
+    public static function stock_wip()
+    {
+        return DB::select("SELECT 
+            a.box_pengiriman as no_box,
+            a.grade,
+            sum(a.pcs) as pcs, 
+            sum(a.gr) as gr,
+            a.no_invoice,
+            a.urutan,
+            b.pcs as pcs_pengiriman, 
+            b.gr as gr_pengiriman
+            FROM `grading_partai` as a
+            LEFT JOIN (
+                SELECT 
+                no_box as no_box_pengiriman,
+                sum(pcs) as pcs, 
+                sum(gr) as gr 
+                FROM `pengiriman` 
+                GROUP BY no_box
+            )  as b on b.no_box_pengiriman = a.box_pengiriman
+            where a.formulir = 'Y'
+            GROUP BY box_pengiriman ORDER BY a.grade Desc");
+    }
+
     public static function gudangPengirimanGr($no_box = null)
     {
         $whereBox = $no_box ? "AND g.no_box = $no_box " : '';

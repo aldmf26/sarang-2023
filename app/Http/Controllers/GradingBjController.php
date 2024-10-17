@@ -335,7 +335,7 @@ class GradingBjController extends Controller
                     # code...
                 } else {
                     if ($getBoxkirim->grade != $r->grade[$i]) {
-                        return redirect()->back()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
+                        return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
                     }
                 }
                 DB::table('grading_partai')->insert($data);
@@ -352,7 +352,7 @@ class GradingBjController extends Controller
 
 
             if ($ttlPcsGrading > $ttlPcsSortir || $ttlGrGrading > $ttlGrSortir) {
-                return redirect()->back()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
+                return redirect()->back()->withInput()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
 
 
@@ -372,7 +372,7 @@ class GradingBjController extends Controller
             return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -701,27 +701,7 @@ class GradingBjController extends Controller
 
     public function gudang_siap_kirim(Request $r)
     {
-        // $gudang = Grading::siapKirim();
-        $gudang = DB::select("SELECT 
-            a.box_pengiriman as no_box,
-            a.grade,
-            sum(a.pcs) as pcs, 
-            sum(a.gr) as gr,
-            a.no_invoice,
-            a.urutan,
-            b.pcs as pcs_pengiriman, 
-            b.gr as gr_pengiriman
-            FROM `grading_partai` as a
-            LEFT JOIN (
-                SELECT 
-                no_box as no_box_pengiriman,
-                sum(pcs) as pcs, 
-                sum(gr) as gr 
-                FROM `pengiriman` 
-                GROUP BY no_box
-            )  as b on b.no_box_pengiriman = a.box_pengiriman
-            where a.formulir = 'Y'
-            GROUP BY box_pengiriman ORDER BY a.grade Desc");
+        $gudang = Grading::stock_wip();
 
         $data = [
             'title' => 'Stock Siap Kirim',

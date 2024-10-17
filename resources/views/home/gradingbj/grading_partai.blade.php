@@ -213,15 +213,16 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input x-model="pcs[index]" type="text" autocomplete="off" class="text-end form-control"
-                                            name="pcs[]">
+                                        <input x-model="pcs[index]" type="text" autocomplete="off"
+                                            class="text-end form-control" name="pcs[]">
                                     </td>
                                     <td>
-                                        <input required x-model="gr[index]" type="text" autocomplete="off" class="text-end form-control"
-                                            name="gr[]">
+                                        <input required x-model="gr[index]" type="text" autocomplete="off"
+                                            class="text-end form-control" name="gr[]">
                                     </td>
                                     <td>
-                                        <input required type="text" autocomplete="off" class="form-control" name="box_sp[]">
+                                        <input required type="text" autocomplete="off" class="form-control"
+                                            name="box_sp[]">
                                     </td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
@@ -261,10 +262,11 @@
             </div>
             <button type="submit" class="btn btn-md btn-primary float-end">Save</button>
         </form>
+
         @section('scripts')
-            
-        <script>
-            $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
+
+            <script>
+                $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
                     const $currentCell = $(this).closest('td');
                     const columnIndex = $currentCell.index();
                     const $currentRow = $currentCell.parent();
@@ -286,7 +288,7 @@
                             break;
                     }
                 });
-        </script>
+            </script>
         @endsection
 
     </x-slot>
