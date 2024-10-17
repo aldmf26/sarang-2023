@@ -438,7 +438,7 @@ group by a.no_box;
                     ) as f on f.no_box = a.no_box
                     where a.baru = 'baru' and a.kategori ='cabut'
                     group by a.no_box
-                ) as g on g.no_box = a.no_box_sortir
+                ) as g on g.no_box = a.no_box_sortir 
         WHERE a.selesai = 'T'
         group by a.no_box_sortir
         having gr != 0;");

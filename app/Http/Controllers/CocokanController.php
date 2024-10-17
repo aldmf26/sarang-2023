@@ -437,6 +437,7 @@ left join(
             'cost_dll' => $cost_dll,
             'cetak_akhir'  => $cetak_akhir,
             'grading_sisa' => CocokanModel::grading_sisa(),
+            'grading_sisa2' => OpnameNewModel::grading_sisa(),
             'grading_akhir' => $grading_akhir,
             'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
             'cetak_selesai' => OpnameNewModel::cetak_selesai(),
