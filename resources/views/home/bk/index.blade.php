@@ -15,6 +15,7 @@
                         @include('home.bk.btn_import')
                     </div>
                 </div> --}}
+                @if (auth()->user()->posisi_id != 13)
                 <div>
                     @include('home.bk.btn_import')
                 </div>
@@ -27,6 +28,13 @@
                 <div>
                     <x-theme.btn_filter />
                 </div>
+                @endif
+                @if (auth()->user()->posisi_id == 13)
+                <div>
+                    <x-theme.btn_filter />
+                </div> 
+                @endif
+
             </div>
         </div>
 
