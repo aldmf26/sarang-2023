@@ -72,7 +72,7 @@
                 </table>
             </div>
             <div class="col-lg-12">
-                <table class="table" id="tablealdi">
+                <table class="table" id="tblPenc">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -183,7 +183,7 @@
             $(document).ready(function() {
 
                 inputChecked('cekSemuaTutup', 'cek_bayar')
-                pencarian('pencarian', 'tablealdi')
+                pencarian('pencarian', 'tblPenc')
 
                 function clickCekKirim(kelas, link, formDelete = null) {
                     $(document).on('click', `${kelas}`, function(e) {
