@@ -768,9 +768,8 @@ class GradingBjController extends Controller
             tgl,
             admin
             FROM `grading_partai`
-            WHERE box_pengiriman = '$no_invoice'");
+            WHERE no_invoice = '$no_invoice'");
 
-        dd($no_invoice);
 
         $getBox = DB::select("SELECT a.no_box_sortir as no_box, a.pcs,a.gr, b.tipe FROM `grading` as a 
         join bk as b on a.no_box_sortir = b.no_box and b.kategori = 'cabut'
@@ -779,7 +778,6 @@ class GradingBjController extends Controller
         $gradeStatuses = ['bentuk', 'turun'];
         $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
         $gradeTurun = $tb_grade->where('status', 'turun');
-
         $nm_partai = $getFormulir[0]->nm_partai;
         $admin = $getFormulir[0]->admin;
         $tgl = $getFormulir[0]->tgl;
