@@ -221,8 +221,8 @@
                                             class="text-end form-control" name="gr[]">
                                     </td>
                                     <td>
-                                        <input required type="text" autocomplete="off" class="form-control"
-                                            name="box_sp[]">
+                                        <input required type="text" autocomplete="off"
+                                            class="form-control boxkirim" name="box_sp[]">
                                     </td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
@@ -264,7 +264,6 @@
         </form>
 
         @section('scripts')
-
             <script>
                 $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
                     const $currentCell = $(this).closest('td');
