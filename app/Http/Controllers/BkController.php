@@ -31,9 +31,11 @@ class BkController extends Controller
             $where .= " and a.penerima = ?";
             $params[] = $id_user;
         }
+
         $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
         left join users as d on d.id = a.penerima 
         WHERE $where ORDER BY a.id_bk DESC", $params);
+
         $data = [
             'title' => 'Divisi BK',
             'tgl1' => $tgl1,

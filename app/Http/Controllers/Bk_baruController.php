@@ -8,11 +8,34 @@ use Illuminate\Support\Facades\DB;
 
 class Bk_baruController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
+        $id_user = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $id_user = auth()->user()->id;
+        $where = "a.tgl between ? and ? and a.kategori LIKE ? and a.selesai = 'T' ";
+        $params = [$tgl1, $tgl2, "cabut"];
+        if (!in_array(auth()->user()->posisi_id, [1, 12])) {
+            $where .= " and a.penerima = ?";
+            $params[] = $id_user;
+        }
+
+        if ($posisi == 1 || $posisi == 12) {
+            $bk = DB::table('bk')->where('formulir', 'T')->where('kategori', 'cabut')->orderBy('id_bk', 'DESC')->get();
+        } else {
+            $bk = DB::select("SELECT a.tgl_input,a.pgws_grade, a.susut, a.nm_partai,a.id_bk,a.selesai,a.no_lot,a.no_box,a.tipe,a.ket,a.warna,a.tgl,a.pengawas,a.penerima,a.pcs_awal,a.gr_awal,d.name FROM bk as a 
+            left join users as d on d.id = a.penerima 
+            WHERE $where ORDER BY a.id_bk DESC", $params);
+        }
+
+
         $data = [
             'title' => 'Box Terakhir:',
-            'bk' => DB::table('bk')->where('formulir', 'T')->where('kategori', 'cabut')->orderBy('id_bk', 'DESC')->get(),
+            'bk' => $bk,
             'users' => DB::table('users')->whereNotIn('posisi_id', [1, 15, 16, 14])->get(),
             'bk_terakhir' => $this->getNoBoxTambah()['nobox2'],
         ];
