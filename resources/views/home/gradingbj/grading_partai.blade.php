@@ -44,12 +44,12 @@
             method="post">
             @csrf
             <div class="row">
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="dhead">Pengawas</th>
-                                {{-- <th class="dhead">No Nota</th> --}}
+                                <th class="dhead">No Invoice</th>
                                 <th class="dhead">Tgl</th>
                             </tr>
                             <tr>
@@ -58,10 +58,10 @@
                                         class="form-control" required>
                                     <input type="hidden" name="nm_partai" value="{{ $nm_partai }}">
                                 </td>
-                                {{-- <td>
-                                    <input type="text" readonly value="{{ $no_nota }}" name="no_nota"
+                                <td>
+                                    <input type="text" readonly value="{{ $no_invoice }}" name="no_nota"
                                         class="form-control" required>
-                                </td> --}}
+                                </td>
                                 <td>
                                     <input readonly type="date" value="{{ date('Y-m-d') }}" name="tgl"
                                         class="form-control" required>

@@ -30,5 +30,21 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endpresiden', function () {
             return "<?php endif; ?>";
         });
+
+        Blade::directive('pgwsGrading', function () {
+            return "<?php if(Auth::check() && Auth::user()->posisi_id == 15): ?>";
+        });
+
+        Blade::directive('endpgwsGrading', function () {
+            return "<?php endif; ?>";
+        });
+
+        Blade::directive('pgwsCabut', function () {
+            return "<?php if(Auth::check() && Auth::user()->posisi_id == 13): ?>";
+        });
+
+        Blade::directive('endpgwsCabut', function () {
+            return "<?php endif; ?>";
+        });
     }
 }

@@ -27,17 +27,29 @@
                                 Data Selisih</a>
                             <button type="submit" name="submit" value="export" class="btn btn-sm btn-primary"
                                 href="" x-show="cek.length">Export</button> --}}
+
+
                             <input type="hidden" name="no_box" class="form-control" :value="cek">
-                            <button name="submit" value="grading" x-transition x-show="cek.length"
+
+                            {{-- <button name="submit" value="grading" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-primary" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Grading
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                            </button>
+                            </button> --}}
+
                             <a href="{{ route('gradingbj.gudang') }}" style="color: white;background-color: #D722A9;"
                                 class="btn btn-sm ">
                                 <i class="fas fa-clipboard-list"></i> Gudang
                             </a>
+                            <x-theme.button href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}"
+                                icon="fa-clipboard-list" teks="Po Grading" />
+                            <button name="submit" value="serah" x-transition x-show="cek.length"
+                                class="btn btn-sm btn-primary" type="submit">
+                                <i class="fas fa-plus"></i>
+                                Serah
+                                <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            </button>
                             {{-- <button name="submit" value="selisih" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-danger" type="submit">
                                 <i class="fas fa-plus"></i>
@@ -67,29 +79,36 @@
                         </thead>
                         <tbody>
                             @foreach ($formulir as $i => $d)
-                                <tr class="pointer"
-                                    @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
-                                    <td>{{ $i + 1 }}</td>
-                                    {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
-                                    <td>{{ $d->nm_partai }}</td>
-                                    <td align="center">{{ $d->no_box }}</td>
-                                    <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                    <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
-                                    <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
-                                    @presiden
-                                        <td class="text-end">
-                                            {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
+                                @php
+                                    $boxPoGrade = DB::table('formulir_sarang')
+                                        ->where([['kategori', 'grading'], ['no_box', $d->no_box]])
+                                        ->first();
+                                    if(!empty($boxPoGrade)) continue;
+                                   
+                                @endphp
+                                    <tr class=""
+                                        @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
+                                        <td>{{ $i + 1 }}</td>
+                                        {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
+                                        <td>{{ $d->nm_partai }}</td>
+                                        <td align="center">{{ $d->no_box }}</td>
+                                        <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
+                                        <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
+                                        <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
+                                        @presiden
+                                            <td class="text-end">
+                                                {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
+                                            </td>
+                                            <td class="text-end">
+                                                {{-- {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }} --}}
+                                            </td>
+                                        @endpresiden
+                                        <td align="center">
+                                            <input type="checkbox" class="form-check"
+                                                :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
+                                                id="" value="{{ $d->no_box }}">
                                         </td>
-                                        <td class="text-end">
-                                            {{-- {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }} --}}
-                                        </td>
-                                    @endpresiden
-                                    <td align="center">
-                                        <input type="checkbox" class="form-check"
-                                            :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
-                                            id="" value="{{ $d->no_box }}">
-                                    </td>
-                                </tr>
+                                    </tr>
                             @endforeach
                         </tbody>
                     </table>

@@ -244,11 +244,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/invoice_sortir', 'invoice_sortir')->name('invoice_sortir');
             Route::get('/invoice_grade', 'invoice_grade')->name('invoice_grade');
             Route::get('/invoice_wip', 'invoice_wip')->name('invoice_wip');
+            Route::get('/invoice_grading', 'invoice_grading')->name('invoice_grading');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
+
             Route::get('/selesai_wip', 'selesai_wip')->name('selesai_wip');
             Route::get('/batal_wip', 'batal_wip')->name('batal_wip');
             Route::get('/print_formulir_wip', 'print_formulir_wip')->name('print_formulir_wip');
+
+            Route::get('/selesai_grading', 'selesai_grading')->name('selesai_grading');
+            Route::get('/batal_grading', 'batal_grading')->name('batal_grading');
+            Route::get('/print_formulir_grading', 'print_formulir_grading')->name('print_formulir_grading');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
