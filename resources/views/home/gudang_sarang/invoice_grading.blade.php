@@ -53,6 +53,12 @@
                                     $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
                                 @endphp
                                 @pgwsGrading
+                                    
+                                    @if ($getSudahGrading)
+                                    <a href="{{ route('gradingbj.detail_pengiriman', ['no_box' => $hasil,'no_invoice' => $d->no_invoice, 'detail' => 'Y']) }}">
+                                        <span class="badge bg-primary">Detail</span>
+                                    </a>
+                                    @else
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal_grading', ['no_invoice' => $d->no_invoice, 'kategori' => 'grading']) }}">
                                         <span class="badge bg-danger">Cancel</span>
@@ -62,11 +68,6 @@
                                         target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
-                                    @if ($getSudahGrading)
-                                    <a href="{{ route('gradingbj.detail_pengiriman', ['no_box' => $hasil,'no_invoice' => $d->no_invoice, 'detail' => 'Y']) }}">
-                                        <span class="badge bg-primary">Detail</span>
-                                    </a>
-                                    @else
                                     <a href="{{ route('gradingbj.grading_partai_result', ['no_box' => $hasil,'no_invoice' => $d->no_invoice]) }}">
                                         <span class="badge bg-primary">Grading</span>
                                     </a>
