@@ -946,92 +946,97 @@ class OpnameNewController extends Controller
         }
         $sheet4->getStyle('B3:J' . $kolom - 1)->applyFromArray($style);
 
-        $sheet4->mergeCells('N1:O1');
-        $sheet4->mergeCells('P1:Q1');
-        $sheet4->mergeCells('R1:S1');
-        $sheet4->mergeCells('T1:U1');
+        $kolom2 = $kolom + 1;
 
-        $sheet4->mergeCells('M1:M2');
+        $sheet4->mergeCells("C$kolom2:D$kolom2");
+        $sheet4->mergeCells("E$kolom2:F$kolom2");
+        $sheet4->mergeCells("G$kolom2:H$kolom2");
+        $sheet4->mergeCells("I$kolom2:J$kolom2");
 
-        $sheet4->getStyle("M1:U2")->applyFromArray($style_atas);
+        $sheet4->mergeCells("B$kolom2:B" . $kolom2 + 1);
 
-        $sheet4->setCellValue('L1', 'Cetak');
-        $sheet4->setCellValue('M1', 'Nama pengawas');
-        $sheet4->setCellValue('N1', 'Cetak proses');
-        $sheet4->setCellValue('P1', 'Cetak sisa pengawas');
-        $sheet4->setCellValue('R1', 'Cetak selesai siap sortir');
-        $sheet4->setCellValue('T1', 'Total');
+        $sheet4->getStyle("B$kolom2:J" . $kolom2 + 1)->applyFromArray($style_atas);
 
-        $sheet4->setCellValue('N2', 'pcs');
-        $sheet4->setCellValue('O2', 'gr');
-        $sheet4->setCellValue('P2', 'pcs');
-        $sheet4->setCellValue('Q2', 'gr');
-        $sheet4->setCellValue('R2', 'pcs');
-        $sheet4->setCellValue('S2', 'gr');
-        $sheet4->setCellValue('T2', 'pcs');
-        $sheet4->setCellValue('U2', 'gr');
+        $sheet4->setCellValue('A' . $kolom2, 'Cetak');
+        $sheet4->setCellValue('B' . $kolom2, 'Nama pengawas');
+        $sheet4->setCellValue('C' . $kolom2, 'Cetak proses');
+        $sheet4->setCellValue('E' . $kolom2, 'Cetak sisa pengawas');
+        $sheet4->setCellValue('G' . $kolom2, 'Cetak selesai siap sortir');
+        $sheet4->setCellValue('I' . $kolom2, 'Total');
+
+        $sheet4->setCellValue('C' . $kolom2 + 1, 'pcs');
+        $sheet4->setCellValue('D' . $kolom2 + 1, 'gr');
+        $sheet4->setCellValue('E' . $kolom2 + 1, 'pcs');
+        $sheet4->setCellValue('F' . $kolom2 + 1, 'gr');
+        $sheet4->setCellValue('G' . $kolom2 + 1, 'pcs');
+        $sheet4->setCellValue('H' . $kolom2 + 1, 'gr');
+        $sheet4->setCellValue('I' . $kolom2 + 1, 'pcs');
+        $sheet4->setCellValue('J' . $kolom2 + 1, 'gr');
 
         $pgws_cetak = DB::table('users')->where('posisi_id', '14')->get();
 
-        $kolom = 3;
+        $kolom_ctk = $kolom2 + 2;
         foreach ($pgws_cetak  as $no => $b) {
-            $sheet4->setCellValue('M' . $kolom, $b->name);
-            $sheet4->setCellValue('N' . $kolom, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$E:$E)');
-            $sheet4->setCellValue('O' . $kolom, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$F:$F)');
-            $sheet4->setCellValue('P' . $kolom, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$R:$R)');
-            $sheet4->setCellValue('Q' . $kolom, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$S:$S)');
-            $sheet4->setCellValue('R' . $kolom, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$AE:$AE)');
-            $sheet4->setCellValue('S' . $kolom, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!M' . $kolom . ',\'Gudang Cetak\'!$AF:$AF)');
-            $sheet4->setCellValue('T' . $kolom, "=N$kolom+P$kolom+R$kolom");
-            $sheet4->setCellValue('U' . $kolom, "=O$kolom+Q$kolom+S$kolom");
+            $sheet4->setCellValue('B' . $kolom_ctk, $b->name);
+            $sheet4->setCellValue('C' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$E:$E)');
+            $sheet4->setCellValue('D' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$F:$F)');
+            $sheet4->setCellValue('E' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$R:$R)');
+            $sheet4->setCellValue('F' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$S:$S)');
+            $sheet4->setCellValue('G' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AE:$AE)');
+            $sheet4->setCellValue('H' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AF:$AF)');
+            $sheet4->setCellValue('I' . $kolom_ctk, "=C$kolom_ctk+E$kolom_ctk+G$kolom_ctk");
+            $sheet4->setCellValue('J' . $kolom_ctk, "=D$kolom_ctk+F$kolom_ctk+H$kolom_ctk");
 
-            $kolom++;
+            $kolom_ctk++;
         }
-        $sheet4->getStyle('M3:U' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle("B$kolom2:J" . $kolom_ctk - 1)->applyFromArray($style);
 
 
-        $sheet4->mergeCells('Y1:Z1');
-        $sheet4->mergeCells('AA1:AB1');
-        $sheet4->mergeCells('AC1:AD1');
-        $sheet4->mergeCells('AE1:AF1');
+        $kolom3 = $kolom_ctk + 1;
 
-        $sheet4->mergeCells('X1:X2');
 
-        $sheet4->getStyle("X1:AF2")->applyFromArray($style_atas);
+        $sheet4->mergeCells("C$kolom3:D$kolom3");
+        $sheet4->mergeCells("E$kolom3:F$kolom3");
+        $sheet4->mergeCells("G$kolom3:H$kolom3");
+        $sheet4->mergeCells("I$kolom3:J$kolom3");
 
-        $sheet4->setCellValue('W1', 'Sortir');
-        $sheet4->setCellValue('X1', 'Nama pengawas');
-        $sheet4->setCellValue('Y1', 'Sortir proses');
-        $sheet4->setCellValue('AA1', 'Sortir sisa pengawas');
-        $sheet4->setCellValue('AC1', 'Sortir selesai siap grade');
-        $sheet4->setCellValue('AE1', 'Total');
+        $sheet4->mergeCells("B$kolom3:B" . $kolom3 + 1);
 
-        $sheet4->setCellValue('Y2', 'pcs');
-        $sheet4->setCellValue('Z2', 'gr');
-        $sheet4->setCellValue('AA2', 'pcs');
-        $sheet4->setCellValue('AB2', 'gr');
-        $sheet4->setCellValue('AC2', 'pcs');
-        $sheet4->setCellValue('AD2', 'gr');
-        $sheet4->setCellValue('AE2', 'pcs');
-        $sheet4->setCellValue('AF2', 'gr');
+        $sheet4->getStyle("B$kolom3:J" . $kolom3 + 1)->applyFromArray($style_atas);
+
+        $sheet4->setCellValue('A' . $kolom3, 'Sortir');
+        $sheet4->setCellValue('B' . $kolom3, 'Nama pengawas');
+        $sheet4->setCellValue('C' . $kolom3, 'Sortir proses');
+        $sheet4->setCellValue('E' . $kolom3, 'Sortir sisa pengawas');
+        $sheet4->setCellValue('G' . $kolom3, 'Sortir selesai siap grade');
+        $sheet4->setCellValue('I' . $kolom3, 'Total');
+
+        $sheet4->setCellValue('C' . $kolom3 + 1, 'pcs');
+        $sheet4->setCellValue('D' . $kolom3 + 1, 'gr');
+        $sheet4->setCellValue('E' . $kolom3 + 1, 'pcs');
+        $sheet4->setCellValue('F' . $kolom3 + 1, 'gr');
+        $sheet4->setCellValue('G' . $kolom3 + 1, 'pcs');
+        $sheet4->setCellValue('H' . $kolom3 + 1, 'gr');
+        $sheet4->setCellValue('I' . $kolom3 + 1, 'pcs');
+        $sheet4->setCellValue('J' . $kolom3 + 1, 'gr');
 
         $pgws_sortir = DB::table('users')->whereIn('posisi_id', ['14', '13'])->get();
 
-        $kolom = 3;
+        $kolom_sortir = $kolom3 + 2;
         foreach ($pgws_sortir  as $no => $b) {
-            $sheet4->setCellValue('X' . $kolom, $b->name);
-            $sheet4->setCellValue('Y' . $kolom, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$E:$E)');
-            $sheet4->setCellValue('Z' . $kolom, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$F:$F)');
-            $sheet4->setCellValue('AA' . $kolom, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$R:$R)');
-            $sheet4->setCellValue('AB' . $kolom, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$S:$S)');
-            $sheet4->setCellValue('AC' . $kolom, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$AE:$AE)');
-            $sheet4->setCellValue('AD' . $kolom, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!X' . $kolom . ',\'Gudang Sortir\'!$AF:$AF)');
-            $sheet4->setCellValue('AE' . $kolom, "=Y$kolom+AA$kolom+AC$kolom");
-            $sheet4->setCellValue('AF' . $kolom, "=Z$kolom+AB$kolom+AD$kolom");
+            $sheet4->setCellValue('B' . $kolom_sortir, $b->name);
+            $sheet4->setCellValue('C' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$E:$E)');
+            $sheet4->setCellValue('D' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$F:$F)');
+            $sheet4->setCellValue('E' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$R:$R)');
+            $sheet4->setCellValue('F' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$S:$S)');
+            $sheet4->setCellValue('G' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AE:$AE)');
+            $sheet4->setCellValue('H' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AF:$AF)');
+            $sheet4->setCellValue('I' . $kolom_sortir, "=C$kolom_sortir+E$kolom_sortir+G$kolom_sortir");
+            $sheet4->setCellValue('J' . $kolom_sortir, "=D$kolom_sortir+F$kolom_sortir+H$kolom_sortir");
 
-            $kolom++;
+            $kolom_sortir++;
         }
-        $sheet4->getStyle('X3:AF' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle("B$kolom3:J" . $kolom_sortir - 1)->applyFromArray($style);
     }
 
 
