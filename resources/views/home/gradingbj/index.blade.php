@@ -31,12 +31,12 @@
 
                             <input type="hidden" name="no_box" class="form-control" :value="cek">
 
-                            <button name="submit" value="grading" x-transition x-show="cek.length"
+                            {{-- <button name="submit" value="grading" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-primary" type="submit">
                                 <i class="fas fa-plus"></i>
                                 Grading
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                            </button>
+                            </button> --}}
 
                             <a href="{{ route('gradingbj.gudang') }}" style="color: white;background-color: #D722A9;"
                                 class="btn btn-sm ">

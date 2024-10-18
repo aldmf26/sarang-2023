@@ -49,7 +49,8 @@
                                         ->pluck('no_box')
                                         ->toArray();
                                     $hasil = implode(',', $getBox);
-                               
+
+                                    $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
                                 @endphp
                                 @pgwsGrading
                                     <a onclick="return confirm('Yakin dihapus ?')"
@@ -61,10 +62,15 @@
                                         target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
-                                    <a href="{{ route('gradingbj.grading_partai_result', ['no_box' => $hasil]) }}"
-                                        >
-                                        <span class="badge bg-primary">grading</span>
+                                    @if ($getSudahGrading)
+                                    <a href="{{ route('gradingbj.detail_pengiriman', ['no_box' => $hasil,'no_invoice' => $d->no_invoice, 'detail' => 'Y']) }}">
+                                        <span class="badge bg-primary">Detail</span>
                                     </a>
+                                    @else
+                                    <a href="{{ route('gradingbj.grading_partai_result', ['no_box' => $hasil,'no_invoice' => $d->no_invoice]) }}">
+                                        <span class="badge bg-primary">Grading</span>
+                                    </a>
+                                    @endif
                                     {{-- <form method="POST" action="{{ route('gradingbj.grading_partai', ['no_box' => $hasil]) }}"
                                         onsubmit="return confirm('Yakin digrading ?')">
                                         @csrf

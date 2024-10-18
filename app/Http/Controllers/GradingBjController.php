@@ -252,12 +252,10 @@ class GradingBjController extends Controller
 
         if ($r->submit == 'serah') {
             $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
-            $urutanInvoice = DB::table('formulir_sarang')
-                ->where('kategori', 'grading')
-                ->max('no_invoice');
+            $urutanInvoice = DB::table('grading_partai')
+                ->max('urutan');
 
             $no_invoice = $urutanInvoice ? $urutanInvoice + 1 : 1001;
-
             foreach ($getFormulir as $d) {
                 $data[] = [
                     'no_box' => $d->no_box,
@@ -298,7 +296,8 @@ class GradingBjController extends Controller
             'nm_partai' => $partaiData->first()->nm_partai,
             'getFormulir' => $getFormulir,
             'gradeBentuk' => $tb_grade,
-            'no_box' => $no_box
+            'no_box' => $no_box,
+            'no_invoice' => $r->no_invoice
         ];
 
         return view('home.gradingbj.grading_partai', $data);
@@ -313,7 +312,7 @@ class GradingBjController extends Controller
             $tgl = date('Y-m-d');
             $lastItem = DB::table('grading_partai')->where('nm_partai', $nm_partai)->orderBy('urutan', 'desc')->first();
             $urutan = !$lastItem ? 1 : $lastItem->urutan + 1;
-            $no_invoice = "$nm_partai-$urutan";
+            $no_invoice = $r->no_nota;
 
             for ($i = 0; $i < count($r->no_box); $i++) {
                 $getFormulir = DB::table('formulir_sarang')->where([['kategori', 'grade'], ['no_box', $r->no_box[$i]]])->first();
@@ -326,7 +325,6 @@ class GradingBjController extends Controller
                     'tgl' => $tgl,
                 ];
             }
-
 
             for ($i = 0; $i < count($r->grade); $i++) {
                 if (!$r->box_sp[$i]) {
