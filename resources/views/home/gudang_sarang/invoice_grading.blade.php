@@ -55,7 +55,7 @@
                                 @pgwsGrading
                                     
                                     @if ($getSudahGrading)
-                                    <a href="{{ route('gradingbj.detail_pengiriman', ['no_box' => $hasil,'no_invoice' => $d->no_invoice, 'detail' => 'Y']) }}">
+                                    <a href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}">
                                         <span class="badge bg-primary">Detail</span>
                                     </a>
                                     @else
