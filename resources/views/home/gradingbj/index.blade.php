@@ -84,7 +84,6 @@
                                         ->where([['kategori', 'grading'], ['no_box', $d->no_box]])
                                         ->first();
                                     if(!empty($boxPoGrade)) continue;
-                                   
                                 @endphp
                                     <tr class=""
                                         @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
