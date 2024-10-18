@@ -454,7 +454,7 @@ class GudangSarangController extends Controller
 
     public function getFormulirKategori($kategori)
     {
-        return DB::select("SELECT count(a.no_box) as ttlbox, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        return DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
