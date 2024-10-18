@@ -356,8 +356,8 @@ class CabutController extends Controller
                         'tgl_terima' => $r->tgl_terima[$x],
                     ];
                     $id_cabut = $r->id_cabut[$x];
-                    $cek = DB::table('cabut')->where([['no_box', $no_box],['id_pengawas', $r->id_pengawas[$x]]])->exists();
-                    
+                    $cek = DB::table('cabut')->where([['no_box', $no_box], ['id_pengawas', $r->id_pengawas[$x]]])->exists();
+
                     if ($id_cabut == 9999 && !$cek) {
                         DB::table('cabut')->insert($data);
                     } else {

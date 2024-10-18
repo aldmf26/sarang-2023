@@ -32,11 +32,17 @@
                         @foreach ($summary as $i => $d)
                             @php
                                 $ttl_hari = $d->hariMasuk;
-                                $ttl_rp = $d->ttl_rp + $d->sortir_ttl_rp + $d->eo_ttl_rp + $d->ttl_rp_dll - $d->ttl_rp_denda + $d->ctk_ttl_rp;
+                                $ttl_rp =
+                                    $d->ttl_rp +
+                                    $d->sortir_ttl_rp +
+                                    $d->eo_ttl_rp +
+                                    $d->ttl_rp_dll -
+                                    $d->ttl_rp_denda +
+                                    $d->ctk_ttl_rp;
                                 $rata2 = $ttl_rp / $ttl_hari;
                                 $target = 90000;
                             @endphp
-                            <tr class="detail" ttl_hari="{{$ttl_hari}}" id_anak="{{ $d->id_anak }}">
+                            <tr class="detail" ttl_hari="{{ $ttl_hari }}" id_anak="{{ $d->id_anak }}">
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $d->pgws }}</td>
                                 <td class="text-primary">{{ $d->nm_anak }}</td>
