@@ -61,10 +61,7 @@ class GradingBjController extends Controller
         return view('home.gradingbj.index', $data);
     }
 
-    public function po(Request $r)
-    {
-
-    }
+    public function po(Request $r) {}
 
     public function load_selisih()
     {
@@ -302,6 +299,26 @@ class GradingBjController extends Controller
         ];
 
         return view('home.gradingbj.grading_partai', $data);
+    }
+
+    public function cek_box_kirim(Request $r)
+    {
+        $boxkirim = $r->boxkirim;
+        $grade = $r->grade;
+        $databox =  DB::selectOne("SELECT a.grade, a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr
+                    FROM grading_partai as a 
+                    where a.box_pengiriman = '$boxkirim'
+                    group by a.box_pengiriman;");
+
+        if (empty($databox)) {
+            return "<span class='fw-bold'> data tidak ditemukan </span>";
+        } else {
+            if ($databox->grade == $grade) {
+                return 'Pcs : ' . round($databox->pcs, 0) . ' | ' . 'Gr : ' . round($databox->gr, 0);
+            } else {
+                return "<span class='text-danger fw-bold'> grade: $databox->grade </span>";
+            }
+        }
     }
 
     public function create_partai(Request $r)
