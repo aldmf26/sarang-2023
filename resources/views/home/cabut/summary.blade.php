@@ -69,6 +69,7 @@
                 loadTable('tbl_summary')
                 $('.detail').click(function(e) {
                     e.preventDefault();
+                    console.log('dsa');
                     const id_anak = $(this).attr("id_anak")
                     const ttl_hari = $(this).attr("ttl_hari")
                     const bulan = "{{ $bulan }}"
