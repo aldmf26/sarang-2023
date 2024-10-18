@@ -98,11 +98,13 @@
                                 <th>Grade</th>
                                 <th>Pcs</th>
                                 <th>Gr</th>
+                                <th>Box Grading</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for ($i = 1; $i <= 18; $i++)
                                 <tr>
+                                    <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
