@@ -252,10 +252,11 @@ class GradingBjController extends Controller
 
         if ($r->submit == 'serah') {
             $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
-            $urutanInvoice = DB::table('grading_partai')
-                ->max('urutan');
+            $urutanInvoice = DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->max('no_invoice');
 
-            $no_invoice = $urutanInvoice ? $urutanInvoice + 1 : 1001;
+            $no_invoice = $urutanInvoice ? $urutanInvoice + 1 : 11055;
             foreach ($getFormulir as $d) {
                 $data[] = [
                     'no_box' => $d->no_box,
