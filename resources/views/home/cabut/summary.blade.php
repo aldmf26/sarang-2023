@@ -16,7 +16,7 @@
     <x-slot name="cardBody">
         <div class="row">
             <div class="col">
-                <table id="tbl_summary" class="table table-hover table-bordered">
+                <table id="nanda" class="table table-hover table-bordered" width="100%">
                     <thead>
                         <tr>
                             <th class="dhead">#</th>
