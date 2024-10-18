@@ -3,7 +3,7 @@
         <div x-data="{
             cek: [],
             selectedItem: [],
-            tambah(no_box, grade,pcs, gr) {
+            tambah(no_box, grade, pcs, gr) {
                 const selectedItem = this.selectedItem
                 const index = selectedItem.findIndex(item => item.no_box === no_box);
                 if (index === -1) {
@@ -27,8 +27,8 @@
                             class="fas fa-print"></i> Export All</a> --}}
                     <x-theme.button href="#" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                         teks="serah" />
-                    <x-theme.button href="{{ route('gudangsarang.invoice_wip',['kategori' => 'wip']) }}" icon="fa-clipboard-list"
-                        teks="Po Wip" />
+                    <x-theme.button href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}"
+                        icon="fa-clipboard-list" teks="Po Wip" />
                 </div>
             </div>
             <div class="row">
@@ -147,7 +147,7 @@
                                         <td>{{ $d->box_pengiriman }}</td>
                                         <td>{{ $d->grade }}</td>
                                         <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
-                                        <td class="text-end">{{ number_format($d->gr, 0) }}</td>
+                                        <td class="text-end">{{ number_format(floor($d->gr), 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})"
@@ -192,8 +192,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <input class="d-none" name="no_box[]" type="text"
-                                            :value="cek">
+                                        <input class="d-none" name="no_box[]" type="text" :value="cek">
                                         <template x-for="item in selectedItem">
                                             <tr>
                                                 <td x-text="item.no_box"></td>
