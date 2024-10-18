@@ -209,7 +209,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/sum_cetak', 'sum_cetak')->name('sum_cetak');
             Route::get('/sum_sortir', 'sum_sortir')->name('sum_sortir');
         });
-        Route::post('/import-excel', [KelasController::class, 'importExcel'])->name('import-excel');
+    Route::post('/import-excel', [KelasController::class, 'importExcel'])->name('import-excel');
 
     Route::controller(BkController::class)
         ->prefix('home/bk')
@@ -556,6 +556,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_selisih', 'export_selisih')->name('export_selisih');
             Route::get('/export_susut', 'export_susut')->name('export_susut');
             Route::get('/detail_pengiriman', 'detail_pengiriman')->name('detail_pengiriman');
+            Route::get('/cek_box_kirim', 'cek_box_kirim')->name('cek_box_kirim');
         });
     Route::controller(OpnameController::class)
         ->prefix('home/opname')

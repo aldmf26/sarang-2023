@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
@@ -83,8 +83,11 @@
                                 <th class="dhead text-center">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                <th class="dhead text-end">Rp/gr</th>
-                                <th class="dhead text-end">Total Rp</th>
+
+                                @presiden
+                                    <th class="dhead text-end">Rp/gr</th>
+                                    <th class="dhead text-end">Total Rp</th>
+                                @endpresiden
                             </tr>
                         </thead>
                         <thead class="bg-white">
@@ -133,16 +136,19 @@
                                         {{ $ttlGr }}
                                     </h6>
                                 </th>
-                                <th class="text-end">
-                                    <h6>
+                                @presiden
+                                    <th class="text-end">
+                                        <h6>
 
-                                    </h6>
-                                </th>
-                                <th class="text-end">
-                                    <h6>
-                                        {{ number_format(sumBk($getFormulir, 'cost_bk') + sumBk($getFormulir, 'cost_cbt') + sumBk($getFormulir, 'cost_str') + sumBk($getFormulir, 'cost_eo') + sumBk($getFormulir, 'cost_ctk') + sumBk($getFormulir, 'cost_cu'), 0) }}
-                                    </h6>
-                                </th>
+                                        </h6>
+                                    </th>
+
+                                    <th class="text-end">
+                                        <h6>
+                                            {{ number_format(sumBk($getFormulir, 'cost_bk') + sumBk($getFormulir, 'cost_cbt') + sumBk($getFormulir, 'cost_str') + sumBk($getFormulir, 'cost_eo') + sumBk($getFormulir, 'cost_ctk') + sumBk($getFormulir, 'cost_cu'), 0) }}
+                                        </h6>
+                                    </th>
+                                @endpresiden
                             </tr>
 
                         </thead>
@@ -163,10 +169,12 @@
                                             $d->cost_str +
                                             $d->cost_cu;
                                     @endphp
-                                    <td align="right">{{ number_format($ttl_rp / $d->gr_awal, 0) }}</td>
-                                    <td align="right">
-                                        {{ number_format($ttl_rp, 0) }}
-                                    </td>
+                                    @presiden
+                                        <td align="right">{{ number_format($ttl_rp / $d->gr_awal, 0) }}</td>
+                                        <td align="right">
+                                            {{ number_format($ttl_rp, 0) }}
+                                        </td>
+                                    @endpresiden
 
                                 </tr>
                             @endforeach
@@ -183,6 +191,7 @@
                                 <th class="dhead text-end" width="200">Pcs</th>
                                 <th class="dhead text-end" width="200">Gr</th>
                                 <th class="dhead " width="300">Box Grade</th>
+                                <th class="dhead" width="300">Cek</th>
                                 <th class="dhead">Aksi</th>
                             </tr>
                         </thead>
@@ -203,8 +212,8 @@
                                 <tr>
                                     <td x-text="index + 1"></td>
                                     <td>
-                                        <select x-init="initSelect2" required name="grade[]" class="selectGrade"
-                                            id="">
+                                        <select x-init="initSelect2" required name="grade[]"
+                                            class="selectGrade grade" :urutan="index + 1" id="">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($gradeBentuk as $g)
                                                 <option value="{{ $g->nm_grade }}">{{ strtoupper($g->nm_grade) }}
@@ -222,8 +231,10 @@
                                     </td>
                                     <td>
                                         <input required type="text" autocomplete="off"
-                                            class="form-control boxkirim" name="box_sp[]">
+                                            class="form-control boxkirim" :urutan="index + 1" name="box_sp[]">
                                     </td>
+
+                                    <td class="cek" :urutan="index + 1"></td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
                                                 class="fas fa-trash"></i></span>
@@ -231,7 +242,7 @@
                                 </tr>
                             </template>
                             <tr>
-                                <td colspan="5"><button type="button" @click="rows.push({ value: '' })"
+                                <td colspan="6"><button type="button" @click="rows.push({ value: '' })"
                                         class="btn btn-sm btn-primary btn-block"><i class="fas fa-plus"></i>
                                         Tambah</button></td>
                             </tr>
@@ -286,6 +297,49 @@
                             }
                             break;
                     }
+                });
+            </script>
+            <script>
+                $(document).ready(function() {
+                    $(document).on("keyup", ".boxkirim", function(e) {
+                        var urutan = $(this).attr('urutan');
+                        var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
+                        var grade = $('.grade[urutan="' + urutan + '"]').val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('gradingbj.cek_box_kirim') }}",
+                            data: {
+                                boxkirim: boxkirim,
+                                grade: grade
+                            },
+                            success: function(response) {
+                                $('.cek[urutan="' + urutan + '"]').html(response);
+                            }
+                        });
+
+
+                    });
+
+                    $(document).on("change", ".grade", function(e) {
+                        var urutan = $(this).attr('urutan');
+                        var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
+                        var grade = $('.grade[urutan="' + urutan + '"]').val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('gradingbj.cek_box_kirim') }}",
+                            data: {
+                                boxkirim: boxkirim,
+                                grade: grade
+                            },
+                            success: function(response) {
+                                $('.cek[urutan="' + urutan + '"]').html(response);
+                            }
+                        });
+
+
+                    });
                 });
             </script>
         @endsection
