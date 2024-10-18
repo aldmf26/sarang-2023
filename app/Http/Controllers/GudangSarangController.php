@@ -334,7 +334,7 @@ class GudangSarangController extends Controller
     public function selesai_wip(Request $r)
     {
         $no_invoice = $r->no_invoice;
-        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
+        $getFormulir = DB::table('formulir_sarang')->where([['kategori', $r->kategori]])->get();
         foreach ($getFormulir as $d) {
             DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['formulir' => 'Y']);
         }
