@@ -11,7 +11,7 @@ class Bk_baruController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Bk',
+            'title' => 'Box Terakhir:',
             'bk' => DB::table('bk')->where('formulir', 'T')->where('kategori', 'cabut')->orderBy('id_bk', 'DESC')->get(),
             'users' => DB::table('users')->whereNotIn('posisi_id', [1, 15, 16, 14])->get(),
             'bk_terakhir' => $this->getNoBoxTambah()['nobox2'],
