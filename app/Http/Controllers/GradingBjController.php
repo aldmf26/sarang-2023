@@ -823,10 +823,13 @@ class GradingBjController extends Controller
             $nm_partai = $r->nm_partai;
             $tgl = date('Y-m-d');
 
-            $urutan = DB::table('grading_partai')->where('no_invoice', $no_invoice)->first()->urutan;
-
+            $get = DB::table('grading_partai')->where('no_invoice', $no_invoice);
+            $urutan = $get->first()->urutan;
+            $boxPengiriman = $get->pluck('box_pengiriman');
+            DB::table('formulir_sarang')->whereIn('no_box', $boxPengiriman)->delete();
             DB::table('grading_partai')->where('no_invoice', $no_invoice)->delete();
             DB::table('grading')->where('no_invoice', $no_invoice)->delete();
+
 
             for ($i = 0; $i < count($r->no_box); $i++) {
                 $getFormulir = DB::table('formulir_sarang')->where([['kategori', 'grade'], ['no_box', $r->no_box[$i]]])->first();
