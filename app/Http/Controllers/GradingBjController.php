@@ -333,7 +333,7 @@ class GradingBjController extends Controller
                 $data = [
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
-                    'urutan' => $urutan,
+                    'urutan' => $no_invoice,
                     'grade' => $r->grade[$i],
                     'tipe' => $r->tipe,
                     'pcs' => $r->pcs[$i],

@@ -66,8 +66,8 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>No Box</th>
                             <th>Pgws</th>
+                            <th>No Box</th>
                             <th>Pcs</th>
                             <th>Gr</th>
                         </tr>
@@ -75,8 +75,8 @@
                     <tbody>
                         @foreach ($formulir as $i => $d)
                             <tr>
-                                <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->pgws }}</td>
+                                <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->pcs }}</td>
                                 <td>{{ $d->gr }}</td>
                             </tr>
