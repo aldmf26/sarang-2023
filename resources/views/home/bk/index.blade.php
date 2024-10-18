@@ -16,23 +16,24 @@
                     </div>
                 </div> --}}
                 @if (auth()->user()->posisi_id != 13)
-                <div>
-                    @include('home.bk.btn_import')
-                </div>
-                <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus" teks="Tambah" />
-                <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
-                    class="btn btn-sm btn-primary">
-                    <i class="fas fa-file-excel"></i> Export
-                </a>
-                <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
-                <div>
-                    <x-theme.btn_filter />
-                </div>
+                    <div>
+                        @include('home.bk.btn_import')
+                    </div>
+                    <x-theme.button href="{{ route('bk.add', ['kategori' => $kategori]) }}" icon="fa-plus"
+                        teks="Tambah" />
+                    <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => $kategori]) }}"
+                        class="btn btn-sm btn-primary">
+                        <i class="fas fa-file-excel"></i> Export
+                    </a>
+                    <x-theme.button href="#" icon="fa-print" addClass="btn_bayar" teks="Print" />
+                    <div>
+                        <x-theme.btn_filter />
+                    </div>
                 @endif
                 @if (auth()->user()->posisi_id == 13)
-                <div>
-                    <x-theme.btn_filter />
-                </div> 
+                    <div>
+                        <x-theme.btn_filter />
+                    </div>
                 @endif
 
             </div>

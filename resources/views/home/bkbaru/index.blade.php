@@ -44,10 +44,16 @@
                         {{-- <div>
                         @include('home.bk.btn_import')
                     </div> --}}
+                        @if (auth()->user()->posisi_id == 13)
+                            <div>
+                                <x-theme.btn_filter />
+                            </div>
+                        @endif
                         <x-theme.button href="" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
                             teks="Serah" />
                         <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
                         <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
+
                     </div>
                 </div>
 
