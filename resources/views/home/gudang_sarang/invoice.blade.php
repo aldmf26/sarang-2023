@@ -37,7 +37,7 @@
                             </td>
                             <td>{{ $d->pemberi }}</td>
                             <td>{{ $d->penerima }}</td>
-                            <td align="right">{{ $d->ttlbox }}</td>
+                            <td align="right">{{ $d->ttl_box }}</td>
                             <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
