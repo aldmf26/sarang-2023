@@ -197,6 +197,28 @@
                         url: "{{ route('pengiriman.load_tbl_loadTblTmbhBox') }}",
                         success: function(r) {
                             $("#loadTblTmbhBox").html(r);
+                            $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
+                    const $currentCell = $(this).closest('td');
+                    const columnIndex = $currentCell.index();
+                    const $currentRow = $currentCell.parent();
+
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            const $nextRow = $currentRow.next('tr');
+                            if ($nextRow.length) {
+                                $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            const $prevRow = $currentRow.prev('tr');
+                            if ($prevRow.length) {
+                                $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                            }
+                            break;
+                    }
+                });
                         }
                     });
                 }
@@ -272,28 +294,7 @@
                 });
                 pencarian('tbl1input', 'tbl1')
 
-                $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
-                    const $currentCell = $(this).closest('td');
-                    const columnIndex = $currentCell.index();
-                    const $currentRow = $currentCell.parent();
-
-                    switch (e.key) {
-                        case 'ArrowDown':
-                            e.preventDefault();
-                            const $nextRow = $currentRow.next('tr');
-                            if ($nextRow.length) {
-                                $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
-                            }
-                            break;
-                        case 'ArrowUp':
-                            e.preventDefault();
-                            const $prevRow = $currentRow.prev('tr');
-                            if ($prevRow.length) {
-                                $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
-                            }
-                            break;
-                    }
-                });
+                
 
                 pencarian('tbl3input', 'tbl3')
 
