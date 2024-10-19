@@ -60,11 +60,11 @@
                                         <span class="badge bg-primary">Edit</span>
                                     </a> --}}
 
+                                    @else
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
                                         href="{{ route('gudangsarang.selesai_wip', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
-                                @else
                                     <a href="{{ route('gudangsarang.print_formulir_wip', ['no_invoice' => $d->no_invoice]) }}"
                                         target="_blank">
                                         <span class="badge bg-primary">Print</span>

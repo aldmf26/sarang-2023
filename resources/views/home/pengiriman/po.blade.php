@@ -211,7 +211,7 @@
             </div>
             <div class="d-flex gap-2 float-end">
                 <a class="btn btn-info btn-sm" href="{{ route('pengiriman.list_po') }}">
-                    Kembali
+                    Kembali / Draft
                 </a>
                 <button class="btn btn-primary btn-sm" type="submit">Save</button>
             </div>
