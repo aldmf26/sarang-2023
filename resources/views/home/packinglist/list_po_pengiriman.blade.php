@@ -66,7 +66,7 @@
                                         <a onclick="return confirm("yakin di cancel ?")" href="{{ route('pengiriman.batal', $d->no_nota) }}"
                                             class="btn btn-sm btn-danger">Cancel</a>
                                         <a href="{{ route('pengiriman.po', $d->no_nota) }}" class="btn btn-sm btn-info"
-                                            target="_blank">Lanjutkan</a>
+                                            >Lanjutkan</a>
                                     </td>
                                 </tr>
                             @endforeach

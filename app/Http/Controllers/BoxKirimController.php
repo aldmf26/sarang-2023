@@ -237,8 +237,8 @@ class BoxKirimController extends Controller
     }
     public function po($no_nota)
     {
-        $po = DB::selectOne("SELECT a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
-                WHERE a.no_nota = $no_nota GROUP by a.no_nota;");
+        $po = DB::selectOne("SELECT a.no_barcode,a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
+                WHERE a.no_nota = $no_nota GROUP by a.no_nota order by a.id_pengiriman ASC");
         if (empty($po)) {
             return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', 'data tidak ditemukan');
         }
@@ -261,36 +261,50 @@ class BoxKirimController extends Controller
             $no_invoice = $r->no_nota;
             $tgl = $r->tgl;
             $getFormulir = DB::table('pengiriman')->where('no_nota', $no_invoice)->get();
+            if ($r->submit == 'draft') {
+                for ($i = 0; $i < count($r->id_pengiriman); $i++) {
+                    $data2 = [
+                        'tgl_input' => $tgl,
+                        'pcs' => $r->pcs2[$i],
+                        'gr' => $r->gr2[$i],
+                        'no_barcode' => $r->barcode[$i],
+                        'grade' => $r->grade2[$i],
+                        'no_nota' => $no_invoice,
+                    ];
+                    DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
+                }
+                $redir = "pengiriman.list_po";
+            } else {
+                foreach ($getFormulir as $d) {
+                    $data[] = [
+                        'id_pengiriman' => $d->no_box,
+                        'tgl' => $tgl,
+                        'no_nota' => $no_invoice,
+                        'nm_packing' => $r->nm_packing,
+                        'tujuan' => $r->tujuan,
+                        'kadar' => $r->kadar,
+                    ];
+                }
+                DB::table('pengiriman_packing_list')->insert($data);
 
-            
-            foreach ($getFormulir as $d) {
-                $data[] = [
-                    'id_pengiriman' => $d->no_box,
-                    'tgl' => $tgl,
-                    'no_nota' => $no_invoice,
-                    'nm_packing' => $r->nm_packing,
-                    'tujuan' => $r->tujuan,
-                    'kadar' => $r->kadar,
-                ];
+                for ($i = 0; $i < count($r->id_pengiriman); $i++) {
+                    $data2 = [
+                        'tgl_input' => $tgl,
+                        'pcs' => $r->pcs2[$i],
+                        'gr' => $r->gr2[$i],
+                        'no_barcode' => $r->barcode[$i],
+                        'grade' => $r->grade2[$i],
+                        'no_nota' => $no_invoice,
+                    ];
+
+                    DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
+                    DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']);
+                    DB::table('grading_partai')->where('box_pengiriman', $r->box_grading[$i])->update(['sudah_kirim' => 'Y']);
+                }
+                $redir = "packinglist.pengiriman";
             }
-            DB::table('pengiriman_packing_list')->insert($data);
-
-            for ($i = 0; $i < count($r->id_pengiriman); $i++) {
-                $data2 = [
-                    'tgl_input' => $tgl,
-                    'pcs' => $r->pcs2[$i],
-                    'gr' => $r->gr2[$i],
-                    'no_barcode' => $r->barcode[$i],
-                    'grade' => $r->grade2[$i],
-                    'no_nota' => $no_invoice,
-                ];
-                DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman[$i])->update($data2);
-                DB::table('pengiriman')->where('no_nota', $no_invoice)->update(['selesai' => 'Y']);
-                DB::table('grading_partai')->where('box_pengiriman', $r->box_grading[$i])->update(['sudah_kirim' => 'Y']);
-            }
-
             DB::commit();
-            return redirect()->route('packinglist.pengiriman')->with('sukses', 'Data Berhasil di selesaikan');
+            return redirect()->route($redir)->with('sukses', 'Data Berhasil di selesaikan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());

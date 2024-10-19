@@ -124,11 +124,11 @@
                                     <input class="form-control" type="hidden" name="no_nota"
                                         value="{{ $po->no_nota }}">
                                 </td>
-                                <td><input type="text" placeholder="nama packinglist" required name="nm_packing"
+                                <td><input type="text" placeholder="nama packinglist" name="nm_packing"
                                         class="form-control"></td>
-                                <td><input type="text" placeholder="tujuan cth: hk" required name="tujuan"
+                                <td><input type="text" placeholder="tujuan cth: hk" name="tujuan"
                                         class="form-control"></td>
-                                <td><input type="text" x-model="kadar" required placeholder="kadar %" name="kadar"
+                                <td><input type="text" x-model="kadar" placeholder="kadar %" name="kadar"
                                         class="form-control text-end">
                                 </td>
                                 <td align="center">
@@ -193,8 +193,8 @@
                                             type="text" class="text-end form-control">
                                     </td>
                                     <td align="center">
-                                        <input onclick="$(this).select()" name="barcode[]" required value="{{ $d->no_barcode }}"
-                                            placeholder="cth: 10001" type="text" class="form-control">
+                                        <input  onclick="$(this).select()" name="barcode[]" value="{{ $d->no_barcode }}"
+                                            placeholder="cth: 10001" autocomplete="off" type="text" class="form-control">
                                     </td>
 
                                     <td align="right">
@@ -210,10 +210,10 @@
                 </div>
             </div>
             <div class="d-flex gap-2 float-end">
-                <a class="btn btn-info btn-sm" href="{{ route('pengiriman.list_po') }}">
+                <button name="submit" value="draft" class="btn btn-info btn-sm">
                     Kembali / Draft
-                </a>
-                <button class="btn btn-primary btn-sm" type="submit">Save</button>
+                </button>
+                <button class="btn btn-primary btn-sm" value="simpan" name="submit">Save</button>
             </div>
 
             </section>
