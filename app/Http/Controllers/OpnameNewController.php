@@ -835,18 +835,35 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('M' . $kolom, is_null($b->pcs_susut) ? 'belum selesai' : $b->pcs_susut);
             $sheet4->setCellValue('N' . $kolom, is_null($b->gr_susut) ? 'belum selesai' : $b->gr_susut);
             $sheet4->setCellValue('O' . $kolom, is_null($b->pcs_susut) ? 'belum selesai' : (1 - ($b->gr / $b->gr_bk)) * 100);
-
-
-
-
-
             $sheet4->setCellValue('P' . $kolom, "=IF(M$kolom =" . '"belum selesai"' . ",E$kolom-I$kolom,0)");
             $sheet4->setCellValue('Q' . $kolom, "=IF(N$kolom =" . '"belum selesai"' . ",F$kolom-J$kolom,0)");
             $sheet4->setCellValue('R' . $kolom, "=IF(O$kolom =" . '"belum selesai"' . ",G$kolom-K$kolom,0)");
             $sheet4->setCellValue('S' . $kolom, "=IF(M$kolom=" . '"belum selesai"' . ",R$kolom/Q$kolom,0)");
             $kolom++;
         }
+        $sheet4->setCellValue('A' . $kolom, "Total");
+        $sheet4->setCellValue('B' . $kolom, '');
+        $sheet4->setCellValue('C' . $kolom, '');
+        $sheet4->setCellValue('D' . $kolom, '');
+        $sheet4->setCellValue('E' . $kolom, "=SUM(E2:E" . $kolom - 1 . ")");
+        $sheet4->setCellValue('F' . $kolom, "=SUM(F2:F" . $kolom - 1 . ")");
+        $sheet4->setCellValue('G' . $kolom, "=SUM(G2:G" . $kolom - 1 . ")");
+        $sheet4->setCellValue('H' . $kolom, 0);
+        $sheet4->setCellValue('I' . $kolom, "=SUM(I2:I" . $kolom - 1 . ")");
+        $sheet4->setCellValue('J' . $kolom, "=SUM(J2:J" . $kolom - 1 . ")");
+        $sheet4->setCellValue('K' . $kolom, "=SUM(K2:K" . $kolom - 1 . ")");
+        $sheet4->setCellValue('L' . $kolom, 0);
+
+        $sheet4->setCellValue('M' . $kolom, "=SUM(M2:M" . $kolom - 1 . ")");
+        $sheet4->setCellValue('N' . $kolom, "=SUM(N2:N" . $kolom - 1 . ")");
+        $sheet4->setCellValue('O' . $kolom, "=SUM(O2:O" . $kolom - 1 . ")");
+        $sheet4->setCellValue('P' . $kolom, "=SUM(P2:P" . $kolom - 1 . ")");
+        $sheet4->setCellValue('Q' . $kolom, "=SUM(Q2:Q" . $kolom - 1 . ")");
+        $sheet4->setCellValue('R' . $kolom, "=SUM(R2:R" . $kolom - 1 . ")");
+        $sheet4->setCellValue('S' . $kolom, 0);
+
         $sheet4->getStyle('A2:S' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle("A$kolom:S$kolom")->applyFromArray($style_atas);
 
         // $style2 = [
         //     'fill' => [
@@ -993,8 +1010,6 @@ class OpnameNewController extends Controller
 
 
         $kolom3 = $kolom_ctk + 1;
-
-
         $sheet4->mergeCells("C$kolom3:D$kolom3");
         $sheet4->mergeCells("E$kolom3:F$kolom3");
         $sheet4->mergeCells("G$kolom3:H$kolom3");
@@ -1037,6 +1052,128 @@ class OpnameNewController extends Controller
             $kolom_sortir++;
         }
         $sheet4->getStyle("B$kolom3:J" . $kolom_sortir - 1)->applyFromArray($style);
+
+
+        $kolom4 = $kolom_sortir + 1;
+        $sheet4->mergeCells("C$kolom4:D$kolom4");
+        $sheet4->mergeCells("E$kolom4:F$kolom4");
+        $sheet4->mergeCells("G$kolom4:H$kolom4");
+        $sheet4->mergeCells("I$kolom4:J$kolom4");
+
+        $sheet4->mergeCells("B$kolom4:B" . $kolom4 + 1);
+
+        $sheet4->getStyle("B$kolom4:J" . $kolom4 + 1)->applyFromArray($style_atas);
+
+        $sheet4->setCellValue('A' . $kolom4, 'Grading');
+        $sheet4->setCellValue('B' . $kolom4, 'Nama pengawas');
+        $sheet4->setCellValue('C' . $kolom4, 'Sisa belum grading');
+        $sheet4->setCellValue('E' . $kolom4, 'Sisa belum kirim');
+        $sheet4->setCellValue('G' . $kolom4, '');
+        $sheet4->setCellValue('I' . $kolom4, 'Total');
+
+        $sheet4->setCellValue('C' . $kolom4 + 1, 'pcs');
+        $sheet4->setCellValue('D' . $kolom4 + 1, 'gr');
+        $sheet4->setCellValue('E' . $kolom4 + 1, 'pcs');
+        $sheet4->setCellValue('F' . $kolom4 + 1, 'gr');
+        $sheet4->setCellValue('G' . $kolom4 + 1, 'pcs');
+        $sheet4->setCellValue('H' . $kolom4 + 1, 'gr');
+        $sheet4->setCellValue('I' . $kolom4 + 1, 'pcs');
+        $sheet4->setCellValue('J' . $kolom4 + 1, 'gr');
+
+
+
+        $kolom_grade = $kolom4 + 2;
+
+        $sheet4->setCellValue('B' . $kolom_grade, 'Siti Fatimah');
+        $sheet4->setCellValue('C' . $kolom_grade, "=SUM('Gudang grading'!F:F)");
+        $sheet4->setCellValue('D' . $kolom_grade, "=SUM('Gudang grading'!G:G)");
+        $sheet4->setCellValue('E' . $kolom_grade, "=SUM(Pengiriman!R:R)");
+        $sheet4->setCellValue('F' . $kolom_grade, "=SUM(Pengiriman!S:S)");
+        $sheet4->setCellValue('G' . $kolom_grade, 0);
+        $sheet4->setCellValue('H' . $kolom_grade, 0);
+        $sheet4->setCellValue('I' . $kolom_grade, "=C$kolom_grade+E$kolom_grade+G$kolom_grade");
+        $sheet4->setCellValue('J' . $kolom_grade, "=D$kolom_grade+F$kolom_grade+H$kolom_grade");
+
+
+        $sheet4->getStyle("B$kolom4:J" . $kolom_grade)->applyFromArray($style);
+
+
+        $kolom_sifa = $kolom_grade + 2;
+        $sheet4->setCellValue('B' . $kolom_sifa, 'grading');
+        $sheet4->setCellValue('C' . $kolom_sifa, 0);
+        $sheet4->setCellValue('D' . $kolom_sifa, 0);
+
+        $sheet4->setCellValue('B' . $kolom_sifa + 1, 'wip');
+        $sheet4->setCellValue('C' . $kolom_sifa + 1, 0);
+        $sheet4->setCellValue('D' . $kolom_sifa + 1, 0);
+
+        $sheet4->setCellValue('B' . $kolom_sifa + 2, 'qc');
+        $sheet4->setCellValue('C' . $kolom_sifa + 2, 0);
+        $sheet4->setCellValue('D' . $kolom_sifa + 2, 0);
+
+        $sheet4->setCellValue('B' . $kolom_sifa + 3, 'total');
+        $kolomsifa2 = $kolom_sifa + 2;
+        $sheet4->setCellValue('C' . $kolom_sifa + 3, "=SUM(C$kolom_sifa:C$kolomsifa2)");
+        $sheet4->setCellValue('D' . $kolom_sifa + 3, "=SUM(D$kolom_sifa:D$kolomsifa2)");
+
+        $style2 = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFF00', // Contoh warna kuning
+                ],
+            ],
+        ];
+
+        $sheet4->getStyle("C" . $kolom_sifa + 3 . ":D" . $kolom_sifa + 3)->applyFromArray($style2);
+
+
+        $kolom5 = $kolom_sifa + 5;
+        $sheet4->mergeCells("C$kolom5:D$kolom5");
+        $sheet4->mergeCells("E$kolom5:F$kolom5");
+        $sheet4->mergeCells("G$kolom5:H$kolom5");
+        $sheet4->mergeCells("I$kolom5:J$kolom5");
+
+        $sheet4->mergeCells("B$kolom5:B" . $kolom5 + 1);
+
+        $sheet4->getStyle("B$kolom5:J" . $kolom5 + 1)->applyFromArray($style_atas);
+
+        $sheet4->setCellValue('A' . $kolom5, 'Pengiriman');
+        $sheet4->setCellValue('B' . $kolom5, 'Nama pengawas');
+        $sheet4->setCellValue('C' . $kolom5, 'Pengiriman');
+        $sheet4->setCellValue('E' . $kolom5, '');
+        $sheet4->setCellValue('G' . $kolom5, '');
+        $sheet4->setCellValue('I' . $kolom5, 'Total');
+
+        $sheet4->setCellValue('C' . $kolom5 + 1, 'pcs');
+        $sheet4->setCellValue('D' . $kolom5 + 1, 'gr');
+        $sheet4->setCellValue('E' . $kolom5 + 1, 'pcs');
+        $sheet4->setCellValue('F' . $kolom5 + 1, 'gr');
+        $sheet4->setCellValue('G' . $kolom5 + 1, 'pcs');
+        $sheet4->setCellValue('H' . $kolom5 + 1, 'gr');
+        $sheet4->setCellValue('I' . $kolom5 + 1, 'pcs');
+        $sheet4->setCellValue('J' . $kolom5 + 1, 'gr');
+
+        $kolom_pengiriman = $kolom5 + 2;
+
+        $sheet4->setCellValue('B' . $kolom_pengiriman, 'Ratna');
+        $sheet4->setCellValue('C' . $kolom_pengiriman, "=SUM(Pengiriman!E:E)");
+        $sheet4->setCellValue('D' . $kolom_pengiriman, "=SUM(Pengiriman!F:F)");
+        $sheet4->setCellValue('E' . $kolom_pengiriman, 0);
+        $sheet4->setCellValue('F' . $kolom_pengiriman, 0);
+        $sheet4->setCellValue('G' . $kolom_pengiriman, 0);
+        $sheet4->setCellValue('H' . $kolom_pengiriman, 0);
+        $sheet4->setCellValue('I' . $kolom_pengiriman, "=C$kolom_pengiriman+E$kolom_pengiriman+G$kolom_pengiriman");
+        $sheet4->setCellValue('J' . $kolom_pengiriman, "=D$kolom_pengiriman+F$kolom_pengiriman+H$kolom_pengiriman");
+
+        $sheet4->getStyle("B$kolom5:J" . $kolom_pengiriman)->applyFromArray($style);
+
+        $last_kolom = $kolom_pengiriman + 3;
+
+
+        $sheet4->setCellValue('H' . $last_kolom, 'Total');
+        $sheet4->setCellValue('I' . $last_kolom, "=SUM(I3:I$kolom_pengiriman)");
+        $sheet4->setCellValue('J' . $last_kolom, "=SUM(J3:J$kolom_pengiriman)");
     }
 
 
