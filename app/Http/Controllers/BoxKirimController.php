@@ -243,7 +243,7 @@ class BoxKirimController extends Controller
             return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', 'data tidak ditemukan');
         }
         $gudang = Grading::stock_wip();
-        $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->orderBy('grade', 'DESC')->get();
+        $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->orderBy('id_pengiriman', 'DESC')->get();
         $data = [
             'title' => 'Wip siap kirim',
             'po' => $po,
