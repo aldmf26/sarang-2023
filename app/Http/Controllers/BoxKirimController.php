@@ -276,7 +276,7 @@ class BoxKirimController extends Controller
                         group by box_pengiriman
                     ) as b on a.no_box = b.box_pengiriman
                     WHERE a.no_nota = $no_nota 
-                    ORDER BY a.id_pengiriman DESC");
+                    ORDER BY a.no_barcode ASC");
 
         $data = [
             'title' => 'Wip siap kirim',

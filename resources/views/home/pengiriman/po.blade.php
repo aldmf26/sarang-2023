@@ -73,27 +73,26 @@
 
 
                                 <div class="scrollable-table col-lg-12" x-data="{ cek: [], ttlPcs: 0, ttlGr: 0 }">
-                                    
-                                        <input type="hidden" name="no_box" class="form-control"
-                                            :value="cek.join(',')">
-                                        <input type="hidden" name="no_nota" class="form-control"
-                                            value="{{ $no_nota }}">
-                                        <div class="d-flex gap-2">
-                                            <div class="flex-grow-1">
-                                                <input autocomplete="off" type="text" id="tbl1input"
-                                                    class="form-control form-control-sm mb-2" placeholder="cari">
-                                            </div>
-                                            <div>
-                                                <button x-transition x-show="cek.length" id="simpanTambahBox"
-                                                    class="btn  btn-sm btn-primary" type="button">
-                                                    <i class="fas fa-plus"></i>
-                                                    Kirim
-                                                    <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                                                    <span x-transition><span x-text="ttlPcs"></span> Pcs <span
-                                                            x-text="ttlGr"></span> Gr</span>
-                                                </button>
-                                            </div>
+
+                                    <input type="hidden" name="no_box" class="form-control" :value="cek.join(',')">
+                                    <input type="hidden" name="no_nota" class="form-control"
+                                        value="{{ $no_nota }}">
+                                    <div class="d-flex gap-2">
+                                        <div class="flex-grow-1">
+                                            <input autocomplete="off" type="text" id="tbl1input"
+                                                class="form-control form-control-sm mb-2" placeholder="cari">
                                         </div>
+                                        <div>
+                                            <button x-transition x-show="cek.length" id="simpanTambahBox"
+                                                class="btn  btn-sm btn-primary" type="button">
+                                                <i class="fas fa-plus"></i>
+                                                Kirim
+                                                <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                                                <span x-transition><span x-text="ttlPcs"></span> Pcs <span
+                                                        x-text="ttlGr"></span> Gr</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div id="loadTblTmbhBox"></div>
                                     <table id="tbl1" class="mt-2 table table-hover table-striped table-bordered">
                                         <thead>
@@ -196,30 +195,31 @@
                         success: function(r) {
                             $("#loadTblTmbhBox").html(r);
                             $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
-                    const $currentCell = $(this).closest('td');
-                    const columnIndex = $currentCell.index();
-                    const $currentRow = $currentCell.parent();
+                                const $currentCell = $(this).closest('td');
+                                const columnIndex = $currentCell.index();
+                                const $currentRow = $currentCell.parent();
 
-                    switch (e.key) {
-                        case 'ArrowDown':
-                            e.preventDefault();
-                            const $nextRow = $currentRow.next('tr');
-                            if ($nextRow.length) {
-                                $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
-                            }
-                            break;
-                        case 'ArrowUp':
-                            e.preventDefault();
-                            const $prevRow = $currentRow.prev('tr');
-                            if ($prevRow.length) {
-                                $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
-                            }
-                            break;
-                    }
-                });
+                                switch (e.key) {
+                                    case 'ArrowDown':
+                                        e.preventDefault();
+                                        const $nextRow = $currentRow.next('tr');
+                                        if ($nextRow.length) {
+                                            $nextRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                                        }
+                                        break;
+                                    case 'ArrowUp':
+                                        e.preventDefault();
+                                        const $prevRow = $currentRow.prev('tr');
+                                        if ($prevRow.length) {
+                                            $prevRow.find(`td:eq(${columnIndex}) input[type="text"]`).focus();
+                                        }
+                                        break;
+                                }
+                            });
                         }
                     });
                 }
+
                 function loadTbl() {
                     $.ajax({
                         type: "GET",
@@ -292,7 +292,7 @@
                 });
                 pencarian('tbl1input', 'tbl1')
 
-                
+
 
                 pencarian('tbl3input', 'tbl3')
 
