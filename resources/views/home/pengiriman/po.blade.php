@@ -2,95 +2,11 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
-            <button data-bs-target="#tambah" data-bs-toggle="modal" class="btn btn-sm btn-primary" type="button">Tambah Box</button>
-            <x-theme.modal btnSave="T" title="tambah box" idModal="tambah">
-                <input autocomplete="off" type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
-                
-                <div class="scrollable-table col-lg-12" x-data="{ cek: [], ttlPcs: 0, ttlGr: 0 }">
-                    <form action="{{ route('pengiriman.kirim') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="no_box" class="form-control" :value="cek.join(',')">
-                        <input type="hidden" name="no_nota" class="form-control" value="{{ $no_nota }}">
-                        <button x-transition x-show="cek.length" class="btn btn-sm btn-primary" type="submit">
-                            <i class="fas fa-plus"></i>
-                            Kirim
-                            <span class="badge bg-info" x-text="cek.length" x-transition></span>
-                            <span x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
-                        </button>
-                    </form>
 
-                    <table id="tbl1" class="mt-2 table table-hover table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="dhead">No Box Grading</th>
-                                <th class="dhead text-center">Grade</th>
-                                <th class="dhead text-end">Pcs</th>
-                                <th class="dhead text-end">Gr</th>
-                                {{-- <th class="dhead text-center">Detail</th> --}}
-                                <th class="dhead text-center">Aksi</th>
-                            </tr>
-
-                        </thead>
-
-                        @php
-                            $ttlPcs = 0;
-                            $ttlGr = 0;
-                            foreach ($gudang as $d) {
-                                if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0) {
-                                    $ttlPcs += $d->pcs - $d->pcs_pengiriman;
-                                    $ttlGr += $d->gr - $d->gr_pengiriman;
-                                }
-                            }
-                        @endphp
-                        <tr>
-                            <td class=" dheadstock h6">Total</td>
-                            <td class="dheadstock"></td>
-                            <td class="text-end dheadstock h6 ">{{ number_format($ttlPcs, 0) }}</td>
-                            <td class="text-end dheadstock h6 ">{{ number_format($ttlGr, 0) }}</td>
-                           
-                            <td class="dheadstock"></td>
-                        </tr>
-                        <tbody>
-                            @foreach ($gudang as $d)
-                                @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0)
-                                    <tr
-                                        @click="
-                                            if (cek.includes('{{ $d->no_box }}')) {
-                                                cek = cek.filter(x => x !== '{{ $d->no_box }}')
-                                                ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}
-                                                ttlGr -= {{ $d->gr - $d->gr_pengiriman }}
-                                            } else {
-                                                cek.push('{{ $d->no_box }}')
-                                                ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
-                                                ttlGr += {{ $d->gr - $d->gr_pengiriman }}
-                                            }
-                                        ">
-                                        <td>P{{ $d->no_box }}</td>
-                                        <td class="text-primary text-center pointer">
-                                            <span class="detail"
-                                                data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>
-                                        </td>
-                                        <td class="text-end">{{ number_format($d->pcs - $d->pcs_pengiriman, 0) }}</td>
-                                        <td class="text-end">{{ number_format($d->gr - $d->gr_pengiriman, 0) }}</td>
-                                        {{-- <td class="text-center"><a
-                                                href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}"
-                                                target="_blank" class="badge bg-primary"><i class=" fas fa-eye"></i></a>
-                                        </td> --}}
-                                        <td align="right" class="d-flex justify-content-evenly">
-                                            <input type="checkbox" class="form-check"
-                                                :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
-                                                id="" value="{{ $d->no_box }}">
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </x-theme.modal>
 
         </div>
-        <span class="text-warning fst-italic">Sebelum di masukan barcode, cek dulu box grading nya , jika ada yang kurang tambahkan, jika kelebihan maka dihapus.</span>
+        <span class="text-warning fst-italic">Sebelum di masukan barcode, cek dulu box grading nya , jika ada yang kurang
+            tambahkan, jika kelebihan maka dihapus.</span>
     </x-slot>
 
     <x-slot name="cardBody">
@@ -145,62 +61,122 @@
                     </table>
                 </div>
                 <div class="col-lg-12">
-                    <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
-                    <table class="table table-bordered" id="tbl3">
-                        <thead>
-                            <tr>
-                                <th class="dhead">No</th>
-                                <th class="dhead">No Box</th>
-                                <th class="dhead text-center">Grade 1</th>
-                                <th class="dhead text-end">Pcs 1</th>
-                                <th class="dhead text-end">Gr 1</th>
+                    <div class="d-flex gap-2">
+                        <div class="flex-grow-1">
+                            <input type="text" id="tbl3input" class=" form-control form-control-sm mb-2"
+                                placeholder="cari">
+                        </div>
+                        <div>
+                            <button data-bs-target="#tambah" data-bs-toggle="modal" class="btn btn-sm btn-primary"
+                                type="button"><i class="fas fa-plus"></i> Box</button>
+                            <x-theme.modal btnSave="T" title="tambah box" idModal="tambah">
 
-                                <th width="120" class="bg-info text-white text-center">Grade 2</th>
-                                <th width="120" class="bg-info text-white text-end">Pcs 2</th>
-                                <th width="120" class="bg-info text-white text-end">Gr 2</th>
-                                <th width="120" class="bg-info text-white">No Barcode Pengiriman</th>
 
-                                <th class="dhead text-end">Pcs Kirim</th>
-                                <th class="dhead text-end">Gr Kirim air %</th>
-                                <th class="dhead text-end">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pengiriman as $i => $d)
-                                <tr x-data="{
-                                    gr2: {{ $d->gr }},
-                                }">
-                                    <td>{{ $i + 1 }} </td>
-                                    <td>P{{ $d->no_box }}</td>
-                                    <td align="center">{{ $d->grade }}</td>
-                                    <td align="right">{{ $d->pcs }}</td>
-                                    <td align="right">{{ $d->gr }}</td>
+                                <div class="scrollable-table col-lg-12" x-data="{ cek: [], ttlPcs: 0, ttlGr: 0 }">
+                                    <form id="formTambahBox" action="{{ route('pengiriman.kirim') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="no_box" class="form-control"
+                                            :value="cek.join(',')">
+                                        <input type="hidden" name="no_nota" class="form-control"
+                                            value="{{ $no_nota }}">
+                                        <div class="d-flex gap-2">
+                                            <div class="flex-grow-1">
+                                                <input autocomplete="off" type="text" id="tbl1input"
+                                                    class="form-control form-control-sm mb-2" placeholder="cari">
+                                            </div>
+                                            <div>
+                                                <button x-transition x-show="cek.length" id="simpanTambahBox"
+                                                    class="btn  btn-sm btn-primary" type="button">
+                                                    <i class="fas fa-plus"></i>
+                                                    Kirim
+                                                    <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                                                    <span x-transition><span x-text="ttlPcs"></span> Pcs <span
+                                                            x-text="ttlGr"></span> Gr</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div id="loadTblTmbhBox"></div>
+                                    <table id="tbl1" class="mt-2 table table-hover table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="dhead">No Box Grading</th>
+                                                <th class="dhead text-center">Grade</th>
+                                                <th class="dhead text-end">Pcs</th>
+                                                <th class="dhead text-end">Gr</th>
+                                                {{-- <th class="dhead text-center">Detail</th> --}}
+                                                <th class="dhead text-center">Aksi</th>
+                                            </tr>
 
-                                    <td align="center">
-                                        <label for="grade2[]">{{ $d->grade }}</label>
-                                        <input name="box_grading[]" value="{{ $d->no_box }}" type="hidden"
-                                            class="form-control">
-                                    </td>
-                                    <td align="center">
-                                        <label for="pcs2[]">{{ $d->pcs }}</label>
-                                    </td>
-                                    <td align="center">
-                                        <label for="gr2[]" x-text="gr2">{{ $d->gr }}</label>
-                                    </td>
-                                    <td align="center">
-                                        <label for="barcode[]">{{ $d->no_barcode }}</label>
-                                    </td>
+                                        </thead>
 
-                                    <td align="right">
-                                        {{ $d->pcs }}
-                                    </td>
-                                    <td align="right" x-text="(Number(gr2) / Number(kadar)) + Number(gr2)">-
-                                    </td>
-                                    <td align="center"><a onclick="return confirm('yakin di hapus ?')" href="{{route('pengiriman.delete', ['id' => $d->id_pengiriman])}}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a></td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                        @php
+                                            $ttlPcs = 0;
+                                            $ttlGr = 0;
+                                            foreach ($gudang as $d) {
+                                                if (
+                                                    $d->pcs - $d->pcs_pengiriman >= 0 &&
+                                                    $d->gr - $d->gr_pengiriman > 0
+                                                ) {
+                                                    $ttlPcs += $d->pcs - $d->pcs_pengiriman;
+                                                    $ttlGr += $d->gr - $d->gr_pengiriman;
+                                                }
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <td class=" dheadstock h6">Total</td>
+                                            <td class="dheadstock"></td>
+                                            <td class="text-end dheadstock h6 ">{{ number_format($ttlPcs, 0) }}</td>
+                                            <td class="text-end dheadstock h6 ">{{ number_format($ttlGr, 0) }}</td>
+
+                                            <td class="dheadstock"></td>
+                                        </tr>
+                                        <tbody>
+                                            @foreach ($gudang as $d)
+                                                @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0)
+                                                    <tr
+                                                        @click="
+                                            if (cek.includes('{{ $d->no_box }}')) {
+                                                cek = cek.filter(x => x !== '{{ $d->no_box }}')
+                                                ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}
+                                                ttlGr -= {{ $d->gr - $d->gr_pengiriman }}
+                                            } else {
+                                                cek.push('{{ $d->no_box }}')
+                                                ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
+                                                ttlGr += {{ $d->gr - $d->gr_pengiriman }}
+                                            }
+                                        ">
+                                                        <td>P{{ $d->no_box }}</td>
+                                                        <td class="text-primary text-center pointer">
+                                                            <span class="detail"
+                                                                data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            {{ number_format($d->pcs - $d->pcs_pengiriman, 0) }}</td>
+                                                        <td class="text-end">
+                                                            {{ number_format($d->gr - $d->gr_pengiriman, 0) }}</td>
+
+                                                        <td align="right" class="d-flex justify-content-evenly">
+                                                            <input type="checkbox" class="form-check"
+                                                                :checked="cek.includes('{{ $d->no_box }}')"
+                                                                name="id[]" id=""
+                                                                value="{{ $d->no_box }}">
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </x-theme.modal>
+                        </div>
+                        <div>
+                            <a href="{{ route('pengiriman.po_export', $no_nota) }}" class="btn btn-sm btn-primary"><i
+                                    class="fas fa-file-excel"></i> Export</a>
+                        </div>
+                    </div>
+                    <div id="loadTblPo"></div>
+
                 </div>
             </div>
             <div class="d-flex gap-2 float-end">
@@ -215,6 +191,85 @@
 
         @section('scripts')
             <script>
+                function loadTblTmbhBox() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('pengiriman.load_tbl_loadTblTmbhBox') }}",
+                        success: function(r) {
+                            $("#loadTblTmbhBox").html(r);
+                        }
+                    });
+                }
+                function loadTbl() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('pengiriman.load_tbl_po') }}?no_nota={{ $no_nota }}",
+                        success: function(r) {
+                            $("#loadTblPo").html(r);
+                        }
+                    });
+                }
+
+                function hapus(id) {
+                    if (confirm("Apakah Anda yakin?")) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('pengiriman.delete') }}?id=" + id,
+                            success: function(r) {
+                                alertToast('sukses', 'Berhasil di hapus');
+                                loadTbl()
+                            }
+                        });
+                    }
+                }
+
+                function ubah(element) {
+                    let row = $(element).closest('tr');
+
+                    // Ambil nilai dari input yang baru diketik
+                    let id_pengiriman = row.find('input[name="id_pengiriman[]"]').val();
+                    let grade = row.find('input[name="grade2[]"]').val();
+                    let pcs = row.find('input[name="pcs2[]"]').val();
+                    let gr = row.find('input[name="gr2[]"]').val();
+                    let barcode = row.find('input[name="barcode[]"]').val();
+
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('pengiriman.ubah') }}",
+                        data: {
+                            id_pengiriman,
+                            grade,
+                            pcs,
+                            gr,
+                            barcode
+                        },
+                        success: function(r) {
+                            alertToast('sukses', 'Berhasil di ubah');
+                            loadTbl()
+                        }
+                    });
+                }
+                loadTbl()
+                loadTblTmbhBox()
+
+                $("#simpanTambahBox").click(function(e) {
+                    e.preventDefault();
+                    let noBoxValue = $('input[name="no_box"]').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('pengiriman.kirim') }}",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            no_box: noBoxValue,
+                            no_nota: "{{ $no_nota }}"
+                        },
+                        success: function(r) {
+                            loadTbl()
+                            $("#tambah").modal('hide')
+                        }
+                    });
+                });
                 pencarian('tbl1input', 'tbl1')
 
                 $('#tbl3').on('keydown', 'input[type="text"]', function(e) {
@@ -239,7 +294,9 @@
                             break;
                     }
                 });
+
                 pencarian('tbl3input', 'tbl3')
+
                 $(document).on('click', '.edit', function(e) {
                     e.preventDefault();
 

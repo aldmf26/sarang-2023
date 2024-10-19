@@ -160,6 +160,17 @@ class BoxKirimController extends Controller
         return redirect()->back()->with('success', 'Data dihapus');
     }
 
+    public function ubah(Request $r)
+    {
+        // Hapus data
+        $data2 = [
+            'pcs' => $r->pcs,
+            'gr' => $r->gr,
+            'no_barcode' => $r->barcode,
+            'grade' => $r->grade,
+        ];
+        DB::table('pengiriman')->where('id_pengiriman', $r->id_pengiriman)->update($data2);
+    }
 
     public function kirim(Request $r)
     {
@@ -235,6 +246,8 @@ class BoxKirimController extends Controller
 
         return view('home.packinglist.list_po_pengiriman', $data);
     }
+
+
     public function po($no_nota)
     {
         $po = DB::selectOne("SELECT a.no_barcode,a.tgl_input as tanggal,a.no_nota,sum(pcs) as pcs, sum(gr) as gr, count(*) as ttl FROM `pengiriman` as a
@@ -243,17 +256,35 @@ class BoxKirimController extends Controller
             return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', 'data tidak ditemukan');
         }
         $gudang = Grading::stock_wip();
-        $pengiriman = DB::table('pengiriman')->where('no_nota', $no_nota)->orderBy('id_pengiriman', 'DESC')->get();
         $data = [
             'title' => 'Wip siap kirim',
             'po' => $po,
             'no_nota' => $no_nota,
             'gudang' => $gudang,
-            'pengiriman' => $pengiriman
         ];
         return view('home.pengiriman.po', $data);
     }
+    public function load_tbl_po(Request $r)
+    {
+        $no_nota = $r->no_nota;
 
+        $pengiriman = DB::select("SELECT a.*, b.pcs as pcs1, b.gr as gr1
+                    FROM pengiriman as a 
+                    JOIN (
+                        SELECT box_pengiriman,sum(pcs) as pcs, sum(gr) as gr 
+                        FROM `grading_partai` 
+                        group by box_pengiriman
+                    ) as b on a.no_box = b.box_pengiriman
+                    WHERE a.no_nota = $no_nota 
+                    ORDER BY a.id_pengiriman DESC");
+
+        $data = [
+            'title' => 'Wip siap kirim',
+            'no_nota' => $no_nota,
+            'pengiriman' => $pengiriman
+        ];
+        return view('home.packinglist.tbl_po', $data);
+    }
     public function save_po(Request $r)
     {
         try {
