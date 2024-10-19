@@ -285,6 +285,11 @@ class BoxKirimController extends Controller
         ];
         return view('home.packinglist.tbl_po', $data);
     }
+
+    public function load_tbl_loadTblTmbhBox(Request $r)
+    {
+        return 1;
+    }
     public function save_po(Request $r)
     {
         try {
