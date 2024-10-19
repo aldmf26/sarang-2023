@@ -177,24 +177,18 @@
                                     <td align="right">{{ $d->gr }}</td>
 
                                     <td align="center">
-                                        <input onclick="$(this).select()" name="grade2[]" required value="{{ $d->grade }}" type="text"
+                                        <label for="grade2[]">{{ $d->grade }}</label>
+                                        <input name="box_grading[]" value="{{ $d->no_box }}" type="hidden"
                                             class="form-control">
-                                        <input name="box_grading[]" required value="{{ $d->no_box }}" type="hidden"
-                                            class="form-control">
                                     </td>
                                     <td align="center">
-                                        <input onclick="$(this).select()" name="pcs2[]" required value="{{ $d->pcs }}" type="text"
-                                            class="text-end form-control">
+                                        <label for="pcs2[]">{{ $d->pcs }}</label>
                                     </td>
                                     <td align="center">
-                                        <input name="id_pengiriman[]" required value="{{ $d->id_pengiriman }}"
-                                            type="hidden">
-                                        <input onclick="$(this).select()" name="gr2[]" x-model="gr2" required value="{{ $d->gr }}"
-                                            type="text" class="text-end form-control">
+                                        <label for="gr2[]" x-text="gr2">{{ $d->gr }}</label>
                                     </td>
                                     <td align="center">
-                                        <input  onclick="$(this).select()" name="barcode[]" value="{{ $d->no_barcode }}"
-                                            placeholder="cth: 10001" autocomplete="off" type="text" class="form-control">
+                                        <label for="barcode[]">{{ $d->no_barcode }}</label>
                                     </td>
 
                                     <td align="right">
