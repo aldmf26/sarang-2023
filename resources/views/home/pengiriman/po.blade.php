@@ -73,8 +73,7 @@
 
 
                                 <div class="scrollable-table col-lg-12" x-data="{ cek: [], ttlPcs: 0, ttlGr: 0 }">
-                                    <form id="formTambahBox" action="{{ route('pengiriman.kirim') }}" method="post">
-                                        @csrf
+                                    
                                         <input type="hidden" name="no_box" class="form-control"
                                             :value="cek.join(',')">
                                         <input type="hidden" name="no_nota" class="form-control"
@@ -95,7 +94,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </form>
                                     <div id="loadTblTmbhBox"></div>
                                     <table id="tbl1" class="mt-2 table table-hover table-striped table-bordered">
                                         <thead>
