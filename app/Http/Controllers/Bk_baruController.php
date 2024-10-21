@@ -38,6 +38,8 @@ class Bk_baruController extends Controller
             'bk' => $bk,
             'users' => DB::table('users')->whereNotIn('posisi_id', [1, 15, 16, 14])->get(),
             'bk_terakhir' => $this->getNoBoxTambah()['nobox2'],
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
         ];
         return view('home.bkbaru.index', $data);
     }

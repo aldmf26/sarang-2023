@@ -53,6 +53,10 @@
                             teks="Serah" />
                         <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
                         <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
+                        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => 'cabut']) }}"
+                            class="btn btn-sm btn-primary">
+                            <i class="fas fa-file-excel"></i> Export
+                        </a>
 
                     </div>
                 </div>
