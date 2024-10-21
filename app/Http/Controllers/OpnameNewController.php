@@ -202,14 +202,14 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
+        // $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
 
-        // $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
-        // $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
-        // $this->rekap($spreadsheet, $style_atas, $style, $model);
-        // $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
-        // $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
-        // $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
+        $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
+        $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        $this->rekap($spreadsheet, $style_atas, $style, $model);
+        $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
+        $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
+        $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
 
 
         $namafile = "Opname Gudang.xlsx";

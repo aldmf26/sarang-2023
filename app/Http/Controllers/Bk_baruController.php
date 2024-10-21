@@ -34,7 +34,7 @@ class Bk_baruController extends Controller
 
 
         $data = [
-            'title' => 'Box Terakhir:',
+            'title' => 'Box Terakhir',
             'bk' => $bk,
             'users' => DB::table('users')->whereNotIn('posisi_id', [1, 15, 16, 14])->get(),
             'bk_terakhir' => $this->getNoBoxTambah()['nobox2'],
@@ -289,5 +289,40 @@ class Bk_baruController extends Controller
             ]);
         }
         return redirect()->route('bkbaru.invoice')->with('sukses', 'Data Berhasil di selesaikan');
+    }
+
+    public function edit(Request $r)
+    {
+        $data = [
+            'title' => 'Edit Divisi BK',
+            'pengawas' => User::where('posisi_id', 13)->get(),
+            'ket_bk' => DB::table('ket_bk')->get(),
+            'warna' => DB::table('warna')->get(),
+            'no_nota' => $r->no_nota,
+            'id_pengawas' => $r->id_pengawas,
+            'kategori' => $r->kategori,
+        ];
+        return view('home.bkbaru.edit', $data);
+    }
+    public function update(Request $r)
+    {
+        for ($x = 0; $x < count($r->nm_partai); $x++) {
+            if (!empty($r->no_box[$x])) {
+                $data = [
+                    'nm_partai' => $r->nm_partai[$x],
+                    'no_box' => $r->no_box[$x],
+                    'tipe' => $r->tipe[$x],
+                    'ket' => $r->ket[$x],
+                    'warna' => $r->warna[$x],
+                    'pengawas' => $r->pgws[$x],
+                    'pcs_awal' => $r->pcs_awal[$x],
+                    'gr_awal' => $r->gr_awal[$x],
+                    'tgl' => $r->tgl_terima[$x],
+                    'susut' => $r->susut[$x]
+                ];
+                DB::table('bk')->where('id_bk', $r->id_bk[$x])->update($data);
+            }
+        }
+        return redirect("home/bkbaru")->with('sukses', 'Data berhasil ditambahkan');
     }
 }

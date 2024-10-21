@@ -364,11 +364,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
             Route::get('/batal', 'batal')->name('batal');
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
+            Route::get('/selesai', 'selesai')->name('selesai');
+            Route::get('/edit', 'edit')->name('edit');
 
 
             Route::post('/create', 'create')->name('create');
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
-            Route::get('/selesai', 'selesai')->name('selesai');
+            Route::post('/update', 'update')->name('update');
         });
 });

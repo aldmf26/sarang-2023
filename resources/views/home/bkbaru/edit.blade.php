@@ -9,7 +9,7 @@
 
 
     <x-slot name="cardBody">
-        <form action="{{ route('bk.update') }}" method="post">
+        <form action="{{ route('bkbaru.update') }}" method="post">
             @csrf
             <section class="row">
                 <div class="col-lg-12">
@@ -25,7 +25,7 @@
                                 <th class="dhead">Ket</th>
                                 <th class="dhead">Warna</th>
                                 <th class="dhead">Pgws</th>
-                                <th class="dhead">Nama</th>
+
                                 <th class="dhead">Tgl Terima</th>
                                 <th class="dhead text-end">Pcs Awal</th>
                                 <th class="dhead text-end">Gr Awal</th>
@@ -66,15 +66,7 @@
                                         <input type="text" class="form-control" readonly
                                             value="{{ auth()->user()->name }}" name="pgws[]">
                                     </td>
-                                    <td>
-                                        <select name="nama[]" id="" class="select3">
-                                            <option value="">Pilih Pengawas</option>
-                                            @foreach ($pengawas as $p)
-                                                <option {{ $p->id == $detail->penerima ? 'selected' : '' }}
-                                                    value="{{ $p->id }}">{{ $p->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
+
                                     <td>
                                         <input type="date" value="{{ $detail->tgl }}" class="form-control"
                                             name="tgl_terima[]">

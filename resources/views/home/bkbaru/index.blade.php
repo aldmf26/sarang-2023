@@ -49,14 +49,18 @@
                                 <x-theme.btn_filter />
                             </div>
                         @endif
-                        <x-theme.button href="" icon="fa-plus" variant="info" modal="Y" idModal="tambah"
-                            teks="Serah" />
+
                         <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
                         <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
                         <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => 'cabut']) }}"
                             class="btn btn-sm btn-primary">
                             <i class="fas fa-file-excel"></i> Export
                         </a>
+                        <x-theme.button href="" addClass="serah" icon="fa-plus" variant="info" modal="Y"
+                            idModal="tambah" teks="Serah" />
+                        <button class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger delete"><i class="fas fa-trash-alt"></i> Hapus</button>
+
 
                     </div>
                 </div>
@@ -109,7 +113,7 @@
                                     @if (auth()->user()->posisi_id == 13)
                                     @else
                                         <td class="text-center">
-                                            <input type="checkbox"
+                                            <input type="checkbox" class="cek_bayar" no_nota="{{ $a->id_bk }}"
                                                 @change="tambah({{ $a->no_box }}, '{{ $a->nm_partai }}', {{ $a->pcs_awal }}, {{ $a->gr_awal }})"
                                                 value="{{ $a->no_box }}" x-model="cek">
                                         </td>
@@ -184,5 +188,75 @@
 
     </x-slot>
     @section('scripts')
+        <script>
+            $(".edit_bk").hide();
+            $(".delete").hide();
+            $(".serah").hide();
+
+            $(document).on('change', '.cek_bayar, #cekSemuaTutup', function() {
+                var totalPiutang = 0
+                $('.cek_bayar:checked').each(function() {
+                    var piutang = $(this).attr('piutang');
+                    totalPiutang += parseInt(piutang);
+                });
+                var anyChecked = $('.cek_bayar:checked').length > 0;
+                $('.btn_bayar').toggle(anyChecked);
+                $(".piutang_cek").toggle(anyChecked);
+                $('.delete').toggle(anyChecked);
+                $(".edit_bk").toggle(anyChecked);
+                $(".serah").toggle(anyChecked);
+                $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
+            });
+
+            function clickCekKirim(kelas, link, formDelete = null) {
+                $(document).on('click', `${kelas}`, function(e) {
+                    e.preventDefault();
+
+                    var dipilih = [];
+                    $('.cek_bayar:checked').each(function() {
+                        var no_nota = $(this).attr('no_nota');
+                        dipilih.push(no_nota);
+                    });
+                    var params = new URLSearchParams();
+                    dipilih.forEach(function(orderNumber) {
+                        params.append('no_nota', orderNumber);
+                    });
+                    var queryString = 'no_nota[]=' + dipilih.join('&no_nota[]=');
+
+                    var kategori = "{{ request()->get('kategori') ?? 'cabut' }}"
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var postData = {
+                        _token: csrfToken,
+                        no_nota: dipilih,
+                        kategori: kategori,
+                    };
+                    var targetUrl = `/home/bkbaru/${link}?kategori=${kategori}&${queryString}`
+
+                    if (formDelete === null) {
+                        window.location.assign(targetUrl)
+                    } else {
+                        if (confirm(formDelete)) {
+                            $.ajax({
+                                type: "POST",
+                                url: `/home/bkbaru/${link}`,
+                                data: postData,
+                                beforeSend: function() {
+                                    $("#loading").modal('show')
+                                },
+                                success: function(r) {
+                                    window.location.reload()
+                                },
+                                error: function(error) {
+                                    // Handle error if needed
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            clickCekKirim('.edit_bk', 'edit')
+            clickCekKirim('.delete', 'delete', 'Yakin ingin dihapus ?')
+        </script>
     @endsection
 </x-theme.app>
