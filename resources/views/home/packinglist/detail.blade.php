@@ -5,6 +5,9 @@
     <li class="nav-item" role="presentation">
         <a class="nav-link" id="list-tab" data-bs-toggle="tab" href="#list" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">List Grade</a>
     </li>
+    <li class="nav-item ms-auto">
+        <a href="{{route('pengiriman.po_export', $no_nota)}}" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i>Export</a>
+    </li>
 
 </ul>
 <div class="tab-content" id="myTabContent">

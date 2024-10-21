@@ -57,7 +57,7 @@
             </tr>
         @endforeach
         <tr>
-            <th colspan="4" class="text-center" {!! $color !!}>TOTAL</th>
+            <th colspan="5" class="text-center" {!! $color !!}>TOTAL</th>
             <th class="text-center" {!! $color !!}>{{ number_format($ttlPcs, 0) }}</th>
             <th class="text-center" {!! $color !!}>{{ number_format($ttlGr, 0) }}</th>
             <th class="text-center" {!! $color !!}></th>

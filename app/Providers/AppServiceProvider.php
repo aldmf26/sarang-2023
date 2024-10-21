@@ -21,29 +21,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        Blade::directive('presiden', function () {
-            return "<?php if(Auth::check() && Auth::user()->posisi_id == 1): ?>";
-        });
-
-        Blade::directive('endpresiden', function () {
-            return "<?php endif; ?>";
-        });
-
-        Blade::directive('pgwsGrading', function () {
-            return "<?php if(Auth::check() && Auth::user()->posisi_id == 15): ?>";
-        });
-
-        Blade::directive('endpgwsGrading', function () {
-            return "<?php endif; ?>";
-        });
-
-        Blade::directive('pgwsCabut', function () {
-            return "<?php if(Auth::check() && Auth::user()->posisi_id == 13): ?>";
-        });
-
-        Blade::directive('endpgwsCabut', function () {
-            return "<?php endif; ?>";
-        });
 
         Blade::directive('role', function ($roles) {
             // Mapping role ke posisi_id
@@ -51,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
                 'presiden' => 1,
                 'grading' => 15,
                 'cabut' => 13,
+                'bk' => 12,
+                'cetak' => 14,
+                'wip' => 16,
                 // Tambahkan role lain sesuai kebutuhan
             ];
 
