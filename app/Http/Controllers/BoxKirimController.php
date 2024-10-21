@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TblPoExport;
 use App\Models\Grading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class BoxKirimController extends Controller
 {
@@ -255,28 +259,95 @@ class BoxKirimController extends Controller
         if (empty($po)) {
             return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', 'data tidak ditemukan');
         }
-        $gudang = Grading::stock_wip();
         $data = [
             'title' => 'Wip siap kirim',
             'po' => $po,
             'no_nota' => $no_nota,
-            'gudang' => $gudang,
         ];
         return view('home.pengiriman.po', $data);
     }
+
+    public function po_export($no_nota)
+    {
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $styleBaris = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+
+        $kolom = [
+            'A' => 'no box',
+            'B' => 'grade 1',
+            'C' => 'pcs 1',
+            'D' => 'gr 1',
+            'E' => 'grade 2',
+            'F' => 'pcs 2',
+            'G' => 'gr 2',
+            'H' => 'no barcode',
+        ];
+        foreach ($kolom as $k => $v) {
+            $sheet->setCellValue($k . '1', $v);
+        }
+        $pengiriman = Grading::tbl_po($no_nota);
+        $no = 2;
+
+        foreach ($pengiriman as $item) {
+            $sheet->setCellValue('A' . $no, $item->no_box);
+            $sheet->setCellValue('B' . $no, $item->grade1);
+            $sheet->setCellValue('C' . $no, $item->pcs1);
+            $sheet->setCellValue('D' . $no, $item->gr1);
+            $sheet->setCellValue('E' . $no, $item->grade2);
+            $sheet->setCellValue('F' . $no, $item->pcs2);
+            $sheet->setCellValue('G' . $no, $item->gr2);
+            $sheet->setCellValue('H' . $no, $item->no_barcode);
+
+            $no++;
+        }
+
+        $sheet->getStyle('A1:H1')->applyFromArray($style_atas);
+        $sheet->getStyle('A2:H' . $no - 1)->applyFromArray($styleBaris);
+
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Menggunakan response untuk mengirimkan file ke browser
+        $fileName = "Export List Po $no_nota";
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
+            ]
+        );
+
+    }
+
     public function load_tbl_po(Request $r)
     {
         $no_nota = $r->no_nota;
 
-        $pengiriman = DB::select("SELECT a.*, b.pcs as pcs1, b.gr as gr1
-                    FROM pengiriman as a 
-                    JOIN (
-                        SELECT box_pengiriman,sum(pcs) as pcs, sum(gr) as gr 
-                        FROM `grading_partai` 
-                        group by box_pengiriman
-                    ) as b on a.no_box = b.box_pengiriman
-                    WHERE a.no_nota = $no_nota 
-                    ORDER BY a.id_pengiriman ASC");
+        $pengiriman = Grading::tbl_po($no_nota);
 
         $data = [
             'title' => 'Wip siap kirim',
@@ -286,9 +357,24 @@ class BoxKirimController extends Controller
         return view('home.packinglist.tbl_po', $data);
     }
 
-    public function load_tbl_loadTblTmbhBox(Request $r)
+    public function loadTblTmbhBox(Request $r)
     {
-        return 1;
+        $gudang = Grading::stock_wip();
+        $data = [
+            'title' => 'Wip siap kirim',
+            'gudang' => $gudang,
+        ];
+        return view('home.pengiriman.tbl_tbh_po', $data);
+    }
+
+    public function loadTblSumList(Request $r)
+    {
+        $pengiriman = Grading::tbl_po($r->no_nota);
+        $data = [
+            'title' => 'Wip siap kirim',
+            'pengiriman' => $pengiriman,
+        ];
+        return view('home.pengiriman.tbl_sum_listpo', $data);
     }
     public function save_po(Request $r)
     {

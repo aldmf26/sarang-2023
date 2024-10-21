@@ -109,6 +109,7 @@ class PackingListController extends Controller
         b.pcs,
         b.gr,
         a.grade,
+        a.no_barcode,
         sum(a.pcs) as pcs2,
         sum(a.gr) as gr2,
         a.no_box,
