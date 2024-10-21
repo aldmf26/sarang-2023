@@ -455,7 +455,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/add', 'add')->name('add');
             Route::get('/po/{no_nota}', 'po')->name('po');
+            Route::get('/po_export/{no_nota}', 'po_export')->name('po_export');
             Route::get('/po/', 'list_po')->name('list_po');
+            Route::get('/load_tbl_po/', 'load_tbl_po')->name('load_tbl_po');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/create', 'create')->name('create');
             Route::post('/save_po', 'save_po')->name('save_po');
@@ -466,6 +468,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
+            Route::get('/ubah', 'ubah')->name('ubah');
+            Route::get('/load_tbl_loadTblTmbhBox', 'load_tbl_loadTblTmbhBox')->name('load_tbl_loadTblTmbhBox');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
             Route::get('/batal/{no_nota}', 'batal')->name('batal');

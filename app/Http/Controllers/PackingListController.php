@@ -98,6 +98,7 @@ class PackingListController extends Controller
             join (
                         SELECT grade, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
                         FROM `pengiriman`
+                        where no_nota = $no_nota
                         GROUP BY grade
                     ) as c on a.grade = c.grade
             where a.no_nota = $no_nota
