@@ -14,34 +14,34 @@
 
             <th class="dhead text-end">Pcs Kirim</th>
             <th class="dhead text-end">Gr Kirim air %</th>
-            <th width="71" class="dhead text-end">Aksi</th>
+            <th width="91" class="dhead text-end">Aksi</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($pengiriman as $i => $d)
             <tr x-data="{
-                gr2: {{ $d->gr }},
+                gr2: {{ $d->gr2 }},
             }">
                 <td>{{ $i + 1 }} </td>
                 <td>P{{ $d->no_box }}</td>
-                <td align="center">{{ $d->grade }}</td>
+                <td align="center">{{ $d->grade1 }}</td>
                 <td align="right">{{ $d->pcs1 }}</td>
                 <td align="right">{{ $d->gr1 }}</td>
 
                 <td align="center">
-                    <input onclick="$(this).select()" name="grade2[]" required value="{{ $d->grade }}"
+                    <input onclick="$(this).select()" name="grade2[]" required value="{{ $d->grade2 }}"
                         type="text" class="form-control text-primary">
                     <input name="box_grading[]" required value="{{ $d->no_box }}" type="hidden"
                         class="form-control text-primary">
                 </td>
                 <td align="center">
-                    <input onclick="$(this).select()" name="pcs2[]" required value="{{ $d->pcs }}" type="text"
+                    <input onclick="$(this).select()" name="pcs2[]" required value="{{ $d->pcs2 }}" type="text"
                         class="text-end form-control text-primary">
                 </td>
                 <td align="center">
                     <input name="id_pengiriman[]" required value="{{ $d->id_pengiriman }}" type="hidden">
                     <input onclick="$(this).select()" name="gr2[]" x-model="gr2" required
-                        value="{{ $d->gr }}" type="text" class="text-end form-control text-primary">
+                        value="{{ $d->gr2 }}" type="text" class="text-end form-control text-primary">
                 </td>
                 <td align="center">
                     <input onclick="$(this).select()" name="barcode[]" value="{{ $d->no_barcode }}"
@@ -49,7 +49,7 @@
                 </td>
 
                 <td align="right">
-                    {{ $d->pcs }}
+                    {{ $d->pcs2 }}
                 </td>
                 <td align="right" x-text="(Number(gr2) / Number(kadar)) + Number(gr2)">-
                 </td>
@@ -63,3 +63,5 @@
         @endforeach
     </tbody>
 </table>
+<!-- Tempat untuk menampilkan total Grade -->
+

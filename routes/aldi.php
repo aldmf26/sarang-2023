@@ -469,7 +469,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/update', 'update')->name('update');
             Route::get('/delete', 'delete')->name('delete');
             Route::get('/ubah', 'ubah')->name('ubah');
-            Route::get('/load_tbl_loadTblTmbhBox', 'load_tbl_loadTblTmbhBox')->name('load_tbl_loadTblTmbhBox');
+            Route::get('/loadTblTmbhBox', 'loadTblTmbhBox')->name('loadTblTmbhBox');
+            Route::get('/loadTblSumList', 'loadTblSumList')->name('loadTblSumList');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
             Route::get('/batal/{no_nota}', 'batal')->name('batal');

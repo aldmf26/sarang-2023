@@ -531,4 +531,19 @@ class Grading extends Model
         ) as c on a.no_nota = c.no_nota
         WHERE a.no_nota = $no_nota;");
     }
+
+    public static function tbl_po($no_nota)
+    {
+        $pengiriman = DB::select("SELECT a.id_pengiriman,a.no_box,b.grade as grade1, b.pcs as pcs1, b.gr as gr1,a.grade as grade2, a.pcs as pcs2, a.gr as gr2,a.no_barcode
+                FROM pengiriman as a 
+                JOIN (
+                    SELECT box_pengiriman,sum(pcs) as pcs, sum(gr) as gr,grade 
+                    FROM `grading_partai` 
+                    group by box_pengiriman
+                ) as b on a.no_box = b.box_pengiriman
+                WHERE a.no_nota = $no_nota 
+                ORDER BY a.id_pengiriman DESC");
+
+        return $pengiriman;
+    }
 }

@@ -6,6 +6,7 @@
         <tr>
             <th class="text-center" {!! $color !!}>Partai</th>
             <th class="text-center" {!! $color !!}>No Box</th>
+            <th class="text-center" {!! $color !!}>No Barcode</th>
             <th class="text-center" {!! $color !!}>Tipe</th>
             <th class="text-center" {!! $color !!}>Grade</th>
             <th class="text-center" {!! $color !!}>Pcs</th>
@@ -43,6 +44,7 @@
             <tr class="text-center">
                 <td>{{ $d->nm_partai }}</td>
                 <td>{{ $d->no_box }}</td>
+                <td>{{ $d->no_barcode }}</td>
                 <td>{{ $d->tipe }}</td>
                 <td>{{ $d->grade }}</td>
                 <td>{{ number_format($d->pcs, 0) }}</td>
@@ -55,7 +57,7 @@
             </tr>
         @endforeach
         <tr>
-            <th colspan="4" class="text-center" {!! $color !!}>TOTAL</th>
+            <th colspan="5" class="text-center" {!! $color !!}>TOTAL</th>
             <th class="text-center" {!! $color !!}>{{ number_format($ttlPcs, 0) }}</th>
             <th class="text-center" {!! $color !!}>{{ number_format($ttlGr, 0) }}</th>
             <th class="text-center" {!! $color !!}></th>

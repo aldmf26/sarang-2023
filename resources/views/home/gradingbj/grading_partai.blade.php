@@ -84,10 +84,10 @@
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
 
-                                @presiden
+                                @role('presiden')
                                     <th class="dhead text-end">Rp/gr</th>
                                     <th class="dhead text-end">Total Rp</th>
-                                @endpresiden
+                                @endrole
                             </tr>
                         </thead>
                         <thead class="bg-white">
@@ -136,7 +136,7 @@
                                         {{ $ttlGr }}
                                     </h6>
                                 </th>
-                                @presiden
+                                @role('presiden')
                                     <th class="text-end">
                                         <h6>
 
@@ -148,7 +148,7 @@
                                             {{ number_format(sumBk($getFormulir, 'cost_bk') + sumBk($getFormulir, 'cost_cbt') + sumBk($getFormulir, 'cost_str') + sumBk($getFormulir, 'cost_eo') + sumBk($getFormulir, 'cost_ctk') + sumBk($getFormulir, 'cost_cu'), 0) }}
                                         </h6>
                                     </th>
-                                @endpresiden
+                                @endrole
                             </tr>
 
                         </thead>
@@ -169,12 +169,12 @@
                                             $d->cost_str +
                                             $d->cost_cu;
                                     @endphp
-                                    @presiden
+                                    @role('presiden')
                                         <td align="right">{{ number_format($ttl_rp / $d->gr_awal, 0) }}</td>
                                         <td align="right">
                                             {{ number_format($ttl_rp, 0) }}
                                         </td>
-                                    @endpresiden
+                                    @endrole
 
                                 </tr>
                             @endforeach

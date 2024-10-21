@@ -70,10 +70,10 @@
                                 <th width="90" class="dhead">Tipe - Ket</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
-                                @presiden
+                                @role('presiden')
                                     <th class="dhead text-end">Rp/Gr</th>
                                     <th class="dhead text-end">Ttl Rp</th>
-                                @endpresiden
+                                @endrole
                                 <th class="dhead text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -94,14 +94,14 @@
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
                                         <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
                                         <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
-                                        @presiden
+                                        @role('presiden')
                                             <td class="text-end">
                                                 {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
                                             </td>
                                             <td class="text-end">
                                                 {{-- {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }} --}}
                                             </td>
-                                        @endpresiden
+                                        @endrole
                                         <td align="center">
                                             <input type="checkbox" class="form-check"
                                                 :checked="cek.includes('{{ $d->no_box }}')" name="id[]"

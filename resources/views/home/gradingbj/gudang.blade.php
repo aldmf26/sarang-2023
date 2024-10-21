@@ -145,7 +145,8 @@
                                         <td>{{ $d->urutan }}</td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->box_pengiriman }}</td>
-                                        <td>{{ $d->grade }}</td>
+                                        <td><span class="detail text-primary pointer"
+                                            data-nobox="{{ $d->box_pengiriman }}">{{ $d->grade }}</span></td>
                                         <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                         <td class="text-end">{{ number_format(floor($d->gr), 0) }}</td>
                                         <td align="center">
@@ -159,6 +160,14 @@
                         </table>
                     </div>
                 </div>
+
+                {{-- detail --}}
+                <x-theme.modal title="Detail" idModal="detail" btnSave="T">
+                    <div class="loading d-none">
+                        <x-theme.loading />
+                    </div>
+                    <div id="load_detail"></div>
+                </x-theme.modal>
 
                 <form action="{{ route('gradingbj.save_formulir') }}" method="post">
                     @csrf
@@ -214,6 +223,28 @@
         @section('scripts')
             <script>
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
+
+                $('.detail').click(function(e) {
+                    e.preventDefault();
+                    const no_box = $(this).data('nobox')
+                    $("#detail").modal('show')
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('gradingbj.detail') }}",
+                        data: {
+                            no_box,
+                        },
+                        beforeSend: function() {
+                            $("#load_detail").html("");
+                            $('.loading').removeClass('d-none');
+                        },
+                        success: function(r) {
+                            $('.loading').addClass('d-none');
+                            $("#load_detail").html(r);
+                            loadTable('tblDetail')
+                        }
+                    });
+                });
             </script>
             <script>
                 if ({{ $posisi == 1 }}) {
