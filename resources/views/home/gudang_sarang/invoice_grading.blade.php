@@ -52,6 +52,7 @@
 
                                     $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
                                 @endphp
+                                @presiden
                                 @pgwsGrading
                                     @if ($getSudahGrading)
                                     <a href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}">
@@ -78,6 +79,7 @@
                                         <button type="submit" name="submit" class="border-0 badge bg-success" value="grading">Grading</button>
                                     </form> --}}
                                 @endpgwsGrading
+                                @endpresiden
 
                             </td>
                         </tr>
