@@ -53,6 +53,10 @@
                             teks="Serah" />
                         <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
                         <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
+                        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => 'cabut']) }}"
+                            class="btn btn-sm btn-primary">
+                            <i class="fas fa-file-excel"></i> Export
+                        </a>
 
                     </div>
                 </div>
@@ -79,9 +83,13 @@
                                 <th>Pgws Grade</th>
                                 <th class="text-end">Pcs Awal</th>
                                 <th class="text-end">Gr Awal</th>
-                                <th class="text-center">Cek <br>
-                                    <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
-                                </th>
+                                @if (auth()->user()->posisi_id == 13)
+                                @else
+                                    <th class="text-center">Cek <br>
+                                        <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
+                                    </th>
+                                @endif
+
                             </tr>
                         </thead>
                         <tbody>
@@ -98,11 +106,15 @@
                                     <td>{{ $a->pgws_grade }}</td>
                                     <td>{{ $a->pcs_awal }}</td>
                                     <td>{{ $a->gr_awal }}</td>
-                                    <td class="text-center">
-                                        <input type="checkbox"
-                                            @change="tambah({{ $a->no_box }}, '{{ $a->nm_partai }}', {{ $a->pcs_awal }}, {{ $a->gr_awal }})"
-                                            value="{{ $a->no_box }}" x-model="cek">
-                                    </td>
+                                    @if (auth()->user()->posisi_id == 13)
+                                    @else
+                                        <td class="text-center">
+                                            <input type="checkbox"
+                                                @change="tambah({{ $a->no_box }}, '{{ $a->nm_partai }}', {{ $a->pcs_awal }}, {{ $a->gr_awal }})"
+                                                value="{{ $a->no_box }}" x-model="cek">
+                                        </td>
+                                    @endif
+
 
                                 </tr>
                             @endforeach
