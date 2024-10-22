@@ -425,8 +425,15 @@ class Grading extends Model
 
     public static function pengirimanAll()
     {
-        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
-                 GROUP BY a.no_box");
+    //     return DB::select("SELECT b.nm_partai,a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,b.nm_partai,b.box_pengiriman as no_box,b.grade,sum(b.pcs) as pcs, sum(b.gr) as gr 
+    //             FROM pengiriman as a
+    //              GROUP BY a.no_box");
+        return DB::select("SELECT b.nm_partai,a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,b.nm_partai,b.box_pengiriman as no_box,a.grade,sum(a.pcs) as pcs, sum(a.gr) as gr 
+            FROM pengiriman as a
+            join (
+            SELECT box_pengiriman,nm_partai,grade FROM grading_partai GROUP BY box_pengiriman
+            ) as b on a.no_box = b.box_pengiriman 
+            GROUP by a.no_box");
     }
 
     public static function belumKirimAll()

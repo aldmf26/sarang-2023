@@ -329,9 +329,19 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("R" . $row, $ca11->ttl_rp);
         $sheet->setCellValue("S" . $row, 0);
         $sheet->setCellValue("T$row", $ca11->ttl_rp);
-        $sheet->setCellValue("U$row", empty($ca11->gr) ? 0 : $ca11->ttl_rp / $ca11->gr);
+        $sheet->setCellValue("U$row", $ca11->ttl_rp / $ca11->gr);
         $row = $row + 1;
 
+        $sheet->setCellValue("M" . $row, 'suntikan');
+        $sheet->setCellValue("N" . $row, 'suntikan');
+        $sheet->setCellValue("O" . $row, '-');
+        $sheet->setCellValue("P" . $row, $ca12suntik->pcs);
+        $sheet->setCellValue("Q" . $row, $ca12suntik->gr);
+        $sheet->setCellValue("R" . $row, $ca12suntik->ttl_rp);
+        $sheet->setCellValue("S" . $row, 0);
+        $sheet->setCellValue("T$row", $ca12suntik->ttl_rp);
+        $sheet->setCellValue("U$row", $ca12suntik->ttl_rp / $ca12suntik->gr);
+        $sheet->getStyle('M2:U' . $row)->applyFromArray($style);
 
         // proses ctk
         $proses = $model::cetak_proses();
@@ -456,7 +466,27 @@ class ExportCocokanController extends Controller
             $row++;
         }
 
-      
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik->gr);
+        $sheet->setCellValue("G" . $row, $s1suntik->ttl_rp);
+        $sheet->setCellValue("H$row", 0);
+        $sheet->setCellValue("I$row", $s1suntik->ttl_rp);
+        $sheet->setCellValue("J$row", $s1suntik->ttl_rp / $s1suntik->gr);
+
+        $row = $row + 1;
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik2->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik2->gr);
+        $sheet->setCellValue("G" . $row, $s1suntik2->ttl_rp);
+        $sheet->setCellValue("H$row", 0);
+        $sheet->setCellValue("I$row", $s1suntik2->ttl_rp);
+        $sheet->setCellValue("J$row", $s1suntik2->ttl_rp / $s1suntik2->gr);
+
 
         $sheet->getStyle('B2:J' . $row - 1)->applyFromArray($style);
 
@@ -477,7 +507,19 @@ class ExportCocokanController extends Controller
             $row++;
         }
 
-       
+        $sheet->setCellValue("M" . $row, 'suntikan');
+        $sheet->setCellValue("N" . $row, 'suntikan');
+        $sheet->setCellValue("O" . $row, '-');
+        $sheet->setCellValue("P" . $row, $s1suntik_akhir->pcs);
+        $sheet->setCellValue("Q" . $row, $s1suntik_akhir->gr);
+        $sheet->setCellValue("R" . $row, $s1suntik_akhir->ttl_rp);
+        $sheet->setCellValue("S" . $row, 0);
+        $sheet->setCellValue("T" . $row, 0);
+        $sheet->setCellValue("U" . $row, 0);
+        $sheet->setCellValue("V" . $row, $s1suntik_akhir->ttl_rp);
+        $sheet->setCellValue("W" . $row, $s1suntik_akhir->ttl_rp / $s1suntik_akhir->gr);
+
+        $sheet->getStyle('M2:W' . $row - 1)->applyFromArray($style);
 
         // proses ctk
         $cetak_proses = $model::sortir_proses();
@@ -599,9 +641,24 @@ class ExportCocokanController extends Controller
         }
         $hrgaSatuan = $sumTtlRp / $sumTtlGr;
         session()->put('hrga_satuan', $hrgaSatuan);
-        
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik_akhir->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik_akhir->gr);
+        $sheet->setCellValue("G$row", $s1suntik_akhir->ttl_rp);
+        $sheet->setCellValue("H$row", $s1suntik_akhir->ttl_rp / $s1suntik_akhir->gr);
 
-        
+        $row = $row + 1;
+        $sheet->setCellValue("B" . $row, 'suntikan');
+        $sheet->setCellValue("C" . $row, 'suntikan');
+        $sheet->setCellValue("D" . $row, '-');
+        $sheet->setCellValue("E" . $row, $s1suntik2->pcs);
+        $sheet->setCellValue("F" . $row, $s1suntik2->gr);
+        $sheet->setCellValue("G$row", $s1suntik2->ttl_rp);
+        $sheet->setCellValue("H$row", $s1suntik2->ttl_rp / $s1suntik2->gr);
+
+        $sheet->getStyle('B2:H' . $row - 1)->applyFromArray($style);
 
         $row = 2;
         foreach ($sisaGrading as $v) {
@@ -690,7 +747,7 @@ class ExportCocokanController extends Controller
         // akhir sortir
         $row = 2;
         foreach ($pengiriman as $v) {
-            $sheet->setCellValue("B$row", $v->nm_partai ?? '');
+            $sheet->setCellValue("B$row", $v->nm_partai);
             $sheet->setCellValue("C$row", $v->no_box);
             $sheet->setCellValue("D$row", $v->grade);
             $sheet->setCellValue("E$row", $v->pcs);
