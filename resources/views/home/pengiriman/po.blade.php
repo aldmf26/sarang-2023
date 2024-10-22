@@ -59,8 +59,8 @@
                     </table>
                 </div>
                 <div class="col-lg-12">
-                    <div class="d-flex gap-2">
-                        <div class="flex-grow-1">
+                    <div class="d-flex gap-2 float-end">
+                        <div>
                             <input type="text" id="tbl3input" class=" form-control form-control-sm mb-2"
                                 placeholder="cari">
                         </div>
