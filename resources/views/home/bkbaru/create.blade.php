@@ -130,11 +130,11 @@
                                             name="tgl_terima[]">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control pcsAwal text-end"
+                                        <input autocomplete="off" type="text" class="form-control pcsAwal text-end"
                                             count="{{ $i }}" name="pcs_awal[]" value="0">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control grAwal text-end"
+                                        <input autocomplete="off" type="text" class="form-control grAwal text-end"
                                             count="{{ $i }}" name="gr_awal[]" value="0">
                                     </td>
 
