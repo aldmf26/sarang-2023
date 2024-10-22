@@ -23,7 +23,7 @@
                             class="btn btn-sm btn-primary" type="submit">
                             <i class="fas fa-plus"></i>
                             Kirim
-                            <span class="badge bg-info" x-text="cek.length" x-transition></span>
+                            <span class="badge bg-white text-black" x-text="cek.length" x-transition></span>
                             <span  x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
                         </button>
                     </form>
