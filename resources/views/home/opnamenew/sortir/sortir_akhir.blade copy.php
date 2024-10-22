@@ -46,7 +46,20 @@
                                 <td class="text-end">{{ number_format($b->ttl_rp / $b->gr, 0) }}</td>
                             </tr>
                         @endforeach
-                      
+                        <tr>
+                            <td></td>
+                            <td>partai suntik</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td class="text-end">{{ number_format($suntik->pcs, 0) }}</td>
+                            <td class="text-end">{{ number_format($suntik->gr, 0) }}</td>
+                            <td class="text-end">{{ number_format($suntik->ttl_rp, 0) }}</td>
+                            <td class="text-end">0</td>
+                            {{-- <td class="text-end">0</td>
+                            <td class="text-end">0</td> --}}
+                            <td class="text-end">{{ number_format($suntik->ttl_rp, 0) }}</td>
+                            <td class="text-end">{{ number_format($suntik->ttl_rp / $suntik->gr, 0) }}</td>
+                        </tr>
                         
                     </tbody>
                     <tfoot>
@@ -57,11 +70,11 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs') + $suntik->pcs, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr') + $suntik->gr, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp, 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                             {{-- <th class="dheadstock  text-end">0</th>
                             <th class="dheadstock  text-end">0</th> --}}
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') , 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') + $suntik->ttl_rp , 0) }}</th>
                             <th class="dheadstock  text-end">
                                 {{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0) }}
                             </th>

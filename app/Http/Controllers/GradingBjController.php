@@ -314,7 +314,7 @@ class GradingBjController extends Controller
             return "<span class='fw-bold'> data tidak ditemukan </span>";
         } else {
             if ($databox->grade == $grade) {
-                return 'Pcs : ' . round($databox->pcs, 0) . ' | ' . 'Gr : ' . round($databox->gr, 0);
+                return '<span style="color: blue;">Pcs : ' . round($databox->pcs, 0) . ' <br/> ' . 'Gr : ' . round($databox->gr, 0) . '</span>';
             } else {
                 return "<span class='text-danger fw-bold'> grade: $databox->grade </span>";
             }

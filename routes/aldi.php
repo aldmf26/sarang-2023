@@ -482,6 +482,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/check_grade', 'check_grade')->name('check_grade');
+            Route::get('/export', 'export')->name('export');
             Route::post('/pengiriman', 'create')->name('create');
             Route::post('/tbh_invoice', 'tbh_invoice')->name('tbh_invoice');
             Route::get('/detail', 'detail')->name('detail');

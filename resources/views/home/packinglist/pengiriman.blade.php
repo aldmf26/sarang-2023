@@ -6,11 +6,15 @@
                 @include('home.gradingbj.nav')
             </div>
             <div class="d-flex gap-1">
-                <div>
-                    {{-- <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan Grade</a> --}}
-                </div>
+                
                 <div>
                     <x-theme.btn_filter />
+                </div>
+                <div>
+                    <a href="{{ route('packinglist.check_grade') }}" class="btn btn-sm btn-primary">Check Perubahan Grade</a>
+                </div>
+                <div>
+                    <a href="{{ route('packinglist.export') }}" class="btn btn-sm btn-primary"><i class="fas fa-file-excel"></i> Export</a>
                 </div>
             </div>
         </div>

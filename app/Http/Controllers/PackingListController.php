@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grading;
-use App\Models\PengirimanModel;
-use App\Models\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -176,5 +176,87 @@ class PackingListController extends Controller
             'cek' => $cek,
         ];
         return view('home.packinglist.check_grade', $data);
+    }
+
+    private function lis_pengiriman($spreadsheet, $style_atas, $style)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet4 = $spreadsheet->getActiveSheet(0);
+        $sheet4->setTitle('List Pengiriman');
+
+        $sheet4->getStyle("A1:I1")->applyFromArray($style_atas);
+        $sheet4->setCellValue('A1', 'No');
+        $sheet4->setCellValue('B1', 'tgl kirim');
+        $sheet4->setCellValue('C1', 'no packing list');
+        $sheet4->setCellValue('D1', 'nama packing list');
+        $sheet4->setCellValue('E1', 'tujuan');
+        $sheet4->setCellValue('F1', 'box');
+        $sheet4->setCellValue('G1', 'pcs');
+        $sheet4->setCellValue('H1', 'gr');
+        $sheet4->setCellValue('I1', 'gr + kadar');
+
+        $packing_list = Grading::list_pengiriman_sum();
+
+        $kolom = 2;
+
+        foreach ($packing_list  as $no => $d) {
+            $sheet4->setCellValue('A' . $kolom, $no + 1);
+            $sheet4->setCellValue('B' . $kolom, tanggal($d->tgl));
+            $sheet4->setCellValue('C' . $kolom, $d->no_nota);
+            $sheet4->setCellValue('D' . $kolom, ucwords($d->nm_packing));
+            $sheet4->setCellValue('E' . $kolom, strtoupper($d->tujuan));
+            $sheet4->setCellValue('F' . $kolom, $d->ttl_box);
+            $sheet4->setCellValue('G' . $kolom, $d->pcs);
+            $sheet4->setCellValue('H' . $kolom, $d->gr);
+            $sheet4->setCellValue('I' . $kolom, $d->gr_naik);
+            $kolom++;
+        }
+        $sheet4->getStyle('A2:I' . $kolom - 1)->applyFromArray($style);
+    }
+
+    public function export()
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $this->lis_pengiriman($spreadsheet, $style_atas, $style);
+
+        $namafile = "Opname Gudang.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }
