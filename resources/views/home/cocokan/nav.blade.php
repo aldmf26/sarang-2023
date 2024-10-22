@@ -40,9 +40,11 @@
 
 <div class="col-lg-4">
     <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end"><i
-            class="fas fa-file-excel"></i>Export</a>
+            class="fas fa-file-excel"></i>Export All</a>
+    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end me-2"><i
+            class="fas fa-file-excel"></i>Export Rp + Cost Kerja</a>
     <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
-        class="btn btn-primary btn-sm float-end me-2">Cost operasional</a>
+        class="btn btn-primary btn-sm float-end me-2">Isi Cost operasional</a>
 </div>
 
 <div class="col-lg-12">
