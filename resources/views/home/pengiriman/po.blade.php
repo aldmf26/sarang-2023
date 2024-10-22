@@ -103,7 +103,7 @@
                     <div id="loadTblPo"></div>
                     <div class="d-flex gap-2 float-end">
                         <button name="submit" value="draft" class="btn btn-info btn-sm">
-                            Kembali / Draft
+                            Simpan / Draft
                         </button>
                         <button class="btn btn-primary btn-sm" value="simpan" name="submit">Save To
                             Packinglist</button>
