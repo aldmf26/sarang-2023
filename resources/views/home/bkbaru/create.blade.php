@@ -61,6 +61,13 @@
                                 <th class="dhead text-end">Pcs Awal</th>
                                 <th class="dhead text-end">Gr Awal</th>
                             </tr>
+                            <tr>
+                                {{-- <th class="dhead" width="70">Tipe</th> --}}
+
+                                <th colspan="8" style="background-color: #f3a36e; color:white">Total</th>
+                                <th class=" text-end ttl_pcs_awal" style="background-color: #f3a36e;color:white"></th>
+                                <th class=" text-end ttl_gr_awal" style="background-color: #f3a36e;color:white"></th>
+                            </tr>
                         </thead>
                         <tbody>
                             @for ($i = 1; $i <= $baris; $i++)
@@ -229,7 +236,7 @@
                         }
                     });
 
-                    alert(hasil);
+
                 });
             }
             keyupBp('ket')
@@ -307,6 +314,22 @@
                     $('.nomor_lot' + no).val(nolot).trigger(
                         'change.select2');
                 });
+            });
+            $(document).on('keyup', '.pcsAwal', function() {
+
+                var total_pcs_awal = 0;
+                $(".pcsAwal").each(function() {
+                    total_pcs_awal += parseFloat($(this).val());
+                });
+                $('.ttl_pcs_awal').text(total_pcs_awal);
+            });
+            $(document).on('keyup', '.grAwal', function() {
+
+                var total_gr_awal = 0;
+                $(".grAwal").each(function() {
+                    total_gr_awal += parseFloat($(this).val());
+                });
+                $('.ttl_gr_awal').text(total_gr_awal);
             });
         </script>
     @endsection
