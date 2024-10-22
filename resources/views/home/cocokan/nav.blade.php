@@ -37,6 +37,7 @@
         </li> --}}
     </ul>
 </div>
+
 <div class="col-lg-4">
     <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end"><i
             class="fas fa-file-excel"></i>Export All</a>
@@ -45,6 +46,7 @@
     <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
         class="btn btn-primary btn-sm float-end me-2">Isi Cost operasional</a>
 </div>
+
 <div class="col-lg-12">
     <hr style="border: 1px solid black;">
 </div>
