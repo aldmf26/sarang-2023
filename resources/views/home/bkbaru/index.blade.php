@@ -163,10 +163,13 @@
                                     <tbody>
                                         <input class="d-none" name="no_box[]" type="text" :value="cek">
                                         <tr>
-                                            <td></td>
-                                            <td x-text="selectedItem.length + ' Box'"></td>
-                                            <th class="text-end" x-text="selectedItem.reduce((acc, cur) => acc + cur.pcs, 0)"></th>
-                                            <th class="text-end" x-text="selectedItem.reduce((acc, cur) => acc + cur.gr, 0)"></th>
+                                            <td style="background-color: #f3a36e; color:white">Total</td>
+                                            <td style="background-color: #f3a36e; color:white"
+                                                x-text="selectedItem.length + ' Box'"></td>
+                                            <th style="background-color: #f3a36e; color:white" class="text-end"
+                                                x-text="selectedItem.reduce((acc, cur) => acc + cur.pcs, 0)"></th>
+                                            <th style="background-color: #f3a36e; color:white" class="text-end"
+                                                x-text="selectedItem.reduce((acc, cur) => acc + cur.gr, 0)"></th>
                                         </tr>
                                         <template x-for="item in selectedItem">
                                             <tr>
