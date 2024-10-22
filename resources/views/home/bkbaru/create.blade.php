@@ -228,6 +228,8 @@
                             shouldUpdate = true;
                         }
                     });
+
+                    alert(hasil);
                 });
             }
             keyupBp('ket')
