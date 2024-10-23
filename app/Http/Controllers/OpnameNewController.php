@@ -202,7 +202,6 @@ class OpnameNewController extends Controller
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
-        // $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
 
         $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
@@ -211,6 +210,7 @@ class OpnameNewController extends Controller
         $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
         $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
 
+        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
 
         $namafile = "Opname Gudang.xlsx";
 
@@ -482,8 +482,8 @@ class OpnameNewController extends Controller
 
         $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
         $sheet3->setCellValue('N1', 'Sisa belum kirim');
-        $sheet3->setCellValue('O1', 'box grading');
-        $sheet3->setCellValue('P1', 'pengawas');
+        $sheet3->setCellValue('O1', 'nama partai');
+        $sheet3->setCellValue('P1', 'no box pengiriman');
         $sheet3->setCellValue('Q1', 'grade');
         $sheet3->setCellValue('R1', 'pcs');
         $sheet3->setCellValue('S1', 'gr');
@@ -494,11 +494,11 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('X1', 'total rp');
         $sheet3->setCellValue('Y1', 'rp/gr');
 
-        $grading = DB::select("SELECT * FROM `grading_partai` WHERE sudah_kirim = 'T'");
+        $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(cost_bk) as ttl_rp, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` WHERE sudah_kirim = 'T' group by box_pengiriman;");
         $kolom = 2;
         foreach ($grading  as $d) {
-            $sheet3->setCellValue('O' . $kolom, $d->box_pengiriman);
-            $sheet3->setCellValue('P' . $kolom, $d->admin);
+            $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
+            $sheet3->setCellValue('P' . $kolom, $d->box_pengiriman);
             $sheet3->setCellValue('Q' . $kolom, $d->grade);
             $sheet3->setCellValue('R' . $kolom, $d->pcs);
             $sheet3->setCellValue('S' . $kolom, $d->gr);
@@ -542,8 +542,8 @@ class OpnameNewController extends Controller
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
         $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(3);
-        $sheet4 = $spreadsheet->getActiveSheet(3);
+        $spreadsheet->setActiveSheetIndex(9);
+        $sheet4 = $spreadsheet->getActiveSheet(9);
         $sheet4->setTitle('Sortir selesai');
 
         $cetak_selesai = $model::sortir_selesai_akhir();
