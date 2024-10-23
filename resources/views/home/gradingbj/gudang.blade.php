@@ -2,6 +2,7 @@
     <x-slot name="slot">
         <div x-data="{
             cek: [],
+            cekPrint: [],
             selectedItem: [],
             tambah(no_box, grade, pcs, gr) {
                 const selectedItem = this.selectedItem
@@ -19,9 +20,9 @@
         
             },
         }">
-            <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex justify-content-between mb-3 gap-1">
                 <h6>{{ $title }}</h6>
-                <div>
+                <div class="d-flex gap-1">
                     {{-- <a class="btn btn-sm btn-primary"
                         href="{{ route('cabut.export_gudang', ['bulan' => $bulan, 'tahun' => $tahun, 'id_user' => $id_user]) }}"><i
                             class="fas fa-print"></i> Export All</a> --}}
@@ -29,6 +30,19 @@
                         teks="serah" />
                     <x-theme.button href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}"
                         icon="fa-clipboard-list" teks="Po Wip" />
+                    <div>
+                        <form action="{{ route('pengiriman.kirim') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="no_box" class="form-control" :value="cekPrint.join(',')">
+                            <button value="print" x-transition x-show="cekPrint.length" class="btn btn-sm btn-info"
+                                name="submit">
+                                <i class="fas fa-print"></i>
+                                Print
+                                <span class="badge bg-white text-black" x-text="cekPrint.length + ' Box'"
+                                    x-transition></span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -114,7 +128,7 @@
                         <table id="tbl3" class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '7' : '6' }}">
+                                    <th class="dhead text-center" colspan="{{ $posisi == 1 ? '8' : '7' }}">
                                         ({{ number_format(count($gradingSelesai), 0) }}) Grading Selesai
                                     </th>
                                 </tr>
@@ -125,7 +139,9 @@
                                     <th class="dhead">Grade</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-center">Aksi</th>
+                                    <th class="dhead text-center">Serah</th>
+                                    <th class="dhead text-center">Print</th>
+
                                 </tr>
 
                                 <tr>
@@ -146,13 +162,30 @@
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->box_pengiriman }}</td>
                                         <td><span class="detail text-primary pointer"
-                                            data-nobox="{{ $d->box_pengiriman }}">{{ $d->grade }}</span></td>
+                                                data-nobox="{{ $d->box_pengiriman }}">{{ $d->grade }}</span></td>
                                         <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                         <td class="text-end">{{ number_format(floor($d->gr), 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})"
                                                 value="{{ $d->box_pengiriman }}" class="pointer" x-model="cek">
+                                        </td>
+                                        <td align="center" class="">
+                                            @if ($d->sudah_print == 'T')
+                                                <input type="checkbox" class="form-check"
+                                                    :checked="cekPrint.includes('{{ $d->box_pengiriman }}')"
+                                                    @change="
+                                                    if (cekPrint.includes('{{ $d->box_pengiriman }}')) {
+                                                        cekPrint = cekPrint.filter(x => x !== '{{ $d->box_pengiriman }}')
+                                                    } else {
+                                                        cekPrint.push('{{ $d->box_pengiriman }}')
+                                                    }
+                                                "
+                                                    name="id_print[]" id=""
+                                                    value="{{ $d->box_pengiriman }}">
+                                            @else
+                                                <span class="badge bg-success">Y</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

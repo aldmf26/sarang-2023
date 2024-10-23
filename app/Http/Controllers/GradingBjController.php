@@ -392,11 +392,9 @@ class GradingBjController extends Controller
             $selisihPcs =  $ttlPcsSortir - $ttlPcsGrading;
             $selisihGr =  $ttlGrSortir - $ttlGrGrading;
 
-
-            if ($ttlPcsGrading > $ttlPcsSortir || $ttlGrGrading > $ttlGrSortir) {
+            if ($ttlPcsGrading != $ttlPcsSortir || $ttlGrGrading != $ttlGrSortir) {
                 return redirect()->back()->withInput()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
-
 
             if ($selisihGr > 0) {
                 DB::table('grading_selisih')->insert([
@@ -751,6 +749,8 @@ class GradingBjController extends Controller
         ];
         return view('home.gradingbj.gudang_siap_kirim_partai', $data);
     }
+
+    
     public function detail(Request $r)
     {
         $no_box = $r->no_box;
@@ -1060,6 +1060,24 @@ class GradingBjController extends Controller
         return view('home.gradingbj.gudang', $data);
     }
 
+    public function print(Request $r)
+    {
+        $box_grading = explode(',', $r->no_box);
+        $get = DB::table('grading_partai')
+            ->select('box_pengiriman','grade','nm_partai', DB::raw('SUM(pcs) as pcs'), DB::raw('SUM(gr) as gr'))
+            ->whereIn('box_pengiriman', $box_grading)
+            ->groupBy('box_pengiriman');
+
+        $get->update(['sudah_print' => 'Y']);
+
+        $getBox = $get->get();
+
+        $data = [
+            'title' => 'Print Grading',
+            'getBox' => $getBox
+        ];
+        return view('home.gradingbj.print', $data);
+    }
 
     public function save_formulir(Request $r)
     {

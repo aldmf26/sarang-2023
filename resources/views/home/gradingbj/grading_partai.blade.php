@@ -9,6 +9,7 @@
         <form x-data="{
             cek: [],
             rows: [],
+            isDisabled: false,
             selectedRowIndex: null,
             pcs: Array().fill(''),
             gr: Array().fill(''),
@@ -271,7 +272,8 @@
                     </table>
                 </div>
             </div>
-            <button type="submit" class="btn btn-md btn-primary float-end">Save</button>
+            <button type="submit" class="btn btn-md btn-primary float-end" x-show="!isDisabled"
+                @click="isDisabled = true">Save</button>
         </form>
 
         @section('scripts')

@@ -178,19 +178,23 @@ class BoxKirimController extends Controller
 
     public function kirim(Request $r)
     {
-        $admin = auth()->user()->name;
-        $tgl_input = date('Y-m-d');
-        $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
-        $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
-        // $r->no_nota didapat dari po lsit pengiriman, jika dari sana maka notanya di ambil
-        $no_nota = $r->no_nota ?? $no_nota;
-        foreach (explode(',', $r->no_box) as $d) {
-            // $grade = DB::table('grading as a')
-            //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
-            //     ->where('a.no_box_grading', $d)
-            //     ->first()
-            //     ->nm_grade;
-            $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
+        if ($r->submit == 'print') {
+            return redirect()->route('gradingbj.print', ['no_box' => $r->no_box]);
+        } else {
+            dd($r->all());
+            $admin = auth()->user()->name;
+            $tgl_input = date('Y-m-d');
+            $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
+            $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
+            // $r->no_nota didapat dari po lsit pengiriman, jika dari sana maka notanya di ambil
+            $no_nota = $r->no_nota ?? $no_nota;
+            foreach (explode(',', $r->no_box) as $d) {
+                // $grade = DB::table('grading as a')
+                //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
+                //     ->where('a.no_box_grading', $d)
+                //     ->first()
+                //     ->nm_grade;
+                $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
             sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
             
             FROM `grading_partai` as a
@@ -198,26 +202,29 @@ class BoxKirimController extends Controller
                     group by a.box_pengiriman");
 
 
-            // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
+                // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
 
-            $dataToInsert[] = [
-                'no_box' => $d,
-                'pcs' => $ambilBox->pcs,
-                'gr' => $ambilBox->gr,
-                'admin' => $admin,
-                'grade' => $ambilBox->grade,
-                'tgl_input' => $tgl_input,
-                'no_nota' => $no_nota,
-                'rp_gram' => 1,
-                'ttl_rp' => $ambilBox->ttl_rp,
-                'cost_bk' => $ambilBox->cost_bk,
-                'cost_kerja' => $ambilBox->cost_kerja,
-                'cost_cu' => $ambilBox->cost_cu,
-            ];
+                $dataToInsert[] = [
+                    'no_box' => $d,
+                    'pcs' => $ambilBox->pcs,
+                    'gr' => $ambilBox->gr,
+                    'admin' => $admin,
+                    'grade' => $ambilBox->grade,
+                    'tgl_input' => $tgl_input,
+                    'no_nota' => $no_nota,
+                    'rp_gram' => 1,
+                    'ttl_rp' => $ambilBox->ttl_rp,
+                    'cost_bk' => $ambilBox->cost_bk,
+                    'cost_kerja' => $ambilBox->cost_kerja,
+                    'cost_cu' => $ambilBox->cost_cu,
+                ];
+            }
+            DB::table('pengiriman')->insert($dataToInsert);
+            return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
         }
-        DB::table('pengiriman')->insert($dataToInsert);
-        return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
     }
+
+    
 
     public function kirim_grade2(Request $r)
     {
@@ -340,7 +347,6 @@ class BoxKirimController extends Controller
                 'Content-Disposition' => 'attachment; filename="' . $fileName . '.xlsx"',
             ]
         );
-
     }
 
     public function load_tbl_po(Request $r)
@@ -455,6 +461,8 @@ class BoxKirimController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    
 
     public function print_formulir_grade(Request $r)
     {
