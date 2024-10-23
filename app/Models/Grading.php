@@ -209,7 +209,8 @@ class Grading extends Model
             a.no_invoice,
             a.urutan,
             b.pcs as pcs_pengiriman, 
-            b.gr as gr_pengiriman
+            b.gr as gr_pengiriman,
+            a.sudah_print
             FROM `grading_partai` as a
             LEFT JOIN (
                 SELECT 
@@ -409,6 +410,7 @@ class Grading extends Model
                 sum(a.cost_cu) as cost_cu,
                 sum(a.cost_op) as cost_op,
                 a.grade, 
+                a.sudah_print, 
                 a.urutan
                 FROM grading_partai as a
                 WHERE a.formulir = 'T' 

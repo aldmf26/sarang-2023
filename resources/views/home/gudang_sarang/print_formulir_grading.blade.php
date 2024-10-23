@@ -85,45 +85,47 @@
                     </tbody>
                     <tfoot>
                         <tr></tr>
-                            <th colspan="2">Total :</th>
-                            <th>{{ sumCol($formulir, 'pcs')}}</th>
-                            <th>{{ sumCol($formulir, 'gr')}}</th>
+                        <th colspan="2">Total :</th>
+                        <th>{{ sumCol($formulir, 'pcs') }}</th>
+                        <th>{{ sumCol($formulir, 'gr') }}</th>
                     </tfoot>
                 </table>
             </div>
-             <div class="col-md-8">
-                    <table class="table">
-                        <thead>
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Pcs</th>
+                            <th>Gr</th>
+                            <th>Box Grading</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for ($i = 1; $i <= 18; $i++)
                             <tr>
-                                <th>Grade</th>
-                                <th>Pcs</th>
-                                <th>Gr</th>
-                                <th>Box Grading</th>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @for ($i = 1; $i <= 18; $i++)
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            @endfor
+                        @endfor
 
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3">Total :</th>
-                            </tr>
-                           
-                        </tfoot>
-                    </table>
-                </div>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Total :</th>
+                        </tr>
+
+                    </tfoot>
+                </table>
+            </div>
         </div>
 
     </div>
-
+    <script>
+        window.print()
+    </script>
 </body>
 
 </html>
