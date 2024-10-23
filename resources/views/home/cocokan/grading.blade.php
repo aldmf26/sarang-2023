@@ -123,13 +123,13 @@
                     <tr>
                         <td class="fw-bold">Total</td>
                         <td class="text-end fw-bold">
-                            {{ number_format($sortir_akhir->pcs + $opname->pcs, 0) }}
+                            {{ number_format($grading->pcs + $grading_sisa->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
                             {{ number_format($grading->gr + $grading_sisa->gr, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp, 0) }}
+                            {{ number_format($grading->cost_bk + $grading_sisa->cost_bk, 0) }}
                         </td>
                     </tr>
 

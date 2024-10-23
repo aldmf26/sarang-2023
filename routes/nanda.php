@@ -8,6 +8,7 @@ use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\CocokanController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
 use App\Http\Controllers\importPerbaikanController;
@@ -372,5 +373,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/update', 'update')->name('update');
+        });
+    Route::controller(ExportCostController::class)
+        ->prefix('home/exportcost')
+        ->name('exportcost.')
+        ->group(function () {
+            Route::get('/export', 'export')->name('export');
         });
 });
