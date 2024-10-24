@@ -46,42 +46,14 @@
                                 <td class="text-end">{{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td></td>
-                            <td>partai suntik</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-end">{{ number_format($suntik->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">0</td>
-                            {{-- <td class="text-end">0</td>
-                            <td class="text-end">0</td> --}}
-                            <td class="text-end">{{ number_format($suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik->ttl_rp / $suntik->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>partai suntik</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-end">{{ number_format($suntik2->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp, 0) }}</td>
-                            <td class="text-end">0</td>
-                            {{-- <td class="text-end">0</td>
-                            <td class="text-end">0</td> --}}
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($suntik2->ttl_rp / $suntik2->gr, 0) }}</td>
-                        </tr>
                     </tbody>
                     <tfoot>
                         @php
                             $total_cost = sumBk($query, 'cost_kerja');
                             $total_cost_op = sumBk($query, 'cost_kerja') + sumBk($query, 'ttl_rp');
-                            $total_pcs = sumBk($query, 'pcs_akhir') + $suntik->pcs + $suntik2->pcs;
-                            $total_gr = sumBk($query, 'gr_akhir') + $suntik->gr + $suntik2->gr;
-                            $total_ttl_rp = sumBk($query, 'ttl_rp') + $suntik->ttl_rp + $suntik2->ttl_rp;
+                            $total_pcs = sumBk($query, 'pcs_akhir');
+                            $total_gr = sumBk($query, 'gr_akhir');
+                            $total_ttl_rp = sumBk($query, 'ttl_rp');
                         @endphp
                        
                         <tr>

@@ -220,7 +220,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
                 FROM formulir_sarang as a 
                 LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 WHERE b.baru = 'baru' AND b.kategori = 'cabut'  AND a.kategori = 'sortir' AND a.no_box NOT IN (SELECT b.no_box FROM sortir as b WHERE b.id_anak != 0)
-        ");
+        "); 
 
         return $result;
     }

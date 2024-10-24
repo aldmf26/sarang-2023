@@ -70,7 +70,7 @@
                                 {{ number_format(sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_op') + sumBk($query, 'cost_dll'), 0) }}
                             </th>
                             <th class="dheadstock  text-end">
-                                {{ number_format((sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_op') + sumBk($query, 'cost_dll')) / sumBk($query, 'gr'), 0) }}
+                                {{ number_format(empty(sumBk($query, 'gr')) ? 0 : (sumBk($query, 'ttl_rp') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_op') + sumBk($query, 'cost_dll')) / sumBk($query, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>

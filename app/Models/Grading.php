@@ -183,6 +183,44 @@ class Grading extends Model
         return $arr[$jenis];
     }
 
+    public static function gradingSisa()
+    {
+        return DB::select("SELECT a.no_box_sortir as no_box, 
+        e.nm_partai,
+                    sum(b.pcs_awal - d.pcs) as pcs_awal , 
+                    sum(b.gr_awal - d.gr) as gr_awal , 
+                    sum(g.ttl_rp) as ttl_rp_sortir, 
+                    sum(COALESCE(g.cost_cbt,0) + COALESCE(g.cost_eo,0) + COALESCE(g.cost_ctk,0) + COALESCE(g.cost_str,0) ) as cost_kerja_sortir
+FROM grading as a 
+left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' 
+JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' 
+LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir 
+left join(
+        SELECT a.no_box, (a.gr_awal * a.hrga_satuan) as ttl_rp, b.ttl_rp as cost_cbt, c.ttl_rp as cost_eo, d.cost_ctk, e.ttl_rp as cost_str, f.cost_cu
+            FROM bk as a 
+            left JOIN cabut as b on b.no_box = a.no_box
+            left JOIN eo as c on c.no_box = a.no_box
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as cost_ctk 
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CTK'
+                        group by a.no_box
+            ) as d on d.no_box = a.no_box
+            left join sortir as e on e.no_box = a.no_box
+            left join (
+                SELECT a.no_box, sum(a.ttl_rp) as cost_cu
+                        FROM cetak_new as a 
+                        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+                        where b.kategori = 'CU'
+                        group by a.no_box
+            ) as f on f.no_box = a.no_box
+            where a.baru = 'baru' and a.kategori ='cabut'
+            group by a.no_box
+        ) as g on g.no_box = a.no_box_sortir
+        WHERE a.selesai = 'T' GROUP by a.no_box_sortir");
+    }
+
     public static function siapKirim()
     {
         $gudang = DB::select(
@@ -418,6 +456,24 @@ class Grading extends Model
                 GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
     }
 
+    public static  function gradingAkhir()
+    {
+        return DB::select("SELECT a.nm_partai,
+                a.box_pengiriman,
+                sum(a.pcs) as pcs,
+                sum(a.gr) as gr,
+                sum(a.ttl_rp) as ttl_rp,
+                sum(a.cost_bk) as cost_bk,
+                sum(a.cost_kerja) as cost_kerja,
+                sum(a.cost_cu) as cost_cu,
+                sum(a.cost_op) as cost_op,
+                a.grade, 
+                a.sudah_print, 
+                a.urutan
+        FROM grading_partai as a
+        GROUP BY a.box_pengiriman ORDER BY a.urutan DESC;");
+    }
+
     public static function sisa()
     {
         return DB::select("SELECT a.no_box as no_invoice, b.nm_partai, a.pcs, a.gr,b.tipe FROM `grading_selisih` as a
@@ -440,7 +496,7 @@ class Grading extends Model
 
     public static function belumKirimAll()
     {
-        return DB::select("SELECT a.cost_op,a.cost_cu,a.cost_bk as cost_bk,a.ttl_rp,a.cost_kerja,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a ) group by a.box_pengiriman");
+        return DB::select("SELECT a.cost_op,a.cost_cu,sum(a.cost_bk) as cost_bk,sum(a.ttl_rp) as ttl_rp,sum(a.cost_kerja) as cost_kerja,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.sudah_kirim = 'T' group by a.box_pengiriman");
     }
     public static function pengirimanSum()
     {

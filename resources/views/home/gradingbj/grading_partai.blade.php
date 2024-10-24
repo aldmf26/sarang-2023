@@ -9,6 +9,7 @@
         <form x-data="{
             cek: [],
             rows: [],
+            baris: 1,
             isDisabled: false,
             selectedRowIndex: null,
             pcs: Array().fill(''),
@@ -93,6 +94,7 @@
                         </thead>
                         <thead class="bg-white">
                             <tr>
+
                                 <th class="text-end">
                                     <h6>Total</h6>
                                 </th>
@@ -187,10 +189,10 @@
                     <table class="table table-bordered" id="tbl3">
                         <thead>
                             <tr>
-                                <th class="dhead">No</th>
+                                <th class="dhead" width="130">No</th>
                                 <th class="dhead">Grade</th>
-                                <th class="dhead text-end" width="200">Pcs</th>
-                                <th class="dhead text-end" width="200">Gr</th>
+                                <th class="dhead text-end" width="210">Pcs</th>
+                                <th class="dhead text-end" width="210">Gr</th>
                                 <th class="dhead " width="300">Box Grade</th>
                                 <th class="dhead" width="300">Cek</th>
                                 <th class="dhead">Aksi</th>
@@ -198,7 +200,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td></td>
+                                <td><input type="text" class="form-control" value="0" x-model="baris"></td>
                                 <td>
                                     <h6>Total</h6>
                                 </td>
@@ -209,7 +211,7 @@
                                     <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                                 </td>
                             </tr>
-                            <template x-for="(row, index) in rows" :key="index">
+                            <template x-for="(row, index) in Array.from({length: baris}, (v, k) => k + 1)" :key="index">
                                 <tr>
                                     <td x-text="index + 1"></td>
                                     <td>
@@ -242,11 +244,11 @@
                                     </td>
                                 </tr>
                             </template>
-                            <tr>
+                            {{-- <tr>
                                 <td colspan="6"><button type="button" @click="rows.push({ value: '' })"
                                         class="btn btn-sm btn-primary btn-block"><i class="fas fa-plus"></i>
                                         Tambah</button></td>
-                            </tr>
+                            </tr> --}}
                             <!-- Add more rows as needed -->
 
                             {{-- <tr>
