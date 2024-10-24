@@ -612,7 +612,7 @@ class ExportCocokanController extends Controller
         $s1suntik2 = $this->getSuntikan(41);
         $s1suntik_akhir = $this->getSuntikan(35);
         $sisaGrading = Grading::dapatkanStokBox('formulir');
-        $selesaiGrading = Grading::selesai();
+        $selesaiGrading = Grading::gradingAkhir();
 
         $sumTtlRp = $s1suntik_akhir->ttl_rp + $s1suntik2->ttl_rp;
         $sumTtlGr = $s1suntik_akhir->gr + $s1suntik2->gr;

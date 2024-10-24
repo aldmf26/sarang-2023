@@ -47,44 +47,16 @@
                                     {{ number_format(($b->ttl_rp + $b->cost_kerja) / $b->gr_akhir, 0) }}</td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td></td>
-                            <td>partai suntik</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-end">{{ number_format($a14suntik->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($a14suntik->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($a14suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">0</td>
-                            {{--  <td class="text-end">0</td>
-                            <td class="text-end">0</td> --}}
-                            <td class="text-end">{{ number_format($a14suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($a14suntik->ttl_rp / $a14suntik->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>partai suntik</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-end">{{ number_format($a16suntik->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($a16suntik->gr, 0) }}</td>
-                            <td class="text-end">{{ number_format($a16suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">0</td>
-                            {{-- <td class="text-end">0</td>
-                            <td class="text-end">0</td> --}}
-                            <td class="text-end">{{ number_format($a16suntik->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($a16suntik->ttl_rp / $a16suntik->gr, 0) }}</td>
-                        </tr>
-
+                        
                     </tbody>
                     <tfoot>
                         @php
                             $total_cost = sumBk($cabut_awal, 'cost_kerja');
                             $total_cost_op = sumBk($cabut_awal, 'cost_kerja') + sumBk($cabut_awal, 'ttl_rp');
-                            $total_pcs = sumBk($cabut_awal, 'pcs') + $a14suntik->pcs + $a16suntik->pcs;
-                            $total_gr = sumBk($cabut_awal, 'gr_akhir') + $a14suntik->gr + $a16suntik->gr;
+                            $total_pcs = sumBk($cabut_awal, 'pcs');
+                            $total_gr = sumBk($cabut_awal, 'gr_akhir');
                             $total_ttl_rp =
-                                sumBk($cabut_awal, 'ttl_rp') + $a14suntik->ttl_rp + $a16suntik->ttl_rp + $total_cost;
+                                sumBk($cabut_awal, 'ttl_rp') + $total_cost;
                         @endphp
 
                         <tr>

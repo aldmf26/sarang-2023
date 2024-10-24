@@ -1,8 +1,8 @@
 @php
     $rot = request()->route()->getName();
 @endphp
-<div class="row">
-    <div class="col-lg-7">
+<div class="d-flex justify-content-between">
+    <div>
         <ul class="nav nav-pills float-start">
             <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.index' ? 'active' : '' }}" aria-current="page"
@@ -38,21 +38,15 @@
             </li> --}}
         </ul>
     </div>
-
-    <div class="col-lg-5">
-        <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end"><i
+    <div>
+        <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm "><i
                 class="fas fa-file-excel"></i>Export All</a>
-        <a href="{{ route('exportcost.export') }}" class="btn btn-primary btn-sm float-end me-2"><i
+        <a href="{{ route('exportcost.export') }}" class="btn btn-primary btn-sm"><i
                 class="fas fa-file-excel"></i>Export Rp + Cost Kerja</a>
         <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
-            class="btn btn-primary btn-sm float-end me-2">Isi Cost operasional</a>
-    </div>
-
-    <div class="col-lg-12">
-        <hr style="border: 1px solid black;">
+            class="btn btn-primary btn-sm">Isi Cost operasional</a>
     </div>
 </div>
-
 
 <form action="{{ route('summary.saveoprasional') }}" method="post">
     @csrf

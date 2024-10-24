@@ -416,7 +416,7 @@ class CabutDetailController extends Controller
 
     public function gradingSisa()
     {
-        $sisaGrading = Grading::dapatkanStokBoxYANGLAMA('formulir');
+        $sisaGrading = Grading::gradingSisa();
 
         $data = [
             'title' => 'Grading Sisa',
@@ -427,7 +427,7 @@ class CabutDetailController extends Controller
 
     public function gradingAkhir()
     {
-        $selesaiGrading = Grading::selesai();
+        $selesaiGrading = Grading::gradingAkhir();
         $hrgaSatuan = Grading::gradingSum()->hrga_satuan;
 
         $data = [

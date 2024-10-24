@@ -37,7 +37,7 @@
                                 <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr_awal) }}</td>
                                 <td class="text-end">{{ number_format($ttlRp,0) }}</td>
-                                <td class="text-end">{{ number_format($ttlRp / $d->gr_awal) }}</td>
+                                <td class="text-end">{{ number_format(empty($d->gr_awal) ? 0 : $ttlRp / $d->gr_awal) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -50,7 +50,7 @@
                             <th class="dheadstock "></th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs_awal'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr_awal'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp_sortir') + sumBk($query, 'cost_kerja_sortir'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp_sortir'), 0) }}</th>
                             <th class="dheadstock  text-end">0</th>
                         </tr>
                     </tfoot>

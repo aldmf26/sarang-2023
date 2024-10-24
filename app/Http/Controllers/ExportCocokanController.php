@@ -569,13 +569,12 @@ class ExportCocokanController extends Controller
         $gradingAwal = $model2::stok_selesai();
         $s1suntik2 = $this->getSuntikan(41);
         $s1suntik_akhir = $this->getSuntikan(35);
-        $sisaGrading = Grading::dapatkanStokBox('formulir');
-        $selesaiGrading = Grading::selesai();
+        $sisaGrading = Grading::gradingSisa();
+        $selesaiGrading = Grading::gradingAkhir();
 
         $sumTtlRp = $s1suntik_akhir->ttl_rp + $s1suntik2->ttl_rp;
         $sumTtlGr = $s1suntik_akhir->gr + $s1suntik2->gr;
         $sumttlPcs = $s1suntik_akhir->pcs + $s1suntik2->pcs;
-
 
         $sumTtlRp2 = 0;
         $sumTtlGr2 = 0;
@@ -599,9 +598,6 @@ class ExportCocokanController extends Controller
         }
         $hrgaSatuan = $sumTtlRp / $sumTtlGr;
         session()->put('hrga_satuan', $hrgaSatuan);
-        
-
-        
 
         $row = 2;
         foreach ($sisaGrading as $v) {
@@ -875,8 +871,8 @@ class ExportCocokanController extends Controller
 
             ],
             'belum kirim' => [
-                'pcs' => "=SUM('Gudang Pengiriman'!P:P)",
-                'gr' => "=SUM('Gudang Pengiriman'!Q:Q)",
+                'pcs' => "=SUM('Gudang Pengiriman'!Q:Q)",
+                'gr' => "=SUM('Gudang Pengiriman'!R:R)",
                 'rp' => "=SUM('Gudang Pengiriman'!S:S)",
                 'cost_kerja' => 0,
                 'cu' => "=SUM('Gudang Pengiriman'!T:T)",

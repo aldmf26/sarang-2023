@@ -55,6 +55,13 @@
                         </td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.sortir.sortir_awal') }}" target="_blank">
+                                {{ $akhir_cetak->gr }}
+                                +
+                                {{ $opname->gr }}
+                                -
+                                {{ $sedang_proses->gr }}
+                                -
+                                {{ $sortir_sisa->gr }}
                                 {{ number_format($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr, 0) }}
                             </a>
                         </td>

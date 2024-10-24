@@ -95,6 +95,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>No</th>
                             <th>Grade</th>
                             <th>Pcs</th>
                             <th>Gr</th>
@@ -104,6 +105,7 @@
                     <tbody>
                         @for ($i = 1; $i <= 18; $i++)
                             <tr>
+                                <td>{{ $i }}</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
