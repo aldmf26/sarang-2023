@@ -15,7 +15,7 @@ class PenutupController extends Controller
 
     public function getData($param)
     {
-        $bulan = 9;
+        $bulan = 10;
         $tahun = date('Y');
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
@@ -98,7 +98,7 @@ class PenutupController extends Controller
                 $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
                 $ttl = $uangMakan + $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $data->ttl_rp_cetak - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
-                
+
                 $tes[] = [
                     'pgws' => $data->pgws,
                     'hari_masuk' => $data->hariMasuk,
