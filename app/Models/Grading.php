@@ -452,6 +452,10 @@ class Grading extends Model
     {
         return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
     }
+    public static function belumKirimSumsusut()
+    {
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade = 'susut'");
+    }
 
     public static function gradingSum()
     {

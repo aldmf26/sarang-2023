@@ -374,6 +374,7 @@ left join(
 
         $pengiriman = Grading::pengirimanSum();
         $grading = Grading::belumKirimSum();
+        $grading_susut = Grading::belumKirimSumsusut();
 
         $a14suntik = $this->getSuntikan(14);
         $a16suntik = $this->getSuntikan(16);
@@ -442,6 +443,7 @@ left join(
             'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
             'cetak_selesai' => OpnameNewModel::cetak_selesai(),
             'sortir_selesai' => OpnameNewModel::sortir_selesai(),
+            'grading_susut' => $grading_susut
 
 
         ];
