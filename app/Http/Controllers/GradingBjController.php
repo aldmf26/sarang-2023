@@ -232,9 +232,15 @@ class GradingBjController extends Controller
 
         // Dapatkan jumlah unik untuk partai, tipe, dan ket
         $uniqueCounts = [
-            'partai' => $partaiData->pluck('nm_partai')->unique()->count(),
-            'tipe' => $partaiData->pluck('tipe')->unique()->count(),
-            'ket' => $partaiData->pluck('ket')->unique()->count(),
+            'partai' => $partaiData->pluck('nm_partai')->map(function ($item) {
+                return strtolower($item);
+            })->unique()->count(),
+            'tipe' => $partaiData->pluck('tipe')->map(function ($item) {
+                return strtolower($item);
+            })->unique()->count(),
+            'ket' => $partaiData->pluck('ket')->map(function ($item) {
+                return strtolower($item);
+            })->unique()->count(),
         ];
 
         // Validasi setiap kriteria
