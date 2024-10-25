@@ -59,7 +59,7 @@ class ExportCostController extends Controller
         $sheet4->setCellValue('J1', 'rata2');
 
 
-        $bk_sinta = SummaryModel::summarybk();
+        $bk_sinta = SummaryModel::summarybk2();
 
         $kolom = 2;
         foreach ($bk_sinta  as $no => $b) {
@@ -70,9 +70,9 @@ class ExportCostController extends Controller
             $sheet4->setCellValue('E' . $kolom, $b->pcs_bk);
             $sheet4->setCellValue('F' . $kolom, $b->gr_bk);
             $sheet4->setCellValue('G' . $kolom, $b->cost_bk);
-            $sheet4->setCellValue('H' . $kolom, '0');
-            $sheet4->setCellValue('I' . $kolom, '0');
-            $sheet4->setCellValue('J' . $kolom, $b->cost_bk / $b->gr_bk);
+            $sheet4->setCellValue('H' . $kolom, $b->cost_cabut_dulu + $b->cost_cetak_dulu + $b->cost_cetak_dulu + $b->cost_eo_dulu);
+            $sheet4->setCellValue('I' . $kolom, $b->cost_cabut_berjalan + $b->cost_cetak_berjalan + $b->cost_cetak_berjalan + $b->cost_eo_berjalan);
+            $sheet4->setCellValue('J' . $kolom, ($b->cost_bk + $b->cost_cabut_dulu + $b->cost_cetak_dulu + $b->cost_cetak_dulu + $b->cost_eo_dulu + $b->cost_cabut_berjalan + $b->cost_cetak_berjalan + $b->cost_cetak_berjalan + $b->cost_eo_berjalan) / $b->gr_bk);
 
             $kolom++;
         }

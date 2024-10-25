@@ -23,6 +23,7 @@ class SummaryModel extends Model
         return $result;
     }
 
+
     public static function bksedang_proses()
     {
         $result = DB::select("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp, sum(a.cost_cu) as cost_cu
@@ -601,12 +602,44 @@ class SummaryModel extends Model
 
     public static function summarybk2()
     {
-        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk, b.bulan, b.tahun, b.pcs_susut, b.gr_susut
+        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk, b.bulan, b.tahun, b.pcs_susut, b.gr_susut, sum(c.ttl_rp) as cost_cabut_dulu, sum(d.ttl_rp) as cost_cabut_berjalan,
+sum(e.ttl_rp) as cost_sortir_dulu, sum(f.ttl_rp) as cost_sortir_berjalan, sum(g.ttl_rp) as cost_cetak_dulu, sum(h.ttl_rp) as cost_cetak_berjalan,
+sum(i.ttl_rp) as cost_eo_dulu, sum(j.ttl_rp) as cost_eo_berjalan
         FROM bk as a 
         left join bk_awal as b on b.nm_partai = a.nm_partai
+        left join cabut as c on c.no_box = a.no_box and c.bulan_dibayar in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        
+        left join cabut as d on d.no_box = a.no_box and d.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        
+        left join sortir as e on e.no_box = a.no_box and e.bulan in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        left join sortir as f on f.no_box = a.no_box and f.bulan not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        
+        
+
+left join (
+	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+    		
+            where b.kategori = 'CTK' and a.bulan_dibayar  in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+            group by a.no_box
+) as g on g.no_box = a.no_box
+
+left join (
+	SELECT a.no_box, sum(a.ttl_rp) as ttl_rp
+            FROM cetak_new as a 
+            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+    		
+            where b.kategori = 'CTK' and a.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+            group by a.no_box
+) as h on h.no_box = a.no_box
+
+left join eo as i on i.no_box = a.no_box and i.bulan_dibayar  in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+left join eo as j on j.no_box = a.no_box and j.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        
         where a.baru = 'baru' and a.kategori ='cabut' and a.no_box != 9999 
         group by a.nm_partai
-        order by b.bulan ASC, a.nm_partai ASC
+        order by b.bulan ASC, a.nm_partai ASC;
         ");
 
         return $result;

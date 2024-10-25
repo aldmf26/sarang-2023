@@ -43,9 +43,13 @@
                 class="fas fa-file-excel"></i>Export All</a>
         <a href="{{ route('exportcost.export') }}" class="btn btn-primary btn-sm"><i
                 class="fas fa-file-excel"></i>Export Rp + Cost Kerja</a>
-        <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input"
-            class="btn btn-primary btn-sm">Isi Cost operasional</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input" class="btn btn-primary btn-sm">Isi
+            Cost operasional</a>
     </div>
+
+</div>
+<div class="col-lg-12">
+    <hr style="border: 1px solid black;">
 </div>
 
 <form action="{{ route('summary.saveoprasional') }}" method="post">
