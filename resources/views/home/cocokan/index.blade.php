@@ -88,8 +88,10 @@
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
-                        <td class="text-end fw-bold"></td>
-                        <td class="text-end fw-bold"></td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($bk_akhir->pcs + $cbt_proses->pcs + $cbt_sisa_pgws->pcs, 0) }}</td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($bk_akhir->gr + $cbt_proses->gr + $cbt_sisa_pgws->gr, 0) }}</td>
                         <td class="text-end fw-bold">
                             {{ number_format($cbt_sisa_pgws->ttl_rp + $cbt_proses->ttl_rp + $bk_akhir->ttl_rp, 0) }}
                         </td>

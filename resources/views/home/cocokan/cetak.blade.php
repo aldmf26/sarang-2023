@@ -111,8 +111,10 @@
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
-                        <td class="text-end fw-bold"></td>
-                        <td class="text-end fw-bold"></td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($cetak_akhir->pcs + $cetak_proses->pcs + $cetak_sisa->pcs, 0) }}</td>
+                        <td class="text-end fw-bold">
+                            {{ number_format($cetak_akhir->gr + $cetak_proses->gr + $cetak_sisa->gr, 0) }}</td>
                         <td class="text-end fw-bold">
                             {{ number_format($cetak_akhir->ttl_rp + $cetak_proses->ttl_rp + $cetak_sisa->ttl_rp, 0) }}
                         </td>
