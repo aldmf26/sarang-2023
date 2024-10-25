@@ -414,8 +414,6 @@ left join(
         
         ");
 
-
-
         $data = [
             'title' => 'Balance Sheet ',
             'bk' => SummaryModel::summarybk(),
