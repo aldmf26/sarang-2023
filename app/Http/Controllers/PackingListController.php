@@ -247,7 +247,7 @@ class PackingListController extends Controller
 
         $this->lis_pengiriman($spreadsheet, $style_atas, $style);
 
-        $namafile = "Opname Gudang.xlsx";
+        $namafile = "History Pengiriman.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

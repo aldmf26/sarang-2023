@@ -3,7 +3,7 @@
 @endphp
 <div class="d-flex justify-content-between">
     <div>
-        <ul class="nav nav-pills float-start">
+        <ul class="nav nav-pills">
             <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.index' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cocokan.index') }}">Cabut</a>
