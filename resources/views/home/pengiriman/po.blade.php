@@ -79,7 +79,7 @@
                                                 class="form-control form-control-sm mb-2" placeholder="cari">
                                         </div>
                                         <div>
-                                            <button x-transition x-show="cek.length" id="simpanTambahBox"
+                                            <button @click="cek = []" x-transition x-show="cek.length" id="simpanTambahBox"
                                                 class="btn  btn-sm btn-primary" type="button">
                                                 <i class="fas fa-plus"></i>
                                                 Kirim
