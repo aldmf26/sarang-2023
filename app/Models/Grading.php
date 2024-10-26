@@ -187,6 +187,7 @@ class Grading extends Model
     {
         return DB::select("SELECT a.no_box_sortir as no_box, 
         e.nm_partai,
+        b.id_pemberi as pemberi,
                     sum(b.pcs_awal - d.pcs) as pcs_awal , 
                     sum(b.gr_awal - d.gr) as gr_awal , 
                     sum(g.ttl_rp) as ttl_rp_sortir, 
@@ -471,6 +472,7 @@ left join(
                 a.sudah_print, 
                 a.urutan
         FROM grading_partai as a
+        where a.grade != 'susut'
         GROUP BY a.box_pengiriman ORDER BY a.urutan DESC;");
     }
 
@@ -496,7 +498,7 @@ left join(
 
     public static function belumKirimAll()
     {
-        return DB::select("SELECT a.cost_op,a.cost_cu,sum(a.cost_bk) as cost_bk,sum(a.ttl_rp) as ttl_rp,sum(a.cost_kerja) as cost_kerja,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.sudah_kirim = 'T' group by a.box_pengiriman");
+        return DB::select("SELECT a.cost_op,a.cost_cu,sum(a.cost_bk) as cost_bk,sum(a.ttl_rp) as ttl_rp,sum(a.cost_kerja) as cost_kerja,a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut' group by a.box_pengiriman");
     }
     public static function pengirimanSum()
     {

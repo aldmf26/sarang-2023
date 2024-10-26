@@ -273,7 +273,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("C$row", $v->name);
             $sheet->setCellValue("D$row", $v->no_box);
             $sheet->setCellValue("E$row", $v->pcs_awal);
-            $sheet->setCellValue("F$row", $i == 200 ? $v->gr_awal + 418 : $v->gr_awal);
+            $sheet->setCellValue("F$row", $v->gr_awal);
             $sheet->setCellValue("G$row", $v->ttl_rp);
             $sheet->setCellValue("H$row", 0);
             $sheet->setCellValue("I$row", $v->ttl_rp);
@@ -606,8 +606,8 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("M$row", $v->no_box);
             $sheet->setCellValue("N$row", $v->pcs_awal);
             $sheet->setCellValue("O$row", $v->gr_awal);
-            $sheet->setCellValue("P$row", $v->ttl_rp);
-            $sheet->setCellValue("Q$row", !$v->gr_awal ? 0 : ($v->ttl_rp) / $v->gr_awal);
+            $sheet->setCellValue("P$row", $v->ttl_rp_sortir);
+            $sheet->setCellValue("Q$row", !$v->gr_awal ? 0 : ($v->ttl_rp_sortir) / $v->gr_awal);
             $row++;
         }
         $sheet->getStyle('K2:Q' . $row - 1)->applyFromArray($style);
