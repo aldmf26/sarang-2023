@@ -49,7 +49,6 @@
                                         ->where([['a.no_invoice', $d->no_invoice],['a.kategori', 'wip'],['b.formulir','Y']])
                                         ->first();
                                 @endphp
-                                @if (!$getCtk)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal_wip', $param) }}">
                                         <span class="badge bg-danger">Cancel</span>
@@ -60,7 +59,6 @@
                                         <span class="badge bg-primary">Edit</span>
                                     </a> --}}
 
-                                    @else
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
                                         href="{{ route('gudangsarang.selesai_wip', $param) }}">
                                         <span class="badge bg-success">Selesai</span>

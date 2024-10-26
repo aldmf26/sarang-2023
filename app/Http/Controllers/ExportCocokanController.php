@@ -774,6 +774,13 @@ class ExportCocokanController extends Controller
                 'cost_kerja' => "=SUM('Gudang Cabut'!AS:AS)",
                 'ttl_rp' => "=D5",
             ],
+            'Cabut selesai siap cetak belum kirim' => [
+                'pcs' => "=SUM('Gudang Cabut'!AP:AP)",
+                'gr' => "=SUM('Gudang Cabut'!AQ:AQ)",
+                'rp' => "=SUM('Gudang Cabut'!AR:AR)",
+                'cost_kerja' => "=SUM('Gudang Cabut'!AS:AS)",
+                'ttl_rp' => "=D5",
+            ],
 
             // cetak
             'awal cetak' => [
@@ -806,6 +813,14 @@ class ExportCocokanController extends Controller
                 'ttl_rp' => "=D9",
 
             ],
+            'Cetak selesai siap sortir belum kirim' => [
+                'pcs' => "=SUM('Gudang Cetak'!AL:AL)",
+                'gr' => "=SUM('Gudang Cetak'!AM:AM)",
+                'rp' => "=SUM('Gudang Cetak'!AN:AN)",
+                'cost_kerja' => "=SUM('Gudang Cetak'!AO:AO)",
+                'ttl_rp' => "=D9",
+
+            ],
 
             // sortir
             'awal sortir' => [
@@ -831,6 +846,14 @@ class ExportCocokanController extends Controller
 
             ],
             'sortir sisa pengawas' => [
+                'pcs' => "=SUM('Gudang Sortir'!AN:AN)",
+                'gr' => "=SUM('Gudang Sortir'!AO:AO)",
+                'rp' => "=SUM('Gudang Sortir'!AP:AP)",
+                'cost_kerja' => "=SUM('Gudang Sortir'!AQ:AQ)",
+                'ttl_rp' => "=D13",
+
+            ],
+            'Sortir selesai siap grading belum kirim' => [
                 'pcs' => "=SUM('Gudang Sortir'!AN:AN)",
                 'gr' => "=SUM('Gudang Sortir'!AO:AO)",
                 'rp' => "=SUM('Gudang Sortir'!AP:AP)",
@@ -881,20 +904,20 @@ class ExportCocokanController extends Controller
 
             ],
             'selisih' => [
-                'pcs' => "=SUM('Gudang Grading'!AC:AC)",
-                'gr' => "=SUM('Gudang Grading'!AD:AD)",
-                'rp' => "=SUM('Gudang Grading'!AE:AE)",
+                'pcs' => "=B13-B19-B20-B21",
+                'gr' => "0",
+                'rp' => "0",
                 'cost_kerja' => 0,
             ],
 
             'total' => [
-                'pcs' => "=B4+B5+B8+B9+B12+B13+B17+B18+B19",
-                'gr' => "=C4+C5+C8+C9+C12+C13+C17+C18+C19",
-                'rp' => "=D4+D5+D8+D9+D12+D13+D17+D18+D19",
-                'cost_kerja' => "=SUM(E2:E19)",
-                'cu' => "=SUM(F2:F19)",
-                'op' => "=SUM(G2:G19)",
-                'ttl_rp' => "=SUM(D20:G20)",
+                'pcs' => "=B4+B5+B9+B10+B14+B15+B20+B21+B19+B22+B6+B11+B16",
+                'gr' => "=C4+C5+C9+C10+C14+C15+C20+C21+C19+C22+C6+C11+C16",
+                'rp' => "==D4+D5+D9+D10+D14+D15+D20+D21+D19+D22+D6+D11+D16",
+                'cost_kerja' => "=SUM(E2:E22)",
+                'cu' => "=SUM(F2:F22)",
+                'op' => "=SUM(G2:G22)",
+                'ttl_rp' => "=SUM(D23:G23)",
             ],
         ];
         $row = 2;
@@ -912,10 +935,10 @@ class ExportCocokanController extends Controller
         $sheet->getStyle('A1:H19')->applyFromArray($style);
 
         $warnai = [
-            'A4:A5',
-            'A8:A9',
-            'A12:A13',
-            'A17:A19',
+            'A4:A6',
+            'A9:A11',
+            'A14:A16',
+            'A19:A22',
         ];
         foreach($warnai as $w){
             $sheet->getStyle($w)
