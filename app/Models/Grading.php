@@ -473,7 +473,7 @@ left join(
                 a.urutan
         FROM grading_partai as a
         where a.grade != 'susut'
-        GROUP BY a.box_pengiriman ORDER BY a.urutan DESC;");
+        GROUP BY a.box_pengiriman,a.grade ORDER BY a.urutan DESC;");
     }
 
     public static function sisa()
