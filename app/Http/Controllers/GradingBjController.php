@@ -56,7 +56,7 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Grading',
-            'formulir' => Grading::dapatkanStokBoxYANGLAMA('formulir')
+            'formulir' => Grading::dapatkanStokBox('formulir')
         ];
         return view('home.gradingbj.index', $data);
     }
