@@ -67,7 +67,6 @@
                                         target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
-                                @endif
                             </td>
                         </tr>
                     @endforeach
