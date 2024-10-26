@@ -213,7 +213,7 @@
                         },
                         success: function(r) {
                             alertToast('sukses', 'Berhasil di ubah');
-                            loadTbl()
+                            // loadTbl()
                         }
                     });
                 }
