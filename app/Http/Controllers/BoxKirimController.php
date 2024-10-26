@@ -181,7 +181,6 @@ class BoxKirimController extends Controller
         if ($r->submit == 'print') {
             return redirect()->route('gradingbj.print', ['no_box' => $r->no_box]);
         } else {
-            dd($r->all());
             $admin = auth()->user()->name;
             $tgl_input = date('Y-m-d');
             $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
