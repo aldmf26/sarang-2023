@@ -226,7 +226,7 @@
                             <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_proses->gr, 0) }}</td>
                             <td class="text-end">
-                                {{ number_format($cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cbt_blm_kirim->cost_kerja, 0) }}
+                                {{ number_format($cetak_proses->ttl_rp + $cetak_proses->cost_kerja, 0) }}
                             </td>
 
                         </tr>
