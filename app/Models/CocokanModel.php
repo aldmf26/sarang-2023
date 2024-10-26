@@ -195,7 +195,7 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
     public static function stock_sortir_awal()
     {
         $result = DB::selectOne("SELECT SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.gr_awal * b.hrga_satuan) as ttl_rp
-        FROM  formulir_sarang as a 
+        FROM formulir_sarang as a 
         LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         WHERE b.baru = 'baru' AND a.kategori = 'sortir';
         ");
