@@ -41,7 +41,7 @@
         <div class="d-flex flex-wrap">
         @foreach ($grading as $d)
             <div style="width:25%; padding:10px;">
-                <table cellspacing="2" cellpadding="1" border="1">
+                <table border="1">
                     <tr>
                         <td>No Nota</td>
                         <td>:</td>
@@ -50,7 +50,7 @@
                     <tr>
                         <td>Nama Partai</td>
                         <td>:</td>
-                        <td>{{ $d->nm_partai }}</td>
+                        <th>{{ $d->nm_partai }}</th>
                     </tr>
                     <tr>
                         <td>Box Grading</td>
@@ -65,12 +65,12 @@
                     <tr>
                         <td>Pcs</td>
                         <td>:</td>
-                        <th><h5>{{ $d->pcs }}</h5></th>
+                        <td>{{ $d->pcs }}</td>
                     </tr>
                     <tr>
                         <td>Gr</td>
                         <td>:</td>
-                        <th><h5>{{ $d->gr }}</h5></th>
+                        <td>{{ $d->gr }}</td>
                     </tr>
                 </table>
             </div>
