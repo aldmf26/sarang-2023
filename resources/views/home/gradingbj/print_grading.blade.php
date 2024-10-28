@@ -41,7 +41,7 @@
         <div class="d-flex flex-wrap">
         @foreach ($grading as $d)
             <div style="width:25%; padding:10px;">
-                <table cellspacing="5" cellpadding="3" border="1" class="p-1">
+                <table cellspacing="2" cellpadding="1" border="1">
                     <tr>
                         <td>No Nota</td>
                         <td>:</td>
