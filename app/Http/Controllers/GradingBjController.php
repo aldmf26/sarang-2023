@@ -906,20 +906,7 @@ class GradingBjController extends Controller
         FROM `grading_partai`
         WHERE no_invoice = '$r->no_invoice' and grade = 'susut'");
 
-        $box_grading = DB::select("SELECT a.no_box_sortir, b.tipe, a.pcs, a.gr, (b.gr_awal * b.hrga_satuan) as cost_bk, c.ttl_rp as cost_cbt, d.ttl_rp as cost_ctk, e.ttl_rp as cost_eo , f.ttl_rp as cost_sortir
-        FROM grading as a 
-        left join bk as b on b.no_box = a.no_box_sortir and b.kategori ='cabut'
-        left join cabut as c on c.no_box = a.no_box_sortir
-        left join (
-        SELECT d.no_box, d.ttl_rp
-            FROM cetak_new as d 
-            left join kelas_cetak as e on e.id_kelas_cetak = d.id_kelas_cetak
-            where e.kategori ='CTK'
-        ) as d on d.no_box = a.no_box_sortir
-        left join eo as e on e.no_box = a.no_box_sortir 
-        left join sortir as f on f.no_box = a.no_box_sortir
-        where a.no_invoice = '$r->no_invoice'
-        ");
+        $box_grading = Grading::detailPengiriman($r->no_invoice);
 
 
         $data = [
@@ -934,6 +921,26 @@ class GradingBjController extends Controller
             'rp_susut' => DB::selectOne("SELECT  * FROM rp_susut as a ")
         ];
         return view('home.gradingbj.detail_pengiriman', $data);
+    }
+
+    public function print_grading($no_nota)
+    {
+        $box_grading = Grading::detailPengiriman($no_nota);
+        $getFormulir = DB::select("SELECT nm_partai,no_invoice,box_pengiriman,grade,pcs,gr,tgl,
+        admin
+        FROM `grading_partai`
+        WHERE no_invoice = '$no_nota' and grade != 'susut'");
+
+        $data = [
+            'title' => 'Print Grading',
+            'no_nota' => $no_nota,
+            'box_grading' => $box_grading,
+            'no_invoice' => $no_nota,
+            'grading' => $getFormulir,
+
+
+        ];
+        return view('home.gradingbj.print_grading', $data);
     }
 
     public function template_import_gudang_siap_kirim()

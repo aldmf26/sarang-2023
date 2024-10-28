@@ -3,6 +3,7 @@
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
             <div>
+                <a class="btn btn-sm btn-info" href="{{ route('gradingbj.print_grading', $no_invoice) }}"><i class="fas fa-print"></i> Print</a>
             </div>
         </div>
     </x-slot>

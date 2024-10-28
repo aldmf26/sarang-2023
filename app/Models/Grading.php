@@ -263,6 +263,24 @@ left join(
             GROUP BY box_pengiriman ORDER BY a.grade Desc");
     }
 
+    public static function detailPengiriman($no_nota)
+    {
+        return DB::select("SELECT a.no_box_sortir, b.tipe, a.pcs, a.gr, (b.gr_awal * b.hrga_satuan) as cost_bk, c.ttl_rp as cost_cbt, d.ttl_rp as cost_ctk, e.ttl_rp as cost_eo , f.ttl_rp as cost_sortir
+        FROM grading as a 
+        left join bk as b on b.no_box = a.no_box_sortir and b.kategori ='cabut'
+        left join cabut as c on c.no_box = a.no_box_sortir
+        left join (
+        SELECT d.no_box, d.ttl_rp
+            FROM cetak_new as d 
+            left join kelas_cetak as e on e.id_kelas_cetak = d.id_kelas_cetak
+            where e.kategori ='CTK'
+        ) as d on d.no_box = a.no_box_sortir
+        left join eo as e on e.no_box = a.no_box_sortir 
+        left join sortir as f on f.no_box = a.no_box_sortir
+        where a.no_invoice = '$no_nota'
+        ");
+    }
+
     public static function gudangPengirimanGr($no_box = null)
     {
         $whereBox = $no_box ? "AND g.no_box = $no_box " : '';
