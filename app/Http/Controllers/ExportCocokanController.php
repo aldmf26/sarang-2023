@@ -913,7 +913,7 @@ class ExportCocokanController extends Controller
             'total' => [
                 'pcs' => "=B4+B5+B9+B10+B14+B15+B20+B21+B19+B22+B6+B11+B16",
                 'gr' => "=C4+C5+C9+C10+C14+C15+C20+C21+C19+C22+C6+C11+C16",
-                'rp' => "==D4+D5+D9+D10+D14+D15+D20+D21+D19+D22+D6+D11+D16",
+                'rp' => "=D4+D5+D9+D10+D14+D15+D20+D21+D19+D22+D6+D11+D16",
                 'cost_kerja' => "=SUM(E2:E22)",
                 'cu' => "=SUM(F2:F22)",
                 'op' => "=SUM(G2:G22)",
