@@ -41,6 +41,8 @@
     <div>
         <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm "><i
                 class="fas fa-file-excel"></i>Export Opname</a>
+        <a href="{{ route('cocokan.export') }}" class="btn btn-primary btn-sm "><i
+                class="fas fa-file-excel"></i>Export Detail</a>
         <a href="{{ route('exportcost.export') }}" class="btn btn-primary btn-sm"><i
                 class="fas fa-file-excel"></i>Export Rp + Cost Kerja</a>
         <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input" class="btn btn-primary btn-sm">Isi
