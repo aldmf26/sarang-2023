@@ -41,12 +41,12 @@
                 <table class="table table-sm table-bordered" border="1" style="width: calc(50% - 1rem); font-size: 10px">
                     <thead>
                         <tr>
-                            <th class="bg-info">Grade</th>
-                            <th class="bg-info">Box Grading</th>
-                            <th class="bg-info">Pcs</th>
-                            <th class="bg-info">Gr</th>
-                            <th class="bg-info">No Barcode</th>
-                            <th class="bg-info">Ket</th>
+                            <th>Grade</th>
+                            <th>Box Grading</th>
+                            <th>Pcs</th>
+                            <th>Gr</th>
+                            <th>No Barcode</th>
+                            <th>Ket</th>
                         </tr>
                     </thead>
                     <tbody>
