@@ -28,7 +28,4 @@
         @endforeach
     </ul>
 </div>
-<div class="col-lg-4 mb-3">
-    <a href="{{ route('cocokan.export') }}" class="btn btn-primary btn-sm float-end"><i
-            class="fas fa-file-excel"></i>Export</a>
-</div>
+
