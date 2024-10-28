@@ -584,12 +584,6 @@ class GudangSarangController extends Controller
             ->groupBy('b.box_pengiriman')
             ->get();
 
-        // $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name as penerima
-        // FROM formulir_sarang as a 
-        // left join users as b on b.id = a.id_pemberi
-        // left join users as c on c.id = a.id_penerima
-        // WHERE a.no_invoice = '$r->no_invoice' and a.kategori = 'grade'");
-
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,

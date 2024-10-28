@@ -32,60 +32,59 @@
 <body>
     <br>
     <div class="container-fluid">
-        <div class="d-flex justify-content-between print_hilang">
-            {{-- <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="print_hilang btn btn-sm btn-warning"><i
-                    class="fa-solid fa-left-long"></i>
-                Kembali</a> --}}
-            <a href=""></a>
-            <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary float-end"><i
-                    class="fa-solid fa-print"></i>
-                Print</a>
-        </div>
-            {{-- @php
-                $detail = DB::table('formulir_sarang as a')
-                    ->leftJoin('users', 'users.id', '=', 'a.id_penerima')
-                    ->leftJoin('bk as b', function ($join) {
-                        $join->on('b.no_box', '=', 'a.no_box')->where('b.kategori', '=', 'cabut');
-                    })
-                    ->where('a.no_invoice', $no_invoice)
-                    ->where('a.kategori', 'sortir')
-                    ->where('a.id_penerima', $h->id_penerima)
-                    ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
-                    ->get();
-            @endphp --}}
-            <div class="section">
-                <h5 class="fw-bold text-center" style="text-decoration: underline">PO Wip : {{ $no_invoice }}</h5>
+        <h5 class="fw-bold" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
+            {{ tanggal($formulir[0]->tanggal) }}</h5>
 
-                <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($formulir[0]->id_pemberi)->name }} ~
-                    {{ auth()->user()->find($formulir[0]->id_penerima)->name }} | Tanggal : {{tanggal($formulir[0]->tanggal)}}</h6>
-                <div class="row">
-                    <div class="col-lg-12">
 
-                        <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
+        <div class="d-flex flex-wrap gap-2">
+            @foreach ($formulir as $d)
+                <table class="table table-sm table-bordered" border="1" style="width: calc(50% - 1rem); font-size: 10px">
+                    <thead>
+                        <tr>
+                            <th class="bg-info">Grade</th>
+                            <th class="bg-info">Box Grading</th>
+                            <th class="bg-info">Pcs</th>
+                            <th class="bg-info">Gr</th>
+                            <th class="bg-info">No Barcode</th>
+                            <th class="bg-info">Ket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>{{ $d->grade }}</th>
+                            <th>P{{ $d->no_box }}</th>
+                            <th>{{ $d->pcs_awal }}</th>
+                            <th>{{ $d->gr_awal }}</th>
+                        </tr>
+
+                    </tbody>
+                    <tbody>
+                        @php
+                            $grading = DB::table('grading_partai')
+                                ->where('box_pengiriman', $d->no_box)
+                                ->get();
+                        @endphp
+                        @foreach ($grading as $s)
                             <tr>
-                                <th>Tgl</th>
-                                <th>Box Grading</th>
-                                <th>Tipe - grade</th>
-                                <th class="text-end">Pcs </th>
-                                <th class="text-end"> Gr </th>
+                                <td colspan="2">{{ $s->nm_partai }}</td>
+                                <td>{{ $s->pcs }}</td>
+                                <td>{{ $s->gr }}</td>
+                                <td colspan="2"></td>
                             </tr>
-                            @foreach ($formulir as $d)
-                                <tr>
-                                    <td style="width: 100px"></td>
-                                    <td>{{ $d->no_box }}</td>
-                                    <td>{{ $d->grade . ' - ' . $d->tipe }}</td>
-                                    <td class="text-end">{{ $d->pcs_awal }}</td>
-                                    <td class="text-end">{{ $d->gr_awal }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
-            </div>
+                        @endforeach
+
+                    </tbody>
+                </table>
+            @endforeach
+        </div>
+
+
 
 
     </div>
-
+    <script>
+        window.print()
+    </script>
 
 </body>
 

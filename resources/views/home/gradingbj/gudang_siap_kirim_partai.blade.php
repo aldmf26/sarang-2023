@@ -72,7 +72,7 @@
                             $ttlPcs = 0;
                             $ttlGr = 0;
                             foreach ($gudang as $d) {
-                                if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0) {
+                                if ($d->gr - $d->gr_pengiriman >= 250) {
                                     $ttlPcs += $d->pcs - $d->pcs_pengiriman;
                                     $ttlGr += $d->gr - $d->gr_pengiriman;
                                 }
@@ -88,18 +88,18 @@
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
-                                @if ($d->pcs - $d->pcs_pengiriman >= 0 && $d->gr - $d->gr_pengiriman > 0)
+                                @if ($d->gr - $d->gr_pengiriman >= 250)
                                     <tr
                                         @click="
-                                                    if (cek.includes('{{ $d->no_box }}')) {
-                                                        cek = cek.filter(x => x !== '{{ $d->no_box }}')
-                                                        ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}
-                                                        ttlGr -= {{ $d->gr - $d->gr_pengiriman }}
-                                                    } else {
-                                                        cek.push('{{ $d->no_box }}')
-                                                        ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
-                                                        ttlGr += {{ $d->gr - $d->gr_pengiriman }}
-                                                    }
+                                                if (cek.includes('{{ $d->no_box }}')) {
+                                                    cek = cek.filter(x => x !== '{{ $d->no_box }}')
+                                                    ttlPcs -= {{ $d->pcs - $d->pcs_pengiriman }}
+                                                    ttlGr -= {{ $d->gr - $d->gr_pengiriman }}
+                                                } else {
+                                                    cek.push('{{ $d->no_box }}')
+                                                    ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
+                                                    ttlGr += {{ $d->gr - $d->gr_pengiriman }}
+                                                }
                                                 ">
                                         <td>P{{ $d->no_box }}</td>
                                         <td class="text-primary text-center pointer">
