@@ -15,98 +15,62 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>{{ $title }}</title>
+</head>
 
+<body>
     <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        /* Table Styles */
         .po-table {
-            width: calc(50% - 0.5rem);
+            width: 100%;
             font-size: 10px;
             margin-bottom: 0.5rem;
+            table-layout: fixed;
         }
-
-        .po-table th, 
+    
+        .po-table th,
         .po-table td {
             padding: 4px;
-            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-
-        /* Responsive Styles */
-        @media screen and (max-width: 768px) {
+    
+        @media (min-width: 768px) {
             .po-table {
-                width: 100% !important;
+                width: calc(50% - 0.5rem);
             }
         }
-
-        /* Print Styles */
+    
         @media print {
-            /* Existing styles */
-            .print_hilang {
-                display: none;
-            }
-
-            .section {
-                page-break-after: always;
-            }
-
-            /* Additional print optimizations */
             @page {
                 size: landscape;
                 margin: 1cm;
             }
-
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            .container-fluid {
-                width: 100%;
-                padding: 0.5cm;
-                margin: 0;
-            }
-
+    
             .po-table {
                 page-break-inside: avoid;
                 border-collapse: collapse;
             }
-
-            .table th, 
+    
+            .table th,
             .table td {
                 padding: 4px !important;
                 border: 1px solid #000 !important;
             }
-
+    
             thead {
                 display: table-header-group;
             }
-
+    
             .table {
                 border: none !important;
             }
-
-            h5 {
-                margin-bottom: 15px;
-            }
-
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
         }
     </style>
-</head>
-
-<body>
-    <br>
+    
     <div class="container-fluid">
-        <h5 class="fw-bold" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
+        <h5 class="fw-bold mb-3" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
             {{ tanggal($formulir[0]->tanggal) }}</h5>
-
+    
         <div class="d-flex flex-wrap" style="gap: 0.5rem;">
             @foreach ($formulir as $d)
                 <table class="table table-sm table-bordered po-table">
