@@ -15,38 +15,73 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>{{ $title }}</title>
-
-    <style>
-        @media print {
-            .print_hilang {
-                display: none;
-            }
-
-            .section {
-                page-break-after: always;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <br>
+    <style>
+        .po-table {
+            width: 100%;
+            font-size: 10px;
+            margin-bottom: 0.5rem;
+            table-layout: fixed;
+        }
+    
+        .po-table th,
+        .po-table td {
+            padding: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    
+        @media (min-width: 768px) {
+            .po-table {
+                width: calc(50% - 0.5rem);
+            }
+        }
+    
+        @media print {
+            @page {
+                size: landscape;
+                margin: 1cm;
+            }
+    
+            .po-table {
+                page-break-inside: avoid;
+                border-collapse: collapse;
+            }
+    
+            .table th,
+            .table td {
+                padding: 4px !important;
+                border: 1px solid #000 !important;
+            }
+    
+            thead {
+                display: table-header-group;
+            }
+    
+            .table {
+                border: none !important;
+            }
+        }
+    </style>
+    
     <div class="container-fluid">
-        <h5 class="fw-bold" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
+        <h5 class="fw-bold mb-3" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
             {{ tanggal($formulir[0]->tanggal) }}</h5>
-
-
-        <div class="d-flex flex-wrap gap-2">
+    
+        <div class="d-flex flex-wrap" style="gap: 0.5rem;">
             @foreach ($formulir as $d)
-                <table class="table table-sm table-bordered" border="1" style="width: calc(50% - 1rem); font-size: 10px">
+                <table class="table table-sm table-bordered po-table">
                     <thead>
                         <tr>
-                            <th class="bg-info">Grade</th>
-                            <th class="bg-info">Box Grading</th>
-                            <th class="bg-info">Pcs</th>
-                            <th class="bg-info">Gr</th>
-                            <th class="bg-info">No Barcode</th>
-                            <th class="bg-info">Ket</th>
+                            <th style="width: 20%">Grade</th>
+                            <th style="width: 20%">Box Grading</th>
+                            <th style="width: 15%">Pcs</th>
+                            <th style="width: 15%">Gr</th>
+                            <th style="width: 15%">No Barcode</th>
+                            <th style="width: 15%">Ket</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,8 +90,9 @@
                             <th>P{{ $d->no_box }}</th>
                             <th>{{ $d->pcs_awal }}</th>
                             <th>{{ $d->gr_awal }}</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-
                     </tbody>
                     <tbody>
                         @php
@@ -72,15 +108,10 @@
                                 <td colspan="2"></td>
                             </tr>
                         @endforeach
-
                     </tbody>
                 </table>
             @endforeach
         </div>
-
-
-
-
     </div>
     <script>
         window.print()

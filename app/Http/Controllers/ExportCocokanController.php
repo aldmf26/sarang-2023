@@ -907,6 +907,7 @@ class ExportCocokanController extends Controller
                 'gr' => "0",
                 'rp' => "0",
                 'cost_kerja' => 0,
+                
             ],
 
             'total' => [

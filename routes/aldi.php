@@ -564,6 +564,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_susut', 'export_susut')->name('export_susut');
             Route::get('/detail_pengiriman', 'detail_pengiriman')->name('detail_pengiriman');
             Route::get('/cek_box_kirim', 'cek_box_kirim')->name('cek_box_kirim');
+            Route::get('/print_grading/{no_nota}', 'print_grading')->name('print_grading');
         });
     Route::controller(OpnameController::class)
         ->prefix('home/opname')

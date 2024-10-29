@@ -140,7 +140,7 @@
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-center">Serah</th>
-                                    <th class="dhead text-center">Print</th>
+                                    {{-- <th class="dhead text-center">Print</th> --}}
 
                                 </tr>
 
@@ -170,7 +170,7 @@
                                                 @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})"
                                                 value="{{ $d->box_pengiriman }}" class="pointer" x-model="cek">
                                         </td>
-                                        <td align="center" class="">
+                                        <td align="center" class="d-none">
                                             @if ($d->sudah_print == 'T')
                                                 <input type="checkbox" class="form-check"
                                                     :checked="cekPrint.includes('{{ $d->box_pengiriman }}')"
@@ -279,13 +279,7 @@
                     });
                 });
             </script>
-            <script>
-                if ({{ $posisi == 1 }}) {
-                    document.body.style.zoom = "90%";
-                } else {
-                    document.body.style.zoom = "75%";
-                }
-            </script>
+          
         @endsection
     </x-slot>
 

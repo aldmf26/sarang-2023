@@ -242,6 +242,7 @@ class GradingBjController extends Controller
                 return strtolower($item);
             })->unique()->count(),
         ];
+        
 
         // Validasi setiap kriteria
         foreach ($uniqueCounts as $key => $count) {
@@ -249,9 +250,6 @@ class GradingBjController extends Controller
                 return redirect()->back()->with('error', ucfirst($key) . ' harus sama.');
             }
         }
-
-        $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
-        session()->flash('success', 'Data berhasil diproses.');
 
         if ($r->submit == 'serah') {
             $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
@@ -315,7 +313,12 @@ class GradingBjController extends Controller
                     FROM grading_partai as a 
                     where a.box_pengiriman = '$boxkirim'
                     group by a.box_pengiriman;");
+        
+        $cekSudahKirim = DB::table('pengiriman')->where('no_box', $boxkirim)->exists();
 
+        if($cekSudahKirim) {
+            return "<span class='text-danger fw-bold'> BOX SUDAH DIKIRIM </span>";
+        }
         if (empty($databox)) {
             return "<span class='fw-bold'> data tidak ditemukan </span>";
         } else {
@@ -379,13 +382,17 @@ class GradingBjController extends Controller
                 FROM grading_partai as a 
                 where `box_pengiriman` = '$boxsp';");
 
-                if (empty($getBoxkirim)) {
-                    # code...
-                } else {
+                $cekBoxSudahKirim = DB::table('pengiriman')->where('no_box', $boxsp)->exists();
+                if ($cekBoxSudahKirim) {
+                    return redirect()->back()->withInput()->with('error', 'BOX SUDAH DIKIRIM : ' . $boxsp);
+                }
+
+                if (!empty($getBoxkirim)) {
                     if ($getBoxkirim->grade != $r->grade[$i]) {
                         return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
                     }
-                }
+                } 
+
                 DB::table('grading_partai')->insert($data);
             }
 
@@ -402,15 +409,15 @@ class GradingBjController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
 
-            if ($selisihGr > 0) {
-                DB::table('grading_selisih')->insert([
-                    'no_box' => $no_invoice,
-                    'pcs' => $selisihPcs,
-                    'gr' => $selisihGr,
-                    'admin' => auth()->user()->name,
-                    'tgl' => $tgl,
-                ]);
-            }
+            // if ($selisihGr > 0) {
+            //     DB::table('grading_selisih')->insert([
+            //         'no_box' => $no_invoice,
+            //         'pcs' => $selisihPcs,
+            //         'gr' => $selisihGr,
+            //         'admin' => auth()->user()->name,
+            //         'tgl' => $tgl,
+            //     ]);
+            // }
 
             DB::table('grading')->insert($dataGrading);
 
@@ -906,20 +913,7 @@ class GradingBjController extends Controller
         FROM `grading_partai`
         WHERE no_invoice = '$r->no_invoice' and grade = 'susut'");
 
-        $box_grading = DB::select("SELECT a.no_box_sortir, b.tipe, a.pcs, a.gr, (b.gr_awal * b.hrga_satuan) as cost_bk, c.ttl_rp as cost_cbt, d.ttl_rp as cost_ctk, e.ttl_rp as cost_eo , f.ttl_rp as cost_sortir
-        FROM grading as a 
-        left join bk as b on b.no_box = a.no_box_sortir and b.kategori ='cabut'
-        left join cabut as c on c.no_box = a.no_box_sortir
-        left join (
-        SELECT d.no_box, d.ttl_rp
-            FROM cetak_new as d 
-            left join kelas_cetak as e on e.id_kelas_cetak = d.id_kelas_cetak
-            where e.kategori ='CTK'
-        ) as d on d.no_box = a.no_box_sortir
-        left join eo as e on e.no_box = a.no_box_sortir 
-        left join sortir as f on f.no_box = a.no_box_sortir
-        where a.no_invoice = '$r->no_invoice'
-        ");
+        $box_grading = Grading::detailPengiriman($r->no_invoice);
 
 
         $data = [
@@ -934,6 +928,26 @@ class GradingBjController extends Controller
             'rp_susut' => DB::selectOne("SELECT  * FROM rp_susut as a ")
         ];
         return view('home.gradingbj.detail_pengiriman', $data);
+    }
+
+    public function print_grading($no_nota)
+    {
+        $box_grading = Grading::detailPengiriman($no_nota);
+        $getFormulir = DB::select("SELECT nm_partai,no_invoice,box_pengiriman,grade,pcs,gr,tgl,
+        admin
+        FROM `grading_partai`
+        WHERE no_invoice = '$no_nota' and grade != 'susut'");
+
+        $data = [
+            'title' => 'Print Grading',
+            'no_nota' => $no_nota,
+            'box_grading' => $box_grading,
+            'no_invoice' => $no_nota,
+            'grading' => $getFormulir,
+
+
+        ];
+        return view('home.gradingbj.print_grading', $data);
     }
 
     public function template_import_gudang_siap_kirim()
