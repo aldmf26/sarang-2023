@@ -51,18 +51,16 @@
                                         href="{{ route('gudangsarang.selesai_wip', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
-                                @endif
-                                @if ($d->selesai == 'Y' && $d->print == 'T')
-                                    <a href="{{ route('gudangsarang.print_formulir_wip', $param) }}" target="_blank">
-                                        <span class="badge bg-primary">Print</span>
-                                    </a>
-                                @endif
-                                @if ($d->selesai == 'Y')
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal_wip', $param) }}">
                                         <span class="badge bg-danger">Cancel</span>
                                     </a>
                                 @endif
+                                {{-- @if ($d->selesai == 'Y' && $d->print == 'T') --}}
+                                    <a href="{{ route('gudangsarang.print_formulir_wip', $param) }}" target="_blank">
+                                        <span class="badge bg-primary">Print</span>
+                                    </a>
+                                {{-- @endif --}}
 
                             </td>
                         </tr>
