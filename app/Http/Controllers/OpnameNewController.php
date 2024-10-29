@@ -964,7 +964,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('J' . $kolom, "=D$kolom+F$kolom+H$kolom");
             $sheet4->setCellValue('K' . $kolom, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('L' . $kolom, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
-            $sheet4->setCellValue('N' . $kolom, $b->gr_awal);
+            // $sheet4->setCellValue('N' . $kolom, $b->gr_awal);
 
             $kolom++;
         }
@@ -1017,7 +1017,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('K' . $kolom_ctk, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('L' . $kolom_ctk, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . '%');
 
-            $sheet4->setCellValue('N' . $kolom_ctk, $b->gr_awal);
+            // $sheet4->setCellValue('N' . $kolom_ctk, $b->gr_awal);
             $kolom_ctk++;
         }
         $sheet4->getStyle("B$kolom2:L" . $kolom_ctk - 1)->applyFromArray($style);
@@ -1069,7 +1069,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('K' . $kolom_sortir, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('L' . $kolom_sortir, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . "%");
 
-            $sheet4->setCellValue('N' . $kolom_sortir, $b->gr_awal);
+            // $sheet4->setCellValue('N' . $kolom_sortir, $b->gr_awal);
             $kolom_sortir++;
         }
         $sheet4->getStyle("B$kolom3:L" . $kolom_sortir - 1)->applyFromArray($style);
