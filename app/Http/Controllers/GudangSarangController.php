@@ -301,7 +301,7 @@ class GudangSarangController extends Controller
     public function batal_wip(Request $r)
     {
         $no_invoice = $r->no_invoice;
-        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]]);
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'wip']]);
         $getFormulir->delete();
         return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
     }
@@ -334,7 +334,9 @@ class GudangSarangController extends Controller
     public function selesai_wip(Request $r)
     {
         $no_invoice = $r->no_invoice;
-        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
+        $getQ = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'wip']]);
+        $getQ->update(['selesai' => 'Y']);
+        $getFormulir = $getQ->get();
         foreach ($getFormulir as $d) {
             DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['formulir' => 'Y']);
         }
@@ -454,7 +456,7 @@ class GudangSarangController extends Controller
 
     public function getFormulirKategori($kategori)
     {
-        return DB::select("SELECT count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        return DB::select("SELECT a.selesai,a.print,count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
@@ -577,6 +579,7 @@ class GudangSarangController extends Controller
 
     public function print_formulir_wip(Request $r)
     {
+        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice],['kategori', 'wip']])->update(['print' => 'Y']);
         $formulir = DB::table('formulir_sarang as a')
             ->join('grading_partai as b', 'a.no_box', '=', 'b.box_pengiriman')
             ->where([['a.no_invoice', $r->no_invoice], ['a.kategori', 'wip']])

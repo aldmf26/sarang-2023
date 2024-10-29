@@ -42,31 +42,28 @@
                             <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
                                 @php
-                                    $param = ['kategori' => 'wip', 'no_invoice' => $d->no_invoice];
-                                    $getCtk = DB::table('formulir_sarang as a')
-                                        ->select('a.no_box')
-                                        ->join('grading_partai as b', 'a.no_box', 'b.box_pengiriman')
-                                        ->where([['a.no_invoice', $d->no_invoice],['a.kategori', 'wip'],['b.formulir','Y']])
-                                        ->first();
+                                    $param = [
+                                        'no_invoice' => $d->no_invoice,
+                                    ];
                                 @endphp
-                                    <a onclick="return confirm('Yakin dihapus ?')"
-                                        href="{{ route('gudangsarang.batal_wip', $param) }}">
-                                        <span class="badge bg-danger">Cancel</span>
-                                    </a>
-
-                                    {{-- <a href="#" class="edit" data-no_invoice="{{ $d->no_invoice }}"
-                                        data-kategori="cetak">
-                                        <span class="badge bg-primary">Edit</span>
-                                    </a> --}}
-
+                                @if ($d->selesai == 'T')
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
                                         href="{{ route('gudangsarang.selesai_wip', $param) }}">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
-                                    <a href="{{ route('gudangsarang.print_formulir_wip', ['no_invoice' => $d->no_invoice]) }}"
-                                        target="_blank">
+                                @endif
+                                @if ($d->selesai == 'Y' && $d->print == 'T')
+                                    <a href="{{ route('gudangsarang.print_formulir_wip', $param) }}" target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
+                                @endif
+                                @if ($d->selesai == 'Y')
+                                    <a onclick="return confirm('Yakin dihapus ?')"
+                                        href="{{ route('gudangsarang.batal_wip', $param) }}">
+                                        <span class="badge bg-danger">Cancel</span>
+                                    </a>
+                                @endif
+
                             </td>
                         </tr>
                     @endforeach
@@ -74,7 +71,7 @@
             </table>
 
 
-        </section> 
+        </section>
 
         {{-- <form action="{{ route('gudangsarang.update_invoice_grade') }}" method="post">
             @csrf
