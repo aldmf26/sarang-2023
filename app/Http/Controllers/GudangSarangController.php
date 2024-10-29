@@ -583,10 +583,13 @@ class GudangSarangController extends Controller
             ->selectRaw('b.grade,b.tipe,a.tanggal,a.no_box, a.pcs_awal, a.gr_awal, a.id_pemberi,a.id_penerima')
             ->groupBy('b.box_pengiriman')
             ->get();
+        
+        $no_box = explode('-', $r->no_box);
 
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
+            'no_box' => $no_box,
             'no_invoice' => $r->no_invoice,
         ];
         return view('home.gudang_sarang.print_formulir_wip', $data);

@@ -279,13 +279,7 @@
                     });
                 });
             </script>
-            <script>
-                if ({{ $posisi == 1 }}) {
-                    document.body.style.zoom = "90%";
-                } else {
-                    document.body.style.zoom = "75%";
-                }
-            </script>
+          
         @endsection
     </x-slot>
 

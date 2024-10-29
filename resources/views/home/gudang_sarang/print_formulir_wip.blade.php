@@ -17,13 +17,85 @@
     <title>{{ $title }}</title>
 
     <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Table Styles */
+        .po-table {
+            width: calc(50% - 0.5rem);
+            font-size: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .po-table th, 
+        .po-table td {
+            padding: 4px;
+            vertical-align: middle;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .po-table {
+                width: 100% !important;
+            }
+        }
+
+        /* Print Styles */
         @media print {
+            /* Existing styles */
             .print_hilang {
                 display: none;
             }
 
             .section {
                 page-break-after: always;
+            }
+
+            /* Additional print optimizations */
+            @page {
+                size: landscape;
+                margin: 1cm;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .container-fluid {
+                width: 100%;
+                padding: 0.5cm;
+                margin: 0;
+            }
+
+            .po-table {
+                page-break-inside: avoid;
+                border-collapse: collapse;
+            }
+
+            .table th, 
+            .table td {
+                padding: 4px !important;
+                border: 1px solid #000 !important;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            .table {
+                border: none !important;
+            }
+
+            h5 {
+                margin-bottom: 15px;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>
@@ -34,18 +106,18 @@
     <div class="container-fluid">
         <h5 class="fw-bold" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
             {{ tanggal($formulir[0]->tanggal) }}</h5>
-        <div class="d-flex flex-wrap gap-2">
+
+        <div class="d-flex flex-wrap" style="gap: 0.5rem;">
             @foreach ($formulir as $d)
-                <table class="table table-sm table-bordered" border="1"
-                    style="width: calc(50% - 1rem); font-size: 10px">
+                <table class="table table-sm table-bordered po-table">
                     <thead>
                         <tr>
-                            <th>Grade</th>
-                            <th>Box Grading</th>
-                            <th>Pcs</th>
-                            <th>Gr</th>
-                            <th>No Barcode</th>
-                            <th>Ket</th>
+                            <th style="width: 20%">Grade</th>
+                            <th style="width: 20%">Box Grading</th>
+                            <th style="width: 15%">Pcs</th>
+                            <th style="width: 15%">Gr</th>
+                            <th style="width: 15%">No Barcode</th>
+                            <th style="width: 15%">Ket</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,8 +126,9 @@
                             <th>P{{ $d->no_box }}</th>
                             <th>{{ $d->pcs_awal }}</th>
                             <th>{{ $d->gr_awal }}</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-
                     </tbody>
                     <tbody>
                         @php
@@ -71,15 +144,10 @@
                                 <td colspan="2"></td>
                             </tr>
                         @endforeach
-
                     </tbody>
                 </table>
             @endforeach
         </div>
-
-
-
-
     </div>
     <script>
         window.print()
