@@ -296,7 +296,8 @@
         scrollCollapse: true,
         "autoWidth": true,
         "paging": false,
-        "info": false
+        "info": false,
+        "stateSave": true,
     });
 
     $('#tablealdi').DataTable({
