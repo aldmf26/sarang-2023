@@ -56,11 +56,11 @@
                                         <span class="badge bg-danger">Cancel</span>
                                     </a>
                                 @endif
-                                {{-- @if ($d->selesai == 'Y' && $d->print == 'T') --}}
+                                @if ($d->selesai == 'Y')
                                     <a href="{{ route('gudangsarang.print_formulir_wip', $param) }}" target="_blank">
                                         <span class="badge bg-primary">Print</span>
                                     </a>
-                                {{-- @endif --}}
+                                @endif
 
                             </td>
                         </tr>
