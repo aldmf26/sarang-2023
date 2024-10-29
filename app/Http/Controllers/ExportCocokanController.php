@@ -96,7 +96,7 @@ class ExportCocokanController extends Controller
             $kolom++;
         }
 
-        
+
 
         $sheet1->getStyle("N1:W1")->applyFromArray($style_atas);
         $sheet1->setCellValue('M1', 'Cabut akhir');
@@ -129,7 +129,7 @@ class ExportCocokanController extends Controller
             $kolom++;
         }
 
-        
+
 
         $sheet1->getStyle("Z1:AJ1")->applyFromArray($style_atas);
         $sheet1->setCellValue('Y1', 'Cabut sedang proses');
@@ -456,7 +456,7 @@ class ExportCocokanController extends Controller
             $row++;
         }
 
-      
+
 
         $sheet->getStyle('B2:J' . $row - 1)->applyFromArray($style);
 
@@ -477,7 +477,7 @@ class ExportCocokanController extends Controller
             $row++;
         }
 
-       
+
 
         // proses ctk
         $cetak_proses = $model::sortir_proses();
@@ -588,8 +588,8 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("D$row", $v->no_box);
             $sheet->setCellValue("E$row", $v->pcs);
             $sheet->setCellValue("F$row", $v->gr);
-            $sheet->setCellValue("G$row", $v->ttl_rp );
-            $sheet->setCellValue("H$row", ($v->ttl_rp ) / $v->gr);
+            $sheet->setCellValue("G$row", $v->ttl_rp);
+            $sheet->setCellValue("H$row", ($v->ttl_rp) / $v->gr);
             $sumTtlRp += $v->ttl_rp;
             $sumTtlGr += $v->gr;
             $sumttlPcs += $v->pcs;
@@ -624,7 +624,7 @@ class ExportCocokanController extends Controller
 
             $sumTtlRp2 += $hrgaSatuan * $v->gr;
             $sumTtlGr2 += $v->gr;
-            $sumTtlPcs2 += $v->pcs; 
+            $sumTtlPcs2 += $v->pcs;
 
             $row++;
         }
@@ -636,7 +636,6 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue("AF2", ($sumTtlGr - $sumTtlGr2) == 0 ? 0 : ($sumTtlRp - $sumTtlRp2) / ($sumTtlGr - $sumTtlGr2));
 
         $sheet->getStyle('AC1:AF2')->applyFromArray($style);
-
     }
 
     public function pengiriman2($spreadsheet, $style_atas, $style, $model)
@@ -744,7 +743,7 @@ class ExportCocokanController extends Controller
         foreach ($koloms as $k => $v) {
             $sheet->setCellValue($k . '1', $v);
         }
-       
+
         $kolomRekap = [
             // cabut
             'awal cabut' => [
@@ -928,7 +927,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue("D$row", $v['rp']);
             $sheet->setCellValue("E$row", $v['cost_kerja']);
             $sheet->setCellValue("F$row", $v['cu'] ?? 0);
-            $sheet->setCellValue("G$row", $v['op'] ?? 0) ;
+            $sheet->setCellValue("G$row", $v['op'] ?? 0);
             $sheet->setCellValue("H$row", $v['ttl_rp'] ?? 0);
             $row++;
         }
@@ -940,7 +939,7 @@ class ExportCocokanController extends Controller
             'A14:A16',
             'A19:A22',
         ];
-        foreach($warnai as $w){
+        foreach ($warnai as $w) {
             $sheet->getStyle($w)
                 ->getFill()
                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
