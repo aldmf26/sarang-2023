@@ -242,6 +242,7 @@ class GradingBjController extends Controller
                 return strtolower($item);
             })->unique()->count(),
         ];
+        
 
         // Validasi setiap kriteria
         foreach ($uniqueCounts as $key => $count) {
@@ -249,9 +250,6 @@ class GradingBjController extends Controller
                 return redirect()->back()->with('error', ucfirst($key) . ' harus sama.');
             }
         }
-
-        $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
-        session()->flash('success', 'Data berhasil diproses.');
 
         if ($r->submit == 'serah') {
             $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
@@ -315,7 +313,12 @@ class GradingBjController extends Controller
                     FROM grading_partai as a 
                     where a.box_pengiriman = '$boxkirim'
                     group by a.box_pengiriman;");
+        
+        $cekSudahKirim = DB::table('pengiriman')->where('no_box', $boxkirim)->exists();
 
+        if($cekSudahKirim) {
+            return "<span class='text-danger fw-bold'> BOX SUDAH DIKIRIM </span>";
+        }
         if (empty($databox)) {
             return "<span class='fw-bold'> data tidak ditemukan </span>";
         } else {
@@ -379,13 +382,17 @@ class GradingBjController extends Controller
                 FROM grading_partai as a 
                 where `box_pengiriman` = '$boxsp';");
 
-                if (empty($getBoxkirim)) {
-                    # code...
-                } else {
+                $cekBoxSudahKirim = DB::table('pengiriman')->where('no_box', $boxsp)->exists();
+                if ($cekBoxSudahKirim) {
+                    return redirect()->back()->withInput()->with('error', 'BOX SUDAH DIKIRIM : ' . $boxsp);
+                }
+
+                if (!empty($getBoxkirim)) {
                     if ($getBoxkirim->grade != $r->grade[$i]) {
                         return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
                     }
-                }
+                } 
+
                 DB::table('grading_partai')->insert($data);
             }
 
@@ -402,15 +409,15 @@ class GradingBjController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Total pcs dan gr grading tidak boleh lebih dari ttl pcs atau gr sortir');
             }
 
-            if ($selisihGr > 0) {
-                DB::table('grading_selisih')->insert([
-                    'no_box' => $no_invoice,
-                    'pcs' => $selisihPcs,
-                    'gr' => $selisihGr,
-                    'admin' => auth()->user()->name,
-                    'tgl' => $tgl,
-                ]);
-            }
+            // if ($selisihGr > 0) {
+            //     DB::table('grading_selisih')->insert([
+            //         'no_box' => $no_invoice,
+            //         'pcs' => $selisihPcs,
+            //         'gr' => $selisihGr,
+            //         'admin' => auth()->user()->name,
+            //         'tgl' => $tgl,
+            //     ]);
+            // }
 
             DB::table('grading')->insert($dataGrading);
 

@@ -34,11 +34,10 @@
     <div class="container-fluid">
         <h5 class="fw-bold" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
             {{ tanggal($formulir[0]->tanggal) }}</h5>
-
-
         <div class="d-flex flex-wrap gap-2">
             @foreach ($formulir as $d)
-                <table class="table table-sm table-bordered" border="1" style="width: calc(50% - 1rem); font-size: 10px">
+                <table class="table table-sm table-bordered" border="1"
+                    style="width: calc(50% - 1rem); font-size: 10px">
                     <thead>
                         <tr>
                             <th>Grade</th>
