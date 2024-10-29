@@ -445,4 +445,73 @@ group by a.no_box;
 
         return $result;
     }
+
+    public static function cabut_susut()
+    {
+        $return = DB::select("SELECT a.no_box, a.nm_partai, a.name, sum(a.pcs) as pcs, sum(a.gr_awal) as gr_awal, sum(a.gr_akhir) as gr_akhir
+        FROM (
+                SELECT a.id_pengawas, a.no_box, b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+                FROM cabut as a 
+                left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                left join users as c on c.id = a.id_pengawas
+                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
+
+                UNION ALL
+
+                SELECT a.id_pengawas, a.no_box, b.nm_partai, c.name,  a.ttl_rp as cost, 0 as pcs, a.gr_eo_awal as gr_awal, a.gr_eo_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+                FROM eo as a 
+                LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                left join users as c on c.id = a.id_pengawas
+                WHERE a.selesai = 'Y' AND b.baru = 'baru'
+
+                UNION ALL 
+                SELECT a.id_pengawas, a.no_box, b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
+                FROM cabut as a 
+                left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+                left join users as c on c.id = a.id_pengawas
+                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
+
+        ) as a
+        group by a.id_pengawas;");
+
+        return $return;
+    }
+
+    public static function cetak_susut()
+    {
+        return DB::select("SELECT 
+        e.no_box, c.name,e.nm_partai,
+        sum(a.pcs_awal_ctk) as pcs_awal,
+        sum(a.gr_awal_ctk) as gr_awal,
+        sum(a.pcs_akhir + a.pcs_tdk_cetak) as pcs_akhir,
+        sum(a.gr_akhir + a.gr_tdk_cetak) as gr_akhir,
+        sum(e.gr_awal * e.hrga_satuan) as ttl_rp,
+        sum(a.ttl_rp) as cost_kerja
+        FROM cetak_new as a 
+        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
+        left join users as c on a.id_pengawas = c.id
+        left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+        where 
+            a.selesai = 'Y' 
+            and a.no_box != 9999 
+            and a.id_anak != 0 
+            and g.kategori = 'CTK' 
+            and e.baru = 'baru' 
+        group by a.id_pengawas;");
+    }
+
+    public static function sortir_susut()
+    {
+        return DB::select("SELECT c.name,b.nm_partai,sum(a.pcs_awal) as pcs,sum(a.gr_awal) as gr_awal, sum(a.gr_akhir) as gr_akhir
+            FROM sortir as a
+            LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut' and b.baru = 'baru'
+            left join users as c on a.id_pengawas = c.id
+            WHERE a.no_box in (SELECT a.no_box
+                        FROM formulir_sarang as a 
+                        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' and b.baru = 'baru'
+                        left join users as c on a.id_penerima = c.id
+                        where a.kategori ='grade'
+           group by a.no_box) 
+           group by a.id_pengawas;");
+    }
 }
