@@ -78,8 +78,8 @@
                         <tr>
                             <th style="width: 20%">Grade</th>
                             <th style="width: 20%">Box Grading</th>
-                            <th style="width: 15%">Pcs</th>
-                            <th style="width: 15%">Gr</th>
+                            <th style="width: 15%" class="text-end">Pcs</th>
+                            <th style="width: 15%" class="text-end">Gr</th>
                             <th style="width: 15%">No Barcode</th>
                             <th style="width: 15%">Ket</th>
                         </tr>
@@ -88,8 +88,8 @@
                         <tr>
                             <th>{{ $d->grade }}</th>
                             <th>P{{ $d->no_box }}</th>
-                            <th>{{ $d->pcs_awal }}</th>
-                            <th>{{ $d->gr_awal }}</th>
+                            <th class="text-end">{{ $d->pcs_awal }}</th>
+                            <th class="text-end">{{ $d->gr_awal }}</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -103,8 +103,8 @@
                         @foreach ($grading as $s)
                             <tr>
                                 <td colspan="2">{{ $s->nm_partai }}</td>
-                                <td>{{ $s->pcs }}</td>
-                                <td>{{ $s->gr }}</td>
+                                <td align="right">{{ $s->pcs }}</td>
+                                <td align="right">{{ $s->gr }}</td>
                                 <td colspan="2"></td>
                             </tr>
                         @endforeach
