@@ -80,7 +80,7 @@
                                     </td> --}}
                                     <td>
                                         <input required name="nm_partai[]" count="{{ $i }}" type="text"
-                                            class="form-control namaPartai">
+                                            class="form-control namaPartai" autocomplete="off">
                                     </td>
                                     {{-- <td>
                                         <input required name="no_box[]" count="{{ $i }}" type="text"
@@ -88,15 +88,15 @@
                                     </td> --}}
                                     <td>
                                         <input type="text" count="{{ $i }}" name="tipe[]"
-                                            class="form-control tipe">
+                                            class="form-control tipe" autocomplete="off">
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}" name="ket[]"
-                                            class="form-control ket">
+                                            class="form-control ket" autocomplete="off">
                                     </td>
                                     <td>
                                         <input type="text" count="{{ $i }}" name="warna[]"
-                                            class="form-control warna">
+                                            class="form-control warna" autocomplete="off">
                                     </td>
                                     {{-- <td>
                                         <div count="{{ $i }}" class="load_tipe"></div>
@@ -123,7 +123,7 @@
                                     </td> --}}
                                     <td>
                                         <input type="text" count="{{ $i }}" name="pgws_grade[]"
-                                            class="form-control pgws_grade">
+                                            class="form-control pgws_grade" autocomplete="off">
                                     </td>
                                     <td>
                                         <input type="date" value="{{ date('Y-m-d') }}" class="form-control"
@@ -131,11 +131,13 @@
                                     </td>
                                     <td>
                                         <input autocomplete="off" type="text" class="form-control pcsAwal text-end"
-                                            count="{{ $i }}" name="pcs_awal[]" value="0">
+                                            count="{{ $i }}" name="pcs_awal[]" value="0"
+                                            autocomplete="off">
                                     </td>
                                     <td>
                                         <input autocomplete="off" type="text" class="form-control grAwal text-end"
-                                            count="{{ $i }}" name="gr_awal[]" value="0">
+                                            count="{{ $i }}" name="gr_awal[]" value="0"
+                                            autocomplete="off">
                                     </td>
 
                                 </tr>

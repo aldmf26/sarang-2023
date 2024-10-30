@@ -48,18 +48,24 @@
                             <div>
                                 <x-theme.btn_filter />
                             </div>
+                        @else
+                            <div>
+                                @include('home.bk.btn_import')
+                            </div>
+                            <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
+                            <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list"
+                                teks="Po Cabut" />
+                            <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => 'cabut']) }}"
+                                class="btn btn-sm btn-primary">
+                                <i class="fas fa-file-excel"></i> Export
+                            </a>
+                            <x-theme.button href="" addClass="serah" icon="fa-plus" variant="info" modal="Y"
+                                idModal="tambah" teks="Serah" />
+                            <button class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-danger delete"><i class="fas fa-trash-alt"></i> Hapus</button>
                         @endif
 
-                        <x-theme.button href="{{ route('bkbaru.add') }}" icon="fa-plus" teks="Tambah Data" />
-                        <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
-                        <a href="{{ route('bk.export', ['tgl1' => $tgl1, 'tgl2' => $tgl2, 'kategori' => 'cabut']) }}"
-                            class="btn btn-sm btn-primary">
-                            <i class="fas fa-file-excel"></i> Export
-                        </a>
-                        <x-theme.button href="" addClass="serah" icon="fa-plus" variant="info" modal="Y"
-                            idModal="tambah" teks="Serah" />
-                        <button class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="btn btn-sm btn-danger delete"><i class="fas fa-trash-alt"></i> Hapus</button>
+
 
 
                     </div>
