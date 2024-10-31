@@ -201,7 +201,7 @@ class Bk_baruController extends Controller
 
         $formulir = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, b.warna FROM formulir_sarang as a
             left join bk as b on b.no_box = a.no_box
-            where a.kategori = 'cabut' and a.no_invoice = '$r->no_invoice'
+            where a.kategori = 'cetak' and a.no_invoice = '$r->no_invoice'
         ");
 
 
