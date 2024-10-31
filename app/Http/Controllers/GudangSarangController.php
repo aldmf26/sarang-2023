@@ -165,7 +165,8 @@ class GudangSarangController extends Controller
                 $join->on('b.no_box', '=', 'a.no_box')
                     ->where('b.kategori', '=', 'cabut');
             })
-            ->join('cabut as c', 'c.no_box', '=', 'a.no_box')
+            ->leftJoin('cabut as c', 'c.no_box', '=', 'a.no_box')
+            ->leftJoin('eo as d', 'd.no_box', '=', 'a.no_box')
             ->where('a.kategori', 'cetak')
             ->where('a.no_invoice', $r->no_invoice)
             ->selectRaw('b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, c.pcs_awal as pcs_cbt, c.gr_awal as gr_cbt')
