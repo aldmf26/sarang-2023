@@ -180,7 +180,7 @@ class GudangSarangController extends Controller
         left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
         WHERE no_invoice = '$r->no_invoice' and a.kategori = 'cetak'");
         $data = [
-            'title' => 'Gudang Sarang',
+            'title' => 'Gudang Sarang dssdfdsfdsfdsfds',
             'formulir' => $formulir,
             'no_invoice' => $r->no_invoice,
             'ket_formulir' => $ket_formulir
