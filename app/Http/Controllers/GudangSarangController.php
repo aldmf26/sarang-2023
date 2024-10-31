@@ -169,7 +169,6 @@ class GudangSarangController extends Controller
             ->where('a.kategori', 'cetak')
             ->where('a.no_invoice', $r->no_invoice)
             ->selectRaw('b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, c.pcs_awal as pcs_cbt, c.gr_awal as gr_cbt')
-            ->groupBy('b.no_box')
             ->get();
 
 
@@ -179,8 +178,9 @@ class GudangSarangController extends Controller
         left join users as c on c.id = a.id_penerima
         left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
         WHERE no_invoice = '$r->no_invoice' and a.kategori = 'cetak'");
+
         $data = [
-            'title' => 'Gudang Sarang dssdfdsfdsfdsfds',
+            'title' => 'Gudang Sarang',
             'formulir' => $formulir,
             'no_invoice' => $r->no_invoice,
             'ket_formulir' => $ket_formulir

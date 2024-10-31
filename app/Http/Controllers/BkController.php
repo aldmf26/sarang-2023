@@ -199,11 +199,6 @@ class BkController extends Controller
                     if (empty(array_filter($row))) {
                         continue;
                     }
-
-                    $partai = $row[0];
-                    $partai = $row[0];
-                    $tgl = $row[6];
-
                     // $cekBox = DB::table('bk')->where([['kategori', 'LIKE', '%cabut%'], ['no_box', $nobox]])->first();
 
                     if (
@@ -225,14 +220,7 @@ class BkController extends Controller
                         DB::rollBack();
                         return redirect()->route('bk.index')->with('error', "ERROR! " . $pesan[true]);
                     } else {
-                        if (is_numeric($tgl)) {
-                            // Jika nilai berupa angka, konversi ke format tanggal
-                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
-                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
-                        } else {
-                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
-                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
-                        }
+
                         $nobox = $this->getNoBoxTambah();
                         // $nobox = $row[9];
 
