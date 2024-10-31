@@ -196,7 +196,9 @@ class Bk_baruController extends Controller
             ->where('a.kategori', 'cabut')
             ->where('a.no_invoice', $r->no_invoice)
             ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal', 'b.tipe', 'b.ket', 'b.warna')
+            ->groupBy('b.no_box')
             ->get();
+
 
 
 
