@@ -188,21 +188,21 @@ class Bk_baruController extends Controller
 
     public function print_formulir(Request $r)
     {
-        // $formulir = DB::table('formulir_sarang as a')
-        //     ->leftJoin('bk as b', function ($join) {
-        //         $join->on('b.no_box', '=', 'a.no_box')
-        //             ->where('b.kategori', '=', 'cabut');
-        //     })
-        //     ->where('a.kategori', 'cabut')
-        //     ->where('a.no_invoice', $r->no_invoice)
-        //     ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal', 'b.tipe', 'b.ket', 'b.warna')
-        //     ->groupBy('b.no_box')
-        //     ->get();
+        $formulir = DB::table('formulir_sarang as a')
+            ->leftJoin('bk as b', function ($join) {
+                $join->on('b.no_box', '=', 'a.no_box')
+                    ->where('b.kategori', '=', 'cabut');
+            })
+            ->where('a.kategori', 'cabut')
+            ->where('a.no_invoice', $r->no_invoice)
+            ->select('b.nm_partai', 'a.no_box', 'a.pcs_awal', 'a.gr_awal', 'b.tipe', 'b.ket', 'b.warna')
+            ->groupBy('b.no_box')
+            ->get();
 
-        $formulir = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, b.warna FROM formulir_sarang as a
-            left join bk as b on b.no_box = a.no_box
-            where a.kategori = 'cetak' and a.no_invoice = '$r->no_invoice'
-        ");
+        // $formulir = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, b.warna FROM formulir_sarang as a
+        //     left join bk as b on b.no_box = a.no_box
+        //     where a.kategori = 'cabut' and a.no_invoice = '$r->no_invoice'
+        // ");
 
 
 

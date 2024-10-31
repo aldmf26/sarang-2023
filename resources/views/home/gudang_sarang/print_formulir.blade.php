@@ -49,7 +49,7 @@
                             <th width="90">Tanggal</th>
                             <th width="70">Nama Partai</th>
                             <th width="70">No Box</th>
-                            <th width="70" >Grade</th>
+                            <th width="70">Grade</th>
                             <th width="60" class="text-end">Pcs Awal Cbt</th>
                             <th width="60" class="text-end">Gr Awal Cbt</th>
                             <th width="60" class="text-end">Pcs Awal</th>

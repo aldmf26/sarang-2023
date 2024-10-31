@@ -169,6 +169,7 @@ class GudangSarangController extends Controller
             ->where('a.kategori', 'cetak')
             ->where('a.no_invoice', $r->no_invoice)
             ->selectRaw('b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, c.pcs_awal as pcs_cbt, c.gr_awal as gr_cbt')
+            ->groupBy('b.no_box')
             ->get();
 
 
@@ -580,14 +581,14 @@ class GudangSarangController extends Controller
 
     public function print_formulir_wip(Request $r)
     {
-        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice],['kategori', 'wip']])->update(['print' => 'Y']);
+        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'wip']])->update(['print' => 'Y']);
         $formulir = DB::table('formulir_sarang as a')
             ->join('grading_partai as b', 'a.no_box', '=', 'b.box_pengiriman')
             ->where([['a.no_invoice', $r->no_invoice], ['a.kategori', 'wip']])
             ->selectRaw('b.grade,b.tipe,a.tanggal,a.no_box, a.pcs_awal, a.gr_awal, a.id_pemberi,a.id_penerima')
             ->groupBy('b.box_pengiriman')
             ->get();
-        
+
         $no_box = explode('-', $r->no_box);
 
         $data = [
