@@ -31,7 +31,6 @@ class AppServiceProvider extends ServiceProvider
                 'bk' => 12,
                 'cetak' => 14,
                 'wip' => 16,
-                // Tambahkan role lain sesuai kebutuhan
             ];
 
             // Ubah string menjadi array untuk pengecekan
