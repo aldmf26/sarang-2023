@@ -204,7 +204,7 @@ class BkController extends Controller
                     if (
                         // $cekBox || 
                         empty($row[0]) ||
-                        empty($row[5]) ||
+
                         empty($row[6])
                         // empty($row[9]) ||
                         // empty($row[10])
