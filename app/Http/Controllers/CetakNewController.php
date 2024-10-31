@@ -49,7 +49,6 @@ class CetakNewController extends Controller
         where a.no_invoice = '$no_invoice' and a.kategori = 'sortir'
         group by a.id_penerima
         ");
-
         $data = [
             'title' => 'Formulir Cetak Print',
             'halaman' => $halaman,

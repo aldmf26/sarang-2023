@@ -66,7 +66,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="cost_opr"></div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -79,10 +78,7 @@
                         <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
                         Loading...
                     </button>
-
-
                 </div>
-
             </div>
         </div>
     </div>

@@ -44,34 +44,42 @@
             <div class="col-lg-12">
                 <table class="table table-bordered" style="font-size: 13px">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tanggal</th>
-                            <th>Nama Partai</th>
-                            <th>No Box</th>
-                            <th>Grade</th>
-                            <th class="text-end">Pcs Awal</th>
-                            <th class="text-end">Gr Awal</th>
-                            <th class="text-end">Pcs Tidak Ctk</th>
-                            <th class="text-end">Gr Tidak Ctk</th>
-                            <th>Nama Anak</th>
-                            <th class="text-end">Pcs Akhir</th>
-                            <th class="text-end">Gr Akhir</th>
-                            <th class="text-end">Pcs Hcr</th>
-                            <th class="text-end">Susut%</th>
-                            <th class="text-end">Total Gaji</th>
-                            <th>Capai</th>
+                        <tr class="align-middle" style="font-size: 10px">
+                            <th width="10">#</th>
+                            <th width="90">Tanggal</th>
+                            <th width="70">Nama Partai</th>
+                            <th width="70">No Box</th>
+                            <th width="70" >Grade</th>
+                            <th width="60" class="text-end">Pcs Awal Cbt</th>
+                            <th width="60" class="text-end">Gr Awal Cbt</th>
+                            <th width="60" class="text-end">Pcs Awal</th>
+                            <th width="60" class="text-end">Gr Awal</th>
+                            <th width="60" class="text-end">Pcs Tidak Ctk</th>
+                            <th width="60" class="text-end">Gr Tidak Ctk</th>
+                            <th width="200">Nama Anak</th>
+                            <th width="70" class="text-end">Pcs Akhir</th>
+                            <th width="70" class="text-end">Gr Akhir</th>
+                            <th width="30" class="text-end">Pcs Hcr</th>
+                            <th width="10" class="text-end">Sst%</th>
+                            <th width="150" class="text-end">Total Gaji</th>
+                            <th width="30">Capai</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $ttlPcs = 0;
                             $ttlGr = 0;
+
+                            $ttlPcs_cbt = 0;
+                            $ttlGr_cbt = 0;
                         @endphp
                         @foreach ($formulir as $no => $f)
                             @php
                                 $ttlPcs += $f->pcs_awal;
                                 $ttlGr += $f->gr_awal;
+
+                                $ttlPcs_cbt += $f->pcs_cbt;
+                                $ttlGr_cbt += $f->gr_cbt;
                             @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>
@@ -79,6 +87,8 @@
                                 <td>{{ $f->nm_partai }}</td>
                                 <td>{{ $f->no_box }}</td>
                                 <td>{{ $f->tipe }}-{{ $f->ket }}</td>
+                                <td class="text-end">{{ $f->pcs_cbt }}</td>
+                                <td class="text-end">{{ $f->gr_cbt }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
                                 @for ($i = 0; $i < 9; $i++)
@@ -90,6 +100,8 @@
                     <tfoot>
                         <tr>
                             <th class="text-center" colspan="5">Total</th>
+                            <th class="text-end">{{ number_format($ttlPcs_cbt, 0) }}</th>
+                            <th class="text-end">{{ number_format($ttlGr_cbt, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             @for ($i = 0; $i < 9; $i++)

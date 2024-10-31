@@ -394,8 +394,6 @@
                 close: true,
                 avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
             }).showToast();
-
-
         });
     </script>
 @endif
