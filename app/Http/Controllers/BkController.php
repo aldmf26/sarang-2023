@@ -245,16 +245,16 @@ class BkController extends Controller
                             'warna' => $row[3],
                             'tgl' => date('Y-m-d'),
                             'pengawas' => 'sinta',
-                            'penerima' => $row[4],
-                            'pgws_grade' => $row[5],
-                            'pcs_awal' => $row[6],
-                            'gr_awal' => $row[7],
+                            // 'penerima' => $row[4],
+                            'pgws_grade' => $row[4],
+                            'pcs_awal' => $row[5],
+                            'gr_awal' => $row[6],
                             'kategori' => 'cabut',
                         ]);
                     }
                 }
                 DB::commit();
-                return redirect()->route('bk.index')->with('sukses', 'Data berhasil import');
+                return redirect()->route('bkbaru.index')->with('sukses', 'Data berhasil import');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return redirect()->back()->with('error', $e->getMessage());
