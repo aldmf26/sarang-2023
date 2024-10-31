@@ -535,7 +535,7 @@ class Cabut extends Model
             sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END ) as ttl_rp,
             SUM(CASE WHEN selesai = 'T' THEN rp_target ELSE 0 END) as rp_target, 
             sum((1 - gr_akhir / gr_awal) * 100) as susut
-            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl_input) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
         LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
