@@ -42,18 +42,7 @@
                 Print</a>
         </div>
         @foreach ($halaman as $h)
-            @php
-                $detail = DB::table('formulir_sarang as a')
-                    ->leftJoin('users', 'users.id', '=', 'a.id_penerima')
-                    ->leftJoin('bk as b', function ($join) {
-                        $join->on('b.no_box', '=', 'a.no_box')->where('b.kategori', '=', 'cabut');
-                    })
-                    ->where('a.no_invoice', $no_invoice)
-                    ->where('a.kategori', 'sortir')
-                    ->where('a.id_penerima', $h->id_penerima)
-                    ->select('b.nm_partai','b.tipe','b.ket', 'a.no_box', 'a.pcs_awal', 'a.gr_awal')
-                    ->get();
-            @endphp
+            
             <div class="section">
                 <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{ $no_invoice }}</h5>
 
@@ -64,36 +53,45 @@
 
                         <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
                             <thead>
-                                <tr>
+                                <tr class="align-middle">
                                     <th>Tgl</th>
-                                    <th>Nama Partai</th>
-                                    <th>No Box</th>
-                                    <th>Grade</th>
-                                    <th>Nama Anak</th>
-                                    <th class="text-end">Pcs Awal</th>
-                                    <th class="text-end"> Gr Awal</th>
-                                    <th class="text-end">Pcs Akhir</th>
-                                    <th class="text-end">Gr Akhir</th>
-                                    <th class="text-end">Susut %</th>
-                                    <th class="text-end">Total Rp</th>
+                                    <th width="80">Nama Partai</th>
+                                    <th width="70">No Box</th>
+                                    <th width="89">Grade</th>
+                                    <th width="200">Nama Anak</th>
+                                    <th width="60" class="text-end">Pcs Awal Ctk</th>
+                                    <th width="60" class="text-end">Gr Awal Ctk</th>
+                                    <th width="60" class="text-end">Pcs Awal</th>
+                                    <th width="60" class="text-end">Gr Awal</th>
+                                    <th width="60" class="text-end">Pcs Akhir</th>
+                                    <th width="60" class="text-end">Gr Akhir</th>
+                                    <th width="60" class="text-end">Susut %</th>
+                                    <th width="130" class="text-end">Total Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-                                    $ttlPcs = 0;
-                                    $ttlGr = 0;
+                                    $detail = DB::table('formulir_sarang as a')
+                                        ->leftJoin('users', 'users.id', '=', 'a.id_penerima')
+                                        ->leftJoin('bk as b', function ($join) {
+                                            $join->on('b.no_box', '=', 'a.no_box')->where('b.kategori', '=', 'cabut');
+                                        })
+                                        ->leftJoin('cetak_new as c', 'c.no_box', '=', 'a.no_box')
+                                        ->where('a.no_invoice', $no_invoice)
+                                        ->where('a.kategori', 'sortir')
+                                        ->where('a.id_penerima', $h->id_penerima)
+                                        ->selectRaw('b.nm_partai, b.tipe as tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal,c.pcs_awal_ctk as pcs_cbt, c.gr_awal_ctk as gr_cbt')
+                                        ->get()->toArray();
                                 @endphp
                                 @foreach ($detail as $d)
-                                    @php
-                                        $ttlPcs += $d->pcs_awal;
-                                        $ttlGr += $d->gr_awal;
-                                    @endphp
                                     <tr>
                                         <td style="width: 100px"></td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
                                         <td></td>
+                                        <td class="text-end">{{ $d->pcs_cbt }}</td>
+                                        <td class="text-end">{{ $d->gr_cbt }}</td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
                                         <td></td>
@@ -106,8 +104,10 @@
                             <tfoot>
                                 <tr>
                                     <th colspan="5">Total</th>
-                                    <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
-                                    <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'pcs_cbt'), 0) }}</th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'gr_awal'), 0) }}</th>
                                     <td></td>
                                     <td></td>
                                     <td></td>
