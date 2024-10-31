@@ -218,8 +218,8 @@ class BkController extends Controller
                             // empty($row[0]) => "NO LOT TIDAK BOLEH KOSONG",
                             empty($row[0]) => "NAMA PARTAI TIDAK BOLEH KOSONG",
                             // empty($row[6]) => "PENGAWAS TIDAK BOLEH KOSONG",
-                            empty($row[7]) => "GR TIDAK BOLEH KOSONG",
-                            empty($row[8]) => "KATEGORI TIDAK BOLEH KOSONG",
+                            empty($row[6]) => "GR TIDAK BOLEH KOSONG",
+                            // empty($row[8]) => "KATEGORI TIDAK BOLEH KOSONG",
                             // $cekBox ? "NO BOX : $nobox SUDAH ADA" : false,
                         ];
                         DB::rollBack();

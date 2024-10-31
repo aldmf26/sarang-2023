@@ -410,9 +410,7 @@ left join(
 
         $grading_akhir =  DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
         sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
-        FROM grading_partai as a
-        
-        ");
+        FROM grading_partai as a ");
 
         $data = [
             'title' => 'Balance Sheet ',
