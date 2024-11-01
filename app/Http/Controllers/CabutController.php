@@ -540,8 +540,7 @@ class CabutController extends Controller
         group by b.id");
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
-
-
+        dd($tbl);
         $data = [
             'title' => 'Global Rekap',
             'bulan' => $bulan,
@@ -653,7 +652,7 @@ class CabutController extends Controller
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak' AND a.posisi_id = 13
+        WHERE a.kategori != 'cetak' AND b.posisi_id = 13
         group by b.id");
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
