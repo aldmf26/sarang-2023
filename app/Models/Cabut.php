@@ -365,6 +365,7 @@ class Cabut extends Model
         ctk.pcs_akhir_ctk,
         ctk.gr_akhir_ctk,
         ctk.ttl_rp_cetak,
+        b.lokasi,
         umk.nominal as umk_nominal
         FROM 
             (

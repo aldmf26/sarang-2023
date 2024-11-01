@@ -534,13 +534,44 @@ class CabutController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
-        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
-        group by b.id");
+        WHERE b.posisi_id = 13
+        
+        group by b.id ORDER BY b.lokasi ASC");
+
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
+
+        $datas = [];
+        foreach ($pengawas as $p) {
+
+            $ttlRp = 0;
+            $tbl2 = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
+            foreach ($tbl2 as $data) {
+                $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
+                $ttl =
+                    $data->ttl_rp +
+                    $data->eo_ttl_rp +
+                    $data->sortir_ttl_rp +
+                    $data->ttl_rp_cetak +
+                    $uangMakan +
+                    $data->ttl_rp_dll -
+                    $data->ttl_rp_denda;
+                $ttlRp += $ttl;
+            }
+            if ($ttlRp != 0) {
+
+                $datas[] = [
+                    'pgws' => $p->name,
+                    'lokasi' => $p->lokasi,
+                    'ttlRp' => $ttlRp
+                ];
+            }
+        }
 
         $data = [
             'title' => 'Global Rekap',
@@ -549,6 +580,7 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
+            'sumPgws' => $datas,
         ];
         return view('home.cabut.global', $data);
     }
@@ -653,7 +685,7 @@ class CabutController extends Controller
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
+        WHERE a.kategori != 'cetak' AND b.posisi_id = 13
         group by b.id");
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
@@ -863,8 +895,8 @@ class CabutController extends Controller
 
             $sheet->setCellValue('W' . $rowTotal, $dllTtlRp);
             $sheet->setCellValue('X' . $rowTotal, $ttlUangMakan);
-            $sheet->setCellValue('Z' . $rowTotal, $dendaTtlRp);
-            $sheet->setCellValue('AA' . $rowTotal, $ttlTtlRp);
+            $sheet->setCellValue('Y' . $rowTotal, $dendaTtlRp);
+            $sheet->setCellValue('Z' . $rowTotal, $ttlTtlRp);
 
             $sheet->getStyle("A$rowTotal:AA$rowTotal")->applyFromArray($styleBold);
 
