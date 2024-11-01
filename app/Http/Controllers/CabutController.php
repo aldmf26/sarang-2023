@@ -653,7 +653,7 @@ class CabutController extends Controller
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
+        WHERE a.kategori != 'cetak' AND a.posisi_id = 13
         group by b.id");
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
@@ -863,8 +863,8 @@ class CabutController extends Controller
 
             $sheet->setCellValue('W' . $rowTotal, $dllTtlRp);
             $sheet->setCellValue('X' . $rowTotal, $ttlUangMakan);
-            $sheet->setCellValue('Z' . $rowTotal, $dendaTtlRp);
-            $sheet->setCellValue('AA' . $rowTotal, $ttlTtlRp);
+            $sheet->setCellValue('Y' . $rowTotal, $dendaTtlRp);
+            $sheet->setCellValue('Z' . $rowTotal, $ttlTtlRp);
 
             $sheet->getStyle("A$rowTotal:AA$rowTotal")->applyFromArray($styleBold);
 
