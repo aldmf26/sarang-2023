@@ -51,28 +51,38 @@
                     <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
                         <thead>
 
-                            <tr>
+                            <tr class="align-middle">
                                 <th>Partai</th>
                                 <th>No Box</th>
                                 <th>Tipe - ket</th>
-                                <th class="text-end">Pcs </th>
-                                <th class="text-end"> Gr </th>
+                                <th class="text-end" width="100">Pcs Awal Sortir</th>
+                                <th class="text-end" width="100">Gr Awal Sortir</th>
+                                <th class="text-end" width="100">Pcs</th>
+                                <th class="text-end" width="100">Gr</th>
                             </tr>
                         </thead>
                         @php
                             $ttlPcs = 0;
                             $ttlGr = 0;
+
+                            $ttlPcsSrt = 0;
+                            $ttlGrSrt = 0;
                         @endphp
                         @foreach ($formulir as $d)
                             @php
                                 $ttlPcs += $d->pcs;
                                 $ttlGr += $d->gr;
+
+                                $ttlPcsSrt += $d->pcs;
+                                $ttlGrSrt += $d->gr;
                             @endphp
                             <tbody>
                                 <tr>
                                     <td>{{ $d->nm_partai }}</td>
                                     <td>{{ $d->no_box }}</td>
                                     <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
+                                    <td class="text-end">{{ $d->pcs_srt }}</td>
+                                    <td class="text-end">{{ $d->gr_srt }}</td>
                                     <td class="text-end">{{ $d->pcs }}</td>
                                     <td class="text-end">{{ $d->gr }}</td>
                                 </tr>
@@ -81,6 +91,9 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3">Total</th>
+                                <th class="text-end">{{ number_format($ttlPcsSrt, 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlGrSrt, 0) }}</th>
+
                                 <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             </tr>
