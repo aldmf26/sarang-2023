@@ -89,7 +89,7 @@
                                 <td>{{ $f->no_box }}</td>
                                 <td>{{ $f->tipe }}-{{ $f->ket }}</td>
                                 <td class="text-end">{{ $f->pcs_cbt ?? 0 }}</td>
-                                <td class="text-end">{{ $f->gr_cbt ?? $f->gr_eo }}</td>
+                                <td class="text-end">{{ $f->gr_cbt ?? 0 + $f->gr_eo ?? 0 }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
                                 @for ($i = 0; $i < 9; $i++)
