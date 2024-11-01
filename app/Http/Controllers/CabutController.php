@@ -535,39 +535,44 @@ class CabutController extends Controller
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
 
-        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
+        $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
         JOIN users as b on a.penerima = b.id
         WHERE b.posisi_id = 13
-        group by b.id");
+        
+        group by b.id ORDER BY b.lokasi ASC");
 
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
 
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
-        
-        // $groupedData = [];
-        // foreach($pengawas as $p){
-        //     $tblPgws = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
-        //     foreach ($tblPgws as $data) {
-    
-        //         $ttl =
-        //             $data->ttl_rp +
-        //             $data->eo_ttl_rp +
-        //             $data->sortir_ttl_rp +
-        //             $data->ttl_rp_dll -
-        //             $data->ttl_rp_denda;
-    
-        //         $lokasi = $data->lokasi;
-        //         if (!isset($groupedData[$lokasi])) {
-        //             $groupedData[$lokasi] = [
-        //                 'ttl_rp' => 0,
-        //             ];
-        //         }
-        //         $groupedData[$lokasi]['ttl_rp'] += $ttl;
-        //     }
-        // }
-        
-        // dd($groupedData);
+
+        $datas = [];
+        foreach ($pengawas as $p) {
+
+            $ttlRp = 0;
+            $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
+            foreach ($tbl as $data) {
+                $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
+                $ttl =
+                    $data->ttl_rp +
+                    $data->eo_ttl_rp +
+                    $data->sortir_ttl_rp +
+                    $data->ttl_rp_cetak +
+                    $uangMakan +
+                    $data->ttl_rp_dll -
+                    $data->ttl_rp_denda;
+                $ttlRp += $ttl;
+            }
+            if ($ttlRp != 0) {
+
+                $datas[] = [
+                    'pgws' => $p->name,
+                    'lokasi' => $p->lokasi,
+                    'ttlRp' => $ttlRp
+                ];
+            }
+        }
+
         $data = [
             'title' => 'Global Rekap',
             'bulan' => $bulan,
@@ -575,6 +580,7 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
+            'sumPgws' => $datas,
         ];
         return view('home.cabut.global', $data);
     }

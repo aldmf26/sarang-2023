@@ -55,22 +55,75 @@
         <section class="row" x-data="{
             cabut: true,
             eo: true,
-            sortir: true
+            sortir: true,
+            sum: false,
+            data: {{ json_encode($sumPgws) }},
+            totalPerLokasi: {},
+        
+            init() {
+                // Menghitung total per lokasi
+                this.data.forEach(d => {
+                    if (!this.totalPerLokasi[d.lokasi]) {
+                        this.totalPerLokasi[d.lokasi] = 0;
+                    }
+                    this.totalPerLokasi[d.lokasi] += d.ttlRp;
+                });
+            },
+        
+            formatRupiah(value) {
+                // Membulatkan nilai sebelum diformat
+                value = Math.round(value);
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+            }
         }">
-            <div class="col-lg-3 float-start ">
-                <table class="table table-stripped ">
+            <div class="col-lg-3">
+                <h6 @click="sum = !sum">Summary Gaji <span class="badge bg-primary text-white">tampilkan <i
+                            class="fas fa-eye"></i></span></h6>
+                <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th class="">Lokasi</th>
-                            <th class="">Gaji</th>
+                            <th class="bg-primary text-white">Lokasi</th>
+                            <th class="bg-primary text-white">Pgws</th>
+                            <th class="bg-primary text-white text-end">Gaji</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($lokasi as $d)
+                        @foreach ($sumPgws as $d)
+                            <tr>
+                                <td class="text-start">{{ $d['lokasi'] }}</td>
+                                <td class="text-start">{{ $d['pgws'] }}</td>
+                                <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="bg-info text-white">
                         <tr>
-
+                            <th colspan="2" class="text-center">Total</th>
+                            <th class="text-end">
+                                <h6 class="text-white">{{ number_format(sumCol($sumPgws, 'ttlRp')) }}</h6>
+                            </th>
                         </tr>
-                        @endforeach --}}
+                    </tfoot>
+                </table>
+                
+                
+            </div>
+            <div class="col-lg-2">
+                <h6 x-transition x-show="sum">Summary Gaji Perlokasi </h6>
+                <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary text-white">Lokasi</th>
+                            <th class="bg-primary text-white text-end">Ttl Gaji</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="(total, lokasi) in totalPerLokasi">
+                            <tr>
+                                <td x-text="lokasi" class="text-start">{{ $d['lokasi'] }}</td>
+                                <td  x-text="formatRupiah(total)" class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                            </tr>
+                        </template>
                     </tbody>
                 </table>
             </div>
@@ -198,7 +251,7 @@
                             $ttlUangMakan = 0;
 
                         @endphp
-                          @foreach ($tbl as $data)
+                            @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
