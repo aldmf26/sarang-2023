@@ -550,8 +550,8 @@ class CabutController extends Controller
         foreach ($pengawas as $p) {
 
             $ttlRp = 0;
-            $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
-            foreach ($tbl as $data) {
+            $tbl2 = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
+            foreach ($tbl2 as $data) {
                 $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
                 $ttl =
                     $data->ttl_rp +
