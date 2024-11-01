@@ -150,7 +150,7 @@ class OpnameNewController extends Controller
         $kolom = 2;
         foreach ($gudangbksisa as $d) {
             $sheet1->setCellValue('O' . $kolom, $d->nm_partai);
-            $sheet1->setCellValue('P' . $kolom, $d->name);
+            $sheet1->setCellValue('P' . $kolom, $d->name ?? 'sinta');
             $sheet1->setCellValue('Q' . $kolom, $d->no_box);
             $sheet1->setCellValue('R' . $kolom, $d->pcs);
             $sheet1->setCellValue('S' . $kolom, $d->gr);
@@ -980,8 +980,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
 
-            // $sheet4->setCellValue('N' . $kolom, $b->gr_awal);
-            // $sheet4->setCellValue('O' . $kolom, $b->gr_akhir);
+            $sheet4->setCellValue('O' . $kolom, $b->gr_awal);
+            $sheet4->setCellValue('P' . $kolom, $b->gr_akhir);
 
             $kolom++;
         }
@@ -1043,7 +1043,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom_ctk, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom_ctk, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . '%');
 
-            // $sheet4->setCellValue('N' . $kolom_ctk, $b->gr_awal);
+            $sheet4->setCellValue('O' . $kolom_ctk, $b->gr_awal);
+            $sheet4->setCellValue('P' . $kolom_ctk, $b->gr_awal);
             $kolom_ctk++;
         }
         $sheet4->getStyle("B$kolom2:M" . $kolom_ctk - 1)->applyFromArray($style);
@@ -1105,7 +1106,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom_sortir, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom_sortir, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . "%");
 
-            // $sheet4->setCellValue('N' . $kolom_sortir, $b->gr_awal);
+            $sheet4->setCellValue('O' . $kolom_sortir, $b->gr_awal);
+            $sheet4->setCellValue('P' . $kolom_sortir, $b->gr_awal);
             $kolom_sortir++;
         }
         $sheet4->getStyle("B$kolom3:M" . $kolom_sortir - 1)->applyFromArray($style);
