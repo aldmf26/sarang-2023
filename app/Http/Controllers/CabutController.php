@@ -534,13 +534,40 @@ class CabutController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
+
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name FROM bk as a
         JOIN users as b on a.penerima = b.id
-        WHERE a.kategori != 'cetak'
+        WHERE b.posisi_id = 13
         group by b.id");
+
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
+
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
-        dd($tbl);
+
+        
+        // $groupedData = [];
+        // foreach($pengawas as $p){
+        //     $tblPgws = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
+        //     foreach ($tblPgws as $data) {
+    
+        //         $ttl =
+        //             $data->ttl_rp +
+        //             $data->eo_ttl_rp +
+        //             $data->sortir_ttl_rp +
+        //             $data->ttl_rp_dll -
+        //             $data->ttl_rp_denda;
+    
+        //         $lokasi = $data->lokasi;
+        //         if (!isset($groupedData[$lokasi])) {
+        //             $groupedData[$lokasi] = [
+        //                 'ttl_rp' => 0,
+        //             ];
+        //         }
+        //         $groupedData[$lokasi]['ttl_rp'] += $ttl;
+        //     }
+        // }
+        
+        // dd($groupedData);
         $data = [
             'title' => 'Global Rekap',
             'bulan' => $bulan,

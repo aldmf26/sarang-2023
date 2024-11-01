@@ -66,11 +66,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lokasi as $d)
+                        {{-- @foreach ($lokasi as $d)
                         <tr>
 
                         </tr>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             </div>
