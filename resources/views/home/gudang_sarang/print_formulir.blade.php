@@ -79,7 +79,8 @@
                                 $ttlGr += $f->gr_awal;
 
                                 $ttlPcs_cbt += $f->pcs_cbt;
-                                $ttlGr_cbt += $f->gr_cbt ?? $f->gr_eo;
+                                $ttlGr_cbt += $f->gr_cbt;
+                                $ttlGr_cbt += $f->gr_eo ?? 0;
                             @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>

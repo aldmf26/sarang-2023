@@ -32,6 +32,7 @@
 
             </ul>
 
+
         </div>
 
     </x-slot>
@@ -56,7 +57,26 @@
             eo: true,
             sortir: true
         }">
+            <div class="col-lg-3 float-start ">
+                <table class="table table-stripped ">
+                    <thead>
+                        <tr>
+                            <th class="">Lokasi</th>
+                            <th class="">Gaji</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($lokasi as $d)
+                        <tr>
 
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12">
+
+            </div>
             <div class="col-lg-6">
                 <span class="me-2">Filter : </span>
                 <div class="form-check form-check-inline">
@@ -178,7 +198,7 @@
                             $ttlUangMakan = 0;
 
                         @endphp
-                                                             @foreach ($tbl as $data)
+                          @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
