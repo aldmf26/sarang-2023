@@ -120,7 +120,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template x-if="Object.keys(totalPerLokasi).length > 0">
+                        <template x-if="totalPerLokasi.length > 0">
                             <template x-for="(total, lokasi) in totalPerLokasi" :key="lokasi">
                                 <tr>
                                     <td x-text="lokasi" class="text-start"></td>
@@ -130,7 +130,7 @@
                         </template>
                         
                         <!-- Tampilan jika array kosong -->
-                        <template x-if="Object.keys(totalPerLokasi).length === 0">
+                        <template x-if="totalPerLokasi.length === 0">
                             <tr>
                                 <td colspan="2" class="text-center">Data tidak tersedia</td>
                             </tr>
