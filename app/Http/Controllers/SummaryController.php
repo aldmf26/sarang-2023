@@ -1120,7 +1120,7 @@ class SummaryController extends Controller
     public function saveoprasional(Request $r)
     {
         $pengiriman = DB::select("SELECT * FROM pengiriman as a where a.cost_op_cek is null");
-        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.cost_op_cek is null and a.box_pengiriman not in ( SELECT a.no_box FROM pengiriman as a )");
+        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.cost_op_cek is null and a.sudah_kirim = 'T'");
 
         $ttl_gr = sumBk($grading_partai, 'gr') + sumBk($pengiriman, 'gr');
 
@@ -1128,6 +1128,7 @@ class SummaryController extends Controller
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
+
         // Validasi angka mentah
         if (!is_numeric($rawNumber)) {
             return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
