@@ -150,7 +150,7 @@ class OpnameNewController extends Controller
         $kolom = 2;
         foreach ($gudangbksisa as $d) {
             $sheet1->setCellValue('O' . $kolom, $d->nm_partai);
-            $sheet1->setCellValue('P' . $kolom, $d->name);
+            $sheet1->setCellValue('P' . $kolom, $d->name ?? 'sinta');
             $sheet1->setCellValue('Q' . $kolom, $d->no_box);
             $sheet1->setCellValue('R' . $kolom, $d->pcs);
             $sheet1->setCellValue('S' . $kolom, $d->gr);
@@ -980,14 +980,31 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
 
-            // $sheet4->setCellValue('N' . $kolom, $b->gr_awal);
-            // $sheet4->setCellValue('O' . $kolom, $b->gr_akhir);
+            // $sheet4->setCellValue('O' . $kolom, $b->gr_awal);
+            // $sheet4->setCellValue('P' . $kolom, $b->gr_akhir);
 
             $kolom++;
         }
-        $sheet4->getStyle('B3:M' . $kolom - 1)->applyFromArray($style);
+        $kolom_sinta = $kolom;
 
-        $kolom2 = $kolom + 1;
+        $sheet4->setCellValue('B' . $kolom_sinta, 'sinta');
+        $sheet4->setCellValue('C' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$E:$E)');
+        $sheet4->setCellValue('D' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$F:$F)');
+        $sheet4->setCellValue('E' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$R:$R)');
+        $sheet4->setCellValue('F' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$S:$S)');
+        $sheet4->setCellValue('G' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AE:$AE)');
+        $sheet4->setCellValue('H' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AF:$AF)');
+
+        $sheet4->setCellValue('I' . $kolom_sinta, "=C$kolom_sinta+E$kolom_sinta+G$kolom_sinta");
+        $sheet4->setCellValue('J' . $kolom_sinta, "=D$kolom_sinta+F$kolom_sinta+H$kolom_sinta");
+
+
+
+
+
+        $sheet4->getStyle('B3:M' . $kolom_sinta)->applyFromArray($style);
+
+        $kolom2 = $kolom + 3;
 
         $sheet4->mergeCells("C$kolom2:D$kolom2");
         $sheet4->mergeCells("E$kolom2:F$kolom2");
@@ -1043,7 +1060,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom_ctk, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom_ctk, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . '%');
 
-            // $sheet4->setCellValue('N' . $kolom_ctk, $b->gr_awal);
+            $sheet4->setCellValue('O' . $kolom_ctk, $b->gr_awal);
+            $sheet4->setCellValue('P' . $kolom_ctk, $b->gr_awal);
             $kolom_ctk++;
         }
         $sheet4->getStyle("B$kolom2:M" . $kolom_ctk - 1)->applyFromArray($style);
@@ -1105,7 +1123,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom_sortir, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom_sortir, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 2) . "%");
 
-            // $sheet4->setCellValue('N' . $kolom_sortir, $b->gr_awal);
+            $sheet4->setCellValue('O' . $kolom_sortir, $b->gr_awal);
+            $sheet4->setCellValue('P' . $kolom_sortir, $b->gr_awal);
             $kolom_sortir++;
         }
         $sheet4->getStyle("B$kolom3:M" . $kolom_sortir - 1)->applyFromArray($style);

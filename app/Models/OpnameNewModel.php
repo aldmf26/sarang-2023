@@ -455,7 +455,7 @@ group by a.no_box;
                 FROM cabut as a 
                 left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
-                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
+                where a.selesai = 'Y' and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)   and b.baru = 'baru' and a.pcs_awal != 0
 
                 UNION ALL
 
@@ -463,14 +463,14 @@ group by a.no_box;
                 FROM eo as a 
                 LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
-                WHERE a.selesai = 'Y' AND b.baru = 'baru'
+                WHERE a.selesai = 'Y' AND b.baru = 'baru' and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)
 
                 UNION ALL 
                 SELECT a.id_pengawas, a.no_box, b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
                 FROM cabut as a 
                 left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
-                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
+                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0 and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)
 
         ) as a
         group by a.id_pengawas;");
@@ -487,7 +487,7 @@ group by a.no_box;
                 left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
             	left join tb_kelas as d on d.id_kelas = a.id_kelas
-                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
+                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0 and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)
 
                 UNION ALL
 
@@ -496,7 +496,7 @@ group by a.no_box;
                 LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
             left join tb_kelas as d on d.id_kelas = a.id_kelas
-                WHERE a.selesai = 'Y' AND b.baru = 'baru'
+                WHERE a.selesai = 'Y' AND b.baru = 'baru' and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)
 
                 UNION ALL 
                 SELECT a.id_pengawas,concat(d.tipe ) as tipe, a.no_box,  b.nm_partai, c.name, a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_awal, a.gr_akhir as gr_akhir, (b.hrga_satuan * b.gr_awal) as ttl_rp
@@ -504,7 +504,7 @@ group by a.no_box;
                 left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                 left join users as c on c.id = a.id_pengawas
             	left join tb_kelas as d on d.id_kelas = a.id_kelas
-                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
+                where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0 and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box)
 
         ) as a
         group by a.id_pengawas, a.tipe
@@ -531,7 +531,8 @@ group by a.no_box;
             and a.no_box != 9999 
             and a.id_anak != 0 
             and g.kategori = 'CTK' 
-            and e.baru = 'baru' 
+            and e.baru = 'baru'
+            and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'sortir' group by a.no_box)
         group by a.id_pengawas;");
     }
     public static function cetak_susut2()
@@ -554,6 +555,7 @@ group by a.no_box;
             and a.id_anak != 0 
             and g.kategori = 'CTK' 
             and e.baru = 'baru' 
+            and a.no_box in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'sortir' group by a.no_box)
         group by a.id_pengawas, g.kelas
         order by c.name ASC;");
     }
@@ -566,8 +568,6 @@ group by a.no_box;
             left join users as c on a.id_pengawas = c.id
             WHERE a.no_box in (SELECT a.no_box
                         FROM formulir_sarang as a 
-                        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' and b.baru = 'baru'
-                        left join users as c on a.id_penerima = c.id
                         where a.kategori ='grade'
            group by a.no_box) 
            group by a.id_pengawas;");
@@ -582,8 +582,6 @@ group by a.no_box;
             left join tb_kelas_sortir as d on d.id_kelas =  a.id_kelas
             WHERE a.no_box in (SELECT a.no_box
                         FROM formulir_sarang as a 
-                        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut' and b.baru = 'baru'
-                        left join users as c on a.id_penerima = c.id
                         where a.kategori ='grade'
            group by a.no_box) 
            group by a.id_pengawas, d.kelas
