@@ -986,7 +986,7 @@ class OpnameNewController extends Controller
             $kolom++;
         }
 
-        $sheet4->setCellValue('B' . $kolom + 1, $b->name);
+        $sheet4->setCellValue('B' . $kolom + 1, 'sinta');
         $sheet4->setCellValue('C' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$E:$E)');
         $sheet4->setCellValue('D' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$F:$F)');
         $sheet4->setCellValue('E' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$R:$R)');
