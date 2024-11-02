@@ -572,7 +572,6 @@ class CabutController extends Controller
                 ];
             }
         }
-        dd($sumPgws);
         $data = [
             'title' => 'Global Rekap',
             'bulan' => $bulan,
