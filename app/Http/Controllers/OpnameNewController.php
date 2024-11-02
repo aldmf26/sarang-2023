@@ -985,9 +985,30 @@ class OpnameNewController extends Controller
 
             $kolom++;
         }
-        $sheet4->getStyle('B3:M' . $kolom - 1)->applyFromArray($style);
 
-        $kolom2 = $kolom + 1;
+        $sheet4->setCellValue('B' . $kolom + 1, $b->name);
+        $sheet4->setCellValue('C' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$E:$E)');
+        $sheet4->setCellValue('D' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$F:$F)');
+        $sheet4->setCellValue('E' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$R:$R)');
+        $sheet4->setCellValue('F' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$S:$S)');
+        $sheet4->setCellValue('G' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$AE:$AE)');
+        $sheet4->setCellValue('H' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$AF:$AF)');
+
+        $sheet4->setCellValue('I' . $kolom + 1, "=C$kolom + 1+E$kolom + 1+G$kolom + 1");
+        $sheet4->setCellValue('J' . $kolom + 1, "=D$kolom + 1+F$kolom + 1+H$kolom + 1");
+        $sheet4->setCellValue('K' . $kolom + 1, $b->tipe);
+        $sheet4->setCellValue('L' . $kolom + 1, $b->gr_awal - $b->gr_akhir);
+        $sheet4->setCellValue('M' . $kolom + 1, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
+
+        $sheet4->setCellValue('O' . $kolom + 1, $b->gr_awal);
+        $sheet4->setCellValue('P' . $kolom + 1, $b->gr_akhir);
+
+
+
+
+        $sheet4->getStyle('B3:M' . $kolom)->applyFromArray($style);
+
+        $kolom2 = $kolom + 2;
 
         $sheet4->mergeCells("C$kolom2:D$kolom2");
         $sheet4->mergeCells("E$kolom2:F$kolom2");
