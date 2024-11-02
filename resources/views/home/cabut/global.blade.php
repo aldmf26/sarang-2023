@@ -130,7 +130,7 @@
                         </template>
                         
                         <!-- Tampilan jika array kosong -->
-                        <template x-else>
+                        <template x-if="Object.keys(totalPerLokasi).length === 0">
                             <tr>
                                 <td colspan="2" class="text-center">Data tidak tersedia</td>
                             </tr>
