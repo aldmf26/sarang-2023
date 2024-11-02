@@ -1006,9 +1006,9 @@ class OpnameNewController extends Controller
 
 
 
-        $sheet4->getStyle('B3:M' . $kolom)->applyFromArray($style);
+        $sheet4->getStyle('B3:M' . $kolom + 1)->applyFromArray($style);
 
-        $kolom2 = $kolom + 2;
+        $kolom2 = $kolom + 3;
 
         $sheet4->mergeCells("C$kolom2:D$kolom2");
         $sheet4->mergeCells("E$kolom2:F$kolom2");
