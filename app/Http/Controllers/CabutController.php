@@ -546,7 +546,7 @@ class CabutController extends Controller
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
 
-        $datas = [];
+        $sumPgws = [];
         foreach ($pengawas as $p) {
 
             $ttlRp = 0;
@@ -565,14 +565,14 @@ class CabutController extends Controller
             }
             if ($ttlRp != 0) {
 
-                $datas[] = [
+                $sumPgws[] = [
                     'pgws' => $p->name,
                     'lokasi' => $p->lokasi,
                     'ttlRp' => $ttlRp
                 ];
             }
         }
-
+        dd($sumPgws);
         $data = [
             'title' => 'Global Rekap',
             'bulan' => $bulan,
@@ -580,7 +580,7 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
-            'sumPgws' => $datas,
+            'sumPgws' => $sumPgws,
         ];
         return view('home.cabut.global', $data);
     }
