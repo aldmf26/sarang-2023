@@ -120,10 +120,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template x-for="(total, lokasi) in totalPerLokasi">
+                        <template x-if="Object.keys(totalPerLokasi).length > 0">
+                            <template x-for="(total, lokasi) in totalPerLokasi" :key="lokasi">
+                                <tr>
+                                    <td x-text="lokasi" class="text-start"></td>
+                                    <td x-text="formatRupiah(total)" class="text-end"></td>
+                                </tr>
+                            </template>
+                        </template>
+                        
+                        <!-- Tampilan jika array kosong -->
+                        <template x-if="Object.keys(totalPerLokasi).length === 0">
                             <tr>
-                                <td x-text="lokasi" class="text-start">{{ $d['lokasi'] }}</td>
-                                <td  x-text="formatRupiah(total)" class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                                <td colspan="2" class="text-center">Data tidak tersedia</td>
                             </tr>
                         </template>
                     </tbody>
