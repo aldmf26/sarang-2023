@@ -980,8 +980,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('L' . $kolom, $b->gr_awal - $b->gr_akhir);
             $sheet4->setCellValue('M' . $kolom, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
 
-            $sheet4->setCellValue('O' . $kolom, $b->gr_awal);
-            $sheet4->setCellValue('P' . $kolom, $b->gr_akhir);
+            // $sheet4->setCellValue('O' . $kolom, $b->gr_awal);
+            // $sheet4->setCellValue('P' . $kolom, $b->gr_akhir);
 
             $kolom++;
         }
@@ -997,12 +997,7 @@ class OpnameNewController extends Controller
 
         $sheet4->setCellValue('I' . $kolom_sinta, "=C$kolom_sinta+E$kolom_sinta+G$kolom_sinta");
         $sheet4->setCellValue('J' . $kolom_sinta, "=D$kolom_sinta+F$kolom_sinta+H$kolom_sinta");
-        $sheet4->setCellValue('K' . $kolom_sinta, $b->tipe);
-        $sheet4->setCellValue('L' . $kolom_sinta, $b->gr_awal - $b->gr_akhir);
-        $sheet4->setCellValue('M' . $kolom_sinta, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
 
-        $sheet4->setCellValue('O' . $kolom_sinta, $b->gr_awal);
-        $sheet4->setCellValue('P' . $kolom_sinta, $b->gr_akhir);
 
 
 
