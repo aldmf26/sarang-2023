@@ -985,28 +985,29 @@ class OpnameNewController extends Controller
 
             $kolom++;
         }
+        $kolom_sinta = $kolom;
 
-        $sheet4->setCellValue('B' . $kolom + 1, 'sinta');
-        $sheet4->setCellValue('C' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$E:$E)');
-        $sheet4->setCellValue('D' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$F:$F)');
-        $sheet4->setCellValue('E' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$R:$R)');
-        $sheet4->setCellValue('F' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$S:$S)');
-        $sheet4->setCellValue('G' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$AE:$AE)');
-        $sheet4->setCellValue('H' . $kolom + 1, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom + 1 . ',\'Gudang Cabut\'!$AF:$AF)');
+        $sheet4->setCellValue('B' . $kolom_sinta, 'sinta');
+        $sheet4->setCellValue('C' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$E:$E)');
+        $sheet4->setCellValue('D' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$F:$F)');
+        $sheet4->setCellValue('E' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$R:$R)');
+        $sheet4->setCellValue('F' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$S:$S)');
+        $sheet4->setCellValue('G' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AE:$AE)');
+        $sheet4->setCellValue('H' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AF:$AF)');
 
-        $sheet4->setCellValue('I' . $kolom + 1, "=C$kolom + 1+E$kolom + 1+G$kolom + 1");
-        $sheet4->setCellValue('J' . $kolom + 1, "=D$kolom + 1+F$kolom + 1+H$kolom + 1");
-        $sheet4->setCellValue('K' . $kolom + 1, $b->tipe);
-        $sheet4->setCellValue('L' . $kolom + 1, $b->gr_awal - $b->gr_akhir);
-        $sheet4->setCellValue('M' . $kolom + 1, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
+        $sheet4->setCellValue('I' . $kolom_sinta, "=C$kolom_sinta+E$kolom_sinta+G$kolom_sinta");
+        $sheet4->setCellValue('J' . $kolom_sinta, "=D$kolom_sinta+F$kolom_sinta+H$kolom_sinta");
+        $sheet4->setCellValue('K' . $kolom_sinta, $b->tipe);
+        $sheet4->setCellValue('L' . $kolom_sinta, $b->gr_awal - $b->gr_akhir);
+        $sheet4->setCellValue('M' . $kolom_sinta, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 1) . '%');
 
-        $sheet4->setCellValue('O' . $kolom + 1, $b->gr_awal);
-        $sheet4->setCellValue('P' . $kolom + 1, $b->gr_akhir);
-
-
+        $sheet4->setCellValue('O' . $kolom_sinta, $b->gr_awal);
+        $sheet4->setCellValue('P' . $kolom_sinta, $b->gr_akhir);
 
 
-        $sheet4->getStyle('B3:M' . $kolom + 1)->applyFromArray($style);
+
+
+        $sheet4->getStyle('B3:M' . $kolom_sinta)->applyFromArray($style);
 
         $kolom2 = $kolom + 3;
 
