@@ -88,13 +88,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($sumPgws as $d)
-                            <tr>
-                                <td class="text-start">{{ $d['lokasi'] }}</td>
-                                <td class="text-start">{{ $d['pgws'] }}</td>
-                                <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
-                            </tr>
-                        @endforeach
+                        @forelse ($sumPgws as $d)
+                        <tr>
+                            <td class="text-start">{{ $d['lokasi'] }}</td>
+                            <td class="text-start">{{ $d['pgws'] }}</td>
+                            <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                        </tr>
+                        @empty
+                            
+                        @endforelse
                     </tbody>
                     <tfoot class="bg-info text-white">
                         <tr>
