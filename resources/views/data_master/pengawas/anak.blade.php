@@ -1,56 +1,133 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="8">
-    <x-slot name="cardHeader">
-        <h3 class="float-start mt-1">{{ $title }}</h3>
-        <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Tambah" />
-    </x-slot>
+<x-theme.app title="{{ $title }}" table="T" cont="container-fluid">
+    <x-slot name="slot">
+        <div class="p-2" x-data="{
+            cek: [],
+            cekPrint: [],
+            selectedItem: [],
+            tambah(id_anak) {
+                const selectedItem = this.selectedItem
+                const index = selectedItem.findIndex(item => item.id_anak === id_anak);
+                if (index === -1) {
+                    selectedItem.push({
+                        id_anak: id_anak,
+                    });
+                } else {
+                    selectedItem.splice(index, 1);
+                }
+        
+            },
+        }">
 
-    <x-slot name="cardBody">
-        <section class="row">
-            <table class="table" id="table1">
-                <thead>
-                    <tr>
-                        <th width="5">#</th>
-                        <th>Nama</th>
-                        <th>Tgl Masuk</th>
-                        <th>Kelas</th>
-                        <th>Pengawas</th>
-                        <th>Uang Makan</th>
-                        <th width="20%">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($user as $no => $d)
+            <div class="d-flex justify-content-between mb-3 gap-1">
+                <h6>{{ $title }}</h6>
+                <div class="d-flex gap-1">
+                    <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Tambah" />
+                    <div>
+                        <form action="{{ route('pengawas.submit_ceklis') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id_anak" class="form-control" :value="cek.join(',')">
+                            <button value="berhenti" x-transition x-show="cek.length" class="btn btn-sm btn-danger"
+                                name="submit">
+                                Berhenti
+                                <span class="badge bg-white text-black" x-text="cek.length + ' Anak'"
+                                    x-transition></span>
+                            </button>
+                            <button value="bayar" x-transition x-show="cek.length" class="btn btn-sm btn-primary"
+                                name="submit">
+                                Bayar
+                                <span class="badge bg-white text-black" x-text="cek.length + ' Anak'"
+                                    x-transition></span>
+                            </button>
+                            <button value="print" x-transition x-show="cek.length" class="btn btn-sm btn-info"
+                                name="submit">
+                                <i class="fas fa-print"></i>
+                                Print
+                                <span class="badge bg-white text-black" x-text="cek.length + ' Anak'"
+                                    x-transition></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <section class="row">
+                <table class="table" id="nanda">
+                    <thead>
                         <tr>
-                            <td>{{ $no + 1 }}</td>
-                            <td>{{ ucwords($d->nama) }}</td>
-                            <td>{{ tanggal($d->tgl_masuk) }}</td>
-                            <td>{{ ucwords($d->id_kelas) }}</td>
-                            <td>{{ ucwords($d->name) }}</td>
-                            <td class="text-end">Rp. {{ number_format($d->nominal, 0) }}</td>
-                            <td>
-                                {{-- <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a> --}}
-
-                                <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen"
-                                    addClass="float-end edit" teks="" data="id={{ $d->id_anak }}" />
-                            </td>
+                            <th width="5">#</th>
+                            <th>Tgl Masuk</th>
+                            <th>Tgl Dibayar</th>
+                            <th>Nama Karyawan</th>
+                            <th>Kelas</th>
+                            <th>Pembawa</th>
+                            <th>Pengawas</th>
+                            <th>Keterangan</th>
+                            <th>Periode</th>
+                            <th class="text-end">Komisi Rp</th>
+                            <th>Tgl Lunas</th>
+                            <th>Pembayar</th>
+                            <th>Status</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
+                    </thead>
+                    <tbody>
+                        @foreach ($user as $no => $d)
+                            <tr>
+                                <td>{{ $no + 1 }}</td>
+                                <td>{{ tanggal($d->tgl_masuk) }}</td>
+                                <td>{{ !$d->tgl_dibayar ? '' :  tanggal($d->tgl_dibayar) }}</td>
+                                <td>{{ ucwords($d->nama) }}</td>
+                                <td>{{ ucwords($d->id_kelas) }}</td>
+                                <td>{{ ucwords($d->pembawa) }}</td>
+                                <td>{{ ucwords($d->name) }}</td>
+                                <td>{{ "dibayar " . number_format($d->komisi,0) }}</td>
+                                <td>{{ "$d->periode Bulan" }}</td>
+                                <td align="right">{{ number_format($d->komisi,0) }}</td>
+                                <td>{{ tanggal($d->tgl_masuk) }}</td>
+                                <td>{{ "-" }}</td>
+                                <td>
+                                    @if ($d->berhenti == 'Y')
+                                        
+                                    <span class="badge bg-danger">
+                                        Berhenti
+                                    </span>
+                                    @endif
+                                </td>
+                                <td class="d-flex gap-3 align-middle justify-content-center">
+                                    {{-- <a onclick="return confirm('Yakin dihapus ?')" class="btn btn-sm btn-danger float-end" href="{{ route('pengawas.destroy_anak', $d->id_anak) }}"><i class="fas fa-trash"></i></a> --}}
+                                    <div>
+
+                                        <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen"
+                                            addClass="float-end edit" teks="" data="id={{ $d->id_anak }}" />
+                                    </div>
+                                    <div>
+                                        @if ($d->berhenti == 'Y')
+                                        x
+                                        @else
+                                        <input type="checkbox" @change="tambah({{ $d->id_anak }})"
+                                            value="{{ $d->id_anak }}" class="pointer" x-model="cek">
+                                        @endif
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </section>
+        </div>
 
         {{-- ALL MODAL --}}
         <form action="{{ route('pengawas.create_anak') }}" method="post">
             @csrf
             <x-theme.modal idModal="tambah" title="tambah user" btnSave="Y">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Nama Anak</label>
                             <input required type="text" name="nama" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Kelas</label>
                             <select name="kelas" class="select2" id="">
@@ -66,22 +143,57 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="">Pgws Pembawa</label>
+                            <input required type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
+                                class="form-control">
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Pengawas Cbt</label>
+                            <select name="id_pengawas" id="" class="select2">
+                                <option value="">- Pilih Pengawas -</option>
+                                @foreach ($pengawas as $p)
+                                    <option {{ $p->id == auth()->user()->id ? 'selected' : '' }}
+                                        value="{{ $p->id }}">{{ ucwords($p->name) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
                             <label for="">Tgl Masuk</label>
-                            <input required type="date" value="{{ date('Y-m-d') }}" name="tgl_masuk"
+                            <input required type="date" id="tgl_masuk" value="{{ date('Y-m-d') }}" name="tgl_masuk"
                                 class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="">Pengawas</label>
-                            <select name="id_pengawas" id="" class="select2">
-                                <option value="">- Pilih Pengawas -</option>
-                                @foreach ($pengawas as $p)
-                                    <option value="{{ $p->id }}">{{ ucwords($p->name) }}</option>
-                                @endforeach
+                            <label for="">Periode Bulan Bayar</label>
+                            <select required name="periode" id="periode" class="select2">
+                                <option value="">- Periode -</option>
+                                @for ($i = 1; $i < 13; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
                             </select>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Komisi Rp</label>
+                            <input required type="text" value="" name="komisi" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="">Tgl Dibayar</label>
+                            <input readonly id="tgl_dibayar" required type="date" value="{{ date('Y-m-d') }}"
+                                name="tgl_dibayar" class="form-control">
+                        </div>
+                    </div>
+
 
                 </div>
             </x-theme.modal>
@@ -95,9 +207,7 @@
                 </div>
             </x-theme.modal>
         </form>
-
-        {{-- delete --}}
-
+        </div>
     </x-slot>
 
     @section('scripts')
@@ -105,6 +215,21 @@
             $(document).ready(function() {
                 $(".select3").select2()
                 detail('edit', 'id', 'anak', 'get_edit')
+
+                $('#periode, #tgl_masuk').on('change', function() {
+                    let tglMasuk = $('#tgl_masuk').val();
+                    let periode = parseInt($('#periode').val());
+
+                    // Cek apakah kedua input memiliki nilai yang valid
+                    if (tglMasuk && periode) {
+                        let tgl = new Date(tglMasuk);
+                        tgl.setMonth(tgl.getMonth() + periode);
+
+                        // Format tanggal menjadi YYYY-MM-DD
+                        let tglDibayar = tgl.toISOString().split('T')[0];
+                        $('#tgl_dibayar').val(tglDibayar);
+                    }
+                });
             });
         </script>
     @endsection

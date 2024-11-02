@@ -162,6 +162,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/', 'create')->name('create');
             Route::get('/edit', 'edit')->name('edit');
             Route::post('/edit', 'update')->name('update');
+            Route::post('/submit_ceklis', 'submit_ceklis')->name('submit_ceklis');
             Route::get('/delete', 'delete')->name('delete');
         });
     Route::controller(AksesController::class)

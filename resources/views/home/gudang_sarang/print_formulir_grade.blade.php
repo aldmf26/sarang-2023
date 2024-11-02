@@ -73,8 +73,8 @@
                                 $ttlPcs += $d->pcs;
                                 $ttlGr += $d->gr;
 
-                                $ttlPcsSrt += $d->pcs;
-                                $ttlGrSrt += $d->gr;
+                                $ttlPcsSrt += $d->pcs_srt;
+                                $ttlGrSrt += $d->gr_srt;
                             @endphp
                             <tbody>
                                 <tr>
