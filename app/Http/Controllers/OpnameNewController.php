@@ -1193,7 +1193,7 @@ class OpnameNewController extends Controller
 
 
         $sheet4->getStyle("B$kolom4:M" . $kolom_grade)->applyFromArray($style);
-        $sheet4->getStyle("M$kolom:M" . $kolom_grade)->applyFromArray($style_persen);
+        $sheet4->getStyle("M2:M" . $kolom_grade)->applyFromArray($style_persen);
 
 
 
