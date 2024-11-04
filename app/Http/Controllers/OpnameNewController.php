@@ -91,6 +91,8 @@ class OpnameNewController extends Controller
             ],
         ];
 
+
+
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->setActiveSheetIndex(0);
@@ -953,6 +955,14 @@ class OpnameNewController extends Controller
 
         $pgws_cabut = OpnameNewModel::cabut_susut2();
 
+        $style_persen = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ];
+
+
 
 
 
@@ -1183,6 +1193,8 @@ class OpnameNewController extends Controller
 
 
         $sheet4->getStyle("B$kolom4:M" . $kolom_grade)->applyFromArray($style);
+        $sheet4->getStyle("M2:M" . $kolom_grade)->applyFromArray($style_persen);
+
 
 
         $kolom_sifa = $kolom_grade + 2;
@@ -1211,6 +1223,8 @@ class OpnameNewController extends Controller
                 ],
             ],
         ];
+
+
 
         $sheet4->getStyle("C" . $kolom_sifa + 3 . ":D" . $kolom_sifa + 3)->applyFromArray($style2);
 
