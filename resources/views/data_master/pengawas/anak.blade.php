@@ -144,7 +144,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="">Pgws Pembawa</label>
+                            <label for="">Pembawa</label>
                             <input required type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
                                 class="form-control">
                         </div>
