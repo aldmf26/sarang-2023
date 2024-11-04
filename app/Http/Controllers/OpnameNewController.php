@@ -79,6 +79,7 @@ class OpnameNewController extends Controller
             ],
         );
 
+
         $style = [
             'borders' => [
                 'alignment' => [
@@ -867,16 +868,16 @@ class OpnameNewController extends Controller
         $sheet4->getStyle('A2:S' . $kolom - 1)->applyFromArray($style);
         $sheet4->getStyle("A$kolom:S$kolom")->applyFromArray($style_atas);
 
-        // $style2 = [
-        //     'fill' => [
-        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-        //         'startColor' => [
-        //             'argb' => 'FFFF00', // Contoh warna kuning
-        //         ],
-        //     ],
-        // ];
+        $style2 = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFF00', // Contoh warna kuning
+                ],
+            ],
+        ];
 
-        // $sheet4->getStyle('I1:P' . $kolom - 1)->applyFromArray($style2);
+        $sheet4->getStyle("A$kolom:S$kolom")->applyFromArray($style2);
     }
     private function lis_pengiriman($spreadsheet, $style_atas, $style, $model)
     {
@@ -926,11 +927,11 @@ class OpnameNewController extends Controller
         $sheet4->mergeCells('E1:F1');
         $sheet4->mergeCells('G1:H1');
         $sheet4->mergeCells('I1:J1');
-        $sheet4->mergeCells('K1:M1');
+        $sheet4->mergeCells('K1:N1');
 
         $sheet4->mergeCells('B1:B2');
 
-        $sheet4->getStyle("B1:M2")->applyFromArray($style_atas);
+        $sheet4->getStyle("B1:O2")->applyFromArray($style_atas);
 
         $sheet4->setCellValue('A1', 'Cabut');
         $sheet4->setCellValue('B1', 'Nama pengawas');
@@ -948,9 +949,11 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H2', 'gr');
         $sheet4->setCellValue('I2', 'pcs');
         $sheet4->setCellValue('J2', 'gr');
-        $sheet4->setCellValue('K2', 'kelas');
-        $sheet4->setCellValue('L2', 'gr');
-        $sheet4->setCellValue('M2', '%');
+        $sheet4->setCellValue('K2', 'nama posisi');
+        $sheet4->setCellValue('L2', 'kelas');
+        $sheet4->setCellValue('M2', 'gr');
+        $sheet4->setCellValue('N2', 'gr');
+        $sheet4->setCellValue('O2', '%');
 
 
         $pgws_cabut = OpnameNewModel::cabut_susut2();
@@ -959,6 +962,20 @@ class OpnameNewController extends Controller
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ];
+        $style_susut = [
+            'font' => [
+                'color' => ['rgb' => 'FF0000'],
+            ],
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
             ],
         ];
 
@@ -986,9 +1003,19 @@ class OpnameNewController extends Controller
 
             $sheet4->setCellValue('I' . $kolom, "=C$kolom+E$kolom+G$kolom");
             $sheet4->setCellValue('J' . $kolom, "=D$kolom+F$kolom+H$kolom");
-            $sheet4->setCellValue('K' . $kolom, $b->tipe);
-            $sheet4->setCellValue('L' . $kolom, $b->gr_awal - $b->gr_akhir);
-            $sheet4->setCellValue('M' . $kolom, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0) . '%');
+            $sheet4->setCellValue('K' . $kolom, 'Cabut ' . $b->name);
+            $susut = round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0);
+
+            if ($susut > $b->batas_susut) {
+                $stylesst = $style_susut;
+            } else {
+                $stylesst = $style;
+            }
+            $sheet4->setCellValue('L' . $kolom, $b->tipe);
+            $sheet4->setCellValue('M' . $kolom, $b->gr_awal - $b->gr_akhir);
+            $sheet4->setCellValue('N' . $kolom, "=IF(B$kolom=\"\",\"\",SUMIF(\$K:\$K,K$kolom,\$M:\$M))");
+            $sheet4->setCellValue('O' . $kolom, $susut . '%');
+            $sheet4->getStyle("L$kolom:O$kolom")->applyFromArray($stylesst);
 
             // $sheet4->setCellValue('O' . $kolom, $b->gr_awal);
             // $sheet4->setCellValue('P' . $kolom, $b->gr_akhir);
@@ -1012,7 +1039,7 @@ class OpnameNewController extends Controller
 
 
 
-        $sheet4->getStyle('B3:M' . $kolom_sinta)->applyFromArray($style);
+        $sheet4->getStyle('B3:O' . $kolom_sinta)->applyFromArray($style);
 
         $kolom2 = $kolom + 3;
 
@@ -1020,11 +1047,11 @@ class OpnameNewController extends Controller
         $sheet4->mergeCells("E$kolom2:F$kolom2");
         $sheet4->mergeCells("G$kolom2:H$kolom2");
         $sheet4->mergeCells("I$kolom2:J$kolom2");
-        $sheet4->mergeCells("K$kolom2:M$kolom2");
+        $sheet4->mergeCells("K$kolom2:O$kolom2");
 
         $sheet4->mergeCells("B$kolom2:B" . $kolom2 + 1);
 
-        $sheet4->getStyle("B$kolom2:M" . $kolom2 + 1)->applyFromArray($style_atas);
+        $sheet4->getStyle("B$kolom2:O" . $kolom2 + 1)->applyFromArray($style_atas);
 
         $sheet4->setCellValue('A' . $kolom2, 'Cetak');
         $sheet4->setCellValue('B' . $kolom2, 'Nama pengawas');
@@ -1042,9 +1069,11 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H' . $kolom2 + 1, 'gr');
         $sheet4->setCellValue('I' . $kolom2 + 1, 'pcs');
         $sheet4->setCellValue('J' . $kolom2 + 1, 'gr');
-        $sheet4->setCellValue('K' . $kolom2 + 1, 'kelas');
-        $sheet4->setCellValue('L' . $kolom2 + 1, 'gr');
-        $sheet4->setCellValue('M' . $kolom2 + 1, '%');
+        $sheet4->setCellValue('K' . $kolom2 + 1, 'nama posisi');
+        $sheet4->setCellValue('L' . $kolom2 + 1, 'kelas');
+        $sheet4->setCellValue('M' . $kolom2 + 1, 'gr');
+        $sheet4->setCellValue('N' . $kolom2 + 1, 'gr');
+        $sheet4->setCellValue('O' . $kolom2 + 1, '%');
 
         $pgws_cetak = OpnameNewModel::cetak_susut2();
 
@@ -1066,15 +1095,24 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('H' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AF:$AF)');
             $sheet4->setCellValue('I' . $kolom_ctk, "=C$kolom_ctk+E$kolom_ctk+G$kolom_ctk");
             $sheet4->setCellValue('J' . $kolom_ctk, "=D$kolom_ctk+F$kolom_ctk+H$kolom_ctk");
-            $sheet4->setCellValue('K' . $kolom_ctk, $b->kelas);
-            $sheet4->setCellValue('L' . $kolom_ctk, $b->gr_awal - $b->gr_akhir);
-            $sheet4->setCellValue('M' . $kolom_ctk, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0) . '%');
+            $susut_ctk = round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0);
+            if ($susut_ctk > $b->batas_susut) {
+                $stylesst = $style_susut;
+            } else {
+                $stylesst = $style;
+            }
+            $sheet4->setCellValue('K' . $kolom_ctk, 'Cetak ' . $b->name);
+            $sheet4->setCellValue('L' . $kolom_ctk, $b->kelas);
+            $sheet4->setCellValue('M' . $kolom_ctk, $b->gr_awal - $b->gr_akhir);
+            $sheet4->setCellValue('N' . $kolom_ctk, "=IF(B$kolom_ctk=\"\",\"\",SUMIF(\$K:\$K,K$kolom_ctk,\$M:\$M))");
+            $sheet4->setCellValue('O' . $kolom_ctk, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0) . '%');
+            $sheet4->getStyle("L$kolom_ctk:O$kolom_ctk")->applyFromArray($stylesst);
 
             // $sheet4->setCellValue('O' . $kolom_ctk, $b->gr_awal);
             // $sheet4->setCellValue('P' . $kolom_ctk, $b->gr_awal);
             $kolom_ctk++;
         }
-        $sheet4->getStyle("B$kolom2:M" . $kolom_ctk - 1)->applyFromArray($style);
+        $sheet4->getStyle("B$kolom2:O" . $kolom_ctk - 1)->applyFromArray($style);
 
 
         $kolom3 = $kolom_ctk + 1;
@@ -1082,11 +1120,11 @@ class OpnameNewController extends Controller
         $sheet4->mergeCells("E$kolom3:F$kolom3");
         $sheet4->mergeCells("G$kolom3:H$kolom3");
         $sheet4->mergeCells("I$kolom3:J$kolom3");
-        $sheet4->mergeCells("K$kolom3:M$kolom3");
+        $sheet4->mergeCells("K$kolom3:O$kolom3");
 
         $sheet4->mergeCells("B$kolom3:B" . $kolom3 + 1);
 
-        $sheet4->getStyle("B$kolom3:M" . $kolom3 + 1)->applyFromArray($style_atas);
+        $sheet4->getStyle("B$kolom3:O" . $kolom3 + 1)->applyFromArray($style_atas);
 
         $sheet4->setCellValue('A' . $kolom3, 'Sortir');
         $sheet4->setCellValue('B' . $kolom3, 'Nama pengawas');
@@ -1104,9 +1142,11 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H' . $kolom3 + 1, 'gr');
         $sheet4->setCellValue('I' . $kolom3 + 1, 'pcs');
         $sheet4->setCellValue('J' . $kolom3 + 1, 'gr');
-        $sheet4->setCellValue('K' . $kolom3 + 1, 'kelas');
-        $sheet4->setCellValue('L' . $kolom3 + 1, 'gr');
-        $sheet4->setCellValue('M' . $kolom3 + 1, '%');
+        $sheet4->setCellValue('K' . $kolom3 + 1, 'nama posisi');
+        $sheet4->setCellValue('L' . $kolom3 + 1, 'kelas');
+        $sheet4->setCellValue('M' . $kolom3 + 1, 'gr');
+        $sheet4->setCellValue('N' . $kolom3 + 1, 'gr');
+        $sheet4->setCellValue('O' . $kolom3 + 1, '%');
 
         $pgws_sortir = OpnameNewModel::sortir_susut2();
 
@@ -1129,15 +1169,24 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('H' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AF:$AF)');
             $sheet4->setCellValue('I' . $kolom_sortir, "=C$kolom_sortir+E$kolom_sortir+G$kolom_sortir");
             $sheet4->setCellValue('J' . $kolom_sortir, "=D$kolom_sortir+F$kolom_sortir+H$kolom_sortir");
-            $sheet4->setCellValue('K' . $kolom_sortir, $b->kelas);
-            $sheet4->setCellValue('L' . $kolom_sortir, $b->gr_awal - $b->gr_akhir);
-            $sheet4->setCellValue('M' . $kolom_sortir, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0) . "%");
+            $sheet4->setCellValue('K' . $kolom_sortir, 'Sortir ' . $b->name);
+            $susut_str = round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0);
+            if ($susut_str > $b->bts_denda_sst) {
+                $stylesst = $style_susut;
+            } else {
+                $stylesst = $style;
+            }
+            $sheet4->setCellValue('L' . $kolom_sortir, $b->kelas);
+            $sheet4->setCellValue('M' . $kolom_sortir, $b->gr_awal - $b->gr_akhir);
+            $sheet4->setCellValue('N' . $kolom_sortir, "=IF(B$kolom_sortir=\"\",\"\",SUMIF(\$K:\$K,K$kolom_sortir,\$M:\$M))");
+            $sheet4->setCellValue('O' . $kolom_sortir, round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0) . "%");
+            $sheet4->getStyle("L$kolom_sortir:O$kolom_sortir")->applyFromArray($stylesst);
 
             // $sheet4->setCellValue('O' . $kolom_sortir, $b->gr_awal);
             // $sheet4->setCellValue('P' . $kolom_sortir, $b->gr_awal);
             $kolom_sortir++;
         }
-        $sheet4->getStyle("B$kolom3:M" . $kolom_sortir - 1)->applyFromArray($style);
+        $sheet4->getStyle("B$kolom3:O" . $kolom_sortir - 1)->applyFromArray($style);
 
 
         $kolom4 = $kolom_sortir + 1;
@@ -1145,11 +1194,11 @@ class OpnameNewController extends Controller
         $sheet4->mergeCells("E$kolom4:F$kolom4");
         $sheet4->mergeCells("G$kolom4:H$kolom4");
         $sheet4->mergeCells("I$kolom4:J$kolom4");
-        $sheet4->mergeCells("K$kolom4:M$kolom4");
+        $sheet4->mergeCells("K$kolom4:O$kolom4");
 
         $sheet4->mergeCells("B$kolom4:B" . $kolom4 + 1);
 
-        $sheet4->getStyle("B$kolom4:M" . $kolom4 + 1)->applyFromArray($style_atas);
+        $sheet4->getStyle("B$kolom4:O" . $kolom4 + 1)->applyFromArray($style_atas);
 
         $sheet4->setCellValue('A' . $kolom4, 'Grading');
         $sheet4->setCellValue('B' . $kolom4, 'Nama pengawas');
@@ -1167,9 +1216,11 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H' . $kolom4 + 1, 'gr');
         $sheet4->setCellValue('I' . $kolom4 + 1, 'pcs');
         $sheet4->setCellValue('J' . $kolom4 + 1, 'gr');
-        $sheet4->setCellValue('K' . $kolom4 + 1, 'kelas');
-        $sheet4->setCellValue('L' . $kolom4 + 1, 'gr');
-        $sheet4->setCellValue('M' . $kolom4 + 1, '%');
+        $sheet4->setCellValue('K' . $kolom4 + 1, 'nama posisi');
+        $sheet4->setCellValue('L' . $kolom4 + 1, 'kelas');
+        $sheet4->setCellValue('M' . $kolom4 + 1, 'gr');
+        $sheet4->setCellValue('N' . $kolom4 + 1, 'gr');
+        $sheet4->setCellValue('O' . $kolom4 + 1, '%');
 
 
 
@@ -1188,12 +1239,14 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('I' . $kolom_grade, "=C$kolom_grade+E$kolom_grade+G$kolom_grade");
         $sheet4->setCellValue('J' . $kolom_grade, "=D$kolom_grade+F$kolom_grade+H$kolom_grade");
         $sheet4->setCellValue('K' . $kolom_grade, "-");
-        $sheet4->setCellValue('L' . $kolom_grade, $susut_grading->gr_susut);
-        $sheet4->setCellValue('M' . $kolom_grade, "=ROUND((1- (J$kolom_grade/(L$kolom_grade+J$kolom_grade))) * 100,0)");
+        $sheet4->setCellValue('L' . $kolom_grade, "-");
+        $sheet4->setCellValue('M' . $kolom_grade, $susut_grading->gr_susut);
+        $sheet4->setCellValue('N' . $kolom_grade, $susut_grading->gr_susut);
+        $sheet4->setCellValue('O' . $kolom_grade, "=ROUND((1- (J$kolom_grade/(M$kolom_grade+J$kolom_grade))) * 100,0)");
 
 
-        $sheet4->getStyle("B$kolom4:M" . $kolom_grade)->applyFromArray($style);
-        $sheet4->getStyle("M2:M" . $kolom_grade)->applyFromArray($style_persen);
+        $sheet4->getStyle("B$kolom4:O" . $kolom_grade)->applyFromArray($style);
+        $sheet4->getStyle("O2:O" . $kolom_grade)->applyFromArray($style_persen);
 
 
 
@@ -1275,7 +1328,14 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('H' . $last_kolom, 'Total');
         $sheet4->setCellValue('I' . $last_kolom, "=SUM(I3:I$kolom_pengiriman)");
         $sheet4->setCellValue('J' . $last_kolom, "=SUM(J3:J$kolom_pengiriman)");
-        $sheet4->setCellValue('L' . $last_kolom, "=SUM(L3:L$kolom_pengiriman)");
+
+        $sheet4->getStyle("H$last_kolom:J$last_kolom")->applyFromArray($style);
+
+        $sheet4->setCellValue('L' . $last_kolom, 'Total');
+        $sheet4->setCellValue('M' . $last_kolom, "=SUM(M3:M$kolom_pengiriman)");
+        $sheet4->setCellValue('N' . $last_kolom, "=SUM(N3:N$kolom_pengiriman)");
+
+        $sheet4->getStyle("L$last_kolom:N$last_kolom")->applyFromArray($style);
     }
 
 
