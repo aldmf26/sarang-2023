@@ -41,15 +41,38 @@ class PengawasController extends Controller
 
     public function create_anak(Request $r)
     {
-
         DB::table('tb_anak')->insert([
             'tgl_masuk' => $r->tgl_masuk,
             'nama' => $r->nama,
+            'pembawa' => $r->pembawa,
+            'periode' => $r->periode,
+            'komisi' => $r->komisi,
+            'tgl_dibayar' => $r->tgl_dibayar,
             'id_kelas' => $r->kelas,
             'id_pengawas' => $r->id_pengawas,
         ]);
 
         return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
+    }
+
+    public function submit_ceklis(Request $r)
+    {
+        $submit = $r->submit;
+        $id_anak = explode(',', $r->id_anak);
+        
+        if ($submit == 'berhenti') {
+            DB::table('tb_anak')->whereIn('id_anak', $id_anak)->update(['berhenti' => 'Y']);
+            return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
+        }
+
+        if ($submit == 'bayar') {
+            $data = [
+                'title' => 'Print Invoice',
+                'anak' => DB::table('tb_anak')->whereIn('id_anak', $id_anak)->get(),
+            ];
+
+            return view('data_master.pengawas.create_invoice', $data);
+        }
     }
 
     public function anak_detail($id)
