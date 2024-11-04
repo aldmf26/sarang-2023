@@ -23,8 +23,7 @@
                 <div class="d-flex gap-1">
                     <x-theme.button modal="Y" idModal="tambah" icon="fa-plus" addClass="float-end" teks="Tambah" />
                     <div>
-                        <form action="{{ route('pengawas.submit_ceklis') }}" method="post">
-                            @csrf
+                        <form action="{{ route('pengawas.create_invoice') }}" method="get">
                             <input type="hidden" name="id_anak" class="form-control" :value="cek.join(',')">
                             <button value="berhenti" x-transition x-show="cek.length" class="btn btn-sm btn-danger"
                                 name="submit">
@@ -35,13 +34,6 @@
                             <button value="bayar" x-transition x-show="cek.length" class="btn btn-sm btn-primary"
                                 name="submit">
                                 Bayar
-                                <span class="badge bg-white text-black" x-text="cek.length + ' Anak'"
-                                    x-transition></span>
-                            </button>
-                            <button value="print" x-transition x-show="cek.length" class="btn btn-sm btn-info"
-                                name="submit">
-                                <i class="fas fa-print"></i>
-                                Print
                                 <span class="badge bg-white text-black" x-text="cek.length + ' Anak'"
                                     x-transition></span>
                             </button>
@@ -74,22 +66,31 @@
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ tanggal($d->tgl_masuk) }}</td>
-                                <td>{{ !$d->tgl_dibayar ? '' :  tanggal($d->tgl_dibayar) }}</td>
+                                <td>{{ !$d->tgl_dibayar ? '' : tanggal($d->tgl_dibayar) }}</td>
                                 <td>{{ ucwords($d->nama) }}</td>
                                 <td>{{ ucwords($d->id_kelas) }}</td>
                                 <td>{{ ucwords($d->pembawa) }}</td>
                                 <td>{{ ucwords($d->name) }}</td>
-                                <td>{{ "dibayar " . number_format($d->komisi,0) }}</td>
+                                <td>{{ 'dibayar ' . number_format($d->komisi, 0) }}</td>
                                 <td>{{ "$d->periode Bulan" }}</td>
-                                <td align="right">{{ number_format($d->komisi,0) }}</td>
-                                <td>{{ tanggal($d->tgl_masuk) }}</td>
-                                <td>{{ "-" }}</td>
+                                <td align="right">{{ number_format($d->komisi, 0) }}</td>
+                                <td>{{ !empty($d->tgl_lunas) ? tanggal($d->tgl_lunas) : '-' }}</td>
+                                <td>
+                                    <a target="_blank"
+                                        href="{{ route('pengawas.invoice', ['no_invoice' => $d->no_invoice]) }}">
+                                        {{ $d->pembayar ? $d->no_invoice . ' ' . $d->pembayar : '-' }}
+                                    </a>
+                                </td>
                                 <td>
                                     @if ($d->berhenti == 'Y')
-                                        
-                                    <span class="badge bg-danger">
-                                        Berhenti
-                                    </span>
+                                        <span class="badge bg-danger">
+                                            Berhenti
+                                        </span>
+                                    @endif
+                                    @if ($d->pembayar)
+                                        <span class="badge bg-success">
+                                            Lunas
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="d-flex gap-3 align-middle justify-content-center">
@@ -100,11 +101,11 @@
                                             addClass="float-end edit" teks="" data="id={{ $d->id_anak }}" />
                                     </div>
                                     <div>
-                                        @if ($d->berhenti == 'Y')
-                                        x
+                                        @if ($d->berhenti == 'Y' || $d->pembayar)
+                                            x
                                         @else
-                                        <input type="checkbox" @change="tambah({{ $d->id_anak }})"
-                                            value="{{ $d->id_anak }}" class="pointer" x-model="cek">
+                                            <input type="checkbox" @change="tambah({{ $d->id_anak }})"
+                                                value="{{ $d->id_anak }}" class="pointer" x-model="cek">
                                         @endif
                                     </div>
                                 </td>
@@ -172,7 +173,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Periode Bulan Bayar</label>
-                            <select required name="periode" id="periode" class="select2">
+                            <select required name="periode" id="periode" class="select3">
                                 <option value="">- Periode -</option>
                                 @for ($i = 1; $i < 13; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -214,22 +215,51 @@
         <script>
             $(document).ready(function() {
                 $(".select3").select2()
-                detail('edit', 'id', 'anak', 'get_edit')
+                detailEdit('edit', 'id', 'anak', 'get_edit')
+                tglBayar('periode', 'tgl_masuk', 'tgl_dibayar')
 
-                $('#periode, #tgl_masuk').on('change', function() {
-                    let tglMasuk = $('#tgl_masuk').val();
-                    let periode = parseInt($('#periode').val());
+                function detailEdit(kelas, attr, link, load) {
+                    $(document).on('click', `.${kelas}`, function() {
+                        var id = $(this).attr(`${attr}`)
+                        alert(id)
+                        $.ajax({
+                            type: "GET",
+                            url: `${link}/${id}`,
+                            success: function(r) {
+                                $(`#${load}`).html(r);
+                                $('.select2-edit').select2({
+                                    dropdownParent: $('#edit .modal-content')
+                                });
+                                $('#tableDetail').DataTable({
+                                    "paging": true,
+                                    "pageLength": 10,
+                                    "lengthChange": true,
+                                    "stateSave": true,
+                                    "searching": true,
+                                });
+                                tglBayar('periode' + id  , 'tgl_masuk' + id, 'tgl_dibayar' + id)
+                            }
+                        });
+                    })
+                }
 
-                    // Cek apakah kedua input memiliki nilai yang valid
-                    if (tglMasuk && periode) {
-                        let tgl = new Date(tglMasuk);
-                        tgl.setMonth(tgl.getMonth() + periode);
+                function tglBayar(periode,tgl_masuk,tgl_dibayar) {
+                    $(document).on('change', `#${periode}, #${tgl_masuk}`, function() {
+                        let tglMasuk = $(`#${tgl_masuk}`).val();
+                        let periode = parseInt($(`#${periode}`).val());
 
-                        // Format tanggal menjadi YYYY-MM-DD
-                        let tglDibayar = tgl.toISOString().split('T')[0];
-                        $('#tgl_dibayar').val(tglDibayar);
-                    }
-                });
+                        // Cek apakah kedua input memiliki nilai yang valid
+                        if (tglMasuk && periode) {
+                            let tgl = new Date(tglMasuk);
+                            tgl.setMonth(tgl.getMonth() + periode);
+
+                            // Format tanggal menjadi YYYY-MM-DD
+                            let tglDibayar = tgl.toISOString().split('T')[0];
+                            $(`#${tgl_dibayar}`).val(tglDibayar);
+                        }
+                    })
+                  
+                }
             });
         </script>
     @endsection
