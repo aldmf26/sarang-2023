@@ -145,7 +145,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Pembawa</label>
-                            <input required type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
+                            <input type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
                                 class="form-control">
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Periode Bulan Bayar</label>
-                            <select required name="periode" id="periode" class="select2">
+                            <select  name="periode" id="periode" class="select2">
                                 <option value="">- Periode -</option>
                                 @for ($i = 1; $i < 13; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -184,7 +184,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Komisi Rp</label>
-                            <input required type="text" value="" name="komisi" class="form-control">
+                            <input  type="text" value="" name="komisi" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-12">
