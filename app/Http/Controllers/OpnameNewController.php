@@ -879,7 +879,8 @@ class OpnameNewController extends Controller
 
         $sheet4->getStyle("A$kolom:S$kolom")->applyFromArray($style2);
     }
-    private function lis_pengiriman($spreadsheet, $style_atas, $style, $model)
+
+    private function lis_pengiriman($spreadsheet, $style_atas, $style)
     {
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(7);
@@ -915,6 +916,7 @@ class OpnameNewController extends Controller
         }
         $sheet4->getStyle('A2:I' . $kolom - 1)->applyFromArray($style);
     }
+
 
     private function rekapPengawas($spreadsheet, $style_atas, $style, $model)
     {
