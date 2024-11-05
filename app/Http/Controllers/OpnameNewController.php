@@ -888,7 +888,7 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(7);
         $sheet4->setTitle('List Pengiriman');
 
-        $sheet4->getStyle("A1:I1")->applyFromArray($style_atas);
+        $sheet4->getStyle("A1:J1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'No');
         $sheet4->setCellValue('B1', 'tgl kirim');
         $sheet4->setCellValue('C1', 'no packing list');
@@ -919,7 +919,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('J' . $kolom, $totalRp);
             $kolom++;
         }
-        $sheet4->getStyle('A2:I' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle('A2:J' . $kolom - 1)->applyFromArray($style);
     }
 
     private function rekapPengawas($spreadsheet, $style_atas, $style, $model)
