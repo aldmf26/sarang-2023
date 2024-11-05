@@ -89,6 +89,7 @@
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp / $cbt_proses->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->cost_kerja, 0) }}</td>
+                        <td class="text-end">{{ number_format($cbt_proses->ttl_rp + $cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
