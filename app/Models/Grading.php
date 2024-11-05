@@ -596,7 +596,11 @@ left join(
             c.box as ttl_box,
             sum(a.pcs) as pcs,
             sum(a.gr + (a.gr / b.kadar)) as gr_naik,
-            sum(a.gr) as gr
+            sum(a.gr) as gr,
+            sum(a.cost_bk) as cost_bk,
+            sum(a.cost_kerja) as cost_kerja,
+            sum(a.cost_cu) as cost_cu,
+            sum(a.cost_op) as cost_op
         from pengiriman as a 
         join (
             select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 

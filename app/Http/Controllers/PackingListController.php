@@ -185,7 +185,8 @@ class PackingListController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(0);
         $sheet4->setTitle('List Pengiriman');
 
-        $sheet4->getStyle("A1:I1")->applyFromArray($style_atas);
+        $sheet4->getStyle("A1:J1")->applyFromArray($style_atas);
+        
         $sheet4->setCellValue('A1', 'No');
         $sheet4->setCellValue('B1', 'tgl kirim');
         $sheet4->setCellValue('C1', 'no packing list');
@@ -195,6 +196,7 @@ class PackingListController extends Controller
         $sheet4->setCellValue('G1', 'pcs');
         $sheet4->setCellValue('H1', 'gr');
         $sheet4->setCellValue('I1', 'gr + kadar');
+        $sheet4->setCellValue('J1', 'Total Rp');
 
         $packing_list = Grading::list_pengiriman_sum();
 
@@ -210,9 +212,13 @@ class PackingListController extends Controller
             $sheet4->setCellValue('G' . $kolom, $d->pcs);
             $sheet4->setCellValue('H' . $kolom, $d->gr);
             $sheet4->setCellValue('I' . $kolom, $d->gr_naik);
+
+            $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
+
+            $sheet4->setCellValue('J' . $kolom, $totalRp);
             $kolom++;
         }
-        $sheet4->getStyle('A2:I' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle('A2:J' . $kolom - 1)->applyFromArray($style);
     }
 
     public function export()
