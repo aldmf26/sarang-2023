@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
     </x-slot>
@@ -34,7 +34,9 @@
                                 <td>{{ strtoupper($d->tujuan) }}</td>
                                 <td align="center">{{ $d->ttl_box }}</td>
                                 <td align="right">{{ number_format($d->pcs, 0) }}</td>
-                                <td align="right"><a target="_blank" href="{{ route('detail.list_pengiriman', ['no_nota' => $d->no_nota]) }}">{{ number_format($d->gr, 0) }}</a></td>
+                                <td align="right"><a target="_blank"
+                                        href="{{ route('detail.list_pengiriman', ['no_nota' => $d->no_nota]) }}">{{ number_format($d->gr, 0) }}</a>
+                                </td>
                                 <td align="right">{{ number_format($d->gr_naik, 0) }}</td>
                             </tr>
                         @endforeach

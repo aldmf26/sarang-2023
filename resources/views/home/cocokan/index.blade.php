@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
     </x-slot>
@@ -6,8 +6,11 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
-            <Label>Bk dari sinta</Label>
+
             <div class="col-lg-4">
+                <div>
+                    <h6>Bk Sinta</h6>
+                </div>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead text-end">Pcs</th>
@@ -23,6 +26,9 @@
                 </table>
             </div>
             <div class="col-lg-8">
+                <div>
+                    <h6>Cabut Kerja</h6>
+                </div>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -106,6 +112,8 @@
 
                 </table>
             </div>
+
+
         </section>
 
 
@@ -116,6 +124,9 @@
 
 
         @section('scripts')
+            <script>
+                pencarian('tbl1input', 'tbl1')
+            </script>
             <script>
                 get_opr();
 
@@ -144,5 +155,6 @@
                 }
             </script>
         @endsection
+
     </x-slot>
 </x-theme.app>

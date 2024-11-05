@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
     </x-slot>
@@ -6,8 +6,11 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
-            <Label>{{ $title }}</Label>
+
             <div class="col-lg-4">
+                <div>
+                    <h6>Cabut Akhir</h6>
+                </div>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -31,13 +34,17 @@
                         <td class="fw-bold">Total</td>
                         <td class="text-end fw-bold">{{ number_format($ctk_opname->pcs + $akhir_cbt->pcs, 0) }}</td>
                         <td class="text-end fw-bold">{{ number_format($ctk_opname->gr + $akhir_cbt->gr, 0) }}</td>
-                        <td class="text-end fw-bold">{{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp, 0) }}
+                        <td class="text-end fw-bold">
+                            {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp, 0) }}
                         </td>
                     </tr>
 
                 </table>
             </div>
             <div class="col-lg-8">
+                <div>
+                    <h6>Cetak Kerja</h6>
+                </div>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -94,7 +101,8 @@
                         </td>
                         <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
                         <td class="text-end">{{ number_format($cetak_proses->cost_kerja, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_proses->cost_kerja + $cetak_proses->ttl_rp, 0) }}
+                        <td class="text-end">
+                            {{ number_format($cetak_proses->cost_kerja + $cetak_proses->ttl_rp, 0) }}
                         </td>
                     </tr>
                     <tr>
@@ -132,6 +140,8 @@
 
                 </table>
             </div>
+
+
         </section>
 
 
@@ -142,6 +152,9 @@
 
 
         @section('scripts')
+            <script>
+                pencarian('tbl1input', 'tbl1')
+            </script>
             <script>
                 get_opr();
 
@@ -170,5 +183,6 @@
                 }
             </script>
         @endsection
+
     </x-slot>
 </x-theme.app>
