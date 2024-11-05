@@ -63,7 +63,7 @@ class CocokanController extends Controller
         $akhir_cbt = new stdClass();
         $akhir_cbt->pcs = $ca2->pcs + $ca12suntik->pcs;
         $akhir_cbt->gr = $ca2->gr + $ca12suntik->gr;
-        $akhir_cbt->ttl_rp = $ca2->ttl_rp + $ca12suntik->ttl_rp;
+        $akhir_cbt->ttl_rp = $ca2->ttl_rp + $ca12suntik->ttl_rp + $ca2->cost_kerja;
 
 
 

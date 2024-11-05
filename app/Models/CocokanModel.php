@@ -132,7 +132,8 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
     public static function cetak_stok_awal()
     {
         $result = DB::selectOne("SELECT a.no_box, b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
-                    d.ttl_rp as cost_cbt, c.nm_partai, c.pcs_awal as pcs_bk, (d.gr_akhir * f.rp_gr) as cost_op, z.cost_cu
+                    sum(COALESCE(d.ttl_rp,0) + COALESCE(g.ttl_rp,0)) as cost_kerja, 
+                    c.nm_partai, c.pcs_awal as pcs_bk, (d.gr_akhir * f.rp_gr) as cost_op, z.cost_cu
                 FROM formulir_sarang as a 
                 left join users as b on b.id = a.id_penerima
                 left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
@@ -156,10 +157,13 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
 
     public static function cetak_proses()
     {
-        $result = DB::selectOne("SELECT sum(a.ttl_rp) as cost_kerja,sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp, sum(a.ttl_rp) as cost_kerja
+        $result = DB::selectOne("SELECT sum(a.ttl_rp) as cost_kerja,sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, 
+        sum(COALESCE(d.gr_awal * d.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp, sum(a.ttl_rp) as cost_kerja
             FROM cetak_new as a 
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
             left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
+            left join cabut as c on c.no_box = a.no_box
+            left join eo as e on e.no_box = a.no_box
             where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
             order by a.no_box ASC;
         ");
@@ -169,9 +173,11 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
 
     public static function cetak_stok()
     {
-        $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.hrga_satuan  * c.gr_awal) as ttl_rp
+        $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(COALESCE(c.hrga_satuan  * c.gr_awal,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as ttl_rp
                 FROM formulir_sarang as a 
                 left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
+                left join cabut as d on d.no_box = a.no_box and a.kategori = 'cetak'
+                left join eo as e on e.no_box = a.no_box and a.kategori = 'cetak'
                 WHERE a.kategori = 'cetak'   
                 and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
         ");
@@ -181,11 +187,14 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
 
     public static function cetak_selesai()
     {
-        $result = DB::selectOne("SELECT sum(COALESCE(a.pcs_akhir,0) + COALESCE(a.pcs_tdk_cetak,0)) as pcs, sum(COALESCE(a.gr_akhir,0) + COALESCE(a.gr_tdk_cetak,0)) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp, sum(a.ttl_rp) as cost_kerja
+        $result = DB::selectOne("SELECT sum(COALESCE(a.pcs_akhir,0) + COALESCE(a.pcs_tdk_cetak,0)) as pcs, sum(COALESCE(a.gr_akhir,0) + COALESCE(a.gr_tdk_cetak,0)) as gr, sum(COALESCE(e.gr_awal * e.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0)) as ttl_rp, sum(a.ttl_rp) as cost_kerja
         FROM cetak_new as a 
         left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
+        
         left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
         join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
+        left join cabut as c on c.no_box = a.no_box
+        left join eo as d on d.no_box = a.no_box
         where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru';
         ");
 
@@ -194,9 +203,11 @@ SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b
 
     public static function stock_sortir_awal()
     {
-        $result = DB::selectOne("SELECT SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.gr_awal * b.hrga_satuan) as ttl_rp
+        $result = DB::selectOne("SELECT SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, 
+        SUM(COALESCE(b.gr_awal * b.hrga_satuan,0) ) as ttl_rp
         FROM formulir_sarang as a 
         LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        
         WHERE b.baru = 'baru' AND a.kategori = 'sortir';
         ");
 

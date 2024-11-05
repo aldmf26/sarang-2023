@@ -16,6 +16,7 @@ use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\OpnameNewController;
+use App\Http\Controllers\OpnameSusutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RekapGajiPeranakController;
@@ -306,7 +307,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/grading', 'grading')->name('grading');
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
-            Route::get('/opname', 'opname')->name('opname');
+            // Route::get('/opname', 'opname')->name('opname');
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
         });
     Route::controller(OpnameNewController::class)
@@ -379,5 +380,11 @@ Route::middleware('auth')->group(function () {
         ->name('exportcost.')
         ->group(function () {
             Route::get('/export', 'export')->name('export');
+        });
+    Route::controller(OpnameSusutController::class)
+        ->prefix('home/cocokan')
+        ->name('cocokan.')
+        ->group(function () {
+            Route::get('/opname', 'index')->name('opname');
         });
 });
