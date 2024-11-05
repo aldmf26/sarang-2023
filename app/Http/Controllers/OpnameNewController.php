@@ -888,17 +888,18 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(7);
         $sheet4->setTitle('List Pengiriman');
 
-        $sheet4->getStyle("A1:J1")->applyFromArray($style_atas);
+        $sheet4->getStyle("A1:K1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'No');
-        $sheet4->setCellValue('B1', 'tgl kirim');
-        $sheet4->setCellValue('C1', 'no packing list');
-        $sheet4->setCellValue('D1', 'nama packing list');
-        $sheet4->setCellValue('E1', 'tujuan');
-        $sheet4->setCellValue('F1', 'box');
-        $sheet4->setCellValue('G1', 'pcs');
-        $sheet4->setCellValue('H1', 'gr');
-        $sheet4->setCellValue('I1', 'gr + kadar');
-        $sheet4->setCellValue('J1', 'Total Rp');
+        $sheet4->setCellValue('B1', 'bulan');
+        $sheet4->setCellValue('C1', 'tgl kirim');
+        $sheet4->setCellValue('D1', 'no packing list');
+        $sheet4->setCellValue('E1', 'nama packing list');
+        $sheet4->setCellValue('F1', 'tujuan');
+        $sheet4->setCellValue('G1', 'box');
+        $sheet4->setCellValue('H1', 'pcs');
+        $sheet4->setCellValue('I1', 'gr');
+        $sheet4->setCellValue('J1', 'gr + kadar');
+        $sheet4->setCellValue('K1', 'Total Rp');
 
         $packing_list = Grading::list_pengiriman_sum();
 
@@ -906,20 +907,21 @@ class OpnameNewController extends Controller
 
         foreach ($packing_list  as $no => $d) {
             $sheet4->setCellValue('A' . $kolom, $no + 1);
-            $sheet4->setCellValue('B' . $kolom, tanggal($d->tgl));
-            $sheet4->setCellValue('C' . $kolom, $d->no_nota);
-            $sheet4->setCellValue('D' . $kolom, ucwords($d->nm_packing));
-            $sheet4->setCellValue('E' . $kolom, strtoupper($d->tujuan));
-            $sheet4->setCellValue('F' . $kolom, $d->ttl_box);
-            $sheet4->setCellValue('G' . $kolom, $d->pcs);
-            $sheet4->setCellValue('H' . $kolom, $d->gr);
-            $sheet4->setCellValue('I' . $kolom, $d->gr_naik);
+            $sheet4->setCellValue('B' . $kolom, date('F', strtotime($d->tgl)));
+            $sheet4->setCellValue('C' . $kolom, tanggal($d->tgl));
+            $sheet4->setCellValue('D' . $kolom, $d->no_nota);
+            $sheet4->setCellValue('E' . $kolom, ucwords($d->nm_packing));
+            $sheet4->setCellValue('F' . $kolom, strtoupper($d->tujuan));
+            $sheet4->setCellValue('G' . $kolom, $d->ttl_box);
+            $sheet4->setCellValue('H' . $kolom, $d->pcs);
+            $sheet4->setCellValue('I' . $kolom, $d->gr);
+            $sheet4->setCellValue('J' . $kolom, $d->gr_naik);
             $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
 
-            $sheet4->setCellValue('J' . $kolom, $totalRp);
+            $sheet4->setCellValue('K' . $kolom, $totalRp);
             $kolom++;
         }
-        $sheet4->getStyle('A2:J' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
     }
 
     private function rekapPengawas($spreadsheet, $style_atas, $style, $model)
