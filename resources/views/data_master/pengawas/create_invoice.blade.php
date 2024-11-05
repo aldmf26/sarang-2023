@@ -12,6 +12,7 @@
                 .print_hilang {
                     display: none;
                 }
+
                 .print_ada {
                     display: block;
                 }
@@ -38,20 +39,19 @@
 
                         <div class="container">
                             @if ($cekSudahSave->count())
-                                
-                            <div class="d-flex justify-content-between">
-                                <p style="color: #7e8d9f;font-size: 18px;"><strong>No Invoice:
-                                        #{{ $no_invoice }}</strong>
+                                <div class="d-flex justify-content-between">
+                                    <p style="color: #7e8d9f;font-size: 18px;"><strong>No Invoice:
+                                            #{{ $no_invoice }}</strong>
+                                    </p>
+                                    <p style="color: #7e8d9f;font-size: 15px;"><strong>Tgl Lunas:
+                                            {{ tanggal($cekSudahSave[0]->tgl_lunas) }}</strong>
+                                </div>
+                                <p class="" style="color: #7e8d9f;font-size: 15px;"><strong>Pembayar:
+                                        {{ $cekSudahSave[0]->pembayar }}</strong>
                                 </p>
-                                <p style="color: #7e8d9f;font-size: 15px;"><strong>Tgl Lunas:
-                                        {{ tanggal($cekSudahSave[0]->tgl_lunas) }}</strong>
-                            </div>
-                            <p class="" style="color: #7e8d9f;font-size: 15px;"><strong>Pembayar:
-                                    {{ $cekSudahSave[0]->pembayar }}</strong>
-                            </p>
                             @endif
 
-                            <div class="row print_hilang {{request()->get('no_invoice') ? 'd-none' : ''}}">
+                            <div class="row print_hilang {{ request()->get('no_invoice') ? 'd-none' : '' }}">
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <div class="form-group">
@@ -130,7 +130,7 @@
                                     <a onclick="return window.print();" data-mdb-ripple-init
                                         class="btn btn-light text-capitalize border-0" data-mdb-ripple-color="dark"><i
                                             class="fas fa-print text-primary"></i> Print</a>
-                                    @if (!$cekSudahSave)
+                                    @if ($cekSudahSave->count() < 1)
                                         <button type="submit" data-mdb-button-init data-mdb-ripple-init
                                             class="btn btn-primary text-capitalize"
                                             style="background-color:#60bdf3 ;">Simpan</button>

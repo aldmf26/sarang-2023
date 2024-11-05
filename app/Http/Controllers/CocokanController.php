@@ -191,10 +191,6 @@ left join(
         ) as g on g.no_box = a.no_box_sortir
         WHERE a.selesai = 'T' ;");
 
-
-
-
-
         $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
 
         $data = [

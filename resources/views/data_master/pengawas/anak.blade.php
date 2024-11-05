@@ -145,7 +145,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Pembawa</label>
-                            <input required type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
+                            <input type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
                                 class="form-control">
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Periode Bulan Bayar</label>
-                            <select required name="periode" id="periode" class="select3">
+                            <select  name="periode" id="periode" class="select2">
                                 <option value="">- Periode -</option>
                                 @for ($i = 1; $i < 13; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -184,7 +184,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Komisi Rp</label>
-                            <input required type="text" value="" name="komisi" class="form-control">
+                            <input  type="text" value="" name="komisi" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -215,51 +215,22 @@
         <script>
             $(document).ready(function() {
                 $(".select3").select2()
-                detailEdit('edit', 'id', 'anak', 'get_edit')
-                tglBayar('periode', 'tgl_masuk', 'tgl_dibayar')
+                detail('edit', 'id', 'anak', 'get_edit')
 
-                function detailEdit(kelas, attr, link, load) {
-                    $(document).on('click', `.${kelas}`, function() {
-                        var id = $(this).attr(`${attr}`)
-                        alert(id)
-                        $.ajax({
-                            type: "GET",
-                            url: `${link}/${id}`,
-                            success: function(r) {
-                                $(`#${load}`).html(r);
-                                $('.select2-edit').select2({
-                                    dropdownParent: $('#edit .modal-content')
-                                });
-                                $('#tableDetail').DataTable({
-                                    "paging": true,
-                                    "pageLength": 10,
-                                    "lengthChange": true,
-                                    "stateSave": true,
-                                    "searching": true,
-                                });
-                                tglBayar('periode' + id  , 'tgl_masuk' + id, 'tgl_dibayar' + id)
-                            }
-                        });
-                    })
-                }
+                $('#periode, #tgl_masuk').change(function (e) { 
+                    e.preventDefault();
+                    let tglMasuk = $(`#tgl_masuk`).val();
+                    let periode = parseInt($(`#periode`).val());
+                    // Cek apakah kedua input memiliki nilai yang valid
+                    if (tglMasuk && periode) {
+                        let tgl = new Date(tglMasuk);
+                        tgl.setMonth(tgl.getMonth() + periode);
 
-                function tglBayar(periode,tgl_masuk,tgl_dibayar) {
-                    $(document).on('change', `#${periode}, #${tgl_masuk}`, function() {
-                        let tglMasuk = $(`#${tgl_masuk}`).val();
-                        let periode = parseInt($(`#${periode}`).val());
-
-                        // Cek apakah kedua input memiliki nilai yang valid
-                        if (tglMasuk && periode) {
-                            let tgl = new Date(tglMasuk);
-                            tgl.setMonth(tgl.getMonth() + periode);
-
-                            // Format tanggal menjadi YYYY-MM-DD
-                            let tglDibayar = tgl.toISOString().split('T')[0];
-                            $(`#${tgl_dibayar}`).val(tglDibayar);
-                        }
-                    })
-                  
-                }
+                        // Format tanggal menjadi YYYY-MM-DD
+                        let tglDibayar = tgl.toISOString().split('T')[0];
+                        $(`#tgl_dibayar`).val(tglDibayar);
+                    }
+                });
             });
         </script>
     @endsection
