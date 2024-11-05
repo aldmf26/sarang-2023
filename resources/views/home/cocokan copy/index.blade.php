@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
 
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <div>
                     <h6>Awal Cabut</h6>
                 </div>
@@ -27,23 +27,20 @@
 
                 </table>
             </div>
-            <div class="col-lg-5">
-                
-                <div class="d-flex justify-content-between">
-                    <h6>Cabut Kerja</h6>
-                    <div>
-                        <a href="{{route('cocokan.cabutExport')}}" class="btn btn-sm btn-primary"><i class="fas fa-file-excel"></i> Export</a>
-                    </div>
+            <div class="col-lg-8">
+                <div>
+                    <h6>Awal cabut</h6>
                 </div>
-                <table class="table table-bordered mt-1">
+                <table class="table table-bordered">
                     <tr>
                         <th class="dhead">ket</th>
                         <th class="dhead text-end">pcs</th>
                         <th class="dhead text-end">gr</th>
                         <th class="dhead text-end">rp awal</th>
-                        <th class="dhead text-end">rata2</th>
                         <th class="dhead text-end">cost kerja</th>
                         <th class="dhead text-end">total Rp + cost kerja</th>
+                        <th class="dhead text-end">rata2</th>
+                        <th class="dhead text-end">susut</th>
                     </tr>
                     <tr>
                         <td>Cabut awal</td>
@@ -58,17 +55,18 @@
                         <td class="text-end">
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp, 0) }}
                         </td>
-                        <td class="text-end">
-                            {{ number_format(($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp) / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr), 0) }}
-                        </td>
+
                         <td class="text-end">
                             {{ number_format($bk_akhir->cost_kerja, 0) }}
                         </td>
                         <td class="text-end">
                             {{ number_format($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp + $bk_akhir->cost_kerja, 0) }}
                         </td>
+                        <td class="text-end">
+                            {{ number_format(($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp) / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr), 0) }}
+                        </td>
                     </tr>
-                    {{-- <tr>
+                    <tr>
                         <td style="background-color: #F7F700">Cabut akhir</td>
                         <td class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
                         </td>
@@ -83,7 +81,7 @@
                         <td class="text-end">{{ number_format($bk_akhir->ttl_rp + $bk_akhir->cost_kerja, 0) }}</td>
 
 
-                    </tr> --}}
+                    </tr>
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
@@ -129,7 +127,7 @@
 
                 </table>
             </div>
-            <div class="col-lg-4">
+            {{-- <div class="col-lg-4">
                 <div>
                     <h6>Akhir Cabut</h6>
                 </div>
@@ -163,7 +161,7 @@
 
 
                 </table>
-            </div>
+            </div> --}}
 
 
 
