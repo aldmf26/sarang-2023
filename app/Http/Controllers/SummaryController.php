@@ -83,7 +83,7 @@ class SummaryController extends Controller
         $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
         FROM tb_gaji_penutup as a;");
         $data = [
-            'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(a.ttl_gaji) as ttl_gaji
+            'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji
             FROM tb_gaji_penutup as a 
             where a.bulan_dibayar = '$bulan->bulan' and a.tahun_dibayar  = '$bulan->tahun';"),
             'bulan' => $bulan->bulan,
@@ -1125,6 +1125,8 @@ class SummaryController extends Controller
         $ttl_gr = sumBk($grading_partai, 'gr') + sumBk($pengiriman, 'gr');
 
 
+
+
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
@@ -1152,14 +1154,14 @@ class SummaryController extends Controller
                 'cost_op' => $p->gr * $rp_gr,
                 'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
             ];
-            DB::table('pengiriman')->whereNull('cost_op_cek')->update($data);
+            DB::table('pengiriman')->where('id_pengiriman', $p->id_pengiriman)->update($data);
         }
         foreach ($grading_partai as $p) {
             $data = [
                 'cost_op' => $p->gr * $rp_gr,
                 'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
             ];
-            DB::table('grading_partai')->whereNull('cost_op_cek')->update($data);
+            DB::table('grading_partai')->where('id_grading', $p->id_grading)->update($data);
         }
 
 
