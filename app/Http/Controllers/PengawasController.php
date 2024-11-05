@@ -135,7 +135,7 @@ class PengawasController extends Controller
         }
 
         DB::table('invoice_karyawan')->insert($data);
-        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('pengawas.invoice', ['no_invoice' => $r->no_invoice])->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function anak_detail($id)
