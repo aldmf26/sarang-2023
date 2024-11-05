@@ -461,9 +461,4 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.list_pengiriman', $data);
     }
-
-    public function exportCabut(Request $r)
-    {
-        
-    }
 }

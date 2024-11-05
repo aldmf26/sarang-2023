@@ -28,12 +28,10 @@
                 </table>
             </div>
             <div class="col-lg-5">
-                
-                <div class="d-flex justify-content-between">
+
+                <div>
                     <h6>Cabut Kerja</h6>
-                    <div>
-                        <a href="{{route('cocokan.cabutExport')}}" class="btn btn-sm btn-primary"><i class="fas fa-file-excel"></i> Export</a>
-                    </div>
+
                 </div>
                 <table class="table table-bordered mt-1">
                     <tr>
@@ -130,9 +128,14 @@
                 </table>
             </div>
             <div class="col-lg-4">
-                <div>
+                <div class="d-flex justify-content-between">
                     <h6>Akhir Cabut</h6>
+                    <div>
+                        <a href="{{ route('cocokan.exportCabut') }}" class="btn btn-sm btn-primary"><i
+                                class="fas fa-file-excel"></i> Export</a>
+                    </div>
                 </div>
+
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
