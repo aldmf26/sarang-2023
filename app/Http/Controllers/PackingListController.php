@@ -22,7 +22,7 @@ class PackingListController extends Controller
             'title' => 'Packing list',
             'pengiriman' => $pengiriman
         ];
-        
+
         return view('home.packinglist.index', $data);
     }
 
@@ -52,7 +52,7 @@ class PackingListController extends Controller
         return redirect()->route('packinglist.index', ['kategori' => 'packing'])->with('sukses', 'Data Berhasil dimasukan');
     }
 
-    
+
     public function pengiriman(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -61,7 +61,7 @@ class PackingListController extends Controller
 
         $packing = Grading::list_pengiriman_sum();
 
-        
+
         $tgl1 = tglFormat($tgl1);
         $tgl2 = tglFormat($tgl2);
         $data = [
@@ -170,7 +170,7 @@ class PackingListController extends Controller
                 FROM pengiriman as a 
                 join grading_partai as b on a.no_box = b.box_pengiriman 
                 WHERE a.selesai = 'Y';");
-                
+
         $data = [
             'title' => 'Check Grade Berubah',
             'cek' => $cek,
@@ -186,7 +186,7 @@ class PackingListController extends Controller
         $sheet4->setTitle('List Pengiriman');
 
         $sheet4->getStyle("A1:J1")->applyFromArray($style_atas);
-        
+
         $sheet4->setCellValue('A1', 'No');
         $sheet4->setCellValue('B1', 'tgl kirim');
         $sheet4->setCellValue('C1', 'no packing list');
