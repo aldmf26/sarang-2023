@@ -500,7 +500,10 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/cetak_cetakakhir', 'cetak_cetakakhir')->name('cetak_cetakakhir');
             Route::get('/cetak_sedangproses', 'cetak_sedangproses')->name('cetak_sedangproses');
             Route::get('/cetak_sisa', 'cetak_sisa')->name('cetak_sisa');
+            Route::get('/exportCabut', 'exportCabut')->name('exportCabut');
         });
+
+   
     Route::controller(SiapKirimController::class)
         ->prefix('home/siapkirim')
         ->name('siapkirim.')

@@ -26,10 +26,13 @@
                 </table>
             </div>
             <div class="col-lg-8">
-                <div>
+                <div class="d-flex justify-content-between">
                     <h6>Cabut Kerja</h6>
+                    <div>
+                        <a href="{{route('cocokan.cabutExport')}}" class="btn btn-sm btn-primary"><i class="fas fa-file-excel"></i> Export</a>
+                    </div>
                 </div>
-                <table class="table table-bordered">
+                <table class="table table-bordered mt-1">
                     <tr>
                         <th class="dhead">Ket</th>
                         <th class="dhead text-end">Pcs</th>

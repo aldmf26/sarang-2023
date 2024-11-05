@@ -162,11 +162,11 @@ class CocokanController extends Controller
         ");
 
         $grading_sisa = DB::selectOne("SELECT a.no_box_sortir, sum(b.pcs_awal - d.pcs) as pcs , sum(b.gr_awal - d.gr) as gr , sum(g.ttl_rp) as cost_bk, sum(COALESCE(g.cost_cbt,0) + COALESCE(g.cost_eo,0) + COALESCE(g.cost_ctk,0) + COALESCE(g.cost_str,0) ) as cost_kerja
-FROM grading as a 
-left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' 
-JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' 
-LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir 
-left join(
+        FROM grading as a 
+        left join formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade' 
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut' 
+        LEFT JOIN( select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr from grading group by no_box_sortir ) as d on d.no_box = a.no_box_sortir 
+        left join(
         SELECT a.no_box, (a.gr_awal * a.hrga_satuan) as ttl_rp, b.ttl_rp as cost_cbt, c.ttl_rp as cost_eo, d.cost_ctk, e.ttl_rp as cost_str, f.cost_cu
             FROM bk as a 
             left JOIN cabut as b on b.no_box = a.no_box
@@ -460,5 +460,10 @@ left join(
             'query' => $query,
         ];
         return view('home.cocokan.list_pengiriman', $data);
+    }
+
+    public function exportCabut(Request $r)
+    {
+        
     }
 }
