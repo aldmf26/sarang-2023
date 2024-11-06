@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\Bk_baruController;
 use App\Http\Controllers\CabutDetailController;
 use App\Http\Controllers\CabutSpecialController;
@@ -387,5 +388,13 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/opname', 'index')->name('opname');
             Route::get('/detail_cabut', 'detail_cabut')->name('detail_cabut');
+        });
+
+    Route::controller(BalanceController::class)
+        ->prefix('home/cocokan/balancesheet/detail')
+        ->name('cocokan.balance.')
+        ->group(function () {
+            Route::get('/', 'index')->name('gaji');
+            Route::get('/cost', 'cost')->name('cost');
         });
 });

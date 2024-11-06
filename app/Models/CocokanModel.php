@@ -103,26 +103,26 @@ class CocokanModel extends Model
     public static function bkselesai_siap_ctk_diserahkan_sum()
     {
         $result = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp, sum(a.cost) as cost_kerja
-FROM (
-SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
-        FROM cabut as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-        where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
+        FROM (
+            SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
+            FROM cabut as a 
+            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal != 0
 
-        UNION ALL
+            UNION ALL
 
-        SELECT a.ttl_rp as cost, 0 as pcs, a.gr_eo_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
-        FROM eo as a 
-        LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-        WHERE a.selesai = 'Y' AND b.baru = 'baru'
+            SELECT a.ttl_rp as cost, 0 as pcs, a.gr_eo_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
+            FROM eo as a 
+            LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            WHERE a.selesai = 'Y' AND b.baru = 'baru'
 
-        UNION ALL 
-        SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
-        FROM cabut as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-        where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
+            UNION ALL 
+            SELECT a.ttl_rp as cost,a.pcs_akhir as pcs, a.gr_akhir as gr, (b.hrga_satuan * b.gr_awal) as ttl_rp
+            FROM cabut as a 
+            left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+            where a.selesai = 'Y'   and b.baru = 'baru' and a.pcs_awal = 0
 
-) as a;
+        ) as a;
 
         ");
 

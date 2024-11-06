@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
 
-            <div class="col-lg-6">
+            {{-- <div class="col-lg-5">
                 <div class="d-flex justify-content-between mb-2">
                     <div>
                         <h6>Bk Kerja</h6>
@@ -77,14 +77,15 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="col-lg-2">
+            </div> --}}
+            <div class="col-lg-4">
                 <h6>Cost Perbulan</h6>
-
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th class="dhead">bulan & tahun</th>
+                            <th class="text-end dhead">gaji</th>
+                            <th class="text-end dhead">cost operasional</th>
                             <th class="text-end dhead">total rp</th>
                         </tr>
                     </thead>
@@ -93,6 +94,8 @@
                             <tr>
                                 <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '01')) }}
                                 </td>
+                                <td class="text-end"><a target="_blank" href="{{route('cocokan.balance.gaji', ['bulan' => $u->bulan, 'tahun' => $u->tahun])}}">{{ number_format(0, 0) }}</a></td>
+                                <td class="text-end"><a target="_blank" href="{{route('cocokan.balance.cost', ['bulan' => $u->bulan, 'tahun' => $u->tahun])}}">{{ number_format(0, 0) }}</a></td>
                                 <td class="text-end">{{ number_format($u->total_operasional, 0) }}</td>
                             </tr>
                         @endforeach
@@ -101,9 +104,15 @@
                     <tfoot>
                         <tr>
                             <th>Total</th>
-                            <th class="text-end">
-                                {{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</th>
+                            <th class="text-end">{{ number_format(0, 0) }}</th>
+                            <th class="text-end">{{ number_format(0, 0) }}</th>
+                            <th>{{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</th>
                         </tr>
+                        @for ($i = 0; $i < 5; $i++)
+                        <tr>
+                            <th colspan="3">&nbsp;</th>
+                        </tr>
+                        @endfor
                         @php
                             $ttl_sisa_belum_kirim =
                                 $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
@@ -150,13 +159,16 @@
                         @endphp
                         <tr>
                             <th>Cost Berjalan</th>
+                            <th></th>
+                            <th></th>
                             <th class="text-end">
                                 {{ number_format($ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'), 0) }}
-
                             </th>
                         </tr>
                         <tr>
                             <th class="dhead">Total Bk + Operasional + cost berjalan</th>
+                            <th class="dhead"></th>
+                            <th class="dhead"></th>
                             <th class="text-end dhead">
                                 {{ number_format(sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan, 0) }}
                             </th>
@@ -165,7 +177,7 @@
                     </tfoot>
                 </table>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <h6>Bk Rp</h6>
                 <table class="table table-bordered">
                     <thead>
@@ -454,8 +466,6 @@
 
                 </table> --}}
             </div>
-
-
         </section>
 
 
