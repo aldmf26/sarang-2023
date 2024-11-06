@@ -1537,49 +1537,39 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue($k, $v);
         }
         $model = new CocokanModel();
-        $s1 = $model::stock_sortir_awal();
-        $s2suntik = $this->getSuntikan(32);
-        $akhir_cetak = new stdClass();
-        $akhir_cetak->pcs = $s1->pcs + $s2suntik->pcs;
-        $akhir_cetak->gr = $s1->gr + $s2suntik->gr;
-        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
-
         $s3 = $model::sortir_akhir();
 
         $s5suntik = $this->getSuntikan(35);
+        $opname =  $this->getSuntikan(41);
 
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
         $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
-        $sortir_akhir->cost_kerja = $s3->cost_kerja;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp + $s3->cost_kerja;
 
-        $ttl_gr = $this->getCost($model, 'ttl_gr');
-        $cost_op = $this->getCost($model, 'cost_op');
-        $cost_dll = $this->getCost($model, 'dll');
-        $opname = $this->getSuntikan(31);
-        $sedang_proses = $model::sortir_proses();
-        $sortir_sisa = $model::stock_sortir();
+        $grading = $model->gradingOne();
+        $grading_sisa = $model->gradingSisaOne();    
+        $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
 
-        $sheet->setCellValue('B2', $akhir_cetak->pcs);
-        $sheet->setCellValue('C2', $akhir_cetak->gr);
-        $sheet->setCellValue('D2', $akhir_cetak->ttl_rp);
-        $sheet->setCellValue('E2', $akhir_cetak->ttl_rp / $akhir_cetak->gr);
+        $sheet->setCellValue('B2', $sortir_akhir->pcs);
+        $sheet->setCellValue('C2', $sortir_akhir->gr);
+        $sheet->setCellValue('D2', $sortir_akhir->ttl_rp);
+        $sheet->setCellValue('E2', $sortir_akhir->ttl_rp / $sortir_akhir->gr);
 
 
         $datas = [
             [
-                'ket' => 'awal sortir',
-                'pcs' => $akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs,
-                'gr' => $akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr,
-                'ttl_rp' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp,
-                'rata2' => ($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp) / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr),
-                'cost_kerja' => $sortir_akhir->cost_kerja,
-                'ttl' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp + $sortir_akhir->cost_kerja,
+                'ket' => 'awal grading',
+                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading_sisa->pcs,
+                'gr' => $sortir_akhir->gr + $opname->gr - $grading_sisa->gr,
+                'ttl_rp' => $sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk,
+                'rata2' => ($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr),
+                'cost_kerja' => 0,
+                'ttl' => $sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk,
             ],
             [
-                'ket' => 'sedang proses',
-                'pcs' => $sedang_proses->pcs,
+                'ket' => 'selisih pcs',
+                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $grading_sisa->pcs,
                 'gr' => $sedang_proses->gr,
                 'ttl_rp' => $sedang_proses->ttl_rp,
                 'rata2' => empty($sedang_proses->gr) ? 0 : $sedang_proses->ttl_rp / $sedang_proses->gr,
@@ -1587,7 +1577,7 @@ class ExportCocokanController extends Controller
                 'ttl' => $sedang_proses->ttl_rp,
             ],
             [
-                'ket' => 'sisa pengawas',
+                'ket' => 'sisa belum grading',
                 'pcs' => $sortir_sisa->pcs,
                 'gr' => $sortir_sisa->gr,
                 'ttl_rp' => $sortir_sisa->ttl_rp,

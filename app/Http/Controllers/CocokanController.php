@@ -157,28 +157,9 @@ class CocokanController extends Controller
         // $pengiriman = DB::selectOne("SELECT sum(b.pcs) as pcs, sum(b.gr) as gr FROM pengiriman as a
         //     JOIN grading_partai as b on a.no_box = b.box_pengiriman");
 
-        $grading = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
-        sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
-        FROM grading_partai as a 
-        where a.grade != 'susut'
-        ");
+        $grading = $model->gradingOne();
 
-        $grading_sisa = DB::selectOne("SELECT sum(a.pcs_awal) pcs , 
-        sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk
-        FROM formulir_sarang as a 
-        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
-        left join cabut as c on c.no_box = a.no_box 
-        left join eo as d on d.no_box = a.no_box
-        left join sortir as e on e.no_box = a.no_box
-        left join (
-            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp 
-            FROM cetak_new as a 
-            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-            where b.kategori = 'CTK'
-            group by a.no_box
-        ) as f on f.no_box = a.no_box
-
-        where a.no_box not in ( SELECT a.no_box_sortir FROM grading as a where a.no_invoice is not null  ) and a.kategori ='grading';");
+        $grading_sisa = $model->gradingSisaOne();    
 
         $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
 
