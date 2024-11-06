@@ -17,8 +17,11 @@ class BalanceController extends Controller
         $cabut = BalanceModel::cabut($bulan, $tahun);
         $cetak = BalanceModel::cetak($bulan, $tahun);
         $sortir = BalanceModel::sortir($bulan, $tahun);
-        
+
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
+        $operasional = DB::table('oprasional')->where('bulan', $bulan)->where('tahun', $tahun)->first();
+        $grading = BalanceModel::grading($bulan, $tahun);
+
         $data = [
             'title' => 'Detail Gaji Balancesheet',
             'dataBulan' => $dataBulan,
@@ -27,8 +30,10 @@ class BalanceController extends Controller
             'cabut' => $cabut,
             'cetak' => $cetak,
             'sortir' => $sortir,
+            'operasional' => $operasional,
+            'grading' => $grading
         ];
-        return view('home.cocokan.balance.index',$data);
+        return view('home.cocokan.balance.index', $data);
     }
     public function cost(Request $r)
     {

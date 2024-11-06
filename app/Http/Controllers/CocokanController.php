@@ -159,7 +159,7 @@ class CocokanController extends Controller
 
         $grading = $model->gradingOne();
 
-        $grading_sisa = $model->gradingSisaOne();    
+        $grading_sisa = $model->gradingSisaOne();
 
         $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
 
@@ -195,6 +195,8 @@ class CocokanController extends Controller
 
         $belum_kirim = Grading::belumKirimSum();
 
+        $list_pengiriman = Grading::list_pengiriman_sum();
+
         $data = [
             'title' => 'Pengiriman ',
             'opname' =>  $this->getSuntikan(41),
@@ -203,7 +205,8 @@ class CocokanController extends Controller
             'sumTtlRpPengiriman' => $sumTtlRpPengiriman,
             'grading' => $grading,
             'grading_sisa' => $grading_sisa,
-            'belum_kirim' => $belum_kirim
+            'belum_kirim' => $belum_kirim,
+            'list_pengiriman' => $list_pengiriman
         ];
         return view('home.cocokan.pengiriman', $data);
     }

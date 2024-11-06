@@ -10,7 +10,7 @@ class BalanceModel extends Model
 {
     use HasFactory;
 
-    public static function cabut($bulan,$tahun)
+    public static function cabut($bulan, $tahun)
     {
         return DB::selectOne("SELECT 
         bulan_dibayar,
@@ -73,9 +73,9 @@ class BalanceModel extends Model
         GROUP BY bulan_dibayar;");
     }
 
-    public static function cetak($bulan,$tahun)
+    public static function cetak($bulan, $tahun)
     {
-        
+
         return DB::selectOne("SELECT 
         sum(COALESCE(a.pcs_akhir,0) + COALESCE(a.pcs_tdk_cetak,0)) as pcs, 
         sum(COALESCE(a.gr_akhir,0) + COALESCE(a.gr_tdk_cetak,0)) as gr, 
@@ -90,9 +90,9 @@ class BalanceModel extends Model
         left join eo as d on d.no_box = a.no_box
         where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru' and a.bulan_dibayar = $bulan;");
     }
-    public static function sortir($bulan,$tahun)
+    public static function sortir($bulan, $tahun)
     {
-        
+
         return DB::selectOne("SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr, 
         SUM(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as ttl_rp,
         sum(a.ttl_rp) as cost_kerja

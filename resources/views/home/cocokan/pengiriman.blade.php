@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
             <Label>{{ $title }}</Label>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -36,15 +36,13 @@
 
                 </table>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-4">
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
-                        <th class="dhead text-end">Cost kerja</th>
-                        <th class="dhead text-end">Cost cu</th>
                         <th class="dhead text-end">Cost operasional</th>
                         <th class="dhead text-end">Total Rp</th>
                     </tr>
@@ -57,8 +55,7 @@
                             </a>
                         </td>
                         <td class="text-end">{{ number_format($pengiriman->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($pengiriman->cost_kerja, 0) }}</td>
-                        <td class="text-end">{{ number_format($pengiriman->cost_cu, 0) }}</td>
+
                         <td class="text-end">{{ number_format($pengiriman->cost_op, 0) }}</td>
                         <td class="text-end">
                             {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
@@ -73,8 +70,6 @@
                             </a>
                         </td>
                         <td class="text-end">{{ number_format($belum_kirim->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($belum_kirim->cost_kerja, 0) }}</td>
-                        <td class="text-end">{{ number_format($belum_kirim->cost_cu, 0) }}</td>
                         <td class="text-end">{{ number_format($belum_kirim->cost_op, 0) }}</td>
                         <td class="text-end">
                             {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk, 0) }}
@@ -92,8 +87,6 @@
                             {{ number_format($pengiriman->cost_bk + $belum_kirim->cost_bk, 0) }}
                         </td>
                         <td></td>
-                        <td></td>
-                        <td></td>
                         <td class="text-end fw-bold">
                             {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
                         </td>
@@ -101,6 +94,56 @@
 
 
 
+                </table>
+            </div>
+            <div class="col-lg-5">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="dhead">#</th>
+                            <th class="dhead">Tgl Kirim</th>
+                            <th class="dhead">No Packinglist</th>
+                            <th class="dhead">Nama Packing List</th>
+                            <th class="dhead">Tujuan</th>
+                            <th class="dhead text-end">Box</th>
+                            <th class="dhead text-end">Pcs</th>
+                            <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Gr + Kadar</th>
+                            <th class="dhead text-end">Total Rp</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach ($list_pengiriman as $i => $d)
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td>{{ tanggal($d->tgl) }}</td>
+                                <td>PI {{ $d->no_nota }}</td>
+                                <td>{{ ucwords($d->nm_packing) }}</td>
+                                <td>{{ strtoupper($d->tujuan) }}</td>
+                                <td align="center">{{ $d->ttl_box }}</td>
+                                <td align="right">{{ number_format($d->pcs, 0) }}</td>
+                                <td align="right"><a target="_blank"
+                                        href="{{ route('detail.list_pengiriman', ['no_nota' => $d->no_nota]) }}">{{ number_format($d->gr, 0) }}</a>
+                                </td>
+                                <td align="right">{{ number_format($d->gr_naik, 0) }}</td>
+                                <td align="right">{{ number_format($d->cost_bk + $d->cost_op, 0) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6" class="fw-bold">Total</th>
+                            <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman, 'pcs'), 0) }}</th>
+                            <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman, 'gr'), 0) }}</th>
+                            <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman, 'gr_naik'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">
+                                {{ number_format(sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op'), 0) }}
+                            </th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </section>
