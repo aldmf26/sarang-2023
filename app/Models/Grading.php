@@ -520,13 +520,20 @@ left join(
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp FROM pengiriman as a
+        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, 0 as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp 
+        FROM pengiriman as a
+        left join (
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk
+            FROM grading_partai as b 
+            where b.sudah_kirim = 'Y'
+            group by b.box_pengiriman
+        ) as b on b.box_pengiriman = a.no_box
         ");
     }
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,0 as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
     }
     public static function belumKirimSumsusut()
     {

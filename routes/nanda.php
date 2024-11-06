@@ -386,5 +386,6 @@ Route::middleware('auth')->group(function () {
         ->name('cocokan.')
         ->group(function () {
             Route::get('/opname', 'index')->name('opname');
+            Route::get('/detail_cabut', 'detail_cabut')->name('detail_cabut');
         });
 });
