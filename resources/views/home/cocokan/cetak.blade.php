@@ -141,8 +141,11 @@
                 </table>
             </div>
             <div class="col-lg-4">
-                <div>
-                    <h6>Akhir cetak</h6>
+                <div class="d-flex justify-content-between">
+                    <h6>Akhir Cetak</h6>
+                    <div>
+                        @include('home.cocokan.btn_export')
+                    </div>
                 </div>
                 <table class="table table-bordered">
                     <tr>

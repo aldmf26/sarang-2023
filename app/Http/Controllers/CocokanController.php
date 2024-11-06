@@ -87,13 +87,13 @@ class CocokanController extends Controller
         $ttl_gr = $this->getCost($model, 'ttl_gr');
         $cost_op = $this->getCost($model, 'cost_op');
         $cost_dll = $this->getCost($model, 'dll');
-
+        $proses = $model::cetak_proses();
         $data = [
 
             'title' => 'Cetak',
             'ctk_opname' => $ctk_opname,
             'akhir_cbt' => $akhir_cbt,
-            'cetak_proses' => $model::cetak_proses(),
+            'cetak_proses' => $proses,
             'cetak_sisa' => $cetak_sisa,
             'cetak_akhir' => $cetak_akhir,
             'ttl_gr' => $ttl_gr,
@@ -125,13 +125,15 @@ class CocokanController extends Controller
         $ttl_gr = $this->getCost($model, 'ttl_gr');
         $cost_op = $this->getCost($model, 'cost_op');
         $cost_dll = $this->getCost($model, 'dll');
-
+        $opname = $this->getSuntikan(31);
+        $sedang_proses = $model::sortir_proses();
+        $sortir_sisa = $model::stock_sortir();
         $data = [
             'title' => 'Sortir ',
-            'opname' => $this->getSuntikan(31),
+            'opname' => $opname,
             'akhir_cetak' => $akhir_cetak,
-            'sedang_proses' => $model::sortir_proses(),
-            'sortir_sisa' => $model::stock_sortir(),
+            'sedang_proses' => $sedang_proses,
+            'sortir_sisa' => $sortir_sisa,
             'sortir_akhir' => $sortir_akhir,
             'ttl_gr' => $ttl_gr,
             'cost_op' => $cost_op,

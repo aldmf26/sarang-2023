@@ -1138,27 +1138,21 @@ class ExportCocokanController extends Controller
         }
         $model = new CocokanModel();
         $a11 = $model::bkstockawal_sum();
-        $a11suntik = $this->getSuntikan(11);
 
         $bk_awal = new stdClass();
-        $bk_awal->pcs = $a11->pcs + $a11suntik->pcs;
-        $bk_awal->gr = $a11->gr + $a11suntik->gr;
-        $bk_awal->ttl_rp = $a11->ttl_rp + $a11suntik->ttl_rp;
+        $bk_awal->pcs = $a11->pcs;
+        $bk_awal->gr = $a11->gr;
+        $bk_awal->ttl_rp = $a11->ttl_rp;
         // akhir
-        $a14suntik = $this->getSuntikan(14);
-        $a16suntik = $this->getSuntikan(16);
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
 
         $bk_akhir = new stdClass();
-        $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
-        $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
-        $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
+        $bk_akhir->pcs = $a12->pcs ;
+        $bk_akhir->gr = $a12->gr;
+        $bk_akhir->ttl_rp = $a12->ttl_rp;
         $bk_akhir->cost_kerja = $a12->cost_kerja;
 
         $ttl_gr = $this->getCost($model, 'ttl_gr');
-        $cost_op = $this->getCost($model, 'cost_op');
-        $cost_dll = $this->getCost($model, 'dll');
-
 
         $cbt_proses = $model::bksedang_proses_sum();
         $cbt_sisa_pgws = $model::bksisapgws();
@@ -1169,48 +1163,470 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('E2', $bk_awal->ttl_rp / $bk_awal->gr);
 
 
-        $sheet->setCellValue('H2', 'cabut awal');
-        $sheet->setCellValue('I2', $bk_awal->pcs - $cbt_proses->pcs - $cbt_sisa_pgws->pcs);
-        $sheet->setCellValue('J2', $bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr);
-        $sheet->setCellValue('K2', $bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp);
-        $sheet->setCellValue('L2', ($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp) / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr));
-        $sheet->setCellValue('M2', $bk_akhir->cost_kerja);
-        $sheet->setCellValue('N2', $bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp + $bk_akhir->cost_kerja);
+        $datas = [
+            [
+                'ket' => 'cabut awal',
+                'pcs' => $bk_awal->pcs - $cbt_proses->pcs - $cbt_sisa_pgws->pcs,
+                'gr' => $bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr,
+                'ttl_rp' => $bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp,
+                'rata2' => ($bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp) / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr),
+                'cost_kerja' => $bk_akhir->cost_kerja,
+                'ttl' => $bk_awal->ttl_rp - $cbt_proses->ttl_rp - $cbt_sisa_pgws->ttl_rp + $bk_akhir->cost_kerja,
+            ],
+            [
+                'ket' => 'sedang proses',
+                'pcs' => $cbt_proses->pcs,
+                'gr' => $cbt_proses->gr,
+                'ttl_rp' => $cbt_proses->ttl_rp,
+                'rata2' => $cbt_proses->ttl_rp / $cbt_proses->gr,
+                'cost_kerja' => $cbt_proses->cost_kerja,
+                'ttl' => $cbt_proses->cost_kerja + $cbt_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'sisa pengawas',
+                'pcs' => $cbt_sisa_pgws->pcs,
+                'gr' => $cbt_sisa_pgws->gr,
+                'ttl_rp' => $cbt_sisa_pgws->ttl_rp,
+                'rata2' => $cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr,
+                'cost_kerja' => 0,
+                'ttl' => $cbt_sisa_pgws->ttl_rp,
+            ],
+            [
+                'ket' => 'total',
+                'pcs' => "=SUM(I2:I4)",
+                'gr' => "=SUM(J2:J4)",
+                'ttl_rp' => "=SUM(K2:K4)",
+                'rata2' => "0",
+                'cost_kerja' => "=SUM(M2:M4)",
+                'ttl' => "=SUM(N2:N4)",
+            ],
+        ];
 
-        $sheet->setCellValue('H3', 'sedang proses');
-        $sheet->setCellValue('I3', $cbt_proses->pcs);
-        $sheet->setCellValue('J3', $cbt_proses->gr);
-        $sheet->setCellValue('K3', $cbt_proses->ttl_rp);
-        $sheet->setCellValue('L3', $cbt_proses->ttl_rp / $cbt_proses->gr);
-        $sheet->setCellValue('M3', $cbt_proses->cost_kerja);
-        $sheet->setCellValue('N3', $cbt_proses->cost_kerja + $cbt_proses->ttl_rp);
-
-        $sheet->setCellValue('H4', 'sisa pengawas');
-        $sheet->setCellValue('I4', $cbt_sisa_pgws->pcs);
-        $sheet->setCellValue('J4', $cbt_sisa_pgws->gr);
-        $sheet->setCellValue('K4', $cbt_sisa_pgws->ttl_rp);
-        $sheet->setCellValue('L4', $cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr);
-        $sheet->setCellValue('M4', 0);
-        $sheet->setCellValue('N4', $cbt_sisa_pgws->ttl_rp);
-
-        $sheet->setCellValue('H5', 'total');
-        $sheet->setCellValue('I5', "=SUM(I2:I4)");
-        $sheet->setCellValue('J5', "=SUM(J2:J4)");
-        $sheet->setCellValue('K5', "=SUM(K2:K4)");
-        $sheet->setCellValue('L5', "0");
-        $sheet->setCellValue('M5', "=SUM(M2:M4)");
-        $sheet->setCellValue('N5', "=SUM(N2:N4)");
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('H' . $row, $v['ket']);
+            $sheet->setCellValue('I' . $row, $v['pcs']);
+            $sheet->setCellValue('J' . $row, $v['gr']);
+            $sheet->setCellValue('K' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('L' . $row, $v['rata2']);
+            $sheet->setCellValue('M' . $row, $v['cost_kerja']);
+            $sheet->setCellValue('N' . $row, $v['ttl']);
+        }
 
         $sheet->setCellValue('Q2', 'akhir cabut');
         $sheet->setCellValue('R2', $bk_akhir->pcs);
         $sheet->setCellValue('S2', $bk_akhir->gr);
         $sheet->setCellValue('T2', $bk_akhir->ttl_rp + $bk_akhir->cost_kerja);
         $sheet->setCellValue('U2', ($bk_akhir->ttl_rp + $bk_akhir->cost_kerja) / $bk_akhir->gr);
-        $sheet->setCellValue('V2', (1 - $bk_akhir->gr / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr)) * 100);
+        $sheet->setCellValue('V2', (1 - $bk_akhir->gr / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr)) * 100 . '%');
 
 
-        // $sheet->getStyle('AC1:AF2')->applyFromArray($style);
+        // $sheet->getStyle('A1:V1')->applyFromArray($style);
     }
+
+    public function cetakSum($spreadsheet, $style_atas, $style)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Cetak');
+        $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
+        $sheet->getStyle('B1:E2')->applyFromArray($style);
+        $sheet->getStyle('H1:N5')->applyFromArray($style);
+        $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $koloms = [
+            'A1' => 'Akhir Cabut',
+            'B1' => 'pcs',
+            'C1' => 'gr',
+            'D1' => 'rp awal',
+            'E1' => 'rata2',
+
+            'G1' => 'Awal Cetak',
+            'H1' => 'ket',
+            'I1' => 'pcs',
+            'J1' => 'gr',
+            'K1' => 'rp awal',
+            'L1' => 'rata2',
+            'M1' => 'cost kerja',
+            'N1' => 'total Rp + cost kerja',
+
+            'P1' => 'Akhir Cetak',
+            'Q1' => 'Ket',
+            'R1' => 'pcs',
+            'S1' => 'gr',
+            'T1' => 'total rp + cost kerja',
+            'U1' => 'rata2 rp + cost kerja',
+            'V1' => 'susut'
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k, $v);
+        }
+        $model = new CocokanModel();
+        $ca11 = $this->getSuntikan(21);
+        $ctk_opname = new stdClass();
+        $ctk_opname->pcs = $ca11->pcs;
+        $ctk_opname->gr = $ca11->gr;
+        $ctk_opname->ttl_rp = $ca11->ttl_rp;
+
+        $ca2 = $model::cetak_stok_awal();
+
+        $ca12suntik = $this->getSuntikan(23);
+        $akhir_cbt = new stdClass();
+        $akhir_cbt->pcs = $ca2->pcs + $ca12suntik->pcs;
+        $akhir_cbt->gr = $ca2->gr + $ca12suntik->gr;
+        $akhir_cbt->ttl_rp = $ca2->ttl_rp + $ca12suntik->ttl_rp + $ca2->cost_kerja;
+
+
+
+        $ca17 = $model::cetak_stok();
+        $ca17suntik = $this->getSuntikan(27);
+
+
+        $cetak_sisa = new stdClass();
+        $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
+        $cetak_sisa->gr = $ca17->gr + $ca17suntik->gr;
+        $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp;
+
+        $ca16suntik = $this->getSuntikan(26);
+        $ca16 = $model::cetak_selesai();
+        $cetak_akhir = new stdClass();
+        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
+        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
+        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
+        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
+
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+        $cetak_proses = $model::cetak_proses();
+
+        $sheet->setCellValue('B2', $akhir_cbt->pcs);
+        $sheet->setCellValue('C2', $akhir_cbt->gr);
+        $sheet->setCellValue('D2', $akhir_cbt->ttl_rp);
+        $sheet->setCellValue('E2', $akhir_cbt->ttl_rp / $akhir_cbt->gr);
+
+
+        $datas = [
+            [
+                'ket' => 'cetak awal',
+                'pcs' => $ctk_opname->pcs + $akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs,
+                'gr' => $ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr,
+                'ttl_rp' => $ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp,
+                'rata2' => ($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp) / ($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr),
+                'cost_kerja' => $cetak_akhir->cost_kerja,
+                'ttl' => $ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp + $cetak_akhir->cost_kerja,
+            ],
+            [
+                'ket' => 'sedang proses',
+                'pcs' => $cetak_proses->pcs,
+                'gr' => $cetak_proses->gr,
+                'ttl_rp' => $cetak_proses->ttl_rp,
+                'rata2' => $cetak_proses->ttl_rp / $cetak_proses->gr,
+                'cost_kerja' => $cetak_proses->cost_kerja,
+                'ttl' => $cetak_proses->cost_kerja + $cetak_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'sisa pengawas',
+                'pcs' => $cetak_sisa->pcs,
+                'gr' => $cetak_sisa->gr,
+                'ttl_rp' => $cetak_sisa->ttl_rp,
+                'rata2' => $cetak_sisa->ttl_rp / $cetak_sisa->gr,
+                'cost_kerja' => 0,
+                'ttl' => $cetak_sisa->ttl_rp,
+            ],
+            [
+                'ket' => 'total',
+                'pcs' => "=SUM(I2:I4)",
+                'gr' => "=SUM(J2:J4)",
+                'ttl_rp' => "=SUM(K2:K4)",
+                'rata2' => "0",
+                'cost_kerja' => "=SUM(M2:M4)",
+                'ttl' => "=SUM(N2:N4)",
+            ],
+        ];
+
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('H' . $row, $v['ket']);
+            $sheet->setCellValue('I' . $row, $v['pcs']);
+            $sheet->setCellValue('J' . $row, $v['gr']);
+            $sheet->setCellValue('K' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('L' . $row, $v['rata2']);
+            $sheet->setCellValue('M' . $row, $v['cost_kerja']);
+            $sheet->setCellValue('N' . $row, $v['ttl']);
+        }
+
+        $sheet->setCellValue('Q2', 'akhir cetak');
+        $sheet->setCellValue('R2', $cetak_akhir->pcs);
+        $sheet->setCellValue('S2', $cetak_akhir->gr);
+        $sheet->setCellValue('T2', $cetak_akhir->ttl_rp + $cetak_akhir->cost_kerja);
+        $sheet->setCellValue('U2', ($cetak_akhir->ttl_rp + $cetak_akhir->cost_kerja) / $cetak_akhir->gr);
+        $sheet->setCellValue('V2', (1 - $cetak_akhir->gr / ($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr)) * 100 . '%');
+
+    }
+
+    public function sortirSum($spreadsheet, $style_atas, $style)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(2);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Sortir');
+        $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
+        $sheet->getStyle('B1:E2')->applyFromArray($style);
+        $sheet->getStyle('H1:N5')->applyFromArray($style);
+        $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $koloms = [
+            'A1' => 'Akhir Cetak',
+            'B1' => 'pcs',
+            'C1' => 'gr',
+            'D1' => 'rp awal',
+            'E1' => 'rata2',
+
+            'G1' => 'Sortir Kerja',
+            'H1' => 'ket',
+            'I1' => 'pcs',
+            'J1' => 'gr',
+            'K1' => 'rp awal',
+            'L1' => 'rata2',
+            'M1' => 'cost kerja',
+            'N1' => 'total Rp + cost kerja',
+
+            'P1' => 'Akhir Sortir',
+            'Q1' => 'Ket',
+            'R1' => 'pcs',
+            'S1' => 'gr',
+            'T1' => 'total rp + cost kerja',
+            'U1' => 'rata2 rp + cost kerja',
+            'V1' => 'susut'
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k, $v);
+        }
+        $model = new CocokanModel();
+        $s1 = $model::stock_sortir_awal();
+        $s2suntik = $this->getSuntikan(32);
+        $akhir_cetak = new stdClass();
+        $akhir_cetak->pcs = $s1->pcs + $s2suntik->pcs;
+        $akhir_cetak->gr = $s1->gr + $s2suntik->gr;
+        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
+
+        $s3 = $model::sortir_akhir();
+
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->cost_kerja = $s3->cost_kerja;
+
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+        $opname = $this->getSuntikan(31);
+        $sedang_proses = $model::sortir_proses();
+        $sortir_sisa = $model::stock_sortir();
+
+        $sheet->setCellValue('B2', $akhir_cetak->pcs);
+        $sheet->setCellValue('C2', $akhir_cetak->gr);
+        $sheet->setCellValue('D2', $akhir_cetak->ttl_rp);
+        $sheet->setCellValue('E2', $akhir_cetak->ttl_rp / $akhir_cetak->gr);
+
+
+        $datas = [
+            [
+                'ket' => 'awal sortir',
+                'pcs' => $akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs,
+                'gr' => $akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr,
+                'ttl_rp' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp,
+                'rata2' => ($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp) / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr),
+                'cost_kerja' => $sortir_akhir->cost_kerja,
+                'ttl' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp + $sortir_akhir->cost_kerja,
+            ],
+            [
+                'ket' => 'sedang proses',
+                'pcs' => $sedang_proses->pcs,
+                'gr' => $sedang_proses->gr,
+                'ttl_rp' => $sedang_proses->ttl_rp,
+                'rata2' => empty($sedang_proses->gr) ? 0 : $sedang_proses->ttl_rp / $sedang_proses->gr,
+                'cost_kerja' => 0,
+                'ttl' => $sedang_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'sisa pengawas',
+                'pcs' => $sortir_sisa->pcs,
+                'gr' => $sortir_sisa->gr,
+                'ttl_rp' => $sortir_sisa->ttl_rp,
+                'rata2' => empty($sortir_sisa->gr) ? 0 : $sortir_sisa->ttl_rp / $sortir_sisa->gr,
+                'cost_kerja' => 0,
+                'ttl' => $sortir_sisa->ttl_rp,
+            ],
+            [
+                'ket' => 'total',
+                'pcs' => "=SUM(I2:I4)",
+                'gr' => "=SUM(J2:J4)",
+                'ttl_rp' => "=SUM(K2:K4)",
+                'rata2' => "0",
+                'cost_kerja' => "=SUM(M2:M4)",
+                'ttl' => "=SUM(N2:N4)",
+            ],
+        ];
+
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('H' . $row, $v['ket']);
+            $sheet->setCellValue('I' . $row, $v['pcs']);
+            $sheet->setCellValue('J' . $row, $v['gr']);
+            $sheet->setCellValue('K' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('L' . $row, $v['rata2']);
+            $sheet->setCellValue('M' . $row, $v['cost_kerja']);
+            $sheet->setCellValue('N' . $row, $v['ttl']);
+
+        }
+
+        $sheet->setCellValue('Q2', 'akhir sortir');
+        $sheet->setCellValue('R2', $sortir_akhir->pcs);
+        $sheet->setCellValue('S2', $sortir_akhir->gr);
+        $sheet->setCellValue('T2', $sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja);
+        $sheet->setCellValue('U2', ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja) / $sortir_akhir->gr);
+        $sheet->setCellValue('V2', number_format((1 - $sortir_akhir->gr / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr)) * 100, 0) . '%');
+
+    }
+
+    public function gradingSum($spreadsheet, $style_atas, $style)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Grading');
+        $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
+        $sheet->getStyle('B1:E2')->applyFromArray($style);
+        $sheet->getStyle('H1:N5')->applyFromArray($style);
+        $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $koloms = [
+            'A1' => 'Akhir Sortir',
+            'B1' => 'pcs',
+            'C1' => 'gr',
+            'D1' => 'rp awal',
+            'E1' => 'rata2',
+
+            'G1' => 'Grading Kerja',
+            'H1' => 'ket',
+            'I1' => 'pcs',
+            'J1' => 'gr',
+            'K1' => 'rp awal',
+            'L1' => 'rata2',
+            'M1' => 'cost kerja',
+            'N1' => 'total Rp + cost kerja',
+
+            'P1' => 'Akhir Grading',
+            'Q1' => 'Ket',
+            'R1' => 'pcs',
+            'S1' => 'gr',
+            'T1' => 'total rp + cost kerja',
+            'U1' => 'rata2 rp + cost kerja',
+            'V1' => 'susut'
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k, $v);
+        }
+        $model = new CocokanModel();
+        $s1 = $model::stock_sortir_awal();
+        $s2suntik = $this->getSuntikan(32);
+        $akhir_cetak = new stdClass();
+        $akhir_cetak->pcs = $s1->pcs + $s2suntik->pcs;
+        $akhir_cetak->gr = $s1->gr + $s2suntik->gr;
+        $akhir_cetak->ttl_rp = $s1->ttl_rp + $s2suntik->ttl_rp;
+
+        $s3 = $model::sortir_akhir();
+
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->cost_kerja = $s3->cost_kerja;
+
+        $ttl_gr = $this->getCost($model, 'ttl_gr');
+        $cost_op = $this->getCost($model, 'cost_op');
+        $cost_dll = $this->getCost($model, 'dll');
+        $opname = $this->getSuntikan(31);
+        $sedang_proses = $model::sortir_proses();
+        $sortir_sisa = $model::stock_sortir();
+
+        $sheet->setCellValue('B2', $akhir_cetak->pcs);
+        $sheet->setCellValue('C2', $akhir_cetak->gr);
+        $sheet->setCellValue('D2', $akhir_cetak->ttl_rp);
+        $sheet->setCellValue('E2', $akhir_cetak->ttl_rp / $akhir_cetak->gr);
+
+
+        $datas = [
+            [
+                'ket' => 'awal sortir',
+                'pcs' => $akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs,
+                'gr' => $akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr,
+                'ttl_rp' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp,
+                'rata2' => ($akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp) / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr),
+                'cost_kerja' => $sortir_akhir->cost_kerja,
+                'ttl' => $akhir_cetak->ttl_rp + $opname->ttl_rp - $sedang_proses->ttl_rp - $sortir_sisa->ttl_rp + $sortir_akhir->cost_kerja,
+            ],
+            [
+                'ket' => 'sedang proses',
+                'pcs' => $sedang_proses->pcs,
+                'gr' => $sedang_proses->gr,
+                'ttl_rp' => $sedang_proses->ttl_rp,
+                'rata2' => empty($sedang_proses->gr) ? 0 : $sedang_proses->ttl_rp / $sedang_proses->gr,
+                'cost_kerja' => 0,
+                'ttl' => $sedang_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'sisa pengawas',
+                'pcs' => $sortir_sisa->pcs,
+                'gr' => $sortir_sisa->gr,
+                'ttl_rp' => $sortir_sisa->ttl_rp,
+                'rata2' => empty($sortir_sisa->gr) ? 0 : $sortir_sisa->ttl_rp / $sortir_sisa->gr,
+                'cost_kerja' => 0,
+                'ttl' => $sortir_sisa->ttl_rp,
+            ],
+            [
+                'ket' => 'total',
+                'pcs' => "=SUM(I2:I4)",
+                'gr' => "=SUM(J2:J4)",
+                'ttl_rp' => "=SUM(K2:K4)",
+                'rata2' => "0",
+                'cost_kerja' => "=SUM(M2:M4)",
+                'ttl' => "=SUM(N2:N4)",
+            ],
+        ];
+
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('H' . $row, $v['ket']);
+            $sheet->setCellValue('I' . $row, $v['pcs']);
+            $sheet->setCellValue('J' . $row, $v['gr']);
+            $sheet->setCellValue('K' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('L' . $row, $v['rata2']);
+            $sheet->setCellValue('M' . $row, $v['cost_kerja']);
+            $sheet->setCellValue('N' . $row, $v['ttl']);
+
+        }
+
+        $sheet->setCellValue('Q2', 'akhir sortir');
+        $sheet->setCellValue('R2', $sortir_akhir->pcs);
+        $sheet->setCellValue('S2', $sortir_akhir->gr);
+        $sheet->setCellValue('T2', $sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja);
+        $sheet->setCellValue('U2', ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja) / $sortir_akhir->gr);
+        $sheet->setCellValue('V2', number_format((1 - $sortir_akhir->gr / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr)) * 100, 0) . '%');
+
+    }
+
     public function exportCabut()
     {
 
@@ -1243,6 +1659,9 @@ class ExportCocokanController extends Controller
         $spreadsheet = new Spreadsheet();
 
         $this->cabutSum($spreadsheet, $style_atas, $style);
+        $this->cetakSum($spreadsheet, $style_atas, $style);
+        $this->sortirSum($spreadsheet, $style_atas, $style);
+        $this->gradingSum($spreadsheet, $style_atas, $style);
 
         $namafile = "Export gudang summary cocokan.xlsx";
 

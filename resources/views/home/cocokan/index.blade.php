@@ -132,8 +132,7 @@
                 <div class="d-flex justify-content-between">
                     <h6>Akhir Cabut</h6>
                     <div>
-                        <a href="{{ route('cocokan.exportCabut') }}" class="btn btn-sm btn-primary"><i
-                                class="fas fa-file-excel"></i> Export</a>
+                        @include('home.cocokan.btn_export')
                     </div>
                 </div>
 
