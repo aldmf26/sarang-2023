@@ -30,8 +30,20 @@ class BalanceController extends Controller
         ];
         return view('home.cocokan.balance.index',$data);
     }
-    public function gaji()
+    public function cost(Request $r)
     {
-        return 1;
+        $bulan = $r->bulan;
+        $tahun = $r->tahun;
+        $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
+        $grading = BalanceModel::grading($bulan, $tahun);
+        $data = [
+            'title' => 'Cost Gaji',
+            'dataBulan' => $dataBulan,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'grading' => $grading,
+        ];
+        return view('home.cocokan.balance.cost',$data);
+
     }
 }
