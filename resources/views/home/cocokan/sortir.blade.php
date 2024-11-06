@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
             <div class="col-lg-3">
-                <h6>Awal Sortir</h6>
+                <h6> Sortir awal </h6>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">ket</th>
@@ -17,7 +17,7 @@
                         <th class="dhead text-end">rata2</th>
                     </tr>
                     <tr>
-                        <td>Akhir Cetak</td>
+                        <td>Cetak akhir </td>
                         <td class="text-end">{{ number_format($akhir_cetak->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($akhir_cetak->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($akhir_cetak->ttl_rp, 0) }}</td>
@@ -56,7 +56,7 @@
                         <th class="dhead text-end">total rp + cost kerja</th>
                     </tr>
                     <tr>
-                        <td>Awal Sortir</td>
+                        <td>Sortir awal</td>
                         <td class="text-end">
                             {{ number_format($akhir_cetak->pcs + $opname->pcs - $sedang_proses->pcs - $sortir_sisa->pcs, 0) }}
                         </td>
@@ -98,7 +98,7 @@
                         </td>
                     </tr> --}}
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
+                        <td style="background-color: #F7BAC5;color:white">Sortir sedang proses</td>
                         <td class="text-end">
                             {{ number_format($sedang_proses->pcs, 0) }}
                         </td>
@@ -121,7 +121,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
+                        <td style="background-color: #F7BAC5;color:white">Sortir sisa pengawas</td>
                         <td class="text-end">
                             {{ number_format($sortir_sisa->pcs, 0) }}
                         </td>
@@ -176,7 +176,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="d-flex justify-content-between">
-                    <h6>Akhir Sortir</h6>
+                    <h6> Sortir akhir </h6>
                     <div>
                         @include('home.cocokan.btn_export')
                     </div>
@@ -193,7 +193,7 @@
                     </tr>
 
                     <tr>
-                        <td style="background-color: #F7F700">Akhir Sortir</td>
+                        <td style="background-color: #F7F700">Sortir akhir </td>
                         <td class="text-end">
                             {{ number_format($sortir_akhir->pcs, 0) }}
                         </td>

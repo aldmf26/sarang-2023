@@ -131,7 +131,7 @@ class CabutOpnameModel extends Model
         ) as a
         where a.id_pengawas = '$id_pengawas' and a.tipe = '$tipe'
         group by a.id_anak, a.no_box
-        Order by a.name ASC;
+        Order by a.nm_anak ASC;
         ;");
     }
 }
