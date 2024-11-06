@@ -520,10 +520,10 @@ left join(
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, 0 as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp 
+        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, 0 as cost_kerja, sum(a.cost_cu) as cost_cu, sum(b.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp 
         FROM pengiriman as a
         left join (
-            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op
             FROM grading_partai as b 
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
@@ -604,10 +604,10 @@ left join(
             sum(a.pcs) as pcs,
             sum(a.gr + (a.gr / b.kadar)) as gr_naik,
             sum(a.gr) as gr,
-            sum(a.cost_bk) as cost_bk,
-            sum(a.cost_kerja) as cost_kerja,
-            sum(a.cost_cu) as cost_cu,
-            sum(a.cost_op) as cost_op
+            sum(d.cost_bk) as cost_bk,
+            0 as cost_kerja,
+           0 as cost_cu,
+            sum(d.cost_op) as cost_op
         from pengiriman as a 
         join (
             select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
@@ -617,6 +617,12 @@ left join(
             FROM `pengiriman`
             GROUP BY no_nota
         ) as c on a.no_nota = c.no_nota
+        left join (
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op
+            FROM grading_partai as b 
+            where b.sudah_kirim = 'Y'
+            group by b.box_pengiriman
+        ) as d on d.box_pengiriman = a.no_box
         GROUP by a.no_nota order by a.no_nota desc");
     }
 
