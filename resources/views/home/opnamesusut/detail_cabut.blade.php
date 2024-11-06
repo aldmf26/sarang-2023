@@ -1,4 +1,4 @@
-<h5>Tipe : {{ $tipe }}</h5>
+<h5>Pengawas : {{ $nm_pengawas }} | Tipe : {{ $tipe }}</h5>
 <table class="table table-bordered table-hover">
     <thead>
 
@@ -30,7 +30,11 @@
                 <td class="text-end">{{ $b->gr_awal }}</td>
                 <td class="text-end">{{ $b->pcs }}</td>
                 <td class="text-end">{{ $b->gr_akhir }}</td>
-                <td class="text-end">{{ number_format((1 - $b->gr_akhir / $b->gr_awal) * 100, 0) }}%</td>
+                @php
+                    $susut = (1 - $b->gr_akhir / $b->gr_awal) * 100;
+                @endphp
+                <td class="text-end {{ $susut > $b->batas_susut ? 'text-danger' : '' }}">
+                    {{ number_format((1 - $b->gr_akhir / $b->gr_awal) * 100, 0) }}%</td>
             </tr>
         @endforeach
     </tbody>

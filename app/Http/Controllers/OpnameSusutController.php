@@ -6,6 +6,7 @@ use App\Models\Cabut;
 use App\Models\CabutOpnameModel;
 use App\Models\OpnameNewModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OpnameSusutController extends Controller
 {
@@ -26,8 +27,20 @@ class OpnameSusutController extends Controller
         $data = [
             'title' => 'Data Opname',
             'tipe' => $r->tipe,
+            'nm_pengawas' => DB::table('users')->where('id', $r->id_pengawas)->first()->name,
             'box_stock' => CabutOpnameModel::cabut_susut_detail($r->id_pengawas, $r->tipe),
         ];
         return view('home.opnamesusut.detail_cabut', $data);
+    }
+
+    public function cetak(Request $request)
+    {
+        $pgws_cabut = CabutOpnameModel::cabut_susut();
+        $data = [
+            'title' => 'Data Opname',
+            'pgws_cabut' => $pgws_cabut,
+
+        ];
+        return view('home.opnamesusut.cetak', $data);
     }
 }

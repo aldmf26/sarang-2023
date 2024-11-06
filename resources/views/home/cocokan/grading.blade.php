@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
             <div class="col-lg-3">
-                <h6>Awal Grading</h6>
+                <h6>Grading awal </h6>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -17,7 +17,7 @@
                         <th class="dhead text-end">rata2</th>
                     </tr>
                     <tr>
-                        <td>Akhir Sortir</td>
+                        <td>Sortir akhir </td>
                         <td class="text-end">{{ number_format($sortir_akhir->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($sortir_akhir->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($sortir_akhir->ttl_rp, 0) }}</td>
@@ -61,7 +61,7 @@
 
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Awal Grading</td>
+                        <td style="background-color: #F7BAC5;color:white"> Grading awal </td>
                         <td class="text-end">
                             {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading_sisa->pcs, 0) }}
                         </td>
@@ -99,7 +99,7 @@
                         </td>
                     </tr> --}}
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Selisih pcs</td>
+                        <td style="background-color: #F7BAC5;color:white">Grading selisih pcs</td>
                         <td class="text-end text-danger fw-bold">
                             {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $grading_sisa->pcs, 0) }}
                         </td>
@@ -156,7 +156,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="d-flex justify-content-between">
-                    <h6>Akhir Grading</h6>
+                    <h6> Grading akhir </h6>
                     <div>
                         @include('home.cocokan.btn_export')
                     </div>
@@ -174,7 +174,7 @@
 
 
                     <tr>
-                        <td style="background-color: #F7F700;">Akhir Grading</td>
+                        <td style="background-color: #F7F700;">Grading akhir </td>
                         <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.grading.akhir') }}" target="_blank">

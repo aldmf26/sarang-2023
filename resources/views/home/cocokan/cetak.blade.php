@@ -9,7 +9,7 @@
 
             <div class="col-lg-3">
                 <div>
-                    <h6>Awal cetak</h6>
+                    <h6>Cetak Awal</h6>
                 </div>
                 <table class="table table-bordered">
                     <tr>
@@ -20,7 +20,7 @@
                         <th class="dhead text-end">rata2</th>
                     </tr>
                     <tr>
-                        <td>Akhir Cabut</td>
+                        <td>Cabut akhir </td>
                         <td class="text-end">{{ number_format($akhir_cbt->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($akhir_cbt->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($akhir_cbt->ttl_rp, 0) }}</td>
@@ -49,7 +49,7 @@
             </div>
             <div class="col-lg-5">
                 <div>
-                    <h6>Awal cetak</h6>
+                    <h6>Cetak awal </h6>
                 </div>
                 <table class="table table-bordered">
                     <tr>
@@ -62,7 +62,7 @@
                         <th class="dhead text-end">total rp + cost kerja</th>
                     </tr>
                     <tr>
-                        <td>Awal Cetak</td>
+                        <td>Cetak awal</td>
                         <td class="text-end">
                             {{ number_format($ctk_opname->pcs + $akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs, 0) }}
                         </td>
@@ -86,7 +86,7 @@
                     </tr>
 
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sedang Proses</td>
+                        <td style="background-color: #F7BAC5;color:white">Cetak sedang proses</td>
                         <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.cetak.proses') }}" target="_blank">
@@ -101,7 +101,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sisa Pengawas</td>
+                        <td style="background-color: #F7BAC5;color:white">Cetak sisa pengawas</td>
                         <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.cetak.sisa') }}" target="_blank">
@@ -130,7 +130,7 @@
                             $modal = $cetak_akhir->ttl_rp + $cetak_proses->ttl_rp + $cetak_sisa->ttl_rp;
                         @endphp
                         <td class="text-end fw-bold">
-                            0
+                            {{ number_format($cetak_akhir->cost_kerja, 0) }}
                         </td>
                         <td class="text-end fw-bold">
                             {{ number_format($modal + $cetak_akhir->cost_kerja + $cetak_proses->cost_kerja, 0) }}
@@ -142,7 +142,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="d-flex justify-content-between">
-                    <h6>Akhir Cetak</h6>
+                    <h6> Cetak akhir </h6>
                     <div>
                         @include('home.cocokan.btn_export')
                     </div>
@@ -158,7 +158,7 @@
                     </tr>
 
                     <tr>
-                        <td style="background-color: #F7F700">Akhir Cetak</td>
+                        <td style="background-color: #F7F700">Cetak akhir </td>
                         <td class="text-end">
                             {{ number_format($cetak_akhir->pcs, 0) }}</td>
                         <td class="text-end fw-bold">

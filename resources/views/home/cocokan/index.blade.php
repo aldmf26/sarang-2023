@@ -9,7 +9,7 @@
 
             <div class="col-lg-3">
                 <div>
-                    <h6>Awal Cabut</h6>
+                    <h6> Cabut awal </h6>
                 </div>
                 <table class="table table-bordered">
                     <tr>
@@ -83,7 +83,7 @@
 
                     </tr> --}}
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sedang proses</td>
+                        <td style="background-color: #F7BAC5;color:white">Cabut sedang proses</td>
                         <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a target="_blank"
                                 href="{{ route('detail.cabut.proses') }}">{{ number_format($cbt_proses->gr, 0) }}</a>
@@ -94,7 +94,7 @@
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp + $cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Sisa pengawas</td>
+                        <td style="background-color: #F7BAC5;color:white">Cabut sisa pengawas</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
                         <td class="text-end fw-bold"><a
                                 href="{{ route('detail.cabut.sisa') }}">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
@@ -130,7 +130,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="d-flex justify-content-between">
-                    <h6>Akhir Cabut</h6>
+                    <h6>Cabut akhir </h6>
                     <div>
                         @include('home.cocokan.btn_export')
                     </div>
