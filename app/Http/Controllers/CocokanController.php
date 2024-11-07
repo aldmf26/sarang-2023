@@ -341,6 +341,7 @@ class CocokanController extends Controller
         $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
         $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
+
         $pengiriman = Grading::pengirimanSum();
         $grading = Grading::belumKirimSum();
         $grading_susut = Grading::belumKirimSumsusut();

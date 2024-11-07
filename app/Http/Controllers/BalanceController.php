@@ -20,7 +20,8 @@ class BalanceController extends Controller
 
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
         $operasional = DB::table('oprasional')->where('bulan', $bulan)->where('tahun', $tahun)->first();
-        $grading = BalanceModel::grading($bulan, $tahun);
+        $grading = BalanceModel::gradingone($bulan, $tahun);
+
 
         $data = [
             'title' => 'Detail Gaji Balancesheet',
@@ -48,7 +49,6 @@ class BalanceController extends Controller
             'tahun' => $tahun,
             'grading' => $grading,
         ];
-        return view('home.cocokan.balance.cost',$data);
-
+        return view('home.cocokan.balance.cost', $data);
     }
 }
