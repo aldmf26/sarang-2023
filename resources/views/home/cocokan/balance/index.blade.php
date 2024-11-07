@@ -30,6 +30,24 @@
                             <th class="dhead text-end">Rp/gr</th>
                         </tr>
                     </thead>
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="bg-info text-white">Total</th>
+                            @php
+                                $ttlGaji = $cabut->cost + $cetak->cost_kerja + $sortir->cost_kerja + $operasional->total_operasional;
+                                $ttlTtlGaji = $operasional->total_operasional;
+                                $ttlCost = $operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja;
+                                $ttlPcs = $cabut->pcs + $cetak->pcs + $sortir->pcs + $grading->pcs;
+                                $ttlGr = $cabut->gr + $cetak->gr + $sortir->gr + $grading->gr;
+                            @endphp
+                            <th class="text-end bg-info text-white">{{ number_format($ttlGaji,0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlTtlGaji,0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlCost,0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlPcs,0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlGr,0) }}</th>
+                            <th class="bg-info text-white"></th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <td>{{ formatTglGaji($bulan, $tahun) }}</td>
