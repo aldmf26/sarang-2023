@@ -7,7 +7,7 @@
         <section class="row">
             @include('home.cocokan.nav')
 
-            {{-- <div class="col-lg-5">
+            <div class="col-lg-5">
                 <div class="d-flex justify-content-between mb-2">
                     <div>
                         <h6>Bk Kerja</h6>
@@ -77,7 +77,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div> --}}
+            </div>
             <div class="col-lg-4">
                 <h6>Cost Perbulan</h6>
                 <table class="table table-bordered">
