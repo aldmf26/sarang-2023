@@ -307,7 +307,8 @@
                             <td class="text-end">{{ number_format($grading_sisa->pcs ?? 0, 0) }}</td>
                             <td class="text-end">{{ number_format($grading_sisa->gr ?? 0, 0) }}</td>
                             <td class="text-end">
-                                {{ number_format(sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja'), 0) }}
+                                {{-- {{ number_format(sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja'), 0) }} --}}
+                                {{ number_format($grading_sisa->cost_bk, 0) }}
                             </td>
 
                         </tr>
