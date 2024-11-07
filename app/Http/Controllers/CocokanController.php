@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BalanceModel;
 use Illuminate\Http\Request;
 use App\Models\CocokanModel;
 use App\Models\Grading;
@@ -271,7 +272,7 @@ class CocokanController extends Controller
 
 
 
-        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
+        $uang_cost = BalanceModel::uangCost();
         $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
 
 
@@ -386,7 +387,7 @@ class CocokanController extends Controller
             'title' => 'Balance Sheet ',
             'bk' => SummaryModel::summarybk(),
             'bk_suntik' => DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'"),
-            'uang_cost' => DB::select("SELECT a.* FROM oprasional as a"),
+            'uang_cost' => BalanceModel::uangCost(),
             'bk_akhir' => $bk_akhir,
             'cbt_proses' => CocokanModel::bksedang_proses_sum(),
             'cbt_sisa_pgws' => CocokanModel::bksisapgws(),

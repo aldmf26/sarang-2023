@@ -20,7 +20,7 @@ class BalanceController extends Controller
 
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
         $operasional = DB::table('oprasional')->where('bulan', $bulan)->where('tahun', $tahun)->first();
-        $grading = BalanceModel::gradingone($bulan, $tahun);
+        $grading = BalanceModel::gradingOne($bulan, $tahun);
 
 
         $data = [
