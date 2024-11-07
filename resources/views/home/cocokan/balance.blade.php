@@ -94,8 +94,18 @@
                             <tr>
                                 <td>{{ date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '01')) }}
                                 </td>
-                                <td class="text-end"><a target="_blank" href="{{route('cocokan.balance.gaji', ['bulan' => $u->bulan, 'tahun' => $u->tahun])}}">{{ number_format(0, 0) }}</a></td>
-                                <td class="text-end"><a target="_blank" href="{{route('cocokan.balance.cost', ['bulan' => $u->bulan, 'tahun' => $u->tahun])}}">{{ number_format(0, 0) }}</a></td>
+                                <td class="text-end">
+                                    <a target="_blank"
+                                        href="{{ route('cocokan.balance.gaji', ['bulan' => $u->bulan, 'tahun' => $u->tahun]) }}">
+                                        {{ number_format(0, 0) }}
+                                    </a>
+                                </td>
+                                <td class="text-end">
+                                    <a target="_blank"
+                                        href="{{ route('cocokan.balance.cost', ['bulan' => $u->bulan, 'tahun' => $u->tahun]) }}">
+                                        {{ number_format(0, 0) }}
+                                    </a>
+                                </td>
                                 <td class="text-end">{{ number_format($u->total_operasional, 0) }}</td>
                             </tr>
                         @endforeach
@@ -109,9 +119,9 @@
                             <th>{{ number_format(sumBk($uang_cost, 'total_operasional'), 0) }}</th>
                         </tr>
                         @for ($i = 0; $i < 5; $i++)
-                        <tr>
-                            <th colspan="3">&nbsp;</th>
-                        </tr>
+                            <tr>
+                                <th colspan="3">&nbsp;</th>
+                            </tr>
                         @endfor
                         @php
                             $ttl_sisa_belum_kirim =
