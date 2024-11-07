@@ -34,7 +34,7 @@
                         <tr>
                             <th colspan="2" class="bg-info text-white">Total</th>
                             @php
-                                $ttlGaji = $cabut->cost + $cetak->cost_kerja + $sortir->cost_kerja + $operasional->total_operasional;
+                                $ttlGaji = $cabut->cost + $cetak->cost_kerja + $sortir->cost_kerja;
                                 $ttlTtlGaji = $operasional->total_operasional;
                                 $ttlCost = $operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja;
                                 $ttlPcs = $cabut->pcs + $cetak->pcs + $sortir->pcs + $grading->pcs;
