@@ -538,7 +538,7 @@ left join users as g on g.id = a.id_pengawas
 
     public static function gradingSisaOne()
     {
-       return  DB::selectOne("SELECT sum(a.pcs_awal) pcs , 
+        return  DB::selectOne("SELECT sum(a.pcs_awal) pcs , 
         sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
@@ -553,6 +553,6 @@ left join users as g on g.id = a.id_pengawas
             group by a.no_box
         ) as f on f.no_box = a.no_box
 
-        where a.no_box not in ( SELECT a.no_box_sortir FROM grading as a where a.no_invoice is not null  ) and a.kategori ='grading';");
+        where a.no_box not in ( SELECT a.no_box_sortir FROM grading as a where a.no_invoice is not null  ) and a.kategori ='grade';");
     }
 }
