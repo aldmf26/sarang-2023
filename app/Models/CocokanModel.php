@@ -553,6 +553,6 @@ left join users as g on g.id = a.id_pengawas
             group by a.no_box
         ) as f on f.no_box = a.no_box
 
-        where a.no_box not in ( SELECT a.no_box_sortir FROM grading as a where a.no_invoice is not null  ) and a.kategori ='grade';");
+        where a.no_box not in ( SELECT a.no_box_sortir FROM grading as a where a.no_invoice is not null   ) and a.kategori ='grade';");
     }
 }
