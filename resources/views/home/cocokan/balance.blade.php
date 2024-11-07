@@ -129,8 +129,7 @@
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
 
-                            $ttl_sisa_blum_grading =
-                                sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja');
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
 
                             $ttl_cost_berjalan =
                                 $cbt_proses->ttl_rp +
@@ -372,8 +371,7 @@
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
 
-                            $ttl_sisa_blum_grading =
-                                sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja');
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
 
                             // $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
 
