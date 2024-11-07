@@ -120,4 +120,13 @@ class BalanceModel extends Model
             WHERE a.bulan = $bulan and a.tahun = $tahun
             GROUP BY a.bulan,a.grade;");
     }
+
+    public static function gradingOne($bulan, $tahun)
+    {
+
+        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.cost_bk) as cost_bk, sum(a.cost_op) as cost_op 
+        FROM grading_partai as a
+        where a.bulan = $bulan and a.tahun = $tahun
+        ");
+    }
 }
