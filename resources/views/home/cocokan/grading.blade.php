@@ -76,9 +76,9 @@
                         <td class="text-end">
                             {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr), 0) }}
                         </td>
-                        <td class="text-end">0</td>
+                        <td class="text-end">{{ number_format($grading->cost_op, 0) }}</td>
                         <td class="text-end">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk, 0) }}
+                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading->cost_op, 0) }}
                         </td>
                     </tr>
 
@@ -143,7 +143,7 @@
                             {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr + $grading_sisa->gr), 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            0
+                            {{ number_format($grading->cost_op, 0) }}
                         </td>
                         <td class="text-end fw-bold">
                             {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk, 0) }}
@@ -181,8 +181,11 @@
                                 {{ number_format($grading->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($grading->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->cost_bk / $grading->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0) }}
+                        </td>
                         <td class="text-end">
                             {{ number_format((1 - $grading->gr / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr)) * 100, 0) }}
                         </td>

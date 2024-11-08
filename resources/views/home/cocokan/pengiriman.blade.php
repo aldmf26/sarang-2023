@@ -19,13 +19,15 @@
                         <td>Grading akhir</td>
                         <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->cost_bk, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
                         <td class="text-end fw-bold">{{ number_format($grading->pcs, 0) }}</td>
                         <td class="text-end fw-bold">{{ number_format($grading->gr, 0) }}</td>
-                        <td class="text-end fw-bold">{{ number_format($grading->cost_bk, 0) }}
+                        <td class="text-end fw-bold">
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}
                         </td>
                     </tr>
 
@@ -43,7 +45,7 @@
                         <th class="dhead text-end">Pcs</th>
                         <th class="dhead text-end">Gr</th>
                         <th class="dhead text-end">Rp</th>
-                        <th class="dhead text-end">Cost operasional</th>
+                        <th class="dhead text-end">Cost kerja</th>
                         <th class="dhead text-end">Total Rp</th>
                     </tr>
                     <tr>
@@ -54,9 +56,11 @@
                                 {{ number_format($pengiriman->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($pengiriman->cost_bk, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($pengiriman->cost_bk + $pengiriman->cost_op + $pengiriman->cost_kerja + $pengiriman->cost_cu, 0) }}
+                        </td>
 
-                        <td class="text-end">{{ number_format($pengiriman->cost_op, 0) }}</td>
+                        <td class="text-end">0</td>
                         <td class="text-end">
                             {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
                         </td>
@@ -69,8 +73,10 @@
                                 {{ number_format($belum_kirim->gr, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($belum_kirim->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($belum_kirim->cost_op, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($belum_kirim->cost_bk + $belum_kirim->cost_kerja + $belum_kirim->cost_op, 0) }}
+                        </td>
+                        <td class="text-end">0</td>
                         <td class="text-end">
                             {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk, 0) }}
                         </td>
@@ -84,7 +90,7 @@
                             {{ number_format($pengiriman->gr + $belum_kirim->gr, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($pengiriman->cost_bk + $belum_kirim->cost_bk, 0) }}
+                            {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
                         </td>
                         <td></td>
                         <td class="text-end fw-bold">
@@ -128,7 +134,9 @@
                                         href="{{ route('detail.list_pengiriman', ['no_nota' => $d->no_nota]) }}">{{ number_format($d->gr, 0) }}</a>
                                 </td>
                                 <td align="right">{{ number_format($d->gr_naik, 0) }}</td>
-                                <td align="right">{{ number_format($d->cost_bk + $d->cost_op, 0) }}</td>
+                                <td align="right">
+                                    {{ number_format($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu, 0) }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -140,7 +148,7 @@
                             <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman, 'gr_naik'), 0) }}
                             </th>
                             <th class="text-end fw-bold">
-                                {{ number_format(sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op'), 0) }}
+                                {{ number_format(sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu'), 0) }}
                             </th>
                         </tr>
                     </tfoot>

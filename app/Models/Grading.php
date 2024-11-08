@@ -520,10 +520,10 @@ left join(
     }
     public static function pengirimanSum()
     {
-        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, 0 as cost_kerja, sum(a.cost_cu) as cost_cu, sum(b.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp 
+        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, sum(b.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(b.cost_op) as cost_op, sum(a.ttl_rp) as ttl_rp 
         FROM pengiriman as a
         left join (
-            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja
             FROM grading_partai as b 
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
@@ -533,7 +533,7 @@ left join(
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,0 as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
     }
     public static function belumKirimSumsusut()
     {
@@ -605,8 +605,8 @@ left join(
             sum(a.gr + (a.gr / b.kadar)) as gr_naik,
             sum(a.gr) as gr,
             sum(d.cost_bk) as cost_bk,
-            0 as cost_kerja,
-           0 as cost_cu,
+            sum(d.cost_kerja) as cost_kerja,
+           sum(d.cost_cu) as cost_cu,
             sum(d.cost_op) as cost_op
         from pengiriman as a 
         join (
@@ -618,7 +618,7 @@ left join(
             GROUP BY no_nota
         ) as c on a.no_nota = c.no_nota
         left join (
-            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu
             FROM grading_partai as b 
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
