@@ -24,7 +24,7 @@ class BalanceController extends Controller
 
 
         $data = [
-            'title' => 'Cost Gaji Cabut Cetak Sortir',
+            'title' => 'Cost Gaji Proses',
             'dataBulan' => $dataBulan,
             'bulan' => $bulan,
             'tahun' => $tahun,
