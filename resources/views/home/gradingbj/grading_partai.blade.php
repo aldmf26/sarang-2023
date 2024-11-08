@@ -2,6 +2,7 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
+            <a target="_blank" href="{{ route('gradingbj.gudang') }}" class="btn btn-sm btn-info"><i class="fa fa-warehouse"></i> List Gudang Box</a>
         </div>
     </x-slot>
 
@@ -53,6 +54,7 @@
                                 <th class="dhead">Pengawas</th>
                                 <th class="dhead">No Invoice</th>
                                 <th class="dhead">Tgl</th>
+                                <th class="dhead">Bulan dibayar</th>
                             </tr>
                             <tr>
                                 <td>
@@ -68,7 +70,17 @@
                                     <input readonly type="date" value="{{ date('Y-m-d') }}" name="tgl"
                                         class="form-control" required>
                                 </td>
-
+                                <td>
+                                    <select name="bulan{{ $i + 1 }}[]" class="form-control">
+                                        <option value="0">Pilih Bulan</option>
+                                      
+                                        @foreach (getListBulan() as $l)
+                                            <option value="{{ $l->bulan }}"
+                                                {{ $d->bulan == $l->bulan ? 'selected' : '' }}>
+                                                {{ $l->nm_bulan }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                             </tr>
                         </thead>
                     </table>
