@@ -6,8 +6,8 @@
     <x-slot name="cardBody">
         <section class="row">
             @include('home.cocokan.nav')
-            <Label>{{ $title }}</Label>
             <div class="col-lg-3">
+                <h6>{{ $title }}</h6>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -39,6 +39,7 @@
                 </table>
             </div>
             <div class="col-lg-4">
+                <h6>Pengiriman Kerja</h6>
                 <table class="table table-bordered">
                     <tr>
                         <th class="dhead">Ket</th>
@@ -113,6 +114,12 @@
                 </table>
             </div>
             <div class="col-lg-5">
+                <div class="d-flex justify-content-between">
+                    <h6>List Pengiriman</h6>
+                    <div>
+                        @include('home.cocokan.btn_export')
+                    </div>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
