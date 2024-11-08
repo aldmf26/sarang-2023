@@ -126,6 +126,7 @@
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-end">Gr + Kadar</th>
                             <th class="dhead text-end">Total Rp</th>
+                            <th class="dhead text-end">Rata2</th>
                         </tr>
                     </thead>
 
@@ -147,6 +148,9 @@
                                 <td align="right">
                                     {{ number_format($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu, 0) }}
                                 </td>
+                                <td align="right">
+                                    {{ number_format(($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr, 0) }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -159,6 +163,9 @@
                             </th>
                             <th class="text-end fw-bold">
                                 {{ number_format(sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">
+                                {{ number_format((sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
