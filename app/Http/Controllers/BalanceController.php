@@ -24,7 +24,7 @@ class BalanceController extends Controller
 
 
         $data = [
-            'title' => 'Detail Gaji Balancesheet',
+            'title' => 'Cost Gaji Cabut Cetak Sortir',
             'dataBulan' => $dataBulan,
             'bulan' => $bulan,
             'tahun' => $tahun,
@@ -43,7 +43,7 @@ class BalanceController extends Controller
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
         $grading = BalanceModel::grading($bulan, $tahun);
         $data = [
-            'title' => 'Cost Gaji',
+            'title' => 'Cost Operasional Beban Digrading',
             'dataBulan' => $dataBulan,
             'bulan' => $bulan,
             'tahun' => $tahun,
