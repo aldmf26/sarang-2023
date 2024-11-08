@@ -607,12 +607,13 @@ sum(e.ttl_rp) as cost_sortir_dulu, sum(f.ttl_rp) as cost_sortir_berjalan, sum(g.
 sum(i.ttl_rp) as cost_eo_dulu, sum(j.ttl_rp) as cost_eo_berjalan
         FROM bk as a 
         left join bk_awal as b on b.nm_partai = a.nm_partai
-        left join cabut as c on c.no_box = a.no_box and c.bulan_dibayar in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        left join cabut as c on c.no_box = a.no_box and c.bulan_dibayar  in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar) 
         
-        left join cabut as d on d.no_box = a.no_box and d.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+        left join cabut as d on d.no_box = a.no_box and d.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar) and d.selesai = 'Y'
         
         left join sortir as e on e.no_box = a.no_box and e.bulan in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
-        left join sortir as f on f.no_box = a.no_box and f.bulan not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+
+        left join sortir as f on f.no_box = a.no_box and f.bulan not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar) and f.selesai = 'Y'
         
         
 
@@ -630,12 +631,12 @@ left join (
             FROM cetak_new as a 
             left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
     		
-            where b.kategori = 'CTK' and a.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+            where b.kategori = 'CTK' and a.selesai = 'Y' and a.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
             group by a.no_box
 ) as h on h.no_box = a.no_box
 
 left join eo as i on i.no_box = a.no_box and i.bulan_dibayar  in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
-left join eo as j on j.no_box = a.no_box and j.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar)
+left join eo as j on j.no_box = a.no_box and j.bulan_dibayar not in (SELECT z.bulan_dibayar FROM tb_gaji_penutup as z group by z.bulan_dibayar and z.tahun_dibayar) and j.selesai = 'Y'
         
         where a.baru = 'baru' and a.kategori ='cabut' and a.no_box != 9999 
         group by a.nm_partai

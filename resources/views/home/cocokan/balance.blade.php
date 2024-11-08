@@ -129,8 +129,7 @@
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
 
-                            $ttl_sisa_blum_grading =
-                                sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja');
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
 
                             $ttl_cost_berjalan =
                                 $cbt_proses->ttl_rp +
@@ -307,7 +306,8 @@
                             <td class="text-end">{{ number_format($grading_sisa->pcs ?? 0, 0) }}</td>
                             <td class="text-end">{{ number_format($grading_sisa->gr ?? 0, 0) }}</td>
                             <td class="text-end">
-                                {{ number_format(sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja'), 0) }}
+                                {{-- {{ number_format(sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja'), 0) }} --}}
+                                {{ number_format($grading_sisa->cost_bk, 0) }}
                             </td>
 
                         </tr>
@@ -371,14 +371,13 @@
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
 
-                            $ttl_sisa_blum_grading =
-                                sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja');
+                            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
 
                             // $grading_sisa = $grading_sisa->cost_kerja_dll ?? 0;
 
                         @endphp
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cetak_sisa->ttl_rp + sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja') + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja') + sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja') + $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op, 0) }}
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cetak_sisa->ttl_rp + sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja') + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja') + $ttl_sisa_blum_grading + $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op, 0) }}
                         </td>
                     </tfoot>
 

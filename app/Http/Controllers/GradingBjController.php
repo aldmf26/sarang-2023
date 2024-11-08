@@ -242,7 +242,7 @@ class GradingBjController extends Controller
                 return strtolower($item);
             })->unique()->count(),
         ];
-        
+
 
         // Validasi setiap kriteria
         foreach ($uniqueCounts as $key => $count) {
@@ -313,10 +313,10 @@ class GradingBjController extends Controller
                     FROM grading_partai as a 
                     where a.box_pengiriman = '$boxkirim'
                     group by a.box_pengiriman;");
-        
+
         $cekSudahKirim = DB::table('pengiriman')->where('no_box', $boxkirim)->exists();
 
-        if($cekSudahKirim) {
+        if ($cekSudahKirim) {
             return "<span class='text-danger fw-bold'> BOX SUDAH DIKIRIM </span>";
         }
         if (empty($databox)) {
@@ -391,7 +391,7 @@ class GradingBjController extends Controller
                     if ($getBoxkirim->grade != $r->grade[$i]) {
                         return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade ' . $getBoxkirim->box_pengiriman);
                     }
-                } 
+                }
 
                 DB::table('grading_partai')->insert($data);
             }
@@ -763,7 +763,7 @@ class GradingBjController extends Controller
         return view('home.gradingbj.gudang_siap_kirim_partai', $data);
     }
 
-    
+
     public function detail(Request $r)
     {
         $no_box = $r->no_box;
@@ -1084,7 +1084,7 @@ class GradingBjController extends Controller
     {
         $box_grading = explode(',', $r->no_box);
         $get = DB::table('grading_partai')
-            ->select('box_pengiriman','grade','nm_partai', DB::raw('SUM(pcs) as pcs'), DB::raw('SUM(gr) as gr'))
+            ->select('box_pengiriman', 'grade', 'nm_partai', DB::raw('SUM(pcs) as pcs'), DB::raw('SUM(gr) as gr'))
             ->whereIn('box_pengiriman', $box_grading)
             ->groupBy('box_pengiriman');
 
