@@ -134,7 +134,7 @@
                         @foreach ($list_pengiriman as $i => $d)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
-                                <td>{{ tanggal($d->tgl) }}</td>
+                                <td style="white-space: nowrap">{{ tanggal($d->tgl) }}</td>
                                 <td>PI {{ $d->no_nota }}</td>
                                 <td>{{ ucwords($d->nm_packing) }}</td>
                                 <td>{{ strtoupper($d->tujuan) }}</td>

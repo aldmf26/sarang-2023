@@ -6,7 +6,8 @@
         <div class="d-flex gap-2">
             @foreach ($dataBulan as $d)
                 <div>
-                    <a href="{{ route('cocokan.balance.cost', ['bulan' => $d->bulan, 'tahun' => $d->tahun]) }}" class="btn btn-sm {{ $d->bulan == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
+                    <a href="{{ route('cocokan.balance.cost', ['bulan' => $d->bulan, 'tahun' => $d->tahun]) }}"
+                        class="btn btn-sm {{ $d->bulan == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
                 </div>
             @endforeach
         </div>
@@ -32,11 +33,14 @@
                         <tr>
                             <th class="bg-info text-white">Total</th>
                             <th class=" bg-info text-white">{{ count($grading) }} Box</th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading,'pcs'),0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading,'gr'),0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading,'cost_bk'),0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading,'cost_op'),0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading,'cost_bk') + sumCol($grading,'cost_op'),0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'pcs'), 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'gr'), 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_bk'), 0) }}
+                            </th>
+                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_op'), 0) }}
+                            </th>
+                            <th class="text-end bg-info text-white">
+                                {{ number_format(sumCol($grading, 'cost_bk') + sumCol($grading, 'cost_op'), 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,8 +48,8 @@
                             <tr>
                                 <td>{{ formatTglGaji($d->bulan, $d->tahun) }}</td>
                                 <td>P{{ $d->box_grading }}</td>
-                                <td class="text-end">{{ number_format($d->pcs,0) }}</td>
-                                <td class="text-end">{{ number_format($d->gr,0) }}</td>
+                                <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_op, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk + $d->cost_op, 0) }}</td>
