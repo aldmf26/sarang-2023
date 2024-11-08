@@ -1652,6 +1652,7 @@ class ExportCocokanController extends Controller
             'V1' => 'Gr',
             'W1' => 'Gr + kadar',
             'X1' => 'Total Rp',
+            'Y1' => 'Rat2',
         ];
 
         foreach ($koloms as $k => $v) {
@@ -1732,6 +1733,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('V' . $row, $d->gr);
             $sheet->setCellValue('W' . $row, $d->gr_naik);
             $sheet->setCellValue('X' . $row, $d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu);
+            $sheet->setCellValue('Y' . $row, ($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr);
         }
         $rowTbh = $row + 1;
         $sheet->setCellValue('O' . $rowTbh, "Total");
@@ -1740,10 +1742,11 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('V' . $rowTbh, "=SUM(V1:V$row)");
         $sheet->setCellValue('W' . $rowTbh, "=SUM(W1:W$row)");
         $sheet->setCellValue('X' . $rowTbh, "=SUM(X1:X$row)");
+        $sheet->setCellValue('Y' . $rowTbh, "=SUM(X1:X$row) / SUM(V1:V$row)");
 
-        $sheet->getStyle("O$rowTbh:X$rowTbh")->applyFromArray($style_atas);
+        $sheet->getStyle("O$rowTbh:Y$rowTbh")->applyFromArray($style_atas);
 
-        $sheet->getStyle('O1:X' . $rowTbh)->applyFromArray($style);
+        $sheet->getStyle('O1:Y' . $rowTbh)->applyFromArray($style);
 
 
     }
