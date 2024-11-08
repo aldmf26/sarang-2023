@@ -22,6 +22,7 @@
                         <tr>
                             <th class="dhead">Bulan</th>
                             <th class="dhead">Box Grading</th>
+                            <th class="dhead">Grade</th>
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-end">Cost Bk</th>
@@ -33,6 +34,7 @@
                         <tr>
                             <th class="bg-info text-white">Total</th>
                             <th class=" bg-info text-white">{{ count($grading) }} Box</th>
+                            <th class=" bg-info text-white"></th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'pcs'), 0) }}</th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'gr'), 0) }}</th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_bk'), 0) }}
@@ -48,6 +50,7 @@
                             <tr>
                                 <td>{{ formatTglGaji($d->bulan, $d->tahun) }}</td>
                                 <td>P{{ $d->box_grading }}</td>
+                                <td>{{ strtoupper($d->grade) }}</td>
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk, 0) }}</td>
