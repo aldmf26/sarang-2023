@@ -47,14 +47,14 @@
             method="post">
             @csrf
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="dhead">Pengawas</th>
-                                <th class="dhead">No Invoice</th>
+                                <th class="dhead" width="100">No Invoice</th>
                                 <th class="dhead">Tgl</th>
-                                <th class="dhead">Bulan dibayar</th>
+                                <th class="dhead" width="200">Bulan dibayar</th>
                             </tr>
                             <tr>
                                 <td>
@@ -71,12 +71,12 @@
                                         class="form-control" required>
                                 </td>
                                 <td>
-                                    <select name="bulan{{ $i + 1 }}[]" class="form-control">
+                                    <select name="bulan[]" class="form-control">
                                         <option value="0">Pilih Bulan</option>
                                       
                                         @foreach (getListBulan() as $l)
                                             <option value="{{ $l->bulan }}"
-                                                {{ $d->bulan == $l->bulan ? 'selected' : '' }}>
+                                                {{ date('m') == $l->bulan ? 'selected' : '' }}>
                                                 {{ $l->nm_bulan }}</option>
                                         @endforeach
                                     </select>

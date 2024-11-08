@@ -470,9 +470,10 @@ left join(
                 a.sudah_print, 
                 a.urutan
                 FROM grading_partai as a
+                JOIN tb_grade AS g ON a.grade = g.nm_grade
                 WHERE a.formulir = 'T' 
                 $whereBox 
-                GROUP BY a.box_pengiriman ORDER BY a.urutan DESC");
+                GROUP BY a.box_pengiriman ORDER BY g.id_grade ASC");
     }
 
     public static  function gradingAkhir()

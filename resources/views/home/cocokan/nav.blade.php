@@ -28,10 +28,10 @@
                 <a class="nav-link  {{ $rot == 'cocokan.balancesheet' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cocokan.balancesheet') }}">Balance Sheet</a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.list_pengiriman' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cocokan.list_pengiriman') }}">List Pengiriman</a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.opname' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cocokan.opname') }}">Opname</a>
