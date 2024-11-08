@@ -1570,20 +1570,20 @@ class ExportCocokanController extends Controller
             [
                 'ket' => 'selisih pcs',
                 'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $grading_sisa->pcs,
-                'gr' => $sedang_proses->gr,
-                'ttl_rp' => $sedang_proses->ttl_rp,
-                'rata2' => empty($sedang_proses->gr) ? 0 : $sedang_proses->ttl_rp / $sedang_proses->gr,
+                'gr' => 0,
+                'ttl_rp' => 0,
+                'rata2' => 0,
                 'cost_kerja' => 0,
-                'ttl' => $sedang_proses->ttl_rp,
+                'ttl' => 0,
             ],
             [
                 'ket' => 'sisa belum grading',
-                'pcs' => $sortir_sisa->pcs,
-                'gr' => $sortir_sisa->gr,
-                'ttl_rp' => $sortir_sisa->ttl_rp,
-                'rata2' => empty($sortir_sisa->gr) ? 0 : $sortir_sisa->ttl_rp / $sortir_sisa->gr,
+                'pcs' => $grading_sisa->pcs,
+                'gr' => $grading_sisa->gr,
+                'ttl_rp' => $grading_sisa->cost_bk,
+                'rata2' => empty($grading_sisa->gr) ? 0 : $grading_sisa->cost_bk / $grading_sisa->gr,
                 'cost_kerja' => 0,
-                'ttl' => $sortir_sisa->ttl_rp,
+                'ttl' => $grading_sisa->cost_bk,
             ],
             [
                 'ket' => 'total',
@@ -1608,12 +1608,132 @@ class ExportCocokanController extends Controller
 
         }
 
-        $sheet->setCellValue('Q2', 'akhir sortir');
-        $sheet->setCellValue('R2', $sortir_akhir->pcs);
-        $sheet->setCellValue('S2', $sortir_akhir->gr);
-        $sheet->setCellValue('T2', $sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja);
-        $sheet->setCellValue('U2', ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja) / $sortir_akhir->gr);
-        $sheet->setCellValue('V2', number_format((1 - $sortir_akhir->gr / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr)) * 100, 0) . '%');
+        $sheet->setCellValue('Q2', 'akhir grading');
+        $sheet->setCellValue('R2', $grading->pcs);
+        $sheet->setCellValue('S2', $grading->gr);
+        $sheet->setCellValue('T2', $grading->cost_bk);
+        $sheet->setCellValue('U2', $grading->cost_bk / $grading->gr);
+        $sheet->setCellValue('V2', number_format((1 - $grading->gr / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr)) * 100, 0) . '%');
+
+    }
+
+    public function pengirimanSum($spreadsheet, $style_atas, $style)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(4);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Pengiriman');
+        $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
+        $sheet->getStyle('B1:E2')->applyFromArray($style);
+        $sheet->getStyle('H1:N5')->applyFromArray($style);
+        $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $koloms = [
+            'A1' => 'Akhir Sortir',
+            'B1' => 'pcs',
+            'C1' => 'gr',
+            'D1' => 'rp awal',
+            'E1' => 'rata2',
+
+            'G1' => 'Grading Kerja',
+            'H1' => 'ket',
+            'I1' => 'pcs',
+            'J1' => 'gr',
+            'K1' => 'rp awal',
+            'L1' => 'rata2',
+            'M1' => 'cost kerja',
+            'N1' => 'total Rp + cost kerja',
+
+            'P1' => 'Akhir Grading',
+            'Q1' => 'Ket',
+            'R1' => 'pcs',
+            'S1' => 'gr',
+            'T1' => 'total rp + cost kerja',
+            'U1' => 'rata2 rp + cost kerja',
+            'V1' => 'susut'
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k, $v);
+        }
+        $model = new CocokanModel();
+        $s3 = $model::sortir_akhir();
+
+        $s5suntik = $this->getSuntikan(35);
+        $opname =  $this->getSuntikan(41);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp + $s3->cost_kerja;
+
+        $grading = $model->gradingOne();
+        $grading_sisa = $model->gradingSisaOne();    
+        $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
+
+        $sheet->setCellValue('B2', $sortir_akhir->pcs);
+        $sheet->setCellValue('C2', $sortir_akhir->gr);
+        $sheet->setCellValue('D2', $sortir_akhir->ttl_rp);
+        $sheet->setCellValue('E2', $sortir_akhir->ttl_rp / $sortir_akhir->gr);
+
+
+        $datas = [
+            [
+                'ket' => 'awal grading',
+                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading_sisa->pcs,
+                'gr' => $sortir_akhir->gr + $opname->gr - $grading_sisa->gr,
+                'ttl_rp' => $sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk,
+                'rata2' => ($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr),
+                'cost_kerja' => 0,
+                'ttl' => $sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk,
+            ],
+            [
+                'ket' => 'selisih pcs',
+                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $grading_sisa->pcs,
+                'gr' => 0,
+                'ttl_rp' => 0,
+                'rata2' => 0,
+                'cost_kerja' => 0,
+                'ttl' => 0,
+            ],
+            [
+                'ket' => 'sisa belum grading',
+                'pcs' => $grading_sisa->pcs,
+                'gr' => $grading_sisa->gr,
+                'ttl_rp' => $grading_sisa->cost_bk,
+                'rata2' => empty($grading_sisa->gr) ? 0 : $grading_sisa->cost_bk / $grading_sisa->gr,
+                'cost_kerja' => 0,
+                'ttl' => $grading_sisa->cost_bk,
+            ],
+            [
+                'ket' => 'total',
+                'pcs' => "=SUM(I2:I4)",
+                'gr' => "=SUM(J2:J4)",
+                'ttl_rp' => "=SUM(K2:K4)",
+                'rata2' => "0",
+                'cost_kerja' => "=SUM(M2:M4)",
+                'ttl' => "=SUM(N2:N4)",
+            ],
+        ];
+
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('H' . $row, $v['ket']);
+            $sheet->setCellValue('I' . $row, $v['pcs']);
+            $sheet->setCellValue('J' . $row, $v['gr']);
+            $sheet->setCellValue('K' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('L' . $row, $v['rata2']);
+            $sheet->setCellValue('M' . $row, $v['cost_kerja']);
+            $sheet->setCellValue('N' . $row, $v['ttl']);
+
+        }
+
+        $sheet->setCellValue('Q2', 'akhir grading');
+        $sheet->setCellValue('R2', $grading->pcs);
+        $sheet->setCellValue('S2', $grading->gr);
+        $sheet->setCellValue('T2', $grading->cost_bk);
+        $sheet->setCellValue('U2', $grading->cost_bk / $grading->gr);
+        $sheet->setCellValue('V2', number_format((1 - $grading->gr / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr)) * 100, 0) . '%');
 
     }
 
@@ -1652,6 +1772,7 @@ class ExportCocokanController extends Controller
         $this->cetakSum($spreadsheet, $style_atas, $style);
         $this->sortirSum($spreadsheet, $style_atas, $style);
         $this->gradingSum($spreadsheet, $style_atas, $style);
+        // $this->pengirimanSum($spreadsheet, $style_atas, $style);
 
         $namafile = "Export gudang summary cocokan.xlsx";
 

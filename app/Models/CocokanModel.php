@@ -542,7 +542,7 @@ left join users as g on g.id = a.id_pengawas
         sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
-        left join cabut as c on c.no_box = a.no_box 
+        left join cabut as c on c.no_box = a.no_box
         left join eo as d on d.no_box = a.no_box
         left join sortir as e on e.no_box = a.no_box
         left join (
