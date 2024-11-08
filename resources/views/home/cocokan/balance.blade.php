@@ -219,7 +219,7 @@
 
                         </tr>
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Cabut selesai siap cetak belum kirim</td>
+                            <td style="background-color: #F7F700;">Cabut selesai siap cetak belum kirim</td>
                             <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'pcs'), 0) }}</td>
                             <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}</td>
                             <td class="text-end">
@@ -255,7 +255,7 @@
 
                         </tr>
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Cetak selesai siap sortir belum kirim</td>
+                            <td style="background-color: #F7F700;">Cetak selesai siap sortir belum kirim</td>
                             <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'pcs'), 0) }}</td>
                             <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'gr'), 0) }}</td>
                             <td class="text-end">
@@ -292,7 +292,7 @@
 
                         </tr>
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Sortir selesai siap grading belum kirim
+                            <td style="background-color: #F7F700;">Sortir selesai siap grading belum kirim
                             </td>
                             <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'pcs'), 0) }}</td>
                             <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'gr'), 0) }}</td>
