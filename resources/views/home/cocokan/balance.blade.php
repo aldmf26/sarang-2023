@@ -78,7 +78,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <h6>Cost Perbulan</h6>
                 <table class="table table-bordered">
                     <thead>
@@ -182,7 +182,7 @@
                     </tfoot>
                 </table>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <h6>Bk Rp</h6>
                 <table class="table table-bordered">
                     <thead>

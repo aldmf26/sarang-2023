@@ -48,6 +48,7 @@
                         <th class="dhead text-end">Rp</th>
                         <th class="dhead text-end">Cost kerja</th>
                         <th class="dhead text-end">Total Rp</th>
+                        <th class="dhead text-end">Rata2</th>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
@@ -65,6 +66,9 @@
                         <td class="text-end">
                             {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
                         </td>
+                        <td class="text-end">
+                            {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="background-color: #F7BAC5; color:white">Sisa belum kirim</td>
@@ -81,6 +85,9 @@
                         <td class="text-end">
                             {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk, 0) }}
                         </td>
+                        <td class="text-end">
+                            {{ number_format(($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk) / $belum_kirim->gr, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
@@ -96,6 +103,9 @@
                         <td></td>
                         <td class="text-end fw-bold">
                             {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
+                        </td>
+                        <td class="text-end fw-bold">
+                            {{ number_format(($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op)) / ($pengiriman->gr + $belum_kirim->gr), 0) }}
                         </td>
                     </tr>
 
@@ -131,7 +141,7 @@
                         @foreach ($list_pengiriman as $i => $d)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
-                                <td>{{ tanggal($d->tgl) }}</td>
+                                <td style="white-space: nowrap">{{ tanggal($d->tgl) }}</td>
                                 <td>PI {{ $d->no_nota }}</td>
                                 <td>{{ ucwords($d->nm_packing) }}</td>
                                 <td>{{ strtoupper($d->tujuan) }}</td>

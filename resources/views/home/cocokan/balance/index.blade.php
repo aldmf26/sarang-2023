@@ -23,8 +23,8 @@
                             <th class="dhead">Bulan</th>
                             <th class="dhead">Kerja</th>
                             <th class="dhead text-end">Gaji</th>
-                            <th class="dhead text-end">Ttl Gaji</th>
                             <th class="dhead text-end">Cost Operasional</th>
+                            <th class="dhead text-end">Total Gaji</th>
                             <th class="dhead text-end">Pcs Akhir</th>
                             <th class="dhead text-end">Gr Akhir</th>
                             <th class="dhead text-end">Rp/gr</th>
@@ -36,16 +36,20 @@
                             @php
                                 $ttlGaji = $cabut->cost + $cetak->cost_kerja + $sortir->cost_kerja;
                                 $ttlTtlGaji = $operasional->total_operasional;
-                                $ttlCost = $operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja;
+                                $ttlCost =
+                                    $operasional->total_operasional -
+                                    $cabut->cost -
+                                    $cetak->cost_kerja -
+                                    $sortir->cost_kerja;
                                 $ttlPcs = $cabut->pcs + $cetak->pcs + $sortir->pcs + $grading->pcs;
                                 $ttlGr = $cabut->gr + $cetak->gr + $sortir->gr + $grading->gr;
                             @endphp
-                            <th class="text-end bg-info text-white">{{ number_format($ttlGaji,0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format($ttlTtlGaji,0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format($ttlCost,0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format($ttlPcs,0) }}</th>
-                            <th class="text-end bg-info text-white">{{ number_format($ttlGr,0) }}</th>
-                            <th class="bg-info text-white"></th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlGaji, 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlCost, 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlTtlGaji, 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlPcs, 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format($ttlGr, 0) }}</th>
+                            <th class="bg-info text-end text-white">{{ number_format($ttlTtlGaji / $ttlGr, 0) }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,10 +87,10 @@
                             <td>{{ formatTglGaji($bulan, $tahun) }}</td>
                             <td>grading</td>
                             <td align="right">{{ 0 }}</td>
-                            <td align="right">{{ number_format($operasional->total_operasional, 0) }}</td>
                             <td align="right">
                                 {{ number_format($operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja, 0) }}
                             </td>
+                            <td align="right">{{ number_format($operasional->total_operasional, 0) }}</td>
                             <td align="right">{{ number_format($grading->pcs, 0) }}</td>
                             <td align="right">{{ number_format($grading->gr, 0) }}</td>
                             <td align="right">

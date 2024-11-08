@@ -146,7 +146,7 @@
                             {{ number_format($grading->cost_op, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk, 0) }}
+                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk + $grading->cost_op, 0) }}
                         </td>
                     </tr>
 

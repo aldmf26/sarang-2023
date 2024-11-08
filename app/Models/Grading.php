@@ -623,7 +623,7 @@ left join(
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
         ) as d on d.box_pengiriman = a.no_box
-        GROUP by a.no_nota order by a.no_nota desc");
+        GROUP by a.no_nota order by a.no_nota ASC");
     }
 
     public static function list_pengiriman_sum_detail($no_nota)
