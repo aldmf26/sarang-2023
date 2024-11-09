@@ -1200,7 +1200,7 @@ class ExportCocokanController extends Controller
                 'pcs' => "=SUM(I2:I4)",
                 'gr' => "=SUM(J2:J4)",
                 'ttl_rp' => "=SUM(K2:K4)",
-                'rata2' => "0",
+                'rata2' => "=K5/J5",
                 'cost_kerja' => "=SUM(M2:M4)",
                 'ttl' => "=SUM(N2:N4)",
             ],
@@ -1347,7 +1347,7 @@ class ExportCocokanController extends Controller
                 'pcs' => "=SUM(I2:I4)",
                 'gr' => "=SUM(J2:J4)",
                 'ttl_rp' => "=SUM(K2:K4)",
-                'rata2' => "0",
+                'rata2' => "=K5/J5",
                 'cost_kerja' => "=SUM(M2:M4)",
                 'ttl' => "=SUM(N2:N4)",
             ],
@@ -1478,7 +1478,7 @@ class ExportCocokanController extends Controller
                 'pcs' => "=SUM(I2:I4)",
                 'gr' => "=SUM(J2:J4)",
                 'ttl_rp' => "=SUM(K2:K4)",
-                'rata2' => "0",
+                'rata2' => "=K5/J5",
                 'cost_kerja' => "=SUM(M2:M4)",
                 'ttl' => "=SUM(N2:N4)",
             ],
@@ -1599,7 +1599,7 @@ class ExportCocokanController extends Controller
                 'pcs' => "=SUM(I2:I4)",
                 'gr' => "=SUM(J2:J4)",
                 'ttl_rp' => "=SUM(K2:K4)",
-                'rata2' => "0",
+                'rata2' => "=K5/J5",
                 'cost_kerja' => "=SUM(M2:M4)",
                 'ttl' => "=SUM(N2:N4)",
             ],
@@ -2053,7 +2053,7 @@ class ExportCocokanController extends Controller
         $spreadsheet = new Spreadsheet();
         // Hapus worksheet default
         $spreadsheet->removeSheetByIndex(0);
-        
+
         $divisi = $r->divisi;
 
         if (!$divisi) {
@@ -2068,12 +2068,13 @@ class ExportCocokanController extends Controller
             $this->$methodName($spreadsheet, $style_atas, $style);
         }
 
-        $namafile = "Export gudang summary cocokan.xlsx";
+        $namafile = "Export gudang summary cocokan " . $divisi ?? '' . ".xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename=' . $namafile);
         header('Cache-Control: max-age=0');
+        
 
 
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
