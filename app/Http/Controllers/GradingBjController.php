@@ -289,7 +289,7 @@ class GradingBjController extends Controller
             ->where('kategori', 'cabut')
             ->select('nm_partai', 'tipe', 'ket')
             ->get();
-        $getFormulir = Grading::dapatkanStokBoxYANGLAMA('formulir', $r->no_box);
+        $getFormulir = Grading::dapatkanStokBoxtesting('formulir', $r->no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
 
         $data = [
@@ -330,7 +330,7 @@ class GradingBjController extends Controller
                 ORDER BY a.grade ASC;");
         }
 
-        if(!empty($cek250)){
+        if (!empty($cek250)) {
             return json_encode([
                 'box_pengiriman' => $cek250->box_pengiriman,
                 'html' => '<span style="color: blue;">Pcs : ' . round($cek250->pcs, 0) . ' <br/> ' . 'Gr : ' . round($cek250->gr, 0) . '</span>'
