@@ -337,7 +337,7 @@ class GradingBjController extends Controller
 
             $nm_partai = $r->nm_partai;
             $bulan = $r->bulan;
-            $bulan = 2004;
+            $tahun = 2004;
             $tgl = date('Y-m-d');
             $lastItem = DB::table('grading_partai')->where('nm_partai', $nm_partai)->orderBy('urutan', 'desc')->first();
             $urutan = !$lastItem ? 1 : $lastItem->urutan + 1;

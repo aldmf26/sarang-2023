@@ -158,7 +158,8 @@
                 <div class="d-flex justify-content-between">
                     <h6> Grading akhir </h6>
                     <div>
-                        @include('home.cocokan.btn_export')
+                        @include('home.cocokan.btn_export', ['divisi' => 'grading'])
+
                     </div>
                 </div>
                 <table class="table table-bordered">

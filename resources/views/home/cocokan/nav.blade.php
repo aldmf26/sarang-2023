@@ -47,6 +47,7 @@
                 class="fas fa-file-excel"></i>Export Rp + Cost Kerja</a>
         <a href="#" data-bs-toggle="modal" data-bs-target="#cost_opr_input" class="btn btn-primary btn-sm">Isi
             Cost operasional</a>
+        @include('home.cocokan.btn_export_cocokan')
     </div>
 
 </div>

@@ -166,7 +166,7 @@
                             <th>Cost Berjalan</th>
                             <th></th>
                             <th></th>
-                            <th class="text-end">
+                            <th class="text-end">                              
                                 {{ number_format($ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'), 0) }}
                             </th>
                         </tr>
@@ -183,7 +183,13 @@
                 </table>
             </div>
             <div class="col-lg-4">
-                <h6>Bk Rp</h6>
+                <div class="d-flex justify-content-between">
+                    <h6>Bk Rp</h6>
+                    <div>
+                        @include('home.cocokan.btn_export', ['divisi' => 'balance'])
+
+                    </div>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
