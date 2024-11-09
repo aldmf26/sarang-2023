@@ -134,4 +134,56 @@ class CabutOpnameModel extends Model
         Order by a.nm_anak ASC;
         ;");
     }
+
+
+    public static function cabutPartai($partai)
+    {
+        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs , sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        FROM cabut as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        where a.selesai = 'Y' and b.baru='baru' and a.no_box != '9999' and b.nm_partai = '$partai'
+        group by b.nm_partai
+        ");
+    }
+    public static function eotPartai($partai)
+    {
+        return DB::selectOne("SELECT b.nm_partai,  sum(a.gr_eo_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        FROM eo as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        where a.selesai = 'Y' and b.baru='baru' and a.no_box != '9999' and b.nm_partai = '$partai'
+        group by b.nm_partai
+        ");
+    }
+    public static function cetakPartai($partai)
+    {
+        return DB::selectOne("SELECT c.nm_partai, sum(a.pcs_tdk_cetak + a.pcs_akhir) as pcs , sum(a.gr_tdk_cetak + a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        FROM cetak_new as a 
+        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut' 
+        where b.kategori ='CTK' and c.baru='baru' and c.nm_partai ='$partai';
+        ");
+    }
+    public static function sortirPartai($partai)
+    {
+        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs ,  sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        FROM sortir as a 
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        where a.selesai = 'Y' and b.baru = 'baru' and a.no_box != '9999' and b.nm_partai = '$partai'
+        group by b.nm_partai
+        ");
+    }
+    public static function gradingPartai($partai)
+    {
+        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs) as pcs , sum(a.gr) as gr, a.no_invoice, d.cost_kerja as ttl_rp
+        FROM grading as a 
+        left join bk as b on b.no_box = a.no_box_sortir and b.kategori = 'cabut'
+        left join (
+            SELECT c.nm_partai, sum(c.cost_op) as cost_kerja
+            FROM grading_partai as c
+            group by c.nm_partai
+        ) as d on d.nm_partai = b.nm_partai
+        where a.no_invoice is not null and b.nm_partai ='$partai' 
+        group by b.nm_partai;
+        ");
+    }
 }

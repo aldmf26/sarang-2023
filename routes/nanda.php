@@ -388,6 +388,8 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/opname', 'index')->name('opname');
             Route::get('/detail_cabut', 'detail_cabut')->name('detail_cabut');
+            Route::get('/costPartai', 'costPartai')->name('costPartai');
+            Route::get('/getCostpartai', 'getCostpartai')->name('getCostpartai');
         });
 
     Route::controller(BalanceController::class)
