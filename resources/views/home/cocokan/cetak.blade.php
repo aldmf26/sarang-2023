@@ -87,17 +87,19 @@
 
                     <tr>
                         <td style="background-color: #F7BAC5;color:white">Cetak sedang proses</td>
-                        <td class="text-end">{{ number_format($cetak_proses->pcs, 0) }}</td>
+                        <td class="text-end">{{ number_format($cetak_proses->pcs ?? 0, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.cetak.proses') }}" target="_blank">
-                                {{ number_format($cetak_proses->gr, 0) }}
+                                {{ number_format($cetak_proses->gr ?? 0, 0) }}
                             </a>
                         </td>
-                        <td class="text-end">{{ number_format($cetak_proses->ttl_rp, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_proses->ttl_rp / $cetak_proses->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format($cetak_proses->cost_kerja, 0) }}</td>
+                        <td class="text-end">{{ number_format($cetak_proses->ttl_rp ?? 0, 0) }}</td>
                         <td class="text-end">
-                            {{ number_format($cetak_proses->cost_kerja + $cetak_proses->ttl_rp, 0) }}
+                            {{ empty($cetak_proses->gr) ? 0 : number_format($cetak_proses->ttl_rp / $cetak_proses->gr, 0) }}
+                        </td>
+                        <td class="text-end">{{ number_format($cetak_proses->cost_kerja ?? 0, 0) }}</td>
+                        <td class="text-end">
+                            {{ number_format($cetak_proses->cost_kerja ?? (0 + $cetak_proses->ttl_rp ?? 0), 0) }}
                         </td>
                     </tr>
                     <tr>

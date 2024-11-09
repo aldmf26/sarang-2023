@@ -459,9 +459,9 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('L1', 'rp/gr');
 
         $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, a.pcs as pcs, a.gr as gr , 
-        sum(a.cost_bk) as total_rp, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op FROM pengiriman as a 
+        sum(b.cost_bk) as total_rp, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, sum(b.cost_op) as cost_op FROM pengiriman as a 
         left join  (
-        SELECT sum(b.pcs) as pcs, sum(b.gr) as gr, b.box_pengiriman
+        SELECT sum(b.pcs) as pcs, sum(b.gr) as gr, b.box_pengiriman, sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu
         FROM grading_partai as b
         group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
@@ -509,8 +509,8 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('V' . $kolom, $d->cost_cu);
             $sheet3->setCellValue('W' . $kolom, $d->cost_op);
-            $sheet3->setCellValue('X' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : $d->ttl_rp / $d->gr);
+            $sheet3->setCellValue('X' . $kolom, $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op);
+            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : ($d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op) / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
