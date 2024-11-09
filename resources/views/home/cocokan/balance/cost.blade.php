@@ -10,7 +10,12 @@
                         class="btn btn-sm {{ $d->bulan == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
                 </div>
             @endforeach
+            <a href="{{ route('cocokan.balance.cost', ['bulan' => $d->bulan + 1, 'tahun' => $d->tahun]) }}"
+                class="btn btn-sm {{ $d->bulan + 1 == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan + 1, $d->tahun) }}</a>
         </div>
+        <a href="{{ route('cocokan.balance.CostOperasionalBebanDigrading') }}"
+            class="btn btn-sm bg-primary float-end text-white"><i class="fas fa-file-excel"></i> Export</a>
+
 
     </x-slot>
 
@@ -36,7 +41,8 @@
                             <th class="bg-info text-white">Total</th>
                             <th class=" bg-info text-white">{{ count($grading) }} Box</th>
                             <th class=" bg-info text-white"></th>
-                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'pcs'), 0) }}</th>
+                            <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'pcs'), 0) }}
+                            </th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'gr'), 0) }}</th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_bk'), 0) }}
                             </th>

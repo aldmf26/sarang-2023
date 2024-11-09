@@ -10,7 +10,14 @@
                         class="btn btn-sm {{ $d->bulan == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
                 </div>
             @endforeach
+            <div>
+                <a href="{{ route('cocokan.balance.gaji', ['bulan' => $d->bulan + 1, 'tahun' => $d->tahun]) }}"
+                    class="btn btn-sm {{ $d->bulan + 1 == $bulan ? 'btn-info' : '' }}">{{ formatTglGaji($d->bulan + 1, $d->tahun) }}</a>
+            </div>
+
         </div>
+        <a href="{{ route('cocokan.balance.CostGajiProses') }}" class="btn btn-sm bg-primary float-end text-white"><i
+                class="fas fa-file-excel"></i> Export</a>
 
     </x-slot>
 
@@ -35,12 +42,13 @@
                             <th colspan="2" class="bg-info text-white">Total</th>
                             @php
                                 $ttlGaji = $cabut->cost + $cetak->cost_kerja + $sortir->cost_kerja;
-                                $ttlTtlGaji = $operasional->total_operasional;
-                                $ttlCost =
-                                    $operasional->total_operasional -
-                                    $cabut->cost -
-                                    $cetak->cost_kerja -
-                                    $sortir->cost_kerja;
+                                $ttlTtlGaji = $operasional->total_operasional ?? 0;
+                                $ttlCost = empty($operasional->total_operasional)
+                                    ? 0
+                                    : $operasional->total_operasional -
+                                        $cabut->cost -
+                                        $cetak->cost_kerja -
+                                        $sortir->cost_kerja;
                                 $ttlPcs = $cabut->pcs + $cetak->pcs + $sortir->pcs + $grading->pcs;
                                 $ttlGr = $cabut->gr + $cetak->gr + $sortir->gr + $grading->gr;
                             @endphp
@@ -88,13 +96,13 @@
                             <td>grading</td>
                             <td align="right">{{ 0 }}</td>
                             <td align="right">
-                                {{ number_format($operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja, 0) }}
+                                {{ empty($operasional->total_operasional) ? 0 : number_format($operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja, 0) }}
                             </td>
-                            <td align="right">{{ number_format($operasional->total_operasional, 0) }}</td>
+                            <td align="right">{{ number_format($operasional->total_operasional ?? 0, 0) }}</td>
                             <td align="right">{{ number_format($grading->pcs, 0) }}</td>
                             <td align="right">{{ number_format($grading->gr, 0) }}</td>
                             <td align="right">
-                                {{ number_format(($operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja) / $grading->gr, 0) }}
+                                {{ empty($operasional->total_operasional) ? 0 : number_format(($operasional->total_operasional - $cabut->cost - $cetak->cost_kerja - $sortir->cost_kerja) / $grading->gr, 0) }}
                             </td>
                         </tr>
                     </tbody>

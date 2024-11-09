@@ -398,5 +398,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('gaji');
             Route::get('/cost', 'cost')->name('cost');
+            Route::get('/CostGajiProses', 'CostGajiProses')->name('CostGajiProses');
+            Route::get('/CostOperasionalBebanDigrading', 'CostOperasionalBebanDigrading')->name('CostOperasionalBebanDigrading');
         });
 });
