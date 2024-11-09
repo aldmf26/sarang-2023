@@ -369,7 +369,6 @@ class GradingBjController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $nm_partai = $r->nm_partai;
             $bulan = $r->bulan;
             $tahun = 2004;
