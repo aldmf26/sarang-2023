@@ -76,6 +76,32 @@ class Grading extends Model
         return $arr[$jenis];
     }
 
+    public static function dapatkanStokBoxtesting($jenis, $noBox = null)
+    {
+        return  DB::select("SELECT a.no_box, b.tipe, b.ket, a.pcs_awal, a.gr_awal , (b.hrga_satuan * b.gr_awal) as cost_bk, (c.ttl_rp) as cost_cbt, (d.ttl_rp) as cost_eo, (e.ttl_rp) as cost_str, (f.ttl_rp) as cost_ctk, (g.ttl_rp) as cost_cu
+FROM formulir_sarang as a 
+left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+left join cabut as c on c.no_box = a.no_box
+left join eo as d on d.no_box = a.no_box
+left join sortir as e on e.no_box = a.no_box
+left join (
+	SELECT f.no_box , sum(f.ttl_rp) as ttl_rp
+    FROM cetak_new as f 
+    left join kelas_cetak as g on g.id_kelas_cetak = f.id_kelas_cetak
+    WHERE g.kategori = 'CTK'
+    group by f.no_box
+) as f on f.no_box = a.no_box
+left join (
+	SELECT f.no_box , sum(f.ttl_rp) as ttl_rp
+    FROM cetak_new as f 
+    left join kelas_cetak as g on g.id_kelas_cetak = f.id_kelas_cetak
+    WHERE g.kategori = 'CU'
+    group by f.no_box
+) as g on g.no_box = a.no_box
+
+where a.kategori = 'grade' and a.no_box in ($noBox);");
+    }
+
     public static function dapatkanStokBoxYANGLAMA($jenis, $noBox = null)
     {
         $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
