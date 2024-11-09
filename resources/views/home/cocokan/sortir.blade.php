@@ -178,7 +178,8 @@
                 <div class="d-flex justify-content-between">
                     <h6> Sortir akhir </h6>
                     <div>
-                        @include('home.cocokan.btn_export')
+                        @include('home.cocokan.btn_export', ['divisi' => 'sortir'])
+
                     </div>
                 </div>
                 <table class="table table-bordered">

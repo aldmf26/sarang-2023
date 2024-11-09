@@ -144,7 +144,8 @@
                 <div class="d-flex justify-content-between">
                     <h6> Cetak akhir </h6>
                     <div>
-                        @include('home.cocokan.btn_export')
+                        @include('home.cocokan.btn_export', ['divisi' => 'cetak'])
+
                     </div>
                 </div>
                 <table class="table table-bordered">

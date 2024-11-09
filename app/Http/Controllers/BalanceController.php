@@ -22,7 +22,6 @@ class BalanceController extends Controller
         $operasional = DB::table('oprasional')->where('bulan', $bulan)->where('tahun', $tahun)->first();
         $grading = BalanceModel::gradingOne($bulan, $tahun);
 
-
         $data = [
             'title' => 'Cost Gaji Proses',
             'dataBulan' => $dataBulan,

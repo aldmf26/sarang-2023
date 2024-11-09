@@ -117,7 +117,7 @@
                 <div class="d-flex justify-content-between">
                     <h6>List Pengiriman</h6>
                     <div>
-                        @include('home.cocokan.btn_export')
+                        @include('home.cocokan.btn_export', ['divisi' => 'pengiriman'])
                     </div>
                 </div>
                 <table class="table table-bordered">

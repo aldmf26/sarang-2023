@@ -132,7 +132,7 @@
                 <div class="d-flex justify-content-between">
                     <h6>Cabut akhir </h6>
                     <div>
-                        @include('home.cocokan.btn_export')
+                        @include('home.cocokan.btn_export', ['divisi' => 'cabut'])
                     </div>
                 </div>
 

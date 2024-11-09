@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BalanceModel;
 use App\Models\CocokanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ use App\Models\DetailCetakModel;
 use App\Models\DetailSortirModel;
 use App\Models\Grading;
 use App\Models\OpnameNewModel;
+use App\Models\SummaryModel;
 use stdClass;
 
 class ExportCocokanController extends Controller
@@ -1099,14 +1101,16 @@ class ExportCocokanController extends Controller
 
     public function cabutSum($spreadsheet, $style_atas, $style)
     {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(0);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Cabut');
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Cabut');
+        $sheet  = $spreadsheet->addSheet($worksheet);
         $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
         $sheet->getStyle('B1:E2')->applyFromArray($style);
         $sheet->getStyle('H1:N5')->applyFromArray($style);
         $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $sheet->getStyle("H3:H4")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFD1DC');
 
         $koloms = [
             'A1' => 'Awal Cabut',
@@ -1147,7 +1151,7 @@ class ExportCocokanController extends Controller
         $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
 
         $bk_akhir = new stdClass();
-        $bk_akhir->pcs = $a12->pcs ;
+        $bk_akhir->pcs = $a12->pcs;
         $bk_akhir->gr = $a12->gr;
         $bk_akhir->ttl_rp = $a12->ttl_rp;
         $bk_akhir->cost_kerja = $a12->cost_kerja;
@@ -1218,7 +1222,7 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('S2', $bk_akhir->gr);
         $sheet->setCellValue('T2', $bk_akhir->ttl_rp + $bk_akhir->cost_kerja);
         $sheet->setCellValue('U2', ($bk_akhir->ttl_rp + $bk_akhir->cost_kerja) / $bk_akhir->gr);
-        $sheet->setCellValue('V2', number_format((1 - $bk_akhir->gr / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr)) * 100,0) . '%');
+        $sheet->setCellValue('V2', number_format((1 - $bk_akhir->gr / ($bk_awal->gr - $cbt_proses->gr - $cbt_sisa_pgws->gr)) * 100, 0) . '%');
 
 
         // $sheet->getStyle('A1:V1')->applyFromArray($style);
@@ -1226,14 +1230,16 @@ class ExportCocokanController extends Controller
 
     public function cetakSum($spreadsheet, $style_atas, $style)
     {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(1);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Cetak');
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Cetak');
+        $sheet  = $spreadsheet->addSheet($worksheet);
         $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
         $sheet->getStyle('B1:E2')->applyFromArray($style);
         $sheet->getStyle('H1:N5')->applyFromArray($style);
         $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+        $sheet->getStyle("H3:H4")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFD1DC');
 
         $koloms = [
             'A1' => 'Akhir Cabut',
@@ -1363,20 +1369,22 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('S2', $cetak_akhir->gr);
         $sheet->setCellValue('T2', $cetak_akhir->ttl_rp + $cetak_akhir->cost_kerja);
         $sheet->setCellValue('U2', ($cetak_akhir->ttl_rp + $cetak_akhir->cost_kerja) / $cetak_akhir->gr);
-        $sheet->setCellValue('V2', number_format((1 - $cetak_akhir->gr / ($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr)) * 100,0) . '%');
-
+        $sheet->setCellValue('V2', number_format((1 - $cetak_akhir->gr / ($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr)) * 100, 0) . '%');
     }
 
     public function sortirSum($spreadsheet, $style_atas, $style)
     {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(2);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Sortir');
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Sortir');
+        $sheet  = $spreadsheet->addSheet($worksheet);
         $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
         $sheet->getStyle('B1:E2')->applyFromArray($style);
         $sheet->getStyle('H1:N5')->applyFromArray($style);
         $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+
+        $sheet->getStyle("H3:H4")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFD1DC');
 
         $koloms = [
             'A1' => 'Akhir Cetak',
@@ -1485,7 +1493,6 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('L' . $row, $v['rata2']);
             $sheet->setCellValue('M' . $row, $v['cost_kerja']);
             $sheet->setCellValue('N' . $row, $v['ttl']);
-
         }
 
         $sheet->setCellValue('Q2', 'akhir sortir');
@@ -1494,19 +1501,21 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('T2', $sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja);
         $sheet->setCellValue('U2', ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja) / $sortir_akhir->gr);
         $sheet->setCellValue('V2', number_format((1 - $sortir_akhir->gr / ($akhir_cetak->gr + $opname->gr - $sedang_proses->gr - $sortir_sisa->gr)) * 100, 0) . '%');
-
     }
 
     public function gradingSum($spreadsheet, $style_atas, $style)
     {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(3);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Grading');
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Grading');
+        $sheet  = $spreadsheet->addSheet($worksheet);
         $sheet->getStyle("H5:N5")->applyFromArray($style_atas);
         $sheet->getStyle('B1:E2')->applyFromArray($style);
         $sheet->getStyle('H1:N5')->applyFromArray($style);
         $sheet->getStyle('Q1:V2')->applyFromArray($style);
+
+
+        $sheet->getStyle("H4:H4")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFD1DC');
 
         $koloms = [
             'A1' => 'Akhir Sortir',
@@ -1548,7 +1557,7 @@ class ExportCocokanController extends Controller
         $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp + $s3->cost_kerja;
 
         $grading = $model->gradingOne();
-        $grading_sisa = $model->gradingSisaOne();    
+        $grading_sisa = $model->gradingSisaOne();
         $sumTtlRpPengiriman = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp FROM pengiriman as a ");
 
         $sheet->setCellValue('B2', $sortir_akhir->pcs);
@@ -1605,7 +1614,6 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('L' . $row, $v['rata2']);
             $sheet->setCellValue('M' . $row, $v['cost_kerja']);
             $sheet->setCellValue('N' . $row, $v['ttl']);
-
         }
 
         $sheet->setCellValue('Q2', 'akhir grading');
@@ -1614,18 +1622,19 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('T2', $grading->cost_bk);
         $sheet->setCellValue('U2', $grading->cost_bk / $grading->gr);
         $sheet->setCellValue('V2', number_format((1 - $grading->gr / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr)) * 100, 0) . '%');
-
     }
 
     public function pengirimanSum($spreadsheet, $style_atas, $style)
     {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(4);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Pengiriman');
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Pengiriman');
+        $sheet  = $spreadsheet->addSheet($worksheet);
         $sheet->getStyle("G4:L4")->applyFromArray($style_atas);
         $sheet->getStyle('B1:D2')->applyFromArray($style);
         $sheet->getStyle('G1:L4')->applyFromArray($style);
+
+        $sheet->getStyle("G2:G3")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFD1DC');
 
         $koloms = [
             'A1' => 'Grading akhir',
@@ -1718,15 +1727,14 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('J' . $row, $v['rp']);
             $sheet->setCellValue('K' . $row, $v['cost_kerja']);
             $sheet->setCellValue('L' . $row, $v['ttl_rp']);
-
         }
 
-        foreach($list_pengiriman as $i => $d){
+        foreach ($list_pengiriman as $i => $d) {
             $row = $i + 2;
-            $sheet->setCellValue('O' . $row, $i+1);
+            $sheet->setCellValue('O' . $row, $i + 1);
             $sheet->setCellValue('P' . $row, tanggal($d->tgl));
             $sheet->setCellValue('Q' . $row, "PI$d->no_nota");
-            $sheet->setCellValue('R' . $row,ucwords($d->nm_packing));
+            $sheet->setCellValue('R' . $row, ucwords($d->nm_packing));
             $sheet->setCellValue('S' . $row, strtoupper($d->tujuan));
             $sheet->setCellValue('T' . $row, $d->ttl_box);
             $sheet->setCellValue('U' . $row, $d->pcs);
@@ -1747,11 +1755,273 @@ class ExportCocokanController extends Controller
         $sheet->getStyle("O$rowTbh:Y$rowTbh")->applyFromArray($style_atas);
 
         $sheet->getStyle('O1:Y' . $rowTbh)->applyFromArray($style);
-
-
     }
 
-    public function exportCabut()
+    public function balanceSum($spreadsheet, $style_atas, $style)
+    {
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Balancesheet');
+        $sheet  = $spreadsheet->addSheet($worksheet);
+
+        $sheet->getStyle("B1:H1")->applyFromArray($style_atas);
+
+        $koloms = [
+            'A1' => 'bk kerja',
+            'B1' => 'No',
+            'C1' => 'Bulan kerja',
+            'D1' => 'Nama part',
+            'E1' => 'Grade',
+            'F1' => 'Pcs',
+            'G1' => 'Gr',
+            'H1' => 'Ttl Rp',
+
+            'J1' => 'Cost Perbulan',
+            'K1' => 'bulan & tahun',
+            'L1' => 'gaji',
+            'M1' => 'cost operasional',
+            'N1' => 'total rp',
+
+            'P1' => 'Bk Rp',
+            'Q1' => 'ket',
+            'R1' => 'pcs',
+            'S1' => 'gr',
+            'T1' => 'Total Rp',
+        ];
+
+        foreach ($koloms as $k => $v) {
+            $sheet->setCellValue($k, $v);
+        }
+
+        $bk = SummaryModel::summarybk();
+
+        foreach ($bk as $i => $b) {
+            $row = $i + 2;
+            $sheet->setCellValue('B' . $row, $i + 1);
+            $sheet->setCellValue('C' . $row, empty($b->bulan) ? '-' : date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)));
+            $sheet->setCellValue('D' . $row, $b->nm_partai);
+            $sheet->setCellValue('E' . $row, $b->grade);
+            $sheet->setCellValue('F' . $row, $b->pcs_bk);
+            $sheet->setCellValue('G' . $row, $b->gr_bk);
+            $sheet->setCellValue('H' . $row, $b->cost_bk);
+        }
+
+        $rowTbh = $row + 1;
+        $sheet->setCellValue('B' . $rowTbh, "Total");
+        $sheet->setCellValue('F' . $rowTbh, "=SUM(F2:F$row)");
+        $sheet->setCellValue('G' . $rowTbh, "=SUM(G2:G$row)");
+        $sheet->setCellValue('H' . $rowTbh, "=SUM(H2:H$row)");
+
+        $sheet->getStyle("B$rowTbh:H$rowTbh")->applyFromArray($style_atas);
+
+        $sheet->getStyle('B1:H' . $rowTbh)->applyFromArray($style);
+
+        $uang_cost = BalanceModel::uangCost();
+
+        foreach ($uang_cost as $i => $u) {
+            $row = $i + 2;
+            $sheet->setCellValue('K' . $row, date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-01')));
+            $sheet->setCellValue('L' . $row, $u->gaji);
+            $sheet->setCellValue('M' . $row, $u->total_operasional - $u->gaji);
+            $sheet->setCellValue('N' . $row, $u->total_operasional);
+        }
+
+        $rowTbhCost = $row + 1;
+        $sheet->setCellValue('K' . $rowTbhCost, "Total");
+        $sheet->setCellValue('L' . $rowTbhCost, "=SUM(L2:L$row)");
+        $sheet->setCellValue('M' . $rowTbhCost, "=SUM(M2:M$row)");
+        $sheet->setCellValue('N' . $rowTbhCost, "=SUM(N2:N$row)");
+
+        $sheet->setCellValue('N' . $rowTbhCost, "=SUM(N2:N$row)");
+
+        $model = new CocokanModel();
+
+        $grading = Grading::belumKirimSum();
+        $pengiriman = Grading::pengirimanSum();
+        $grading_sisa = CocokanModel::gradingSisaOne();
+        $cbt_proses = CocokanModel::bksedang_proses_sum();
+        $cbt_sisa_pgws = CocokanModel::bksisapgws();
+        $cetak_proses = CocokanModel::cetak_proses_balance();
+        $cbt_blm_kirim = CocokanModel::bksedang_selesai_sum();
+        $ca17 = CocokanModel::cetak_stok_balance();
+        $ca17suntik = $this->getSuntikan(27);
+        $s3 = $model::sortir_akhir();
+        $s5suntik = $this->getSuntikan(35);
+
+        $sortir_akhir = new stdClass();
+        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+        $sortir_akhir->cost_kerja = $s3->cost_kerja;
+        $cetak_sisa = new stdClass();
+        $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
+        $cetak_sisa->gr = $ca17->gr + $ca17suntik->gr;
+        $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp + $ca17->cost_kerja;
+        $opname =  $this->getSuntikan(41);
+
+        $cetak_sisa = $cetak_sisa;
+        $sedang_proses = CocokanModel::sortir_proses_balance();
+        $sortir_sisa = CocokanModel::sortir_stock_balance();
+        $cabut_selesai_siap_cetak = OpnameNewModel::bksedang_selesai_sum();
+        $cetak_selesai = OpnameNewModel::cetak_selesai();
+        $sortir_selesai = OpnameNewModel::sortir_selesai();
+        $grading_susut = Grading::belumKirimSumsusut();
+        $bk_suntik = DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'");
+
+        $ttl_sisa_belum_kirim =
+            $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
+
+        $ttl_pengiriman =
+            $pengiriman->cost_bk +
+            $pengiriman->cost_kerja +
+            $pengiriman->cost_cu +
+            $pengiriman->cost_op;
+
+        $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
+
+        $ttl_cost_berjalan =
+            $cbt_proses->ttl_rp +
+            $cbt_sisa_pgws->ttl_rp +
+            $cetak_proses->ttl_rp +
+            $cetak_proses->cost_kerja +
+            $cbt_blm_kirim->cost_kerja +
+            $cetak_sisa->ttl_rp +
+            $sedang_proses->ttl_rp +
+            $sedang_proses->cost_kerja +
+            $sortir_sisa->ttl_rp +
+            $sortir_sisa->cost_kerja +
+            $ttl_sisa_blum_grading +
+            $ttl_pengiriman +
+            $ttl_sisa_belum_kirim +
+            sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
+            sumBk($sortir_selesai, 'ttl_rp') +
+            sumBk($cetak_selesai, 'ttl_rp') +
+            sumBk($cabut_selesai_siap_cetak, 'cost_kerja') +
+            sumBk($sortir_selesai, 'cost_kerja') +
+            sumBk($cetak_selesai, 'cost_kerja') +
+            $grading_susut->cost_bk +
+            $grading_susut->cost_kerja +
+            $grading_susut->cost_cu +
+            $grading_susut->cost_op;
+
+        $ttl_berjalan =
+            $ttl_cost_berjalan -
+            sumBk($uang_cost, 'total_operasional') -
+            sumBk($bk, 'cost_bk') -
+            sumBk($bk_suntik, 'ttl_rp');
+
+
+        $rowCost = $rowTbhCost + 1;
+        $sheet->setCellValue('K' . $rowCost, "Cost berjalan");
+        $sheet->setCellValue('N' . $rowCost, $ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'));
+
+        $rowTtl = $rowCost + 1;
+        $sheet->setCellValue('K' . $rowTtl, "Total Bk + Operasional + cost berjalan");
+        $sheet->setCellValue('N' . $rowTtl, sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan);
+
+        $sheet->getStyle("K$rowTbhCost:N$rowTbhCost")->applyFromArray($style_atas);
+
+        $sheet->getStyle('K1:N' . $rowTtl)->applyFromArray($style);
+
+        $pcs_sisa_grading = $grading_sisa->pcs ?? 0;
+        $datas = [
+            [
+                'ket' => 'cabut sedang proses',
+                'pcs' => $cbt_proses->pcs,
+                'gr' => $cbt_proses->gr,
+                'ttl_rp' => $cbt_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'cabut sisa pengawas',
+                'pcs' => $cbt_sisa_pgws->pcs,
+                'gr' => $cbt_sisa_pgws->gr,
+                'ttl_rp' => $cbt_sisa_pgws->ttl_rp,
+            ],
+            [
+                'ket' => 'Cabut selesai siap cetak belum kirim',
+                'pcs' => sumBk($cabut_selesai_siap_cetak, 'pcs'),
+                'gr' => sumBk($cabut_selesai_siap_cetak, 'gr'),
+                'ttl_rp' => sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'),
+            ],
+            [
+                'ket' => 'Cetak sedang Proses',
+                'pcs' => $cetak_proses->pcs,
+                'gr' => $cetak_proses->gr,
+                'ttl_rp' => $cetak_proses->ttl_rp + $cetak_proses->cost_kerja,
+            ],
+            [
+                'ket' => 'Cetak sisa Pengawas',
+                'pcs' => $cetak_sisa->pcs,
+                'gr' => $cetak_sisa->gr,
+                'ttl_rp' => $cetak_sisa->ttl_rp,
+            ],
+            [
+                'ket' => 'Cetak selesai siap sortir belum kirim',
+                'pcs' => sumBk($cetak_selesai, 'pcs'),
+                'gr' => sumBk($cetak_selesai, 'gr'),
+                'ttl_rp' => sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'),
+            ],
+            [
+                'ket' => 'Sortir sedang Proses',
+                'pcs' => $sedang_proses->pcs,
+                'gr' => $sedang_proses->gr,
+                'ttl_rp' => $sedang_proses->ttl_rp + $sedang_proses->cost_kerja,
+            ],
+            [
+                'ket' => 'Sortir sisa Pengawas',
+                'pcs' => $sortir_sisa->pcs,
+                'gr' => $sortir_sisa->gr,
+                'ttl_rp' => $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja,
+            ],
+            [
+                'ket' => 'Sortir selesai siap grading belum kirim',
+                'pcs' => sumBk($sortir_selesai, 'pcs'),
+                'gr' => sumBk($sortir_selesai, 'gr'),
+                'ttl_rp' => sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'),
+            ],
+            [
+                'ket' => 'Sisa belum grading',
+                'pcs' => $grading_sisa->pcs ?? 0,
+                'gr' => $grading_sisa->gr ?? 0,
+                'ttl_rp' => $grading_sisa->cost_bk,
+            ],
+            [
+                'ket' => 'Pengiriman',
+                'pcs' => $pengiriman->pcs ?? 0,
+                'gr' => $pengiriman->gr ?? 0,
+                'ttl_rp' => $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op,
+            ],
+            [
+                'ket' => 'Sisa belum kirim ( sisa + qc)',
+                'pcs' => $grading->pcs ?? 0,
+                'gr' => $grading->gr ?? 0,
+                'ttl_rp' => $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op,
+            ],
+            [
+                'ket' => 'Selisih',
+                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $pcs_sisa_grading,
+                'gr' => 0,
+                'ttl_rp' => 0,
+            ],
+        ];
+
+        foreach ($datas as $i => $v) {
+            $row = $i + 2;
+            $sheet->setCellValue('Q' . $row, $v['ket']);
+            $sheet->setCellValue('R' . $row, $v['pcs']);
+            $sheet->setCellValue('S' . $row, $v['gr']);
+            $sheet->setCellValue('T' . $row, $v['ttl_rp']);
+        }
+
+        $rowTbhCost = $row + 1;
+        $sheet->setCellValue('Q' . $rowTbhCost, "Total");
+        $sheet->setCellValue('R' . $rowTbhCost, "=SUM(R2:R$row)");
+        $sheet->setCellValue('S' . $rowTbhCost, "=SUM(S2:S$row)");
+        $sheet->setCellValue('T' . $rowTbhCost, "=SUM(T2:T$row)");
+
+        $sheet->getStyle("Q$rowTbhCost:T$rowTbhCost")->applyFromArray($style_atas);
+        $sheet->getStyle('Q1:T' . $rowTbhCost)->applyFromArray($style);
+    }
+
+    public function exportCabut(Request $r)
     {
 
         $style_atas = array(
@@ -1781,12 +2051,19 @@ class ExportCocokanController extends Controller
             ],
         ];
         $spreadsheet = new Spreadsheet();
+        $divisi = $r->divisi;
 
-        $this->cabutSum($spreadsheet, $style_atas, $style);
-        $this->cetakSum($spreadsheet, $style_atas, $style);
-        $this->sortirSum($spreadsheet, $style_atas, $style);
-        $this->gradingSum($spreadsheet, $style_atas, $style);
-        $this->pengirimanSum($spreadsheet, $style_atas, $style);
+        if (!$divisi) {
+            $this->cabutSum($spreadsheet, $style_atas, $style);
+            $this->cetakSum($spreadsheet, $style_atas, $style);
+            $this->sortirSum($spreadsheet, $style_atas, $style);
+            $this->gradingSum($spreadsheet, $style_atas, $style);
+            $this->pengirimanSum($spreadsheet, $style_atas, $style);
+            $this->balanceSum($spreadsheet, $style_atas, $style);
+        } else {
+            $methodName = $divisi . 'Sum';
+            $this->$methodName($spreadsheet, $style_atas, $style);
+        }
 
         $namafile = "Export gudang summary cocokan.xlsx";
 
