@@ -309,23 +309,58 @@ class GradingBjController extends Controller
     {
         $boxkirim = $r->boxkirim;
         $grade = $r->grade;
-        $databox =  DB::selectOne("SELECT a.grade, a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr
+        if (!empty($boxkirim)) {
+            $databox =  DB::selectOne("SELECT a.grade, a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr
                     FROM grading_partai as a 
                     where a.box_pengiriman = '$boxkirim'
                     group by a.box_pengiriman;");
+        }
+        if (!empty($grade)) {
+            $cek250 =  DB::selectOne("SELECT 
+                a.box_pengiriman,
+                sum(a.pcs) as pcs,
+                sum(a.gr) as gr,
+                a.grade, 
+                a.sudah_print, 
+                a.urutan
+                FROM grading_partai as a
+                WHERE a.formulir = 'T' and a.grade = '$grade'
+                GROUP BY a.box_pengiriman 
+                having sum(a.gr) < 250
+                ORDER BY a.grade ASC;");
+        }
+
+        if(!empty($cek250)){
+            return json_encode([
+                'box_pengiriman' => $cek250->box_pengiriman,
+                'html' => '<span style="color: blue;">Pcs : ' . round($cek250->pcs, 0) . ' <br/> ' . 'Gr : ' . round($cek250->gr, 0) . '</span>'
+            ]);
+        }
 
         $cekSudahKirim = DB::table('pengiriman')->where('no_box', $boxkirim)->exists();
 
         if ($cekSudahKirim) {
-            return "<span class='text-danger fw-bold'> BOX SUDAH DIKIRIM </span>";
+            return json_encode([
+                'box_pengiriman' => '',
+                'html' => "<span class='text-danger fw-bold'> BOX SUDAH DIKIRIM </span>"
+            ]);
         }
         if (empty($databox)) {
-            return "<span class='fw-bold'> data tidak ditemukan </span>";
+            return json_encode([
+                'box_pengiriman' => '',
+                'html' => "<span class='fw-bold'> data tidak ditemukan </span>"
+            ]);
         } else {
             if ($databox->grade == $grade) {
-                return '<span style="color: blue;">Pcs : ' . round($databox->pcs, 0) . ' <br/> ' . 'Gr : ' . round($databox->gr, 0) . '</span>';
+                return json_encode([
+                    'box_pengiriman' => '',
+                    'html' => '<span style="color: blue;">Pcs : ' . round($databox->pcs, 0) . ' <br/> ' . 'Gr : ' . round($databox->gr, 0) . '</span>'
+                ]);
             } else {
-                return "<span class='text-danger fw-bold'> grade: $databox->grade </span>";
+                return json_encode([
+                    'box_pengiriman' => '',
+                    'html' => "<span class='text-danger fw-bold'> grade: $databox->grade </span>"
+                ]);
             }
         }
     }

@@ -2051,6 +2051,9 @@ class ExportCocokanController extends Controller
             ],
         ];
         $spreadsheet = new Spreadsheet();
+        // Hapus worksheet default
+        $spreadsheet->removeSheetByIndex(0);
+        
         $divisi = $r->divisi;
 
         if (!$divisi) {

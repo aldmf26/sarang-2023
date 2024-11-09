@@ -256,11 +256,11 @@
                                     </td>
                                 </tr>
                             </template>
-                            {{-- <tr>
-                                <td colspan="6"><button type="button" @click="rows.push({ value: '' })"
+                            <tr>
+                                <td colspan="6"><button type="button" @click="baris++"
                                         class="btn btn-sm btn-primary btn-block"><i class="fas fa-plus"></i>
                                         Tambah</button></td>
-                            </tr> --}}
+                            </tr>
                             <!-- Add more rows as needed -->
 
                             {{-- <tr>
@@ -317,7 +317,7 @@
             </script>
             <script>
                 $(document).ready(function() {
-                    $(document).on("keyup", ".boxkirim", function(e) {
+                    $(document).on("keyup", ".boxkirimd", function(e) {
                         var urutan = $(this).attr('urutan');
                         var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
                         var grade = $('.grade[urutan="' + urutan + '"]').val();
@@ -349,13 +349,21 @@
                                 boxkirim: boxkirim,
                                 grade: grade
                             },
-                            success: function(response) {
-                                $('.cek[urutan="' + urutan + '"]').html(response);
+                            dataType: "json",
+                            success: function(r) {
+                                // if(r.html){
+                                //     $('.cek[urutan="' + urutan + '"]').html(r.html);
+                                // }
+
+                                    $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
+                                    $('.cek[urutan="' + urutan + '"]').html(r.html);
+
                             }
                         });
 
 
                     });
+
                 });
             </script>
         @endsection
