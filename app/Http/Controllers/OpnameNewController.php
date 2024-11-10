@@ -829,7 +829,7 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('E' . $kolom, $b->pcs);
             $sheet4->setCellValue('F' . $kolom, $b->gr);
             $sheet4->setCellValue('G' . $kolom, $b->ttl_rp);
-            $sheet4->setCellValue('H' . $kolom, $b->ttl_rp / $b->gr);
+            $sheet4->setCellValue('H' . $kolom, empty($b->gr) ? 0 : $b->ttl_rp / $b->gr);
             $sheet4->setCellValue('I' . $kolom, $b->pcs_bk);
             $sheet4->setCellValue('J' . $kolom, $b->gr_bk);
             $sheet4->setCellValue('K' . $kolom, $b->cost_bk);
