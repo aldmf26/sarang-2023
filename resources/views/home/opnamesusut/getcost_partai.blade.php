@@ -3,11 +3,11 @@
         <tr>
             <th class="dhead">Partai</th>
             <th class="dhead">Grade</th>
-            <th class="text-end dhead">Pcs tidak cetak</th>
-            <th class="text-end dhead">Gr tidak cetak</th>
             <th class="text-end dhead">Pcs</th>
             <th class="text-end dhead">Gr</th>
             <th class="text-end dhead">Rp</th>
+            <th class="text-end dhead">Pcs tidak cetak</th>
+            <th class="text-end dhead">Gr tidak cetak</th>
             <th class="text-end dhead">Pcs akhir</th>
             <th class="text-end dhead">Gr akhir</th>
             <th class="text-end dhead">Cost Rp</th>
@@ -19,11 +19,11 @@
         <tr>
             <td>{{ $bk->nm_partai }}</td>
             <td>{{ $bk->tipe }}</td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
             <td class="text-end">{{ number_format($bk->pcs_awal, 0) }}</td>
             <td class="text-end">{{ number_format($bk->gr_awal, 0) }}</td>
             <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
+            <td class="text-end"></td>
+            <td class="text-end"></td>
 
 
             <td class="text-end"></td>
