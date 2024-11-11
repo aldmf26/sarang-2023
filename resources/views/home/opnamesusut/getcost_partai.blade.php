@@ -24,9 +24,9 @@
 
             <td class="text-end"></td>
             <td class="text-end"></td>
-            <td class="text-end"></td>
-            <td class="text-end"></td>
             <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
+            <td class="text-end"></td>
+            <td class="text-end"></td>
         </tr>
         <tr>
             <td>Cabut</td>
