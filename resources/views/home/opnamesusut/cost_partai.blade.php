@@ -81,6 +81,9 @@
                             data: {
                                 partai: partai
                             },
+                            beforeSend: function() {
+                            $('#loadHalaman').html("loading...");
+                        },
                             success: function(response) {
                                 $('#loadHalaman').html(response);
 
