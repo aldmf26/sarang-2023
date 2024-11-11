@@ -47,6 +47,9 @@
                     $.ajax({
                         type: "get",
                         url: "{{ route('summary.get_operasional') }}",
+                        beforeSend: function() {
+                            $('#cost_opr').html("loading...");
+                        },
                         success: function(response) {
                             $('#cost_opr').html(response);
                         }
