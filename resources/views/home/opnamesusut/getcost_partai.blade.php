@@ -102,7 +102,6 @@
                 {{ number_format($ttl2, 0) }}
             </th>
             <th class="text-end">
-                
                 {{ number_format($ttl2 / $grading->gr, 0) }}
             </th>
             <th class="text-end">
