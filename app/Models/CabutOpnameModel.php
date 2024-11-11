@@ -156,7 +156,7 @@ class CabutOpnameModel extends Model
     }
     public static function cetakPartai($partai)
     {
-        return DB::selectOne("SELECT c.nm_partai, sum(a.pcs_tdk_cetak + a.pcs_akhir) as pcs , sum(a.gr_tdk_cetak + a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        return DB::selectOne("SELECT c.nm_partai, sum(a.pcs_tdk_cetak ) as pcs_tdk sum(a.pcs_akhir) as pcs , sum(a.gr_tdk_cetak ) as gr_tdk, sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
         FROM cetak_new as a 
         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut' 
