@@ -99,7 +99,7 @@
                 {{ number_format($sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
             </th>
             <th class="text-end">
-                {{ number_format(($sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp) / $grading->gr, 0) }}
+                {{ number_format(($sortir->ttl_rp + $grading->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp) / $grading->gr, 0) }}
             </th>
             <th class="text-end">
                 {{ number_format($grading->ttl_rp + $sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
