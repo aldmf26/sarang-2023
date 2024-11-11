@@ -29,8 +29,8 @@
                     href="{{ route('cocokan.balancesheet') }}">Balance Sheet</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ $rot == 'cocokan.getCostpartai' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.getCostpartai') }}">Cost per partai</a>
+                <a class="nav-link  {{ $rot == 'cocokan.costPartai' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.costPartai') }}">Cost per partai</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.opname' ? 'active' : '' }}" aria-current="page"
