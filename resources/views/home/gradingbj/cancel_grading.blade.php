@@ -11,13 +11,14 @@
         <form action="{{ route('gradingbj.createUlang') }}" method="post">
             @csrf
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="dhead">Pengawas</th>
                                 <th class="dhead" width="150">No Nota</th>
                                 <th class="dhead">Tgl</th>
+                                <th class="dhead">Bulan dibayar</th>
                             </tr>
                             <tr>
                                 <td>
@@ -32,6 +33,13 @@
                                 <td>
                                     <input readonly type="date" value="{{ $tgl }}" name="tgl"
                                         class="form-control" required>
+                                </td>
+                                <td>
+                                    <input readonly type="text" value="{{ $getFormulir[0]->bulan }}" name="bulan"
+                                        class="form-control" required>
+                                    <input readonly type="hidden" value="{{ date('Y') }}" name="tahun"
+                                        class="form-control" required>
+                                
                                 </td>
 
                             </tr>
@@ -77,8 +85,11 @@
                                     <h6>Total</h6>
                                 </th>
                                 <th></th>
+                                
                                 <th class="text-end">
-                                    <h6>{{ array_sum(array_column($getBox, 'pcs')) }}</h6>
+                                    <h6>
+                                        {{ array_sum(array_column($getBox, 'pcs')) }}
+                                    </h6>
                                 </th>
                                 <th class="text-end">
                                     <h6>{{ array_sum(array_column($getBox, 'gr')) }}</h6>
@@ -124,7 +135,7 @@
                                     <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                                 </td>
                             </tr>
-
+                            
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr>
                                     <td>

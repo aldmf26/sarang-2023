@@ -35,7 +35,9 @@
                         <td align="center">{{ $d->grade }}</td>
                         <td align="right">{{ $d->pcs }}</td>
                         <td align="right">{{ $d->gr }}</td>
-                        {{-- <td align="center">
+                        <td align="center">
+                            @if ($d->sudah_kirim == 'T')
+                                
                             <form action="{{ route('gradingbj.cancel') }}" method="post">
                                 @csrf
                                 @method('post')
@@ -44,7 +46,9 @@
                                     Cancel
                                 </button>
                             </form>
-                        </td> --}}
+                            @endif
+
+                        </td>
                         {{-- <td>
                             <form action="{{ route('gradingbj.cancel') }}" method="post">
                                 @csrf
