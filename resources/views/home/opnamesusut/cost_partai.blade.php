@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="11" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
     </x-slot>
@@ -82,8 +82,8 @@
                                 partai: partai
                             },
                             beforeSend: function() {
-                            $('#loadHalaman').html("loading...");
-                        },
+                                $('#loadHalaman').html("loading...");
+                            },
                             success: function(response) {
                                 $('#loadHalaman').html(response);
 

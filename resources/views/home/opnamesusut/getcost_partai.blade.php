@@ -12,7 +12,7 @@
             <th class="text-end dhead">Gr akhir</th>
             <th class="text-end dhead">Cost Rp</th>
             <th class="text-end dhead">Rp/gr</th>
-            <th class="text-end dhead">Saldo</th>
+            {{-- <th class="text-end dhead">Saldo</th> --}}
         </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
             <td class="text-end"></td>
             <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
             <td class="text-end"></td>
-            <td class="text-end"></td>
+            {{-- <td class="text-end"></td> --}}
         </tr>
         <tr>
             <td>Cabut</td>
@@ -46,7 +46,7 @@
             <td class="text-end">
                 {{ number_format((($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0)) / ($cabut->gr ?? (0 + $eo->gr ?? 0)), 0) }}
             </td>
-            <td class="text-end">{{ number_format($bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}</td>
+            {{-- <td class="text-end">{{ number_format($bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}</td> --}}
         </tr>
         <tr>
             <td>Cetak</td>
@@ -60,9 +60,9 @@
             <td class="text-end">{{ number_format($cetak->gr, 0) }}</td>
             <td class="text-end">{{ number_format($cetak->ttl_rp, 0) }}</td>
             <td class="text-end">{{ number_format($cetak->ttl_rp / $cetak->gr, 0) }}</td>
-            <td class="text-end">
+            {{-- <td class="text-end">
                 {{ number_format($cetak->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}
-            </td>
+            </td> --}}
         </tr>
         <tr>
             <td>Sortir</td>
@@ -76,9 +76,9 @@
             <td class="text-end">{{ number_format($sortir->gr, 0) }}</td>
             <td class="text-end">{{ number_format($sortir->ttl_rp, 0) }}</td>
             <td class="text-end">{{ number_format($sortir->ttl_rp / $sortir->gr, 0) }}</td>
-            <td class="text-end">
+            {{-- <td class="text-end">
                 {{ number_format($sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
-            </td>
+            </td> --}}
         </tr>
         <tr>
             <td>Grading</td>
@@ -92,9 +92,9 @@
             <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
             <td class="text-end">{{ number_format($grading->ttl_rp, 0) }}</td>
             <td class="text-end">{{ number_format($grading->ttl_rp / $grading->gr, 0) }}</td>
-            <td class="text-end">
+            {{-- <td class="text-end">
                 {{ number_format($grading->ttl_rp + $sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
-            </td>
+            </td> --}}
         </tr>
     </tbody>
     <tfoot>
@@ -105,8 +105,8 @@
             <th class="text-end">{{ number_format($bk->gr_awal, 0) }}</th>
             <th class="text-end">{{ number_format($bk->ttl_rp, 0) }}</th>
 
-            <th class="text-end"></th>
-            <th class="text-end"></th>
+            <th class="text-end">{{ number_format($cetak->pcs_tdk, 0) }}</th>
+            <th class="text-end">{{ number_format($cetak->gr_tdk, 0) }}</th>
 
             <th class="text-end">{{ number_format($grading->pcs, 0) }}</th>
             <th class="text-end">{{ number_format($grading->gr, 0) }}</th>
@@ -117,16 +117,17 @@
                         $grading->ttl_rp +
                         ($cabut->ttl_rp ?? 0) +
                         ($eo->ttl_rp ?? 0) +
-                        $cetak->ttl_rp;
+                        $cetak->ttl_rp +
+                        $bk->ttl_rp;
                 @endphp
                 {{ number_format($ttl2, 0) }}
             </th>
             <th class="text-end">
                 {{ number_format($ttl2 / $grading->gr, 0) }}
             </th>
-            <th class="text-end">
+            {{-- <th class="text-end">
                 {{ number_format($grading->ttl_rp + $sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
-            </th>
+            </th> --}}
         </tr>
     </tfoot>
 </table>
