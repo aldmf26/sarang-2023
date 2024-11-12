@@ -178,6 +178,74 @@
                     </tfoot>
                 </table>
             </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-5">
+                <div class="d-flex justify-content-between">
+                    <h6>List Pengiriman Belum Cost</h6>
+
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="dhead">#</th>
+                            <th class="dhead">Tgl Kirim</th>
+                            <th class="dhead">No Packinglist</th>
+                            <th class="dhead">Nama Packing List</th>
+                            <th class="dhead">Tujuan</th>
+                            <th class="dhead text-end">Box</th>
+                            <th class="dhead text-end">Pcs</th>
+                            <th class="dhead text-end">Gr</th>
+                            <th class="dhead text-end">Gr + Kadar</th>
+                            <th class="dhead text-end">Total Rp</th>
+                            <th class="dhead text-end">Rata2</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach ($list_pengiriman_belum as $i => $d)
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td style="white-space: nowrap">{{ tanggal($d->tgl) }}</td>
+                                <td>PI {{ $d->no_nota }}</td>
+                                <td>{{ ucwords($d->nm_packing) }}</td>
+                                <td>{{ strtoupper($d->tujuan) }}</td>
+                                <td align="center">{{ $d->ttl_box }}</td>
+                                <td align="right">{{ number_format($d->pcs, 0) }}</td>
+                                <td align="right"><a target="_blank"
+                                        href="{{ route('detail.list_pengiriman', ['no_nota' => $d->no_nota]) }}">{{ number_format($d->gr, 0) }}</a>
+                                </td>
+                                <td align="right">{{ number_format($d->gr_naik, 0) }}</td>
+                                <td align="right">
+                                    {{ number_format($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu, 0) }}
+                                </td>
+                                <td align="right">
+                                    {{ number_format(($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr, 0) }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6" class="fw-bold">Total</th>
+                            <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman_belum, 'pcs'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">{{ number_format(sumBK($list_pengiriman_belum, 'gr'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">
+                                {{ number_format(sumBK($list_pengiriman_belum, 'gr_naik'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">
+                                {{ number_format(sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu'), 0) }}
+                            </th>
+                            <th class="text-end fw-bold">
+                                {{ number_format((sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </section>
 
 

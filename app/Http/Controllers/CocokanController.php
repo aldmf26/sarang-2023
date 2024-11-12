@@ -197,6 +197,7 @@ class CocokanController extends Controller
         $belum_kirim = Grading::belumKirimSum();
 
         $list_pengiriman = Grading::list_pengiriman_sum();
+        $list_pengiriman_belum = Grading::list_pengiriman_sum_belum();
 
         $data = [
             'title' => 'Pengiriman ',
@@ -207,7 +208,8 @@ class CocokanController extends Controller
             'grading' => $grading,
             'grading_sisa' => $grading_sisa,
             'belum_kirim' => $belum_kirim,
-            'list_pengiriman' => $list_pengiriman
+            'list_pengiriman' => $list_pengiriman,
+            'list_pengiriman_belum' => $list_pengiriman_belum
         ];
         return view('home.cocokan.pengiriman', $data);
     }
