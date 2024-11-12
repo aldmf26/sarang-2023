@@ -9,13 +9,17 @@
 
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <select name="" id="select2" class="form-control pilih_partai">
                             <option value="">Pilih Partai</option>
                             @foreach ($partai as $p)
                                 <option value="{{ $p->nm_partai }}">{{ $p->nm_partai }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-lg-9">
+                        <a href="{{ route('cocokan.exportCostpartai') }}"
+                            class="btn btn-primary btn-sm float-end mb-2"><i class="fas fa-file-excel"></i>Export</a>
                     </div>
                     <div class="col-lg-12 mt-4">
                         <div id="loadHalaman"></div>
