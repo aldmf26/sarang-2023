@@ -29,7 +29,7 @@
             <td class="text-end"></td>
             <td class="text-end"></td>
             <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
-            <td class="text-end"></td>
+            <td class="text-end">{{ empty($bk->ttl_rp) ? 0 : number_format($bk->ttl_rp / $bk->gr_awal, 0) }}</td>
             {{-- <td class="text-end"></td> --}}
         </tr>
         <tr>
@@ -72,9 +72,9 @@
             <td class="text-end"></td>
             <td class="text-end"></td>
             <td class="text-end"></td>
-            <td class="text-end">{{ number_format($sortir->pcs, 0) }}</td>
-            <td class="text-end">{{ number_format($sortir->gr, 0) }}</td>
-            <td class="text-end">{{ number_format($sortir->ttl_rp, 0) }}</td>
+            <td class="text-end">{{ number_format($sortir->pcs ?? 0, 0) }}</td>
+            <td class="text-end">{{ number_format($sortir->gr ?? 0, 0) }}</td>
+            <td class="text-end">{{ number_format($sortir->ttl_rp ?? 0, 0) }}</td>
             <td class="text-end">{{ number_format($sortir->ttl_rp / $sortir->gr, 0) }}</td>
             {{-- <td class="text-end">
                 {{ number_format($sortir->ttl_rp + $bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + $cetak->ttl_rp, 0) }}
