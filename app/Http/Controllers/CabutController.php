@@ -448,7 +448,7 @@ class CabutController extends Controller
             $no_box = $getBox->first()->no_box;
 
             if ($r->tipe != 'tutup') {
-                $cekFormulir = DB::table('formulir_sarang')->where[[('no_box', $no_box],['kategori', 'cetak']])->exists();
+                $cekFormulir = DB::table('formulir_sarang')->where([['no_box', $no_box],['kategori', 'cetak']])->exists();
                 if ($cekFormulir) {
                     $boxAda .= $boxAda == '' ? $no_box : ", $no_box";
                 } else {
