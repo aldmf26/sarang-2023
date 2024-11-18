@@ -256,26 +256,44 @@ class SortirController extends Controller
         $tgl1 = $r->tgl1 ?? date('Y-m-d');
         $tgl2 = $r->tgl2 ?? date('Y-m-t');
         $id_anak = $r->id_anak;
+        $id_user = auth()->user()->id;
 
         if ($id_anak == 'All') {
-            $sortir = DB::table('sortir as a')
-                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                // ->whereBetween('a.tgl', [$tgl1, $tgl2])
-                ->orderBY('a.selesai', 'ASC')
-                ->get();
+            // $sortir = DB::table('sortir as a')
+            //     ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            //     ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+            //     ->leftJoin('formulir_sarang as d', 'a.no_box', 'd.no_box', 'a.kategori', 'grade')
+            //     ->where('a.id_pengawas', auth()->user()->id)
+            //     ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            //     // ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            //     ->orderBY('a.selesai', 'ASC')
+            //     ->get();
+            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai, d.no_box as no_box_formulir FROM sortir as a 
+                left join tb_anak as b on a.id_anak = b.id_anak
+                left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
+                left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
+                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T'
+                order by a.selesai ASC
+                ");
         } else {
-            $sortir = DB::table('sortir as a')
-                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                // ->whereBetween('a.tgl', [$tgl1, $tgl2])
-                ->where('a.id_anak', $id_anak)
-                ->orderBY('a.selesai', 'ASC')
-                ->get();
+            // $sortir = DB::table('sortir as a')
+            //     ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            //     ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
+            //     ->leftJoin('formulir_sarang as d', 'a.no_box', 'd.no_box', 'a.kategori', 'grade')
+            //     ->where('a.id_pengawas', auth()->user()->id)
+            //     ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
+            //     // ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            //     ->where('a.id_anak', $id_anak)
+            //     ->orderBY('a.selesai', 'ASC')
+            //     ->get();
+
+            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir FROM sortir as a 
+                left join tb_anak as b on a.id_anak = b.id_anak
+                left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
+                left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
+                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
+                order by a.selesai ASC
+                ");
         }
 
 
@@ -301,14 +319,13 @@ class SortirController extends Controller
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
 
-            'd' => DB::table('sortir as a')
-                ->leftJoin('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->where([['a.no_box', '!=', '9999'], ['a.penutup', 'T']])
-                ->where('id_sortir', $r->id_sortir)
-                ->orderBY('a.selesai', 'ASC')
-                ->first(),
+            'd' => DB::selectOne("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir FROM sortir as a 
+            left join tb_anak as b on a.id_anak = b.id_anak
+            left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
+            left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
+            where  a.no_box != '9999' and a.penutup = 'T' and a.id_sortir = '$r->id_sortir'
+            order by a.selesai ASC
+            "),
             'kelas' => DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get(),
             'anak' => $this->getAnak(),
             'bulan' => DB::table('bulan')->get(),
