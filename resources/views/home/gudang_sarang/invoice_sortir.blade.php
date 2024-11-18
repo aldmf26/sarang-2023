@@ -12,7 +12,7 @@
 
     <x-slot name="cardBody">
 
-        <section class="row">
+        <section class="row" >
             <table class="table table_bordered" id="nanda">
                 <thead>
                     <tr>
@@ -29,7 +29,9 @@
                 </thead>
                 <tbody>
                     @foreach ($formulir as $no => $d)
-                        <tr>
+                        <tr x-data="{
+                            isDisabled: false,
+                        }">
                             <td>{{ $no + 1 }}</td>
                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
                             <td>
@@ -62,7 +64,8 @@
                                     </a>
 
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('cetaknew.selesai_po_sortir', $param) }}">
+                                        href="#" x-show="!isDisabled"
+                                        @click="isDisabled = true">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
                                 @else
