@@ -371,6 +371,7 @@ group by a.no_box;
             b.tipe, b.ket,
             SUM(a.pcs_akhir) as pcs, 
             SUM(a.gr_akhir) as gr, 
+            sum(a.gr_awal) as gr_awal,
             SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, 
             sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
             sum(z.cost_cu) as cost_cu
