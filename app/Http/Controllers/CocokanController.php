@@ -196,7 +196,7 @@ class CocokanController extends Controller
 
         $belum_kirim = Grading::belumKirimSum();
 
-        $list_pengiriman = Grading::list_pengiriman_sum();
+        $list_pengiriman = Grading::list_pengiriman_sum2();
         $list_pengiriman_belum = Grading::list_pengiriman_sum_belum();
 
         $data = [
