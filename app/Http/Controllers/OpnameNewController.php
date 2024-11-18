@@ -563,7 +563,7 @@ class OpnameNewController extends Controller
 
 
 
-        $sheet4->getStyle("B1:N1")->applyFromArray($style_atas);
+        $sheet4->getStyle("B1:O1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'Sortir Selesai');
         $sheet4->setCellValue('B1', 'partai');
         $sheet4->setCellValue('C1', 'no box');
@@ -571,13 +571,14 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('E1', 'ket');
         $sheet4->setCellValue('F1', 'pengawas');
         $sheet4->setCellValue('G1', 'pcs');
-        $sheet4->setCellValue('H1', 'gr');
-        $sheet4->setCellValue('I1', 'ttl rp bk');
-        $sheet4->setCellValue('J1', 'cost kerja');
-        $sheet4->setCellValue('K1', 'cost cu');
-        $sheet4->setCellValue('L1', 'cost operasional');
-        $sheet4->setCellValue('M1', 'total rp');
-        $sheet4->setCellValue('N1', 'rp/gr');
+        $sheet4->setCellValue('H1', 'gr awal');
+        $sheet4->setCellValue('I1', 'gr akhir');
+        $sheet4->setCellValue('J1', 'ttl rp bk');
+        $sheet4->setCellValue('K1', 'cost kerja');
+        $sheet4->setCellValue('L1', 'cost cu');
+        $sheet4->setCellValue('M1', 'cost operasional');
+        $sheet4->setCellValue('N1', 'total rp');
+        $sheet4->setCellValue('O1', 'rp/gr');
 
 
         $kolom = 2;
@@ -588,13 +589,14 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('E' . $kolom, $d->ket);
             $sheet4->setCellValue('F' . $kolom, $d->name);
             $sheet4->setCellValue('G' . $kolom, $d->pcs);
-            $sheet4->setCellValue('H' . $kolom, $d->gr);
-            $sheet4->setCellValue('I' . $kolom, $d->ttl_rp);
-            $sheet4->setCellValue('J' . $kolom, $d->cost_kerja);
-            $sheet4->setCellValue('K' . $kolom,  $d->cost_cu);
-            $sheet4->setCellValue('L' . $kolom, 0);
+            $sheet4->setCellValue('H' . $kolom, $d->gr_awal);
+            $sheet4->setCellValue('I' . $kolom, $d->gr);
+            $sheet4->setCellValue('J' . $kolom, $d->ttl_rp);
+            $sheet4->setCellValue('K' . $kolom, $d->cost_kerja);
+            $sheet4->setCellValue('L' . $kolom,  $d->cost_cu);
             $sheet4->setCellValue('M' . $kolom, 0);
             $sheet4->setCellValue('N' . $kolom, 0);
+            $sheet4->setCellValue('O' . $kolom, 0);
             // $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $d->gr);
             // $sheet4->setCellValue('M' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr));
             // $sheet4->setCellValue('N' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr)) / $d->gr);
@@ -632,7 +634,7 @@ class OpnameNewController extends Controller
         // $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
         // $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
-        $sheet4->getStyle('B2:N' . $kolom + 1)->applyFromArray($style);
+        $sheet4->getStyle('B2:O' . $kolom + 1)->applyFromArray($style);
     }
     private function gudang_grading($spreadsheet, $style_atas, $style, $model)
     {
