@@ -88,7 +88,7 @@
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
-                                @if ($d->gr - $d->gr_pengiriman >= 0)
+                                @if ($d->gr - $d->gr_pengiriman > 0)
                                     <tr
                                         @click="
                                                 if (cek.includes('{{ $d->no_box }}')) {
