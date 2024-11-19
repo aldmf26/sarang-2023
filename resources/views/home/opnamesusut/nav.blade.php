@@ -9,12 +9,12 @@
                     href="{{ route('cocokan.opname') }}">Cabut</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ $rot == 'cocokan.cetak' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.cetak') }}">Cetak</a>
+                <a class="nav-link  {{ $rot == 'cocokan.opname/cetak' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.opname/cetak') }}">Cetak</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ $rot == 'cocokan.sortir' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.sortir') }}">Sortir</a>
+                <a class="nav-link  {{ $rot == 'cocokan.opname/sortir' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.opname/sortir') }}">Sortir</a>
             </li>
         </ul>
     </div>

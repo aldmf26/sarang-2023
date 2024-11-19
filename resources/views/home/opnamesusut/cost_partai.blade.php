@@ -8,26 +8,60 @@
             @include('home.cocokan.nav')
 
             <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <select name="" id="select2" class="form-control pilih_partai">
-                            <option value="">Pilih Partai</option>
-                            @foreach ($partai as $p)
-                                <option value="{{ $p->nm_partai }}">{{ $p->nm_partai }}</option>
-                            @endforeach
-                        </select>
+                <form action="{{ route('cocokan.exportCostperpartai') }}" method="get">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <select name="partai" id="select2" class="form-control pilih_partai">
+                                <option value="">Pilih Partai</option>
+                                @foreach ($partai as $p)
+                                    <option value="{{ $p->nm_partai }}">{{ $p->nm_partai }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-9">
+                            <a href="{{ route('cocokan.exportCostpartai') }}"
+                                class="btn btn-primary btn-sm float-end mb-2"><i class="fas fa-file-excel"></i>Export
+                                All</a>
+                            <button type="submit" class="btn btn-primary btn-sm float-end mb-2 me-2"><i
+                                    class="fas fa-file-excel"></i>Export</button>
+                        </div>
+                        <div class="col-lg-12 mt-4">
+                            <div id="loadHalaman"></div>
+                        </div>
                     </div>
-                    <div class="col-lg-9">
-                        <a href="{{ route('cocokan.exportCostpartai') }}"
-                            class="btn btn-primary btn-sm float-end mb-2"><i class="fas fa-file-excel"></i>Export</a>
-                    </div>
-                    <div class="col-lg-12 mt-4">
-                        <div id="loadHalaman"></div>
+                </form>
+
+
+
+            </div>
+
+            <style>
+                .modal_sedang {
+                    max-width: 600px;
+                }
+            </style>
+            <div class="modal fade" id="detail_data" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog  modal_sedang">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Detail Grading</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="load_grade"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Close</span>
+                            </button>
+
+
+                        </div>
                     </div>
                 </div>
-
-
-
             </div>
 
 
@@ -90,6 +124,28 @@
                             },
                             success: function(response) {
                                 $('#loadHalaman').html(response);
+
+                            }
+                        });
+
+                    });
+                    $(document).on('click', '.detail_grade', function(e) {
+                        e.preventDefault();
+                        var nm_partai = $(this).attr('nm_partai');
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('cocokan.detailGrade') }}",
+                            data: {
+                                nm_partai: nm_partai
+                            },
+                            success: function(response) {
+                                $("#load_grade").html(response);
+                                $('#tableHalaman').DataTable({
+                                    "searching": true,
+                                    "autoWidth": true,
+                                    "paging": true,
+                                    "ordering": true
+                                });
 
                             }
                         });

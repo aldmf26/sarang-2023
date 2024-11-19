@@ -183,8 +183,8 @@
                             </a>
                         </td>
                         <td class="text-end">
-                            {{ number_format($grading->cost_bk + $grading->cost_kerja, 0) }} /
-                            {{ number_format($grading->cost_op, 0) }}
+                            {{-- {{ number_format($grading->cost_bk + $grading->cost_kerja, 0) }} /
+                            {{ number_format($grading->cost_op, 0) }} --}}
                             {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
                         <td class="text-end">
                             {{ number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0) }}

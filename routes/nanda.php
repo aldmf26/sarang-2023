@@ -390,7 +390,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/detail_cabut', 'detail_cabut')->name('detail_cabut');
             Route::get('/costPartai', 'costPartai')->name('costPartai');
             Route::get('/getCostpartai', 'getCostpartai')->name('getCostpartai');
+            Route::get('/detailGrade', 'detailGrade')->name('detailGrade');
             Route::get('/exportCostpartai', 'exportCostpartai')->name('exportCostpartai');
+            Route::get('/exportCostperpartai', 'exportCostperpartai')->name('exportCostperpartai');
+
+            Route::get('/opname/cetak', 'cetak')->name('opname/cetak');
+            Route::get('/opname/sortir', 'sortir')->name('opname/sortir');
         });
 
     Route::controller(BalanceController::class)
