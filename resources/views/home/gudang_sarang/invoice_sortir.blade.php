@@ -64,7 +64,7 @@
                                     </a>
 
                                     <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="#" x-show="!isDisabled"
+                                        href="{{ route('cetaknew.selesai_po_sortir', $param) }}" x-show="!isDisabled"
                                         @click="isDisabled = true">
                                         <span class="badge bg-success">Selesai</span>
                                     </a>
