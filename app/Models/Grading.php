@@ -15,7 +15,16 @@ class Grading extends Model
         $groupBoxPartai = $noBox ? ",b.no_box" : '';
 
         $formulir = DB::select("SELECT 
-        b.no_box, b.tanggal, e.tipe,e.ket,e.nm_partai, c.name as pemberi, b.no_invoice, (b.pcs_awal - d.pcs) as pcs_awal, (b.gr_awal - d.gr) as gr_awal, akhir_sortir.ttl_rp
+        b.no_box, 
+        b.tanggal, 
+        e.tipe,
+        e.ket,
+        e.nm_partai, 
+        c.name as pemberi, 
+        b.no_invoice, 
+        (b.pcs_awal - d.pcs) as pcs_awal, 
+        (b.gr_awal - d.gr) as gr_awal, 
+        akhir_sortir.ttl_rp
         FROM grading as a 
         JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
         JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
@@ -26,7 +35,6 @@ class Grading extends Model
             group by no_box_sortir
         ) as d on d.no_box = b.no_box
         JOIN users as c on c.id = b.id_pemberi
-        
         LEFT JOIN (
             SELECT sum(a.ttl_rp) as cost_kerja,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, b.no_box,c.name,b.nm_partai,sum(a.pcs_akhir) as pcs,sum(a.gr_akhir) as gr FROM sortir as a
                 LEFT JOIN bk as b on a.no_box = b.no_box and b.kategori = 'cabut'
@@ -71,6 +79,42 @@ class Grading extends Model
         $arr = [
             'formulir' => $formulir,
             'formulirGroupBy' => $formulirGroupBy,
+            'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
+        ];
+        return $arr[$jenis];
+    }
+
+    public static function dapatkanStokBoxGradingbj($jenis, $noBox = null)
+    {
+        $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
+
+        $formulir = DB::select("SELECT 
+        b.no_box, 
+        b.tanggal, 
+        e.tipe,
+        e.ket,
+        e.nm_partai, 
+        c.name as pemberi, 
+        b.no_invoice, 
+        (b.pcs_awal - d.pcs) as pcs_awal, 
+        (b.gr_awal - d.gr) as gr_awal
+        FROM grading as a 
+        JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
+        $whereBox
+        LEFT JOIN(
+            select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
+            from grading 
+            group by no_box_sortir
+        ) as d on d.no_box = b.no_box
+        JOIN users as c on c.id = b.id_pemberi
+        WHERE a.selesai  = 'T'
+        GROUP BY b.no_box
+        HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
+        ORDER BY b.tanggal DESC");
+
+        $arr = [
+            'formulir' => $formulir,
             'pengawas' => DB::table('users')->where('posisi_id', 13)->get()
         ];
         return $arr[$jenis];

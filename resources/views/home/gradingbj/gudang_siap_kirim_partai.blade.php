@@ -147,7 +147,7 @@
                     $("#detail").modal('show')
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('gradingbj.detail') }}",
+                        url: "{{ route('gradingbj.detail_perpartai') }}",
                         data: {
                             no_box,
                         },

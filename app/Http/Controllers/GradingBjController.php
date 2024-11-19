@@ -56,7 +56,7 @@ class GradingBjController extends Controller
     {
         $data = [
             'title' => 'Grading',
-            'formulir' => Grading::dapatkanStokBox('formulir')
+            'formulir' => Grading::dapatkanStokBoxGradingbj('formulir')
         ];
         return view('home.gradingbj.index', $data);
     }
@@ -823,6 +823,68 @@ class GradingBjController extends Controller
         return view('home.gradingbj.detail_gudang_siap_kirim', $data);
     }
 
+    public function detail_perpartai(Request $r)
+    {
+        $no_box = $r->no_box;
+        $detail = DB::table('grading_partai as a')
+            ->selectRaw('a.id_grading,a.box_pengiriman,a.grade,a.nm_partai,a.no_invoice,a.sudah_kirim, a.bulan, a.pcs, a.gr')
+            ->where('a.box_pengiriman', $no_box)
+            ->groupBy('a.id_grading')
+            ->get();
+
+        $data = [
+            'no_box' => $no_box,
+            'detail' => $detail
+        ];
+        return view('home.gradingbj.detail_gudang_siap_kirim_perpartai', $data);
+    }
+
+    public function cancel_perpartai(Request $r)
+    {
+        $id_grading = $r->id_grading;
+
+        $getFormulir = DB::select("SELECT 
+            nm_partai,
+            no_invoice,
+            box_pengiriman,
+            grade,
+            pcs,
+            bulan,
+            gr,
+            tgl,
+            ttl_rp,
+            cost_bk,
+            cost_kerja,
+            admin
+            FROM `grading_partai`
+            WHERE id_grading = '$id_grading'");
+        $gradeStatuses = ['bentuk', 'turun'];
+        $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
+        $gradeTurun = $tb_grade->where('status', 'turun');
+        $nm_partai = $getFormulir[0]->nm_partai;
+        $admin = $getFormulir[0]->admin;
+        $tgl = $getFormulir[0]->tgl;
+
+        $no_invoice = $getFormulir[0]->no_invoice;
+        $bulan = $getFormulir[0]->bulan;
+
+
+        $data = [
+            'title' => 'Cancel Grading',
+            'bulan' => $bulan,
+            'user' => auth()->user()->name,
+            'gradeBentuk' => $tb_grade,
+            'gradeTurun' => $gradeTurun,
+            'getFormulir' => $getFormulir,
+            'nm_partai' => $nm_partai,
+            'id_grading' => $id_grading,
+            'admin' => $admin,
+            'no_invoice' => $no_invoice,
+            'tgl' => $tgl,
+            'formulir' => 'Y',
+        ];
+        return view('home.gradingbj.cancel_grading_partai', $data);
+    }
     public function cancelBoxPengiriman(Request $r)
     {
         $no_invoice = $r->no_invoice;
@@ -866,6 +928,70 @@ class GradingBjController extends Controller
             'tgl' => $tgl,
         ];
         return view('home.gradingbj.cancel_grading', $data);
+    }
+
+    public function createUlangPartai(Request $r)
+    {
+        try {
+            DB::beginTransaction();
+            $id_grading = $r->id_grading;
+            $tgl = date('Y-m-d');
+
+
+
+            $get = DB::table('grading_partai')->where('id_grading', $id_grading)->first();
+            $bulan = $get->bulan;
+            $tahun = $get->tahun;
+            $no_invoice = $get->no_invoice;
+            $nm_partai = $get->nm_partai;
+
+            $urutan = $get->urutan;
+            $tipe = $get->tipe;
+
+            $gr = $get->gr;
+
+            $rpGr = $get->ttl_rp / $gr;
+            $rpGrBk = $get->cost_bk / $gr;
+            $rpGrKerja = $get->cost_kerja / $gr;
+            $rpGrOp = $get->cost_op / $gr;
+
+            for ($i = 0; $i < count($r->grade); $i++) {
+                $cekBox = DB::table('grading_partai')->where('box_pengiriman', $r->box_sp[$i])->where('bulan', '!=', $bulan)->first();
+                if ($cekBox) {
+                    DB::rollBack();
+                    return redirect()->route('gradingbj.index')->with('error', "ERROR! Box Pengiriman " . $r->box_sp[$i] . " sudah terdaftar di bulan " . $cekBox->bulan);
+                }
+                
+                $data[] = [
+                    'bulan' => $bulan,
+                    'tahun' => $tahun,
+                    'no_invoice' => $no_invoice,
+                    'nm_partai' => $nm_partai,
+                    'urutan' => $urutan,
+                    'grade' => $r->grade[$i],
+                    'tipe' => $tipe,
+                    'pcs' => $r->pcs[$i],
+                    'gr' => $r->gr[$i],
+                    'tgl' => $tgl,
+                    'admin' => auth()->user()->name,
+                    'box_pengiriman' => $r->box_sp[$i],
+                    'ttl_rp' => $rpGr * $r->gr[$i],
+                    'cost_bk' => $rpGrBk * $r->gr[$i],
+                    'cost_kerja' => $rpGrKerja * $r->gr[$i],
+                    'cost_cu' => 0,
+                    'cost_op' => $rpGrOp * $r->gr[$i],
+                    'formulir' => 'Y',
+                ];
+            }
+            DB::table('grading_partai')->where('id_grading', $id_grading)->delete();
+            DB::table('grading_partai')->insert($data);
+
+            DB::commit();
+            return redirect()->route('gradingbj.gudang_siap_kirim')->with('sukses', 'Berhasil');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('gradingbj.gudang_siap_kirim')->with('error', $e->getMessage());
+        }
     }
 
     public function createUlang(Request $r)

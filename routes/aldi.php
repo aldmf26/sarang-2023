@@ -555,6 +555,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/print', 'print')->name('print');
             Route::post('/create_partai', 'create_partai')->name('create_partai');
             Route::post('/createUlang', 'createUlang')->name('createUlang');
+            Route::post('/createUlangPartai', 'createUlangPartai')->name('createUlangPartai');
             Route::get('/opname', 'opname')->name('opname');
             Route::post('/import', 'import')->name('import');
             Route::get('/template_import', 'template_import')->name('template_import');
@@ -562,7 +563,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/template_import_gudang_siap_kirim', 'template_import_gudang_siap_kirim')->name('template_import_gudang_siap_kirim');
             Route::get('/gudang_siap_kirim', 'gudang_siap_kirim')->name('gudang_siap_kirim');
             Route::get('/detail', 'detail')->name('detail');
+            Route::get('/detail_perpartai', 'detail_perpartai')->name('detail_perpartai');
             Route::get('/cancel', 'cancel')->name('cancel');
+            Route::post('/cancel_perpartai', 'cancel_perpartai')->name('cancel_perpartai');
             Route::post('/cancel', 'cancelBoxPengiriman')->name('cancelBoxPengiriman');
             Route::get('/selesai', 'selesai')->name('selesai');
             Route::get('/load_selisih', 'load_selisih')->name('load_selisih');
