@@ -13,9 +13,9 @@
                     <thead>
                         <tr>
                             <th rowspan="2" class="dhead">Nama Pengawas</th>
-                            <th colspan="2" class="dhead text-center">Cabut proses</th>
-                            <th colspan="2" class="dhead text-center">Cabut sisa pengawas</th>
-                            <th colspan="2" class="dhead text-center">Cabut selesai siap cetak</th>
+                            <th colspan="2" class="dhead text-center">Cetak proses</th>
+                            <th colspan="2" class="dhead text-center">Cetak sisa pengawas</th>
+                            <th colspan="2" class="dhead text-center">Cetak selesai siap sortir</th>
                             <th colspan="2" class="dhead text-center">Total</th>
                             <th colspan="3" class="dhead text-center">Susut</th>
                         </tr>
@@ -72,12 +72,12 @@
                                     <td class="text-end">{{ number_format($p->gr_proses, 0) }}</td>
                                     <td class="text-end">{{ number_format($p->pcs_sisa, 0) }}</td>
                                     <td class="text-end">{{ number_format($p->gr_sisa, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->pcs_siap_cetak, 0) }}</td>
-                                    <td class="text-end">{{ number_format($p->gr_siap_cetak, 0) }}</td>
+                                    <td class="text-end">{{ number_format($p->pcs_selesai, 0) }}</td>
+                                    <td class="text-end">{{ number_format($p->gr_selesai, 0) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($p->pcs_proses + $p->pcs_sisa + $p->pcs_siap_cetak, 0) }}</td>
+                                        {{ number_format($p->pcs_proses + $p->pcs_sisa + $p->pcs_selesai, 0) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($p->gr_proses + $p->gr_sisa + $p->gr_siap_cetak, 0) }}</td>
+                                        {{ number_format($p->gr_proses + $p->gr_sisa + $p->gr_selesai, 0) }}</td>
                                     @php
                                         $nama_terisi[] = $p->name;
                                     @endphp
@@ -102,7 +102,7 @@
                                 @endphp
                                 {{-- <td class="{{ $susut > $p->batas_susut ? 'text-danger' : '' }}">Cabut
                                     {{ $p->name }}</td> --}}
-                                <td class="{{ $susut > $p->batas_susut ? 'text-danger' : '' }}">{{ $p->tipe }}
+                                <td class="{{ $susut > $p->bts_denda_sst ? 'text-danger' : '' }}">{{ $p->kelas }}
                                 </td>
 
                                 @php
@@ -110,14 +110,14 @@
                                     $current_total += $difference; // Tambahkan perbedaan ke total untuk nama saat ini
                                 @endphp
 
-                                <td class="text-end {{ $susut > $p->batas_susut ? 'text-danger' : '' }}">
+                                <td class="text-end {{ $susut > $p->bts_denda_sst ? 'text-danger' : '' }}">
                                     {{ number_format($difference, 0) }}</td>
 
                                 <td
-                                    class="text-end fw-bold text-decoration-underline {{ $susut > $p->batas_susut ? 'text-danger' : '' }}">
+                                    class="text-end fw-bold text-decoration-underline {{ $susut > $p->bts_denda_sst ? 'text-danger' : '' }}">
                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#detail_data"
-                                        tipe="{{ $p->tipe }}" id_pengawas="{{ $p->id_pengawas }}"
-                                        class="{{ $susut > $p->batas_susut ? 'text-danger' : '' }} detail_data">{{ number_format((1 - $p->gr_akhir / $p->gr_awal) * 100, 0) }}
+                                        tipe="{{ $p->kelas }}" id_pengawas="{{ $p->id_pengawas }}"
+                                        class="{{ $susut > $p->bts_denda_sst ? 'text-danger' : '' }} detail_data">{{ number_format((1 - $p->gr_akhir / $p->gr_awal) * 100, 0) }}
                                         %
                                     </a>
 

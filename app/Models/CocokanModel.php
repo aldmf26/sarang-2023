@@ -278,6 +278,7 @@ class CocokanModel extends Model
     public static function sortir_akhir()
     {
         $result = DB::selectOne("SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr, 
+        sum(b.hrga_satuan * b.gr_awal) as cost_bk,
         SUM(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as ttl_rp,
         sum(a.ttl_rp) as cost_kerja
                     FROM sortir as a 
@@ -539,6 +540,7 @@ left join users as g on g.id = a.id_pengawas
     public static function gradingSisaOne()
     {
         return  DB::selectOne("SELECT sum(a.pcs_awal) pcs , 
+        sum(b.gr_awal * b.hrga_satuan) as bk_rp,
         sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'

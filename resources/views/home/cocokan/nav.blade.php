@@ -33,8 +33,8 @@
                     href="{{ route('cocokan.costPartai') }}">Cost per partai</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ $rot == 'cocokan.opname' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.opname') }}">Opname</a>
+                <a class="nav-link  {{ $rot == 'cocokan.opname' || $rot == 'cocokan.opname/cetak' || $rot == 'cocokan.opname/sortir' ? 'active' : '' }}"
+                    aria-current="page" href="{{ route('cocokan.opname') }}">Opname</a>
             </li>
         </ul>
     </div>
