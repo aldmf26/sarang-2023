@@ -961,7 +961,7 @@ class GradingBjController extends Controller
                     DB::rollBack();
                     return redirect()->route('gradingbj.index')->with('error', "ERROR! Box Pengiriman " . $r->box_sp[$i] . " sudah terdaftar di bulan " . $cekBox->bulan);
                 }
-                
+
                 $data[] = [
                     'bulan' => $bulan,
                     'tahun' => $tahun,
@@ -1014,29 +1014,36 @@ class GradingBjController extends Controller
             DB::table('grading')->where('no_invoice', $no_invoice)->delete();
 
 
+            $ttlGr = 0;
+            $ttlRp = 0;
+            $cost_bk = 0;
+            $cost_kerja = 0;
             for ($i = 0; $i < count($r->no_box); $i++) {
                 $getFormulirRp = Grading::dapatkanStokBoxtesting('formulir', $r->no_box[$i]);
-                $tipe = $getFormulirRp[0]->tipe;
-                $ttlGr = array_sum(array_column($getFormulirRp, 'gr_awal'));
-                $ttlRp =
-                    sumBk($getFormulirRp, 'cost_bk') +
-                    sumBk($getFormulirRp, 'cost_cbt') +
-                    sumBk($getFormulirRp, 'cost_str') +
-                    sumBk($getFormulirRp, 'cost_eo') +
-                    sumBk($getFormulirRp, 'cost_ctk') +
-                    sumBk($getFormulirRp, 'cost_cu');
 
-                $cost_bk = sumBk($getFormulirRp, 'cost_bk');
-                $cost_kerja =
-                    sumBk($getFormulirRp, 'cost_cbt') +
-                    sumBk($getFormulirRp, 'cost_str') +
-                    sumBk($getFormulirRp, 'cost_eo') +
-                    sumBk($getFormulirRp, 'cost_ctk');
-                $cost_cu = sumBk($getFormulirRp, 'cost_cu');
-                $rpGr = $ttlRp / $ttlGr;
-                $rpGrBk = $cost_bk / $ttlGr;
-                $rpGrKerja = $cost_kerja / $ttlGr;
-                $rpGrCu = $cost_cu / $ttlGr;
+                $tipe = $getFormulirRp[0]->tipe;
+                // $ttlGr = array_sum(array_column($getFormulirRp, 'gr_awal'));
+                // $ttlRp =
+                //     sumBk($getFormulirRp, 'cost_bk') +
+                //     sumBk($getFormulirRp, 'cost_cbt') +
+                //     sumBk($getFormulirRp, 'cost_str') +
+                //     sumBk($getFormulirRp, 'cost_eo') +
+                //     sumBk($getFormulirRp, 'cost_ctk') +
+                //     sumBk($getFormulirRp, 'cost_cu');
+
+                // $cost_bk = sumBk($getFormulirRp, 'cost_bk');
+                // $cost_kerja =
+                //     sumBk($getFormulirRp, 'cost_cbt') +
+                //     sumBk($getFormulirRp, 'cost_str') +
+                //     sumBk($getFormulirRp, 'cost_eo') +
+                //     sumBk($getFormulirRp, 'cost_ctk');
+                // $cost_cu = sumBk($getFormulirRp, 'cost_cu');
+                // $rpGr = $ttlRp / $ttlGr;
+                // $rpGrBk = $cost_bk / $ttlGr;
+                // $rpGrKerja = $cost_kerja / $ttlGr;
+                // $rpGrCu = $cost_cu / $ttlGr;
+
+
 
 
                 $getFormulir = DB::table('formulir_sarang')->where([['kategori', 'grade'], ['no_box', $r->no_box[$i]]])->first();
@@ -1048,7 +1055,31 @@ class GradingBjController extends Controller
                     'admin' => auth()->user()->name,
                     'tgl' => $tgl,
                 ];
+
+                $ttlGr += $getFormulir->gr_awal;
+
+                $ttlRp +=
+                    sumBk($getFormulirRp, 'cost_bk') +
+                    sumBk($getFormulirRp, 'cost_cbt') +
+                    sumBk($getFormulirRp, 'cost_str') +
+                    sumBk($getFormulirRp, 'cost_eo') +
+                    sumBk($getFormulirRp, 'cost_ctk') +
+                    sumBk($getFormulirRp, 'cost_cu');
+
+
+                $cost_bk += sumBk($getFormulirRp, 'cost_bk');
+
+                $cost_kerja +=
+                    sumBk($getFormulirRp, 'cost_cbt') +
+                    sumBk($getFormulirRp, 'cost_str') +
+                    sumBk($getFormulirRp, 'cost_eo') +
+                    sumBk($getFormulirRp, 'cost_ctk');
             }
+
+            $rpGr = $ttlRp / $ttlGr;
+            $rpGrBk = $cost_bk / $ttlGr;
+            $rpGrKerja = $cost_kerja / $ttlGr;
+
 
             for ($i = 0; $i < count($r->grade); $i++) {
                 $data[] = [
@@ -1067,8 +1098,7 @@ class GradingBjController extends Controller
                     'ttl_rp' => $rpGr * $r->gr[$i],
                     'cost_bk' => $rpGrBk * $r->gr[$i],
                     'cost_kerja' => $rpGrKerja * $r->gr[$i],
-                    'cost_kerja' => $rpGrKerja * $r->gr[$i],
-                    'cost_cu' => $rpGrCu * $r->gr[$i],
+                    'cost_cu' => 0,
                 ];
             }
 
