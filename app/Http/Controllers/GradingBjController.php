@@ -1002,8 +1002,6 @@ class GradingBjController extends Controller
         try {
             DB::beginTransaction();
             $no_invoice = $r->no_nota;
-            $bulan = $r->bulan;
-            $tahun = $r->tahun;
             $nm_partai = $r->nm_partai;
             $tgl = date('Y-m-d');
 
