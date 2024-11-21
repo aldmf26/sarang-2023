@@ -1,5 +1,20 @@
 <h6>Operasional bulan : {{ date('F', strtotime('01-' . $bulan . '-' . $tahun)) }} {{ $tahun }}</h6>
 <br>
+<div class="row">
+    <div class="col-lg-8"></div>
+    <div class="col-lg-4">
+        <label for="">Pilih Bulan</label>
+        <select name="" id="" class="form-control bulan_op">
+            <option value="">Pilih bulan</option>
+            @foreach ($dataBulan as $b)
+                <option value="{{ $b->id_oprasional }}" @selected($id_oprasional == $b->id_oprasional)>{{ $b->bulan }} ~
+                    {{ $b->tahun }}</option>
+            @endforeach
+
+        </select>
+    </div>
+</div>
+<br>
 <table class="table table-bordered" width="100%">
     <thead>
         <tr>

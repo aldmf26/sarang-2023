@@ -80,8 +80,14 @@ class SummaryController extends Controller
 
     public function get_operasional(Request $r)
     {
-        $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
+        if (empty($r->id_oprasional)) {
+            $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
         FROM tb_gaji_penutup as a;");
+        } else {
+            $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
+        }
+
+        $bulan_array = DB::table('oprasional')->get();
         $data = [
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji
             FROM tb_gaji_penutup as a 
@@ -89,6 +95,8 @@ class SummaryController extends Controller
             'bulan' => $bulan->bulan,
             'tahun' => $bulan->tahun,
             'cost_oprasional' => DB::selectOne("SELECT sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
+            'dataBulan' => $bulan_array,
+            'id_oprasional' => $r->id_oprasional
         ];
 
         return view('home.summary.operasional', $data);
