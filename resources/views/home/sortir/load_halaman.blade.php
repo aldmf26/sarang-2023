@@ -136,10 +136,10 @@
                             $posisi = auth()->user()->posisi_id;
                         @endphp
                         @if (empty($d->no_box_formulir))
+                            <a href="#" class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
+                                id_sortir="{{ $d->id_sortir }}"><i class="fas fa-redo"></i>
+                            </a>
                         @endif
-                        <a href="#" class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
-                            id_sortir="{{ $d->id_sortir }}"><i class="fas fa-redo"></i>
-                        </a>
                     @endif
                 </td>
                 <td align="center">
