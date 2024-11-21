@@ -35,11 +35,11 @@
                                         class="form-control" required>
                                 </td>
                                 <td>
-                                    <input readonly type="text" value="{{ $getFormulir[0]->bulan }}" name="bulan"
+                                    <input readonly type="text" value="{{ $getFormulir[0]->bulan }}" name="bulans"
                                         class="form-control" required>
-                                    <input readonly type="hidden" value="{{ date('Y') }}" name="tahun"
+                                    <input readonly type="hidden" value="{{ date('Y') }}" name="tahuns"
                                         class="form-control" required>
-                                
+
                                 </td>
 
                             </tr>
@@ -50,6 +50,7 @@
             <div class="row" x-data="{
                 rows: {{ json_encode($getFormulir) }},
                 selectedRowIndex: null,
+                isDisabled: false,
                 pcs: {{ json_encode(array_column($getFormulir, 'pcs')) }},
                 gr: {{ json_encode(array_column($getFormulir, 'gr')) }},
                 ttlSum: function(type) {
@@ -85,7 +86,7 @@
                                     <h6>Total</h6>
                                 </th>
                                 <th></th>
-                                
+
                                 <th class="text-end">
                                     <h6>
                                         {{ array_sum(array_column($getBox, 'pcs')) }}
@@ -116,6 +117,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th class="dhead">#</th>
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end" width="200">Pcs</th>
                                 <th class="dhead text-end" width="200">Gr</th>
@@ -135,12 +137,13 @@
                                     <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                                 </td>
                             </tr>
-                            
+
                             <template x-for="(row, index) in rows" :key="index">
                                 <tr>
+                                    <td x-text="index + 1"></td>
                                     <td>
-                                        <select x-init="initSelect2" required name="grade[]" class="selectGrade"
-                                            id="">
+                                        <select  x-init="initSelect2"
+                                            required name="grade[]" class="selectGrade" id="">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($gradeBentuk as $g)
                                                 <option :selected="row.grade === '{{ $g->nm_grade }}'"
@@ -148,20 +151,28 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                      
                                     </td>
                                     <td>
-                                        <input onclick="select()" x-model="pcs[index]" type="text"
-                                            class="text-end form-control" name="pcs[]">
+                                        <input :readonly="row.sudah_kirim === 'Y'" onclick="select()"
+                                            x-model="pcs[index]" type="text" class="text-end form-control"
+                                            name="pcs[]">
                                     </td>
                                     <td>
-                                        <input onclick="select()" x-model="gr[index]" required type="text"
-                                            class="text-end form-control" name="gr[]">
+                                        <input :readonly="row.sudah_kirim === 'Y'" onclick="select()"
+                                            x-model="gr[index]" required type="text" class="text-end form-control"
+                                            name="gr[]">
                                     </td>
                                     <td>
-                                        <input onclick="select()" :value="row.box_pengiriman" required type="text"
+                                        <input :readonly="row.sudah_kirim === 'Y'" onclick="select()"
+                                            :value="row.box_pengiriman" required type="text"
                                             class="form-control text-end" name="box_sp[]">
                                     </td>
-                                    <td>
+                                    <td x-show="row.sudah_kirim === 'T'">
+                                        <input type="hidden" :value="row.sudah_kirim" name="sudah_kirim[]">
+                                        <input type="hidden" :value="row.formulir" name="formulir[]">
+                                        <input type="hidden" :value="row.bulan" name="bulan[]">
+                                        <input type="hidden" :value="row.tahun" name="tahun[]">
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
                                                 class="fas fa-trash"></i></span>
                                     </td>
@@ -178,7 +189,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-md btn-primary float-end">Save</button>
+            <button x-show="!isDisabled" @click="isDisabled = true" type="submit"
+                class="btn btn-md btn-primary float-end">Save</button>
         </form>
         @section('scripts')
             <script>
