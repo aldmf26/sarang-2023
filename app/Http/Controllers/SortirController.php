@@ -288,13 +288,13 @@ class SortirController extends Controller
             //     ->orderBY('a.selesai', 'ASC')
             //     ->get();
 
-            $wherepgws = $posisi_id == 1 ? '' : "and a.id_pengawas = '$id_user'";
+
 
             $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir FROM sortir as a 
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
                 left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-                where $wherepgws and a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
+                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
                 order by a.selesai ASC
                 ");
         }
