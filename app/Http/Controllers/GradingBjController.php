@@ -896,8 +896,11 @@ class GradingBjController extends Controller
             grade,
             pcs,
             bulan,
+            tahun,
             gr,
             tgl,
+            sudah_kirim,
+            formulir,
             admin
             FROM `grading_partai`
             WHERE no_invoice = '$no_invoice'");
@@ -1004,8 +1007,6 @@ class GradingBjController extends Controller
             $nm_partai = $r->nm_partai;
             $tgl = date('Y-m-d');
 
-
-
             $get = DB::table('grading_partai')->where('no_invoice', $no_invoice);
             $urutan = $get->first()->urutan;
             $boxPengiriman = $get->pluck('box_pengiriman');
@@ -1022,29 +1023,6 @@ class GradingBjController extends Controller
                 $getFormulirRp = Grading::dapatkanStokBoxtesting('formulir', $r->no_box[$i]);
 
                 $tipe = $getFormulirRp[0]->tipe;
-                // $ttlGr = array_sum(array_column($getFormulirRp, 'gr_awal'));
-                // $ttlRp =
-                //     sumBk($getFormulirRp, 'cost_bk') +
-                //     sumBk($getFormulirRp, 'cost_cbt') +
-                //     sumBk($getFormulirRp, 'cost_str') +
-                //     sumBk($getFormulirRp, 'cost_eo') +
-                //     sumBk($getFormulirRp, 'cost_ctk') +
-                //     sumBk($getFormulirRp, 'cost_cu');
-
-                // $cost_bk = sumBk($getFormulirRp, 'cost_bk');
-                // $cost_kerja =
-                //     sumBk($getFormulirRp, 'cost_cbt') +
-                //     sumBk($getFormulirRp, 'cost_str') +
-                //     sumBk($getFormulirRp, 'cost_eo') +
-                //     sumBk($getFormulirRp, 'cost_ctk');
-                // $cost_cu = sumBk($getFormulirRp, 'cost_cu');
-                // $rpGr = $ttlRp / $ttlGr;
-                // $rpGrBk = $cost_bk / $ttlGr;
-                // $rpGrKerja = $cost_kerja / $ttlGr;
-                // $rpGrCu = $cost_cu / $ttlGr;
-
-
-
 
                 $getFormulir = DB::table('formulir_sarang')->where([['kategori', 'grade'], ['no_box', $r->no_box[$i]]])->first();
                 $dataGrading[] = [
@@ -1083,8 +1061,8 @@ class GradingBjController extends Controller
 
             for ($i = 0; $i < count($r->grade); $i++) {
                 $data[] = [
-                    'bulan' => $bulan,
-                    'tahun' => $tahun,
+                    'bulan' => $r->bulan[$i],
+                    'tahun' => $r->tahun[$i],
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
                     'urutan' => $no_invoice,
@@ -1092,6 +1070,8 @@ class GradingBjController extends Controller
                     'tipe' => $tipe,
                     'pcs' => $r->pcs[$i],
                     'gr' => $r->gr[$i],
+                    'sudah_kirim' => $r->sudah_kirim[$i],
+                    'formulir' => $r->formulir[$i],
                     'tgl' => $tgl,
                     'admin' => auth()->user()->name,
                     'box_pengiriman' => $r->box_sp[$i],
