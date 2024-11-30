@@ -195,6 +195,25 @@
                         }
                     });
                 }
+                $(document).ready(function() {
+                    $(document).on("change", ".bulan_op", function(e) {
+                        e.preventDefault();
+                        var id_oprasional = $(this).val();
+
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('summary.get_operasional') }}",
+                            data: {
+                                id_oprasional: id_oprasional
+                            },
+                            success: function(response) {
+                                $('#cost_opr').html(response);
+                            }
+                        });
+
+                    });
+                });
             </script>
             <script>
                 function numberFormat(initialValue) {

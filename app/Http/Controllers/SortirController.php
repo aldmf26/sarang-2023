@@ -257,6 +257,7 @@ class SortirController extends Controller
         $tgl2 = $r->tgl2 ?? date('Y-m-t');
         $id_anak = $r->id_anak;
         $id_user = auth()->user()->id;
+        $posisi_id = auth()->user()->posisi_id;
 
         if ($id_anak == 'All') {
             // $sortir = DB::table('sortir as a')
@@ -286,6 +287,8 @@ class SortirController extends Controller
             //     ->where('a.id_anak', $id_anak)
             //     ->orderBY('a.selesai', 'ASC')
             //     ->get();
+
+
 
             $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir FROM sortir as a 
                 left join tb_anak as b on a.id_anak = b.id_anak

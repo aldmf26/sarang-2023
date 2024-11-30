@@ -166,7 +166,7 @@
                             <th>Cost Berjalan</th>
                             <th></th>
                             <th></th>
-                            <th class="text-end">                              
+                            <th class="text-end">
                                 {{ number_format($ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'), 0) }}
                             </th>
                         </tr>
@@ -545,6 +545,25 @@
                         }
                     });
                 }
+                $(document).ready(function() {
+                    $(document).on("change", ".bulan_op", function(e) {
+                        e.preventDefault();
+                        var id_oprasional = $(this).val();
+
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('summary.get_operasional') }}",
+                            data: {
+                                id_oprasional: id_oprasional
+                            },
+                            success: function(response) {
+                                $('#cost_opr').html(response);
+                            }
+                        });
+
+                    });
+                });
             </script>
             <script>
                 function numberFormat(initialValue) {
