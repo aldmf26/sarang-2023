@@ -2,7 +2,8 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
-            <a target="_blank" href="{{ route('gradingbj.gudang') }}" class="btn btn-sm btn-info"><i class="fa fa-warehouse"></i> List Gudang Box</a>
+            <a target="_blank" href="{{ route('gradingbj.gudang') }}" class="btn btn-sm btn-info"><i
+                    class="fa fa-warehouse"></i> List Gudang Box</a>
         </div>
     </x-slot>
 
@@ -73,7 +74,7 @@
                                 <td>
                                     <select name="bulan" class="form-control">
                                         <option value="0">Pilih Bulan</option>
-                                      
+
                                         @foreach (getListBulan() as $l)
                                             <option value="{{ $l->bulan }}"
                                                 {{ date('m') == $l->bulan ? 'selected' : '' }}>
@@ -223,7 +224,8 @@
                                     <h6 x-text="numberFormat(ttlSum('gr'))">0</h6>
                                 </td>
                             </tr>
-                            <template x-for="(row, index) in Array.from({length: baris}, (v, k) => k + 1)" :key="index">
+                            <template x-for="(row, index) in Array.from({length: baris}, (v, k) => k + 1)"
+                                :key="index">
                                 <tr>
                                     <td x-text="index + 1"></td>
                                     <td>
@@ -355,8 +357,8 @@
                                 //     $('.cek[urutan="' + urutan + '"]').html(r.html);
                                 // }
 
-                                    $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
-                                    $('.cek[urutan="' + urutan + '"]').html(r.html);
+                                $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
+                                $('.cek[urutan="' + urutan + '"]').html(r.html);
 
                             }
                         });

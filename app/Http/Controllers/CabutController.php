@@ -1225,9 +1225,11 @@ class CabutController extends Controller
     public function cabut_ok(Request $r)
     {
         $cabut = Cabut::getCabut();
+        $bulan = $r->bulan;
+        $id_pengawas = $r->id_pengawas;
         foreach ($cabut as $d) {
             $hasil = rumusTotalRp($d);
-            DB::table('cabut')->where([['id_cabut', $d->id_cabut], ['bulan_dibayar', 9]])->update([
+            DB::table('cabut')->where([['id_cabut', $d->id_cabut], ['bulan_dibayar', $bulan],['id_pengawas', $id_pengawas]])->update([
                 'ttl_rp' => $hasil->ttl_rp
             ]);
         }
