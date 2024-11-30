@@ -73,7 +73,7 @@
             formatRupiah(value) {
                 // Membulatkan nilai sebelum diformat
                 value = Math.round(value);
-                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value);
             }
         }">
             <div class="col-lg-3">
