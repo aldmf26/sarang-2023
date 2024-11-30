@@ -73,7 +73,7 @@
             formatRupiah(value) {
                 // Membulatkan nilai sebelum diformat
                 value = Math.round(value);
-                return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value);
+                return new Intl.NumberFormat().format(value);
             }
         }">
             <div class="col-lg-3">
