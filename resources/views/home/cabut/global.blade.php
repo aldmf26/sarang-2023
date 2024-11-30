@@ -73,7 +73,9 @@
             formatRupiah(value) {
                 // Membulatkan nilai sebelum diformat
                 value = Math.round(value);
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+                return new Intl.NumberFormat('id-ID', { 
+                    minimumFractionDigits: 0 
+                }).format(value).replace('.', ',');
             }
         }">
             <div class="col-lg-3">
