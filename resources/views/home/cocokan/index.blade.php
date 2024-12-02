@@ -89,7 +89,9 @@
                                 href="{{ route('detail.cabut.proses') }}">{{ number_format($cbt_proses->gr, 0) }}</a>
                         </td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp, 0) }}</td>
-                        <td class="text-end">{{ number_format($cbt_proses->ttl_rp / $cbt_proses->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ empty($cbt_proses->gr) ? 0 : number_format($cbt_proses->ttl_rp / $cbt_proses->gr, 0) }}
+                        </td>
                         <td class="text-end">{{ number_format($cbt_proses->cost_kerja, 0) }}</td>
                         <td class="text-end">{{ number_format($cbt_proses->ttl_rp + $cbt_proses->cost_kerja, 0) }}</td>
                     </tr>
