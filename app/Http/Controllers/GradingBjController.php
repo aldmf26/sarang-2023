@@ -1058,6 +1058,8 @@ class GradingBjController extends Controller
 
 
             for ($i = 0; $i < count($r->grade); $i++) {
+                $sudahKrim = $r->sudah_kirim[$i] == 'Y';
+                
                 $data[] = [
                     'bulan' => $r->bulan[$i],
                     'tahun' => $r->tahun[$i],
@@ -1073,10 +1075,11 @@ class GradingBjController extends Controller
                     'tgl' => $tgl,
                     'admin' => auth()->user()->name,
                     'box_pengiriman' => $r->box_sp[$i],
-                    'ttl_rp' => $rpGr * $r->gr[$i],
-                    'cost_bk' => $rpGrBk * $r->gr[$i],
-                    'cost_kerja' => $rpGrKerja * $r->gr[$i],
+                    'ttl_rp' =>  $sudahKrim ? $r->ttl_rp[$i] : $rpGr * $r->gr[$i],
+                    'cost_bk' => $sudahKrim ? $r->cost_bk[$i] : $rpGrBk * $r->gr[$i],
+                    'cost_kerja' => $sudahKrim ? $r->cost_kerja[$i] : $rpGrKerja * $r->gr[$i],
                     'cost_cu' => 0,
+                    'cost_op' => $r->cost_op[$i] ?? 0,
                 ];
             }
 
