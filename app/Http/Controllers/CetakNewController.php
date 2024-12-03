@@ -1006,23 +1006,27 @@ class CetakNewController extends Controller
             DB::beginTransaction();
             $formulir =  DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->where('kategori', 'sortir')->get();
 
+            $nobox = [];
             foreach ($formulir as $f) {
-                $databk[] = [
-                    'no_box' => $f->no_box,
-                    'pcs_awal' => $f->pcs_awal,
-                    'gr_awal' => $f->gr_awal,
-                    'kategori' => 'sortir',
-                    'tgl' => $f->tanggal,
-                    'penerima' => $f->id_penerima,
-                ];
+                if (!in_array($f->no_box, $nobox)) {
+                    $nobox[] = $f->no_box;
+                    $databk[] = [
+                        'no_box' => $f->no_box,
+                        'pcs_awal' => $f->pcs_awal,
+                        'gr_awal' => $f->gr_awal,
+                        'kategori' => 'sortir',
+                        'tgl' => $f->tanggal,
+                        'penerima' => $f->id_penerima,
+                    ];
 
-                $data[] = [
-                    'no_box' => $f->no_box,
-                    'pcs_awal' => $f->pcs_awal,
-                    'gr_awal' => $f->gr_awal,
-                    'tgl' => $f->tanggal,
-                    'id_pengawas' => $f->id_penerima,
-                ];
+                    $data[] = [
+                        'no_box' => $f->no_box,
+                        'pcs_awal' => $f->pcs_awal,
+                        'gr_awal' => $f->gr_awal,
+                        'tgl' => $f->tanggal,
+                        'id_pengawas' => $f->id_penerima,
+                    ];
+                }
             }
             DB::table('bk')->insert($databk);
             DB::table('sortir')->insert($data);
@@ -1075,37 +1079,48 @@ class CetakNewController extends Controller
     public function save_formulir(Request $r)
     {
         $no_box = explode(',', $r->id_cetak[0]);
-        foreach ($no_box as $d) {
-            $ambil = DB::selectOne("SELECT 
-                        sum(cetak_new.pcs_akhir + cetak_new.pcs_tdk_cetak) as pcs_akhir, sum(cetak_new.gr_akhir + cetak_new.gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi, cetak_new.no_box
-                        FROM cetak_new 
-                        left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
-                        WHERE cetak_new.id_cetak = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box");
-
-            $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir;
-
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
-
-            if (empty($urutan_invoice->no_invoice)) {
-                $inv = 1001;
-            } else {
-                $inv = $urutan_invoice->no_invoice + 1;
-            }
-
-            $data[] = [
-                'no_invoice' => $inv,
-                'no_box' => $ambil->no_box,
-                'id_pemberi' => auth()->user()->id,
-                'id_penerima' => $r->id_penerima,
-                'pcs_awal' => $pcs,
-                'gr_awal' => $gr,
-                'tanggal' => $r->tgl,
-                'kategori' => 'sortir',
-            ];
+        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+        if (empty($urutan_invoice->no_invoice)) {
+            $inv = 1001;
+        } else {
+            $inv = $urutan_invoice->no_invoice + 1;
         }
 
-        DB::table('formulir_sarang')->insert($data);
+        foreach ($no_box as $d) {
+
+            $ambil = DB::selectOne("SELECT 
+            sum(cetak_new.pcs_akhir + cetak_new.pcs_tdk_cetak) as pcs_akhir, sum(cetak_new.gr_akhir + cetak_new.gr_tdk_cetak) as gr_akhir , formulir_sarang.id_pemberi, cetak_new.no_box
+            FROM cetak_new 
+            left join formulir_sarang on formulir_sarang.no_box = cetak_new.no_box and formulir_sarang.kategori = 'cetak'
+            WHERE cetak_new.id_cetak = $d AND cetak_new.selesai = 'Y' GROUP BY cetak_new.no_box");
+            $cek = DB::table('formulir_sarang')
+                ->where('no_box', $ambil->no_box)
+                ->where('kategori', 'sortir')
+                ->exists();
+
+            if (!$cek) {
+
+                $pcs = $ambil->pcs_akhir;
+                $gr = $ambil->gr_akhir;
+    
+    
+    
+                $data[] = [
+                    'no_invoice' => $inv,
+                    'no_box' => $ambil->no_box,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => $r->id_penerima,
+                    'pcs_awal' => $pcs,
+                    'gr_awal' => $gr,
+                    'tanggal' => $r->tgl,
+                    'kategori' => 'sortir',
+                ];
+            }
+        }
+        // Insert semua data baru (jika ada)
+        if (!empty($data)) {
+            DB::table('formulir_sarang')->insert($data);
+        }
         return redirect()->route('cetaknew.gudangcetak')->with('sukses', 'Data Berhasil');
     }
 
