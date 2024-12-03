@@ -906,7 +906,8 @@ class GradingBjController extends Controller
             cost_kerja,
             cost_cu,
             cost_op,
-            cost_op_cek,
+            bulan,
+            tahun,
             admin
             FROM `grading_partai`
             WHERE no_invoice = '$no_invoice'");
