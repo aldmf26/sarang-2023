@@ -174,6 +174,7 @@
                                         <input type="text" :value="row.cost_kerja" name="cost_kerja[]">
                                         <input type="text" :value="row.cost_cu" name="cost_cu[]">
                                         <input type="text" :value="row.cost_op" name="cost_op[]">
+                                        <input type="text" :value="row.cost_op_cek" name="cost_op_cek[]">
 
                                         <input type="hidden" :value="row.sudah_kirim" name="sudah_kirim[]">
                                         <input type="hidden" :value="row.formulir" name="formulir[]">

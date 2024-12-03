@@ -901,6 +901,12 @@ class GradingBjController extends Controller
             tgl,
             sudah_kirim,
             formulir,
+            ttl_rp,
+            cost_bk,
+            cost_kerja,
+            cost_cu,
+            cost_op,
+            cost_op_cek,
             admin
             FROM `grading_partai`
             WHERE no_invoice = '$no_invoice'");
@@ -1059,7 +1065,7 @@ class GradingBjController extends Controller
 
             for ($i = 0; $i < count($r->grade); $i++) {
                 $sudahKrim = $r->sudah_kirim[$i] == 'Y';
-                
+
                 $data[] = [
                     'bulan' => $r->bulan[$i],
                     'tahun' => $r->tahun[$i],
@@ -1079,7 +1085,8 @@ class GradingBjController extends Controller
                     'cost_bk' => $sudahKrim ? $r->cost_bk[$i] : $rpGrBk * $r->gr[$i],
                     'cost_kerja' => $sudahKrim ? $r->cost_kerja[$i] : $rpGrKerja * $r->gr[$i],
                     'cost_cu' => 0,
-                    'cost_op' => $r->cost_op[$i] ?? 0,
+                    'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
+                    'cost_op_cek' => $r->cost_op_cek[$i],
                 ];
             }
 
