@@ -1128,7 +1128,8 @@ class SummaryController extends Controller
     public function saveoprasional(Request $r)
     {
 
-        $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan='11' ");
+        $bulan = $r->bulan;
+        $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan ='$bulan' ");
 
 
         $ttl_gr = sumBk($grading_partai, 'gr');
