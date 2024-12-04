@@ -1127,13 +1127,11 @@ class SummaryController extends Controller
 
     public function saveoprasional(Request $r)
     {
-        $pengiriman = DB::select("SELECT * FROM pengiriman as a where a.cost_op_cek is null");
-        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.cost_op_cek is null and a.sudah_kirim = 'T'");
 
-        $ttl_gr = sumBk($grading_partai, 'gr') + sumBk($pengiriman, 'gr');
+        $grading_partai = DB::select("SELECT * FROM grading_partai as a where  a.sudah_kirim = 'Y' and a.bulan='11' ");
 
 
-
+        $ttl_gr = sumBk($grading_partai, 'gr');
 
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
@@ -1157,24 +1155,12 @@ class SummaryController extends Controller
         ];
         DB::table('oprasional')->insert($data);
 
-        foreach ($pengiriman as $p) {
-            $data = [
-                'cost_op' => $p->gr * $rp_gr,
-                'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
-            ];
-            DB::table('pengiriman')->where('id_pengiriman', $p->id_pengiriman)->update($data);
-        }
         foreach ($grading_partai as $p) {
             $data = [
-                'cost_op' => $p->gr * $rp_gr,
-                'cost_op_cek' => 'bulan ' . $r->bulan . ' tahun ' . $r->tahun,
+                'cost_op' => $p->gr * $rp_gr
             ];
             DB::table('grading_partai')->where('id_grading', $p->id_grading)->update($data);
         }
-
-
-
-
         return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
     }
 }
