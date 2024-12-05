@@ -770,7 +770,7 @@ left join(
         ) as d on d.box_pengiriman = a.no_box
         
         GROUP by a.no_nota 
-        having bulan not in (SELECT c.bulan FROM oprasional as c) 
+        having bulan not in (SELECT c.bulan FROM oprasional as c)  and tahun not in (SELECT c.tahun FROM oprasional as c)
         order by a.no_nota ASC
         ");
     }
