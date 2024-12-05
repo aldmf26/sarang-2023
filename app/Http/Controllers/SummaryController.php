@@ -1156,7 +1156,7 @@ class SummaryController extends Controller
             'rp_oprasional' => $rp_oprasional,
             'bulan' => $r->bulan,
             'tahun' => $r->tahun,
-            'rp_gr' => $rawNumber / $r->gr_akhir,
+            'rp_gr' => $rp_gr,
             'gr' => $r->gr_akhir,
             'total_operasional' => $rawNumber
         ];
