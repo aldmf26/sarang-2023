@@ -1157,7 +1157,7 @@ class SummaryController extends Controller
             'bulan' => $r->bulan,
             'tahun' => $r->tahun,
             'rp_gr' => $rp_gr,
-            'gr' => $r->gr_akhir,
+            'gr' => $ttl_gr,
             'total_operasional' => $rawNumber
         ];
         DB::table('oprasional')->insert($data);
