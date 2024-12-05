@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BalanceModel;
 use App\Models\gudangcekModel;
 use App\Models\SummaryModel;
 use App\Models\TotalanModel;
@@ -92,9 +93,12 @@ class SummaryController extends Controller
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji
             FROM tb_gaji_penutup as a 
             where a.bulan_dibayar = '$bulan->bulan' and a.tahun_dibayar  = '$bulan->tahun';"),
+            'cost_cbt' => BalanceModel::cost_cbt_eo($bulan->bulan, $bulan->tahun),
+            'cost_ctk' => BalanceModel::cost_ctk($bulan->bulan, $bulan->tahun),
+            'cost_str' => BalanceModel::cost_sortir($bulan->bulan, $bulan->tahun),
             'bulan' => $bulan->bulan,
             'tahun' => $bulan->tahun,
-            'cost_oprasional' => DB::selectOne("SELECT sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
+            'cost_oprasional' => DB::selectOne("SELECT sum(a.rp_oprasional) as rp_oprasional, sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
             'dataBulan' => $bulan_array,
             'id_oprasional' => $r->id_oprasional
         ];
@@ -1134,6 +1138,7 @@ class SummaryController extends Controller
 
         $ttl_gr = sumBk($grading_partai, 'gr');
 
+
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
@@ -1146,8 +1151,9 @@ class SummaryController extends Controller
 
         $rp_gr = ($rawNumber - $r->gaji) / $ttl_gr;
 
+        $rp_oprasional = $rawNumber - $r->gaji;
         $data = [
-            'rp_oprasional' => $rawNumber - $r->gaji,
+            'rp_oprasional' => $rp_oprasional,
             'bulan' => $r->bulan,
             'tahun' => $r->tahun,
             'rp_gr' => $rawNumber / $r->gr_akhir,
