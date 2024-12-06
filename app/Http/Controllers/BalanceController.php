@@ -45,6 +45,7 @@ class BalanceController extends Controller
         $tahun = $r->tahun;
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
         $grading = BalanceModel::grading($bulan, $tahun);
+
         $data = [
             'title' => 'Cost Operasional Beban Digrading',
             'dataBulan' => $dataBulan,

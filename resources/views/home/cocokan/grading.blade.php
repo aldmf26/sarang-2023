@@ -121,7 +121,9 @@
                             </a>
                         </td>
                         <td class="text-end">{{ number_format($grading_sisa->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading_sisa->cost_bk / $grading_sisa->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ empty($grading_sisa->gr) ? 0 : number_format($grading_sisa->cost_bk / $grading_sisa->gr, 0) }}
+                        </td>
                         <td class="text-end">0</td>
                         <td class="text-end">{{ number_format($grading_sisa->cost_bk, 0) }}</td>
                     </tr>

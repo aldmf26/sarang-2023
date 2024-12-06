@@ -156,6 +156,15 @@ class ApiBkModel extends Model
 
         return $result;
     }
+    public static function datacabutsum3($nm_partai)
+    {
+        $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk
+        FROM bk as a 
+        where a.kategori = 'cabut' and a.nm_partai = ?
+        group by a.nm_partai;", [$nm_partai]);
+
+        return $result;
+    }
     public static function datacabutsum2backup($nm_partai, $bulan, $tahun)
     {
         $result = DB::selectOne("SELECT a.nm_partai, sum(a.pcs_awal) as pcs_bk , sum(a.gr_awal) as gr_awal_bk,

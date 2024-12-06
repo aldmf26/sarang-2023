@@ -458,8 +458,7 @@ left join users as g on g.id = a.id_pengawas
     public static function sortir_stock_balance()
     {
         $result = DB::selectOne("SELECT a.no_box, f.name, b.nm_partai, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.gr_awal * b.hrga_satuan) as ttl_rp, 
-        sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as cost_kerja,
-        sum(z.ttl_rp) as cu
+        sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as cost_kerja
         FROM formulir_sarang as a 
         LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join cabut as c on c.no_box = a.no_box
@@ -471,13 +470,7 @@ left join users as g on g.id = a.id_pengawas
                     where b.kategori = 'CTK' and a.selesai = 'Y'
                     group by a.no_box
         ) as e on e.no_box = a.no_box
-        left join (
-            SELECT a.no_box, sum(a.ttl_rp) as ttl_rp
-                    FROM cetak_new as a 
-                    left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-                    where b.kategori = 'CU' and a.selesai = 'Y'
-                    group by a.no_box
-        ) as z on z.no_box = a.no_box
+        
 
         left join users as f on f.id = a.id_penerima
 

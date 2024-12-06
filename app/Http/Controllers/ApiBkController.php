@@ -120,6 +120,12 @@ class ApiBkController extends Controller
 
         return response()->json($cabut);
     }
+    public function datacabutsum3(Request $r)
+    {
+        $cabut = ApiBkModel::datacabutsum3($r->nm_partai);
+
+        return response()->json($cabut);
+    }
     public function datacabutsum2backup(Request $r)
     {
         $cabut = ApiBkModel::datacabutsum2backup($r->nm_partai, $r->tgl1, $r->tgl2);

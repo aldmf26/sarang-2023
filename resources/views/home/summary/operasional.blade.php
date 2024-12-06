@@ -33,10 +33,10 @@
             <td class="text-end">{{ number_format($total->gr_eo, 0) }}</td>
             <td class="text-end">{{ number_format($total->gr_ctk, 0) }}</td>
             <td class="text-end">{{ number_format($total->gr_sortir, 0) }}</td>
-            <td class="text-end">{{ number_format($total->ttl_gaji, 0) }}</td>
+            <td class="text-end">{{ number_format($cost_cbt->cost + $cost_ctk->cost + $cost_str->cost, 0) }}</td>
             <td class="text-end">
-                {{ empty($cost_oprasional->ttl_rp) ? 0 : number_format($cost_oprasional->ttl_rp - $total->ttl_gaji, 0) }}
-                <input type="hidden" name="gaji" value="{{ $total->ttl_gaji ?? 0 }}">
+                {{ empty($cost_oprasional->rp_oprasional) ? 0 : number_format($cost_oprasional->rp_oprasional, 0) }}
+                <input type="hidden" name="gaji" value="{{ $cost_cbt->cost + $cost_ctk->cost + $cost_str->cost }}">
             </td>
             <td x-data="numberFormat({{ empty($cost_oprasional->ttl_rp) ? 0 : $cost_oprasional->ttl_rp }})">
                 <input type="text" class="form-control" autofocus name="biaya_oprasional" id="number"
@@ -51,11 +51,11 @@
     </tbody>
 </table>
 <hr style="border: 1px solid black">
-<h5>Total: {{ number_format($total->gr_cabut + $total->gr_eo + $total->gr_ctk + $total->gr_sortir, 0) }} | Rp/gr :
+{{-- <h5>Total: {{ number_format($total->gr_cabut + $total->gr_eo + $total->gr_ctk + $total->gr_sortir, 0) }} | Rp/gr :
     {{ empty($cost_oprasional->ttl_rp) ? 0 : number_format($cost_oprasional->ttl_rp / ($total->gr_cabut + $total->gr_eo + $total->gr_ctk + $total->gr_sortir), 0) }}
     @php
         $ttl_gr = $total->gr_cabut + $total->gr_eo + $total->gr_ctk + $total->gr_sortir;
     @endphp
 
     <input type="hidden" name="gr_akhir" value="{{ $ttl_gr }}">
-</h5>
+</h5> --}}
