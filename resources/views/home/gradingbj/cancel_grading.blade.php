@@ -169,12 +169,12 @@
                                             class="form-control text-end" name="box_sp[]">
                                     </td>
                                     <td x-show="row.sudah_kirim === 'T'">
-                                        <input type="text" :value="row.ttl_rp" name="ttl_rp[]">
-                                        <input type="text" :value="row.cost_bk" name="cost_bk[]">
-                                        <input type="text" :value="row.cost_kerja" name="cost_kerja[]">
-                                        <input type="text" :value="row.cost_cu" name="cost_cu[]">
-                                        <input type="text" :value="row.cost_op" name="cost_op[]">
-                                        <input type="text" :value="row.cost_op_cek" name="cost_op_cek[]">
+                                        <input type="hidden" :value="row.ttl_rp" name="ttl_rp[]">
+                                        <input type="hidden" :value="row.cost_bk" name="cost_bk[]">
+                                        <input type="hidden" :value="row.cost_kerja" name="cost_kerja[]">
+                                        <input type="hidden" :value="row.cost_cu" name="cost_cu[]">
+                                        <input type="hidden" :value="row.cost_op" name="cost_op[]">
+                                        <input type="hidden" :value="row.cost_op_cek" name="cost_op_cek[]">
 
                                         <input type="hidden" :value="row.sudah_kirim" name="sudah_kirim[]">
                                         <input type="hidden" :value="row.formulir" name="formulir[]">

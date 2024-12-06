@@ -323,14 +323,19 @@ class GudangSarangController extends Controller
         $no_invoice = $r->no_invoice;
         $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', $r->kategori]])->get();
         foreach ($getFormulir as $d) {
-            $data[] = [
-                'no_box_sortir' => $d->no_box,
-                'tgl' => $d->tanggal,
-                'pcs' => 0,
-                'gr' => 0,
-            ];
+            $cek = DB::table('grading')->where('no_box_sortir', $d->no_box)->exists();
+            if (!$cek) {
+                $data[] = [
+                    'no_box_sortir' => $d->no_box,
+                    'tgl' => $d->tanggal,
+                    'pcs' => 0,
+                    'gr' => 0,
+                ];
+            }
         }
-        DB::table('grading')->insert($data);
+        if(!empty($data)){
+            DB::table('grading')->insert($data);
+        }
         return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
     }
 

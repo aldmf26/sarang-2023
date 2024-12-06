@@ -693,37 +693,47 @@ class SortirController extends Controller
         try {
             DB::beginTransaction();
             $no_box = explode(',', $r->no_box[0]);
+
+            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+
+            if (empty($urutan_invoice->no_invoice)) {
+                $inv = 1001;
+            } else {
+                $inv = $urutan_invoice->no_invoice + 1;
+            }
+
             foreach ($no_box as $d) {
                 $ambil = DB::selectOne("SELECT 
                         sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
                         FROM sortir 
                         left join formulir_sarang on formulir_sarang.no_box = sortir.no_box and formulir_sarang.kategori = 'grade'
                         WHERE sortir.no_box = $d AND sortir.selesai = 'Y' GROUP BY sortir.no_box ");
-                $pcs = $ambil->pcs_akhir;
-                $gr = $ambil->gr_akhir;
 
 
-                $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+                $cek = DB::table('formulir_sarang')
+                    ->where('no_box', $d)
+                    ->where('kategori', 'grade')
+                    ->exists();
+                if (!$cek) {
 
-                if (empty($urutan_invoice->no_invoice)) {
-                    $inv = 1001;
-                } else {
-                    $inv = $urutan_invoice->no_invoice + 1;
+                    $pcs = $ambil->pcs_akhir;
+                    $gr = $ambil->gr_akhir;
+
+                    $data[] = [
+                        'no_invoice' => $inv,
+                        'no_box' => $d,
+                        'id_pemberi' => auth()->user()->id,
+                        'id_penerima' => $r->id_penerima,
+                        'pcs_awal' => $pcs,
+                        'gr_awal' => $gr,
+                        'tanggal' => $r->tgl,
+                        'kategori' => 'grade',
+                    ];
                 }
-
-                $data[] = [
-                    'no_invoice' => $inv,
-                    'no_box' => $d,
-                    'id_pemberi' => auth()->user()->id,
-                    'id_penerima' => $r->id_penerima,
-                    'pcs_awal' => $pcs,
-                    'gr_awal' => $gr,
-                    'tanggal' => $r->tgl,
-                    'kategori' => 'grade',
-                ];
             }
-
-            DB::table('formulir_sarang')->insert($data);
+            if (!empty($data)) {
+                DB::table('formulir_sarang')->insert($data);
+            }
             DB::commit();
             return redirect()->route('sortir.gudang')->with('sukses', 'Data Berhasil');
         } catch (\Exception $e) {

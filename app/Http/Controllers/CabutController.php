@@ -448,7 +448,7 @@ class CabutController extends Controller
             $no_box = $getBox->first()->no_box;
 
             if ($r->tipe != 'tutup') {
-                $cekFormulir = DB::table('formulir_sarang')->where([['no_box', $no_box],['kategori', 'cetak']])->exists();
+                $cekFormulir = DB::table('formulir_sarang')->where([['no_box', $no_box], ['kategori', 'cetak']])->exists();
                 if ($cekFormulir) {
                     $boxAda .= $boxAda == '' ? $no_box : ", $no_box";
                 } else {
@@ -1229,7 +1229,7 @@ class CabutController extends Controller
         $id_pengawas = $r->id_pengawas;
         foreach ($cabut as $d) {
             $hasil = rumusTotalRp($d);
-            DB::table('cabut')->where([['id_cabut', $d->id_cabut], ['bulan_dibayar', $bulan],['id_pengawas', $id_pengawas]])->update([
+            DB::table('cabut')->where([['id_cabut', $d->id_cabut], ['bulan_dibayar', $bulan], ['id_pengawas', $id_pengawas]])->update([
                 'ttl_rp' => $hasil->ttl_rp
             ]);
         }
@@ -1988,65 +1988,69 @@ class CabutController extends Controller
         }
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
-            $ambil = DB::selectOne("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
-                        FROM(
-                            SELECT 
-                            sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir , a.no_box
-                            FROM cabut as a
-                            WHERE a.no_box = $d  AND a.selesai = 'Y' GROUP BY a.no_box 
-                        
-                        UNION ALL
+            $cek = DB::table('formulir_sarang')->where([['no_box', $d], ['kategori', 'cetak']])->exists();
+            if (!$cek) {
+                $ambil = DB::selectOne("SELECT a.no_box, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir
+                FROM(
+                    SELECT 
+                    sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir , a.no_box
+                    FROM cabut as a
+                    WHERE a.no_box = $d  AND a.selesai = 'Y' GROUP BY a.no_box 
+                
+                UNION ALL
 
-                            SELECT 0 as pcs_akhir,
-                            SUM(a.gr_eo_akhir) AS gr_akhir, a.no_box
-                                FROM eo AS a
-                                WHERE a.no_box = '$d' AND a.selesai = 'Y'
-                                GROUP BY a.no_box
-                            ) as a
+                    SELECT 0 as pcs_akhir,
+                    SUM(a.gr_eo_akhir) AS gr_akhir, a.no_box
+                        FROM eo AS a
+                        WHERE a.no_box = '$d' AND a.selesai = 'Y'
+                        GROUP BY a.no_box
+                    ) as a
 
-                        group by a.no_box
-                        
-                        ");
+                group by a.no_box
+                
+                ");
 
-            $pcs = $ambil->pcs_akhir;
-            $gr = $ambil->gr_akhir;
+                $pcs = $ambil->pcs_akhir;
+                $gr = $ambil->gr_akhir;
 
-            if ($r->grading) {
-                $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+                if ($r->grading) {
+                    $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
 
-                if (empty($urutan_invoice->no_invoice)) {
-                    $inv = 1001;
+                    if (empty($urutan_invoice->no_invoice)) {
+                        $inv = 1001;
+                    } else {
+                        $inv = $urutan_invoice->no_invoice + 1;
+                    }
+
+                    $data[] = [
+                        'no_invoice' => $inv,
+                        'no_box' => $d,
+                        'id_pemberi' => auth()->user()->id,
+                        'id_penerima' => $r->id_penerima,
+                        'pcs_awal' => $pcs,
+                        'gr_awal' => $gr,
+                        'tanggal' => $r->tgl,
+                        'kategori' => 'grade',
+                    ];
                 } else {
-                    $inv = $urutan_invoice->no_invoice + 1;
                 }
-
                 $data[] = [
-                    'no_invoice' => $inv,
+                    'no_invoice' => $no_invoice,
                     'no_box' => $d,
                     'id_pemberi' => auth()->user()->id,
                     'id_penerima' => $r->id_penerima,
                     'pcs_awal' => $pcs,
                     'gr_awal' => $gr,
                     'tanggal' => $r->tgl,
-                    'kategori' => 'grade',
+                    'kategori' => 'cetak',
                 ];
-            } else {
+
+                DB::table('cabut')->where('no_box', $d)->update(['formulir' => 'Y']);
             }
-            $data[] = [
-                'no_invoice' => $no_invoice,
-                'no_box' => $d,
-                'id_pemberi' => auth()->user()->id,
-                'id_penerima' => $r->id_penerima,
-                'pcs_awal' => $pcs,
-                'gr_awal' => $gr,
-                'tanggal' => $r->tgl,
-                'kategori' => 'cetak',
-            ];
-
-            DB::table('cabut')->where('no_box', $d)->update(['formulir' => 'Y']);
         }
-
-        DB::table('formulir_sarang')->insert($data);
+        if (!empty($data)) {
+            DB::table('formulir_sarang')->insert($data);
+        }
         return redirect()->route('cabut.gudang')->with('sukses', 'Data Berhasil');
     }
 

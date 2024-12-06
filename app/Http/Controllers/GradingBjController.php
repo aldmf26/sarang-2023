@@ -960,7 +960,7 @@ class GradingBjController extends Controller
 
             $gr = $get->gr;
 
-            $rpGr = $get->ttl_rp / $gr;
+            $rpGr = $get->ttl_rp / $gr; 
             $rpGrBk = $get->cost_bk / $gr;
             $rpGrKerja = $get->cost_kerja / $gr;
             $rpGrOp = $get->cost_op / $gr;
