@@ -916,7 +916,6 @@ class GradingBjController extends Controller
         $getBox = DB::select("SELECT a.no_box_sortir as no_box, a.pcs,a.gr, b.tipe FROM `grading` as a 
         join bk as b on a.no_box_sortir = b.no_box and b.kategori = 'cabut'
         WHERE a.no_invoice = '$no_invoice'");
-
         $gradeStatuses = ['bentuk', 'turun'];
         $tb_grade = DB::table('tb_grade')->whereIn('status', $gradeStatuses)->orderBy('status', 'ASC')->get();
         $gradeTurun = $tb_grade->where('status', 'turun');
@@ -1016,14 +1015,13 @@ class GradingBjController extends Controller
             $urutan = $get->first()->urutan;
             $boxPengiriman = $get->pluck('box_pengiriman');
 
-            DB::table('grading_partai')->where('no_invoice', $no_invoice)->delete();
-            DB::table('grading')->where('no_invoice', $no_invoice)->delete();
-
+            // DB::table('grading_partai')->where('no_invoice', $no_invoice)->delete();
 
             $ttlGr = 0;
             $ttlRp = 0;
             $cost_bk = 0;
             $cost_kerja = 0;
+
             for ($i = 0; $i < count($r->no_box); $i++) {
                 $getFormulirRp = Grading::dapatkanStokBoxtesting('formulir', $r->no_box[$i]);
 
@@ -1038,7 +1036,6 @@ class GradingBjController extends Controller
                     'admin' => auth()->user()->name,
                     'tgl' => $tgl,
                 ];
-
                 $ttlGr += $getFormulir->gr_awal;
 
                 $ttlRp +=
@@ -1072,7 +1069,7 @@ class GradingBjController extends Controller
                     'tahun' => $r->tahun[$i],
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
-                    'urutan' => $no_invoice,
+                    'urutan' => $urutan,
                     'grade' => $r->grade[$i],
                     'tipe' => $tipe,
                     'pcs' => $r->pcs[$i],
@@ -1087,12 +1084,12 @@ class GradingBjController extends Controller
                     'cost_kerja' => $sudahKrim ? $r->cost_kerja[$i] : $rpGrKerja * $r->gr[$i],
                     'cost_cu' => 0,
                     'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
-                    'cost_op_cek' => $r->cost_op_cek[$i],
+                    'cost_op_cek' => $r->cost_op_cek[$i] ?? '',
                 ];
             }
 
             DB::table('grading_partai')->insert($data);
-            DB::table('grading')->insert($dataGrading);
+      
 
             DB::commit();
             return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
@@ -1104,8 +1101,7 @@ class GradingBjController extends Controller
 
     public function cancel(Request $r)
     {
-        DB::table('grading')->where('no_box_grading', $r->no_box)->delete();
-        return redirect()->back()->with('sukses', 'diselesaikan');
+        return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
     }
 
     public function selesai(Request $r)
