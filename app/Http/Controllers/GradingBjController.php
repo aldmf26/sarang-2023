@@ -1023,6 +1023,7 @@ class GradingBjController extends Controller
             $cost_kerja = 0;
 
             for ($i = 0; $i < count($r->no_box); $i++) {
+
                 $getFormulirRp = Grading::dapatkanStokBoxtesting('formulir', $r->no_box[$i]);
 
                 $tipe = $getFormulirRp[0]->tipe;
@@ -1086,6 +1087,7 @@ class GradingBjController extends Controller
                     'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
                     'cost_op_cek' => $r->cost_op_cek[$i] ?? '',
                 ];
+
             }
 
             DB::table('grading_partai')->insert($data);
