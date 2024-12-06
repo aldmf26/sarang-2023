@@ -1015,7 +1015,7 @@ class GradingBjController extends Controller
             $urutan = $get->first()->urutan;
             $boxPengiriman = $get->pluck('box_pengiriman');
 
-            // DB::table('grading_partai')->where('no_invoice', $no_invoice)->delete();
+            DB::table('grading_partai')->where('no_invoice', $no_invoice)->delete();
 
             $ttlGr = 0;
             $ttlRp = 0;
