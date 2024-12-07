@@ -1085,7 +1085,6 @@ class GradingBjController extends Controller
                     'cost_kerja' => $sudahKrim ? $r->cost_kerja[$i] : $rpGrKerja * $r->gr[$i],
                     'cost_cu' => 0,
                     'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
-                    'cost_op_cek' => $r->cost_op_cek[$i] ?? '',
                 ];
 
             }
