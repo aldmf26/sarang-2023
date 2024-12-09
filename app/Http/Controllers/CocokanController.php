@@ -420,6 +420,317 @@ class CocokanController extends Controller
         return view('home.cocokan.balance', $data);
     }
 
+    public function tutup()
+    {
+
+        try {
+            DB::beginTransaction();
+            $tgl_ditutup = now();
+            $bulan_ditutup = date('m');
+            $tahun_ditutup = date('Y');
+            $admin = auth()->user()->name;
+
+            $cekBkKerjaTutup = DB::table('history_bk_kerja')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
+            $cekCostTutup = DB::table('history_cost_perbulan')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
+            $cekBkRpTutup = DB::table('history_bk_rp')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
+
+            if($cekBkKerjaTutup && $cekCostTutup && $cekBkRpTutup){
+                return redirect()->back()->with('error', 'Data sudah ditutup');
+            }
+            
+
+            $model = new CocokanModel();
+            $s3 = $model::sortir_akhir();
+            $s5suntik = $this->getSuntikan(35);
+
+            $sortir_akhir = new stdClass();
+            $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
+            $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
+            $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
+            $sortir_akhir->cost_kerja = $s3->cost_kerja;
+            $opname =  $this->getSuntikan(41);
+            $sortir_akhir = $sortir_akhir;
+
+            $grading = Grading::belumKirimSum();
+            $pengiriman = Grading::pengirimanSum();
+            $grading_sisa = CocokanModel::gradingSisaOne();
+            $cbt_proses = CocokanModel::bksedang_proses_sum();
+            $cbt_sisa_pgws = CocokanModel::bksisapgws();
+            $cetak_proses = CocokanModel::cetak_proses_balance();
+            $cbt_blm_kirim = CocokanModel::bksedang_selesai_sum();
+            $ca17 = CocokanModel::cetak_stok_balance();
+            $ca17suntik = $this->getSuntikan(27);
+            $cetak_sisa = new stdClass();
+            $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp + $ca17->cost_kerja;
+
+            $cetak_sisa = $cetak_sisa;
+            $sedang_proses = CocokanModel::sortir_proses_balance();
+            $sortir_sisa = CocokanModel::sortir_stock_balance();
+
+            $cabut_selesai_siap_cetak = OpnameNewModel::bksedang_selesai_sum();
+            $cetak_selesai = OpnameNewModel::cetak_selesai();
+            $sortir_selesai = OpnameNewModel::sortir_selesai();
+            $grading_susut = Grading::belumKirimSumsusut();
+
+            $bk = SummaryModel::summarybk();
+            $bk_suntik = DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'");
+
+            $ttl_sisa_belum_kirim =
+                $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
+
+            $ttl_pengiriman =
+                $pengiriman->cost_bk +
+                $pengiriman->cost_kerja +
+                $pengiriman->cost_cu +
+                $pengiriman->cost_op;
+
+            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
+
+            $ttl_cost_berjalan =
+                $cbt_proses->ttl_rp +
+                $cbt_sisa_pgws->ttl_rp +
+                $cetak_proses->ttl_rp +
+                $cetak_proses->cost_kerja +
+                $cbt_blm_kirim->cost_kerja +
+                $cetak_sisa->ttl_rp +
+                $sedang_proses->ttl_rp +
+                $sedang_proses->cost_kerja +
+                $sortir_sisa->ttl_rp +
+                $sortir_sisa->cost_kerja +
+                $ttl_sisa_blum_grading +
+                $ttl_pengiriman +
+                $ttl_sisa_belum_kirim +
+                sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
+                sumBk($sortir_selesai, 'ttl_rp') +
+                sumBk($cetak_selesai, 'ttl_rp') +
+                sumBk($cabut_selesai_siap_cetak, 'cost_kerja') +
+                sumBk($sortir_selesai, 'cost_kerja') +
+                sumBk($cetak_selesai, 'cost_kerja') +
+                $grading_susut->cost_bk +
+                $grading_susut->cost_kerja +
+                $grading_susut->cost_cu +
+                $grading_susut->cost_op;
+            
+
+            if (!$cekBkKerjaTutup) {
+                $bk_sinta = SummaryModel::summarybk();
+                foreach ($bk_sinta as $b) {
+
+                    $pcs_susut = is_null($b->pcs_susut) ? 'belum selesai' : $b->pcs_susut;
+                    $gr_susut = is_null($b->gr_susut) ? 'belum selesai' : $b->gr_susut;
+                    $susut_persen = is_null($b->pcs_susut) ? 'belum selesai' : (1 - ($b->gr / $b->gr_bk)) * 100;
+
+                    $pcs_sinta = $pcs_susut == 'belum selesai' ? $b->pcs -  $b->pcs_bk : 0;
+                    $gr_sinta = $gr_susut == 'belum selesai' ? $b->gr -  $b->gr_bk : 0;
+                    $ttl_rp_sinta = $susut_persen == 'belum selesai' ? $b->ttl_rp - $b->cost_bk : 0;
+
+                    $data[] = [
+                        'bulan_kerja' => date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)),
+                        'nm_partai' => $b->nm_partai,
+                        'grade' => $b->grade,
+                        'pcs_bk' => $b->pcs,
+                        'gr_bk' => $b->gr,
+                        'ttl_rp_bk' => $b->ttl_rp,
+                        'rata_rata_bk' => empty($b->gr) ? 0 : $b->ttl_rp / $b->gr,
+                        'pcs_diambil' => $b->pcs_bk,
+                        'gr_diambil' => $b->gr_bk,
+                        'ttl_rp_diambil' => $b->cost_bk,
+                        'rata_rata_diambil' => $b->cost_bk / $b->gr_bk,
+                        'pcs_susut' => $pcs_susut,
+                        'gr_susut' => $gr_susut,
+                        'susut_persen' => $susut_persen,
+                        'pcs_sinta' => $pcs_sinta,
+                        'gr_sinta' => $gr_sinta,
+                        'ttl_rp_sinta' => $susut_persen == 'belum selesai' ? $b->ttl_rp - $b->cost_bk : 0,
+                        'rata_rata_sinta' => $pcs_susut == 'belum selesai' ? $ttl_rp_sinta / $gr_sinta : 0,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'admin' => $admin,
+                    ];
+                }
+                DB::table('history_bk_kerja')->insert($data);
+            }
+            
+            if (!$cekCostTutup) {
+                $uangCost = BalanceModel::uangCost();
+                foreach ($uangCost as $u) {
+                    $data2[] = [
+                        'bulan_tahun' => date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '01')),
+                        'gaji' => $u->gaji,
+                        'cost_op' => $u->total_operasional - $u->gaji,
+                        'ttl_rp' => $u->total_operasional,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'admin' => $admin,
+                    ];
+                }
+
+                $data2[] = [
+                    'bulan_tahun' => 'cost berjalan',
+                    'gaji' => 0,
+                    'cost_op' => 0,
+                    'ttl_rp' => $ttl_cost_berjalan -
+                        sumBk($uangCost, 'total_operasional') -
+                        sumBk($bk, 'cost_bk') -
+                        sumBk($bk_suntik, 'ttl_rp'),
+                    'tgl_ditutup' => $tgl_ditutup,
+                    'bulan_ditutup' => $bulan_ditutup,
+                    'tahun_ditutup' => $tahun_ditutup,
+                    'admin' => $admin,
+                ];
+                DB::table('history_cost_perbulan')->insert($data2);
+            }
+            dd('ok');
+
+            if (!$cekBkRpTutup) {
+                $data3 = [
+                    [
+                        'ket' => 'cabut sedang proses',
+                        'pcs' => $cbt_proses->pcs,
+                        'gr' => $cbt_proses->gr,
+                        'ttl_rp' => $cbt_proses->ttl_rp,
+                        'rata_rata' => $cbt_proses->ttl_rp / $cbt_proses->pcs,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Cabut sisa pengawas',
+                        'pcs' => $cbt_sisa_pgws->pcs,
+                        'gr' => $cbt_sisa_pgws->gr,
+                        'ttl_rp' => $cbt_sisa_pgws->ttl_rp,
+                        'rata_rata' => $cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Cabut selesai siap cetak belum kirim',
+                        'pcs' => sumBk($cabut_selesai_siap_cetak, 'pcs'),
+                        'gr' => sumBk($cabut_selesai_siap_cetak, 'gr'),
+                        'ttl_rp' => sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'),
+                        'rata_rata' => 0,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Cetak sedang Proses',
+                        'pcs' => $cetak_proses->pcs ?? 0,
+                        'gr' => $cetak_proses->gr ?? 0,
+                        'ttl_rp' => $cetak_proses->ttl_rp ?? (0 + $cetak_proses->cost_kerja ?? 0),
+                        'rata_rata' => empty($cetak_proses->gr) ? 0 : ($cetak_proses->ttl_rp + $cetak_proses->cost_kerja) / $cetak_proses->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Cetak sisa Pengawas',
+                        'pcs' => $cetak_sisa->pcs,
+                        'gr' => $cetak_sisa->gr,
+                        'ttl_rp' => $cetak_sisa->ttl_rp,
+                        'rata_rata' => $cetak_sisa->ttl_rp / $cetak_sisa->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Cetak selesai siap sortir belum kirim',
+                        'pcs' => sumBk($cetak_selesai, 'pcs'),
+                        'gr' => sumBk($cetak_selesai, 'gr'),
+                        'ttl_rp' => sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'),
+                        'rata_rata' => 0,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Sortir sedang Proses',
+                        'pcs' => $sedang_proses->pcs,
+                        'gr' => $sedang_proses->gr,
+                        'ttl_rp' => $sedang_proses->ttl_rp + $sedang_proses->cost_kerja,
+                        'rata_rata' => 0,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Sortir sisa Pengawas',
+                        'pcs' => sumBk($sortir_selesai, 'pcs'),
+                        'gr' => sumBk($sortir_selesai, 'gr'),
+                        'ttl_rp' => sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'),
+                        'rata_rata' => 0,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Sisa belum grading',
+                        'pcs' => $grading_sisa->pcs ?? 0,
+                        'gr' => $grading_sisa->gr ?? 0,
+                        'ttl_rp' => $grading_sisa->cost_bk,
+                        'rata_rata' => empty($grading_sisa->gr) ? 0 : $grading_sisa->cost_bk / $grading_sisa->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Pengiriman',
+                        'pcs' => $pengiriman->pcs,
+                        'gr' => $pengiriman->gr,
+                        'ttl_rp' => $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op,
+                        'rata_rata' => ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Sisa belum kirim ( sisa + qc)',
+                        'pcs' => $grading->pcs,
+                        'gr' => $grading->gr,
+                        'ttl_rp' => $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op,
+                        'rata_rata' => ($grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op) / $grading->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Selisih',
+                        'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - ($grading_sisa->pcs ?? 0),
+                        'gr' => 0,
+                        'ttl_rp' => 0,
+                        'rata_rata' => 0,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                ];
+                
+                DB::table('history_bk_rp')->insert($data3);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('sukses', 'Berhasil tutup');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function opname(Request $r)
     {
         $data = [

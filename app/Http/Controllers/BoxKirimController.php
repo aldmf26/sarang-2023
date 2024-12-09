@@ -160,7 +160,11 @@ class BoxKirimController extends Controller
     public function delete(Request $r)
     {
         // Hapus data
-        DB::table('pengiriman')->where('id_pengiriman', $r->id)->delete();
+        $find = DB::table('pengiriman')->where('id_pengiriman', $r->id);
+        foreach($find->get() as $d){
+            DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['sudah_kirim' => 'T']);
+        }
+        $find->delete();
         return redirect()->back()->with('success', 'Data dihapus');
     }
 
@@ -202,6 +206,8 @@ class BoxKirimController extends Controller
 
 
                 // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
+
+                DB::table('grading_partai')->where('box_pengiriman', $d)->update(['sudah_kirim' => 'Y']);
 
                 $dataToInsert[] = [
                     'no_box' => $d,
@@ -479,7 +485,11 @@ class BoxKirimController extends Controller
 
     public function batal($no_nota)
     {
-        DB::table('pengiriman')->where('no_nota', $no_nota)->delete();
+        $find = DB::table('pengiriman')->where('no_nota', $no_nota);
+        foreach($find->get() as $d){
+            DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['sudah_kirim' => 'T']);
+        }
+        $find->delete();
         return redirect()->route('gradingbj.gudang_siap_kirim')->with('sukses', 'Data Berhasil di selesaikan');
     }
 
