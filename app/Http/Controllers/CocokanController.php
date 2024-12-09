@@ -600,14 +600,12 @@ class CocokanController extends Controller
                 ];
                 DB::table('history_cost_perbulan')->insert($data2);
             }
-            dd('ok');
-
             if (!$cekBkRpTutup) {
                 $data3 = [
                     [
                         'ket' => 'cabut sedang proses',
-                        'pcs' => $cbt_proses->pcs,
-                        'gr' => $cbt_proses->gr,
+                        'pcs' => $cbt_proses->pcs ?? 0,
+                        'gr' => $cbt_proses->gr ?? 0,
                         'ttl_rp' => $cbt_proses->ttl_rp,
                         'rata_rata' => $cbt_proses->ttl_rp / $cbt_proses->pcs,
                         'bulan_ditutup' => $bulan_ditutup,
@@ -617,8 +615,8 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Cabut sisa pengawas',
-                        'pcs' => $cbt_sisa_pgws->pcs,
-                        'gr' => $cbt_sisa_pgws->gr,
+                        'pcs' => $cbt_sisa_pgws->pcs ?? 0,
+                        'gr' => $cbt_sisa_pgws->gr ?? 0,
                         'ttl_rp' => $cbt_sisa_pgws->ttl_rp,
                         'rata_rata' => $cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr,
                         'bulan_ditutup' => $bulan_ditutup,
@@ -650,10 +648,10 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Cetak sisa Pengawas',
-                        'pcs' => $cetak_sisa->pcs,
-                        'gr' => $cetak_sisa->gr,
-                        'ttl_rp' => $cetak_sisa->ttl_rp,
-                        'rata_rata' => $cetak_sisa->ttl_rp / $cetak_sisa->gr,
+                        'pcs' => $cetak_sisa->pcs ?? 0,
+                        'gr' => $cetak_sisa->gr ?? 0,
+                        'ttl_rp' => $cetak_sisa->ttl_rp ?? 0,
+                        'rata_rata' => empty($cetak_sisa->gr) ? 0 : $cetak_sisa->ttl_rp / $cetak_sisa->gr,
                         'bulan_ditutup' => $bulan_ditutup,
                         'tahun_ditutup' => $tahun_ditutup,
                         'tgl_ditutup' => $tgl_ditutup,
@@ -672,8 +670,8 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Sortir sedang Proses',
-                        'pcs' => $sedang_proses->pcs,
-                        'gr' => $sedang_proses->gr,
+                        'pcs' => $sedang_proses->pcs ?? 0,
+                        'gr' => $sedang_proses->gr ?? 0,
                         'ttl_rp' => $sedang_proses->ttl_rp + $sedang_proses->cost_kerja,
                         'rata_rata' => 0,
                         'bulan_ditutup' => $bulan_ditutup,
@@ -683,6 +681,17 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Sortir sisa Pengawas',
+                        'pcs' => $sortir_sisa->pcs ?? 0,
+                        'gr' => $sortir_sisa->gr ?? 0,
+                        'ttl_rp' => $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja,
+                        'rata_rata' => ($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja) / $sortir_sisa->gr,
+                        'bulan_ditutup' => $bulan_ditutup,
+                        'tahun_ditutup' => $tahun_ditutup,
+                        'tgl_ditutup' => $tgl_ditutup,
+                        'admin' => $admin,
+                    ],
+                    [
+                        'ket' => 'Sortir selesai siap grading belum kirim',
                         'pcs' => sumBk($sortir_selesai, 'pcs'),
                         'gr' => sumBk($sortir_selesai, 'gr'),
                         'ttl_rp' => sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'),
@@ -705,8 +714,8 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Pengiriman',
-                        'pcs' => $pengiriman->pcs,
-                        'gr' => $pengiriman->gr,
+                        'pcs' => $pengiriman->pcs ?? 0,
+                        'gr' => $pengiriman->gr ?? 0,
                         'ttl_rp' => $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op,
                         'rata_rata' => ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr,
                         'bulan_ditutup' => $bulan_ditutup,
@@ -716,8 +725,8 @@ class CocokanController extends Controller
                     ],
                     [
                         'ket' => 'Sisa belum kirim ( sisa + qc)',
-                        'pcs' => $grading->pcs,
-                        'gr' => $grading->gr,
+                        'pcs' => $grading->pcs ?? 0,
+                        'gr' => $grading->gr ?? 0,
                         'ttl_rp' => $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op,
                         'rata_rata' => ($grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op) / $grading->gr,
                         'bulan_ditutup' => $bulan_ditutup,

@@ -23,6 +23,26 @@ class SummaryModel extends Model
         return $result;
     }
 
+    public static function summarybkDitutup()
+    {
+        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk, b.bulan, b.tahun, b.pcs_susut, b.gr_susut
+        FROM bk as a 
+        left join bk_awal as b on b.nm_partai = a.nm_partai
+        where a.baru = 'baru' 
+            and a.kategori ='cabut' 
+            and a.no_box != 9999 
+            AND NOT EXISTS (
+                SELECT 1
+                FROM history_bk_kerja AS h
+                WHERE h.nm_partai = a.nm_partai
+            )
+        group by a.nm_partai
+        order by b.bulan ASC, a.nm_partai ASC
+        ");
+
+        return $result;
+    }
+
 
     public static function bksedang_proses()
     {

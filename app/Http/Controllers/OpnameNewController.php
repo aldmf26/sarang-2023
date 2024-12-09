@@ -820,7 +820,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('S1', 'rata2');
 
 
-        $bk_sinta = SummaryModel::summarybk();
+        $bk_sinta = SummaryModel::summarybkDitutup();
 
         $kolom = 2;
         foreach ($bk_sinta  as $no => $b) {
