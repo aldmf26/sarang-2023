@@ -45,6 +45,7 @@ class NavbarController extends Controller
         return view('navbar.data_master', compact(['data', 'title']));
     }
 
+
     public function testing(Request $r)
     {
         return view('testing');

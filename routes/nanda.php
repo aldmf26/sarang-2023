@@ -414,5 +414,6 @@ Route::middleware('auth')->group(function () {
         ->name('hccp.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/sampleAdministrator', 'sampleAdministrator')->name('sampleAdministrator');
         });
 });

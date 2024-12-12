@@ -4,9 +4,7 @@
             <h6 class="float-start mt-1">{{ $title }}</h6>
         </div>
     </x-slot>
-
     <x-slot name="cardBody">
-
         <section class="row">
             <div class="col-lg-12">
                 <table class="table table-bordered" width="100%">
@@ -22,7 +20,9 @@
                             <td>1</td>
                             <td>HRD GA</td>
                             <td>
-                                <a href="">* Sampel Administrasi Proses Rekruitmen </a> <br>
+                                <a href="{{ route('hccp.sampleAdministrator') }}">* Sampel Administrasi Proses
+                                    Rekruitmen </a>
+                                <br>
                                 <a href="">* Evaluasi Kompetensi Karyawan</a> <br>
                                 <a href="">* Hasil Medical Checkup</a> <br>
                                 <a href="">* Program & Checklist pemeliharaan bangunan & Infrastruktur</a> <br>

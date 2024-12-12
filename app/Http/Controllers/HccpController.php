@@ -11,6 +11,14 @@ class HccpController extends Controller
         $data = [
             'title' => 'HCCP',
         ];
-        return view('home.hccp.index', $data);
+        return view('hccp.hccp.index', $data);
+    }
+
+    public function sampleAdministrator()
+    {
+        $data = [
+            'title' => 'Sampel Administrator',
+        ];
+        return view('hccp.hccp.sample', $data);
     }
 }
