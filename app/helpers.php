@@ -150,6 +150,15 @@ if (!function_exists('sumBk')) {
         return array_sum(array_column($kategori, $data));
     }
 }
+if (!function_exists('Umur')) {
+    function Umur($tgl1, $tgl2)
+    {
+        $tglLahir = new DateTime($tgl1);
+        $today = new DateTime($tgl2);
+        $interval = $tglLahir->diff($today);
+        return $interval->y;
+    }
+}
 
 if (!function_exists('rumusTotalRp ')) {
     function rumusTotalRp($detail)

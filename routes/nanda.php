@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
+use App\Http\Controllers\hasilWawancaraController;
 use App\Http\Controllers\HccpController;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
@@ -415,5 +416,14 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/sampleAdministrator', 'sampleAdministrator')->name('sampleAdministrator');
+        });
+    Route::controller(hasilWawancaraController::class)
+        ->prefix('hccp/hasilwawancara')
+        ->name('hasilwawancara.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/export/{id}', 'export')->name('export');
+            Route::post('/store', 'store')->name('store');
         });
 });

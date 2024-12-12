@@ -17,7 +17,8 @@ return new class extends Migration
             $table->date('tgl_lahir');
             $table->enum('jenis_kelamin', ['L', 'P'])->default('P');
             $table->string('posisi');
-            $table->string('kesimpulan');
+            $table->text('kesimpulan');
+            $table->enum('keputusan', ['dilanjutkan', 'ditolak'])->default('dilanjutkan');
             $table->timestamps();
         });
     }

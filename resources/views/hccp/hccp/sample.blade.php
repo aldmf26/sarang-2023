@@ -22,7 +22,7 @@
                 </a>
             </div>
             <div class="col-lg-3">
-                <a href="">
+                <a href="{{ route('hasilwawancara.index') }}">
                     <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                         <div class="card-front">
                             <div class="card-body">
