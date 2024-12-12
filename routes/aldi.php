@@ -14,6 +14,8 @@ use App\Http\Controllers\ExportCocokanController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
+use App\Http\Controllers\Hrga1PermohonanKaryawanBaru;
+use App\Http\Controllers\hrga3HasilEvaluasiKaryawanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -591,6 +593,32 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/show/{bulan}/{tahun}', 'show')->name('show');
             Route::post('/import', 'import')->name('import');
             Route::post('/tutup_gaji', 'tutup_gaji')->name('tutup_gaji');
+        });
+    Route::controller(Hrga1PermohonanKaryawanBaru::class)
+        ->prefix('hccp/hrga1')
+        ->name('hrga1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/edit/{id}', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+            Route::get('/export/{id}', 'export')->name('export');
+        });
+
+    Route::controller(hrga3HasilEvaluasiKaryawanController::class)
+        ->prefix('hccp/hrga3')
+        ->name('hrga3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/getKaryawan', 'getKaryawan')->name('getKaryawan');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/edit/{id}', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+            Route::get('/export/{id}', 'export')->name('export');
         });
 
     // Route::controller(PackingListController::class)
