@@ -173,7 +173,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Periode Bulan Bayar</label>
-                            <select  name="periode" id="periode" class="select2">
+                            <select name="periode" id="periode" class="select2">
                                 <option value="">- Periode -</option>
                                 @for ($i = 1; $i < 13; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -184,7 +184,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Komisi Rp</label>
-                            <input  type="text" value="" name="komisi" class="form-control">
+                            <input type="text" value="" name="komisi" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -217,7 +217,7 @@
                 $(".select3").select2()
                 detail('edit', 'id', 'anak', 'get_edit')
 
-                $('#periode, #tgl_masuk').change(function (e) { 
+                $('#periode, #tgl_masuk').change(function(e) {
                     e.preventDefault();
                     let tglMasuk = $(`#tgl_masuk`).val();
                     let periode = parseInt($(`#periode`).val());

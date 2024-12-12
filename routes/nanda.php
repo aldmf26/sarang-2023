@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
+use App\Http\Controllers\HccpController;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
@@ -407,5 +408,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/cost', 'cost')->name('cost');
             Route::get('/CostGajiProses', 'CostGajiProses')->name('CostGajiProses');
             Route::get('/CostOperasionalBebanDigrading', 'CostOperasionalBebanDigrading')->name('CostOperasionalBebanDigrading');
+        });
+    Route::controller(HccpController::class)
+        ->prefix('hccp')
+        ->name('hccp.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

@@ -394,8 +394,8 @@ class GradingBjController extends Controller
                     continue;
                 }
                 $data = [
-                    'bulan' => $bulan,
-                    'tahun' => $tahun,
+                    'bulan' => '',
+                    'tahun' => '',
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
                     'urutan' => $no_invoice,
@@ -959,7 +959,7 @@ class GradingBjController extends Controller
 
             $gr = $get->gr;
 
-            $rpGr = $get->ttl_rp / $gr; 
+            $rpGr = $get->ttl_rp / $gr;
             $rpGrBk = $get->cost_bk / $gr;
             $rpGrKerja = $get->cost_kerja / $gr;
             $rpGrOp = $get->cost_op / $gr;
@@ -1086,11 +1086,10 @@ class GradingBjController extends Controller
                     'cost_cu' => 0,
                     'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
                 ];
-
             }
 
             DB::table('grading_partai')->insert($data);
-      
+
 
             DB::commit();
             return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');

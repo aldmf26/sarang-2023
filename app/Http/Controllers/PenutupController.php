@@ -15,8 +15,9 @@ class PenutupController extends Controller
 
     public function getData($param)
     {
-        $bulan = 11;
-        $tahun = date('Y');
+        $bln = DB::table('tb_gaji_penutup')->latest('bulan_dibayar')->latest('tahun_dibayar')->first();
+        $bulan = $bln->bulan_dibayar + 1;
+        $tahun = $bln->bulan_dibayar == 12 ? $bln->tahun_dibayar + 1 : $bln->tahun_dibayar;
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
                 WHERE  b.lokasi != ''
@@ -35,8 +36,6 @@ class PenutupController extends Controller
     {
         $bulan = $this->getData('bulan');
         $tahun =  $this->getData('tahun');
-
-
         $gaji = DB::select("SELECT SUM(ttl_gaji) as ttl_gaji, bulan_dibayar, tahun_dibayar
                     FROM tb_gaji_penutup 
                     GROUP BY bulan_dibayar,tahun_dibayar");
@@ -144,6 +143,12 @@ class PenutupController extends Controller
         }
 
         DB::table('tb_gaji_penutup')->insert($tes);
+
+        DB::table('cabut')->where([['bulan_dibayar', $bulan], ['tahun_dibayar', $tahun]])->update(['penutup' => 'Y']);
+        DB::table('eo')->where('bulan_dibayar', $bulan)->whereYear('tgl_serah', $tahun)->update(['penutup' => 'Y']);
+        DB::table('sortir')->where('bulan', $bulan)->whereYear('tgl', $tahun)->update(['penutup' => 'Y']);
+        DB::table('cetak_new')->where('bulan_dibayar', $bulan)->whereYear('tgl', $tahun)->update(['penutup' => 'Y']);
+
         return redirect()->route('penutup.index')->with('sukses', 'Data Gaji Penutup Berhasil');
     }
 

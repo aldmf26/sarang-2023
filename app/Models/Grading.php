@@ -598,6 +598,7 @@ left join(
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
+        join pengiriman_packing_list as c on c.id_pengiriman = a.`no_box`;
         ");
     }
 
@@ -770,7 +771,7 @@ left join(
         ) as d on d.box_pengiriman = a.no_box
         
         GROUP by a.no_nota 
-        having bulan not in (SELECT c.bulan FROM oprasional as c)  and tahun not in (SELECT c.tahun FROM oprasional as c)
+        having bulan not in (SELECT c.bulan FROM oprasional as c) 
         order by a.no_nota ASC
         ");
     }

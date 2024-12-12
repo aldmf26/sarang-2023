@@ -452,10 +452,10 @@ class CocokanController extends Controller
             $cekCostTutup = DB::table('history_cost_perbulan')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
             $cekBkRpTutup = DB::table('history_bk_rp')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
 
-            if($cekBkKerjaTutup && $cekCostTutup && $cekBkRpTutup){
+            if ($cekBkKerjaTutup && $cekCostTutup && $cekBkRpTutup) {
                 return redirect()->back()->with('error', 'Data sudah ditutup');
             }
-            
+
 
             $model = new CocokanModel();
             $s3 = $model::sortir_akhir();
@@ -528,7 +528,7 @@ class CocokanController extends Controller
                 $grading_susut->cost_kerja +
                 $grading_susut->cost_cu +
                 $grading_susut->cost_op;
-            
+
 
             if (!$cekBkKerjaTutup) {
                 $bk_sinta = SummaryModel::summarybk();
@@ -569,7 +569,7 @@ class CocokanController extends Controller
                 }
                 DB::table('history_bk_kerja')->insert($data);
             }
-            
+
             if (!$cekCostTutup) {
                 $uangCost = BalanceModel::uangCost();
                 foreach ($uangCost as $u) {
@@ -746,7 +746,7 @@ class CocokanController extends Controller
                         'admin' => $admin,
                     ],
                 ];
-                
+
                 DB::table('history_bk_rp')->insert($data3);
             }
 
