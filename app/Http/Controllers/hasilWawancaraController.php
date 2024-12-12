@@ -48,6 +48,36 @@ class hasilWawancaraController extends Controller
         return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
+    public function edit($id)
+    {
+        $data = [
+            'title' => 'Edit Hasil Wawancara',
+            'hasil' => DB::table('hasil_wawancara')->where('id', $id)->first()
+        ];
+        return view('hccp.hasilwawancara.edit', $data);
+    }
+
+    public function update(Request $r)
+    {
+        $data = [
+            'nama' => $r->nama,
+            'tgl_lahir' => $r->tgl_lahir,
+            'jenis_kelamin' => $r->jenis_kelamin,
+            'posisi' => $r->posisi,
+            'kesimpulan' => $r->kesimpulan,
+            'keputusan' => $r->keputusan,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('hasil_wawancara')->where('id', $r->id)->update($data);
+        return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil diupdate');
+    }
+
+    public function delete($id)
+    {
+        DB::table('hasil_wawancara')->where('id', $id)->delete();
+        return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil dihapus');
+    }
+
     public function export($id)
     {
         $style_atas = array(
@@ -91,15 +121,28 @@ class hasilWawancaraController extends Controller
             'font' => [
                 'name' => 'Cambria', // Font Cambria
                 'size' => 10,        // Ukuran font
+            ]
+
+        ];
+        $style1 = [
+            'font' => [
+                'name' => 'Cambria', // Font Cambria
+                'size' => 10,        // Ukuran font
             ],
+            'alignment' => [
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,      // Menengahkan secara vertikal
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Menengahkan secara horizontal
+            ],
+
+        ];
+        $style2 = [
             'borders' => [
-                'alignment' => [
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                ],
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                'bottom' => [
+                    'borderStyle' => Border::BORDER_DASHED, // Gaya titik-titik
+                    'color' => ['argb' => 'FF000000'], // Warna hitam
                 ],
             ],
+
         ];
         $style_kiri_kanan = [
             'font' => [
@@ -202,10 +245,50 @@ class hasilWawancaraController extends Controller
 
 
         $sheet1->setCellValue('B22', 'Keputusan:');
-        $sheet1->setCellValue('D22', "■ Dilanjutkan");
+
+        $sheet1->setCellValue('D22', $hasil->keputusan == 'dilanjutkan' ? "⬛ Dilanjutkan" : "⬜ Dilanjutkan");
         $sheet1->mergeCells('D22:E22');
-        $sheet1->setCellValue('H22', "☐ Ditolak");
+        $sheet1->setCellValue('H22', $hasil->keputusan == 'ditolak' ? "⬛ Ditolak" : "⬜ Ditolak");
         $sheet1->mergeCells('H22:I22');
+        $sheet1->getStyle('B22:I22')->applyFromArray($style);
+
+        $sheet1->setCellValue('B24', 'Pewawancara:');
+        $sheet1->getStyle('B24')->applyFromArray($style);
+        $sheet1->setCellValue('D24', 'Nama');
+        $sheet1->mergeCells('D24:E24');
+        $sheet1->setCellValue('H24', 'Paraf');
+        $sheet1->mergeCells('H24:I24');
+        $sheet1->getStyle('D24:I24')->applyFromArray($style1);
+
+        $sheet1->setCellValue('D25', '');
+        $sheet1->setCellValue('H25', '');
+
+        $sheet1->mergeCells('D25:E25');
+        $sheet1->mergeCells('H25:I25');
+
+        $sheet1->getStyle('D25:E25')->applyFromArray($style2);
+        $sheet1->getStyle('H25:I25')->applyFromArray($style2);
+
+        $sheet1->setCellValue('D26', '');
+        $sheet1->setCellValue('H26', '');
+
+        $sheet1->mergeCells('D26:E26');
+        $sheet1->mergeCells('H26:I26');
+
+        $sheet1->getStyle('D26:E26')->applyFromArray($style2);
+        $sheet1->getStyle('H26:I26')->applyFromArray($style2);
+
+        $sheet1->setCellValue('D27', '');
+        $sheet1->setCellValue('H27', '');
+
+        $sheet1->mergeCells('D27:E27');
+        $sheet1->mergeCells('H27:I27');
+
+        $sheet1->getStyle('D27:E27')->applyFromArray($style2);
+        $sheet1->getStyle('H27:I27')->applyFromArray($style2);
+
+
+
 
 
 
