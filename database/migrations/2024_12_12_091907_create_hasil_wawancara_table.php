@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('hasil_wawancara', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nik');
             $table->date('tgl_lahir');
             $table->enum('jenis_kelamin', ['L', 'P'])->default('P');
             $table->integer('id_divisi');

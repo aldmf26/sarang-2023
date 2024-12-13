@@ -3,7 +3,8 @@
         <tr>
             <th>No</th>
             <th>Nama panggilan</th>
-            <th width="20%">Nama Calon Karyawan</th>
+            <th width="15%">Nama Calon Karyawan</th>
+            <th width="15%">NIK</th>
             <th>Tanggal Lahir</th>
             <th>Tanggal Masuk</th>
             <th>Usia</th>
@@ -19,6 +20,10 @@
                 <td>{{ $h->nm_panggilan }}</td>
                 <td>
                     <input type="text" class="form-control nama{{ $h->id_tb_anak }}" name="nama"
+                        value="{{ $h->nik }}">
+                </td>
+                <td>
+                    <input type="text" class="form-control nik{{ $h->id_tb_anak }}" name="nama"
                         value="{{ $h->nama }}">
                 </td>
                 <td>

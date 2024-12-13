@@ -14,7 +14,9 @@ class hrga4DataPegawaiController extends Controller
 {
     public function index()
     {
-        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', 'lulus')->get();
+        $karyawans = DB::table('hasil_wawancara')
+            ->leftJoin('divisis', 'divisis.id', '=', 'hasil_wawancara.id_divisi')
+            ->where('keputusan_lulus', 'lulus')->get();
         $data = [
             'title' => 'Data Pegawai',
             'karyawans' => $karyawans

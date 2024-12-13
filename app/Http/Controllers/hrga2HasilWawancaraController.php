@@ -20,25 +20,22 @@ class hrga2HasilWawancaraController extends Controller
 
     public function index(Request $r)
     {
-        $id_pengawas = auth()->user()->id;
+        $posisi = auth()->user()->posisi_id;
+
+
         $data = [
             'title' => 'Hasil Wawancara',
-            'hasil_wawancara' => DB::table('hasil_wawancara')->where('id_divisi', $r->id_divisi)->get()
+            'posisi' => $posisi,
+            'hasil_wawancara' => DB::table('hasil_wawancara')
+                ->leftJoin('divisis', 'divisis.id', 'hasil_wawancara.id_divisi')
+                ->select('hasil_wawancara.*', 'divisis.divisi')
+                ->where('id_divisi', $r->divisi)
+                ->orderBy('id', 'desc')
+                ->get(),
+            'id_divisi' => $r->divisi,
         ];
         return view('hccp.hrga2.index', $data);
     }
-
-    public function divisi()
-    {
-        $data = [
-            'divisi' => DB::table('divisis')->get()
-        ];
-        return view('hccp.hrga2.divisi', $data);
-    }
-
-
-
-
     public function getData()
     {
         $id_pengawas = auth()->user()->id;
@@ -57,10 +54,11 @@ class hrga2HasilWawancaraController extends Controller
         ];
         return view('hccp.hrga2.getdata', $data);
     }
-    public function create()
+    public function create(Request $r)
     {
         $data = [
             'title' => 'Tambah Hasil Wawancara',
+            'divisi' => DB::table('divisis')->where('id', $r->id_divisi)->first(),
         ];
         return view('hccp.hrga2.tambah', $data);
     }
@@ -69,6 +67,7 @@ class hrga2HasilWawancaraController extends Controller
     {
         $data = [
             'nama' => $r->nama,
+            'nik' => $r->nik,
             'tgl_lahir' => $r->tgl_lahir,
             'jenis_kelamin' => $r->jenis_kelamin,
             'id_divisi' => $r->id_divisi,
@@ -78,16 +77,16 @@ class hrga2HasilWawancaraController extends Controller
         ];
         DB::table('hasil_wawancara')->insert($data);
 
-        return redirect()->route('hrga2.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('hrga2.index', ['divisi' => $r->id_divisi])->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function tambah_data(Request $r)
     {
 
-        DB::table('hasil_wawancara')->where('id', $r->id_anak)->delete();
+        DB::table('hasil_wawancara')->where('id_anak', $r->id_anak)->delete();
         $data = [
-            'id' => $r->id_anak,
             'nama' => $r->nama,
+            'nik' => $r->nik,
             'tgl_lahir' => $r->tgl_lahir,
             'jenis_kelamin' => $r->jenis_kelamin,
             'id_divisi' => $r->divisi,
