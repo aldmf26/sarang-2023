@@ -8,13 +8,13 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class HasilWawancaraExport implements FromView
+class hrga2Export implements FromView
 {
 
     public function view(): View
     {
         $drawing = new Drawing();
-        return view('hccp.hasilwawancara.excel', compact('drawing'));
+        return view('hccp.hrga2.excel', compact('drawing'));
     }
     public function drawings()
     {

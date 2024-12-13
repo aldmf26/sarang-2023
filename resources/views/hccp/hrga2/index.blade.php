@@ -2,7 +2,7 @@
     <x-slot name="cardHeader">
         <div class="col-lg-12">
             <h6 class="float-start mt-1">{{ $title }}</h6>
-            <a href="{{ route('hasilwawancara.create') }}" class="btn btn-primary float-end"><i class="fas fa-plus"></i>
+            <a href="{{ route('hrga2.create') }}" class="btn btn-primary float-end"><i class="fas fa-plus"></i>
                 Data</a>
         </div>
     </x-slot>
@@ -29,7 +29,7 @@
                     function getData() {
                         $.ajax({
                             type: "get",
-                            url: "{{ route('hasilwawancara.getData') }}",
+                            url: "{{ route('hrga2.getData') }}",
                             success: function(response) {
                                 $('.load-data').html(response);
                             }
@@ -46,7 +46,7 @@
 
                         $.ajax({
                             type: "get",
-                            url: "{{ route('hasilwawancara.tambah_data') }}",
+                            url: "{{ route('hrga2.tambah_data') }}",
                             data: {
                                 id_anak: id_anak,
                                 nama: nama,
