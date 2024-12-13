@@ -18,7 +18,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
     {
         $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->get();
         $data = [
-            'title' => 'Harga 1 Permohonan Karyawan Baru',
+            'title' => 'Hrga 1 Permohonan Karyawan Baru',
             'hrga1' => $hrga1
         ];
         return view('hccp.hrga1.index', $data);
@@ -91,7 +91,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
         $spreadsheet->getDefaultStyle()->getFont()->setSize('10');
         // Set header untuk download
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="permohonan_karyawan.xlsx"');
+        header('Content-Disposition: attachment;filename="FRM.HRGA.01.01 - Permohonan Karyawan Baru.xlsx"');
         header('Cache-Control: max-age=0');
 
         // Langsung kirim ke output

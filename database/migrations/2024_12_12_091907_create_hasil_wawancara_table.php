@@ -18,7 +18,11 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['L', 'P'])->default('P');
             $table->string('posisi');
             $table->text('kesimpulan');
-            $table->enum('keputusan', ['dilanjutkan', 'ditolak'])->default('dilanjutkan');
+            $table->enum('keputusan', ['dilanjutkan', 'ditolak'])->nullable();
+
+            $table->enum('periode_masa_percobaan', ['1', '3', '6'])->nullable();
+            $table->string('status')->nullable();
+            $table->string('keputusan_lulus')->nullable();
             $table->timestamps();
         });
     }

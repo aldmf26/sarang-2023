@@ -614,6 +614,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::get('/getKaryawan', 'getKaryawan')->name('getKaryawan');
+            Route::get('/penilaianShow', 'penilaianShow')->name('penilaianShow');
             Route::post('/create', 'store')->name('store');
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/edit/{id}', 'update')->name('update');

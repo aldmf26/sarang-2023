@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('table_hrga3_hasil_evaluasi', function (Blueprint $table) {
+        Schema::create('hrga3_hasil_evaluasi', function (Blueprint $table) {
             $table->id();
             $table->integer('karyawan_id');
-            $table->string('status');
-            $table->string('periode');
-            $table->enum('periode', ['1', '3', '6'])->default('1');
-
+            $table->string('kriteria')->nullable();
+            $table->string('standar')->nullable();
+            $table->string('hasil')->nullable();
+            $table->string('admin');
             $table->timestamps();
         });
     }
