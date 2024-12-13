@@ -8,15 +8,19 @@
         <form action="{{ route('hrga2.store') }}" method="post">
             @csrf
             <section class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <label for="">Nama Karyawan</label>
                     <input type="text" class="form-control" name="nama">
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
+                    <label for="">NIK</label>
+                    <input type="text" class="form-control" name="nik">
+                </div>
+                <div class="col-lg-2">
                     <label for="">Tanggal Lahir</label>
                     <input type="date" class="form-control" name="tgl_lahir">
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <label for="">Jenis Kelamin</label>
                     <select id="" class="form-control" name="jenis_kelamin">
                         <option value="P">Perempuan</option>
@@ -25,7 +29,8 @@
                 </div>
                 <div class="col-lg-3">
                     <label for="">Posisi</label>
-                    <input type="text" class="form-control" name="posisi">
+                    <input type="text" class="form-control" value="{{ $divisi->divisi }}" readonly>
+                    <input type="hidden" class="form-control" name="id_divisi" value="{{ $divisi->id }}">
                 </div>
 
                 <div class="col-lg-9 mt-2">

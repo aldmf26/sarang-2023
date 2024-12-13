@@ -2,7 +2,7 @@
     <x-slot name="cardHeader">
         <div class="col-lg-12">
             <h6 class="float-start mt-1">{{ $title }}</h6>
-            <a href="{{ route('datapegawai.export') }}" class="btn btn-primary float-end"><i class="fas fa-file-excel"></i>
+            <a href="{{ route('hrga4.export') }}" class="btn btn-primary float-end"><i class="fas fa-file-excel"></i>
                 Export</a>
         </div>
     </x-slot>
@@ -25,10 +25,10 @@
                         @foreach ($karyawans as $k)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="text-center">{{ $k->posisi }}</td>
+                                <td class="text-center">{{ $k->divisi }}</td>
                                 <td class="text-center">{{ $k->nama }}</td>
                                 <td class="text-center">{{ $k->jenis_kelamin }} / {{ tanggal($k->tgl_lahir) }}</td>
-                                <td class="text-center">{{ $k->status }}</td>
+                                <td class="text-center">{{ $k->posisi2 }}</td>
                                 <td class="text-center">01 Februari 2023</td>
                                 <td class="text-center">Pengawas</td>
                             </tr>
