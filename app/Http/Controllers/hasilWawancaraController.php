@@ -18,11 +18,33 @@ class hasilWawancaraController extends Controller
 {
     public function index()
     {
+        $id_pengawas = auth()->user()->id;
         $data = [
             'title' => 'Hasil Wawancara',
-            'hasilWawancara' => DB::table('hasil_wawancara')->orderBy('id', 'DESC')->get(),
+            'hasilWawancara' => DB::select("SELECT a.id_anak, a.nama as nm_panggilan, b.* FROM tb_anak as a 
+            left join hasil_wawancara as b on b.id_anak = a.id_anak
+            where a.id_pengawas = $id_pengawas"),
         ];
         return view('hccp.hasilwawancara.index', $data);
+    }
+
+    public function getData()
+    {
+        $id_pengawas = auth()->user()->id;
+        $lokasi_pgws = auth()->user()->lokasi;
+
+        $data = [
+            'title' => 'Hasil Wawancara',
+            'hasilWawancara' => DB::select("SELECT c.lokasi, a.id_anak as id_tb_anak, a.nama as nm_panggilan, b.* FROM tb_anak as a 
+            left join hasil_wawancara as b on b.id_anak = a.id_anak
+            left join users as c on c.id = a.id_pengawas
+            where a.id_pengawas = $id_pengawas
+            order by a.nama ASC
+            "),
+            'divisi' => DB::table('divisis')->get(),
+            'lokasi_pgws' => $lokasi_pgws
+        ];
+        return view('hccp.hasilwawancara.getdata', $data);
     }
     public function create()
     {
@@ -38,7 +60,7 @@ class hasilWawancaraController extends Controller
             'nama' => $r->nama,
             'tgl_lahir' => $r->tgl_lahir,
             'jenis_kelamin' => $r->jenis_kelamin,
-            'posisi' => $r->posisi,
+            'id_divisi' => $r->id_divisi,
             'kesimpulan' => $r->kesimpulan,
             'keputusan' => $r->keputusan,
             'created_at' => date('Y-m-d H:i:s'),
@@ -46,6 +68,29 @@ class hasilWawancaraController extends Controller
         DB::table('hasil_wawancara')->insert($data);
 
         return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil ditambahkan');
+    }
+
+    public function tambah_data(Request $r)
+    {
+
+        DB::table('hasil_wawancara')->where('id', $r->id_anak)->delete();
+        $data = [
+            'id' => $r->id_anak,
+            'nama' => $r->nama,
+            'tgl_lahir' => $r->tgl_lahir,
+            'jenis_kelamin' => $r->jenis_kelamin,
+            'id_divisi' => $r->divisi,
+            'kesimpulan' => "- Ybs memahami cara kerja cabut bulu
+- Ybs kenal dengan karyawan cabut bulu saat ini sehingga bisa belajar
+- Ybs Tidak neko-neko, Terlihat teliti dan tidak mudah bosan",
+            'keputusan' => 'dilanjutkan',
+            'id_anak' => $r->id_anak,
+            'tgl_masuk' => $r->tgl_masuk,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('hasil_wawancara')->insert($data);
+
+        // return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -218,7 +263,9 @@ class hasilWawancaraController extends Controller
 
 
 
-        $hasil = DB::table('hasil_wawancara')->where('id', $id)->first();
+        $hasil = DB::table('hasil_wawancara')
+            ->leftJoin('divisis', 'divisis.id', 'hasil_wawancara.id_divisi')
+            ->where('hasil_wawancara.id', $id)->first();
         $sheet1->setCellValue('B8', 'Nama Calon  Karyawan');
         $sheet1->setCellValue('D8', ': ' . $hasil->nama);
         $sheet1->setCellValue('B9', 'Usia');
@@ -226,7 +273,7 @@ class hasilWawancaraController extends Controller
         $sheet1->setCellValue('B10', 'Jenis Kelamin');
         $sheet1->setCellValue('D10', ': ' . $hasil->jenis_kelamin);
         $sheet1->setCellValue('B11', 'Posisi');
-        $sheet1->setCellValue('D11', ': ' . $hasil->posisi);
+        $sheet1->setCellValue('D11', ': ' . $hasil->divisi);
 
         $sheet1->getStyle('B8:D11')->applyFromArray($style_kop);
         $sheet1->getColumnDimension('C')->setWidth(10.91);
@@ -286,13 +333,6 @@ class hasilWawancaraController extends Controller
 
         $sheet1->getStyle('D27:E27')->applyFromArray($style2);
         $sheet1->getStyle('H27:I27')->applyFromArray($style2);
-
-
-
-
-
-
-
         $namafile = "FRM.HRGA.01.02 - Hasil Wawancara.xlsx";
 
         $writer = new Xlsx($spreadsheet);

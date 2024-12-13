@@ -12,25 +12,28 @@
                 <table class="table table-bordered" width="100%">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Divisi / Dept</th>
-                            <th>Nama</th>
-                            <th>Jenis Kelamin/ <br>Tanggal lahir</th>
-                            <th>Status</th>
-                            <th>Tanggal Masuk</th>
-                            <th>Posisi</th>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Divisi / Dept</th>
+                            <th class="text-center">Nama</th>
+                            <th class="text-center">Jenis Kelamin/ <br>Tanggal lahir</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Tanggal Masuk</th>
+                            <th class="text-center">Posisi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Cabut bulu</td>
-                            <td>Jennah</td>
-                            <td>L / 01 Februari 2006</td>
-                            <td>Tetap</td>
-                            <td>01 Februari 2023</td>
-                            <td>pengawas</td>
-                        </tr>
+                        @foreach ($karyawans as $k)
+                            <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $k->posisi }}</td>
+                                <td class="text-center">{{ $k->nama }}</td>
+                                <td class="text-center">{{ $k->jenis_kelamin }} / {{ tanggal($k->tgl_lahir) }}</td>
+                                <td class="text-center">{{ $k->status }}</td>
+                                <td class="text-center">01 Februari 2023</td>
+                                <td class="text-center">Pengawas</td>
+                            </tr>
+                        @endforeach
+
 
 
                     </tbody>

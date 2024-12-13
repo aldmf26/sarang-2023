@@ -14,8 +14,11 @@ class hrga4DataPegawaiController extends Controller
 {
     public function index()
     {
+        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', 'lulus')->get();
         $data = [
             'title' => 'Data Pegawai',
+            'karyawans' => $karyawans
+
         ];
         return view('hccp.hrga4.index', $data);
     }
@@ -74,12 +77,17 @@ class hrga4DataPegawaiController extends Controller
         ];
         $style1 = [
             'font' => [
-                'name' => 'Cambria', // Font Cambria
-                'size' => 10,        // Ukuran font
+                'name' => 'Arial', // Font Cambria
+                'size' => 12,        // Ukuran font
             ],
             'alignment' => [
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,      // Menengahkan secara vertikal
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Menengahkan secara horizontal
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
             ],
 
         ];
@@ -192,7 +200,24 @@ class hrga4DataPegawaiController extends Controller
         $sheet1->getColumnDimension('F')->setWidth(27.36);
         $sheet1->getColumnDimension('G')->setWidth(17.64);
 
-        $pegawai = DB::table('pegawai')->get();
+        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', 'lulus')->get();
+
+        $kolom = 10;
+        $no = 1;
+        foreach ($karyawans as $d) {
+            $sheet1->setCellValue('A' . $kolom, $no++);
+            $sheet1->setCellValue('B' . $kolom, $d->posisi);
+            $sheet1->setCellValue('C' . $kolom, $d->nama);
+            $sheet1->setCellValue('D' . $kolom, $d->jenis_kelamin . "/" . tanggal($d->tgl_lahir));
+            $sheet1->setCellValue('E' . $kolom, $d->status);
+            $sheet1->setCellValue('F' . $kolom, '01 Februari 2023');
+            $sheet1->setCellValue('G' . $kolom, 'Pengawas');
+            $kolom++;
+        }
+
+        $sheet1->getStyle('A10:G' . ($kolom - 1))->applyFromArray($style1);
+
+
 
 
 
