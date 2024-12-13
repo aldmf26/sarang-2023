@@ -45,7 +45,7 @@
                         <td>{{ $d->nama }}</td>
                         <td>{{ Umur($d->tgl_lahir, $d->created_at) }}</td>
                         <td>{{ $d->jenis_kelamin }}</td>
-                        <td>{{ $d->posisi }}</td>
+                        <td>{{ $d->divisi }}</td>
                         <td>{{ $d->periode_masa_percobaan }} Bulan</td>
                         <td><a href="#" class="penilaianShow" data-id="{{ $d->id }}">Lihat Penilaian</a>
                         </td>

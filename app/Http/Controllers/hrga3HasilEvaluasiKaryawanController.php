@@ -19,8 +19,11 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     {
         setSessionDivisi($r);
         $keputusan = $r->keputusan ?? 'lulus';
-        $karyawans = DB::table('hasil_wawancara')
-                        ->where([['keputusan_lulus', $keputusan], ['id_divisi', session('id_divisi')]])->get();
+        $karyawans = DB::table('hasil_wawancara as a')
+                        ->join('divisis as b', 'a.id_divisi', 'b.id')
+                        ->select('a.*', 'b.divisi')
+                        ->where([['a.keputusan_lulus', $keputusan], ['a.id_divisi', session('id_divisi')]])
+                        ->get();
         $data = [
             'title' => 'Harga 3 Hasil Evaluasi Karyawan',
             'keputusan' => $keputusan,
