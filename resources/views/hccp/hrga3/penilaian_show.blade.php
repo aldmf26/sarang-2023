@@ -36,7 +36,7 @@
                         </tr>
                         <tr>
                             <th>Periode Masa Percobaan</th>
-                            <td>{{ $karyawan->periode_masa_percobaan }}</td>
+                            <td>{{ $karyawan->periode_masa_percobaan }} Bulan</td>
                         </tr>
                         <tr>
                             <th>Status</th>

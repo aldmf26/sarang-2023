@@ -1,7 +1,5 @@
-<?php
-header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=HCCP_".date('Y-m-d').".xls");
-?>
+@props(['title', 'dok'])
+
 <!doctype html>
 <html lang="en">
 
@@ -15,19 +13,25 @@ header("Content-Disposition: attachment; filename=HCCP_".date('Y-m-d').".xls");
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Hello, world!</title>
+    <style>
+        body {
+            font-family: 'Cambria';
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="d-flex gap-3 justify-content-center align-items-center">
-      <img style="width: 150px" src="{{ asset('uploads/logo.jpeg') }}" alt="">
-      <div>
-      <h5>PERMOHONAN KARYAWAN BARU</h5>
+    <div class="container py-5">
+        <div class="mb-5 d-flex gap-3 align-items-center">
+            <img style="width: 150px" src="{{ asset('uploads/logo.jpeg') }}" alt="">
+            <div>
+                <h5 style="border-radius: 15px;" class="border border-2 border-dark p-3"><b>{{ strtoupper($title) }}</b></h5>
+                <span style="font-size: 10px; margin-top: 20px; right: 50px" class="float-end"> {{ $dok }}</span>
+            </div>
+            
+        </div>
+        {{ $slot }}
     </div>
-    <span style="font-size: 10px; margin-top: 20px; right: 10px"> Dok.No.: FRM.HRGA.01.01, Rev.00</span>
-    </div>
-    {{ $slot }}
-  </div>
 </body>
 
 </html>

@@ -1,105 +1,4 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Models\hrga3HasilEvaluasiKaryawan as hrga3;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
-
-class hrga3HasilEvaluasiKaryawanController extends Controller
-{
-    public function index(Request $r)
-    {
-        $keputusan = $r->keputusan ?? 'lulus';
-        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', $keputusan)->get();
-        $data = [
-            'title' => 'Harga 3 Hasil Evaluasi Karyawan',
-            'keputusan' => $keputusan,
-            'karyawans' => $karyawans
-        ];
-        return view('hccp.hrga3.index', $data);
-    }
-
-    public function penilaianShow(Request $r)
-    {
-        $id = $r->id;
-        $karyawan = DB::table('hasil_wawancara')->where('id', $id)->first();
-        $penilaians = hrga3::where('karyawan_id', $id)->get();
-
-        return view('hccp.hrga3.penilaian_show', compact('karyawan', 'penilaians'));
-    }
-
-    public function create()
-    {
-        $data = [
-            'title' => 'Tambah Hasil Evaluasi Karyawan',
-            'karyawans' => DB::table('hasil_wawancara')
-                            ->where([['keputusan', 'dilanjutkan'],['keputusan_lulus', null]] )
-                            ->get(),
-        ];
-        return view('hccp.hrga3.create', $data);
-    }
-
-    public function getKaryawan(Request $r)
-    {
-        $id = $r->id;
-        $karyawan = DB::table('hasil_wawancara')->where('id', $id)->first();
-        $data = [
-            'usia' => Umur($karyawan->tgl_lahir, $karyawan->created_at),
-            'j_kelamin' => $karyawan->jenis_kelamin,
-            'posisi' => $karyawan->posisi
-        ];
-        return response()->json($data);
-    }
-
-    public function store(Request $r)
-    {
-        try {
-            DB::beginTransaction();
-            foreach ($r->penilaian as $kriteria => $nilai) {
-                Hrga3::create([
-                    'karyawan_id' => $r->id_karyawan,
-                    'kriteria' => ucfirst($kriteria),
-                    'standar' => $nilai['standar'],
-                    'hasil' => $nilai['hasil'],
-                    'admin' => auth()->user()->name
-                ]);
-
-                DB::table('hasil_wawancara')->where('id', $r->id_karyawan)->update([
-                    'status' => $r->status_posisi,
-                    'posisi2' => $r->posisi2,
-                    'keputusan_lulus' => $r->keputusan,
-                    'periode_masa_percobaan' => $r->periode,
-                ]);
-            }
-            DB::commit();
-            return redirect()->route('hrga3.index')->with('sukses', 'Data berhasil disimpan');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    // public function export($id)
-    // {
-    //     $karyawan = DB::table('hasil_wawancara')->where('id', $id)->first();
-    //     $penilaians = hrga3::where('karyawan_id', $id)->get();
-    //     $data = [
-    //         'title' => 'HASIL EVALUASI KARYAWAN BARU',
-    //         'dok' => 'Dok.No.: FRM.HRGA.01.03, Rev.00',
-    //         'karyawan' => $karyawan,
-    //         'penilaians' => $penilaians
-    //     ];
-    //     return view('hccp.hrga3.export', $data);
-    // }
-    public function export($id)
+public function export($id)
     {
         // Buat spreadsheet baru
         $spreadsheet = new Spreadsheet();
@@ -200,14 +99,6 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         // Masukkan Rich Text ke sel
         $sheet->setCellValue('C' . $row, $richText);
 
-        $styleBaris = [
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-            ],
-        ];
-        $sheet->getStyle('B16:D17')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('C0C0C0');
         $sheet->mergeCells('B16:D16');
         $sheet->getStyle('B16:D17')->getFont()->setBold(true);
         $sheet->getStyle('B16:D17')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -215,7 +106,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         $sheet->setCellValue('B17', 'Kriteria Penilaian');
         $sheet->setCellValue('C17', 'Standar Penilaian');
         $sheet->setCellValue('D17', 'Hasil Penilaian');
-        $sheet->getStyle('B16:D17')->applyFromArray($styleBaris);
+
         $penilaians = hrga3::where('karyawan_id', $id)->get();
 
         $sheet->getColumnDimension('B')->setWidth(28.7);
@@ -227,9 +118,9 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
             $sheet->getCell('C' . $row)->setValue($penilaian->standar);
             $sheet->getCell('D' . $row)->setValue($penilaian->hasil);
             $sheet->getStyle('B' . $row . ':D' . $row)->getAlignment()->setWrapText(true);
-            $sheet->getStyle('B' . $row . ':D' . $row)->applyFromArray($styleBaris);
             $row++;
         }
+
         $rowKeputusan = $row + 2;
         $sheet->getStyle('B' . $rowKeputusan)->getFont()->setBold(true);
         $sheet->getStyle('B' . $rowKeputusan)->getFont()->setUnderline(true);
@@ -261,12 +152,6 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         $rowTtd = $rowKet + 3;
         $sheet->setCellValue('C' . $rowTtd, 'Dibuat Oleh,');
         $sheet->setCellValue('D' . $rowTtd, 'Diketahui Oleh,');
-        $sheet->getStyle('C' . $rowTtd . ':D' . $rowTtd)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        $rowTtd = $rowTtd + 4;
-        $sheet->setCellValue('C' . $rowTtd, 'SPV. HR');
-        $sheet->setCellValue('D' . $rowTtd, 'KA.HRGA');
-        $sheet->getStyle('C' . $rowTtd . ':D' . $rowTtd)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
 
@@ -281,4 +166,3 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         //     $sheet->getColumnDimension($columnID)->setAutoSize(true);
         // }
     }
-}

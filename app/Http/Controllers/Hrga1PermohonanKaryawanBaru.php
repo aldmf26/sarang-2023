@@ -14,6 +14,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class Hrga1PermohonanKaryawanBaru extends Controller
 {
+    public function divisi()
+    {
+        $divisi = [
+            'bk'
+        ];
+        $data = [
+            'title' => 'Hrga 1 Permohonan Karyawan Baru'
+        ];
+        return view('hccp.hrga1.divisi', $data);
+    }
     public function index()
     {
         $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->orderBy('id', 'desc')->get();

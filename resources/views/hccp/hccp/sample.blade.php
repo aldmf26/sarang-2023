@@ -2,7 +2,7 @@
     <x-slot name="slot">
         <div class="row">
             <div class="col-lg-3">
-                <a href="{{route('hrga1.index')}}">
+                <a href="{{route('hrga1.divisi')}}">
                     <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                         <div class="card-front">
                             <div class="card-body">

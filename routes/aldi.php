@@ -598,6 +598,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('hccp/hrga1')
         ->name('hrga1.')
         ->group(function () {
+            Route::get('/divisi', 'divisi')->name('divisi');
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::post('/create', 'store')->name('store');
