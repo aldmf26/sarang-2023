@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\HasilWawancaraExport;
+use App\Exports\hrga2Export;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,19 +14,30 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 
-class hasilWawancaraController extends Controller
+class hrga2HasilWawancaraController extends Controller
 {
-    public function index()
+
+
+    public function index(Request $r)
     {
         $id_pengawas = auth()->user()->id;
         $data = [
             'title' => 'Hasil Wawancara',
-            'hasilWawancara' => DB::select("SELECT a.id_anak, a.nama as nm_panggilan, b.* FROM tb_anak as a 
-            left join hasil_wawancara as b on b.id_anak = a.id_anak
-            where a.id_pengawas = $id_pengawas"),
+            'hasil_wawancara' => DB::table('hasil_wawancara')->where('id_divisi', $r->id_divisi)->get()
         ];
-        return view('hccp.hasilwawancara.index', $data);
+        return view('hccp.hrga2.index', $data);
     }
+
+    public function divisi()
+    {
+        $data = [
+            'divisi' => DB::table('divisis')->get()
+        ];
+        return view('hccp.hrga2.divisi', $data);
+    }
+
+
+
 
     public function getData()
     {
@@ -35,7 +46,7 @@ class hasilWawancaraController extends Controller
 
         $data = [
             'title' => 'Hasil Wawancara',
-            'hasilWawancara' => DB::select("SELECT c.lokasi, a.id_anak as id_tb_anak, a.nama as nm_panggilan, b.* FROM tb_anak as a 
+            'hrga2' => DB::select("SELECT c.lokasi, a.id_anak as id_tb_anak, a.nama as nm_panggilan, b.* FROM tb_anak as a 
             left join hasil_wawancara as b on b.id_anak = a.id_anak
             left join users as c on c.id = a.id_pengawas
             where a.id_pengawas = $id_pengawas
@@ -44,14 +55,14 @@ class hasilWawancaraController extends Controller
             'divisi' => DB::table('divisis')->get(),
             'lokasi_pgws' => $lokasi_pgws
         ];
-        return view('hccp.hasilwawancara.getdata', $data);
+        return view('hccp.hrga2.getdata', $data);
     }
     public function create()
     {
         $data = [
             'title' => 'Tambah Hasil Wawancara',
         ];
-        return view('hccp.hasilwawancara.tambah', $data);
+        return view('hccp.hrga2.tambah', $data);
     }
 
     public function store(Request $r)
@@ -67,7 +78,7 @@ class hasilWawancaraController extends Controller
         ];
         DB::table('hasil_wawancara')->insert($data);
 
-        return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('hrga2.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function tambah_data(Request $r)
@@ -86,11 +97,12 @@ class hasilWawancaraController extends Controller
             'keputusan' => 'dilanjutkan',
             'id_anak' => $r->id_anak,
             'tgl_masuk' => $r->tgl_masuk,
+            'keputusan_lulus' => 'lulus',
             'created_at' => date('Y-m-d H:i:s'),
         ];
         DB::table('hasil_wawancara')->insert($data);
 
-        // return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil ditambahkan');
+        // return redirect()->route('hrga2.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -99,7 +111,7 @@ class hasilWawancaraController extends Controller
             'title' => 'Edit Hasil Wawancara',
             'hasil' => DB::table('hasil_wawancara')->where('id', $id)->first()
         ];
-        return view('hccp.hasilwawancara.edit', $data);
+        return view('hccp.hrga2.edit', $data);
     }
 
     public function update(Request $r)
@@ -114,13 +126,13 @@ class hasilWawancaraController extends Controller
             'updated_at' => date('Y-m-d H:i:s'),
         ];
         DB::table('hasil_wawancara')->where('id', $r->id)->update($data);
-        return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil diupdate');
+        return redirect()->route('hrga2.index')->with('sukses', 'Data Berhasil diupdate');
     }
 
     public function delete($id)
     {
         DB::table('hasil_wawancara')->where('id', $id)->delete();
-        return redirect()->route('hasilwawancara.index')->with('sukses', 'Data Berhasil dihapus');
+        return redirect()->route('hrga2.index')->with('sukses', 'Data Berhasil dihapus');
     }
 
     public function export($id)

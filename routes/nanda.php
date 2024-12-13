@@ -12,8 +12,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
-use App\Http\Controllers\hasilWawancaraController;
 use App\Http\Controllers\HccpController;
+use App\Http\Controllers\hrga2Controller;
+use App\Http\Controllers\hrga2HasilWawancaraController;
 use App\Http\Controllers\hrga4DataPegawaiController;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
@@ -418,9 +419,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/sampleAdministrator', 'sampleAdministrator')->name('sampleAdministrator');
         });
-    Route::controller(hasilWawancaraController::class)
-        ->prefix('hccp/hasilwawancara')
-        ->name('hasilwawancara.')
+    Route::controller(hrga2HasilWawancaraController::class)
+        ->prefix('hccp/hrga2')
+        ->name('hrga2.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/getData', 'getData')->name('getData');
@@ -433,8 +434,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/tambah_data', 'tambah_data')->name('tambah_data');
         });
     Route::controller(hrga4DataPegawaiController::class)
-        ->prefix('hccp/datapegawai')
-        ->name('datapegawai.')
+        ->prefix('hccp/hrga4')
+        ->name('hrga4.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/export', 'export')->name('export');

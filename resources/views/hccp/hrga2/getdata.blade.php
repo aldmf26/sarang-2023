@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($hasilWawancara as $h)
+        @foreach ($hrga2 as $h)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $h->nm_panggilan }}</td>
@@ -65,7 +65,7 @@
                     @else
                         <a href="#" class="btn btn-primary btn-sm simpan_data"
                             id_anak="{{ $h->id_tb_anak }}">save</a>
-                        <a href="{{ route('hasilwawancara.export', $h->id) }}" class="btn btn-success btn-sm"><i
+                        <a href="{{ route('hrga2.export', $h->id) }}" class="btn btn-success btn-sm"><i
                                 class="fas fa-file-excel"></i></a>
                     @endif
 
