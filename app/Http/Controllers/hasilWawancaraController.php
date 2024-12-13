@@ -293,7 +293,7 @@ class hasilWawancaraController extends Controller
 
 
 
-        $namafile = "Hasil Wawancara.xlsx";
+        $namafile = "FRM.HRGA.01.02 - Hasil Wawancara.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

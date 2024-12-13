@@ -14,6 +14,7 @@ use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
 use App\Http\Controllers\hasilWawancaraController;
 use App\Http\Controllers\HccpController;
+use App\Http\Controllers\hrga4DataPegawaiController;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
@@ -428,5 +429,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('update', 'update')->name('update');
             Route::get('/delete/{id}', 'delete')->name('delete');
+        });
+    Route::controller(hrga4DataPegawaiController::class)
+        ->prefix('hccp/datapegawai')
+        ->name('datapegawai.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/export', 'export')->name('export');
         });
 });
