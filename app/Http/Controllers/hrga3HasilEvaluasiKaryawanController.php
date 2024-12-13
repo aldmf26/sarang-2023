@@ -17,6 +17,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
 {
     public function index(Request $r)
     {
+        setSessionDivisi($r);
         $keputusan = $r->keputusan ?? 'lulus';
         $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', $keputusan)->get();
         $data = [

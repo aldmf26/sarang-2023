@@ -9,6 +9,7 @@ use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\BoxKirimController;
 use App\Http\Controllers\DendaController;
+use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\EoController;
 use App\Http\Controllers\ExportCocokanController;
 use App\Http\Controllers\GlobalController;
@@ -598,7 +599,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('hccp/hrga1')
         ->name('hrga1.')
         ->group(function () {
-            Route::get('/divisi', 'divisi')->name('divisi');
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::post('/create', 'store')->name('store');
@@ -606,6 +606,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/edit/{id}', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
             Route::get('/export/{id}', 'export')->name('export');
+        });
+    Route::controller(DivisiController::class)
+        ->prefix('hccp/divisi')
+        ->name('divisi.')
+        ->group(function () {
+            Route::get('/{divisi}', 'index')->name('index');
         });
 
     Route::controller(hrga3HasilEvaluasiKaryawanController::class)
