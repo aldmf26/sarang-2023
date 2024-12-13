@@ -26,7 +26,7 @@
                     <input readonly type="text" name="j_kelamin" class="form-control">
                 </div>
                 <div class="col-lg-4">
-                    <label for="">Posisi</label>
+                    <label for="">Divisi</label>
                     <input readonly type="text" name="posisi" class="form-control">
                 </div>
             </div>
@@ -79,23 +79,21 @@
                     <tr>
                         <td>Keterampilan</td>
                         <td>
-                            <input name="penilaian[keterampilan][standar]" type="text" value="N / A"
+                            <input value="Teliti, Cepat" name="penilaian[keterampilan][standar]" type="text" value="N / A"
                                 class="form-control">
                         </td>
                         <td>
-                            <input name="penilaian[keterampilan][hasil]" type="text" value="N / A"
+                            <input value="Teliti, Cepat" name="penilaian[keterampilan][hasil]" type="text" value="N / A"
                                 class="form-control">
                         </td>
                     </tr>
                     <tr>
                         <td>Kompetensi Inti</td>
                         <td>
-                            <input name="penilaian[kompetensi_inti][standar]" type="text" value="N / A"
-                                class="form-control">
+                            <textarea name="penilaian[kompetensi_inti][standar]" class="form-control">Mampu membedakan jenis SBW, mampu melihat jenis pengotor SBW</textarea>
                         </td>
                         <td>
-                            <input name="penilaian[kompetensi_inti][hasil]" type="text" value="N / A"
-                                class="form-control">
+                            <textarea name="penilaian[kompetensi_inti][hasil]" class="form-control">Mampu membedakan jenis SBW, mampu melihat jenis pengotor SBW</textarea>
                         </td>
                     </tr>
                 </tbody>
@@ -156,6 +154,12 @@
                             </div>
 
                         </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="">Posisi</label>
+                        <input required type="text" name="posisi2" placeholder="Posisi" class="form-control">
                     </div>
                 </div>
             </div>

@@ -19,10 +19,12 @@ return new class extends Migration
             $table->string('posisi');
             $table->text('kesimpulan');
             $table->enum('keputusan', ['dilanjutkan', 'ditolak'])->nullable();
-
+            
             $table->enum('periode_masa_percobaan', ['1', '3', '6'])->nullable();
             $table->string('status')->nullable();
             $table->string('keputusan_lulus')->nullable();
+            $table->string('posisi2')->nullable();
+            $table->integer('id_anak');
             $table->timestamps();
         });
     }

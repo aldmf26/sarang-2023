@@ -16,7 +16,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
 {
     public function index()
     {
-        $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->get();
+        $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->orderBy('id', 'desc')->get();
         $data = [
             'title' => 'Hrga 1 Permohonan Karyawan Baru',
             'hrga1' => $hrga1

@@ -18,7 +18,6 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     public function index(Request $r)
     {
         $keputusan = $r->keputusan ?? 'lulus';
-        $model = hrga3::all();
         $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', $keputusan)->get();
         $data = [
             'title' => 'Harga 3 Hasil Evaluasi Karyawan',
@@ -41,7 +40,9 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     {
         $data = [
             'title' => 'Tambah Hasil Evaluasi Karyawan',
-            'karyawans' => DB::table('hasil_wawancara')->where('keputusan', 'dilanjutkan')->get(),
+            'karyawans' => DB::table('hasil_wawancara')
+                            ->where([['keputusan', 'dilanjutkan'],['keputusan_lulus', null]] )
+                            ->get(),
         ];
         return view('hccp.hrga3.create', $data);
     }
@@ -73,6 +74,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
 
                 DB::table('hasil_wawancara')->where('id', $r->id_karyawan)->update([
                     'status' => $r->status_posisi,
+                    'posisi2' => $r->posisi2,
                     'keputusan_lulus' => $r->keputusan,
                     'periode_masa_percobaan' => $r->periode,
                 ]);
@@ -158,7 +160,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         $sheet->setCellValue('B11', 'Posisi');
         $sheet->setCellValue('B12', 'Periode Masa Percobaan');
         $sheet->setCellValue('B13', '* Coret yang tidak sesuai');
-        
+
 
 
 
@@ -181,8 +183,6 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
             if ($periode != $key) {
                 $run->getFont()->setStrikethrough(true);
             }
-
-           
         }
 
         // Masukkan Rich Text ke sel
@@ -213,20 +213,41 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         $rowKeputusan = $row + 2;
         $sheet->getStyle('B' . $rowKeputusan)->getFont()->setBold(true);
         $sheet->getStyle('B' . $rowKeputusan)->getFont()->setUnderline(true);
-        $sheet->setCellValue('B' . $rowKeputusan, 'Keputusan');
+        $sheet->setCellValue('B' . $rowKeputusan, 'Keputusan:');
 
         $status1 = $get->keputusan_lulus == 'lulus' ? '⬛' : '⬜';
         $status2 = $get->keputusan_lulus == 'tidak lulus' ? '⬛' : '⬜';
 
-        $sheet->setCellValue('C' . $rowKeputusan, $status1.' Lulus Masa Percobaan');
-        $sheet->setCellValue('C' . $rowKeputusan + 1, $status2.' Tidak Lulus Masa Percobaan');
+        $sheet->setCellValue('C' . $rowKeputusan, $status1 . ' Lulus Masa Percobaan');
+        $sheet->setCellValue('C' . $rowKeputusan + 1, $status2 . ' Tidak Lulus Masa Percobaan');
+
+        $rowKet = $rowKeputusan + 4;
+
+        // Buat objek Rich Text
+        $richText2 = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+
+        // Tambahkan teks "Keterangan :" dengan format bold dan underline
+        $richTextBold = $richText2->createTextRun('Keterangan : ');
+        $richTextBold->getFont()->setBold(true)->setUnderline(true);
+
+        // Tambahkan teks lainnya dengan format normal
+        $richTextNormal = $richText2->createTextRun('Karyawan dilanjut kontrak dan diikutkan MCU thn ini / depan');
+
+        // Gabungkan RichText ke dalam sel
+        $sheet->mergeCells('B' . $rowKet . ':D' . $rowKet);
+        $sheet->setCellValue('B' . $rowKet, $richText2);
+
+
+        $rowTtd = $rowKet + 3;
+        $sheet->setCellValue('C' . $rowTtd, 'Dibuat Oleh,');
+        $sheet->setCellValue('D' . $rowTtd, 'Diketahui Oleh,');
+
 
 
         $sheet->getStyle('B1:E45')->getFont()->setName('Cambria');
         $sheet->getStyle('B1:E45')->getFont()->setSize('10');
         $sheet->getStyle('B13')->getFont()->setItalic(true);
         $sheet->getStyle('B13')->getFont()->setSize(8);
-
     }
     protected function autoSizeColumns(Worksheet $sheet)
     {
