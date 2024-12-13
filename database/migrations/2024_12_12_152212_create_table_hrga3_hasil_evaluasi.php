@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('hrga3_hasil_evaluasi', function (Blueprint $table) {
             $table->id();
             $table->integer('karyawan_id');
+            $table->integer('id_divisi');
             $table->string('kriteria')->nullable();
             $table->string('standar')->nullable();
             $table->string('hasil')->nullable();

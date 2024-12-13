@@ -604,7 +604,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create', 'store')->name('store');
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/edit/{id}', 'update')->name('update');
-            Route::post('/delete', 'delete')->name('delete');
+            Route::post('/delete/{id}', 'delete')->name('delete');
             Route::get('/export/{id}', 'export')->name('export');
         });
     Route::controller(DivisiController::class)

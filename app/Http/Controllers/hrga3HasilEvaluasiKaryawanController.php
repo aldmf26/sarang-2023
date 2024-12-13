@@ -19,7 +19,8 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     {
         setSessionDivisi($r);
         $keputusan = $r->keputusan ?? 'lulus';
-        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', $keputusan)->get();
+        $karyawans = DB::table('hasil_wawancara')
+                        ->where([['keputusan_lulus', $keputusan], ['id_divisi', session('id_divisi')]])->get();
         $data = [
             'title' => 'Harga 3 Hasil Evaluasi Karyawan',
             'keputusan' => $keputusan,
@@ -42,8 +43,8 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
         $data = [
             'title' => 'Tambah Hasil Evaluasi Karyawan',
             'karyawans' => DB::table('hasil_wawancara')
-                            ->where([['keputusan', 'dilanjutkan'],['keputusan_lulus', null]] )
-                            ->get(),
+                ->where([['keputusan', 'dilanjutkan'], ['keputusan_lulus', null]])
+                ->get(),
         ];
         return view('hccp.hrga3.create', $data);
     }
@@ -67,6 +68,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
             foreach ($r->penilaian as $kriteria => $nilai) {
                 Hrga3::create([
                     'karyawan_id' => $r->id_karyawan,
+                    'id_divisi' => session('id_divisi'),
                     'kriteria' => ucfirst($kriteria),
                     'standar' => $nilai['standar'],
                     'hasil' => $nilai['hasil'],
@@ -75,6 +77,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
 
                 DB::table('hasil_wawancara')->where('id', $r->id_karyawan)->update([
                     'status' => $r->status_posisi,
+                    'id_divisi' => session('id_divisi'),
                     'posisi2' => $r->posisi2,
                     'keputusan_lulus' => $r->keputusan,
                     'periode_masa_percobaan' => $r->periode,

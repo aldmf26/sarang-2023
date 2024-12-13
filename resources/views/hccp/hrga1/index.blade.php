@@ -34,7 +34,8 @@
                                     class="fa fa-print"></i></a>
                             <a href="{{ route('hrga1.edit', $d->id) }}" class="btn btn-sm btn-primary"><i
                                     class="fa fa-edit"></i></a>
-                            <form action="{{ route('hrga1.delete', $d->id) }}" method="post">
+                            <form action="{{ route('hrga1.delete', $d->id) }}" method="post" 
+                                onsubmit="return confirm('Anda yakin ingin menghapus data ini?')">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i
                                     class="fa fa-trash"></i></button>

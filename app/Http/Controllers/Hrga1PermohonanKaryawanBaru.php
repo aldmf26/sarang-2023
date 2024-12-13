@@ -19,7 +19,10 @@ class Hrga1PermohonanKaryawanBaru extends Controller
     {
         setSessionDivisi($r);
 
-        $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->orderBy('id', 'desc')->get();
+        $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')
+                    ->where('id_divisi', session('id_divisi'))
+                    ->orderBy('id', 'desc')
+                    ->get();
         $data = [
             'title' => 'Hrga 1 Permohonan Karyawan Baru',
             'hrga1' => $hrga1
@@ -40,6 +43,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
         $data = $r->except('_token');
         $data['tgl_input'] = now();
         $data['admin'] = auth()->user()->name;
+        $data['id_divisi'] = session('id_divisi');
 
         DB::table('hrga1_permohonan_karyawan_baru')->insert($data);
         return redirect()->route('hrga1.index')->with('sukses', 'Data Berhasil ditambahkan');
@@ -91,7 +95,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
 
         // Set font Cambria untuk seluruh sheet
         $spreadsheet->getDefaultStyle()->getFont()->setName('Cambria');
-        $spreadsheet->getDefaultStyle()->getFont()->setSize('10');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize('12');
         // Set header untuk download
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="FRM.HRGA.01.01 - Permohonan Karyawan Baru.xlsx"');
