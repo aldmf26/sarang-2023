@@ -62,7 +62,7 @@
                 </a>
             </div>
             <div class="col-lg-3">
-                <a href="">
+                <a href="{{ route('datapegawai.index') }}">
                     <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                         <div class="card-front">
                             <div class="card-body">
@@ -75,7 +75,7 @@
                         <div class="card-back">
                             <div class="card-body">
                                 <h5 class="card-text text-white">Hasil wawancara</h5>
-                                <p class="card-text">FRM.HRGA.01.02 - Hasil Wawancara</p>
+                                <p class="card-text">FRM.HRGA.01.04 - Data Pegawai</p>
                             </div>
                         </div>
                     </div>
