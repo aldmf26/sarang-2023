@@ -14,18 +14,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class Hrga1PermohonanKaryawanBaru extends Controller
 {
-    public function divisi()
+
+    public function index(Request $r)
     {
-        $divisi = [
-            'bk'
-        ];
-        $data = [
-            'title' => 'Hrga 1 Permohonan Karyawan Baru'
-        ];
-        return view('hccp.hrga1.divisi', $data);
-    }
-    public function index()
-    {
+        setSessionDivisi($r);
+
         $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')->orderBy('id', 'desc')->get();
         $data = [
             'title' => 'Hrga 1 Permohonan Karyawan Baru',
@@ -234,7 +227,6 @@ class Hrga1PermohonanKaryawanBaru extends Controller
         $sheet->getStyle('B34:F37')->getBorders()->getLeft()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle('B34:F37')->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle('D33:D37')->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN);
-       
     }
     protected function autoSizeColumns(Worksheet $sheet)
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Divisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -150,6 +151,25 @@ if (!function_exists('sumBk')) {
         return array_sum(array_column($kategori, $data));
     }
 }
+
+if (!function_exists('setSessionDivisi')) {
+    function setSessionDivisi($r)
+    {
+        if ($r->has('divisi')) {
+            // Reset the session for 'divisi'
+            session()->forget('divisi');
+            // Retrieve 'divisi' and 'id' from the Divisi model
+            $divisi = Divisi::find($r->divisi);
+            // Set the session with the new 'divisi' and 'id'
+            $session = session([
+                'divisi' => $divisi->divisi,
+                'id_divisi' => $divisi->id
+            ]);
+        }
+        return $session ?? '';
+    }
+}
+
 if (!function_exists('Umur')) {
     function Umur($tgl1, $tgl2)
     {
