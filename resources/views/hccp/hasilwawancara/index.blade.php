@@ -9,45 +9,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-12">
-                <table class="table table-bordered" width="100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Calon Karyawan</th>
-                            <th>Tanggal Lahir</th>
-                            <th>Usia</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Posisi</th>
-
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($hasilWawancara as $h)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $h->nama }}</td>
-                                <td>{{ tanggal($h->tgl_lahir) }}</td>
-                                <td>
-                                    {{ Umur($h->tgl_lahir, $h->created_at) }}
-                                </td>
-                                <td>{{ $h->jenis_kelamin == 'P' ? 'Perempuan' : 'Laki-laki' }}</td>
-                                <td>{{ $h->posisi }}</td>
-
-                                <td>
-                                    <a href="{{ route('hasilwawancara.edit', $h->id) }}"
-                                        class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                    <a href="{{ route('hasilwawancara.export', $h->id) }}"
-                                        class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i></a>
-                                    <a href="{{ route('hasilwawancara.delete', $h->id) }}"
-                                        class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                        @endforeach
-
-                    </tbody>
-
-                </table>
+                <div class="load-data"></div>
             </div>
 
 
@@ -62,6 +24,51 @@
                         e.preventDefault();
                         $(this).next('.full-text').slideToggle();
                         $(this).text($(this).text() === 'Read More' ? 'Show Less' : 'Read More');
+                    });
+
+                    function getData() {
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('hasilwawancara.getData') }}",
+                            success: function(response) {
+                                $('.load-data').html(response);
+                            }
+                        });
+                    }
+                    getData();
+
+                    function save_data(id_anak) {
+                        var nama = $('.nama' + id_anak).val();
+                        var tgl_lahir = $('.tgl_lahir' + id_anak).val();
+                        var tgl_masuk = $('.tgl_masuk' + id_anak).val();
+                        var jenis_kelamin = $('.jenis_kelamin' + id_anak).val();
+                        var divisi = $('.divisi' + id_anak).val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "{{ route('hasilwawancara.tambah_data') }}",
+                            data: {
+                                id_anak: id_anak,
+                                nama: nama,
+                                tgl_lahir: tgl_lahir,
+                                jenis_kelamin: jenis_kelamin,
+                                divisi: divisi,
+                                tgl_masuk: tgl_masuk
+                            },
+                            success: function(response) {
+                                getData();
+                                alertToast('sukses', 'Berhasil ditambahkan');
+                            }
+                        });
+
+                    }
+
+                    $(document).on("click", ".simpan_data", function(e) {
+                        e.preventDefault();
+                        var id_anak = $(this).attr('id_anak');
+
+                        save_data(id_anak);
+
                     });
                 });
             </script>

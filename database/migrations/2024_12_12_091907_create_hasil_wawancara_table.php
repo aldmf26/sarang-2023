@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('nama');
             $table->date('tgl_lahir');
             $table->enum('jenis_kelamin', ['L', 'P'])->default('P');
-            $table->string('posisi');
+            $table->integer('id_divisi');
             $table->text('kesimpulan');
             $table->enum('keputusan', ['dilanjutkan', 'ditolak'])->nullable();
-            
             $table->enum('periode_masa_percobaan', ['1', '3', '6'])->nullable();
             $table->string('status')->nullable();
             $table->string('keputusan_lulus')->nullable();
             $table->string('posisi2')->nullable();
             $table->integer('id_anak');
+            $table->date('tgl_masuk')->nullable();
             $table->timestamps();
         });
     }
