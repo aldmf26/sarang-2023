@@ -2,7 +2,8 @@
     <x-slot name="cardHeader">
         <div class="col-lg-12">
             <h6 class="float-start mt-1">{{ $title }}</h6>
-            <a href="{{ route('hrga4.export') }}" class="btn btn-primary float-end"><i class="fas fa-file-excel"></i>
+            <a href="{{ route('hrga4.export', ['divisi' => $divisi]) }}" class="btn btn-primary float-end"><i
+                    class="fas fa-file-excel"></i>
                 Export</a>
         </div>
     </x-slot>
