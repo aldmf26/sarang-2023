@@ -34,7 +34,7 @@ class hrga2HasilWawancaraController extends Controller
                 ->get(),
             'id_divisi' => $r->divisi,
         ];
-        return view('hccp.hrga2.index', $data);
+        return view('hccp.hrga2_evaluasi.index', $data);
     }
     public function getData()
     {
@@ -52,7 +52,7 @@ class hrga2HasilWawancaraController extends Controller
             'divisi' => DB::table('divisis')->get(),
             'lokasi_pgws' => $lokasi_pgws
         ];
-        return view('hccp.hrga2.getdata', $data);
+        return view('hccp.hrga2_evaluasi.getdata', $data);
     }
     public function create(Request $r)
     {
@@ -60,7 +60,7 @@ class hrga2HasilWawancaraController extends Controller
             'title' => 'Tambah Hasil Wawancara',
             'divisi' => DB::table('divisis')->where('id', $r->id_divisi)->first(),
         ];
-        return view('hccp.hrga2.tambah', $data);
+        return view('hccp.hrga2_evaluasi.tambah', $data);
     }
 
     public function form_isi($id)
@@ -69,7 +69,7 @@ class hrga2HasilWawancaraController extends Controller
             'title' => 'Formulir Hasil Wawancara',
             'divisi' => $id
         ];
-        return view('hccp.hrga2.form_isi', $data);
+        return view('hccp.hrga2_evaluasi.form_isi', $data);
     }
 
 
@@ -125,7 +125,7 @@ class hrga2HasilWawancaraController extends Controller
             'title' => 'Hasil Wawancara',
             'ket' => $r->ket
         ];
-        return view('hccp.hrga2.berhasil', $data);
+        return view('hccp.hrga2_evaluasi.berhasil', $data);
     }
 
     public function tambah_data(Request $r)
@@ -161,7 +161,7 @@ class hrga2HasilWawancaraController extends Controller
             'title' => 'Edit Hasil Wawancara',
             'hasil' => DB::table('hasil_wawancara')->where('id', $id)->first()
         ];
-        return view('hccp.hrga2.edit', $data);
+        return view('hccp.hrga2_evaluasi.edit', $data);
     }
 
     public function update(Request $r)
