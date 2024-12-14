@@ -331,7 +331,7 @@ class hrga2HasilWawancaraController extends Controller
         $sheet1->setCellValue('B8', 'Nama Calon  Karyawan');
         $sheet1->setCellValue('D8', ': ' . $hasil->nama);
         $sheet1->setCellValue('B9', 'Usia');
-        $sheet1->setCellValue('D9', ': ' . Umur($hasil->tgl_lahir, $hasil->created_at));
+        $sheet1->setCellValue('D9', ': ' . Umur($hasil->tgl_lahir, $hasil->tgl_masuk));
         $sheet1->setCellValue('B10', 'Jenis Kelamin');
         $sheet1->setCellValue('D10', ': ' . $hasil->jenis_kelamin);
         $sheet1->setCellValue('B11', 'Posisi');
