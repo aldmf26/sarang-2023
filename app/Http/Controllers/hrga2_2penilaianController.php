@@ -11,6 +11,6 @@ class hrga2_2penilaianController extends Controller
         $data = [
             'title' => 'Harga 2.2 Penilaian',
         ];
-        return view('hccp.hrga2_penilaia.hrga2.index', $data);
+        return view('hccp.hrga2_penilaian.hrga2.index', $data);
     }
 }
