@@ -113,9 +113,9 @@ class hrga2HasilWawancaraController extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
             ];
             DB::table('hasil_wawancara')->insert($data);
-            return redirect()->route('hrga2.berhasil', ['ket' => 'berhasil'])->with('sukses', 'Data Berhasil ditambahkan');
+            return redirect()->route('berhasil', ['ket' => 'berhasil'])->with('sukses', 'Data Berhasil ditambahkan');
         } else {
-            return redirect()->route('hrga2.berhasil', ['ket' => 'gagal'])->with('error', 'Data Berhasil ditambahkan');
+            return redirect()->route('berhasil', ['ket' => 'gagal'])->with('error', 'Data Berhasil ditambahkan');
         }
     }
 

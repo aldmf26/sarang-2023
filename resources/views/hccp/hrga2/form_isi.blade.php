@@ -12,7 +12,7 @@
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Form Pengisian Data Diri</h2>
-        <form action="{{ route('hrga2.save_formulir') }}" method="POST" id="dataDiriForm">
+        <form action="{{ route('save_formulir') }}" method="POST" id="dataDiriForm">
             @csrf
             <div class="mb-3">
                 <label for="namaLengkap" class="form-label">Nama Lengkap</label>

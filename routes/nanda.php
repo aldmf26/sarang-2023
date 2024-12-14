@@ -48,6 +48,12 @@ Route::get('/dashboard', function () {
     return redirect()->route('template1');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/isiformulir/{id}', [hrga2HasilWawancaraController::class, 'form_isi'])->name('isiformulir');
+Route::post('/save_formulir', [hrga2HasilWawancaraController::class, 'save_formulir'])->name('save_formulir');
+Route::get('/berhasil', [hrga2HasilWawancaraController::class, 'berhasil'])->name('berhasil');
+
+
+
 Route::middleware('auth')->group(function () {
 
     // 
@@ -433,8 +439,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/delete/{id}', 'delete')->name('delete');
             Route::get('/tambah_data', 'tambah_data')->name('tambah_data');
             Route::get('/form_isi/{id}', 'form_isi')->name('form_isi');
-            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
-            Route::get('/berhasil', 'berhasil')->name('berhasil');
+            // Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            // Route::get('/berhasil', 'berhasil')->name('berhasil');
         });
     Route::controller(hrga4DataPegawaiController::class)
         ->prefix('hccp/hrga4')
