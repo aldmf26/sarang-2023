@@ -10,7 +10,7 @@ class DivisiController extends Controller
     public function index($divisi)
     {
         if (in_array(auth()->user()->posisi_id, [1, 12])) {
-            $divisis = Divisi::all();
+            $divisis = Divisi::orderBy('urutan')->get();
             $title = [
                 'hrga1' => 'HRGA.01.01 - Permohonan Karyawan Baru',
                 'hrga2' => 'HRGA.01.02 - Hasil Wawancara',
@@ -22,7 +22,7 @@ class DivisiController extends Controller
                 'divisis' => $divisis,
                 'divisi' => $divisi,
             ];
-            return view('hccp.hccp.divisi', $data);
+            return view('hccp.divisi', $data);
         } else {
             return redirect()->route("$divisi.index");
         }

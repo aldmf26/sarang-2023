@@ -15,6 +15,7 @@ use App\Http\Controllers\ExportCocokanController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
+use App\Http\Controllers\HccpController;
 use App\Http\Controllers\Hrga1PermohonanKaryawanBaru;
 use App\Http\Controllers\hrga3HasilEvaluasiKaryawanController;
 use App\Http\Controllers\KelasController;
@@ -506,7 +507,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/exportCabut', 'exportCabut')->name('exportCabut');
         });
 
-   
+
     Route::controller(SiapKirimController::class)
         ->prefix('home/siapkirim')
         ->name('siapkirim.')
@@ -595,6 +596,14 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/import', 'import')->name('import');
             Route::post('/tutup_gaji', 'tutup_gaji')->name('tutup_gaji');
         });
+
+    Route::controller(HccpController::class)
+        ->prefix('hccp')
+        ->name('hccp.')
+        ->group(function () {
+            Route::get('/evaluasiKompetensiKaryawan', 'evaluasiKompetensiKaryawan')->name('evaluasiKompetensiKaryawan');
+        });
+
     Route::controller(Hrga1PermohonanKaryawanBaru::class)
         ->prefix('hccp/hrga1')
         ->name('hrga1.')

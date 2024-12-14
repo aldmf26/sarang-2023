@@ -14,7 +14,7 @@ class hrga2Export implements FromView
     public function view(): View
     {
         $drawing = new Drawing();
-        return view('hccp.hrga2.excel', compact('drawing'));
+        return view('hccp.hrga1_penerimaan.hrga2.excel', compact('drawing'));
     }
     public function drawings()
     {

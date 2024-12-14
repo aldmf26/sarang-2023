@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('divisis', function (Blueprint $table) {
             $table->id();
             $table->string('divisi');
+            $table->integer('urutan')->nullable();
             $table->timestamps();
         });
     }

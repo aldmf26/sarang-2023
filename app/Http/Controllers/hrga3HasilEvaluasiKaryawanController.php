@@ -29,7 +29,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
             'keputusan' => $keputusan,
             'karyawans' => $karyawans
         ];
-        return view('hccp.hrga3.index', $data);
+        return view('hccp.hrga1_penerimaan.hrga3.index', $data);
     }
 
     public function penilaianShow(Request $r)
@@ -42,7 +42,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
                         ->first();
         $penilaians = hrga3::where('karyawan_id', $id)->get();
 
-        return view('hccp.hrga3.penilaian_show', compact('karyawan', 'penilaians'));
+        return view('hccp.hrga1_penerimaan.hrga3.penilaian_show', compact('karyawan', 'penilaians'));
     }
 
     public function create()
@@ -53,7 +53,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
                 ->where([['keputusan', 'dilanjutkan'], ['keputusan_lulus', null]])
                 ->get(),
         ];
-        return view('hccp.hrga3.create', $data);
+        return view('hccp.hrga1_penerimaan.hrga3.create', $data);
     }
 
     public function getKaryawan(Request $r)
@@ -112,7 +112,7 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     //         'karyawan' => $karyawan,
     //         'penilaians' => $penilaians
     //     ];
-    //     return view('hccp.hrga3.export', $data);
+    //     return view('hccp.hrga1_penerimaan.hrga3.export', $data);
     // }
     public function export($id)
     {

@@ -27,7 +27,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
             'title' => 'Hrga 1 Permohonan Karyawan Baru',
             'hrga1' => $hrga1
         ];
-        return view('hccp.hrga1.index', $data);
+        return view('hccp.hrga1_penerimaan.hrga1.index', $data);
     }
 
     public function create()
@@ -35,7 +35,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
         $data = [
             'title' => 'Tambah Permohonan Karyawan Baru',
         ];
-        return view('hccp.hrga1.create', $data);
+        return view('hccp.hrga1_penerimaan.hrga1.create', $data);
     }
 
     public function store(Request $r)
@@ -56,7 +56,7 @@ class Hrga1PermohonanKaryawanBaru extends Controller
             'title' => 'Edit Permohonan Karyawan Baru',
             'get' => $hrga1
         ];
-        return view('hccp.hrga1.edit', $data);
+        return view('hccp.hrga1_penerimaan.hrga1.edit', $data);
     }
 
     public function update(Request $r, $id)

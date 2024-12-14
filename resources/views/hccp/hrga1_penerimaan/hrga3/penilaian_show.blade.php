@@ -2,7 +2,7 @@
     <h4 class="text-center">Hasil Evaluasi Karyawan</h4>
     <!-- Keputusan -->
     <div class="ms-4 mt-4">
-        <h6>Keputusan:</h6>
+        <h5>Keputusan:</h5>
         <p>
             @if ($karyawan->keputusan_lulus == 'lulus')
                 <span class="badge bg-primary">Lulus Masa Percobaan</span>
@@ -14,13 +14,13 @@
     <!-- Data Karyawan -->
     <div class="card">
         <div class="card-body">
-            <h6>Informasi Karyawan</h6>
+            <h5>Informasi Karyawan</h5>
             <div class="row">
                 <div class="col-lg-8">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <tr>
-                            <th>Nama Karyawan</th>
-                            <th>{{ $karyawan->nama }}</th>
+                            <th><h6>Nama Karyawan</h6></th>
+                            <th><h6>{{ $karyawan->nama }}</h6></th>
                         </tr>
                         <tr>
                             <th>Usia</th>
@@ -52,7 +52,7 @@
     <!-- Penilaian -->
     <div class="card">
         <div class="card-body">
-            <h6>Penilaian Karyawan</h6>
+            <h5>Penilaian Karyawan</h5>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

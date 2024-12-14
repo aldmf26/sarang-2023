@@ -11,7 +11,7 @@ class HccpController extends Controller
         $data = [
             'title' => 'HCCP',
         ];
-        return view('hccp.hccp.index', $data);
+        return view('hccp.index', $data);
     }
 
     public function sampleAdministrator()
@@ -19,6 +19,14 @@ class HccpController extends Controller
         $data = [
             'title' => 'Sampel Administrator',
         ];
-        return view('hccp.hccp.sample', $data);
+        return view('hccp.hrga1_penerimaan.index', $data);
+    }
+
+    public function evaluasiKompetensiKaryawan()
+    {
+        $data = [
+            'title' => 'Evaluasi Kompetensi Karyawan',
+        ];
+        return view('hccp.hrga2_evaluasi.index', $data);
     }
 }
