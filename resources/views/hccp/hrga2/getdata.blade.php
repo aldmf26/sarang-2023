@@ -20,11 +20,11 @@
                 <td>{{ $h->nm_panggilan }}</td>
                 <td>
                     <input type="text" class="form-control nama{{ $h->id_tb_anak }}" name="nama"
-                        value="{{ $h->nik }}">
+                        value="{{ $h->nama }}">
                 </td>
                 <td>
                     <input type="text" class="form-control nik{{ $h->id_tb_anak }}" name="nama"
-                        value="{{ $h->nama }}">
+                        value="{{ $h->nik }}">
                 </td>
                 <td>
                     <input type="date" class="form-control tgl_lahir{{ $h->id_tb_anak }}" name="tgl_lahir"
