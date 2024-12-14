@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class hrga4DataPegawaiController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
         $karyawans = DB::table('hasil_wawancara')
             ->leftJoin('divisis', 'divisis.id', '=', 'hasil_wawancara.id_divisi')
+            ->where('id_divisi', $r->divisi)
             ->where('keputusan_lulus', 'lulus')->get();
         $data = [
             'title' => 'Data Pegawai',

@@ -21,7 +21,7 @@
                                 <th width="15%">NIK</th>
                                 <th>Tanggal Lahir</th>
 
-                                <th>Usia</th>
+                                <th>Usia Masuk Kerja</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Posisi</th>
                                 <th>Aksi</th>
@@ -35,7 +35,7 @@
                                     <td>{{ $h->nik }}</td>
                                     <td>{{ tanggal($h->tgl_lahir) }}</td>
 
-                                    <td>{{ umur($h->tgl_lahir, $h->created_at) }} Tahun</td>
+                                    <td>{{ umur($h->tgl_lahir, $h->tgl_masuk) }} Tahun</td>
                                     <td>{{ $h->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                                     <td>{{ $h->divisi }}</td>
                                     <td>

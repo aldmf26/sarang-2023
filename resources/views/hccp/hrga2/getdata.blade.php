@@ -35,7 +35,7 @@
                         value="{{ $h->tgl_masuk }}">
                 </td>
                 <td>
-                    {{ empty($h->tgl_lahir) ? '-' : Umur($h->tgl_lahir, $h->created_at) }}
+                    {{ empty($h->tgl_lahir) ? '-' : Umur($h->tgl_lahir, $h->tgl_masuk) }}
                 </td>
                 <td>
                     <select name="jenis_kelamin" class="form-control jenis_kelamin{{ $h->id_tb_anak }}" id="">
