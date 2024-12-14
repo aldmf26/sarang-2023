@@ -28,7 +28,7 @@
                                 <td class="text-center">{{ $k->divisi }}</td>
                                 <td class="text-center">{{ $k->nama }}</td>
                                 <td class="text-center">{{ $k->jenis_kelamin }} / {{ tanggal($k->tgl_lahir) }}</td>
-                                <td class="text-center">{{ $k->posisi2 }}</td>
+                                <td class="text-center">{{ $k->status }}</td>
                                 <td class="text-center">{{ $k->tgl_masuk }}</td>
                                 <td class="text-center">{{ $k->posisi2 }}</td>
                             </tr>
