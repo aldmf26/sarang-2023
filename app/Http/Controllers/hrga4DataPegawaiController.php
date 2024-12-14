@@ -24,7 +24,7 @@ class hrga4DataPegawaiController extends Controller
             'divisi' => $r->divisi
 
         ];
-        return view('hccp.hrga4_datapegawai.index', $data);
+        return view('hccp.hrga1_penerimaan.hrga4.index', $data);
     }
 
     public function export(Request $r)

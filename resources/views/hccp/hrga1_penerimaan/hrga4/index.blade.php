@@ -9,7 +9,7 @@
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-12">
-                <table class="table table-bordered" width="100%">
+                <table class="table table-bordered" width="100%" id="table">
                     <thead>
                         <tr>
                             <th class="text-center">No</th>
