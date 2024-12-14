@@ -73,6 +73,7 @@ class hrga2HasilWawancaraController extends Controller
             'id_divisi' => $r->id_divisi,
             'kesimpulan' => $r->kesimpulan,
             'keputusan' => $r->keputusan,
+            'status' => 'Kontrak',
             'created_at' => date('Y-m-d H:i:s'),
         ];
         DB::table('hasil_wawancara')->insert($data);
