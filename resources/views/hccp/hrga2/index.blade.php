@@ -13,7 +13,7 @@
         <section class="row">
             <div class="col-lg-12">
                 @if (!empty($id_divisi))
-                    <table class="table table-bordered" width="100%">
+                    <table class="table table-bordered" width="100%" id="table">
                         <thead>
                             <tr>
                                 <th>No</th>
