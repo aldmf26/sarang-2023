@@ -32,6 +32,7 @@
                     <th class="dhead">Nama Karyawan</th>
                     <th class="dhead">Usia</th>
                     <th class="dhead">Jenis Kelamin</th>
+                    <th class="dhead">Divisi</th>
                     <th class="dhead">Posisi</th>
                     <th class="dhead">Periode Masa Percobaan</th>
                     <th class="dhead">Penilaian</th>
@@ -46,6 +47,7 @@
                         <td>{{ Umur($d->tgl_lahir, $d->created_at) }}</td>
                         <td>{{ $d->jenis_kelamin }}</td>
                         <td>{{ $d->divisi }}</td>
+                        <td>{{ $d->posisi2 }}</td>
                         <td>{{ $d->periode_masa_percobaan }} Bulan</td>
                         <td><a href="#" class="penilaianShow" data-id="{{ $d->id }}">Lihat Penilaian</a>
                         </td>

@@ -35,7 +35,11 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     public function penilaianShow(Request $r)
     {
         $id = $r->id;
-        $karyawan = DB::table('hasil_wawancara')->where('id', $id)->first();
+        $karyawan = DB::table('hasil_wawancara as a')
+                        ->join('divisis as b', 'a.id_divisi', 'b.id')
+                        ->where('a.id', $id)
+                        ->select('a.*', 'b.divisi as posisi')
+                        ->first();
         $penilaians = hrga3::where('karyawan_id', $id)->get();
 
         return view('hccp.hrga3.penilaian_show', compact('karyawan', 'penilaians'));
@@ -55,7 +59,11 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
     public function getKaryawan(Request $r)
     {
         $id = $r->id;
-        $karyawan = DB::table('hasil_wawancara')->where('id', $id)->first();
+        $karyawan = DB::table('hasil_wawancara as a')
+            ->join('divisis as b', 'a.id_divisi', 'b.id')
+            ->where('a.id', $id)
+            ->selectRaw('a.jenis_kelamin,a.created_at,a.tgl_lahir, b.divisi as posisi')
+            ->first();
         $data = [
             'usia' => Umur($karyawan->tgl_lahir, $karyawan->created_at),
             'j_kelamin' => $karyawan->jenis_kelamin,
@@ -171,7 +179,10 @@ class hrga3HasilEvaluasiKaryawanController extends Controller
 
     protected function addTableData(Worksheet $sheet, $id)
     {
-        $get = DB::table('hasil_wawancara')->where('id', $id)->first();
+        $get = DB::table('hasil_wawancara as a')
+                ->join('divisis as b', 'a.id_divisi', 'b.id')
+                ->select('a.*', 'b.divisi as posisi')
+                ->where('a.id', $id)->first();
 
         $sheet->setCellValue('B8', 'Nama Karyawan');
         $sheet->setCellValue('B9', 'Usia');

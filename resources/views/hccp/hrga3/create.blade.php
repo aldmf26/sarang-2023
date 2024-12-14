@@ -122,13 +122,13 @@
                         <div class="d-flex gap-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="keputusan" value="lulus"
-                                    id="tetap" required>
-                                <label class="form-check-label" for="tetap">Lulus Masa Percobaan</label>
+                                    id="lulusPercobaan" required>
+                                <label class="form-check-label" for="lulusPercobaan">Lulus Masa Percobaan</label>
                             </div>
                             <div class="form-check">
                                 <input checked class="form-check-input" type="radio" name="keputusan"
-                                    value="tidak lulus" id="kontrak" required>
-                                <label class="form-check-label" for="kontrak">Tidak Lulus Masa Percobaan</label>
+                                    value="tidak lulus" id="tidakLulusPercobaan" required>
+                                <label class="form-check-label" for="tidakLulusPercobaan">Tidak Lulus Masa Percobaan</label>
                             </div>
                         </div>
                     </div>
