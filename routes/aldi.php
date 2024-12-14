@@ -17,6 +17,7 @@ use App\Http\Controllers\GradingBjController;
 use App\Http\Controllers\HariandllController;
 use App\Http\Controllers\HccpController;
 use App\Http\Controllers\Hrga1PermohonanKaryawanBaru;
+use App\Http\Controllers\hrga2_2penilaianController;
 use App\Http\Controllers\hrga3HasilEvaluasiKaryawanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
@@ -602,6 +603,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('hccp.')
         ->group(function () {
             Route::get('/evaluasiKompetensiKaryawan', 'evaluasiKompetensiKaryawan')->name('evaluasiKompetensiKaryawan');
+            Route::get('/pelatihan', 'pelatihan')->name('pelatihan');
+            Route::get('/medical', 'medical')->name('medical');
         });
 
     Route::controller(Hrga1PermohonanKaryawanBaru::class)
@@ -616,11 +619,25 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/delete/{id}', 'delete')->name('delete');
             Route::get('/export/{id}', 'export')->name('export');
         });
+
+    Route::controller(hrga2_2penilaianController::class)
+        ->prefix('hccp/hrga2_2')
+        ->name('hrga2_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/edit/{id}', 'update')->name('update');
+            Route::post('/delete/{id}', 'delete')->name('delete');
+            Route::get('/export/{id}', 'export')->name('export');
+        });
+        
     Route::controller(DivisiController::class)
         ->prefix('hccp/divisi')
         ->name('divisi.')
         ->group(function () {
-            Route::get('/{divisi}', 'index')->name('index');
+            Route::get('/', 'index')->name('index');
         });
 
     Route::controller(hrga3HasilEvaluasiKaryawanController::class)

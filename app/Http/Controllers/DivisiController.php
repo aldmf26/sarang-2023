@@ -7,18 +7,17 @@ use App\Models\Divisi;
 
 class DivisiController extends Controller
 {
-    public function index($divisi)
+
+
+    public function index(Request $r)
     {
+        $divisi = $r->param;
+        $title = $r->deskripsi;
         if (in_array(auth()->user()->posisi_id, [1, 12])) {
             $divisis = Divisi::orderBy('urutan')->get();
-            $title = [
-                'hrga1' => 'HRGA.01.01 - Permohonan Karyawan Baru',
-                'hrga2' => 'HRGA.01.02 - Hasil Wawancara',
-                'hrga3' => 'HRGA.01.03 - Hasil Evaluasi Karyawan',
-                'hrga4' => 'HRGA.01.04 - Data Pegawai'
-            ];
+        
             $data = [
-                'title' => $title[$divisi],
+                'title' => $title,
                 'divisis' => $divisis,
                 'divisi' => $divisi,
             ];

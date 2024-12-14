@@ -31,7 +31,11 @@
                                             'teks' => '* Evaluasi Kompetensi Karyawan',
                                         ],
                                         [
-                                            'url' => 'hccp.sampleAdministrator',
+                                            'url' => 'hccp.pelatihan',
+                                            'teks' => '* Pelatihan (difolder ada di foto tidak ada)',
+                                        ],
+                                        [
+                                            'url' => 'hccp.medical',
                                             'teks' => '* Hasil Medical Checkup',
                                         ],
                                         [
