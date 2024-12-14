@@ -11,12 +11,18 @@
 
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">SUKSES</h1>
-        <h1 class="text-center">SELAMAT ANDA SUDAH TERDAFTAR MENJADI KARYAWAN PT AGRIKA GATYA ARUM </h1>
-        <br>
-        <h2 class="text-center">SEKALI JA MEISINYA LAH KENA MAUK KEBANYAKAN DATA </h2>
-        <br>
-        <p class="text-center fw-lighter" style="font-size: 5px">habis nih piket ai lagi</p>
+        @if ($ket == 'berhasil')
+            <h1 class="text-center">SUKSES</h1>
+            <h1 class="text-center">SELAMAT ANDA SUDAH TERDAFTAR MENJADI KARYAWAN PT AGRIKA GATYA ARUM </h1>
+            <br>
+            <h2 class="text-center">SEKALI JA MEISINYA LAH KENA MAUK KEBANYAKAN DATA </h2>
+            <br>
+            <p class="text-center fw-lighter" style="font-size: 5px">habis nih piket ai lagi</p>
+        @else
+            <h1 class="text-center">GAGAL</h1>
+            <h1 class="text-center">NIK SUDAH TERDAFTAR</h1>
+        @endif
+
     </div>
 
     <!-- Bootstrap JS -->

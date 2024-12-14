@@ -12,7 +12,7 @@
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Form Pengisian Data Diri</h2>
-        <form action="{{ route('hrga2.save_formulir') }}" method="POST">
+        <form action="{{ route('hrga2.save_formulir') }}" method="POST" id="dataDiriForm">
             @csrf
             <div class="mb-3">
                 <label for="namaLengkap" class="form-label">Nama Lengkap</label>
@@ -51,18 +51,14 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('dataDiriForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form dari submit default
+        document.getElementById('dataDiriForm').addEventListener('submit', function() {
+            // Mencegah form dari submit default
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true; // Menonaktifkan tombol submit
             submitBtn.textContent = 'Mengirim...'; // Memberikan indikasi bahwa proses sedang berlangsung
 
             // Simulasi proses submit (misalnya AJAX request)
-            setTimeout(() => {
-                alert('Data berhasil dikirim!');
-                submitBtn.disabled = false; // Mengaktifkan kembali tombol submit
-                submitBtn.textContent = 'Kirim';
-            }, 2000); // Ganti dengan logika submit sebenarnya
+            // Ganti dengan logika submit sebenarnya
         });
     </script>
 

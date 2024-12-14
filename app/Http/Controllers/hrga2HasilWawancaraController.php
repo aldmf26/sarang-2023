@@ -95,26 +95,37 @@ class hrga2HasilWawancaraController extends Controller
     public function save_formulir(Request $r)
     {
         $devis =  DB::table('divisis')->where('id', $r->id_divisi)->first();
-        $data = [
-            'nama' => $r->nama,
-            'nik' => $r->nik,
-            'tgl_lahir' => $r->tgl_lahir,
-            'tgl_masuk' => $r->tgl_masuk,
-            'jenis_kelamin' => $r->jenis_kelamin,
-            'id_divisi' => $r->id_divisi,
-            'kesimpulan' => 'tes',
-            'keputusan' => 'dilanjutkan',
-            'status' => 'Kontrak',
-            'posisi2' => 'Staf ' . $devis->divisi,
-            'keputusan_lulus' => 'lulus',
-            'created_at' => date('Y-m-d H:i:s'),
-        ];
-        DB::table('hasil_wawancara')->insert($data);
+        $cek_nik = DB::table('hasil_wawancara')->where('nik', $r->nik)->first();
+
+        if (empty($cek_nik->nik)) {
+            $data = [
+                'nama' => $r->nama,
+                'nik' => $r->nik,
+                'tgl_lahir' => $r->tgl_lahir,
+                'tgl_masuk' => $r->tgl_masuk,
+                'jenis_kelamin' => $r->jenis_kelamin,
+                'id_divisi' => $r->id_divisi,
+                'kesimpulan' => 'tes',
+                'keputusan' => 'dilanjutkan',
+                'status' => 'Kontrak',
+                'posisi2' => 'Staf ' . $devis->divisi,
+                'keputusan_lulus' => 'lulus',
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+            DB::table('hasil_wawancara')->insert($data);
+            return redirect()->route('hrga2.berhasil', ['ket' => 'berhasil'])->with('sukses', 'Data Berhasil ditambahkan');
+        } else {
+            return redirect()->route('hrga2.berhasil', ['ket' => 'gagal'])->with('error', 'Data Berhasil ditambahkan');
+        }
     }
 
-    public function berhasil()
+    public function berhasil(Request $r)
     {
-        return view('hccp.hrga2.berhasil');
+        $data = [
+            'title' => 'Hasil Wawancara',
+            'ket' => $r->ket
+        ];
+        return view('hccp.hrga2.berhasil', $data);
     }
 
     public function tambah_data(Request $r)
