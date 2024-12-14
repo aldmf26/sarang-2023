@@ -20,13 +20,14 @@ class hrga4DataPegawaiController extends Controller
             ->where('keputusan_lulus', 'lulus')->get();
         $data = [
             'title' => 'Data Pegawai',
-            'karyawans' => $karyawans
+            'karyawans' => $karyawans,
+            'divisi' => $r->divisi
 
         ];
         return view('hccp.hrga4.index', $data);
     }
 
-    public function export()
+    public function export(Request $r)
     {
         $style_atas = array(
             'font' => [
@@ -203,18 +204,21 @@ class hrga4DataPegawaiController extends Controller
         $sheet1->getColumnDimension('F')->setWidth(27.36);
         $sheet1->getColumnDimension('G')->setWidth(17.64);
 
-        $karyawans = DB::table('hasil_wawancara')->where('keputusan_lulus', 'lulus')->get();
+        $karyawans = DB::table('hasil_wawancara')
+            ->leftJoin('divisis', 'divisis.id', '=', 'hasil_wawancara.id_divisi')
+            ->where('id_divisi', $r->divisi)
+            ->where('keputusan_lulus', 'lulus')->get();
 
         $kolom = 10;
         $no = 1;
         foreach ($karyawans as $d) {
             $sheet1->setCellValue('A' . $kolom, $no++);
-            $sheet1->setCellValue('B' . $kolom, $d->posisi);
+            $sheet1->setCellValue('B' . $kolom, $d->divisi);
             $sheet1->setCellValue('C' . $kolom, $d->nama);
             $sheet1->setCellValue('D' . $kolom, $d->jenis_kelamin . "/" . tanggal($d->tgl_lahir));
             $sheet1->setCellValue('E' . $kolom, $d->status);
-            $sheet1->setCellValue('F' . $kolom, '01 Februari 2023');
-            $sheet1->setCellValue('G' . $kolom, 'Pengawas');
+            $sheet1->setCellValue('F' . $kolom, empty($d->tgl_masuk) ? "" :  $d->tgl_masuk);
+            $sheet1->setCellValue('G' . $kolom, $d->posisi2);
             $kolom++;
         }
 

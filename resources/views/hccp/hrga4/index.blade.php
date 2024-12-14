@@ -2,14 +2,15 @@
     <x-slot name="cardHeader">
         <div class="col-lg-12">
             <h6 class="float-start mt-1">{{ $title }}</h6>
-            <a href="{{ route('hrga4.export') }}" class="btn btn-primary float-end"><i class="fas fa-file-excel"></i>
+            <a href="{{ route('hrga4.export', ['divisi' => $divisi]) }}" class="btn btn-primary float-end"><i
+                    class="fas fa-file-excel"></i>
                 Export</a>
         </div>
     </x-slot>
     <x-slot name="cardBody">
         <section class="row">
             <div class="col-lg-12">
-                <table class="table table-bordered" width="100%">
+                <table class="table table-bordered" width="100%" id="table">
                     <thead>
                         <tr>
                             <th class="text-center">No</th>
