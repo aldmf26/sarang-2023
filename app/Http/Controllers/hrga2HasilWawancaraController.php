@@ -73,6 +73,7 @@ class hrga2HasilWawancaraController extends Controller
             'id_divisi' => $r->id_divisi,
             'kesimpulan' => $r->kesimpulan,
             'keputusan' => $r->keputusan,
+
             'created_at' => date('Y-m-d H:i:s'),
         ];
         DB::table('hasil_wawancara')->insert($data);
@@ -84,6 +85,7 @@ class hrga2HasilWawancaraController extends Controller
     {
 
         DB::table('hasil_wawancara')->where('id_anak', $r->id_anak)->delete();
+        $devis =  DB::table('divisis')->where('id', $r->divisi)->first();
         $data = [
             'nama' => $r->nama,
             'nik' => $r->nik,
@@ -96,6 +98,8 @@ class hrga2HasilWawancaraController extends Controller
             'keputusan' => 'dilanjutkan',
             'id_anak' => $r->id_anak,
             'tgl_masuk' => $r->tgl_masuk,
+            'status' => 'Kontrak',
+            'posisi2' => 'Staf ' . $devis->divisi,
             'keputusan_lulus' => 'lulus',
             'created_at' => date('Y-m-d H:i:s'),
         ];
