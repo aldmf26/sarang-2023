@@ -432,6 +432,9 @@ Route::middleware('auth')->group(function () {
             Route::post('update', 'update')->name('update');
             Route::get('/delete/{id}', 'delete')->name('delete');
             Route::get('/tambah_data', 'tambah_data')->name('tambah_data');
+            Route::get('/form_isi/{id}', 'form_isi')->name('form_isi');
+            Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
+            Route::get('/berhasil', 'berhasil')->name('berhasil');
         });
     Route::controller(hrga4DataPegawaiController::class)
         ->prefix('hccp/hrga4')
