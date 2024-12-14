@@ -105,7 +105,7 @@ class hrga2HasilWawancaraController extends Controller
                 'tgl_masuk' => $r->tgl_masuk,
                 'jenis_kelamin' => $r->jenis_kelamin,
                 'id_divisi' => $r->id_divisi,
-                'kesimpulan' => 'tes',
+                'kesimpulan' => ' ',
                 'keputusan' => 'dilanjutkan',
                 'status' => 'Kontrak',
                 'posisi2' => 'Staf ' . $devis->divisi,
