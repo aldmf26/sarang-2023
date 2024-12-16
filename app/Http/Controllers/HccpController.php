@@ -48,26 +48,13 @@ class HccpController extends Controller
     public function evaluasiKompetensiKaryawan()
     {
         $datas = [
-            [
-                'param' => 'hrga2_1',
-                'title' => 'Daftar Nama dan Posisi Karyawan',
-                'deskripsi' => 'FRM.HRGA.02.01 - Daftar Nama dan Posisi Karyawan',
-            ],
+           
             [
                 'param' => 'hrga2_2',
                 'title' => 'Penilaian Kompetensi',
                 'deskripsi' => 'FRM.HRGA.02.02 - Penilaian Kompetensi',
             ],
-            [
-                'param' => 'hrga2_3',
-                'title' => 'Struktur Organisasi',
-                'deskripsi' => 'FRM.HRGA.02.03 - Struktur Organisasi',
-            ],
-            [
-                'param' => 'hrga2_4',
-                'title' => 'Jobdesk',
-                'deskripsi' => 'FRM.HRGA.02.04 -  Jobdesk',
-            ],
+           
             [
                 'param' => 'hrga2_5',
                 'title' => 'Jadwal GAP Analysis',
