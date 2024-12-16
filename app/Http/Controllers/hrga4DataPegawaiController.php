@@ -95,12 +95,36 @@ class hrga4DataPegawaiController extends Controller
             ],
 
         ];
-        $style2 = [
+        $style1_1 = [
+            'font' => [
+                'name' => 'Cambria', // Font Cambria
+                'size' => 12,        // Ukuran font
+            ],
+            'alignment' => [
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,      // Menengahkan secara vertikal
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Menengahkan secara horizontal
+            ],
             'borders' => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_DASHED, // Gaya titik-titik
-                    'color' => ['argb' => 'FF000000'], // Warna hitam
-                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+
+        ];
+        $style2 = [
+            'font' => [
+                'name' => 'Cambria', // Font Cambria
+                'size' => 12,        // Ukuran font
+                'bold' => true
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
 
         ];
@@ -223,6 +247,26 @@ class hrga4DataPegawaiController extends Controller
         }
 
         $sheet1->getStyle('A10:G' . ($kolom - 1))->applyFromArray($style1);
+
+        $sheet1->setCellValue('E' . $kolom + 4, 'Dibuat oleh');
+        $sheet1->setCellValue('E' . $kolom + 5, ' ');
+        $sheet1->mergeCells('E' . $kolom + 5 . ':E' . $kolom + 7);
+        $sheet1->setCellValue('E' . $kolom + 8, 'SPV. HR');
+
+        $sheet1->setCellValue('F' . $kolom + 4, 'Disetujui oleh');
+        $sheet1->setCellValue('F' . $kolom + 5, ' ');
+        $sheet1->mergeCells('F' . $kolom + 5 . ':F' . $kolom + 7);
+        $sheet1->setCellValue('F' . $kolom + 8, 'KA. HRGA');
+
+        $sheet1->setCellValue('G' . $kolom + 4, 'Diketahui oleh');
+        $sheet1->setCellValue('G' . $kolom + 5, ' ');
+        $sheet1->mergeCells('G' . $kolom + 5 . ':G' . $kolom + 7);
+        $sheet1->setCellValue('G' . $kolom + 8, 'DIREKTUR');
+
+        $sheet1->getStyle('E' . ($kolom + 4) . ':G' . ($kolom + 4))->applyFromArray($style2);
+        $sheet1->getStyle('E' . ($kolom + 5) . ':G' . ($kolom + 7))->applyFromArray($style1_1);
+        $sheet1->getStyle('E' . ($kolom + 8) . ':G' . ($kolom + 8))->applyFromArray($style1_1);
+
 
 
 
