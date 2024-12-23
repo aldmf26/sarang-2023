@@ -1323,6 +1323,7 @@ class GradingBjController extends Controller
             $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'wip' ORDER by no_invoice DESC limit 1;");
             $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
             $no_box = explode(',', $r->no_box[0]);
+
             foreach ($no_box as $d) {
                 $cekBox = Grading::selesai($d);
                 $data[] = [
@@ -1335,6 +1336,12 @@ class GradingBjController extends Controller
                     'tanggal' => date('Y-m-d'),
                     'kategori' => 'wip',
                 ];
+
+                $data2 = [
+                    'bulan' => $r->bulan,
+                    'tahun' => date('Y'),
+                ];
+                DB::table('grading_partai')->where('box_pengiriman', $d)->update($data2);
             }
             DB::table('formulir_sarang')->insert($data);
 

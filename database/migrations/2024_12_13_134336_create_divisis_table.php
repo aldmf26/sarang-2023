@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('divisi');
             $table->integer('urutan')->nullable();
+            $table->string('divisi');
             $table->timestamps();
         });
     }

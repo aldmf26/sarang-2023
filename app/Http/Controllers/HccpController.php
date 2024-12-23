@@ -48,13 +48,13 @@ class HccpController extends Controller
     public function evaluasiKompetensiKaryawan()
     {
         $datas = [
-           
+
             [
                 'param' => 'hrga2_2',
                 'title' => 'Penilaian Kompetensi',
                 'deskripsi' => 'FRM.HRGA.02.02 - Penilaian Kompetensi',
             ],
-           
+
             [
                 'param' => 'hrga2_5',
                 'title' => 'Jadwal GAP Analysis',
@@ -70,16 +70,48 @@ class HccpController extends Controller
 
     public function pelatihan()
     {
+        $datas = [
+            [
+                'param' => 'hrga3_1',
+                'title' => 'Informasi Tawaran Pelatihan',
+                'deskripsi' => 'FRM.HRGA.03.01 - Informasi Tawaran Pelatihan',
+            ],
+            [
+                'param' => 'hrga3_2',
+                'title' => 'Program Pelatihan tahunan',
+                'deskripsi' => 'FRM.HRGA.03.02 -  Program Pelatihan tahunan',
+            ],
+            [
+                'param' => 'hrga3_3',
+                'title' => 'Usulan dan Identifikasi Kebutuhan Pelatihan',
+                'deskripsi' => 'FRM.HRGA.03.03 - Usulan dan Identifikasi Kebutuhan Pelatihan',
+            ],
+            [
+                'param' => 'hrga3_6',
+                'title' => 'Evaluasi Pelatihan',
+                'deskripsi' => 'FRM.HRGA.03.06 - Evaluasi Pelatihan',
+            ],
+        ];
         $data = [
             'title' => 'Pelatihan',
+            'datas' => $datas
         ];
         return view('hccp.hrga3_pelatihan.index', $data);
     }
 
     public function medical()
     {
+        $datas = [
+            [
+                'param' => 'hrga4_1',
+                'title' => 'Jadwal Medical Check Up',
+                'deskripsi' => 'FRM.HRGA.04.01 - Jadwal Medical Check Up',
+            ],
+
+        ];
         $data = [
             'title' => 'Medical',
+            'datas' => $datas
         ];
         return view('hccp.hrga4_medical.index', $data);
     }

@@ -222,6 +222,18 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-lg-4">
+                                <label for="">Bulan</label>
+                                <select name="bulan" class="form-control">
+                                    <option value="0">Pilih Bulan</option>
+
+                                    @foreach (getListBulan() as $l)
+                                        <option value="{{ $l->bulan }}"
+                                            {{ date('m') == $l->bulan ? 'selected' : '' }}>
+                                            {{ $l->nm_bulan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <div class="col-lg-12">
                                 <table class="table">
@@ -279,7 +291,6 @@
                     });
                 });
             </script>
-          
         @endsection
     </x-slot>
 

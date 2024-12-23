@@ -13,9 +13,11 @@ class DivisiController extends Controller
     {
         $divisi = $r->param;
         $title = $r->deskripsi;
-        if (in_array(auth()->user()->posisi_id, [1, 12])) {
+
+
+        if (in_array(auth()->user()->posisi_id, [1, 12]) && $divisi != 'hrga2_5' && $divisi != 'hrga3_2') {
             $divisis = Divisi::orderBy('urutan')->get();
-        
+
             $data = [
                 'title' => $title,
                 'divisis' => $divisis,

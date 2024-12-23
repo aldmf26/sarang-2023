@@ -13,8 +13,14 @@ use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\GudangSarangController;
 use App\Http\Controllers\HccpController;
+use App\Http\Controllers\hrga2_5JadwalGapAnalisisController;
 use App\Http\Controllers\hrga2Controller;
 use App\Http\Controllers\hrga2HasilWawancaraController;
+use App\Http\Controllers\hrga3_1InformasiTawaranPelatihan;
+use App\Http\Controllers\hrga3_2ProgramPelatihantahunan;
+use App\Http\Controllers\hrga3_3UsulanController;
+use App\Http\Controllers\hrga3_6EvaluasiPelatihanController;
+use App\Http\Controllers\hrga4_1jadwalMedicalCheckupController;
 use App\Http\Controllers\hrga4DataPegawaiController;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
@@ -448,5 +454,52 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/export', 'export')->name('export');
+        });
+    Route::controller(hrga2_5JadwalGapAnalisisController::class)
+        ->prefix('hccp/hrga2_5')
+        ->name('hrga2_5.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/save_jadwal', 'save_jadwal')->name('save_jadwal');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga3_1InformasiTawaranPelatihan::class)
+        ->prefix('hccp/hrga3_1')
+        ->name('hrga3_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga3_2ProgramPelatihantahunan::class)
+        ->prefix('hccp/hrga3_2')
+        ->name('hrga3_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga3_3UsulanController::class)
+        ->prefix('hccp/hrga3_3')
+        ->name('hrga3_3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga3_6EvaluasiPelatihanController::class)
+        ->prefix('hccp/hrga3_6')
+        ->name('hrga3_6.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga4_1jadwalMedicalCheckupController::class)
+        ->prefix('hccp/hrga4_1')
+        ->name('hrga4_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/store', 'Store')->name('store');
+            Route::get('/print', 'print')->name('print');
         });
 });

@@ -20,6 +20,4 @@ class HasilWawancaraModel extends Model
     {
         return $this->belongsTo(Anak::class, 'id_anak', 'id_anak');
     }
-    
-    
 }
