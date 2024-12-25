@@ -33,6 +33,8 @@
                                 <td>{{ $u->usulan }}</td>
                                 <td>{{ tanggal($u->waktu) }}</td>
                                 <td>{{ $u->alasan }}</td>
+
+
                             </tr>
                         @endforeach
 
