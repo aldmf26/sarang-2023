@@ -967,7 +967,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('O2', '%');
 
 
-        $pgws_cabut = OpnameNewModel::cabut_susut();
+        $pgws_cabut = OpnameNewModel::cabut_susut2();
 
         $style_persen = [
             'alignment' => [
