@@ -43,7 +43,7 @@
                                             'teks' => '* Program & Checklist pemeliharaan bangunan & Infrastruktur',
                                         ],
                                         [
-                                            'url' => 'hccp.sampleAdministrator',
+                                            'url' => 'hccp.sanitasi',
                                             'teks' => '* Program & Checklist cleaning & sanitasi',
                                         ],
                                         [

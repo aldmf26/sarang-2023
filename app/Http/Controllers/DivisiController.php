@@ -12,10 +12,10 @@ class DivisiController extends Controller
     public function index(Request $r)
     {
         $divisi = $r->param;
+        $adaDivisi = $r->adaDivisi ?? 'Y';
         $title = $r->deskripsi;
 
-
-        if (in_array(auth()->user()->posisi_id, [1, 12]) && $divisi != 'hrga2_5' && $divisi != 'hrga3_2') {
+        if ($adaDivisi == 'Y' && in_array(auth()->user()->posisi_id, [1, 12]) && $divisi != 'hrga2_5' && $divisi != 'hrga3_2') {
             $divisis = Divisi::orderBy('urutan')->get();
 
             $data = [

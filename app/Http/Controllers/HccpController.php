@@ -115,4 +115,31 @@ class HccpController extends Controller
         ];
         return view('hccp.hrga4_medical.index', $data);
     }
+
+    public function sanitasi()
+    {
+        $datas = [
+            [
+                'param' => 'hrga6_1',
+                'title' => 'Perencanaan Kebersihan',
+                'deskripsi' => 'FRM.HRGA.06.01 - Perencanaan Kebersihan',
+            ],
+            [
+                'param' => 'hrga6_2',
+                'title' => 'Ceklis Sanitasi',
+                'deskripsi' => 'FRM.HRGA.06.02 - Ceklis Sanitasi',
+            ],
+            [
+                'param' => 'hrga6_2',
+                'title' => 'Ceklis Foot Bath',
+                'deskripsi' => 'FRM.HRGA.06.04 - Ceklis Foot Bath',
+            ],
+
+        ];
+        $data = [
+            'title' => 'Sanitasi',
+            'datas' => $datas
+        ];
+        return view('hccp.hrga6_sanitasi.index', $data);
+    }
 }

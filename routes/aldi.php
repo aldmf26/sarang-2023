@@ -605,6 +605,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/evaluasiKompetensiKaryawan', 'evaluasiKompetensiKaryawan')->name('evaluasiKompetensiKaryawan');
             Route::get('/pelatihan', 'pelatihan')->name('pelatihan');
             Route::get('/medical', 'medical')->name('medical');
+            Route::get('/sanitasi', 'sanitasi')->name('sanitasi');
         });
 
     Route::controller(Hrga1PermohonanKaryawanBaru::class)
@@ -632,6 +633,13 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/edit/{id}', 'update')->name('update');
             Route::post('/delete/{id}', 'delete')->name('delete');
             Route::get('/export/{id}', 'export')->name('export');
+        });
+
+    Route::controller(hrga2_2penilaianController::class)
+        ->prefix('hccp/hrga6_1')
+        ->name('hrga6_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
         
     Route::controller(DivisiController::class)
