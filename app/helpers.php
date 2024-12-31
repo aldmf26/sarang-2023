@@ -110,8 +110,30 @@ if (!function_exists('kode')) {
 if (!function_exists('getListBulan')) {
     function getListBulan()
     {
+        // Ambil bulan terakhir yang telah dibayar
         $bulanTerakhir = DB::table('tb_gaji_penutup')->latest('bulan_dibayar')->first();
-        $listBulan = DB::table('bulan')->where('id_bulan', '>', $bulanTerakhir->bulan_dibayar)->get();
+
+        // Jika bulan terakhir tidak ditemukan, kembalikan semua bulan
+        if (!$bulanTerakhir) {
+            return DB::table('bulan')->get();
+        }
+
+        // Pecah informasi bulan dan tahun dari `bulan_dibayar`
+        $bulanTerakhirDate = Carbon\Carbon::parse($bulanTerakhir->bulan_dibayar);
+        $bulanTerakhirBulan = $bulanTerakhirDate->month;
+        $bulanTerakhirTahun = $bulanTerakhirDate->year;
+
+        // Ambil daftar bulan setelah bulan terakhir dibayar
+        $listBulan = DB::table('bulan')
+            ->where(function ($query) use ($bulanTerakhirBulan, $bulanTerakhirTahun) {
+                $query->where('tahun', '>', $bulanTerakhirTahun)
+                    ->orWhere(function ($query) use ($bulanTerakhirBulan, $bulanTerakhirTahun) {
+                        $query->where('tahun', '=', $bulanTerakhirTahun)
+                            ->where('id_bulan', '>', $bulanTerakhirBulan);
+                    });
+            })
+            ->get();
+
         return $listBulan;
     }
 }
