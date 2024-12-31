@@ -115,6 +115,32 @@ class HccpController extends Controller
         ];
         return view('hccp.hrga4_medical.index', $data);
     }
+    public function pemeliharaanBangunan()
+    {
+        $datas = [
+            [
+                'param' => 'hrga5_1',
+                'title' => 'Program Perawatan Sarana dan Prasarana Umum',
+                'deskripsi' => 'FRM.HRGA.05.01 - Program Perawatan Sarana dan Prasarana Umum',
+            ],
+            [
+                'param' => 'hrga5_2',
+                'title' => 'Riwayat Pemeliharaan Sarana dan Prasarana Umum',
+                'deskripsi' => 'FRM.HRGA.05.02 - Riwayat Pemeliharaan Sarana dan Prasarana Umum',
+            ],
+            [
+                'param' => 'hrga5_3',
+                'title' => 'Permintaan Perbaikan Sarana dan Prasarana Umum',
+                'deskripsi' => 'FRM.HRGA.05.03 - Permintaan Perbaikan Sarana dan Prasarana Umum',
+            ],
+
+        ];
+        $data = [
+            'title' => 'Pemeliharaan bangunan',
+            'datas' => $datas
+        ];
+        return view('hccp.hrga5_pemeliharaan.index', $data);
+    }
 
     public function sanitasi()
     {
