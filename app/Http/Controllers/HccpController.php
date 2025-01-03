@@ -130,7 +130,7 @@ class HccpController extends Controller
                 'deskripsi' => 'FRM.HRGA.06.02 - Ceklis Sanitasi',
             ],
             [
-                'param' => 'hrga6_2',
+                'param' => 'hrga6_4',
                 'title' => 'Ceklis Foot Bath',
                 'deskripsi' => 'FRM.HRGA.06.04 - Ceklis Foot Bath',
             ],

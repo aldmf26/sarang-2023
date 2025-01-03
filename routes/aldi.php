@@ -19,6 +19,9 @@ use App\Http\Controllers\HccpController;
 use App\Http\Controllers\Hrga1PermohonanKaryawanBaru;
 use App\Http\Controllers\hrga2_2penilaianController;
 use App\Http\Controllers\hrga3HasilEvaluasiKaryawanController;
+use App\Http\Controllers\hrga6_1PerencanaanKebersihanController;
+use App\Http\Controllers\hrga6_2CeklisSanitasiController;
+use App\Http\Controllers\hrga6_4CeklisFootBathController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -635,11 +638,43 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export/{id}', 'export')->name('export');
         });
 
-    Route::controller(hrga2_2penilaianController::class)
+    Route::controller(hrga6_1PerencanaanKebersihanController::class)
         ->prefix('hccp/hrga6_1')
         ->name('hrga6_1.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+
+        });
+    Route::controller(hrga6_2CeklisSanitasiController::class)
+        ->prefix('hccp/hrga6_2')
+        ->name('hrga6_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/add/', 'add')->name('add');
+            Route::get('/print', 'print')->name('print');
+        });
+
+    Route::controller(hrga6_4CeklisFootBathController::class)
+        ->prefix('hccp/hrga6_4')
+        ->name('hrga6_4.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/add/', 'add')->name('add');
+            Route::get('/print', 'print')->name('print');
+        });
+
+    Route::controller(hrga6_2CeklisSanitasiController::class)
+        ->prefix('hccp/hrga6_2')
+        ->name('hrga6_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/add/', 'add')->name('add');
+            Route::get('/print', 'print')->name('print');
         });
         
     Route::controller(DivisiController::class)

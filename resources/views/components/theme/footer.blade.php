@@ -400,6 +400,7 @@
 @yield('scripts')
 @yield('js')
 
+@livewireScripts
 </body>
 
 </html>
