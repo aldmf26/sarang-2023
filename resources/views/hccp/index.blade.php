@@ -39,7 +39,7 @@
                                             'teks' => '* Hasil Medical Checkup',
                                         ],
                                         [
-                                            'url' => 'hccp.sampleAdministrator',
+                                            'url' => 'hccp.pemeliharaanBangunan',
                                             'teks' => '* Program & Checklist pemeliharaan bangunan & Infrastruktur',
                                         ],
                                         [

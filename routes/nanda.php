@@ -22,6 +22,10 @@ use App\Http\Controllers\hrga3_3UsulanController;
 use App\Http\Controllers\hrga3_6EvaluasiPelatihanController;
 use App\Http\Controllers\hrga4_1jadwalMedicalCheckupController;
 use App\Http\Controllers\hrga4DataPegawaiController;
+use App\Http\Controllers\hrga5_1ePerawatanSarana;
+use App\Http\Controllers\hrga5_1PerawatanSaranaController;
+use App\Http\Controllers\hrga5_2RiwayatPemeliharaanController;
+use App\Http\Controllers\hrga5_3PermintaanPerbaikan;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
@@ -430,6 +434,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/sampleAdministrator', 'sampleAdministrator')->name('sampleAdministrator');
+            Route::get('/pemeliharaanBangunan', 'pemeliharaanBangunan')->name('pemeliharaanBangunan');
         });
     Route::controller(hrga2HasilWawancaraController::class)
         ->prefix('hccp/hrga2')
@@ -501,5 +506,32 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/store', 'Store')->name('store');
             Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga5_1PerawatanSaranaController::class)
+        ->prefix('hccp/hrga5_1')
+        ->name('hrga5_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/print', 'print')->name('print');
+            Route::post('/store', 'store')->name('store');
+        });
+    Route::controller(hrga5_2RiwayatPemeliharaanController::class)
+        ->prefix('hccp/hrga5_2')
+        ->name('hrga5_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/print', 'print')->name('print');
+            Route::post('/store', 'store')->name('store');
+        });
+    Route::controller(hrga5_3PermintaanPerbaikan::class)
+        ->prefix('hccp/hrga5_3')
+        ->name('hrga5_3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/print/{id}', 'print')->name('print');
+            Route::get('/get_item', 'get_item')->name('get_item');
+            Route::get('/get_merk', 'get_merk')->name('get_merk');
+            Route::post('/store', 'store')->name('store');
+            Route::post('/store2', 'store2')->name('store2');
         });
 });
