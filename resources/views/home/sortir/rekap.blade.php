@@ -114,7 +114,7 @@
                                             LEFT JOIN (
                                                 SELECT no_box,penerima, sum(pcs_awal) as pcs_bk, sum(gr_awal) as gr_bk FROM bk where selesai = 'T' and kategori LIKE '%sortir%' GROUP BY no_box,penerima
                                             ) as c on c.no_box = a.no_box and c.penerima = a.id_pengawas
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T' AND a.bulan = '$bulan' AND YEAR(a.tahun_dibayar) = '$tahun'
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.penutup = 'T' AND a.bulan = '$bulan' AND a.tahun_dibayar = '$tahun'
                                             GROUP by a.no_box");
                                 @endphp
                                 @foreach ($query as $x)
