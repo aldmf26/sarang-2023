@@ -69,7 +69,7 @@
                                     @php
                                         $hari = $date->format('d');
                                         $bulanH = $date->format('m');
-                                        $tahunH = $date->format('Y');
+                                        $tahunH = 2025;
 
                                         $getTgl = DB::table('absen')
                                             ->where([['id_anak', $d->id_anak], ['tgl', "$tahunH-$bulanH-$hari"],['bulan_dibayar', $bulanDibayar]])
