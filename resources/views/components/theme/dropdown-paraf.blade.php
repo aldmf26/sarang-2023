@@ -11,7 +11,7 @@
 @php
     $parafData = DB::table($tbl)
         ->where('id_lokasi', $selectedArea)
-        ->where('tgl', "2024-$selectedBulan-$day")
+        ->where('tgl', "2025-$selectedBulan-$day")
         ->value($type);
 
 @endphp
@@ -42,7 +42,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonEmoji" bis_skin_checked="1" style="">
         @foreach ($items as $item)
-            <a wire:click.prevent="tbhParaf('{{ $type }}', '{{ $item->name }}', '{{ "2024-$selectedBulan-$day" }}')"
+            <a wire:click.prevent="tbhParaf('{{ $type }}', '{{ $item->name }}', '{{ "2025-$selectedBulan-$day" }}')"
                 class="dropdown-item">
                 {{ $item->name }} {{ $parafData == $item->name ? '☑️' : '' }}
             </a>

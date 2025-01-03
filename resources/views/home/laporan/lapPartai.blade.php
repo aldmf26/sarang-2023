@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <h6 class="float-start mt-1">{{ $title }} , Bulan:
-                    {{ date('F', strtotime('01-' . $bulan . '-2024')) }}</h6>
+                    {{ date('F', strtotime('01-' . $bulan . '-2025')) }}</h6>
             </div>
             {{-- <div class="col-lg-6">
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"

@@ -63,7 +63,7 @@
                                             $cekSama = empty($firstSanitasi) ? false : true;
                                         @endphp
                                         <td class="pointer"
-                                            wire:click="tbhSanitasi({{ $firstSanitasi->id_sanitasi ?? 0 }},{{ $d->id_item }}, '{{ "2024-$selectedBulan-$i" }}')">
+                                            wire:click="tbhSanitasi({{ $firstSanitasi->id_sanitasi ?? 0 }},{{ $d->id_item }}, '{{ "2025-$selectedBulan-$i" }}')">
                                             <input @checked($cekSama) class="form-check-input"
                                                 type="checkbox" />
                                         </td>
@@ -103,9 +103,9 @@
                                         <a target="_blank"
                                             href="{{ route('hrga6_2.create', [
                                                 'bulan' => $selectedBulan,
-                                                'tahun' => 2024,
+                                                'tahun' => 2025,
                                                 'id_lokasi' => $id_lokasi,
-                                            ]) }}">{{ formatTglGaji($selectedBulan, 2024) }}</a>
+                                            ]) }}">{{ formatTglGaji($selectedBulan, 2025) }}</a>
                                     @endif
                                 </td>
                             </tr>

@@ -22,6 +22,7 @@ use App\Http\Controllers\hrga3HasilEvaluasiKaryawanController;
 use App\Http\Controllers\hrga6_1PerencanaanKebersihanController;
 use App\Http\Controllers\hrga6_2CeklisSanitasiController;
 use App\Http\Controllers\hrga6_4CeklisFootBathController;
+use App\Http\Controllers\Hrga7_1PembuanganSampahController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PackingListController;
 use App\Http\Controllers\PenutupController;
 use App\Http\Controllers\SiapKirimController;
+use App\Livewire\PembuanganSampah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -609,6 +611,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/pelatihan', 'pelatihan')->name('pelatihan');
             Route::get('/medical', 'medical')->name('medical');
             Route::get('/sanitasi', 'sanitasi')->name('sanitasi');
+            Route::get('/pembuangan_sampah', 'pembuangan_sampah')->name('pembuangan_sampah');
         });
 
     Route::controller(Hrga1PermohonanKaryawanBaru::class)
@@ -645,7 +648,6 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
             Route::get('/print', 'print')->name('print');
-
         });
     Route::controller(hrga6_2CeklisSanitasiController::class)
         ->prefix('hccp/hrga6_2')
@@ -676,7 +678,18 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/add/', 'add')->name('add');
             Route::get('/print', 'print')->name('print');
         });
-        
+
+    Route::controller(Hrga7_1PembuanganSampahController::class)
+        ->prefix('hccp/hrga7_1')
+        ->name('hrga7_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
+
+
     Route::controller(DivisiController::class)
         ->prefix('hccp/divisi')
         ->name('divisi.')

@@ -56,7 +56,7 @@
                                                 '* Dokumen Perijinan dan Laporan Aktifitas pest Control : kontrk, list pestisida, laporan treatment, laporan perbaikan dari setiap rekomendasi, bukti training teknisi',
                                         ],
                                         [
-                                            'url' => 'hccp.sampleAdministrator',
+                                            'url' => 'hccp.pembuangan_sampah',
                                             'teks' =>
                                                 '* Catatan Pembuangan Limbah B3 : termasuk kontrak pihak ke-3 yg melaksanakan pembuangan',
                                         ],

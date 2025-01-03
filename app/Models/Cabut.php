@@ -671,7 +671,12 @@ class Cabut extends Model
         return DB::$query("SELECT a.no_box, a.pcs_awal,COALESCE(b.pcs_awal, 0) as pcs_cabut,a.gr_awal,COALESCE(b.gr_awal, 0) as gr_cabut FROM `bk` as a
         LEFT JOIN (
             SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' and a.selesai = 'T' and a.baru = 'baru'");
+        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' and a.selesai = 'T' and a.baru = 'baru' 
+        AND a.no_box NOT IN (
+                SELECT no_box 
+                FROM `cetak_new`
+            )
+        ");
     }
 
     public static function gudang($bulan = null, $tahun = null, $id_user = null)

@@ -70,7 +70,7 @@ class AddBaruSanitasi extends Component
                 DB::table('sanitasi')->insert([
                     'id_lokasi' => $this->selectedArea,
                     'id_item' => $id_item,
-                    'tgl' => "2024-$this->selectedBulan->01",
+                    'tgl' => "2025-$this->selectedBulan->01",
                     'admin' => auth()->user()->name
                 ]);
             }

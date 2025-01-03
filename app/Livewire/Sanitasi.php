@@ -20,7 +20,7 @@ class Sanitasi extends Component
     #[Url]
     public $bulan;
     #[Url]
-    public $tahun = 2024;
+    public $tahun = 2025;
     #[Url]
     public $id_lokasi;
 

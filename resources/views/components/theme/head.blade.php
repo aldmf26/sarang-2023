@@ -345,7 +345,7 @@
 
     @yield('styles')
 
-    @livewireStyles
+    @livewireStyles()
 </head>
 
 <body>
