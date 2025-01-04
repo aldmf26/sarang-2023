@@ -9,7 +9,7 @@
                             'title' => $i['title'],
                             'deskripsi' => $i['deskripsi'],
                             'adaDivisi' => 'T',
-                        ]) }}">
+                        ]) }}" wire:navigate>
                         <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                             <div class="card-front">
                                 <div class="card-body">

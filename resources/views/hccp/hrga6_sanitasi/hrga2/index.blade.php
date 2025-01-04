@@ -29,7 +29,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td><a
-                                    href="{{ route('hrga6_2.create', $param) }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
+                                    href="{{ route('hrga6_2.create', $param) }}" wire:navigate>{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
                             </td>
                             <td>{{ $d->lokasi }}</td>
                             <td>

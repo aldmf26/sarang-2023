@@ -15,15 +15,15 @@
             <table id="table1" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th width="5">#</th>
-                        <th>Bulan</th>
-                        <th width="20%">Aksi</th>
+                        <th class="dhead" width="5">#</th>
+                        <th class="dhead">Bulan</th>
+                        <th class="dhead" width="20%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $datas = collect([
-                            (object) ['bulan' => '1', 'tahun' => '2025', 'id_lokasi' => 1],
+                            (object) ['bulan' => '1', 'tahun' => '2025', 'jenis_limbah' => 'organik'],
                         ]);
                     @endphp
                     @foreach ($datas as $d)
@@ -31,7 +31,7 @@
                             $param = [
                                 'bulan' => $d->bulan,
                                 'tahun' => $d->tahun,
-                                'id_lokasi' => $d->id_lokasi,
+                                'jenis_limbah' => $d->jenis_limbah,
                             ];
                         @endphp
                         <tr>

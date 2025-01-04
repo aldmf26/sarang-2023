@@ -67,7 +67,7 @@
                                     ];
                                 @endphp
                                 @foreach ($datas as $d => $i)
-                                    <a href="{{ route($i['url']) }}"
+                                    <a wire:navigate href="{{ route($i['url']) }}"
                                         class="text-start mb-2 btn btn-sm btn-outline-primary">{{ $i['teks'] }}</a>
                                     <br>
                                 @endforeach

@@ -5,7 +5,7 @@
         <div class="row">
             @foreach ($divisis as $d)
                 <div class="col-lg-3">
-                    <a href="{{ route("$divisi.index", ['divisi' => $d->id]) }}">
+                    <a wire:navigate href="{{ route("$divisi.index", ['divisi' => $d->id]) }}">
                         <div style="cursor:pointer;background-color: #8c8989" class="card border  text-white">
                             <div class="card-fronsadt">
                                 <div class="card-body">

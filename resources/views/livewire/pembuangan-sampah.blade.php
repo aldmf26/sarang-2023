@@ -1,4 +1,5 @@
 <div>
+  
     <div class="row">
         <div class="col-lg-3">
             <div class="mb-3">
@@ -13,17 +14,25 @@
         </div>
         <div class="col-lg-3">
             <div class="mb-3">
-                <label for="bulan" class="form-label">Jenis Limbah</label>
-                <select required wire:model.live="selectedJenisLImbah" id="jenisLimbah" class="form-select">
+                <label for="jenisLimbah" class="form-label">Jenis Limbah</label>
+                <select required wire:model.live="pilihanLimbah" id="jenisLimbah" class="form-select">
                     <option value="">Jenis Limbah</option>
                     @foreach ($jenisLimbah as $b)
-                        <option value="{{ $b }}">{{ $b }}</option>
+                        <option @selected($b == $jenis_limbah) value="{{ $b }}">{{ $b }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
 
         <div class="col-lg-12">
+            <button wire:loading wire:target='ceklis,pilihanLimbah,selectedBulan' class="btn btn-secondary btn-sm"
+                type="button" disabled="">
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Processing...
+            </button>
+
+            <x-theme.alert />
+            
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
@@ -35,30 +44,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for ($i = 0; $i < $daysInMonth; $i++)
-                    <tr>
-                        <td class="text-center" rowspan="2">{{ $i + 1 }}</td>
-                        <td class="text-center">07:00:00 AM</td>
-                        <td class="text-center pointer">
-                            <div wire:click='ceklis("{{ $i + 1 }}", "07:00:00")' class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox">
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">04:00:00 PM</td>
-                        <td class="text-center pointer">
-                            <div wire:click='ceklis("{{ $i + 1 }}", "04:00:00")' class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox">
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    @php
+                        $jamList = collect([
+                            ['time' => '07:00:00', 'label' => 'AM'],
+                            ['time' => '04:00:00', 'label' => 'PM'],
+                        ]);
+
+                        function cekJam($jenisSampah, $jam, $bulan, $hari)
+                        {
+                            return DB::table('hrga7_pembuangan_sampah')
+                                ->where('jenis_sampah', $jenisSampah)
+                                ->where('jam_cek', $jam)
+                                ->whereMonth('tgl', $bulan)
+                                ->whereDay('tgl', $hari)
+                                ->exists();
+                        }
+                    @endphp
+
+                    @for ($i = 1; $i <= $daysInMonth; $i++)
+                        @foreach ($jamList as $index => $jam)
+                            <tr>
+                                @if ($index === 0)
+                                    <td class="text-center" rowspan="2">{{ $i }}</td>
+                                @endif
+                                <td class="text-center">{{ $jam['time'] }} {{ $jam['label'] }}</td>
+                                <td class="text-center pointer">
+                                    <div wire:click='ceklis("{{ $i }}", "{{ $jam['time'] }}")'
+                                        class="form-check d-flex justify-content-center">
+                                        <input @checked(cekJam($this->pilihanLimbah, $jam['time'], $selectedBulan, $i)) class="form-check-input" type="checkbox">
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endforeach
                     @endfor
-                    
+
                 </tbody>
             </table>
         </div>
