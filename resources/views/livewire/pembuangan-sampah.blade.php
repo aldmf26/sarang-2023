@@ -27,11 +27,11 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th rowspan="2" class="text-center align-middle">Tanggal</th>
-                        <th rowspan="2" class="text-center align-middle">Jam Checklist</th>
-                        <th rowspan="2" class="text-center align-middle">CEKLIS (✓)</th>
-                        <th rowspan="2" class="text-center align-middle">Paraf Petugas</th>
-                        <th rowspan="2" class="text-center align-middle">Keterangan</th>
+                        <th rowspan="2" class="text-center align-middle dhead">Tanggal</th>
+                        <th rowspan="2" class="text-center align-middle dhead">Jam Checklist</th>
+                        <th rowspan="2" class="text-center align-middle dhead">CEKLIS (✓)</th>
+                        <th rowspan="2" class="text-center align-middle dhead">Paraf Petugas</th>
+                        <th rowspan="2" class="text-center align-middle dhead">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -523,7 +523,7 @@ class Cabut extends Model
             sum(CASE WHEN selesai = 'T' THEN rp_target ELSE 0 END) as rp_target,
             sum((1 - (gr_eo_akhir / gr_eo_awal)) * 100) as susut
             FROM eo 
-            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND YEAR(tgl_input) = '$tahun'
+            WHERE penutup = 'T' AND no_box != 9999 AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
             GROUP by id_anak
         ) as eo on eo.id_anak = a.id_anak
         LEFT join (
@@ -536,7 +536,7 @@ class Cabut extends Model
             sum(CASE WHEN selesai = 'Y' THEN ttl_rp ELSE 0 END ) as ttl_rp,
             SUM(CASE WHEN selesai = 'T' THEN rp_target ELSE 0 END) as rp_target, 
             sum((1 - gr_akhir / gr_awal) * 100) as susut
-            FROM `sortir` WHERE bulan = '$bulan' AND YEAR(tgl) = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
+            FROM `sortir` WHERE bulan = '$bulan' AND tahun_dibayar = '$tahun' AND penutup = 'T' AND no_box != 9999 GROUP BY id_anak
         ) as sortir on a.id_anak = sortir.id_anak
         LEFT JOIN (
             SELECT *, count(*) as ttl FROM absen AS a 
@@ -557,7 +557,7 @@ class Cabut extends Model
             SELECT id_anak,
             sum(ttl_rp) as ttl_rp
             FROM cetak_new as c 
-            WHERE bulan_dibayar = '$bulan' AND YEAR(tgl) = '$tahun' GROUP by id_anak
+            WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' GROUP by id_anak
         ) as cetak ON a.id_anak = cetak.id_anak
         left join uang_makan as umk on umk.id_uang_makan = a.id_uang_makan
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");

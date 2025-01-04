@@ -53,9 +53,7 @@ class PembuanganSampah extends Component
 
     public function ceklis($tgl, $waktu)
     {
-        DB::table('hrga7_pembuangan_sampah')->insert([
-            
-        ])
+       
     }
 
     public function render()
