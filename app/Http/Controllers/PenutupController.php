@@ -87,7 +87,6 @@ class PenutupController extends Controller
         $pengawas = $this->getData('pengawas');
 
 
-
         foreach ($pengawas as $p) {
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl as $data) {

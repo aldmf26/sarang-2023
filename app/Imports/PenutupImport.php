@@ -46,7 +46,7 @@ class PenutupImport implements ToCollection
                 'paid' => 'T',
                 'admin' => auth()->user()->name,
                 'bulan_dibayar' => 6,
-                'tahun_dibayar' => 2024,
+                'tahun_dibayar' => 2025,
             ]);
         }
     }

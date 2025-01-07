@@ -156,7 +156,7 @@ class HccpController extends Controller
                 'deskripsi' => 'FRM.HRGA.06.02 - Ceklis Sanitasi',
             ],
             [
-                'param' => 'hrga6_2',
+                'param' => 'hrga6_4',
                 'title' => 'Ceklis Foot Bath',
                 'deskripsi' => 'FRM.HRGA.06.04 - Ceklis Foot Bath',
             ],
@@ -167,5 +167,32 @@ class HccpController extends Controller
             'datas' => $datas
         ];
         return view('hccp.hrga6_sanitasi.index', $data);
+    }
+    public function pembuangan_sampah()
+    {
+        $datas = [
+            [
+                'param' => 'hrga7_1',
+                'title' => 'Schedule Pembuangan Sampah',
+                'deskripsi' => 'FRM.HRGA.07.01, Rev.00 - Schedule Pembuangan Sampah',
+            ],
+            [
+                'param' => 'hrga7_2',
+                'title' => 'Schedule pembuangan TPS',
+                'deskripsi' => 'FRM.HRGA.07.02 - Schedule pembuangan TPS',
+            ],
+            [
+                'param' => 'hrga7_3',
+                'title' => 'Identifikasi Limbah',
+                'deskripsi' => 'FRM.HRGA.07.03 - Identifikasi Limbah',
+            ],
+            
+
+        ];
+        $data = [
+            'title' => 'Pengelolaan Limbah',
+            'datas' => $datas
+        ];
+        return view('hccp.hrga7_pengelolaan_limbah.index', $data);
     }
 }

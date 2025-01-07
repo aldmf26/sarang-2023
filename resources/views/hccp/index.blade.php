@@ -56,7 +56,7 @@
                                                 '* Dokumen Perijinan dan Laporan Aktifitas pest Control : kontrk, list pestisida, laporan treatment, laporan perbaikan dari setiap rekomendasi, bukti training teknisi',
                                         ],
                                         [
-                                            'url' => 'hccp.sampleAdministrator',
+                                            'url' => 'hccp.pembuangan_sampah',
                                             'teks' =>
                                                 '* Catatan Pembuangan Limbah B3 : termasuk kontrak pihak ke-3 yg melaksanakan pembuangan',
                                         ],
@@ -67,7 +67,7 @@
                                     ];
                                 @endphp
                                 @foreach ($datas as $d => $i)
-                                    <a href="{{ route($i['url']) }}"
+                                    <a wire:navigate href="{{ route($i['url']) }}"
                                         class="text-start mb-2 btn btn-sm btn-outline-primary">{{ $i['teks'] }}</a>
                                     <br>
                                 @endforeach

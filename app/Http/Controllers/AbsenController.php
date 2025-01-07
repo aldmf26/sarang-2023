@@ -112,7 +112,7 @@ class AbsenController extends Controller
     {
         $tgl = Carbon::parse($r->tgl);
         $hari = $tgl->day;
-        $tahun = $tgl->year;
+        $tahun = 2025;
         $bulan = in_array($hari, [27, 28, 29, 30, 31]) ? $tgl->copy()->subMonth()->month + 1 : $tgl->month;
         if ($hari >= 27 && $hari <= 31) {
             $bulan++;

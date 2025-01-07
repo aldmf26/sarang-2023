@@ -35,7 +35,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
     <!-- Alpine Core -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     {{-- my css --}}
 
@@ -106,7 +105,7 @@
         .bg-primary {
             background-color: var(--warna1) !important;
         }
-        
+
 
         .pointer {
             cursor: pointer;
@@ -342,12 +341,18 @@
                 font-size: 11px
             }
         }
+
+        .btn-xs {
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            /* Sesuaikan ukuran font */
+            line-height: 1.5;
+        }
     </style>
 
     @yield('styles')
 
-    <livewire:styles />
-    <livewire:scripts />
+    @livewireStyles()
 </head>
 
 <body>

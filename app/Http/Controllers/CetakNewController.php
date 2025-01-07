@@ -434,7 +434,7 @@ class CetakNewController extends Controller
         left join users as c on c.id = a.id_pemberi
         left join users as d on d.id = a.id_pengawas
         left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-        where a.bulan_dibayar = $bulan AND YEAR(a.tgl) = $tahun AND a.id_anak = $id_anak
+        where a.bulan_dibayar = $bulan AND a.tahun_dibayar = $tahun AND a.id_anak = $id_anak
         order by a.pcs_akhir ASC , a.id_cetak DESC");
 
 
