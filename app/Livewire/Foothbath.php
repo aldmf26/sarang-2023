@@ -2,12 +2,11 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 
-class Foothbath extends Component
+class Foothbath extends BaseFunction
 {
     public $selectedBulan;
     public $selectedArea;
@@ -33,6 +32,8 @@ class Foothbath extends Component
             ->selectRaw('a.id_frekuensi, b.frekuensi,b.item,a.tgl,a.paraf_petugas,a.verifikator, count(a.tgl) as ttl')
             ->get();
     }
+
+
     public function mount()
     {
         $this->bulans = DB::table('bulan')->get();
@@ -70,6 +71,7 @@ class Foothbath extends Component
         }
 
         $this->updatedSelectedBulan($this->selectedBulan);
+        $this->alert('sukses', 'Data Berhasil disimpan');
     }
 
     public function updatedSelectedBulan($value)
@@ -95,6 +97,8 @@ class Foothbath extends Component
         } else {
             session()->flash('error', 'Data Tidak ada');
         }
+        $this->alert('sukses', 'Data Berhasil disimpan');
+
     }
 
     public function render()

@@ -3,12 +3,13 @@
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
             <div>
-                <a href="#" data-bs-target="#tambah" data-bs-toggle="modal" class="btn btn-primary"><i
-                        class="fas fa-plus"></i>Data</a>
+                {{-- <a href="#" data-bs-target="#tambah" data-bs-toggle="modal" class="btn btn-primary"><i
+                        class="fas fa-plus"></i>Data</a> --}}
 
             </div>
         </div>
     </x-slot>
+
     <x-slot name="cardBody">
         <div>
 
@@ -34,7 +35,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td><a
-                                    href="{{ route('hrga7_1.create', $param) }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
+                                    href="{{ route('hrga7_2.create', $param) }}">{{ formatTglGaji($d->bulan, $d->tahun) }}</a>
                             </td>
                             <td>{{ $d->jenis_sampah }}</td>
                             <td>

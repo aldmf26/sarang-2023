@@ -177,15 +177,16 @@ class HccpController extends Controller
                 'deskripsi' => 'FRM.HRGA.07.01, Rev.00 - Schedule Pembuangan Sampah',
             ],
             [
-                'param' => 'hrga6_2',
-                'title' => 'Ceklis Sanitasi',
-                'deskripsi' => 'FRM.HRGA.06.02 - Ceklis Sanitasi',
+                'param' => 'hrga7_2',
+                'title' => 'Schedule pembuangan TPS',
+                'deskripsi' => 'FRM.HRGA.07.02 - Schedule pembuangan TPS',
             ],
             [
-                'param' => 'hrga6_4',
-                'title' => 'Ceklis Foot Bath',
-                'deskripsi' => 'FRM.HRGA.06.04 - Ceklis Foot Bath',
+                'param' => 'hrga7_3',
+                'title' => 'Identifikasi Limbah',
+                'deskripsi' => 'FRM.HRGA.07.03 - Identifikasi Limbah',
             ],
+            
 
         ];
         $data = [

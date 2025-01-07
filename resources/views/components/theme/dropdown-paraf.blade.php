@@ -16,12 +16,7 @@
 
 @endphp
 <style>
-    .btn-xs {
-        padding: 2px 6px;
-        font-size: 0.75rem;
-        /* Sesuaikan ukuran font */
-        line-height: 1.5;
-    }
+    
 
     .dropdown-menu {
         background-color: #e4e8ff;

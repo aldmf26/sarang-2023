@@ -2,12 +2,10 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
-
-class Sanitasi extends Component
+class Sanitasi extends BaseFunction
 {
     public $selectedBulan;
     public $selectedArea;
@@ -122,6 +120,7 @@ class Sanitasi extends Component
             );
         }
         $this->updatedSelectedBulan($this->selectedBulan);
+        $this->alert('sukses', 'Data Berhasil disimpan');
     }
 
 
@@ -140,6 +139,7 @@ class Sanitasi extends Component
         } else {
             session()->flash('error', 'Data Tidak ada');
         }
+        $this->alert('sukses', 'Data Berhasil disimpan');
     }
 
     public function render()
@@ -149,6 +149,7 @@ class Sanitasi extends Component
             ->selectRaw('a.id, b.name, a.posisi')
             ->get()
             ->groupBy('posisi');
+            
         $data = [
             'itemSanitasi' => $this->itemSanitasi,
             'adminSanitasi' => $adminSanitasi

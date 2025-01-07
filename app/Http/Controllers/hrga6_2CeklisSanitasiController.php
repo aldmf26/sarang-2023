@@ -48,6 +48,7 @@ class hrga6_2CeklisSanitasiController extends Controller
         $daysInMonth = Carbon::create(2023, $r->bulan)->daysInMonth;
         $area = DB::table('lokasi')->where('id', $r->id_lokasi)->first()->lokasi;
         $nm_bulan = DB::table('bulan')->where('id_bulan', $r->bulan)->first()->nm_bulan;
+
         $data = [
             'title' => 'CEKLIST SANITASI',
             'dok' => 'FRM.HRGA.06.02, Rev.00',
@@ -57,6 +58,7 @@ class hrga6_2CeklisSanitasiController extends Controller
             'bulan' => $r->bulan,
             'area' => $area,
             'nm_bulan' => $nm_bulan,
+            
         ];
         return view('hccp.hrga6_sanitasi.hrga2.print', $data);
     }

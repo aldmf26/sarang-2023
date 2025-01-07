@@ -397,6 +397,19 @@
         });
     </script>
 @endif
+
+
+{{-- dispatch lievewire --}}
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('showAlert', ([{
+            type,
+            message
+        }]) => {
+            alertToast(type, message);
+        });
+    });
+</script>
 @yield('scripts')
 @yield('js')
 

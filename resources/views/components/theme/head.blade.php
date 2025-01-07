@@ -105,7 +105,7 @@
         .bg-primary {
             background-color: var(--warna1) !important;
         }
-        
+
 
         .pointer {
             cursor: pointer;
@@ -340,6 +340,13 @@
             .table {
                 font-size: 11px
             }
+        }
+
+        .btn-xs {
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            /* Sesuaikan ukuran font */
+            line-height: 1.5;
         }
     </style>
 
