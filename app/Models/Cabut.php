@@ -244,19 +244,19 @@ class Cabut extends Model
                                 sum(gr_flx) as gr_flx,
                                 SUM(rupiah) as rupiah,
                                 SUM(ttl_rp) as ttl_rp
-                                FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' GROUP BY id_pengawas
+                                FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' GROUP BY id_pengawas
                         ) as c ON c.id_pengawas = a.id_pengawas
                         LEFT JOIN (
                             SELECT a.penerima,a.no_box,sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk FROM bk as a
                             JOIN (
-                                SELECT no_box FROM cabut WHERE bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun' GROUP BY no_box
+                                SELECT no_box FROM cabut WHERE bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun' GROUP BY no_box
                             ) as b on a.no_box = b.no_box
                             WHERE a.kategori LIKE '%cabut%'
                             GROUP by a.penerima
                         ) as d ON d.penerima = a.id_pengawas
                         LEFT JOIN (
                             SELECT id_pengawas, COUNT(DISTINCT no_box) as ttl_box
-                            FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND YEAR(tgl_terima) = '$tahun'
+                            FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
                         WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
