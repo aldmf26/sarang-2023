@@ -259,7 +259,7 @@ class Cabut extends Model
                             FROM cabut WHERE no_box != 9999 AND penutup = 'T' AND bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                             GROUP BY id_pengawas
                         ) as e ON e.id_pengawas = a.id_pengawas
-                        WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
+                        WHERE  a.no_box != 9999 AND a.penutup = 'T' AND a.bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                         GROUP BY a.id_pengawas");
         return $cabutGroup;
     }
