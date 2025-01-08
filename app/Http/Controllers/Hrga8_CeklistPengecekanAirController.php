@@ -11,6 +11,7 @@ class Hrga8_CeklistPengecekanAirController extends Controller
     {
         $datas = DB::select("SELECT month(a.tgl) as bulan,year(a.tgl) as tahun,a.jenis_mesin FROM hrga8_ceklist_pengecekan_air as a
         group BY month(a.tgl),a.jenis_mesin");
+        
         $data = [
             'title' => 'Ceklist Pengecekan Air',
             'datas' => $datas
@@ -21,7 +22,7 @@ class Hrga8_CeklistPengecekanAirController extends Controller
     public function create()
     {
         $data = [
-            'title' => 'Tambah Pembuangan Tps'
+            'title' => 'Tambah Ceklist Pengecekan Air'
         ];
         return view('hccp.hrga8_perawatan_perbaikan_mesin.hrga7.create', $data);
     }

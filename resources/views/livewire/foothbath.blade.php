@@ -59,7 +59,7 @@
                     <td>(klik kanan)</td>
                 </tr>
             </table>
-            
+
             <button wire:loading wire:target='tbhSanitasi,tbhParaf,addRow,selectedArea,selectedBulan'
                 class="mb-2 btn btn-secondary btn-sm" type="button" disabled="">
                 <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
@@ -151,7 +151,7 @@
                     <tr>
                         <td>Paraf Petugas</td>
                         <td>Ttd</td>
-<td></td>
+                        <td></td>
                         @for ($i = 1; $i <= $daysInMonth; $i++)
                             <td class="pointer">
                                 <x-theme.dropdown-paraf tbl="foothbath_ceklis" :items="$adminSanitasi['petugas']" type="paraf_petugas"
@@ -163,7 +163,7 @@
                     <tr>
                         <td>Verifikator</td>
                         <td>Ttd</td>
-<td></td>
+                        <td></td>
 
                         @for ($i = 1; $i <= $daysInMonth; $i++)
                             <td>

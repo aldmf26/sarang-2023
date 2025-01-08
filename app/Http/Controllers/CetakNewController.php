@@ -468,7 +468,7 @@ class CetakNewController extends Controller
                     FROM `sortir` as a
                     join tb_anak as b on b.id_anak = a.id_anak
                     WHERE a.penutup = 'T' AND a.id_anak = $id_anak and a.no_box != 9999 
-                    AND a.bulan = '$bulan' AND year(a.tgl) = '$tahun'");
+                    AND a.bulan = '$bulan' AND tahun_dibayar = '$tahun'");
 
         $dll = DB::select("SELECT
                 a.rupiah as ttl_rp,
@@ -488,7 +488,7 @@ class CetakNewController extends Controller
                 (1 - a.gr_eo_akhir / a.gr_eo_awal) * 100 as susut
                 FROM eo as a
                 join tb_anak as b on b.id_anak = a.id_anak
-                WHERE a.penutup = 'T' AND a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND a.no_box != 9999 AND year(a.tgl_input) = '$tahun'");
+                WHERE a.penutup = 'T' AND a.id_anak = $id_anak AND a.bulan_dibayar = '$bulan' AND a.no_box != 9999 AND a.tahun_dibayar = '$tahun'");
 
         $denda = DB::select("SELECT a.nominal as denda,a.tgl, b.nama as nm_anak FROM tb_denda as a 
                             join tb_anak as b on b.id_anak = a.id_anak 
