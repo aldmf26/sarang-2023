@@ -186,7 +186,7 @@ class HccpController extends Controller
                 'title' => 'Identifikasi Limbah',
                 'deskripsi' => 'FRM.HRGA.07.03 - Identifikasi Limbah',
             ],
-            
+
 
         ];
         $data = [
@@ -194,5 +194,30 @@ class HccpController extends Controller
             'datas' => $datas
         ];
         return view('hccp.hrga7_pengelolaan_limbah.index', $data);
+    }
+    public function perawatan_dan_perbaikan_mesin()
+    {
+        $datas = [
+            [
+                'param' => 'hrga8_1',
+                'title' => 'PROGRAM PERAWATAN MESIN PROSES PRODUKSI',
+                'deskripsi' => 'FRM.HRGA.08.01 - PROGRAM PERAWATAN MESIN PROSES PRODUKSI',
+            ],
+            [
+                'param' => 'hrga8_2',
+                'title' => 'CEKLIST PERAWATAN MESIN PROSES PRODUKSI',
+                'deskripsi' => 'FRM.HRGA.08.02 - CEKLIST PERAWATAN MESIN PROSES PRODUKSI',
+            ],
+            [
+                'param' => 'hrga8_3',
+                'title' => 'PERMINTAAN PERBAIKAN MESIN PROSES PRODUKSI',
+                'deskripsi' => 'FRM.HRGA.08.03 - PERMINTAAN PERBAIKAN MESIN PROSES PRODUKSI',
+            ],
+        ];
+        $data = [
+            'title' => 'Perawatan dan Perbaikan Mesin',
+            'datas' => $datas
+        ];
+        return view('hccp.hrga8_perawatan_perbaikan_mesin.index', $data);
     }
 }
