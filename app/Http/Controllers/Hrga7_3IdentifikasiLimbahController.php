@@ -13,9 +13,25 @@ class Hrga7_3IdentifikasiLimbahController extends Controller
         group BY month(a.tgl),a.jenis_sampah");
 
         $data = [
-            'title' => 'Pembuangan Tps',
+            'title' => 'Identifikasi limbah',
             'datas' => $datas
         ];
         return view('hccp.hrga7_pengelolaan_limbah.hrga3.index', $data);
+    }
+
+    public function print()
+    {
+        $limbah = DB::table('hrga7_identifikasi_limbah')->orderBy('id', 'desc')->get();
+        $title = 'IDENTIFIKASI LIMBAH';
+        $dok = 'FRM.HRGA.07.03, Rev.00';
+        
+        return view(
+            'hccp.hrga7_pengelolaan_limbah.hrga3.print',
+            compact(
+                'limbah',
+                'title',
+                'dok'
+            )
+        );
     }
 }

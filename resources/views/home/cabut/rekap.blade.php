@@ -129,7 +129,7 @@
                                             ) as rp ON rp.no_box = a.no_box
                                             left join users as b on b.id = a.id_pengawas
                                             left JOIN bk as c on c.no_box = a.no_box AND c.kategori LIKE '%cabut%' and c.selesai = 'T'
-                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.bulan_dibayar = '$bulan' AND YEAR(a.tgl_terima) = '$tahun'
+                                            WHERE  a.id_pengawas = '$id' AND a.no_box != 9999 AND a.bulan_dibayar = '$bulan' AND tahun_dibayar = '$tahun'
                                             GROUP by a.no_box;");
                             @endphp
                             @foreach ($query as $x)

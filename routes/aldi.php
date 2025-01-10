@@ -25,6 +25,7 @@ use App\Http\Controllers\hrga6_4CeklisFootBathController;
 use App\Http\Controllers\Hrga7_1PembuanganSampahController;
 use App\Http\Controllers\Hrga7_2PembuanganTpsController;
 use App\Http\Controllers\Hrga7_3IdentifikasiLimbahController;
+use App\Http\Controllers\Hrga8_CeklistPengecekanAirController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -702,6 +703,15 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::controller(Hrga7_3IdentifikasiLimbahController::class)
         ->prefix('hccp/hrga7_3')
         ->name('hrga7_3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/print', 'print')->name('print');
+        });
+
+    Route::controller(Hrga8_CeklistPengecekanAirController::class)
+        ->prefix('hccp/hrga8_7')
+        ->name('hrga8_7.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create/', 'create')->name('create');

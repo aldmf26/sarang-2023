@@ -3,6 +3,8 @@
         <div class="d-flex justify-content-between">
             <h6 class="">{{ $title }}</h6>
             <div>
+                <a target="_blank" class="btn btn-sm btn-primary"
+                                    href="{{ route('hrga7_3.print') }}"><i class="fas fa-print"></i> Cetak</a>
             </div>
         </div>
     </x-slot>

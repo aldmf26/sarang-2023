@@ -187,6 +187,13 @@ class HccpController extends Controller
                 'deskripsi' => 'FRM.HRGA.07.03 - Identifikasi Limbah',
             ],
 
+            // hrga 8
+            [
+                'param' => 'hrga8_7',
+                'title' => 'CEKLIST PENGECEKAN AIR',
+                'deskripsi' => 'FRM.HRGA.08.07 - CEKLIST PENGECEKAN AIR',
+            ],
+
 
         ];
         $data = [
