@@ -8,6 +8,7 @@ use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\CocokanController;
+use App\Http\Controllers\CostGlobalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
@@ -565,5 +566,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', 'store')->name('store');
             Route::get('/print/{id}', 'print')->name('print');
             Route::post('/store2', 'store2')->name('store2');
+        });
+    Route::controller(CostGlobalController::class)
+        ->prefix('home/cost_global')
+        ->name('cost_global.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

@@ -36,6 +36,10 @@
                 <a class="nav-link  {{ $rot == 'cocokan.opname' || $rot == 'cocokan.opname/cetak' || $rot == 'cocokan.opname/sortir' ? 'active' : '' }}"
                     aria-current="page" href="{{ route('cocokan.opname') }}">Opname</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ $rot == 'cost_global.index' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cost_global.index') }}">Cost Global</a>
+            </li>
         </ul>
     </div>
     <div class="d-none">
@@ -53,8 +57,9 @@
     <div class="btn-group dropdown me-1 mb-1" bis_skin_checked="1">
         <button data-bs-toggle="modal" data-bs-target="#cost_opr_input" type="button" class="btn btn-primary">Isi
             Cost operasional</button>
-        <button data-bs-toggle="modal" data-bs-target="#tutup" type="button" class="btn btn-primary">Tutup balansheet</button>
-        
+        <button data-bs-toggle="modal" data-bs-target="#tutup" type="button" class="btn btn-primary">Tutup
+            balansheet</button>
+
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false" data-reference="parent">
             <span class="sr-only">Export</span>
@@ -114,18 +119,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Balansheet akan di tutup {{tanggal(date('Y-m-d'))}}</h5>
+                    <h5>Balansheet akan di tutup {{ tanggal(date('Y-m-d')) }}</h5>
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="">Bulan</label>
-                                <input type="text" readonly name="bulan_ditutup" value="{{ date('M') }}" class="form-control">
+                                <input type="text" readonly name="bulan_ditutup" value="{{ date('M') }}"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="">Tahun</label>
-                                <input type="text" readonly name="tahun_ditutup" value="{{ date('Y') }}" class="form-control">
+                                <input type="text" readonly name="tahun_ditutup" value="{{ date('Y') }}"
+                                    class="form-control">
                             </div>
                         </div>
                     </div>
