@@ -189,9 +189,20 @@ class HccpController extends Controller
 
             // hrga 8
             [
+                'param' => 'hrga8_4',
+                'title' => 'Ceklist Suhu Ruangan',
+                'deskripsi' => 'FRM.HRGA.08.04 - Ceklist Suhu Ruangan',
+            ],
+            [
+                'param' => 'hrga8_6',
+                'title' => 'Ceklist Suhu Cold Storage',
+                'deskripsi' => 'FRM.HRGA.08.06 - Ceklist Suhu Cold Storage',
+            ],
+
+            [
                 'param' => 'hrga8_7',
-                'title' => 'CEKLIST PENGECEKAN AIR',
-                'deskripsi' => 'FRM.HRGA.08.07 - CEKLIST PENGECEKAN AIR',
+                'title' => 'Ceklist Pengecekan Air',
+                'deskripsi' => 'FRM.HRGA.08.07 - Ceklist Pengecekan Air',
             ],
             
 

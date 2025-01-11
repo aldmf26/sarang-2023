@@ -3,7 +3,7 @@
     <div class="row">
 
         <div class="col-sm-12 col-lg-12">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover border-dark">
                 <thead class="">
                     <tr>
                         @php

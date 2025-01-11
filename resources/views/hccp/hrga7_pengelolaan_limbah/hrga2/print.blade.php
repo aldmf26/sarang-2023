@@ -22,8 +22,8 @@
     <div class="row">
 
         <div class="col-sm-12 col-lg-12">
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
+            <table class="table table-bordered border-dark">
+                <thead>
                     <tr>
                         @php
                             $class = 'text-center align-middle fs-bold';
