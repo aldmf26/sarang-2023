@@ -8,6 +8,7 @@ use App\Http\Controllers\CabutSpecialController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CetakNewController;
 use App\Http\Controllers\CocokanController;
+use App\Http\Controllers\CostGlobalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCostController;
 use App\Http\Controllers\GradingController;
@@ -26,6 +27,9 @@ use App\Http\Controllers\hrga5_1ePerawatanSarana;
 use App\Http\Controllers\hrga5_1PerawatanSaranaController;
 use App\Http\Controllers\hrga5_2RiwayatPemeliharaanController;
 use App\Http\Controllers\hrga5_3PermintaanPerbaikan;
+use App\Http\Controllers\hrga8_1Program_peratawan;
+use App\Http\Controllers\hrga8_2Ceklistperawatanmesin;
+use App\Http\Controllers\hrga8_3Permintaan_perbaikan;
 use App\Http\Controllers\importPerbaikanController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
@@ -435,6 +439,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/sampleAdministrator', 'sampleAdministrator')->name('sampleAdministrator');
             Route::get('/pemeliharaanBangunan', 'pemeliharaanBangunan')->name('pemeliharaanBangunan');
+            Route::get('/perawatan_dan_perbaikan_mesin', 'perawatan_dan_perbaikan_mesin')->name('perawatan_dan_perbaikan_mesin');
         });
     Route::controller(hrga2HasilWawancaraController::class)
         ->prefix('hccp/hrga2')
@@ -533,5 +538,39 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_merk', 'get_merk')->name('get_merk');
             Route::post('/store', 'store')->name('store');
             Route::post('/store2', 'store2')->name('store2');
+        });
+    Route::controller(hrga8_1Program_peratawan::class)
+        ->prefix('hccp/hrga8_1')
+        ->name('hrga8_1.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/get_item', 'get_item')->name('get_item');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(hrga8_2Ceklistperawatanmesin::class)
+        ->prefix('hccp/hrga8_2')
+        ->name('hrga8_2.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/tambah_baris', 'tambah_baris')->name('tambah_baris');
+            Route::get('/print/{id}', 'print')->name('print');
+            Route::post('/store', 'store')->name('store');
+        });
+    Route::controller(hrga8_3Permintaan_perbaikan::class)
+        ->prefix('hccp/hrga8_3')
+        ->name('hrga8_3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/get_item', 'get_item')->name('get_item');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/print/{id}', 'print')->name('print');
+            Route::post('/store2', 'store2')->name('store2');
+        });
+    Route::controller(CostGlobalController::class)
+        ->prefix('home/cost_global')
+        ->name('cost_global.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

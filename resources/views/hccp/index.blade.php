@@ -47,6 +47,15 @@
                                             'teks' => '* Program & Checklist cleaning & sanitasi',
                                         ],
                                         [
+                                            'url' => 'hccp.pembuangan_sampah',
+                                            'teks' =>
+                                                '* Catatan Pembuangan Limbah B3 : termasuk kontrak pihak ke-3 yg melaksanakan pembuangan',
+                                        ],
+                                        [
+                                            'url' => 'hccp.perawatan_dan_perbaikan_mesin',
+                                            'teks' => '* Perawatan dan perbaikan mesin',
+                                        ],
+                                        [
                                             'url' => 'hccp.sampleAdministrator',
                                             'teks' => '* Rekap Penerimaan Tamu',
                                         ],
@@ -55,11 +64,7 @@
                                             'teks' =>
                                                 '* Dokumen Perijinan dan Laporan Aktifitas pest Control : kontrk, list pestisida, laporan treatment, laporan perbaikan dari setiap rekomendasi, bukti training teknisi',
                                         ],
-                                        [
-                                            'url' => 'hccp.pembuangan_sampah',
-                                            'teks' =>
-                                                '* Catatan Pembuangan Limbah B3 : termasuk kontrak pihak ke-3 yg melaksanakan pembuangan',
-                                        ],
+
                                         [
                                             'url' => 'hccp.sampleAdministrator',
                                             'teks' => '* Dokumentasi pemeliharaan CCTV : SOP & laporan pencatatan',

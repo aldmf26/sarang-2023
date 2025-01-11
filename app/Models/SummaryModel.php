@@ -17,7 +17,7 @@ class SummaryModel extends Model
         left join bk_awal as b on b.nm_partai = a.nm_partai
         where a.baru = 'baru' and a.kategori ='cabut' and a.no_box != 9999 
         group by a.nm_partai
-        order by b.bulan ASC, a.nm_partai ASC
+        order by b.tahun ASC, b.bulan ASC, a.nm_partai ASC
         ");
 
         return $result;
