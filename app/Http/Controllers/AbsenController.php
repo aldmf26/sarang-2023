@@ -62,6 +62,8 @@ class AbsenController extends Controller
             'absen' => $absen,
             'bulanDibayar' => $bulanDibayar,
             'id_pengawas' => $r->id_pengawas,
+            'tgl1' => $r->tgl1,
+            'tgl2' => $r->tgl2,
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get()
         ];
         return view('home.absen.detail_sum', $data);

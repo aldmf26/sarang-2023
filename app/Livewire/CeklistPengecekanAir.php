@@ -19,6 +19,7 @@ class CeklistPengecekanAir extends BaseFunction
         'baru',
         'lama'
     ];
+    public $inputValues = [];
 
     #[Url]
     public $bulan;
@@ -27,14 +28,35 @@ class CeklistPengecekanAir extends BaseFunction
     #[Url]
     public $jenis_mesin;
 
-    
-
     public function mount()
     {
         $this->bulans = DB::table('bulan')->get();
         $this->selectedBulan = $this->bulan;
         $this->selectedJenisMesin = $this->jenis_mesin;
-        
+        $this->cekData();
+    }
+    public function cekData()
+    {
+        $this->reset('inputValues');
+
+        // Ambil data dari tabel
+        $data = DB::table($this->tbl)
+            ->whereYear('tgl', $this->tahun)
+            ->whereMonth('tgl', $this->selectedBulan)
+            ->where('jenis_mesin', $this->selectedJenisMesin)
+            ->get();
+        // Tandai tanggal yang memiliki data sebagai readonly
+        foreach ($data as $row) {
+            $tgl = date('d', strtotime($row->tgl));
+            $bulan = date('m', strtotime($row->tgl));
+            $this->inputValues[(int)$bulan][(int)$tgl] = [
+                'kondisi' => $row->kondisi ?? '',
+                'kondisi_air' => $row->kondisi_air ?? '',
+                'pemeriksa' => $row->pemeriksa ?? '',
+                'paraf' => $row->paraf ?? '',
+                'readonly' => true, // Tandai input sebagai readonly jika data sudah ada
+            ];
+        }
     }
 
     public function updatedSelectedBulan($value)
@@ -42,23 +64,33 @@ class CeklistPengecekanAir extends BaseFunction
         if ($value) {
             // Convert month number to number of days
             $this->daysInMonth = Carbon::create(2023, $value)->daysInMonth;
+            $this->cekData();
+        }
+    }
+    public function updatedSelectedJenisMesin($value)
+    {
+        if ($value) {
+            // Convert month number to number of days
+            $this->cekData();
         }
     }
 
     public function ubah($kolom, $tgl, $value)
     {
         $tglSet = "$this->tahun-$this->selectedBulan-$tgl";
-
         DB::table($this->tbl)->updateOrInsert(
-            ['tgl' => $tglSet], 
+            [
+                'tgl' => $tglSet,
+                
+            ],
             [
                 $kolom => $value,
                 'jenis_mesin' => $this->selectedJenisMesin,
                 'admin' => auth()->user()->name
             ]
         );
+        $this->cekData();
         $this->alert('sukses', 'berhasil disimpan');
-
     }
 
     public function render()

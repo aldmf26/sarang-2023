@@ -77,7 +77,7 @@
                                                 ['tgl', "$tahunH-$bulanH-$hari"],
 
                                                 ['bulan_dibayar', $bulanDibayar],
-                                                ['tahun_dibayar', $tahunH],
+                                                ['tahun_dibayar', 2025],
                                             ])
                                             ->count();
                                         $ttl += $getTgl ?? 0;

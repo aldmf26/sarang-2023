@@ -26,6 +26,8 @@ use App\Http\Controllers\Hrga7_1PembuanganSampahController;
 use App\Http\Controllers\Hrga7_2PembuanganTpsController;
 use App\Http\Controllers\Hrga7_3IdentifikasiLimbahController;
 use App\Http\Controllers\Hrga8_CeklistPengecekanAirController;
+use App\Http\Controllers\Hrga8_CeklistSuhuColdStorageController;
+use App\Http\Controllers\Hrga8_CeklistSuhuRuanganController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -703,6 +705,24 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::controller(Hrga7_3IdentifikasiLimbahController::class)
         ->prefix('hccp/hrga7_3')
         ->name('hrga7_3.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/print', 'print')->name('print');
+        });
+
+    Route::controller(Hrga8_CeklistSuhuRuanganController::class)
+        ->prefix('hccp/hrga8_4')
+        ->name('hrga8_4.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create/', 'create')->name('create');
+            Route::get('/print', 'print')->name('print');
+        });
+
+    Route::controller(Hrga8_CeklistSuhuColdStorageController::class)
+        ->prefix('hccp/hrga8_6')
+        ->name('hrga8_6.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create/', 'create')->name('create');

@@ -51,7 +51,7 @@
                 <td align="right">
                     {{ $d->pcs2 }}
                 </td>
-                <td align="right" x-text="(Number(gr2) / Number(kadar)) + Number(gr2)">-
+                <td align="right" x-text="(Number(gr2) * (Number(kadar) / 100)) + Number(gr2)">-
                 </td>
                 <td align="center">
                     <span onclick="hapus({{ $d->id_pengiriman }})" class="pointer badge bg-danger"><i
