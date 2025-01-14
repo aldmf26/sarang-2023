@@ -328,24 +328,24 @@ class CocokanController extends Controller
 
     public function balancesheet()
     {
-        // $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
-        // $bk = json_decode($bk, TRUE);
-        // DB::table('bk_awal')->truncate();
-        // foreach ($bk as $v) {
-        //     $data = [
-        //         'nm_partai' => $v['ket2'],
-        //         'nm_partai_dulu' => $v['ket'],
-        //         'pcs' => $v['pcs'] ?? 0,
-        //         'gr' => $v['gr'],
-        //         'grade' => $v['nm_grade'],
-        //         'ttl_rp' => $v['total_rp'],
-        //         'bulan' => date('m', strtotime($v['tgl'])),
-        //         'tahun' => date('Y', strtotime($v['tgl'])),
-        //         'pcs_susut' => $v['pcs_susut'],
-        //         'gr_susut' => $v['gr_susut'],
-        //     ];
-        //     DB::table('bk_awal')->insert($data);
-        // }
+        $bk = Http::get("https://gudangsarang.ptagafood.com/api/apibk/sum_partai");
+        $bk = json_decode($bk, TRUE);
+        DB::table('bk_awal')->truncate();
+        foreach ($bk as $v) {
+            $data = [
+                'nm_partai' => $v['ket2'],
+                'nm_partai_dulu' => $v['ket'],
+                'pcs' => $v['pcs'] ?? 0,
+                'gr' => $v['gr'],
+                'grade' => $v['nm_grade'],
+                'ttl_rp' => $v['total_rp'],
+                'bulan' => date('m', strtotime($v['tgl'])),
+                'tahun' => date('Y', strtotime($v['tgl'])),
+                'pcs_susut' => $v['pcs_susut'],
+                'gr_susut' => $v['gr_susut'],
+            ];
+            DB::table('bk_awal')->insert($data);
+        }
 
         $ca17 = CocokanModel::cetak_stok_balance();
         $ca17suntik = $this->getSuntikan(27);
@@ -356,12 +356,12 @@ class CocokanController extends Controller
         $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp + $ca17->cost_kerja;
 
 
-        $sa = CocokanModel::akhir_sortir();
-        $p2suntik = $this->getSuntikan(42);
-        $sortir_akhir = new stdClass();
-        $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
-        $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
-        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
+        // $sa = CocokanModel::akhir_sortir();
+        // $p2suntik = $this->getSuntikan(42);
+        // $sortir_akhir = new stdClass();
+        // $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
+        // $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
+        // $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
 
 
         $pengiriman = Grading::pengirimanSum();
