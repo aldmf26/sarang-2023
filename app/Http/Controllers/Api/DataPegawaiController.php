@@ -32,6 +32,7 @@ class DataPegawaiController extends Controller
                         ->get();
 
         $datas = [
+            'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
             'total' => count($dataPegawai)
         ];
