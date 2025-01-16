@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DataPegawaiController;
 use App\Http\Controllers\ApiBkController;
 use App\Http\Controllers\OpnameController;
 use Illuminate\Http\Request;
@@ -23,6 +24,9 @@ Route::get('/blog/lainnya/{slug}', [OpnameController::class, 'blog_lainnya']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/data-pegawai', [DataPegawaiController::class, 'index']);
+
 Route::controller(ApiBkController::class)
     ->prefix('apibk')
     ->name('apibk.')
