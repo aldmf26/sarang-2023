@@ -35,6 +35,6 @@ class DataPegawaiController extends Controller
             'pegawai' => $dataPegawai,
             'total' => count($dataPegawai)
         ];
-        return response()->json($dataPegawai, 200);
+        return response()->json($datas, 200);
     }
 }
