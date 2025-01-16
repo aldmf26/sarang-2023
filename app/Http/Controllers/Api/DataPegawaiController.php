@@ -22,12 +22,12 @@ class DataPegawaiController extends Controller
                         a.tgl_lahir,
                         a.jenis_kelamin,
                         a.tgl_masuk,
-                        b.divisi,
+                        a.id_divisi as divisi_id,
                         a.kesimpulan,
                         a.keputusan,
                         a.periode_masa_percobaan as periode,
                         a.keputusan_lulus as keputusan,
-                        a.posisi2 as jabatan
+                        a.posisi2 as posisi
                         ")
                         ->get();
 
