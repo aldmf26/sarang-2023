@@ -27,7 +27,8 @@ class DataPegawaiController extends Controller
                         a.keputusan,
                         a.periode_masa_percobaan as periode,
                         a.keputusan_lulus as keputusan,
-                        a.posisi2 as posisi
+                        a.posisi2 as posisi,
+                        a.deleted_at
                         ")
                         ->get();
 
