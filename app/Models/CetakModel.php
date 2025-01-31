@@ -339,7 +339,7 @@ class CetakModel extends Model
          sum(c.gr_akhir) as gr_akhir_ctk, 
          sum(c.ttl_rp) as ttl_rp_cetak
             FROM cetak_new as c
-            where c.bulan_dibayar = '$bulan_dibayar' and YEAR(c.tgl) = '$tahun_dibayar' and c.selesai ='Y'
+            where c.bulan_dibayar = '$bulan_dibayar' and c.tahun_dibayar = '$tahun_dibayar' and c.selesai ='Y'
             GROUP by c.id_anak
         ) as c on c.id_anak = a.id_anak
         

@@ -78,7 +78,6 @@
                         <div class="col-lg-3 mt-2">
                             <label for="">Email</label>
                             <input type="text" name="email" class="form-control" required>
-                            <input type="hidden" name="id_divisi" value="{{ $id_divisi }}">
                         </div>
 
                     </div>

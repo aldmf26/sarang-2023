@@ -138,9 +138,9 @@
 
 
             <div class="col-1"></div>
-            <div class="col-6 mt-4">Tanggal : {{ tanggal($permintaan->tgl) }} <br> Pukul :
+            <div class="col-6 mt-4">Tanggal : {{ date('d-m-Y', strtotime($permintaan->tanggal)) }} <br> Pukul :
                 {{ date('H:i', strtotime($permintaan->time)) }}</div>
-            <div class="col-4 mt-4">Tanggal : {{ tanggal($permintaan->tgl) }} <br> Pukul :
+            <div class="col-4 mt-4">Tanggal : {{ date('d-m-Y', strtotime($permintaan->tanggal)) }} <br> Pukul :
                 {{ date('H:i', strtotime($permintaan->time)) }}</div>
             <div class="col-1"></div>
 
@@ -192,18 +192,18 @@
                     </tr>
                     <tr>
                         <td>Tanggal
-                            {{ empty($detail_perbaikan->time) ? '' : tanggal(date('Y-m-d', strtotime($detail_perbaikan->time))) }}
+                            {{ date('d-m-Y', strtotime($permintaan->tanggal)) }}
                         </td>
                         <td>Tanggal
-                            {{ empty($detail_perbaikan->time) ? '' : tanggal(date('Y-m-d', strtotime($detail_perbaikan->time))) }}
+                            {{ date('d-m-Y', strtotime($permintaan->tanggal)) }}
                         </td>
                     </tr>
                     <tr>
                         <td>Pukul
-                            {{ empty($detail_perbaikan->time) ? '' : date('H:i', strtotime($detail_perbaikan->time)) }}
+                            {{ date('H:i', strtotime($permintaan->time)) }}
                         </td>
                         <td>Pukul
-                            {{ empty($detail_perbaikan->time) ? '' : date('H:i', strtotime($detail_perbaikan->time)) }}
+                            {{ date('H:i', strtotime($permintaan->time)) }}
                         </td>
                     </tr>
                 </table>
