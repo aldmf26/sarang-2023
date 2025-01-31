@@ -101,6 +101,7 @@ if (!function_exists('tanggal')) {
 }
 
 if (!function_exists('kode')) {
+
     function kode($kode)
     {
         return str_pad($kode, 5, '0', STR_PAD_LEFT);

@@ -11,7 +11,6 @@
 
     <x-slot name="cardBody">
         @livewire('identifikasi-limbah')
-
     </x-slot>
 
 </x-theme.app>

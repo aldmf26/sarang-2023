@@ -45,7 +45,7 @@
                 @endforeach
             </tbody>
         </table>
-
+        
     </x-slot>
 
 </x-theme.app>

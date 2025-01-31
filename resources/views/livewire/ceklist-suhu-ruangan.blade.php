@@ -78,8 +78,6 @@
             @else
                 <h6 class="text-warning">Data tidak ditemukan, Ruangan / Standard Suhu tidak cocok</h6>
             @endif
-
-
         </div>
     </div>
 </div>
