@@ -143,10 +143,29 @@ class PenutupController extends Controller
 
         DB::table('tb_gaji_penutup')->insert($tes);
 
-        DB::table('cabut')->where([['bulan_dibayar', $bulan], ['tahun_dibayar', $tahun]])->update(['penutup' => 'Y']);
-        DB::table('eo')->where('bulan_dibayar', $bulan)->whereYear('tgl_serah', $tahun)->update(['penutup' => 'Y']);
-        DB::table('sortir')->where('bulan', $bulan)->whereYear('tgl', $tahun)->update(['penutup' => 'Y']);
-        DB::table('cetak_new')->where('bulan_dibayar', $bulan)->whereYear('tgl', $tahun)->update(['penutup' => 'Y']);
+        DB::table('cabut')->where([
+            ['bulan_dibayar', $bulan], 
+            ['tahun_dibayar', $tahun],
+            ['selesai', 'Y'],
+        ])->update(['penutup' => 'Y']);
+
+        DB::table('eo')->where([
+            ['bulan_dibayar', $bulan],
+            ['tahun_dibayar', $tahun],
+            ['selesai', 'Y'],
+        ])->update(['penutup' => 'Y']);
+
+        DB::table('sortir')->where([
+            ['bulan', $bulan],
+            ['tahun_dibayar', $tahun],
+            ['selesai', 'Y'],
+        ])->update(['penutup' => 'Y']);
+
+        DB::table('cetak_new')->where([
+            ['bulan_dibayar', $bulan],
+            ['tahun_dibayar', $tahun],
+            ['selesai', 'Y'],
+        ])->update(['penutup' => 'Y']);
 
         return redirect()->route('penutup.index')->with('sukses', 'Data Gaji Penutup Berhasil');
     }
