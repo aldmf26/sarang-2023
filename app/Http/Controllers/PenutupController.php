@@ -16,8 +16,8 @@ class PenutupController extends Controller
     public function getData($param)
     {
         $bln = DB::table('tb_gaji_penutup')->latest('bulan_dibayar')->latest('tahun_dibayar')->first();
-        $bulan = $bln->bulan_dibayar + 1;
-        $tahun = $bln->bulan_dibayar == 12 ? $bln->tahun_dibayar + 1 : $bln->tahun_dibayar;
+        $bulan = 1;
+        $tahun = 2025;
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
                 WHERE  b.lokasi != ''
