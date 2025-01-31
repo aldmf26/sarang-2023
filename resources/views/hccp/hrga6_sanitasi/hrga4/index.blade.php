@@ -6,7 +6,6 @@
             <div>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#tambah" class="btn btn-primary btn-sm">Foothbath
                     Template</a>
-
             </div>
         </div>
     </x-slot>

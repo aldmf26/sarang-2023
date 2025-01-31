@@ -11,7 +11,6 @@
     </x-slot>
     <x-slot name="cardBody">
         <div>
-
             <table id="table1" class="table table-bordered">
                 <thead>
                     <tr>
@@ -22,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                  
+
                     @foreach ($datas as $d)
                         @php
                             $param = [
