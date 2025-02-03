@@ -111,18 +111,18 @@ if (!function_exists('kode')) {
 if (!function_exists('getListBulan')) {
     function getListBulan()
     {
-        $bulanTerakhir = DB::table('tb_gaji_penutup')->latest('tahun_dibayar')->latest('bulan_dibayar')->first();
-        $tahunSekarang = date('Y');
+        // $bulanTerakhir = DB::table('tb_gaji_penutup')->latest('tahun_dibayar')->latest('bulan_dibayar')->first();
+        // $tahunSekarang = date('Y');
 
-        if ($bulanTerakhir && $bulanTerakhir->tahun_dibayar == $tahunSekarang) {
-            // Jika tahun sama, tampilkan bulan setelah bulan_dibayar terakhir
-            $listBulan = DB::table('bulan')
-                ->where('id_bulan', '>', $bulanTerakhir->bulan_dibayar)
-                ->get();
-        } else {
-            // Jika tahun berbeda, tampilkan semua bulan (Januari - Desember)
-            $listBulan = DB::table('bulan')->where('bulan',2)->get();
-        }
+        // if ($bulanTerakhir && $bulanTerakhir->tahun_dibayar == $tahunSekarang) {
+        //     // Jika tahun sama, tampilkan bulan setelah bulan_dibayar terakhir
+        //     $listBulan = DB::table('bulan')
+        //         ->where('id_bulan', '>', $bulanTerakhir->bulan_dibayar)
+        //         ->get();
+        // } else {
+        //     // Jika tahun berbeda, tampilkan semua bulan (Januari - Desember)
+        // }
+        $listBulan = DB::table('bulan')->where('bulan',2)->get();
         
         return $listBulan;
     }
