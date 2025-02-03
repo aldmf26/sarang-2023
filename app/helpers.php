@@ -121,7 +121,7 @@ if (!function_exists('getListBulan')) {
                 ->get();
         } else {
             // Jika tahun berbeda, tampilkan semua bulan (Januari - Desember)
-            $listBulan = DB::table('bulan')->where('bulan',1)->get();
+            $listBulan = DB::table('bulan')->where('bulan',date('m'))->get();
         }
         
         return $listBulan;
