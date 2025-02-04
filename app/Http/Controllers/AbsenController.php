@@ -113,11 +113,10 @@ class AbsenController extends Controller
     public function create(Request $r)
     {
         $tgl = Carbon::parse($r->tgl);
-        $hari = $tgl->day;
         $tahun = 2025;
-        $bulan = in_array($hari, [27, 28, 29, 30, 31]) ? $tgl->copy()->subMonth()->month + 1 : $tgl->month;
-        if ($hari >= 27 && $hari <= 31) {
-            $bulan++;
+        $bulan = $tgl->month;
+        if ($tgl->day >= 27 && $tgl->day <= 31) {
+            $bulan = $tgl->copy()->subMonth()->month + 1;
         }
         if (!$r->id_anak) {
             return redirect()->route('absen.index')->with('error', 'Pilih Anak Terlebih dahulu');
