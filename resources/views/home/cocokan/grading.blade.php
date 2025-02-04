@@ -76,7 +76,7 @@
                         <td class="text-end">
                             {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr), 0) }}
                         </td>
-                        <td class="text-end">{{ number_format($grading->cost_op, 0) }}</td>
+                        <td class="text-end">{{ number_format($grading->cost_op, 0) }} </td>
                         <td class="text-end">
                             {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading->cost_op, 0) }}
                         </td>
