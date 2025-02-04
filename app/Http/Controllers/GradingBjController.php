@@ -1289,7 +1289,7 @@ class GradingBjController extends Controller
         $data = [
             'title' => 'Gudang',
             'posisi' => $posisi,
-            'gradingStok' => Grading::dapatkanStokBox('formulir'),
+            'gradingStok' => Grading::dapatkanStokBox2025(),
             'gradingSelesai' => Grading::selesai(),
             'gradingSisa' => Grading::sisa(),
             'users' => DB::table('users')->where('posisi_id', 16)->get(),

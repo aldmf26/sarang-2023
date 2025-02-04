@@ -8,6 +8,33 @@ use Illuminate\Support\Facades\DB;
 
 class Grading extends Model
 {
+    public static function dapatkanStokBox2025()
+    {
+        return DB::select("SELECT 
+        b.no_box, 
+        b.tanggal, 
+        e.tipe,
+        e.ket,
+        e.nm_partai, 
+        c.name as pemberi, 
+        b.no_invoice, 
+        (b.pcs_awal - d.pcs) as pcs_awal, 
+        (b.gr_awal - d.gr) as gr_awal
+        FROM grading as a 
+        JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
+        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
+        LEFT JOIN(
+            select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
+            from grading 
+            group by no_box_sortir
+        ) as d on d.no_box = b.no_box
+        JOIN users as c on c.id = b.id_pemberi
+        
+        WHERE a.selesai  = 'T'
+        GROUP BY b.no_box
+        HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
+        ORDER BY b.tanggal DESC");
+    }
     public static function dapatkanStokBox($jenis, $noBox = null)
     {
         $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
