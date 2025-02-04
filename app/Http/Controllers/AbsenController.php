@@ -116,7 +116,7 @@ class AbsenController extends Controller
         $tahun = 2025;
         $bulan = $tgl->month;
         if ($tgl->day >= 27 && $tgl->day <= 31) {
-            $bulan = $tgl->copy()->subMonth()->month + 1;
+            $bulan = $tgl->copy()->addMonth()->month;
         }
         if (!$r->id_anak) {
             return redirect()->route('absen.index')->with('error', 'Pilih Anak Terlebih dahulu');
