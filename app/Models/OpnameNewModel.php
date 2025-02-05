@@ -367,7 +367,7 @@ group by a.no_box;
 
     public static function sortir_selesai_akhir()
     {
-        $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, 
+        $result = DB::select("SELECT a.no_box, b.nm_partai, g.name,
             b.tipe, b.ket,
             SUM(a.pcs_akhir) as pcs, 
             SUM(a.gr_akhir) as gr, 
@@ -396,7 +396,6 @@ group by a.no_box;
                                 group by a.no_box
                     ) as z on z.no_box = a.no_box
             left join users as g on g.id = a.id_pengawas
-            
             WHERE  a.selesai = 'Y' and b.baru = 'baru' 
             group by a.no_box
             order by g.name ASC;
