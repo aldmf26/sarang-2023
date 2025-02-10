@@ -18,7 +18,8 @@ class HasapController extends Controller
             FROM formulir_sarang as c 
             where c.kategori ='cabut'
         ) as c on c.no_box = a.no_box
-        group by c.no_invoice;");
+        group by c.no_invoice
+        order by c.no_invoice DESC");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
