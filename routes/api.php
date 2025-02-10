@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\DataPegawaiController;
+use App\Http\Controllers\Api\HasapController;
 use App\Http\Controllers\ApiBkController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Resources\DataPegawaiCollection;
@@ -27,6 +28,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/data-pegawai', [DataPegawaiController::class, 'index']);
+
+Route::controller(HasapController::class)
+    ->prefix('apihasap')
+    ->name('apihasap.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
 
 Route::controller(ApiBkController::class)
