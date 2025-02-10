@@ -34,6 +34,7 @@ Route::controller(HasapController::class)
     ->name('apihasap.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/detail/{no_invoice}', 'detail')->name('detail');
     });
 
 
