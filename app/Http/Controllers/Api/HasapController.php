@@ -55,12 +55,19 @@ class HasapController extends Controller
     }
 
 
-    public function bk()
+    public function bk(Request $r)
     {
+        if (empty($r->tgl1)) {
+            $tgl1 = date('Y-m-01');
+            $tgl2 = date('Y-m-t');
+        } else {
+            $tgl1 = $r->tgl1;
+            $tgl2 = $r->tgl2;
+        }
         $data = DB::select("SELECT a.*, b.name
         FROM bk as a
         left join users as b on b.id = a.penerima
-        where a.baru = 'baru'
+        where a.baru = 'baru' and a.kategori = 'cabut' and a.tgl between '$tgl1' and '$tgl2'
         ");
 
         return response()->json([
