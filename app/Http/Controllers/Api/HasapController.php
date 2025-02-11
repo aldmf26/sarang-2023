@@ -76,4 +76,28 @@ class HasapController extends Controller
             'data' => $data
         ]);
     }
+    public function cabut(Request $r)
+    {
+        if (empty($r->tgl)) {
+            $tgl = date('Y-m-d');
+        } else {
+            $tgl = $r->tgl;
+        }
+        $data = DB::select("SELECT b.nama, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir
+        FROM cabut as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        join (
+        SELECT e.no_box, e.tipe, e.baru
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        where c.baru = 'baru' and `tgl_terima` = '$tgl';");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
