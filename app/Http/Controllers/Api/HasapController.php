@@ -83,7 +83,7 @@ class HasapController extends Controller
         } else {
             $tgl = $r->tgl;
         }
-        $data = DB::select("SELECT b.nama, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir
+        $data = DB::select("SELECT b.nama, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         join (
@@ -92,7 +92,22 @@ class HasapController extends Controller
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and `tgl_terima` = '$tgl';");
+        left join tb_kelas as d on d.id_kelas = a.id_kelas
+        where c.baru = 'baru' and a.tgl_terima = '2025-01-27' and a.selesai = 'Y'
+
+        UNION ALL 
+
+
+        SELECT b.nama,a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut
+        FROM eo as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        join (
+        SELECT e.no_box, e.tipe, e.baru
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        where c.baru = 'baru' and a.tgl_ambil = '2025-01-27' and a.selesai = 'Y';");
 
         return response()->json([
             'status' => 'success',
