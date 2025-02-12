@@ -93,7 +93,7 @@ class HasapController extends Controller
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru' and a.tgl_terima = '2025-01-27' and a.selesai = 'Y'
+        where c.baru = 'baru' and a.tgl_terima = '$tgl' and a.selesai = 'Y'
 
         UNION ALL 
 
@@ -107,7 +107,7 @@ class HasapController extends Controller
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and a.tgl_ambil = '2025-01-27' and a.selesai = 'Y';");
+        where c.baru = 'baru' and a.tgl_ambil = '$tgl' and a.selesai = 'Y';");
 
         return response()->json([
             'status' => 'success',
