@@ -83,7 +83,7 @@ class HasapController extends Controller
         } else {
             $tgl = $r->tgl;
         }
-        $data = DB::select("SELECT b.nama, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
+        $data = DB::select("SELECT b.nama, a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         join (
