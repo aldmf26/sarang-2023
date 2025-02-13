@@ -98,7 +98,7 @@ class HasapController extends Controller
         UNION ALL 
 
 
-        SELECT b.nama,a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut
+        SELECT b.nama, b.id_anak, a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut
         FROM eo as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         join (
