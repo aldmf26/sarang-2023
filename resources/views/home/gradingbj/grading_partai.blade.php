@@ -55,7 +55,7 @@
                                 <th class="dhead">Pengawas</th>
                                 <th class="dhead" width="100">No Invoice</th>
                                 <th class="dhead">Tgl</th>
-                                {{-- <th class="dhead" width="200">Bulan dibayar</th> --}}
+                                <th class="dhead" width="200">Bulan dibayar</th>
                             </tr>
                             <tr>
                                 <td>
@@ -71,7 +71,7 @@
                                     <input readonly type="date" value="{{ date('Y-m-d') }}" name="tgl"
                                         class="form-control" required>
                                 </td>
-                                {{-- <td>
+                                <td>
                                     <select name="bulan" class="form-control">
                                         <option value="0">Pilih Bulan</option>
 
@@ -81,7 +81,7 @@
                                                 {{ $l->nm_bulan }}</option>
                                         @endforeach
                                     </select>
-                                </td> --}}
+                                </td>
                             </tr>
                         </thead>
                     </table>

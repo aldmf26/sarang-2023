@@ -252,7 +252,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar ,a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -270,7 +270,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             0 AS pcs, 
             a.gr_eo_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             eo AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -287,7 +287,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -298,7 +298,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             AND a.pcs_awal = 0
             
         ) AS combined_data
-        where bulan_dibayar = '$bulan'
+        where bulan_dibayar = '$bulan' and tahun_dibayar = '$tahun'
         GROUP BY bulan_dibayar;");
     }
 
@@ -307,16 +307,10 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
         return DB::selectOne("SELECT 
         sum(COALESCE(a.pcs_akhir,0) + COALESCE(a.pcs_tdk_cetak,0)) as pcs, 
         sum(COALESCE(a.gr_akhir,0) + COALESCE(a.gr_tdk_cetak,0)) as gr, 
-        sum(COALESCE(e.gr_awal * e.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0)) as ttl_rp, 
         sum(a.ttl_rp) as cost, a.bulan_dibayar
         FROM cetak_new as a 
-        left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
-        
         left join kelas_cetak as g on g.id_kelas_cetak = a.id_kelas_cetak
-        join formulir_sarang as b on b.no_box = a.no_box and b.kategori = 'cetak'
-        left join cabut as c on c.no_box = a.no_box
-        left join eo as d on d.no_box = a.no_box
-        where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru' and a.bulan_dibayar = '$bulan'
+        where a.selesai = 'Y'  and a.bulan_dibayar = '$bulan' and a.tahun_dibayar = '$tahun'
     	group by a.bulan_dibayar;");
     }
 
