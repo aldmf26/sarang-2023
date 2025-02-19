@@ -1337,11 +1337,11 @@ class GradingBjController extends Controller
                     'kategori' => 'wip',
                 ];
 
-                $data2 = [
-                    'bulan' => $r->bulan,
-                    'tahun' => date('Y'),
-                ];
-                DB::table('grading_partai')->where('box_pengiriman', $d)->update($data2);
+                // $data2 = [
+                //     'bulan' => $r->bulan,
+                //     'tahun' => date('Y'),
+                // ];
+                // DB::table('grading_partai')->where('box_pengiriman', $d)->update($data2);
             }
             DB::table('formulir_sarang')->insert($data);
 
