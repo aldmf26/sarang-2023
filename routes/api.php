@@ -37,6 +37,7 @@ Route::controller(HasapController::class)
         Route::get('/detail/{no_invoice}', 'detail')->name('detail');
         Route::get('/bk', 'bk')->name('bk');
         Route::get('/cabut', 'cabut')->name('cabut');
+        Route::get('/cetak', 'cetak')->name('cetak');
     });
 
 
