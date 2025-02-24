@@ -118,7 +118,6 @@ class HasapController extends Controller
 
     public function cetak(Request $r)
     {
-
         if (empty($r->tgl)) {
             $tgl = date('Y-m-d');
         } else {
@@ -135,6 +134,30 @@ class HasapController extends Controller
         ) as d on d.no_box = a.no_box
         where a.tgl = '$tgl' and b.kelas = 'CTK' and a.selesai ='Y';");
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+
+    public function grading(Request $r)
+    {
+        if (empty($r->tgl)) {
+            $tgl = date('Y-m-d');
+        } else {
+            $tgl = $r->tgl;
+        }
+
+        $data = DB::select("SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , count(a.box_pengiriman) as box
+        FROM (
+            SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, a.box_pengiriman
+            FROM grading_partai as a 
+            where a.tgl = '$tgl'
+            group by a.grade, a.box_pengiriman
+        ) as a 
+        group by a.grade;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
