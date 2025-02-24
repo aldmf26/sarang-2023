@@ -297,9 +297,6 @@ class CocokanController extends Controller
         $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
 
 
-
-
-
         $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll, max(bulan_dibayar) as bulan FROM `tb_gaji_penutup`");
         $bulan = $cost_dll->bulan;
         $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu

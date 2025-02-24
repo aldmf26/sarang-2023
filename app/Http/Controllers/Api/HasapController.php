@@ -115,4 +115,30 @@ class HasapController extends Controller
             'data' => $data
         ]);
     }
+
+    public function cetak(Request $r)
+    {
+
+        if (empty($r->tgl)) {
+            $tgl = date('Y-m-d');
+        } else {
+            $tgl = $r->tgl;
+        }
+        $data = DB::select("SELECT c.nama, a.no_box, d.tipe, a.pcs_awal_ctk, a.gr_awal_ctk, (COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir)) as pcs_akhir, (COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0)) as gr_akhir
+        FROM cetak_new as a
+        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+        left join tb_anak as c on c.id_anak = a.id_anak
+        LEFT join (
+        SELECT d.no_box , d.tipe
+            FROM bk as d 
+            where d.kategori ='Cabut'
+        ) as d on d.no_box = a.no_box
+        where a.tgl = '$tgl' and b.kelas = 'CTK' and a.selesai ='Y';");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
