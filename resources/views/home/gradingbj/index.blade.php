@@ -4,7 +4,6 @@
     </x-slot>
 
     <x-slot name="cardBody">
-
         <section class="row" x-data="{ cek: [] }">
             <div class="col-lg-12">
                 <x-theme.alert pesan="{{ session()->get('error') }}" />

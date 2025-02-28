@@ -534,28 +534,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/get_select_grade',     'get_select_grade')->name('get_select_grade');
             Route::get('/', 'hal_awal')->name('index');
         });
-    Route::controller(GradingBjController::class)
-        ->prefix('home/gradingbjdsada')
-        ->name('gradingbj_copy.')
-        ->group(function () {
-            // Route::get('/history_ambil', 'index')->name('history_ambil');
-            // Route::get('/add', 'add')->name('add');
-            // Route::get('/gudang_bj', 'gudang_bj')->name('gudang_bj');
-            // Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
-            // Route::get('/history_box_kecil', 'history_box_kecil')->name('history_box_kecil');
-            // Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
-            // Route::get('/gudang_bahan_jadi', 'gudang_bahan_jadi')->name('gudang_bahan_jadi');
-            // Route::post('/create_ambil_box_kecil', 'create_ambil_box_kecil')->name('create_ambil_box_kecil');
-            // Route::post('/create', 'create')->name('create');
-            // Route::post('/create_suntikan', 'create_suntikan')->name('create_suntikan');
-            // Route::post('/create_suntikan_boxsp', 'create_suntikan_boxsp')->name('create_suntikan_boxsp');
-            // Route::post('/create_grading', 'create_grading')->name('create_grading');
-            // Route::get('/load_grading', 'load_grading')->name('load_grading');
-            // Route::get('/load_detail', 'load_detail')->name('load_detail');
-            // Route::get('/template', 'template')->name('template');
-            // Route::post('/import', 'import')->name('import');
-            // Route::get('/', 'halAwal')->name('index');
-        });
+   
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
         ->name('gradingbj.')
@@ -563,6 +542,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/grading', 'grading')->name('grading');
             Route::get('/gudang', 'gudang')->name('gudang');
+            Route::get('/cek_opname', 'cek_opname')->name('cek_opname');
+            Route::post('/cek_opname_store', 'cek_opname_store')->name('cek_opname_store');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/grading_partai', 'grading_partai')->name('grading_partai');
             Route::get('/grading_partai_result', 'gradingPartaiResult')->name('grading_partai_result');
