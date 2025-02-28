@@ -18,10 +18,10 @@
 <table class="table table-bordered" width="100%">
     <thead>
         <tr>
-            <th class="text-end">Gr Cabut</th>
-            <th class="text-end">Gr Eo</th>
-            <th class="text-end">Gr Cetak</th>
-            <th class="text-end">Gr Sortir</th>
+            <th class="text-end">Cost Cabut & EO</th>
+
+            <th class="text-end">Cost Cetak</th>
+            <th class="text-end">Cost Sortir</th>
             <th class="text-end">Total Gaji</th>
             <th class="text-end">Cost Operasional</th>
             <th class="text-end" width="25%">Total Cost Operasional</th>
@@ -29,10 +29,9 @@
     </thead>
     <tbody>
         <tr>
-            <td class="text-end">{{ number_format($total->gr_cabut, 0) }}</td>
-            <td class="text-end">{{ number_format($total->gr_eo, 0) }}</td>
-            <td class="text-end">{{ number_format($total->gr_ctk, 0) }}</td>
-            <td class="text-end">{{ number_format($total->gr_sortir, 0) }}</td>
+            <td class="text-end">{{ number_format($cost_cbt->cost, 0) }}</td>
+            <td class="text-end">{{ number_format($cost_ctk->cost, 0) }}</td>
+            <td class="text-end">{{ number_format($cost_str->cost, 0) }}</td>
             <td class="text-end">{{ number_format($cost_cbt->cost + $cost_ctk->cost + $cost_str->cost, 0) }}</td>
             <td class="text-end">
                 {{ empty($cost_oprasional->rp_oprasional) ? 0 : number_format($cost_oprasional->rp_oprasional, 0) }}

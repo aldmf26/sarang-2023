@@ -81,12 +81,15 @@ class SummaryController extends Controller
 
     public function get_operasional(Request $r)
     {
+        $thn = date('Y');
         if (empty($r->id_oprasional)) {
             $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
-        FROM tb_gaji_penutup as a;");
+        FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn'");
         } else {
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
+
+
 
         $bulan_array = DB::table('oprasional')->get();
         $data = [
@@ -1133,11 +1136,9 @@ class SummaryController extends Controller
     {
 
         $bulan = $r->bulan;
-        $tahun = '2025';
+        $tahun = $r->tahun;
 
         $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan ='$bulan' and a.tahun = '$tahun' ");
-
-
         $ttl_gr = sumBk($grading_partai, 'gr');
 
 
@@ -1152,7 +1153,6 @@ class SummaryController extends Controller
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
 
         $rp_gr = ($rawNumber - $r->gaji) / $ttl_gr;
-
         $rp_oprasional = $rawNumber - $r->gaji;
         $data = [
             'rp_oprasional' => $rp_oprasional,

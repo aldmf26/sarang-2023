@@ -382,7 +382,7 @@ class GradingBjController extends Controller
             DB::beginTransaction();
             $nm_partai = $r->nm_partai;
             $bulan = $r->bulan;
-            $tahun = 2025;
+            $tahun = date('Y');
             $tgl = date('Y-m-d');
             $lastItem = DB::table('grading_partai')->where('nm_partai', $nm_partai)->orderBy('urutan', 'desc')->first();
             $urutan = !$lastItem ? 1 : $lastItem->urutan + 1;
@@ -405,8 +405,8 @@ class GradingBjController extends Controller
                     continue;
                 }
                 $data = [
-                    'bulan' => '',
-                    'tahun' => '',
+                    'bulan' => $bulan,
+                    'tahun' => $tahun,
                     'no_invoice' => $no_invoice,
                     'nm_partai' => $nm_partai,
                     'urutan' => $no_invoice,
@@ -1348,11 +1348,11 @@ class GradingBjController extends Controller
                     'kategori' => 'wip',
                 ];
 
-                $data2 = [
-                    'bulan' => $r->bulan,
-                    'tahun' => date('Y'),
-                ];
-                DB::table('grading_partai')->where('box_pengiriman', $d)->update($data2);
+                // $data2 = [
+                //     'bulan' => $r->bulan,
+                //     'tahun' => date('Y'),
+                // ];
+                // DB::table('grading_partai')->where('box_pengiriman', $d)->update($data2);
             }
             DB::table('formulir_sarang')->insert($data);
 

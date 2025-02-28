@@ -222,7 +222,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-4">
+                            {{-- <div class="col-lg-4">
                                 <label for="">Bulan</label>
                                 <select name="bulan" class="form-control">
                                     <option value="0">Pilih Bulan</option>
@@ -233,7 +233,7 @@
                                             {{ $l->nm_bulan }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
 
                             <div class="col-lg-12">
                                 <table class="table">

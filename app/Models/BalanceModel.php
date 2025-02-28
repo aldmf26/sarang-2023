@@ -137,7 +137,7 @@ FROM oprasional as a
 
 left join (
 SELECT 
-        bulan_dibayar,
+        bulan_dibayar, tahun_dibayar,
         SUM(cost) AS cost,
         SUM(pcs) AS pcs,
         SUM(gr) AS gr,
@@ -148,7 +148,7 @@ SELECT
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -166,7 +166,7 @@ SELECT
             0 AS pcs, 
             a.gr_eo_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             eo AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -183,7 +183,7 @@ SELECT
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -194,15 +194,15 @@ SELECT
             AND a.pcs_awal = 0
             
         ) AS combined_data
-        GROUP BY bulan_dibayar
-) as b on b.bulan_dibayar = a.bulan
+        GROUP BY bulan_dibayar, tahun_dibayar
+) as b on b.bulan_dibayar = a.bulan and b.tahun_dibayar = a.tahun
 
 left join (
 SELECT 
         sum(COALESCE(a.pcs_akhir,0) + COALESCE(a.pcs_tdk_cetak,0)) as pcs, 
         sum(COALESCE(a.gr_akhir,0) + COALESCE(a.gr_tdk_cetak,0)) as gr, 
         sum(COALESCE(e.gr_awal * e.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0)) as ttl_rp, 
-        sum(a.ttl_rp) as cost_kerja, a.bulan_dibayar
+        sum(a.ttl_rp) as cost_kerja, a.bulan_dibayar, a.tahun_dibayar
         FROM cetak_new as a 
         left join bk as e on e.no_box = a.no_box and e.kategori = 'cabut'
         
@@ -211,13 +211,13 @@ SELECT
         left join cabut as c on c.no_box = a.no_box
         left join eo as d on d.no_box = a.no_box
         where a.selesai = 'Y' and g.kategori = 'CTK' and e.baru = 'baru'
-    	group by a.bulan_dibayar
-) as c on c.bulan_dibayar = a.bulan
+    	group by a.bulan_dibayar, a.tahun_dibayar
+) as c on c.bulan_dibayar = a.bulan and c.tahun_dibayar = a.tahun
 
 left join (
 SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr, 
         SUM(COALESCE(b.hrga_satuan * b.gr_awal,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as ttl_rp,
-        sum(a.ttl_rp) as cost_kerja, a.bulan
+        sum(a.ttl_rp) as cost_kerja, a.bulan, a.tahun_dibayar
                     FROM sortir as a 
                     LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
                     JOIN formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
@@ -233,8 +233,8 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
                                 group by a.no_box
                     ) as f on f.no_box = a.no_box
                     WHERE  a.selesai = 'Y' AND b.baru = 'baru' and a.no_box in (SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'grade')
-    				group by a.bulan
-) as d on d.bulan = a.bulan;
+    				group by a.bulan, a.tahun_dibayar
+) as d on d.bulan = a.bulan and d.tahun_dibayar = a.tahun
         ");
     }
 
@@ -252,7 +252,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar ,a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -270,7 +270,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             0 AS pcs, 
             a.gr_eo_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             eo AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -287,7 +287,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             a.pcs_akhir AS pcs, 
             a.gr_akhir AS gr, 
             (b.hrga_satuan * b.gr_awal) AS ttl_rp, 
-            a.bulan_dibayar 
+            a.bulan_dibayar , a.tahun_dibayar
         FROM 
             cabut AS a 
             LEFT JOIN bk AS b ON b.no_box = a.no_box 
@@ -298,7 +298,7 @@ SELECT SUM(a.pcs_akhir) as pcs, SUM(a.gr_akhir) as gr,
             AND a.pcs_awal = 0
             
         ) AS combined_data
-        where bulan_dibayar = '$bulan'
+        where bulan_dibayar = '$bulan' and tahun_dibayar = '$tahun'
         GROUP BY bulan_dibayar;");
     }
 

@@ -625,7 +625,7 @@ left join(
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
-        join pengiriman_packing_list as c on c.id_pengiriman = a.`no_box`;
+        where a.selesai ='Y';
         ");
     }
 
