@@ -398,7 +398,13 @@ class GudangSarangController extends Controller
         if (!$r->no_box[0]) {
             return redirect()->route('gudangsarang.invoice')->with('error', 'No Box / Penerima Kosong !');
         }
-        DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'cetak']])->delete();
+
+        $getFormulir = DB::table('formulir_sarang')->where([['no_invoice', $no_invoice], ['kategori', 'cetak']]);
+        foreach ($getFormulir->get() as $d) {
+            DB::table('cabut')->where('no_box', $d->no_box)->update(['formulir' => 'T']);
+        }
+        $getFormulir->delete();
+
         $no_box = explode(',', $r->no_box[0]);
         foreach ($no_box as $d) {
             $ambil = DB::selectOne("SELECT 
