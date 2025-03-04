@@ -124,7 +124,8 @@ if (!function_exists('getListBulan')) {
         // }
         $listBulan = DB::table('bulan')->where('bulan',3)->get();
         
-        return $listBulan;
+        return $listBulan; 
+        
     }
 }
 
