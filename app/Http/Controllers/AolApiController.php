@@ -26,28 +26,51 @@ class AolApiController extends Controller
         return view('aol.index',$data);
     }
 
-    public function tesApi()
+    public function getToken()
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk'
-        ])->post('https://account.accurate.id/oauth/token', [
-            'code' => $this->getDataSetApi()['code'],
-            'redirect_uri' => $this->getDataSetApi()['redirect_uri'],
-            'grant_type' => 'authorization_code',
-        ]);
-        dd($response);
+        // URL untuk mendapatkan token
+        $url = 'https://account.accurate.id/oauth/token';
 
-        // $client = new \GuzzleHttp\Client();
-        // $response = $client->request('POST', 'https://account.accurate.id/oauth/token', [
-        //     'headers' => [
-        //         'Authorization' => 'Basic ' . base64_encode('NDJmMTJhMTAtMDhkZi00YjkxLWIxZTQtYzQ0NjVkNjg2MDcyOmUxMzM0MTBlYjYzMjU5NjI1NWFkZmJlNWE0OTk5MGZl')
-        //     ],
-        //     'form_params' => [
-        //         'code' => $this->getDataSetApi()['code'],
-        //         'grant_type' => 'authorization_code',
-        //         'redirect_uri' => $this->getDataSetApi()['redirect_uri']
-        //     ]
-        // ]);
-        // dd(json_decode($response->getBody()->getContents(), true));
+        // Header Authorization
+        $headers = [
+            'Authorization' => 'MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk',
+        ];
+
+        // Body request
+        $data = [
+            'grant_type' => 'authorization_code',
+            'code' => 'iGPx6ZzdFU0SNd0uk67Q',
+            'redirect_uri' => 'https://sarang.ptagafood.com/aol',
+        ];
+
+        try {
+            // Kirim HTTP POST request menggunakan Laravel HTTP Client
+            $response = Http::withHeaders($headers)
+                ->asForm() // Gunakan form-encoded untuk body
+                ->post($url, $data);
+
+            // Cek jika request berhasil (status code 200)
+            if ($response->successful()) {
+                $result = $response->json();
+                return response()->json([
+                    'status' => 'success',
+                    'data' => $result,
+                ]);
+            }
+
+            // Jika gagal, kembalikan pesan error
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mendapatkan token',
+                'error' => $response->json(),
+            ], $response->status());
+
+        } catch (\Exception $e) {
+            // Tangani error jika ada masalah jaringan atau lainnya
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
