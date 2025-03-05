@@ -50,8 +50,8 @@ class AolApiController extends Controller
         ];
         $url = "https://account.accurate.id/api/db-list.do";
         $response = Http::withHeaders($headers)
-                ->asForm() // Gunakan form-encoded untuk body
                 ->get($url);
+
             // Cek jika request berhasil (status code 200)
             if ($response->successful()) {
                 $result = $response->json();
