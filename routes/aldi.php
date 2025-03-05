@@ -7,6 +7,7 @@ use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\AolApiController;
 use App\Http\Controllers\BoxKirimController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\DivisiController;
@@ -95,64 +96,14 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/503', function () {
         view('error.503');
     })->name('503');
-    // Route::get('/log', function (Request $r) {
-    //     $pengawas = DB::table('users')->select('id as id_pengawas','name')->where('posisi_id', 13)->get();
-    //     $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
-    //     $data = [
-    //         'pengawas' => $pengawas,
-    //         'id_pengawas' => $id_pengawas,
-    //         'log' => Activity::join('users as b', 'activity_log.causer_id', '=', 'b.id')
-    //                     ->select('activity_log.*', 'b.name')
-    //                     ->where('activity_log.causer_id', $id_pengawas)
-    //                     ->orderBy('activity_log.id', 'desc')
-    //                     ->get(),
-    //     ];
-    //    return view('log.index',$data);
-    // })->name('log');
+    
 
-
-    // Route::get('/db', function (Request $r) {
-    //     if ($r->password == 'Takemor.') {
-    //         return view('db');
-    //     }
-    //     return view('db.login');
-    // })->name('db');
-
-    Route::post('/dbcreate', function (Request $r) {
-        $namaDataseSebelumnyaba = DB::getDatabaseName();
-        $namaDatabase = $r->db;
-        // Mengganti koneksi database pada runtime
-        config(['database.connections.mysql.database' => $namaDatabase]);
-        DB::purge('mysql');
-        DB::reconnect('mysql');
-        // Mengganti nilai database pada file .env
-        // Path ke file .env
-        $envFilePath = base_path('.env');
-
-        // Memastikan bahwa file .env ada sebelum membacanya
-        if (File::exists($envFilePath)) {
-            // Mengganti nilai database pada file .env
-            File::put($envFilePath, str_replace(
-                'DB_DATABASE=' . $namaDataseSebelumnyaba,
-                'DB_DATABASE=' . $namaDatabase,
-                File::get($envFilePath)
-            ));
-
-            // Menjalankan command untuk mereload konfigurasi Laravel
-            Artisan::call('config:cache');
-
-            $tabel = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-
-            // Dump semua tabel
-            dd($tabel);
-        } else {
-            // Jika file .env tidak ada
-            return "File .env tidak ditemukan.";
-        }
-        // Mendapatkan nama database setelah perubahan
-        // Mendapatkan daftar semua tabel pada database
-
-    })->name('dbcreate');
+    Route::controller(AolApiController::class)
+        ->prefix('aol')
+        ->name('aol.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+        });
 
     Route::controller(UserController::class)
         ->prefix('data_master/user')
