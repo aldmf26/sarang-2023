@@ -39,7 +39,7 @@ class AolApiController extends Controller
         // Body request
         $data = [
             'grant_type' => 'authorization_code',
-            'code' => 'iGPx6ZzdFU0SNd0uk67Q',
+            'code' => 'xbkBpaBPVd4qDNM5n28D',
             'redirect_uri' => 'https://sarang.ptagafood.com/aol',
         ];
 
