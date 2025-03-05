@@ -104,6 +104,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/getToken', 'getToken')->name('getToken');
+            Route::get('/read', 'read')->name('read');
         });
 
     Route::controller(UserController::class)
