@@ -35,7 +35,7 @@ class AolApiController extends Controller
             'redirect_uri' => $this->getDataSetApi()['redirect_uri'],
             'grant_type' => 'authorization_code',
         ]);
-        dd($response->json());
+        dd($response);
 
         // $client = new \GuzzleHttp\Client();
         // $response = $client->request('POST', 'https://account.accurate.id/oauth/token', [
