@@ -103,7 +103,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('aol.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/tesApi', 'tesApi')->name('tesApi');
+            Route::get('/getToken', 'getToken')->name('getToken');
         });
 
     Route::controller(UserController::class)
