@@ -46,7 +46,7 @@ class AolApiController extends Controller
     public function read()
     {
         $headers = [
-            'Authorization' => 'Basic MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk',
+            'Authorization' => 'bearer c284c7d1-4f3c-463a-a49a-575d645c3e61',
         ];
         $url = "https://account.accurate.id/api/db-list.do";
         $response = Http::withHeaders($headers)
