@@ -10,7 +10,7 @@ class AolApiController extends Controller
     public function getDataSetApi()
     {
         $redirect_uri = "https://sarang.ptagafood.com/aol";
-        $code = "2EQhSaOrGmZqxuusCEkW";
+        $code = "iGPx6ZzdFU0SNd0uk67Q";
         
         return [
             'redirect_uri' => $redirect_uri,
@@ -29,7 +29,7 @@ class AolApiController extends Controller
     public function tesApi()
     {
         $response = Http::withHeaders([
-            'Authorization' => 'Basic NDJmMTJhMTAtMDhkZi00YjkxLWIxZTQtYzQ0NjVkNjg2MDcyOmUxMzM0MTBlYjYzMjU5NjI1NWFkZmJlNWE0OTk5MGZl'
+            'Authorization' => 'MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk'
         ])->post('https://account.accurate.id/oauth/token', [
             'code' => $this->getDataSetApi()['code'],
             'redirect_uri' => $this->getDataSetApi()['redirect_uri'],
