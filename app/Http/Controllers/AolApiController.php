@@ -33,7 +33,7 @@ class AolApiController extends Controller
 
         // Header Authorization
         $headers = [
-            'Authorization' => 'MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk',
+            'Authorization' => 'Basic MzM5MzQyOGEtMGM5Ni00ZDJjLTk1NGEtNjA4OTA2Y2IyYmMwOmIzYWJjZTAwZjQyYTgwNzZmMjc4ZWIyOWQ1OGMzYjFk',
         ];
 
         // Body request
