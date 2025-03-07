@@ -61,6 +61,17 @@ class GradingBjController extends Controller
         return view('home.gradingbj.index', $data);
     }
 
+
+    public function cek_opname(Request $r)
+    {
+        $previousOpnameData = DB::table('cek_opname')->where('status', 'previous')->get();
+        $data = [
+            'title' => 'Cek Opname',
+            'previousOpnameData' => $previousOpnameData
+        ];
+        return view('home.gradingbj.cek_opname', $data);
+    }
+
     public function po(Request $r) {}
 
     public function load_selisih()

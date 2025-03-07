@@ -7,6 +7,11 @@
             'teks' => 'Grading',
             'variant' => 'info',
         ],
+        'gradingbj.cek_opname' => [
+            'route' => 'gradingbj.cek_opname',
+            'teks' => 'Cek Opname',
+            'variant' => 'warning',
+        ],
     
         'gradingbj.gudang_siap_kirim' => [
             'route' => 'gradingbj.gudang_siap_kirim',

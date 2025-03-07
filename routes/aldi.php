@@ -7,6 +7,7 @@ use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PengawasController;
 use App\Http\Controllers\SortirController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\AolApiController;
 use App\Http\Controllers\BoxKirimController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\DivisiController;
@@ -95,64 +96,16 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/503', function () {
         view('error.503');
     })->name('503');
-    // Route::get('/log', function (Request $r) {
-    //     $pengawas = DB::table('users')->select('id as id_pengawas','name')->where('posisi_id', 13)->get();
-    //     $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
-    //     $data = [
-    //         'pengawas' => $pengawas,
-    //         'id_pengawas' => $id_pengawas,
-    //         'log' => Activity::join('users as b', 'activity_log.causer_id', '=', 'b.id')
-    //                     ->select('activity_log.*', 'b.name')
-    //                     ->where('activity_log.causer_id', $id_pengawas)
-    //                     ->orderBy('activity_log.id', 'desc')
-    //                     ->get(),
-    //     ];
-    //    return view('log.index',$data);
-    // })->name('log');
+    
 
-
-    // Route::get('/db', function (Request $r) {
-    //     if ($r->password == 'Takemor.') {
-    //         return view('db');
-    //     }
-    //     return view('db.login');
-    // })->name('db');
-
-    Route::post('/dbcreate', function (Request $r) {
-        $namaDataseSebelumnyaba = DB::getDatabaseName();
-        $namaDatabase = $r->db;
-        // Mengganti koneksi database pada runtime
-        config(['database.connections.mysql.database' => $namaDatabase]);
-        DB::purge('mysql');
-        DB::reconnect('mysql');
-        // Mengganti nilai database pada file .env
-        // Path ke file .env
-        $envFilePath = base_path('.env');
-
-        // Memastikan bahwa file .env ada sebelum membacanya
-        if (File::exists($envFilePath)) {
-            // Mengganti nilai database pada file .env
-            File::put($envFilePath, str_replace(
-                'DB_DATABASE=' . $namaDataseSebelumnyaba,
-                'DB_DATABASE=' . $namaDatabase,
-                File::get($envFilePath)
-            ));
-
-            // Menjalankan command untuk mereload konfigurasi Laravel
-            Artisan::call('config:cache');
-
-            $tabel = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-
-            // Dump semua tabel
-            dd($tabel);
-        } else {
-            // Jika file .env tidak ada
-            return "File .env tidak ditemukan.";
-        }
-        // Mendapatkan nama database setelah perubahan
-        // Mendapatkan daftar semua tabel pada database
-
-    })->name('dbcreate');
+    Route::controller(AolApiController::class)
+        ->prefix('aol')
+        ->name('aol.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getToken', 'getToken')->name('getToken');
+            Route::get('/read', 'read')->name('read');
+        });
 
     Route::controller(UserController::class)
         ->prefix('data_master/user')
@@ -534,28 +487,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/get_select_grade',     'get_select_grade')->name('get_select_grade');
             Route::get('/', 'hal_awal')->name('index');
         });
-    Route::controller(GradingBjController::class)
-        ->prefix('home/gradingbjdsada')
-        ->name('gradingbj_copy.')
-        ->group(function () {
-            // Route::get('/history_ambil', 'index')->name('history_ambil');
-            // Route::get('/add', 'add')->name('add');
-            // Route::get('/gudang_bj', 'gudang_bj')->name('gudang_bj');
-            // Route::get('/get_select_grade', 'get_select_grade')->name('get_select_grade');
-            // Route::get('/history_box_kecil', 'history_box_kecil')->name('history_box_kecil');
-            // Route::get('/load_ambil_box_kecil', 'load_ambil_box_kecil')->name('load_ambil_box_kecil');
-            // Route::get('/gudang_bahan_jadi', 'gudang_bahan_jadi')->name('gudang_bahan_jadi');
-            // Route::post('/create_ambil_box_kecil', 'create_ambil_box_kecil')->name('create_ambil_box_kecil');
-            // Route::post('/create', 'create')->name('create');
-            // Route::post('/create_suntikan', 'create_suntikan')->name('create_suntikan');
-            // Route::post('/create_suntikan_boxsp', 'create_suntikan_boxsp')->name('create_suntikan_boxsp');
-            // Route::post('/create_grading', 'create_grading')->name('create_grading');
-            // Route::get('/load_grading', 'load_grading')->name('load_grading');
-            // Route::get('/load_detail', 'load_detail')->name('load_detail');
-            // Route::get('/template', 'template')->name('template');
-            // Route::post('/import', 'import')->name('import');
-            // Route::get('/', 'halAwal')->name('index');
-        });
+   
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
         ->name('gradingbj.')
@@ -563,6 +495,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/grading', 'grading')->name('grading');
             Route::get('/gudang', 'gudang')->name('gudang');
+            Route::get('/cek_opname', 'cek_opname')->name('cek_opname');
+            Route::post('/cek_opname_store', 'cek_opname_store')->name('cek_opname_store');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/grading_partai', 'grading_partai')->name('grading_partai');
             Route::get('/grading_partai_result', 'gradingPartaiResult')->name('grading_partai_result');

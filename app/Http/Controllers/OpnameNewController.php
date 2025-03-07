@@ -498,7 +498,9 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('X1', 'total rp');
         $sheet3->setCellValue('Y1', 'rp/gr');
 
-        $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp, sum(cost_bk) as cost_bk, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` WHERE sudah_kirim = 'T' and grade != 'susut'  group by box_pengiriman;");
+        $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp, sum(cost_bk) as cost_bk, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` 
+                WHERE sudah_kirim = 'T' and grade != 'susut'  
+                group by box_pengiriman;");
         $kolom = 2;
         foreach ($grading  as $d) {
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
