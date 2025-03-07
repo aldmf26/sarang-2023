@@ -332,8 +332,8 @@
                                 {{ number_format(sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'), 0) }}
                             </td>
                             <td class="text-end">
-                                {{-- {{ number_format((sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja')) / sumBk($sortir_selesai, 'gr'), 0) }} --}}
-                                0
+                                {{ empty(sumBk($sortir_selesai, 'gr')) ? 0 : number_format((sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja')) / sumBk($sortir_selesai, 'gr'), 0) }}
+
                             </td>
 
                         </tr>
