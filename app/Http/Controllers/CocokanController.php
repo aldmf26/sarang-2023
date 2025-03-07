@@ -350,6 +350,7 @@ class CocokanController extends Controller
         $cetak_sisa = new stdClass();
         $cetak_sisa->pcs = $ca17->pcs + $ca17suntik->pcs;
         $cetak_sisa->gr = $ca17->gr + $ca17suntik->gr;
+        $cetak_sisa->modal = $ca17->ttl_rp;
         $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17suntik->ttl_rp + $ca17->cost_kerja;
 
 
