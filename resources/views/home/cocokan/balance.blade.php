@@ -23,7 +23,8 @@
                             <tr>
                                 <th class="dhead">No</th>
                                 <th class="dhead">Bulan kerja</th>
-                                <th class="dhead">Nama partai</th>
+                                <th class="dhead">Nama parta</th>
+                                <th class="dhead">Ex partai</th>
                                 <th class="dhead">Grade</th>
                                 <th class="text-end dhead">Pcs</th>
                                 <th class="text-end dhead">Gr</th>
@@ -32,6 +33,7 @@
                             <tr>
                                 <td class="dhead"></td>
                                 <td class="dhead">Total</td>
+                                <td class="dhead"></td>
                                 <td class="dhead"></td>
                                 <td class="dhead"></td>
                                 <td class="text-end dhead">
@@ -55,6 +57,7 @@
                                     <td>{{ empty($b->bulan) ? '-' : date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}
                                     </td>
                                     <td>{{ $b->nm_partai }}</td>
+                                    <td>{{ $b->nm_partai_dulu }}</td>
                                     <td>{{ $b->grade }}</td>
                                     <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>
                                     <td class="text-end">{{ number_format($b->gr_bk, 0) }}</td>
