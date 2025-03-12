@@ -241,7 +241,7 @@
                                 {{ number_format(sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format((sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja')) / sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}
+                                {{ empty(sumBk($cabut_selesai_siap_cetak, 'gr')) ? 0 : number_format((sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja')) / sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}
                                 {{-- {{ number_format((sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja')) / sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }} --}}
 
                             </td>
