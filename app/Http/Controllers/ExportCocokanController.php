@@ -1771,7 +1771,7 @@ class ExportCocokanController extends Controller
             'B1' => 'No',
             'C1' => 'Bulan kerja',
             'D1' => 'Nama partai',
-            'E1' => 'Ex partai',
+            'E1' => 'Keterangan',
             'F1' => 'Grade',
             'G1' => 'Pcs',
             'H1' => 'Gr',
