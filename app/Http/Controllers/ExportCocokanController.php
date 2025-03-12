@@ -1762,29 +1762,34 @@ class ExportCocokanController extends Controller
         $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Balancesheet');
         $sheet  = $spreadsheet->addSheet($worksheet);
 
-        $sheet->getStyle("B1:H1")->applyFromArray($style_atas);
+        $sheet->getStyle("B1:J1")->applyFromArray($style_atas);
+        $sheet->getStyle("L1:O1")->applyFromArray($style_atas);
+        $sheet->getStyle("Q1:U1")->applyFromArray($style_atas);
 
         $koloms = [
             'A1' => 'bk kerja',
             'B1' => 'No',
             'C1' => 'Bulan kerja',
-            'D1' => 'Nama part',
-            'E1' => 'Grade',
-            'F1' => 'Pcs',
-            'G1' => 'Gr',
-            'H1' => 'Ttl Rp',
+            'D1' => 'Nama partai',
+            'E1' => 'Ex partai',
+            'F1' => 'Grade',
+            'G1' => 'Pcs',
+            'H1' => 'Gr',
+            'I1' => 'Ttl Rp',
+            'J1' => 'Rata-rata',
 
-            'J1' => 'Cost Perbulan',
-            'K1' => 'bulan & tahun',
-            'L1' => 'gaji',
-            'M1' => 'cost operasional',
-            'N1' => 'total rp',
+            'K1' => 'Cost Perbulan',
+            'L1' => 'bulan & tahun',
+            'M1' => 'gaji',
+            'N1' => 'cost operasional',
+            'O1' => 'total rp',
 
             'P1' => 'Bk Rp',
             'Q1' => 'ket',
             'R1' => 'pcs',
             'S1' => 'gr',
             'T1' => 'Total Rp',
+            'U1' => 'Rata - rata',
         ];
 
         foreach ($koloms as $k => $v) {
@@ -1798,39 +1803,42 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('B' . $row, $i + 1);
             $sheet->setCellValue('C' . $row, empty($b->bulan) ? '-' : date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)));
             $sheet->setCellValue('D' . $row, $b->nm_partai);
-            $sheet->setCellValue('E' . $row, $b->grade);
-            $sheet->setCellValue('F' . $row, $b->pcs_bk);
-            $sheet->setCellValue('G' . $row, $b->gr_bk);
-            $sheet->setCellValue('H' . $row, $b->cost_bk);
+            $sheet->setCellValue('E' . $row, $b->nm_partai_dulu);
+            $sheet->setCellValue('F' . $row, $b->grade);
+            $sheet->setCellValue('G' . $row, $b->pcs_bk);
+            $sheet->setCellValue('H' . $row, $b->gr_bk);
+            $sheet->setCellValue('I' . $row, $b->cost_bk);
+            $sheet->setCellValue('J' . $row, round($b->cost_bk / $b->gr_bk, 1));
         }
 
         $rowTbh = $row + 1;
         $sheet->setCellValue('B' . $rowTbh, "Total");
-        $sheet->setCellValue('F' . $rowTbh, "=SUM(F2:F$row)");
         $sheet->setCellValue('G' . $rowTbh, "=SUM(G2:G$row)");
         $sheet->setCellValue('H' . $rowTbh, "=SUM(H2:H$row)");
+        $sheet->setCellValue('I' . $rowTbh, "=SUM(I2:I$row)");
+        $sheet->setCellValue('I' . $rowTbh, "=SUM(I2:I$row) / SUM(H2:H$row)");
 
-        $sheet->getStyle("B$rowTbh:H$rowTbh")->applyFromArray($style_atas);
+        $sheet->getStyle("B$rowTbh:J$rowTbh")->applyFromArray($style_atas);
 
-        $sheet->getStyle('B1:H' . $rowTbh)->applyFromArray($style);
+        $sheet->getStyle('B1:J' . $rowTbh)->applyFromArray($style);
 
         $uang_cost = BalanceModel::uangCost();
 
         foreach ($uang_cost as $i => $u) {
             $row = $i + 2;
-            $sheet->setCellValue('K' . $row, date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-01')));
-            $sheet->setCellValue('L' . $row, $u->gaji);
-            $sheet->setCellValue('M' . $row, $u->total_operasional - $u->gaji);
-            $sheet->setCellValue('N' . $row, $u->total_operasional);
+            $sheet->setCellValue('L' . $row, date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-01')));
+            $sheet->setCellValue('M' . $row, $u->gaji);
+            $sheet->setCellValue('N' . $row, $u->total_operasional - $u->gaji);
+            $sheet->setCellValue('O' . $row, $u->total_operasional);
         }
 
         $rowTbhCost = $row + 1;
-        $sheet->setCellValue('K' . $rowTbhCost, "Total");
-        $sheet->setCellValue('L' . $rowTbhCost, "=SUM(L2:L$row)");
+        $sheet->setCellValue('L' . $rowTbhCost, "Total");
         $sheet->setCellValue('M' . $rowTbhCost, "=SUM(M2:M$row)");
         $sheet->setCellValue('N' . $rowTbhCost, "=SUM(N2:N$row)");
+        $sheet->setCellValue('O' . $rowTbhCost, "=SUM(O2:O$row)");
 
-        $sheet->setCellValue('N' . $rowTbhCost, "=SUM(N2:N$row)");
+        $sheet->setCellValue('O' . $rowTbhCost, "=SUM(O2:O$row)");
 
         $model = new CocokanModel();
 
@@ -1910,16 +1918,16 @@ class ExportCocokanController extends Controller
 
 
         $rowCost = $rowTbhCost + 1;
-        $sheet->setCellValue('K' . $rowCost, "Cost berjalan");
-        $sheet->setCellValue('N' . $rowCost, $ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'));
+        $sheet->setCellValue('L' . $rowCost, "Cost berjalan");
+        $sheet->setCellValue('O' . $rowCost, $ttl_cost_berjalan - sumBk($uang_cost, 'total_operasional') - sumBk($bk, 'cost_bk') - sumBk($bk_suntik, 'ttl_rp'));
 
         $rowTtl = $rowCost + 1;
-        $sheet->setCellValue('K' . $rowTtl, "Total Bk + Operasional + cost berjalan");
-        $sheet->setCellValue('N' . $rowTtl, sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan);
+        $sheet->setCellValue('L' . $rowTtl, "Total Bk + Operasional + cost berjalan");
+        $sheet->setCellValue('O' . $rowTtl, sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan);
 
-        $sheet->getStyle("K$rowTbhCost:N$rowTbhCost")->applyFromArray($style_atas);
+        $sheet->getStyle("L$rowTbhCost:O$rowTbhCost")->applyFromArray($style_atas);
 
-        $sheet->getStyle('K1:N' . $rowTtl)->applyFromArray($style);
+        $sheet->getStyle('L2:O' . $rowTtl)->applyFromArray($style_atas);
 
         $pcs_sisa_grading = $grading_sisa->pcs ?? 0;
         $datas = [
@@ -2009,6 +2017,7 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue('R' . $row, $v['pcs']);
             $sheet->setCellValue('S' . $row, $v['gr']);
             $sheet->setCellValue('T' . $row, $v['ttl_rp']);
+            $sheet->setCellValue('U' . $row, empty($v['gr']) ? 0 :  round($v['ttl_rp'] / $v['gr'], 1));
         }
 
         $rowTbhCost = $row + 1;
@@ -2016,9 +2025,10 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('R' . $rowTbhCost, "=SUM(R2:R$row)");
         $sheet->setCellValue('S' . $rowTbhCost, "=SUM(S2:S$row)");
         $sheet->setCellValue('T' . $rowTbhCost, "=SUM(T2:T$row)");
+        $sheet->setCellValue('U' . $rowTbhCost, "=SUM(T2:T$row) / SUM(S2:S$row)");
 
-        $sheet->getStyle("Q$rowTbhCost:T$rowTbhCost")->applyFromArray($style_atas);
-        $sheet->getStyle('Q1:T' . $rowTbhCost)->applyFromArray($style);
+        $sheet->getStyle("Q$rowTbhCost:U$rowTbhCost")->applyFromArray($style_atas);
+        $sheet->getStyle('Q2:U' . $rowTbhCost)->applyFromArray($style);
     }
 
     public function exportCabut(Request $r)
