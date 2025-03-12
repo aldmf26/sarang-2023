@@ -275,7 +275,9 @@
                             <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($cetak_sisa->ttl_rp / $cetak_sisa->gr, 0) }}</td>
+                            <td class="text-end">
+                                {{ empty($cetak_sisa->gr) ? 0 : number_format($cetak_sisa->ttl_rp / $cetak_sisa->gr, 0) }}
+                            </td>
 
                         </tr>
                         <tr>
