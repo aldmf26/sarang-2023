@@ -37,6 +37,7 @@ use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\OpnameNewController;
 use App\Http\Controllers\OpnameSusutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QcController;
 use App\Http\Controllers\RekapanController;
 use App\Http\Controllers\RekapGajiPeranakController;
 use App\Http\Controllers\SummaryController;
@@ -272,6 +273,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/invoice_grade', 'invoice_grade')->name('invoice_grade');
             Route::get('/invoice_wip', 'invoice_wip')->name('invoice_wip');
             Route::get('/invoice_grading', 'invoice_grading')->name('invoice_grading');
+            Route::get('/invoice_qc', 'invoice_qc')->name('invoice_qc');
+            Route::get('/invoice_wip2', 'invoice_wip2')->name('invoice_wip2');
+            Route::get('/cancel_po_qc', 'cancel_po_qc')->name('cancel_po_qc');
+            Route::get('/selesai_po_qc', 'selesai_po_qc')->name('selesai_po_qc');
+            Route::get('/selesai_po_wip2', 'selesai_po_wip2')->name('selesai_po_wip2');
+            Route::get('/print_po_qc', 'print_po_qc')->name('print_po_qc');
+            Route::get('/print_po_wip2', 'print_po_wip2')->name('print_po_wip2');
             Route::get('/print_formulir_grade', 'print_formulir_grade')->name('print_formulir_grade');
             Route::get('/selesai_grade', 'selesai_grade')->name('selesai_grade');
 
@@ -572,5 +580,17 @@ Route::middleware('auth')->group(function () {
         ->name('cost_global.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+        });
+
+    Route::controller(QcController::class)
+        ->prefix('home/qc')
+        ->name('qc.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/save_invoice_qc', 'save_invoice_qc')->name('save_invoice_qc');
+            Route::get('/listqc', 'listqc')->name('listqc');
+            Route::get('/listboxqc', 'listboxqc')->name('listboxqc');
+            Route::post('/save_akhir', 'save_akhir')->name('save_akhir');
+            Route::post('/po_wip', 'po_wip')->name('po_wip');
         });
 });

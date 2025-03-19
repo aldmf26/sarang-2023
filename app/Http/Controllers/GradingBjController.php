@@ -811,6 +811,16 @@ class GradingBjController extends Controller
         ];
         return view('home.gradingbj.gudang_siap_kirim_partai', $data);
     }
+    public function gudang_siap_kirim2(Request $r)
+    {
+        $gudang = Grading::stock_wip2();
+
+        $data = [
+            'title' => 'Stock Siap Kirim',
+            'gudang' => $gudang
+        ];
+        return view('home.gradingbj.gudang_siap_kirim_partai2', $data);
+    }
 
 
     public function detail(Request $r)

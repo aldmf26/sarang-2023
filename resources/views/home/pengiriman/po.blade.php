@@ -79,8 +79,8 @@
                                                 class="form-control form-control-sm mb-2" placeholder="cari">
                                         </div>
                                         <div>
-                                            <button @click="cek = []" x-transition x-show="cek.length" id="simpanTambahBox"
-                                                class="btn  btn-sm btn-primary" type="button">
+                                            <button @click="cek = []" x-transition x-show="cek.length"
+                                                id="simpanTambahBox" class="btn  btn-sm btn-primary" type="button">
                                                 <i class="fas fa-plus"></i>
                                                 Kirim
                                                 <span class="badge bg-white text-black" x-text="cek.length"
@@ -193,7 +193,7 @@
 
                 function ubah(element) {
                     let row = $(element).closest('tr');
-                    
+
                     // Ambil nilai dari input yang baru diketik
                     let id_pengiriman = row.find('input[name="id_pengiriman[]"]').val();
                     let grade = row.find('input[name="grade2[]"]').val();

@@ -96,7 +96,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::get('/503', function () {
         view('error.503');
     })->name('503');
-    
+
 
     Route::controller(AolApiController::class)
         ->prefix('aol')
@@ -435,6 +435,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/template', 'template')->name('template');
             Route::get('/gudang', 'gudang')->name('gudang');
             Route::post('/kirim', 'kirim')->name('kirim');
+            Route::post('/qc', 'qc')->name('qc');
             Route::post('/kirim_grade2', 'kirim_grade2')->name('kirim_grade2');
             Route::post('/import', 'import')->name('import');
             Route::post('/update', 'update')->name('update');
@@ -487,7 +488,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/get_select_grade',     'get_select_grade')->name('get_select_grade');
             Route::get('/', 'hal_awal')->name('index');
         });
-   
+
     Route::controller(GradingBjController::class)
         ->prefix('home/gradingbj')
         ->name('gradingbj.')
@@ -511,6 +512,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/import_gudang_siap_kirim', 'import_gudang_siap_kirim')->name('import_gudang_siap_kirim');
             Route::get('/template_import_gudang_siap_kirim', 'template_import_gudang_siap_kirim')->name('template_import_gudang_siap_kirim');
             Route::get('/gudang_siap_kirim', 'gudang_siap_kirim')->name('gudang_siap_kirim');
+            Route::get('/gudang_siap_kirim2', 'gudang_siap_kirim2')->name('gudang_siap_kirim2');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/detail_perpartai', 'detail_perpartai')->name('detail_perpartai');
             Route::get('/cancel', 'cancel')->name('cancel');

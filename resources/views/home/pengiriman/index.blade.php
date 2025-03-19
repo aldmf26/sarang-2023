@@ -17,7 +17,7 @@
                 this.redir('edit')
             },
             del() {
-                if(confirm('Apakah anda yakin ?')) {
+                if (confirm('Apakah anda yakin ?')) {
                     this.redir('delete')
                 }
             },
@@ -30,7 +30,8 @@
                     </table>
                 </div>
                 <div>
-                    <span x-show="cek.length" class="btn btn-sm btn-info" x-transition>Data dipilih <span class="badge bg-primary" x-text="cek.length" x-transition></span></span>
+                    <span x-show="cek.length" class="btn btn-sm btn-info" x-transition>Data dipilih <span
+                            class="badge bg-primary" x-text="cek.length" x-transition></span></span>
                     {{-- <x-theme.button modal="Y" idModal="import" href="#" icon="fa-upload" addClass="float-end"
                         teks="Import" />
                     <form action="{{ route('pengiriman.import') }}" enctype="multipart/form-data" method="post">

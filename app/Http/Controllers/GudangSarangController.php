@@ -333,7 +333,7 @@ class GudangSarangController extends Controller
                 ];
             }
         }
-        if(!empty($data)){
+        if (!empty($data)) {
             DB::table('grading')->insert($data);
         }
         return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
@@ -626,5 +626,118 @@ class GudangSarangController extends Controller
             'no_invoice' => $r->no_invoice,
         ];
         return view('home.gudang_sarang.print_formulir_grading', $data);
+    }
+
+    public function invoice_qc(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice_grading";
+        $formulir = $this->getFormulirKategori('qc');
+        $data = [
+            'title' => 'Po QC',
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_qc', $data);
+    }
+
+    public function cancel_po_qc(Request $r)
+    {
+        $formulir = DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'qc']])->get();
+        foreach ($formulir as $d) {
+            DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update(['cek_qc' => 'T']);
+        }
+        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'qc']])->delete();
+        return redirect()->back()->with('sukses', 'Data Berhasil di hapus');
+    }
+    public function selesai_po_qc(Request $r)
+    {
+        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'qc']])->update(['selesai' => 'Y']);
+        $formulir = DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'qc']])->get();
+        foreach ($formulir as $d) {
+            $data = [
+                'box_pengiriman' => $d->no_box,
+                'pcs_awal' => $d->pcs_awal,
+                'gr_awal' => $d->gr_awal,
+                'gr_akhir' => 0,
+                'bulan_dibayar' => date('m'),
+                'tahun_dibayar' => date('Y'),
+                'tgl' => date('Y-m-d'),
+            ];
+            DB::table('qc')->insert($data);
+        }
+        return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
+    }
+    public function print_po_qc(Request $r)
+    {
+        $formulir = DB::select("SELECT a.tanggal,b.grade,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a 
+        left join (
+            SELECT b.grade , b.box_pengiriman as no_box
+            FROM grading_partai as b
+            group by b.box_pengiriman
+        ) as b on b.no_box = a.no_box
+        where a.no_invoice = '$r->no_invoice' and a.kategori = 'qc'
+        group by a.no_box, a.kategori;");
+
+        $data = [
+            'title' => 'Po QC',
+            'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
+        ];
+        return view('home.gudang_sarang.print_formulir_qc', $data);
+    }
+
+    public function invoice_wip2(Request $r)
+    {
+        $tgl = tanggalFilter($r);
+        $tgl1 = $tgl['tgl1'];
+        $tgl2 = $tgl['tgl2'];
+        $kategori = $r->kategori ?? 'cetak';
+        $route = request()->route()->getName();
+        $routeSekarang = "gudangsarang.invoice_grading";
+        $formulir = $this->getFormulirKategori('wip2');
+        $data = [
+            'title' => 'Po Wip2',
+            'formulir' => $formulir,
+            'kategori' => $kategori,
+            'route' => $route,
+            'routeSekarang' => $routeSekarang,
+        ];
+        return view('home.gudang_sarang.invoice_wip2', $data);
+    }
+
+    public function selesai_po_wip2(Request $r)
+    {
+
+        DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'wip2']])->update(['selesai' => 'Y']);
+        return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
+    }
+
+    public function print_po_wip2(Request $r)
+    {
+        $formulir = DB::select("SELECT a.tanggal,b.grade,a.no_box, a.pcs_awal as pcs, c.gr_awal, a.gr_awal as gr_akhir
+        FROM formulir_sarang as a 
+        left join (
+            SELECT b.grade , b.box_pengiriman as no_box
+            FROM grading_partai as b
+            group by b.box_pengiriman
+        ) as b on b.no_box = a.no_box
+        left join qc as c on c.box_pengiriman = a.no_box
+        where a.no_invoice = '$r->no_invoice' and a.kategori = 'wip2'
+        group by a.no_box, a.kategori;");
+
+        $data = [
+            'title' => 'Po Wip2',
+            'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
+        ];
+        return view('home.gudang_sarang.print_formulir_wip2', $data);
     }
 }
