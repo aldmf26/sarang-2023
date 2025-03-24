@@ -190,26 +190,13 @@ class BoxKirimController extends Controller
             $tgl_input = date('Y-m-d');
             $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
             $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
-            // $r->no_nota didapat dari po lsit pengiriman, jika dari sana maka notanya di ambil
             $no_nota = $r->no_nota ?? $no_nota;
             foreach (explode(',', $r->no_box) as $d) {
-                // $grade = DB::table('grading as a')
-                //     ->join('tb_grade as b', 'a.id_grade', '=', 'b.id_grade')
-                //     ->where('a.no_box_grading', $d)
-                //     ->first()
-                //     ->nm_grade;
                 $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
             sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
-            
             FROM `grading_partai` as a
                     where a.box_pengiriman = $d
                     group by a.box_pengiriman");
-
-
-                // $rp_gram = Grading::gudangPengirimanGr($d)->total_rp_gram_str;
-
-                // DB::table('grading_partai')->where('box_pengiriman', $d)->update(['sudah_kirim' => 'Y']);
-
                 $dataToInsert[] = [
                     'no_box' => $d,
                     'pcs' => $ambilBox->pcs,
@@ -229,8 +216,47 @@ class BoxKirimController extends Controller
             return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
         }
     }
+    public function qc(Request $r)
+    {
+        if ($r->submit == 'print') {
+            return redirect()->route('gradingbj.print', ['no_box' => $r->no_box]);
+        } else {
+            $admin = auth()->user()->name;
+            $tgl_input = date('Y-m-d');
+            $no_invoice = DB::table('formulir_sarang')->where('kategori', 'qc')->orderBy('no_invoice', 'DESC')->value('no_invoice');
+            $no_invoice = empty($no_invoice) ? 1001 : $no_invoice + 1;
 
-    
+
+            foreach (explode(',', $r->no_box) as $d) {
+                $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr
+                FROM grading_partai as a
+                where a.box_pengiriman = $d
+                group by a.box_pengiriman");
+
+                $data1 = [
+                    'cek_qc' => 'Y',
+                ];
+                DB::table('grading_partai')->where('box_pengiriman', $d)->update($data1);
+
+                $dataToInsert[] = [
+                    'no_invoice' => $no_invoice,
+                    'no_box' => $d,
+                    'id_pemberi' => 459,
+                    'id_penerima' => 459,
+                    'pcs_awal' => $ambilBox->pcs,
+                    'gr_awal' => $ambilBox->gr,
+                    'tanggal' => $tgl_input,
+                    'kategori' => 'qc',
+                    'selesai' => 'T',
+                ];
+            }
+            DB::table('formulir_sarang')->insert($dataToInsert);
+
+            return redirect()->back()->with('sukses', 'data sudah masuk qc');
+        }
+    }
+
+
 
     public function kirim_grade2(Request $r)
     {
@@ -468,7 +494,7 @@ class BoxKirimController extends Controller
         }
     }
 
-    
+
 
     public function print_formulir_grade(Request $r)
     {

@@ -16,12 +16,12 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <form action="{{ route('pengiriman.qc') }}" method="post">
+                    <form action="{{ route('pengiriman.kirim') }}" method="post">
                         @csrf
                         <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
                             href="">Import</a>
-                        <a href="{{ route('gudangsarang.invoice_qc', ['kategori' => 'qc']) }}"
-                            class="btn btn-sm btn-info" href=""><i class="fa fa-warehouse"></i> Po Qc</a>
+                        {{-- <a href="{{ route('pengiriman.gudang') }}" class="btn btn-sm btn-info" href=""><i
+                                class="fa fa-warehouse"></i> Gudang</a> --}}
                         {{-- <a href="{{ route('packinglist.pengiriman') }}" class="btn btn-sm btn-primary" href=""><i
                                 class="fa fa-clipboard-list"></i> Packinglist</a> --}}
 
@@ -30,7 +30,7 @@
                         <button value="kirim" x-transition x-show="cek.length" class="btn btn-sm btn-primary"
                             name="submit">
                             <i class="fas fa-plus"></i>
-                            QC
+                            Kirim
                             <span class="badge bg-white text-black" x-text="cek.length" x-transition></span>
                             <span x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
                         </button>

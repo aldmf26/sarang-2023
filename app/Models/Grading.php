@@ -356,7 +356,36 @@ left join(
                 FROM `pengiriman` 
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
-            where a.formulir = 'Y'
+            where a.formulir = 'Y' and a.cek_qc = 'T'
+            GROUP BY box_pengiriman ORDER BY a.grade Desc");
+    }
+    public static function stock_wip2()
+    {
+        return DB::select("SELECT 
+            a.box_pengiriman as no_box,
+            a.grade,
+            sum(a.pcs) as pcs, 
+            sum(a.gr) as gr,
+            a.no_invoice,
+            a.urutan,
+            b.pcs as pcs_pengiriman, 
+            b.gr as gr_pengiriman,
+            a.sudah_print
+            FROM `grading_partai` as a
+            LEFT JOIN (
+                SELECT 
+                no_box as no_box_pengiriman,
+                sum(pcs) as pcs, 
+                sum(gr) as gr 
+                FROM `pengiriman` 
+                GROUP BY no_box
+            )  as b on b.no_box_pengiriman = a.box_pengiriman
+            join (
+                SELECT c.no_box
+                FROM formulir_sarang as c 
+                where c.selesai = 'Y' and c.kategori = 'wip2'
+            ) as c on c.no_box = a.box_pengiriman
+            where a.formulir = 'Y' and a.cek_qc = 'Y'
             GROUP BY box_pengiriman ORDER BY a.grade Desc");
     }
 

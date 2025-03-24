@@ -24,6 +24,7 @@
                                 <th class="dhead">No</th>
                                 <th class="dhead">Bulan kerja</th>
                                 <th class="dhead">Nama partai</th>
+                                <th class="dhead">Keterangan</th>
                                 <th class="dhead">Grade</th>
                                 <th class="text-end dhead">Pcs</th>
                                 <th class="text-end dhead">Gr</th>
@@ -32,6 +33,7 @@
                             <tr>
                                 <td class="dhead"></td>
                                 <td class="dhead">Total</td>
+                                <td class="dhead"></td>
                                 <td class="dhead"></td>
                                 <td class="dhead"></td>
                                 <td class="text-end dhead">
@@ -55,6 +57,7 @@
                                     <td>{{ empty($b->bulan) ? '-' : date('F Y', strtotime('01-' . $b->bulan . '-' . $b->tahun)) }}
                                     </td>
                                     <td>{{ $b->nm_partai }}</td>
+                                    <td>{{ $b->nm_partai_dulu }}</td>
                                     <td>{{ $b->grade }}</td>
                                     <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>
                                     <td class="text-end">{{ number_format($b->gr_bk, 0) }}</td>
@@ -238,8 +241,9 @@
                                 {{ number_format(sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
                             </td>
                             <td class="text-end">
+                                {{ empty(sumBk($cabut_selesai_siap_cetak, 'gr')) ? 0 : number_format((sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja')) / sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}
                                 {{-- {{ number_format((sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja')) / sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }} --}}
-                                0
+
                             </td>
 
                         </tr>
@@ -271,7 +275,9 @@
                             <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
                             <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}</td>
-                            <td class="text-end">{{ number_format($cetak_sisa->ttl_rp / $cetak_sisa->gr, 0) }}</td>
+                            <td class="text-end">
+                                {{ empty($cetak_sisa->gr) ? 0 : number_format($cetak_sisa->ttl_rp / $cetak_sisa->gr, 0) }}
+                            </td>
 
                         </tr>
                         <tr>
@@ -282,8 +288,8 @@
                                 {{ number_format(sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'), 0) }}
                             </td>
                             <td class="text-end">
-                                {{-- {{ number_format((sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja')) / sumBk($cetak_selesai, 'gr'), 0) }} --}}
-                                0
+                                {{ empty(sumBk($cetak_selesai, 'gr')) ? 0 : number_format((sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja')) / sumBk($cetak_selesai, 'gr'), 0) }}
+
                             </td>
 
                         </tr>
@@ -306,8 +312,8 @@
                             <td class="text-end">
                                 {{ number_format($sedang_proses->ttl_rp + $sedang_proses->cost_kerja, 0) }}</td>
                             <td class="text-end">
-                                {{-- {{ number_format(($sedang_proses->ttl_rp + $sedang_proses->cost_kerja) / $sedang_proses->gr, 0) }} --}}
-                                0
+                                {{ empty($sedang_proses->gr) ? 0 : number_format(($sedang_proses->ttl_rp + $sedang_proses->cost_kerja) / $sedang_proses->gr, 0) }}
+
                             </td>
 
                         </tr>
@@ -331,8 +337,8 @@
                                 {{ number_format(sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'), 0) }}
                             </td>
                             <td class="text-end">
-                                {{-- {{ number_format((sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja')) / sumBk($sortir_selesai, 'gr'), 0) }} --}}
-                                0
+                                {{ empty(sumBk($sortir_selesai, 'gr')) ? 0 : number_format((sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja')) / sumBk($sortir_selesai, 'gr'), 0) }}
+
                             </td>
 
                         </tr>
@@ -363,7 +369,7 @@
                                 {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                                {{ empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
                             </td>
                         </tr>
                         <tr>
@@ -427,6 +433,9 @@
                         <td class="dhead text-end fw-bold">
                             {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cetak_sisa->ttl_rp + sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja') + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja') + $ttl_sisa_blum_grading + $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op, 0) }}
                         </td>
+                        {{-- <td class="dhead text-end fw-bold">
+                            {{ number_format($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + $cetak_proses->ttl_rp + $cetak_sisa->modal + sumBk($cetak_selesai, 'ttl_rp') + $sedang_proses->ttl_rp + $sortir_sisa->ttl_rp + sumBk($sortir_selesai, 'ttl_rp') + $grading_sisa->modal + $grading->cost_bk, 0) }}
+                        </td> --}}
                         <td class="dhead text-end fw-bold">
                             {{ number_format(($cbt_proses->ttl_rp + $cbt_sisa_pgws->ttl_rp + sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + $cetak_proses->ttl_rp + $cetak_proses->cost_kerja + $cetak_sisa->ttl_rp + sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja') + $sedang_proses->ttl_rp + $sedang_proses->cost_kerja + $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja + sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja') + $ttl_sisa_blum_grading + $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op) /($cbt_proses->gr + $cbt_sisa_pgws->gr + $cetak_proses->gr + $cetak_sisa->gr + $sedang_proses->gr + $sortir_sisa->gr + $grading->gr + $grding_sisa_gr + $pengiriman->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + sumBk($sortir_selesai, 'gr') + sumBk($cetak_selesai, 'gr')),0) }}
                         </td>

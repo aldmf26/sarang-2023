@@ -45,41 +45,31 @@
 
                                     $no_invoice = $d->no_invoice;
                                     $getBox = DB::table('formulir_sarang')
-                                        ->where([['no_invoice', $no_invoice], ['kategori', 'grading']])
+                                        ->where([['no_invoice', $no_invoice], ['kategori', 'qc'], ['selesai', 'Y']])
                                         ->pluck('no_box')
                                         ->toArray();
                                     $hasil = implode(',', $getBox);
 
                                     $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
                                 @endphp
-                                @role('grading', 'presiden')
-                                    @if ($getSudahGrading)
-                                        <a
-                                            href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}">
-                                            <span class="badge bg-primary">Detail</span>
-                                        </a>
-                                    @else
-                                        <a onclick="return confirm('Yakin dihapus ?')"
-                                            href="{{ route('gudangsarang.batal_grading', ['no_invoice' => $d->no_invoice, 'kategori' => 'grading']) }}">
-                                            <span class="badge bg-danger">Cancel</span>
-                                        </a>
 
-                                        <a href="{{ route('gudangsarang.print_formulir_grading', ['no_invoice' => $d->no_invoice]) }}"
-                                            target="_blank">
-                                            <span class="badge bg-primary">Print</span>
-                                        </a>
-                                        <a
-                                            href="{{ route('gradingbj.grading_partai_result', ['no_box' => $hasil, 'no_invoice' => $d->no_invoice]) }}">
-                                            <span class="badge bg-primary">Grading</span>
-                                        </a>
-                                    @endif
-                                    {{-- <form method="POST" action="{{ route('gradingbj.grading_partai', ['no_box' => $hasil]) }}"
-                                        onsubmit="return confirm('Yakin digrading ?')">
-                                        @csrf
-                                        <input type="hidden" name="no_box" value="{{ $hasil }}">
-                                        <button type="submit" name="submit" class="border-0 badge bg-success" value="grading">Grading</button>
-                                    </form> --}}
-                                @endrole
+                                @if (!$getBox)
+                                    <a onclick="return confirm('Yakin dihapus ?')"
+                                        href="{{ route('gudangsarang.cancel_po_qc', ['no_invoice' => $d->no_invoice]) }}">
+                                        <span class="badge bg-danger">Cancel</span>
+                                    </a>
+                                    <a onclick="return confirm('Yakin diselesaikan ?')"
+                                        href="{{ route('gudangsarang.selesai_po_qc', ['no_invoice' => $d->no_invoice]) }}">
+                                        <span class="badge bg-success">Selesai</span>
+                                    </a>
+                                @else
+                                    <a href="{{ route('gudangsarang.print_po_qc', ['no_invoice' => $d->no_invoice]) }}"
+                                        target="_blank">
+                                        <span class="badge bg-primary">Print</span>
+                                    </a>
+                                @endif
+
+
 
                             </td>
                         </tr>

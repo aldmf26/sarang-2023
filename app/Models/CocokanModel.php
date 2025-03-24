@@ -492,7 +492,7 @@ left join users as g on g.id = a.id_pengawas
     {
         return  DB::selectOne("SELECT sum(a.pcs_awal) pcs , 
         sum(b.gr_awal * b.hrga_satuan) as bk_rp,
-        sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk
+        sum(a.gr_awal) as gr, sum(COALESCE(b.gr_awal * b.hrga_satuan,0) + COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0)  ) as cost_bk, sum(b.gr_awal * b.hrga_satuan) as modal
         FROM formulir_sarang as a 
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
         left join cabut as c on c.no_box = a.no_box

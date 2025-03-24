@@ -17,11 +17,20 @@
     </li>
     <li class="nav-item">
         <a class="nav-link {{ $route == 'gudangsarang.invoice_grading' && $kategori == 'grading' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}">Grading</a>
+            aria-current="page"
+            href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}">Grading</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {{ $route == 'gudangsarang.invoice_wip' && $kategori == 'wip' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}">Wip</a>
+            aria-current="page" href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}">Wip1</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ $route == 'gudangsarang.invoice_qc' && $kategori == 'qc' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('gudangsarang.invoice_qc', ['kategori' => 'qc']) }}">Qc</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ $route == 'gudangsarang.invoice_wip2' && $kategori == 'wip2' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('gudangsarang.invoice_wip2', ['kategori' => 'wip2']) }}">Wip2</a>
     </li>
 
 
