@@ -54,6 +54,8 @@
                             <th width="60" class="text-end">Gr Awal Cbt</th>
                             <th width="60" class="text-end">Pcs Awal</th>
                             <th width="60" class="text-end">Gr Awal</th>
+                            <th width="60" class="text-end">Sst Program</th>
+                            <th width="60" class="text-end">Sst Aktual</th>
                             <th width="60" class="text-end">Pcs Tidak Ctk</th>
                             <th width="60" class="text-end">Gr Tidak Ctk</th>
                             <th width="200">Nama Anak</th>
@@ -72,14 +74,17 @@
 
                             $ttlPcs_cbt = 0;
                             $ttlGr_cbt = 0;
+
                         @endphp
                         @foreach ($formulir as $no => $f)
                             @php
+
+                                $grCabut = $f->gr_cbt ?? 0 + $f->gr_eo ?? 0;
                                 $ttlPcs += $f->pcs_awal;
                                 $ttlGr += $f->gr_awal;
 
                                 $ttlPcs_cbt += $f->pcs_cbt;
-                                $ttlGr_cbt += $f->gr_cbt ?? 0 + $f->gr_eo ?? 0;
+                                $ttlGr_cbt += $grCabut;
                             @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>
@@ -88,9 +93,11 @@
                                 <td>{{ $f->no_box }}</td>
                                 <td>{{ $f->tipe }}-{{ $f->ket }}</td>
                                 <td class="text-end">{{ $f->pcs_cbt ?? 0 }}</td>
-                                <td class="text-end">{{ $f->gr_cbt ?? 0 + $f->gr_eo ?? 0 }}</td>
+                                <td class="text-end">{{ $grCabut }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
+                                <td class="text-end">{{ $grCabut - $f->gr_awal }}</td>
+                                <td></td>
                                 @for ($i = 0; $i < 9; $i++)
                                     <td></td>
                                 @endfor
@@ -104,6 +111,7 @@
                             <th class="text-end">{{ number_format($ttlGr_cbt, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                            <th class="text-end">{{ number_format($ttlGr_cbt - $ttlGr, 0) }}</th>
                             @for ($i = 0; $i < 9; $i++)
                                 <th></th>
                             @endfor

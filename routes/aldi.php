@@ -37,6 +37,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PackingListController;
 use App\Http\Controllers\PenutupController;
 use App\Http\Controllers\SiapKirimController;
+use App\Http\Controllers\SusutController;
 use App\Livewire\PembuanganSampah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -251,6 +252,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/save_formulir_eo', 'save_formulir_eo')->name('save_formulir_eo');
+        });
+    Route::controller(SusutController::class)
+        ->prefix('home/susut')
+        ->name('susut.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     Route::controller(GlobalController::class)
         ->prefix('home/global')

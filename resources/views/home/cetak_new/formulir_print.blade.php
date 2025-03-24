@@ -42,7 +42,6 @@
                 Print</a>
         </div>
         @foreach ($halaman as $h)
-            
             <div class="section">
                 <h5 class="fw-bold text-center" style="text-decoration: underline">PO SORTIR : {{ $no_invoice }}</h5>
 
@@ -63,6 +62,8 @@
                                     <th width="60" class="text-end">Gr Awal Ctk</th>
                                     <th width="60" class="text-end">Pcs Awal</th>
                                     <th width="60" class="text-end">Gr Awal</th>
+                                    <th width="60" class="text-end">Sst Program</th>
+                                    <th width="60" class="text-end">Sst Aktual</th>
                                     <th width="60" class="text-end">Pcs Akhir</th>
                                     <th width="60" class="text-end">Gr Akhir</th>
                                     <th width="60" class="text-end">Susut %</th>
@@ -80,8 +81,11 @@
                                         ->where('a.no_invoice', $no_invoice)
                                         ->where('a.kategori', 'sortir')
                                         ->where('a.id_penerima', $h->id_penerima)
-                                        ->selectRaw('b.nm_partai, b.tipe as tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal,c.pcs_awal_ctk as pcs_cbt, c.gr_awal_ctk as gr_cbt')
-                                        ->get()->toArray();
+                                        ->selectRaw(
+                                            'b.nm_partai, b.tipe as tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal,c.pcs_awal_ctk as pcs_cbt, c.gr_awal_ctk as gr_cbt',
+                                        )
+                                        ->get()
+                                        ->toArray();
                                 @endphp
                                 @foreach ($detail as $d)
                                     <tr>
@@ -94,6 +98,7 @@
                                         <td class="text-end">{{ $d->gr_cbt }}</td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
+                                        <td class="text-end">{{ $d->gr_cbt - $d->gr_awal }}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -108,6 +113,7 @@
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_awal'), 0) }}</th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}</th>
                                     <td></td>
                                     <td></td>
                                     <td></td>

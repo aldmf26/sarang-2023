@@ -59,6 +59,8 @@
                                 <th class="text-end" width="100">Gr Awal Sortir</th>
                                 <th class="text-end" width="100">Pcs</th>
                                 <th class="text-end" width="100">Gr</th>
+                                <th width="60" class="text-end">Sst Program</th>
+                            <th width="60" class="text-end">Sst Aktual</th>
                             </tr>
                         </thead>
                         @php
@@ -85,6 +87,8 @@
                                     <td class="text-end">{{ $d->gr_srt }}</td>
                                     <td class="text-end">{{ $d->pcs }}</td>
                                     <td class="text-end">{{ $d->gr }}</td>
+                                    <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         @endforeach
@@ -96,6 +100,7 @@
 
                                 <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlGrSrt - $ttlGr, 0) }}</th>
                             </tr>
                         </tfoot>
                     </table>
