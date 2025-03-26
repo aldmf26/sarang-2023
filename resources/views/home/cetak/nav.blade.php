@@ -32,10 +32,10 @@
                 'rot' => 'cabut.global',
                 'nama' => 'Global',
             ],
-            // [
-            //     'rot' => 'cabut.laporan_perhari',
-            //     'nama' => 'Laporan Perhari',
-            // ],
+            [
+                'rot' => 'susut.index',
+                'nama' => 'Cek Susut',
+            ],
         ];
 
     @endphp

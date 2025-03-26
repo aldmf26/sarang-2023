@@ -22,19 +22,19 @@
         Export
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-        <a data-bs-toggle="modal" data-bs-target="#tambah" href="#" class="dropdown-item">
+        {{-- <a data-bs-toggle="modal" data-bs-target="#tambah" href="#" class="dropdown-item">
             Export Rekap
-        </a>
+        </a> --}}
 
         <a href="{{ route('cabut.export_global', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
             Export Global
         </a>
-        <a href="{{ route('cabut.export_ibu', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
+        {{-- <a href="{{ route('cabut.export_ibu', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
             Export Ibu
         </a>
         <a href="{{ route('cabut.export_sinta', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
             Export Sinta
-        </a>
+        </a> --}}
     </div>
 </div>
 @include('home.cabut.view_bulandibayar')
