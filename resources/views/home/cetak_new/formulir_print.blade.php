@@ -82,7 +82,7 @@
                                         ->where('a.kategori', 'sortir')
                                         ->where('a.id_penerima', $h->id_penerima)
                                         ->selectRaw(
-                                            'b.nm_partai, b.tipe as tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal,c.pcs_awal_ctk as pcs_cbt, c.gr_awal_ctk as gr_cbt',
+                                            'a.id_formulir,a.sst_aktual,b.nm_partai, b.tipe as tipe, b.ket, a.no_box, a.pcs_awal, a.gr_awal,c.pcs_awal_ctk as pcs_cbt, c.gr_awal_ctk as gr_cbt',
                                         )
                                         ->get()
                                         ->toArray();
@@ -99,7 +99,12 @@
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
                                         <td class="text-end">{{ $d->gr_cbt - $d->gr_awal }}</td>
-                                        <td></td>
+                                        <td>
+                                            @livewire('input-susut-aktual', [
+                                                'id_formulir' => $d->id_formulir,
+                                                'input' => $d->sst_aktual,
+                                            ])
+                                        </td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -113,8 +118,11 @@
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_awal'), 0) }}</th>
-                                    <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}</th>
-                                    <td></td>
+                                    <th class="text-end">
+                                        {{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}
+                                    </th>
+                                    <th class="text-end">{{ number_format(sumCol($detail, 'sst_aktual'), 0) }}</th>
+
                                     <td></td>
                                     <td></td>
                                     <td></td>

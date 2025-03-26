@@ -88,7 +88,12 @@
                                     <td class="text-end">{{ $d->pcs }}</td>
                                     <td class="text-end">{{ $d->gr }}</td>
                                     <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
-                                    <td></td>
+                                    <td>
+                                        @livewire('input-susut-aktual', [
+                                            'id_formulir' => $d->id_formulir,
+                                            'input' => $d->sst_aktual,
+                                        ])
+                                    </td>
                                 </tr>
                             </tbody>
                         @endforeach
@@ -101,6 +106,7 @@
                                 <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGrSrt - $ttlGr, 0) }}</th>
+                                <th class="text-end">{{ number_format($formulir->sum('sst_aktual'), 0) }}</th>
                             </tr>
                         </tfoot>
                     </table>

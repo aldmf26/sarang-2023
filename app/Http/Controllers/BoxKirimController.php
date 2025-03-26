@@ -422,7 +422,6 @@ class BoxKirimController extends Controller
             $tgl = $r->tgl;
             $getFormulir = DB::table('pengiriman')->where('no_nota', $no_invoice)->get();
             if ($r->submit == 'draft') {
-                dd('ini draft');
                 for ($i = 0; $i < count($r->id_pengiriman); $i++) {
                     $data2 = [
                         'tgl_input' => $tgl,
@@ -436,8 +435,6 @@ class BoxKirimController extends Controller
                 }
                 $redir = "pengiriman.list_po";
             } else {
-                dd('ini submit');
-
                 foreach ($getFormulir as $d) {
                     $data[] = [
                         'id_pengiriman' => $d->no_box,

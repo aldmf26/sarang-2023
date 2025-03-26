@@ -43,7 +43,8 @@
         </ul>
     </div>
     <div class="d-none">
-        <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm "><i
+        <a href="{{ route('opnamenew.
+        ') }}" class="btn btn-primary btn-sm "><i
                 class="fas fa-file-excel"></i>Export Opname</a>
         <a href="{{ route('cocokan.export') }}" class="btn btn-primary btn-sm "><i class="fas fa-file-excel"></i>Export
             Detail</a>

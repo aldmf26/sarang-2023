@@ -79,7 +79,7 @@
                         @foreach ($formulir as $no => $f)
                             @php
 
-                                $grCabut = $f->gr_cbt ?? 0 + $f->gr_eo ?? 0;
+                                $grCabut = $f->gr_cbt ?? (0 + $f->gr_eo ?? 0);
                                 $ttlPcs += $f->pcs_awal;
                                 $ttlGr += $f->gr_awal;
 
@@ -97,7 +97,12 @@
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
                                 <td class="text-end">{{ $grCabut - $f->gr_awal }}</td>
-                                <td></td>
+                                <td>
+                                    @livewire('input-susut-aktual', [
+                                        'id_formulir' => $f->id_formulir,
+                                        'input' => $f->sst_aktual,
+                                    ])
+                                </td>
                                 @for ($i = 0; $i < 9; $i++)
                                     <td></td>
                                 @endfor
@@ -112,7 +117,8 @@
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr_cbt - $ttlGr, 0) }}</th>
-                            @for ($i = 0; $i < 9; $i++)
+                            <th class="text-end">{{ number_format($formulir->sum('sst_aktual'), 0) }}</th>
+                            @for ($i = 0; $i < 8; $i++)
                                 <th></th>
                             @endfor
                         </tr>
