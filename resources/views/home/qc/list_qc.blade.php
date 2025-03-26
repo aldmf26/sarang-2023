@@ -29,7 +29,8 @@
                         </button>
 
                         <a href="{{ route('gudangsarang.invoice_wip2', ['kategori' => 'wip2']) }}"
-                            class="btn btn-primary btn-sm  float-end">Po Wip2</a>
+                            class="btn btn-primary btn-sm  float-end ms-2">Po Wip2</a>
+                        <a href="{{ route('qc.index') }}" class="btn btn-secondary btn-sm  float-end">Kembali</a>
                     </div>
                 </form>
                 <div class="col-lg-12">

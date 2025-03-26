@@ -18,8 +18,7 @@
                 <div class="col-lg-8">
                     <form action="{{ route('qc.save_invoice_qc') }}" method="post">
                         @csrf
-                        <a data-bs-toggle="modal" data-bs-target="#import" class="btn btn-sm btn-primary"
-                            href="">Import</a>
+
                         <a href="{{ route('qc.listqc') }}" class="btn btn-sm btn-info" href=""><i
                                 class="fas fa-clipboard-list"></i> List
                             Qc</a>
