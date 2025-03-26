@@ -20,15 +20,16 @@
                     <div class="col-lg-12 mb-4">
                         <input type="hidden" name="no_box" class="form-control"
                             :value="cek.concat(cekPrint).join(',')">
-                        <button value="kirim" x-transition x-show="cek.length" class="btn btn-sm btn-primary float-end"
-                            name="submit">
+                        <button value="kirim" x-transition x-show="cek.length"
+                            class="btn btn-sm btn-primary  float-end ms-2" name="submit">
                             <i class="fas fa-plus"></i>
                             Wip2
                             <span class="badge bg-white text-black" x-text="cek.length" x-transition></span>
                             <span x-transition><span x-text="ttlPcs"></span> Pcs <span x-text="ttlGr"></span> Gr</span>
                         </button>
+
                         <a href="{{ route('gudangsarang.invoice_wip2', ['kategori' => 'wip2']) }}"
-                            class="btn btn-primary float-end">Po Wip2</a>
+                            class="btn btn-primary btn-sm  float-end">Po Wip2</a>
                     </div>
                 </form>
                 <div class="col-lg-12">

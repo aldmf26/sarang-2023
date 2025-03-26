@@ -717,6 +717,13 @@ class GudangSarangController extends Controller
     {
 
         DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'wip2']])->update(['selesai' => 'Y']);
+        $formulir = DB::table('formulir_sarang')->where([['no_invoice', $r->no_invoice], ['kategori', 'wip2']])->get();
+        foreach ($formulir as $d) {
+            $data = [
+                'sudah_kirim' => 'Y',
+            ];
+            DB::table('grading_partai')->where('box_pengiriman', $d->no_box)->update($data);
+        }
         return redirect()->back()->with('sukses', 'Data Berhasil di selesaikan');
     }
 

@@ -178,6 +178,7 @@ class CocokanController extends Controller
         //     JOIN grading_partai as b on a.no_box = b.box_pengiriman");
 
         $grading = $model->gradingOne();
+        $grading_proses = $model->gradingProsesOne();
 
         $grading_sisa = $model->gradingSisaOne();
 
@@ -190,9 +191,42 @@ class CocokanController extends Controller
             // 'pengiriman' => $pengiriman,
             'sumTtlRpPengiriman' => $sumTtlRpPengiriman,
             'grading' => $grading,
+            'grading_proses' => $grading_proses,
             'grading_sisa' => $grading_sisa,
         ];
         return view('home.cocokan.grading', $data);
+    }
+
+    public function wip1(CocokanModel $model)
+    {
+        $data = [
+            'title' => 'WIP 1',
+            'grading'  =>  $model->gradingOne(),
+            'sisa_belum_wip1' => $model->sisa_belum_wip1(),
+            'wip1akhir' => $model->wip1_akhir(),
+        ];
+        return view('home.cocokan.wip1', $data);
+    }
+    public function qc(CocokanModel $model)
+    {
+        $data = [
+            'title' => 'Qc',
+            'wip1akhir' => $model->wip1_akhir(),
+            'sisa_belum_qc' => $model->sisa_belum_qc(),
+            'qc_akhir' => $model->qc_akhir(),
+        ];
+        return view('home.cocokan.qc', $data);
+    }
+    public function wip2(CocokanModel $model)
+    {
+        $data = [
+            'title' => 'WIP2',
+            'qc_akhir' => $model->qc_akhir(),
+            'wip2proses' => $model->wip2proses(),
+            'wip2akhir' => $model->wip2akhir()
+
+        ];
+        return view('home.cocokan.wip2', $data);
     }
 
 
@@ -228,7 +262,9 @@ class CocokanController extends Controller
             'grading_sisa' => $grading_sisa,
             'belum_kirim' => $belum_kirim,
             'list_pengiriman' => $list_pengiriman,
-            'list_pengiriman_belum' => $list_pengiriman_belum
+            'list_pengiriman_belum' => $list_pengiriman_belum,
+            'wip2akhir' => $model->wip2akhir(),
+            'pengiriman_proses' => $model->pengiriman_proses(),
         ];
         return view('home.cocokan.pengiriman', $data);
     }
@@ -402,6 +438,8 @@ class CocokanController extends Controller
         sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
         FROM grading_partai as a ");
 
+        $grading_proses = $model->gradingProsesOne();
+
         $data = [
             'title' => 'Balance Sheet ',
             'bk' => SummaryModel::summarybk(),
@@ -429,7 +467,12 @@ class CocokanController extends Controller
             'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
             'cetak_selesai' => OpnameNewModel::cetak_selesai(),
             'sortir_selesai' => OpnameNewModel::sortir_selesai(),
-            'grading_susut' => $grading_susut
+            'grading_susut' => $grading_susut,
+            'sisa_belum_wip1' => $model->sisa_belum_wip1(),
+            'sisa_belum_qc' => $model->sisa_belum_qc(),
+            'wip2proses' => $model->wip2proses(),
+            'pengiriman_proses' => $model->pengiriman_proses(),
+            'grading_proses' => $grading_proses,
 
 
         ];

@@ -15,20 +15,22 @@
                         <thead>
                             <tr>
                                 <th class="dhead">No Box Grading</th>
-                                <th class="dhead">Pcs</th>
-                                <th class="dhead">Gr</th>
-                                <th class="dhead">Gr Akhir</th>
+                                <th class="dhead">Grade</th>
+                                <th class="dhead text-end">Pcs</th>
+                                <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Gr Akhir</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($qc as $q)
                                 <tr>
                                     <td>{{ $q->box_pengiriman }}</td>
-                                    <td>{{ $q->pcs_awal }}</td>
-                                    <td>{{ $q->gr_awal }}</td>
+                                    <td>{{ $q->grade }}</td>
+                                    <td class="text-end">{{ $q->pcs_awal }}</td>
+                                    <td class="text-end">{{ $q->gr_awal }}</td>
                                     <td width="20%">
-                                        <input type="text" name="gr_akhir[]" class="form-control"
-                                            value="{{ $q->gr_akhir }}">
+                                        <input type="text" name="gr_akhir[]" class="form-control text-end"
+                                            value="{{ $q->gr_akhir == 0 ? $q->gr_awal : $q->gr_akhir }}">
                                         <input type="hidden" name="box_pengiriman[]" value="{{ $q->box_pengiriman }}">
                                     </td>
                                 </tr>

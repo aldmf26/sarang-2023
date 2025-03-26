@@ -192,6 +192,9 @@ class BoxKirimController extends Controller
             $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
             $no_nota = $r->no_nota ?? $no_nota;
             foreach (explode(',', $r->no_box) as $d) {
+
+                DB::table('grading_partai')->where('box_pengiriman', $d)->update(['cek_qc' => 'Y']);
+
                 $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
             sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
             FROM `grading_partai` as a
@@ -247,8 +250,19 @@ class BoxKirimController extends Controller
                     'gr_awal' => $ambilBox->gr,
                     'tanggal' => $tgl_input,
                     'kategori' => 'qc',
-                    'selesai' => 'T',
+                    'selesai' => 'Y',
                 ];
+
+                $data = [
+                    'box_pengiriman' => $d,
+                    'pcs_awal' => $ambilBox->pcs,
+                    'gr_awal' => $ambilBox->gr,
+                    'gr_akhir' => 0,
+                    'bulan_dibayar' => date('m'),
+                    'tahun_dibayar' => date('Y'),
+                    'tgl' => date('Y-m-d'),
+                ];
+                DB::table('qc')->insert($data);
             }
             DB::table('formulir_sarang')->insert($dataToInsert);
 

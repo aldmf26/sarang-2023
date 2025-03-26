@@ -63,53 +63,44 @@
                     <tr>
                         <td style="background-color: #F7BAC5;color:white"> Grading awal </td>
                         <td class="text-end">
-                            {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading_sisa->pcs, 0) }}
+                            {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading_sisa->pcs - $grading_proses->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.grading.awal') }}" target="_blank">
-                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading_sisa->gr, 0) }}
+                                {{ number_format($sortir_akhir->gr + $opname->gr - $grading_sisa->gr - $grading_proses->gr, 0) }}
                             </a>
                         </td>
                         <td class="text-end">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk, 0) }}
+                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja, 0) }}
                         </td>
                         <td class="text-end">
-                            {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr), 0) }}
+                            {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr - $grading_proses->gr), 0) }}
                         </td>
-                        <td class="text-end">{{ number_format($grading->cost_op, 0) }} </td>
+                        <td class="text-end">{{ number_format($grading->cost_op - $grading_proses->cost_op, 0) }} </td>
                         <td class="text-end">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading->cost_op, 0) }}
+                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading->cost_op - $grading_proses->cost_bk - $grading_proses->cost_op - $grading_proses->cost_kerja, 0) }}
                         </td>
                     </tr>
-
-                    {{-- <tr>
-                        <td style="background-color: #F7F700;">Akhir Grading</td>
-                        <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
-                        <td class="text-end fw-bold">
-                            <a href="{{ route('detail.grading.akhir') }}" target="_blank">
-                                {{ number_format($grading->gr, 0) }}
-                            </a>
-                        </td>
-                        <td class="text-end">{{ number_format($grading->cost_bk, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->cost_kerja, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->cost_cu, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->cost_op, 0) }}</td>
-                        <td class="text-end">
-                            {{ number_format($grading->cost_op + $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu, 0) }}
-                        </td>
-                    </tr> --}}
                     <tr>
-                        <td style="background-color: #F7BAC5;color:white">Grading selisih pcs</td>
-                        <td class="text-end text-danger fw-bold">
-                            {{ number_format($sortir_akhir->pcs + $opname->pcs - $grading->pcs - $grading_sisa->pcs, 0) }}
+                        <td style="background-color: #F7BAC5;color:white">Grading sedang proses</td>
+                        <td class="text-end ">
+                            {{ number_format($grading_proses->pcs, 0) }}
                         </td>
-                        <td class="text-end fw-bold text-danger ">
-                            <a href="{{ route('opnamenew.grading') }}" target="_blank" class="text-danger">
-                                0
-                            </a>
+                        <td class="text-end  ">
+                            {{ number_format($grading_proses->gr, 0) }}
                         </td>
-                        <td class="text-end text-danger fw-bold">
-                            0
+                        <td class="text-end ">
+                            {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja, 0) }} /
+                            {{ number_format($grading_proses->ttl_rp, 0) }}
+                        </td>
+                        <td class="text-end ">
+                            {{ number_format(($grading_proses->cost_bk + $grading_proses->cost_kerja) / $grading_proses->gr, 0) }}
+                        </td>
+                        <td class="text-end ">
+                            {{ number_format($grading_proses->cost_op, 0) }}
+                        </td>
+                        <td class="text-end ">
+                            {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja + $grading_proses->cost_op, 0) }}
                         </td>
                     </tr>
                     <tr>

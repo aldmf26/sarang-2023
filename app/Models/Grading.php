@@ -346,7 +346,8 @@ left join(
             a.urutan,
             b.pcs as pcs_pengiriman, 
             b.gr as gr_pengiriman,
-            a.sudah_print
+            a.sudah_print,
+            max(a.cek_qc) as cek_qc 
             FROM `grading_partai` as a
             LEFT JOIN (
                 SELECT 
@@ -356,7 +357,7 @@ left join(
                 FROM `pengiriman` 
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
-            where a.formulir = 'Y' and a.cek_qc = 'T'
+            where a.formulir = 'Y' 
             GROUP BY box_pengiriman ORDER BY a.grade Desc");
     }
     public static function stock_wip2()
@@ -365,28 +366,35 @@ left join(
             a.box_pengiriman as no_box,
             a.grade,
             sum(a.pcs) as pcs, 
-            sum(a.gr) as gr,
+            (sum(a.gr) + COALESCE(d.gr,0)) as gr,
             a.no_invoice,
             a.urutan,
             b.pcs as pcs_pengiriman, 
             b.gr as gr_pengiriman,
             a.sudah_print
-            FROM `grading_partai` as a
+            FROM grading_partai as a
             LEFT JOIN (
                 SELECT 
                 no_box as no_box_pengiriman,
                 sum(pcs) as pcs, 
                 sum(gr) as gr 
-                FROM `pengiriman` 
+                FROM pengiriman
                 GROUP BY no_box
             )  as b on b.no_box_pengiriman = a.box_pengiriman
+            
             join (
                 SELECT c.no_box
                 FROM formulir_sarang as c 
                 where c.selesai = 'Y' and c.kategori = 'wip2'
             ) as c on c.no_box = a.box_pengiriman
+            left join (
+                SELECT d.box_pengiriman, sum(d.pcs) as pcs, sum(d.gr) as gr
+                FROM grading_partai as d
+                where d.formulir = 'Y' and d.cek_qc = 'T'
+                group by d.box_pengiriman
+            ) as d on d.box_pengiriman = a.box_pengiriman
             where a.formulir = 'Y' and a.cek_qc = 'Y'
-            GROUP BY box_pengiriman ORDER BY a.grade Desc");
+            GROUP BY a.box_pengiriman ORDER BY a.grade Desc");
     }
 
     public static function detailPengiriman($no_nota)
@@ -660,7 +668,7 @@ left join(
 
     public static function belumKirimSum()
     {
-        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T' and a.grade != 'susut'");
+        return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T'  and a.grade != 'susut'");
     }
     public static function belumKirimSumsusut()
     {

@@ -16,18 +16,19 @@
                         <th class="dhead text-end">Rp</th>
                     </tr>
                     <tr>
-                        <td>Grading akhir</td>
-                        <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
-                        <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
+                        <td>Wip2 akhir</td>
+                        <td class="text-end">{{ number_format($wip2akhir->pcs, 0) }}</td>
+                        <td class="text-end">{{ number_format($wip2akhir->gr, 0) }}</td>
                         <td class="text-end">
-                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
+                            {{ number_format($wip2akhir->ttl_rp, 0) }}
+                        </td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
-                        <td class="text-end fw-bold">{{ number_format($grading->pcs, 0) }}</td>
-                        <td class="text-end fw-bold">{{ number_format($grading->gr, 0) }}</td>
+                        <td class="text-end fw-bold">{{ number_format($wip2akhir->pcs, 0) }}</td>
+                        <td class="text-end fw-bold">{{ number_format($wip2akhir->gr, 0) }}</td>
                         <td class="text-end fw-bold">
-                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}
+                            {{ number_format($wip2akhir->ttl_rp, 0) }}
                         </td>
                     </tr>
 
@@ -71,41 +72,41 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #F7BAC5; color:white">Sisa belum kirim</td>
-                        <td class="text-end">{{ number_format($belum_kirim->pcs, 0) }}</td>
+                        <td style="background-color: #F7BAC5; color:white">Pengiriman proses</td>
+                        <td class="text-end">{{ number_format($pengiriman_proses->pcs, 0) }}</td>
                         <td class="text-end fw-bold">
                             <a href="{{ route('detail.pengiriman.sisa') }}" target="_blank">
-                                {{ number_format($belum_kirim->gr, 0) }}
+                                {{ number_format($pengiriman_proses->gr, 0) }}
                             </a>
                         </td>
                         <td class="text-end">
-                            {{ number_format($belum_kirim->cost_bk + $belum_kirim->cost_kerja + $belum_kirim->cost_op, 0) }}
+                            {{ number_format($pengiriman_proses->ttl_rp, 0) }}
                         </td>
                         <td class="text-end">0</td>
                         <td class="text-end">
-                            {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk, 0) }}
+                            {{ number_format($pengiriman_proses->ttl_rp, 0) }}
                         </td>
                         <td class="text-end">
-                            {{ number_format(($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk) / $belum_kirim->gr, 0) }}
+                            {{ empty($pengiriman_proses->gr) ? 0 : number_format($pengiriman_proses->ttl_rp / $pengiriman_proses->gr, 0) }}
                         </td>
                     </tr>
                     <tr>
                         <td class="fw-bold">Total</td>
                         <td class="text-end fw-bold">
-                            {{ number_format($pengiriman->pcs + $belum_kirim->pcs, 0) }}
+                            {{ number_format($pengiriman->pcs + $pengiriman_proses->pcs, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($pengiriman->gr + $belum_kirim->gr, 0) }}
+                            {{ number_format($pengiriman->gr + $pengiriman_proses->gr, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
+                            {{ number_format($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
                         </td>
                         <td></td>
                         <td class="text-end fw-bold">
-                            {{ number_format($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
+                            {{ number_format($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format(($belum_kirim->cost_op + $belum_kirim->cost_cu + $belum_kirim->cost_kerja + $belum_kirim->cost_bk + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op)) / ($pengiriman->gr + $belum_kirim->gr), 0) }}
+                            {{ number_format(($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op)) / ($pengiriman->gr + $pengiriman_proses->gr), 0) }}
                         </td>
                     </tr>
 
@@ -172,7 +173,7 @@
                                 {{ number_format(sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu'), 0) }}
                             </th>
                             <th class="text-end fw-bold">
-                                {{ number_format((sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
+                                {{ number_format(empty(sumBK($list_pengiriman, 'gr')) ? 0 : (sumBK($list_pengiriman, 'cost_bk') + sumBk($list_pengiriman, 'cost_op') + sumBK($list_pengiriman, 'cost_kerja') + sumBK($list_pengiriman, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>
@@ -240,7 +241,7 @@
                                 {{ number_format(sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu'), 0) }}
                             </th>
                             <th class="text-end fw-bold">
-                                {{ number_format((sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
+                                {{ number_format(empty(sumBK($list_pengiriman, 'gr')) ? 0 : (sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
                             </th>
                         </tr>
                     </tfoot>

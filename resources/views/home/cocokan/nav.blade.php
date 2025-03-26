@@ -21,6 +21,18 @@
                     href="{{ route('cocokan.grading') }}">Grading</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link  {{ $rot == 'cocokan.wip1' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.wip1') }}">Wip 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ $rot == 'cocokan.qc' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.qc') }}">QC</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ $rot == 'cocokan.wip2' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.wip2') }}">Wip 2</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.pengiriman' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cocokan.pengiriman') }}">Pengiriman</a>
             </li>

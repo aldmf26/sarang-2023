@@ -338,6 +338,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/sortir', 'sortir')->name('sortir');
             Route::get('/grading', 'grading')->name('grading');
+            Route::get('/wip1', 'wip1')->name('wip1');
+            Route::get('/qc', 'qc')->name('qc');
+            Route::get('/wip2', 'wip2')->name('wip2');
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::post('/tutup', 'tutup')->name('tutup');
