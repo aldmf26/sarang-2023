@@ -105,7 +105,7 @@
                                         <td class="text-primary text-center pointer">
                                             <span class="detail"
                                                 data-nobox="{{ $d->no_box }}">{{ $d->grade }}</span>
-                                            {{ $d->cek_qc }}
+
                                         </td>
                                         <td class="text-end">{{ number_format($d->pcs - $d->pcs_pengiriman, 0) }}</td>
                                         <td class="text-end">{{ number_format($d->gr - $d->gr_pengiriman, 0) }}</td>
