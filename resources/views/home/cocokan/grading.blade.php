@@ -76,9 +76,11 @@
                         <td class="text-end">
                             {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr - $grading_proses->gr), 0) }}
                         </td>
-                        <td class="text-end">{{ number_format($grading->cost_op - $grading_proses->cost_op, 0) }} </td>
                         <td class="text-end">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading->cost_op - $grading_proses->cost_bk - $grading_proses->cost_op - $grading_proses->cost_kerja, 0) }}
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja), 0) }}
+                        </td>
+                        <td class="text-end">
+                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja + $grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja), 0) }}
                         </td>
                     </tr>
                     <tr>
@@ -90,8 +92,7 @@
                             {{ number_format($grading_proses->gr, 0) }}
                         </td>
                         <td class="text-end ">
-                            {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja, 0) }} /
-                            {{ number_format($grading_proses->ttl_rp, 0) }}
+                            {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja, 0) }}
                         </td>
                         <td class="text-end ">
                             {{ number_format(($grading_proses->cost_bk + $grading_proses->cost_kerja) / $grading_proses->gr, 0) }}
@@ -136,10 +137,10 @@
                             {{ number_format(($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk) / ($sortir_akhir->gr + $opname->gr - $grading_sisa->gr + $grading_sisa->gr), 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($grading->cost_op, 0) }}
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk - $grading_proses->cost_bk - $grading_proses->cost_kerja) + $grading_proses->cost_op, 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format($sortir_akhir->ttl_rp + $opname->ttl_rp - $grading_sisa->cost_bk + $grading_sisa->cost_bk + $grading->cost_op, 0) }}
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op + $grading_proses->cost_bk + $grading_proses->cost_kerja + $grading_proses->cost_op + $grading_sisa->cost_bk, 0) }}
                         </td>
                     </tr>
 
@@ -178,7 +179,9 @@
                         <td class="text-end">
                             {{-- {{ number_format($grading->cost_bk + $grading->cost_kerja, 0) }} /
                             {{ number_format($grading->cost_op, 0) }} --}}
-                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
+                            {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}
+
+                        </td>
                         <td class="text-end">
                             {{ number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0) }}
                         </td>

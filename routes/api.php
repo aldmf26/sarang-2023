@@ -39,6 +39,7 @@ Route::controller(HasapController::class)
         Route::get('/cabut', 'cabut')->name('cabut');
         Route::get('/cetak', 'cetak')->name('cetak');
         Route::get('/grading', 'grading')->name('grading');
+        Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');
     });
 
 
