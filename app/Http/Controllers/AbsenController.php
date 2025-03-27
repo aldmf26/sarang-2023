@@ -28,7 +28,7 @@ class AbsenController extends Controller
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get(),
             'anak' =>  DB::table('tb_anak as a')
                 ->join('users as b', 'a.id_pengawas', 'b.id')
-                ->where('a.id_pengawas', $id_pengawas)
+                ->where([['a.id_pengawas', $id_pengawas],['a.berhenti', 'T']])
                 ->get()
         ];
         return view('home.absen.index', $data);
