@@ -36,7 +36,7 @@
                 z-index: 1;
             }
         </style>
-    
+
         <section class="row">
             <div class="col-lg-12 mb-2">
                 <table class="float-end">
@@ -59,34 +59,123 @@
                         /* Ensure the header stays on top of other elements */
                     }
                 </style>
-                <table  class="border-dark table table-bordered" id="tblAld"
-                    x-data="{
-                        openRows: [],
-                    }">
+                <table class="border-dark table table-bordered table-striped" id="tblAld" x-data="{
+                    openRows: [],
+                    cabut: true,
+                    cetak: false,
+                    sortir: false,
+                }">
                     <thead>
                         <tr class="sticky-header">
-                            <th width="85" class="text-center dhead">Divisi</th>
-                            <th width="185" class="text-center dhead">Pgws</th>
-                            <th width="85" class="text-center dhead">Pcs</th>
-                            <th width="85" class="text-center dhead">Gr</th>
-                            <th width="85" class="text-center dhead">Gr Akhir</th>
-                            <th width="85" class="text-center dhead">Sst %</th>
-                            <th width="85" class="text-center dhead">Sst Program</th>
-                            <th width="85" class="text-center dhead">Sst Aktual</th>
+                            <th class="text-center dhead">Divisi</th>
+                            <th class="text-center dhead">Pgws</th>
+                            <th class="text-center dhead">Pcs Awal</th>
+                            <th class="text-center dhead">Gr Awal</th>
+                            <th class="text-center dhead">Gr Akhir</th>
+                            <th class="text-center dhead">Sst %</th>
+                            <th class="text-center dhead">Sst Program</th>
+                            <th class="text-center dhead">Sst Aktual</th>
                         </tr>
                     </thead>
+
+                    {{-- cabut --}}
                     <thead>
-                        <tr class="sticky-header">
-                            <th class="dhead text-center">Cabut</th>
+                        <tr class="sticky-header" @click="cabut = !cabut">
+                            <th class="dhead text-center" >Cabut ke Cetak <i class="fas fa-caret-down"></i></th>
                             <th class="dhead text-center"></th>
-                            <th class="dhead text-end">80</th>
-                            <th class="dhead text-end">1000</th>
-                            <th class="dhead text-end">80</th>
-                            <th class="dhead text-end">2%</th>
-                            <th class="dhead text-end">200</th>
-                            <th class="dhead text-end">180</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'pcs_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'gr_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'gr_akhir'), 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end">
+                                {{ number_format(sumCol($cabutKeCetak, 'gr_awal') - sumCol($cabutKeCetak, 'gr_akhir'), 0) }}
+                            </th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'sst_aktual'), 0) }}</th>
                         </tr>
                     </thead>
+                    <tbody>
+                            @foreach ($cabutKeCetak as $d)
+                                <tr x-show="cabut">
+                                    <td></td>
+                                    <td>{{ $d->name }}</td>
+                                    <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
+                                    @php
+                                        $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                    @endphp
+                                    <td align="right">{{ number_format(($d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td>
+                                    <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
+                                    <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
+                                </tr>
+                            @endforeach
+                    </tbody>
+
+                    {{-- cetak --}}
+                    <thead>
+                        <tr class="sticky-header" @click="cetak = !cetak">
+                            <th class="dhead text-center" >Cetak ke Sortir <i class="fas fa-caret-down"></i></th>
+                            <th class="dhead text-center"></th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'pcs_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_akhir'), 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end">
+                                {{ number_format(sumCol($cetakKeSortir, 'gr_awal') - sumCol($cetakKeSortir, 'gr_akhir'), 0) }}
+                            </th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'sst_aktual'), 0) }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            @foreach ($cetakKeSortir as $d)
+                                <tr x-show="cetak">
+                                    <td></td>
+                                    <td>{{ $d->name }}</td>
+                                    <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
+                                    @php
+                                        $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                    @endphp
+                                    <td align="right">{{ number_format(($d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td>
+                                    <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
+                                    <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
+                                </tr>
+                            @endforeach
+                    </tbody>
+
+                    {{-- sortir --}}
+                    <thead>
+                        <tr class="sticky-header" @click="sortir = !sortir">
+                            <th class="dhead text-center" >Sortir ke Grading <i class="fas fa-caret-down"></i></th>
+                            <th class="dhead text-center"></th>
+                            <th class="dhead text-end">{{ number_format(sumCol($sortirKeGrading, 'pcs_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($sortirKeGrading, 'gr_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($sortirKeGrading, 'gr_akhir'), 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end">
+                                {{ number_format(sumCol($sortirKeGrading, 'gr_awal') - sumCol($sortirKeGrading, 'gr_akhir'), 0) }}
+                            </th>
+                            <th class="dhead text-end">{{ number_format(sumCol($sortirKeGrading, 'sst_aktual'), 0) }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            @foreach ($sortirKeGrading as $d)
+                                <tr x-show="sortir">
+                                    <td></td>
+                                    <td>{{ $d->name }}</td>
+                                    <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                                    <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
+                                    @php
+                                        $sstPersen = $d->gr_awal == 0 ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                    @endphp
+                                    <td align="right">{{ number_format($sstPersen, 0) }}%</td>
+                                    <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
+                                    <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
+                                </tr>
+                            @endforeach
+                    </tbody>
                 </table>
             </div>
 
