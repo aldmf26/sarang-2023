@@ -164,4 +164,31 @@ class HasapController extends Controller
             'data' => $data
         ]);
     }
+    public function pengiriman_akhir(Request $r)
+    {
+        if (empty($r->tgl)) {
+            $tgl = date('Y-m-d');
+        } else {
+            $tgl = $r->tgl;
+        }
+
+        $data = DB::select("SELECT a.no_box, a.grade, a.pcs, a.gr, b.tgl, a.no_nota, a.no_barcode
+        FROM pengiriman as a 
+        join (
+        select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
+        ) as b on a.no_nota = b.no_nota
+        left join (
+                    SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, max(b.bulan) as bulan , max(b.tahun) as tahun
+                    FROM grading_partai as b 
+                    where b.sudah_kirim = 'Y'
+                    group by b.box_pengiriman
+        ) as d on d.box_pengiriman = a.no_box
+        where b.tgl = '$tgl'
+        GROUP by a.no_box;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
