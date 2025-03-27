@@ -172,7 +172,7 @@ class HasapController extends Controller
             $tgl = $r->tgl;
         }
 
-        $data = DB::select("SELECT a.no_box, a.grade, a.pcs, a.gr, b.tgl, a.no_nota, a.no_barcode
+        $data = DB::select("SELECT a.no_box, a.grade, a.pcs, a.gr, b.tgl, a.no_nota, a.no_barcode, a.tgl_input
         FROM pengiriman as a 
         join (
         select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
