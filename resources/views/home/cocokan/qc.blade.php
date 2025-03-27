@@ -78,7 +78,7 @@
                             {{ number_format($wip1akhir->ttl_rp, 0) }}
                         </th>
                         <th class="text-end">
-                            {{ number_format($wip1akhir->ttl_rp / $wip1akhir->gr, 0) }}
+                            {{ empty($wip1akhir->gr) ? 0 : number_format($wip1akhir->ttl_rp / $wip1akhir->gr, 0) }}
                         </th>
                         <th class="text-end">0</th>
                         <th class="text-end">
@@ -117,8 +117,10 @@
                         <td class="text-end">{{ number_format($qc_akhir->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($qc_akhir->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($qc_akhir->ttl_rp, 0) }}</td>
-                        <td class="text-end">{{ number_format($qc_akhir->ttl_rp / $qc_akhir->gr, 0) }}</td>
-                        <td class="text-end">{{ number_format((1 - $qc_akhir->gr / $qc_akhir->gr_awal) * 100, 1) }}
+                        <td class="text-end">
+                            {{ empty($qc_akhir->gr) ? 0 : number_format($qc_akhir->ttl_rp / $qc_akhir->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ empty($qc_akhir->gr_awal) ? 0 : number_format((1 - $qc_akhir->gr / $qc_akhir->gr_awal) * 100, 1) }}
                         </td>
                     </tr>
 
