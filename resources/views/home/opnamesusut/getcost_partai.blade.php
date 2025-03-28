@@ -46,7 +46,6 @@
                 $gr_akhir_cabut = $cabut->gr ?? 0;
                 $gr_eo = $eo->gr ?? 0;
                 $gr_eo_awal = $eo->gr_eo_awal ?? 0;
-                $sstCabut = 
             @endphp
             <td class="text-end">{{ number_format($gr_akhir_cabut + $gr_eo, 0) }}</td>
             <td class="text-end">
