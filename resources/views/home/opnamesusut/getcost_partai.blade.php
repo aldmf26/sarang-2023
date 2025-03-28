@@ -8,12 +8,15 @@
             <th class="text-end dhead">Rp</th>
             <th class="text-end dhead">Pcs tidak cetak</th>
             <th class="text-end dhead">Gr tidak cetak</th>
+            <th class="text-end dhead">Pcs awal</th>
+            <th class="text-end dhead">Gr awal</th>
             <th class="text-end dhead">Pcs akhir</th>
             <th class="text-end dhead">Gr akhir</th>
             <th class="text-end dhead">Susut%</th>
             <th class="text-end dhead">Cost Rp</th>
             <th class="text-end dhead">Rp/gr</th>
-            {{-- <th class="text-end dhead">Saldo</th> --}}
+            {{-- <th class="text-end dhead">Sisa Pcs</th>
+            <th class="text-end dhead">Sisa Gr</th> --}}
         </tr>
     </thead>
     <tbody>
@@ -30,9 +33,16 @@
             <td class="text-end"></td>
             <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
             <td class="text-end">{{ empty($bk->ttl_rp) ? 0 : number_format($bk->ttl_rp / $bk->gr_awal, 0) }}</td>
-            {{-- <td class="text-end"></td> --}}
+            <td class="text-end"></td>
         </tr>
         <tr>
+            @php
+                $gr_awal_cabut = $cabut->gr_awal ?? 0;
+                $gr_akhir_cabut = $cabut->gr ?? 0;
+                $gr_eo = $eo->gr ?? 0;
+                $gr_eo_awal = $eo->gr_eo_awal ?? 0;
+            @endphp
+
             <td>Cabut</td>
             <td></td>
             <td class="text-end"></td>
@@ -40,14 +50,11 @@
             <td class="text-end"></td>
             <td class="text-end"></td>
             <td class="text-end"></td>
+            <td class="text-end">{{ number_format($cabut->pcs_awal ?? 0, 0) }}</td>
+            <td class="text-end">{{ number_format($gr_awal_cabut + $gr_eo_awal, 0) }}</td>
             <td class="text-end">{{ number_format($cabut->pcs ?? 0, 0) }}</td>
-            @php
-                $gr_awal_cabut = $cabut->gr_awal ?? 0;
-                $gr_akhir_cabut = $cabut->gr ?? 0;
-                $gr_eo = $eo->gr ?? 0;
-                $gr_eo_awal = $eo->gr_eo_awal ?? 0;
-            @endphp
             <td class="text-end">{{ number_format($gr_akhir_cabut + $gr_eo, 0) }}</td>
+            
             <td class="text-end">
                 {{ $gr_eo + $gr_akhir_cabut == 0 ? 0 : number_format((1 - ($gr_akhir_cabut + $gr_eo) / ($gr_awal_cabut + $gr_eo_awal)) * 100, 0) }}
                 %
@@ -56,6 +63,8 @@
             <td class="text-end">
                 {{ $gr_akhir_cabut + $gr_eo == 0 ? 0 : number_format((($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0)) / ($gr_akhir_cabut + $gr_eo), 0) }}
             </td>
+            {{-- <td class="text-end">{{ number_format(($cabut->pcs_awal ?? 0) - ($cabut->pcs ?? 0), 0) }}</td>
+            <td class="text-end">{{ number_format(($gr_awal_cabut + $gr_eo_awal) - ($gr_akhir_cabut + $gr_eo), 0) }}</td> --}}
             {{-- <td class="text-end">{{ number_format($bk->ttl_rp + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}</td> --}}
         </tr>
         <tr>
@@ -66,6 +75,8 @@
             <td class="text-end"></td>
             <td class="text-end">{{ number_format($cetak->pcs_tdk, 0) }}</td>
             <td class="text-end">{{ number_format($cetak->gr_tdk, 0) }}</td>
+            <td>-</td>
+            <td>-</td>
             <td class="text-end">{{ number_format($cetak->pcs, 0) }}</td>
             <td class="text-end">{{ number_format($cetak->gr, 0) }}</td>
             <td class="text-end">
@@ -77,6 +88,10 @@
             </td> --}}
         </tr>
         <tr>
+            @php
+                $gr_awal_sortir = $sortir->gr_awal ?? 0;
+                $gr_akhir_sortir = $sortir->gr ?? 0;
+            @endphp
             <td>Sortir</td>
             <td></td>
             <td class="text-end"></td>
@@ -84,12 +99,11 @@
             <td class="text-end"></td>
             <td class="text-end"></td>
             <td class="text-end"></td>
+            <td class="text-end">{{ number_format($sortir->pcs_awal ?? 0, 0) }}</td>
+            <td class="text-end">{{ number_format($sortir->gr_awal ?? 0, 0) }}</td>
             <td class="text-end">{{ number_format($sortir->pcs ?? 0, 0) }}</td>
             <td class="text-end">{{ number_format($sortir->gr ?? 0, 0) }}</td>
-            @php
-                $gr_awal_sortir = $sortir->gr_awal ?? 0;
-                $gr_akhir_sortir = $sortir->gr ?? 0;
-            @endphp
+            
             <td class="text-end">
                 {{ empty($gr_awal_sortir) ? 0 : number_format((1 - $gr_akhir_sortir / $gr_awal_sortir) * 100, 0) }} %
             </td>
@@ -136,7 +150,7 @@
 
             <th class="text-end">{{ number_format($cetak->pcs_tdk, 0) }}</th>
             <th class="text-end">{{ number_format($cetak->gr_tdk, 0) }}</th>
-
+            
             <th class="text-end">{{ number_format($grading->pcs ?? 0, 0) }}</th>
             <th class="text-end">{{ number_format($grading->gr ?? 0, 0) }}</th>
             <th class="text-end">

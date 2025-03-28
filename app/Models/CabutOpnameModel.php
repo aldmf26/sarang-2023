@@ -138,7 +138,7 @@ class CabutOpnameModel extends Model
 
     public static function cabutPartai($partai)
     {
-        return DB::selectOne("SELECT b.nm_partai, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs , sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        return DB::selectOne("SELECT b.nm_partai, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs,sum(a.pcs_akhir) as pcs_awal , sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         where a.selesai = 'Y' and b.baru='baru' and a.no_box != '9999' and b.nm_partai = '$partai'
@@ -165,7 +165,7 @@ class CabutOpnameModel extends Model
     }
     public static function sortirPartai($partai)
     {
-        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs , sum(a.gr_awal) as gr_awal,  sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
+        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs,sum(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,  sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         where a.selesai = 'Y' and b.baru = 'baru' and a.no_box != '9999' and b.nm_partai = '$partai'
