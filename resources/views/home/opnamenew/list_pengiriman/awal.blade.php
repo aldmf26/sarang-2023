@@ -21,6 +21,8 @@
                             <th class="dhead">grade</th>
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
+                            <th class="dhead text-end">ttl rp</th>
+                            <th class="dhead text-end">rp/gr</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +44,8 @@
                                 <td>{{ $d->grade }}</td>
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
+                                <td class="text-end">{{ number_format($d->ttl_rp) }}</td>
+                                <td class="text-end">{{ number_format($d->ttl_rp / $d->gr) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -51,6 +55,8 @@
                             <th class="dheadstock " colspan="5">Box : {{ count($query) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0) }}</th>
                         </tr>
                     </tfoot>
                 </table>
