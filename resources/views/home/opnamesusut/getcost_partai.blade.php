@@ -140,23 +140,8 @@
             <th class="text-end">{{ number_format($grading->pcs ?? 0, 0) }}</th>
             <th class="text-end">{{ number_format($grading->gr ?? 0, 0) }}</th>
             <th class="text-end">
-@php
-    $total_susut_persen = 0;
-@endphp
-
-@foreach([$bk, $cabut, $sortir, $grading] as $item)
-    @php
-        $gr_awal = $item->gr_awal ?? 0;
-        $gr_akhir = $item->gr ?? 0;
-        $susut_persen = empty($gr_awal) ? 0 : (1 - $gr_akhir / $gr_awal) * 100;
-        $total_susut_persen += $susut_persen;
-    @endphp
-@endforeach
-
-<th class="text-end">
-    {{ number_format($total_susut_persen, 0) }}%
-</th>
-
+                
+                {{ empty($gr_grading) ? 0 : number_format((1 - $grading->gr / ($gr_susut + $gr_grading)) * 100, 0) }}%
             </th>
             <th class="text-end">
                 @php
