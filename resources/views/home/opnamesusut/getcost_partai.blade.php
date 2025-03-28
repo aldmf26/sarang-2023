@@ -46,6 +46,7 @@
                 $gr_akhir_cabut = $cabut->gr ?? 0;
                 $gr_eo = $eo->gr ?? 0;
                 $gr_eo_awal = $eo->gr_eo_awal ?? 0;
+                $sstCabut = 
             @endphp
             <td class="text-end">{{ number_format($gr_akhir_cabut + $gr_eo, 0) }}</td>
             <td class="text-end">
@@ -140,8 +141,14 @@
             <th class="text-end">{{ number_format($grading->pcs ?? 0, 0) }}</th>
             <th class="text-end">{{ number_format($grading->gr ?? 0, 0) }}</th>
             <th class="text-end">
-                
-                {{ empty($gr_grading) ? 0 : number_format((1 - $grading->gr / ($gr_susut + $gr_grading)) * 100, 0) }}%
+                @php
+                    $sstCabut = $gr_eo + $gr_akhir_cabut == 0 ? 0 : number_format((1 - ($gr_akhir_cabut + $gr_eo) / ($gr_awal_cabut + $gr_eo_awal)) * 100, 0);
+                    $sstCtk = empty($cetak->gr_awal) ? 0 : number_format((1 - $cetak->gr / $cetak->gr_awal) * 100, 0);
+                    $sstSortir = empty($gr_awal_sortir) ? 0 : number_format((1 - $gr_akhir_sortir / $gr_awal_sortir) * 100, 0);
+                    $sstGrading = empty($gr_grading) ? 0 : number_format((1 - $grading->gr / ($gr_susut + $gr_grading)) * 100, 0);
+                @endphp
+                {{ $sstCabut + $sstCtk + $sstSortir + $sstGrading }}%
+                {{-- {{ empty($gr_grading) ? 0 : number_format((1 - $grading->gr / ($gr_susut + $gr_grading)) * 100, 0) }}% --}}
             </th>
             <th class="text-end">
                 @php
