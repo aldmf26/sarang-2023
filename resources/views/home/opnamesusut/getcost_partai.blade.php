@@ -206,7 +206,7 @@
                 </tr>
                 <tr>
                     <td><a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_data2">Pengiriman</a></td>
+                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sisa Pengiriman</a></td>
                     <td></td>
                     <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                     <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
@@ -240,6 +240,45 @@
                     </td>
                     <td class="text-end">
                         {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sudah Terkirim</a></td>
+                    <td></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end">
+                        0%
+                    </td>
+                    <td class="text-end">
+
+                    </td>
+                    <td class="text-end">0</td>
+                    <td class="text-end">0</td>
+                    <td class="text-end">
+
+                    </td>
+                    <td class="text-end">
+
+                    </td>
+
+                    <td class="text-end">
+                        {{ number_format($pengiriman->pcs, 0) }}
+                    </td>
+                    <td class="text-end">
+                        {{ number_format($pengiriman->gr, 0) }}
+                    </td>
+                    <td class="text-end">
+                        {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
+                    </td>
+                    <td class="text-end">
+                        {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                    </td>
+                    <td class="text-end">
+
                     </td>
                 </tr>
             </tbody>

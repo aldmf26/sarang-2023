@@ -130,7 +130,10 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     <td></td>
                     <td style="border-right: 1px solid black"></td>
 
-                    <td colspan="4" style="border-right: 1px solid black"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
                     <td colspan="1" style="border-right: 1px solid black"></td>
                 </tr>
                 <tr>
@@ -168,10 +171,23 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="8"></td>
-                    <td colspan="2" style="background-color: yellow"></td>
-                    <td colspan="2" style="border-right: 1px solid black"></td>
-                    <td colspan="4" style="border-right: 1px solid black"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color: yellow"></td>
+                    <td style="background-color: yellow"></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
                     <td colspan="1" style="border-right: 1px solid black"></td>
                 </tr>
                 <tr>
@@ -218,10 +234,23 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="8"></td>
-                    <td colspan="2" style="background-color: yellow"></td>
-                    <td colspan="2" style="border-right: 1px solid black"></td>
-                    <td colspan="4" style="border-right: 1px solid black"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color: yellow"></td>
+                    <td style="background-color: yellow"></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
                     <td colspan="1" style="border-right: 1px solid black"></td>
                 </tr>
                 <tr>
@@ -276,14 +305,27 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="8"></td>
-                    <td colspan="2" style="background-color: yellow"></td>
-                    <td colspan="2" style="border-right: 1px solid black"></td>
-                    <td colspan="4" style="border-right: 1px solid black"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color: yellow"></td>
+                    <td style="background-color: yellow"></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
                     <td colspan="1" style="border-right: 1px solid black"></td>
                 </tr>
                 <tr>
-                    <td>Pengiriman</td>
+                    <td>Sisa Pengiriman</td>
                     <td></td>
                     <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
                     <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
@@ -319,10 +361,95 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                         {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
                     </td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color: yellow"></td>
+                    <td style="background-color: yellow"></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+                    <td colspan="1" style="border-right: 1px solid black"></td>
+                </tr>
+                <tr>
+                    <td>Sudah Terkirim</td>
+                    <td></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
+                    <td class="text-end">
+                        0%
+                    </td>
+                    <td class="text-end">
+                        0
+                    </td>
+                    <td class="text-end" style="background-color: yellow">0</td>
+                    <td class="text-end" style="background-color: yellow">0</td>
+                    <td class="text-end" style="color: #44B3E1">
+
+                    </td>
+                    <td class="text-end" style="border-right: 1px solid black;color: #44B3E1">
+
+                    </td>
+
+                    <td class="text-end" style="color: #44B3E1">
+                        {{ number_format($pengiriman->pcs, 0) }}
+                    </td>
+                    <td class="text-end" style="color: #44B3E1">
+                        {{ number_format($pengiriman->gr, 0) }}
+                    </td>
+                    <td class="text-end" style="color: #44B3E1">
+                        {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
+                    </td>
+                    <td class="text-end" style="color: #44B3E1;border-right: 1px solid black">
+                        {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                    </td>
+                    <td class="text-end" style="border-right: 1px solid black">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color: yellow"></td>
+                    <td style="background-color: yellow"></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
+                    <td colspan="1" style="border-right: 1px solid black"></td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="8" style="border-bottom: 1px solid black">Total</th>
+                    <th style="border-bottom: 1px solid black">Total</th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
+                    <th style="border-bottom: 1px solid black"></th>
                     <th class="text-end" style="background-color: #FFC000;border-bottom: 1px solid black">
                         {{ number_format(($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + ($cetak->ttl_rp ?? 0) + ($sortir->ttl_rp ?? 0) + ($bk->ttl_rp ?? 0) + ($grading->cost_op ?? 0), 0) }}
                     </th>
