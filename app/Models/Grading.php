@@ -842,7 +842,19 @@ left join(
 
     public static function list_pengiriman_sum_detail($no_nota)
     {
-        return DB::select("SELECT b.nm_partai,a.no_box,a.grade,a.pcs,a.gr,a.ttl_rp,a.cost_kerja,a.cost_cu,a.cost_op,a.cost_bk,a.gr + (a.gr / c.kadar) as gr_naik FROM `pengiriman` as a
+        return DB::select("SELECT 
+        b.nm_partai,
+        a.no_box,
+        a.grade,
+        a.pcs,
+        a.gr,
+        a.ttl_rp,
+        a.cost_kerja,
+        a.cost_cu,
+        a.cost_op,
+        a.cost_bk,
+        a.gr + (a.gr / c.kadar) as gr_naik 
+        FROM `pengiriman` as a
         left join (
             select box_pengiriman,nm_partai from grading_partai GROUP BY box_pengiriman
         ) as b on a.no_box = b.box_pengiriman

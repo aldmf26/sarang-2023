@@ -211,7 +211,7 @@ SELECT a.no_box, c.name, d.nama, b.nm_partai, 0 as pcs_awal , a.gr_eo_awal as gr
     }
     public static function sortirPartai($partai)
     {
-        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs , sum(a.gr_awal) as gr_awal,  sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp, sum(b.hrga_satuan * b.gr_awal) as modal_rp, sum( COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as cost_kerja
+        return DB::selectOne("SELECT b.nm_partai, sum(a.pcs_akhir) as pcs,sum(a.pcs_awal) as pcs_awal , sum(a.gr_awal) as gr_awal,  sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join cabut as c on c.no_box = a.no_box

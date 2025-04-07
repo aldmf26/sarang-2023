@@ -9,6 +9,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class Sortir extends Model
 {
+    use HasFactory;
+    protected $table = 'sortir';
+
     public static function queryRekapGroup($bulan, $tahun)
     {
         $cabutGroup = DB::select("SELECT 
