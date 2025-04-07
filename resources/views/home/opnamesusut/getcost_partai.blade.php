@@ -148,7 +148,7 @@
                         @php
                             $pembagi = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0);
                         @endphp
-                        {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - ($sortir->modal_rp + $sortir->cost_kerja)) / ($cetak->gr_tdk + $cetak->gr - $sortir->gr_awal), 0) }}
+                        {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
                         {{ empty($sortir->gr_awal) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja) + ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
@@ -276,7 +276,7 @@
                         {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
                     </td>
                     <td class="text-end">
-                        {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                        {{ empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
                     </td>
                     <td class="text-end">
 
