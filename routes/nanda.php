@@ -427,11 +427,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/costPartai', 'costPartai')->name('costPartai');
             Route::get('/getCostpartai', 'getCostpartai')->name('getCostpartai');
             Route::get('/detailGrade', 'detailGrade')->name('detailGrade');
+            Route::get('/detailGrade2', 'detailGrade2')->name('detailGrade2');
             Route::get('/exportCostpartai', 'exportCostpartai')->name('exportCostpartai');
             Route::get('/exportCostperpartai', 'exportCostperpartai')->name('exportCostperpartai');
 
             Route::get('/opname/cetak', 'cetak')->name('opname/cetak');
             Route::get('/opname/sortir', 'sortir')->name('opname/sortir');
+            Route::get('/getDetailCabutpartai', 'getDetailCabutpartai')->name('getDetailCabutpartai');
+            Route::get('/getDetailCetakpartai', 'getDetailCetakpartai')->name('getDetailCetakpartai');
+            Route::get('/getDetailSortirpartai', 'getDetailSortirpartai')->name('getDetailSortirpartai');
+            Route::get('/getDetailbkpartai', 'getDetailbkpartai')->name('getDetailbkpartai');
         });
 
     Route::controller(BalanceController::class)
