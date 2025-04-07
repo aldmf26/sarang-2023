@@ -57,7 +57,9 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
-                    <td class="text-end" style="border-right: 1px solid black"></td>
+                    <td class="text-end" style="border-right: 1px solid black;color: #44B3E1">
+                        {{ number_format($bk->ttl_rp / $bk->gr_awal, 0) }}
+                    </td>
                     <td colspan="4" style="border-right: 1px solid black"></td>
                     <td style="border-right: 1px solid black"></td>
                 </tr>

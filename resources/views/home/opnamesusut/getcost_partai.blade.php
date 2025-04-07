@@ -41,6 +41,7 @@
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
+                    <td class="text-end">{{ number_format($bk->ttl_rp / $bk->gr_awal, 0) }}</td>
                 </tr>
                 <tr>
                     <td><a href="#" class="detail_cabut fw-bold" nm_partai="{{ $bk->nm_partai }}"
