@@ -30,11 +30,11 @@
                             $sumTtlRp = 0;
                         @endphp
                         @foreach ($query as $d)
-                        @php
-                            $ttlRp = $d->ttl_rp;
-                            $sumTtlRp += $ttlRp;
-                            $total = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
-                        @endphp
+                            @php
+                                $ttlRp = $d->ttl_rp;
+                                $sumTtlRp += $ttlRp;
+                                $total = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $no_nota }}</td>
@@ -48,7 +48,7 @@
                             </tr>
                         @endforeach
                     </tbody>
-                   
+
                     <tfoot>
                         <tr>
                             <th class="dheadstock " colspan="5">Box : {{ count($query) }}</th>
@@ -56,18 +56,51 @@
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
 
                             @php
-                                $sumTtlRp = sumBk($query, 'cost_bk') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_cu') + sumBk($query, 'cost_op');
+                                $sumTtlRp =
+                                    sumBk($query, 'cost_bk') +
+                                    sumBk($query, 'cost_kerja') +
+                                    sumBk($query, 'cost_cu') +
+                                    sumBk($query, 'cost_op');
                             @endphp
 
                             <th class="dheadstock  text-end">{{ number_format($sumTtlRp, 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp / sumBk($query, 'gr'), 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp / sumBk($query, 'gr'), 0) }}
+                            </th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
         </section>
+        {{-- <canvas id="myChart"></canvas> --}}
+
+
         @section('scripts')
+            <script>
+                const data = {
+                    labels: @json(array_column($query, 'nm_partai')),
+                    datasets: [{
+                        label: 'Ttl Rp',
+                        backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: @json(array_map(fn($d) => $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op, $query)),
+                    },{
+                        label: 'rata-rata',
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgb(255, 206, 86)',
+                        data: @json(array_map(fn($d) => $d->gr / ($d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op), $query)),
+                    }]
+                };
+                const config = {
+                    type: 'line',
+                    data: data
+                };
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            </script>
+
             <script>
                 $('#bk_stock').DataTable({
                     "searching": true,
