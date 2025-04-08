@@ -430,6 +430,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/detailGrade2', 'detailGrade2')->name('detailGrade2');
             Route::get('/exportCostpartai', 'exportCostpartai')->name('exportCostpartai');
             Route::get('/exportCostperpartai', 'exportCostperpartai')->name('exportCostperpartai');
+            Route::get('/exportCostpartai2', 'exportCostpartai2')->name('exportCostpartai2');
 
             Route::get('/opname/cetak', 'cetak')->name('opname/cetak');
             Route::get('/opname/sortir', 'sortir')->name('opname/sortir');

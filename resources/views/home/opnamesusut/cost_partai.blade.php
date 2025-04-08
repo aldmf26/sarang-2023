@@ -8,7 +8,7 @@
             @include('home.cocokan.nav')
 
             <div class="col-lg-12">
-                <form action="{{ route('cocokan.exportCostperpartai') }}" method="get">
+                <form action="{{ route('cocokan.exportCostpartai2') }}" method="get">
                     <div class="row">
                         <div class="col-lg-3">
                             <select name="partai" id="select2" class="form-control pilih_partai">
