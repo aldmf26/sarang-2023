@@ -447,8 +447,8 @@ class OpnameNewController extends Controller
 
         $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
         $sheet3->setCellValue('A1', 'Pengiriman');
-        $sheet3->setCellValue('B1', 'Tanggal pengiriman');
-        $sheet3->setCellValue('C1', 'no pengiriman');
+        $sheet3->setCellValue('B1', 'nama partai');
+        $sheet3->setCellValue('C1', 'box pengiriman');
         $sheet3->setCellValue('D1', 'grade');
         $sheet3->setCellValue('E1', 'pcs');
         $sheet3->setCellValue('F1', 'gr');
@@ -459,28 +459,30 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('K1', 'total rp');
         $sheet3->setCellValue('L1', 'rp/gr');
 
-        $pengiriman = DB::select("SELECT a.tgl_input, a.no_barcode, a.grade, a.pcs as pcs, a.gr as gr , 
-        sum(b.cost_bk) as total_rp, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, sum(b.cost_op) as cost_op FROM pengiriman as a 
-        left join  (
-        SELECT sum(b.pcs) as pcs, sum(b.gr) as gr, b.box_pengiriman, sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu
-        FROM grading_partai as b
-        group by b.box_pengiriman
-        ) as b on b.box_pengiriman = a.no_box
-        group by a.id_pengiriman;");
-        $kolom = 2;
-        foreach ($pengiriman  as $d) {
-            $sheet3->setCellValue('B' . $kolom, $d->tgl_input);
-            $sheet3->setCellValue('C' . $kolom, $d->no_barcode);
-            $sheet3->setCellValue('D' . $kolom, $d->grade);
-            $sheet3->setCellValue('E' . $kolom, $d->pcs);
-            $sheet3->setCellValue('F' . $kolom, $d->gr);
-            $sheet3->setCellValue('G' . $kolom, $d->total_rp);
-            $sheet3->setCellValue('H' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('I' . $kolom, $d->cost_cu);
-            $sheet3->setCellValue('J' . $kolom, $d->cost_op);
-            $sheet3->setCellValue('K' . $kolom, $d->total_rp + $d->cost_kerja + $d->cost_cu + $d->cost_op);
-            $sheet3->setCellValue('L' . $kolom, ($d->total_rp + $d->cost_kerja + $d->cost_cu + $d->cost_op)  / $d->gr);
-            $kolom++;
+        $pengirimanNota = DB::table('pengiriman')->groupBy('no_nota')->pluck('no_nota');
+
+        foreach ($pengirimanNota  as $d) {
+            $belumKirim = Grading::details($d);
+            
+            $kolom = 2;
+            foreach($belumKirim as $b){
+                $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
+                $sheet3->setCellValue('C' . $kolom, $b->no_box);
+                $sheet3->setCellValue('D' . $kolom, $b->grade);
+                $sheet3->setCellValue('E' . $kolom, $b->pcs);
+                $sheet3->setCellValue('F' . $kolom, $b->gr);
+                $sheet3->setCellValue('G' . $kolom, $b->cost_bk);
+                $sheet3->setCellValue('H' . $kolom, $b->cost_kerja);
+                $sheet3->setCellValue('I' . $kolom, $b->cost_cu);
+                $sheet3->setCellValue('J' . $kolom, $b->cost_op);
+
+                $ttlRp = $b->cost_bk + $b->cost_kerja + $b->cost_cu + $b->cost_op;
+
+                $sheet3->setCellValue('K' . $kolom, $ttlRp);
+                $sheet3->setCellValue('L' . $kolom, $ttlRp  / $b->gr);
+                $kolom++;
+            }
+
         }
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 
@@ -500,7 +502,7 @@ class OpnameNewController extends Controller
 
         $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp, sum(cost_bk) as cost_bk, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` 
                 WHERE sudah_kirim = 'T' and grade != 'susut'  
-                group by box_pengiriman;");
+                group by nm_partai,box_pengiriman;");
         $kolom = 2;
         foreach ($grading  as $d) {
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
