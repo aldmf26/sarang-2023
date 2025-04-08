@@ -79,33 +79,33 @@ class QcController extends Controller
             ];
             DB::table('qc')->where('box_pengiriman', $r->box_pengiriman[$i])->update($data);
 
-            $box = $r->box_pengiriman[$i];
+            // $box = $r->box_pengiriman[$i];
 
-            $grading_partai = DB::select("SELECT * FROM grading_partai where box_pengiriman = '$box'");
+            // $grading_partai = DB::select("SELECT * FROM grading_partai where box_pengiriman = '$box'");
 
-            $susut = sumBk($grading_partai, 'gr') - $r->gr_akhir[$i];
-            $pembagian = $susut / count($grading_partai);
+            // $susut = sumBk($grading_partai, 'gr') - $r->gr_akhir[$i];
+            // $pembagian = $susut / count($grading_partai);
 
 
-            foreach ($grading_partai as $d) {
-                $data = [
-                    'gr' => $d->gr - $pembagian,
-                ];
-                DB::table('grading_partai')->where('id_grading', $d->id_grading)->update($data);
-            }
-            if ($susut == 0) {
-            } else {
-                $data2 = [
-                    'box_pengiriman' => '10000',
-                    'nm_partai' => 'susut ' . $r->box_pengiriman[$i],
-                    'gr' => $susut,
-                    'grade' => 'susut',
-                    'pcs' => 0,
-                    'tgl' => date('Y-m-d'),
-                    'no_invoice' => 0,
-                ];
-                DB::table('grading_partai')->insert($data2);
-            }
+            // foreach ($grading_partai as $d) {
+            //     $data = [
+            //         'gr' => $d->gr - $pembagian,
+            //     ];
+            //     DB::table('grading_partai')->where('id_grading', $d->id_grading)->update($data);
+            // }
+            // if ($susut == 0) {
+            // } else {
+            //     $data2 = [
+            //         'box_pengiriman' => '10000',
+            //         'nm_partai' => 'susut ' . $r->box_pengiriman[$i],
+            //         'gr' => $susut,
+            //         'grade' => 'susut',
+            //         'pcs' => 0,
+            //         'tgl' => date('Y-m-d'),
+            //         'no_invoice' => 0,
+            //     ];
+            //     DB::table('grading_partai')->insert($data2);
+            // }
         }
         return redirect()->route('qc.listqc')->with('sukses', 'Data Berhasil di simpan');
     }
