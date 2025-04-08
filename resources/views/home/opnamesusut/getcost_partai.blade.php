@@ -136,13 +136,13 @@
                     </td>
 
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->pcs_tdk + $cetak->pcs - $sortir->pcs, 0) }}
+                        {{ number_format(($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->gr_tdk + $cetak->gr - $sortir->gr_awal, 0) }}
+                        {{ number_format(($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
                         @php
@@ -151,7 +151,7 @@
                         {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr_awal) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja) + ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>
