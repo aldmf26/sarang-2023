@@ -17,8 +17,8 @@
                             <th class="dhead">no</th>
                             <th class="dhead">No Nota</th>
                             <th class="dhead">partai</th>
-                            <th class="dhead">box grading</th>
-                            <th class="dhead">grade</th>
+                            {{-- <th class="dhead">box grading</th>
+                            <th class="dhead">grade</th> --}}
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp</th>
@@ -39,8 +39,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $no_nota }}</td>
                                 <td>{{ $d->nm_partai }}</td>
-                                <td>{{ $d->no_box }}</td>
-                                <td>{{ $d->grade }}</td>
+                                {{-- <td>{{ $d->no_box }}</td>
+                                <td>{{ $d->grade }}</td> --}}
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
                                 <td class="text-end">{{ number_format($total) }}</td>
@@ -51,7 +51,7 @@
 
                     <tfoot>
                         <tr>
-                            <th class="dheadstock " colspan="5">Box : {{ count($query) }}</th>
+                            <th class="dheadstock " colspan="3">Box : {{ count($query) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
 
@@ -63,7 +63,7 @@
                                     sumBk($query, 'cost_op');
                             @endphp
 
-                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp, 0) }}</th>
+                            <th class="dheadstock  text-end showChart">{{ number_format($sumTtlRp, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format($sumTtlRp / sumBk($query, 'gr'), 0) }}
                             </th>
                         </tr>
@@ -72,11 +72,18 @@
             </div>
 
         </section>
-        {{-- <canvas id="myChart"></canvas> --}}
+
+        <canvas id="myChart" class="d-none"></canvas>
 
 
         @section('scripts')
             <script>
+
+                $('.showChart').click(function (e) { 
+                    e.preventDefault();
+                    $('#myChart').toggleClass('d-none');
+                });
+
                 const data = {
                     labels: @json(array_column($query, 'nm_partai')),
                     datasets: [{
@@ -84,16 +91,53 @@
                         backgroundColor: 'rgba(255, 99, 132, 0.3)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: @json(array_map(fn($d) => $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op, $query)),
-                    },{
-                        label: 'rata-rata',
-                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                        borderColor: 'rgb(255, 206, 86)',
-                        data: @json(array_map(fn($d) => $d->gr / ($d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op), $query)),
+                        yAxisID: 'y',
+                    }, {
+                        label: 'Rata Rp',
+                        backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                        borderColor: 'rgb(0, 255, 0)',
+                        data: @json(array_map(fn($d) => ($d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op) / $d->gr, $query)),
+                        pointStyle: 'star',
+                        pointBackgroundColor: 'rgb(0, 0, 255)',
+                        pointBorderColor: 'rgb(0, 0, 255)',
+                        pointBorderWidth: 5,
+                        yAxisID: 'y1',
                     }]
                 };
                 const config = {
                     type: 'line',
-                    data: data
+                    data: data,
+                    options: {
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Ttl Rp'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Rata Rp'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Rata2 Tertinggi : ${Math.max(...data.datasets[1].data).toFixed()}`
+                            }
+                        }
+                    }
                 };
                 const myChart = new Chart(
                     document.getElementById('myChart'),
