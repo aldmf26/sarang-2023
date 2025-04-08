@@ -257,7 +257,7 @@ class OpnameSusutController extends Controller
             $sheet->setCellValue('J' . $kolom, "0");
             $sheet->setCellValue('K' . $kolom, "0");
             $sheet->setCellValue('L' . $kolom, "$d->ttl_rp");
-            $sheet->setCellValue('M' . $kolom, round($d->ttl_rp / $d->gr_awal, 0));
+            $sheet->setCellValue('M' . $kolom, $d->ttl_rp / $d->gr_awal);
             $kolom++;
             $cabut = CabutOpnameModel::cabutPartai($d->nm_partai);
             $eo = CabutOpnameModel::eotPartai($d->nm_partai);
@@ -784,7 +784,7 @@ class OpnameSusutController extends Controller
         $sheet->setCellValue('I' . $kolom, "0");
         $sheet->setCellValue('J' . $kolom, "0");
         $sheet->setCellValue('K' . $kolom, "$d->ttl_rp");
-        $sheet->setCellValue('L' . $kolom, round($d->ttl_rp / $d->gr_awal, 0));
+        $sheet->setCellValue('L' . $kolom, $d->ttl_rp / $d->gr_awal);
 
         $kolom2 = $kolom + 2;
 
