@@ -349,18 +349,18 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
 
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
+                        {{ number_format(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0), 0) }}</td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->gr - $pengiriman->gr, 0) }}
+                        {{ number_format(($grading->gr ?? 0) - ($pengiriman->gr ?? 0), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1;border-right: 1px solid black">
-                        {{ $grading->gr - $pengiriman->gr == 0 || empty($pengiriman->gr) ? 0 : number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op)) / ($grading->gr - $pengiriman->gr), 0) }}
+                        {{ $grading->gr - $pengiriman->gr == 0 ? 0 : number_format((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="border-right: 1px solid black">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>
