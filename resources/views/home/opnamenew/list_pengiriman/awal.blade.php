@@ -34,7 +34,6 @@
                             $ttlRp = $d->ttl_rp;
                             $sumTtlRp += $ttlRp;
                             $total = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
-
                         @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -44,8 +43,8 @@
                                 <td>{{ $d->grade }}</td>
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
-                                <td class="text-end">{{ number_format($d->ttl_rp) }}</td>
-                                <td class="text-end">{{ number_format($d->ttl_rp / $d->gr) }}</td>
+                                <td class="text-end">{{ number_format($total) }}</td>
+                                <td class="text-end">{{ number_format($total / $d->gr) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -55,8 +54,13 @@
                             <th class="dheadstock " colspan="5">Box : {{ count($query) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp'), 0) }}</th>
-                            <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'ttl_rp') / sumBk($query, 'gr'), 0) }}</th>
+
+                            @php
+                                $sumTtlRp = sumBk($query, 'cost_bk') + sumBk($query, 'cost_kerja') + sumBk($query, 'cost_cu') + sumBk($query, 'cost_op');
+                            @endphp
+
+                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp, 0) }}</th>
+                            <th class="dheadstock  text-end">{{ number_format($sumTtlRp / sumBk($query, 'gr'), 0) }}</th>
                         </tr>
                     </tfoot>
                 </table>

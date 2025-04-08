@@ -233,7 +233,6 @@ class CocokanController extends Controller
     public function pengiriman(CocokanModel $model)
     {
         $sa = $model::sortir_akhir();
-
         $p2suntik = $this->getSuntikan(42);
         $sortir_akhir = new stdClass();
         $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;

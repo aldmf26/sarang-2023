@@ -864,6 +864,27 @@ left join(
         WHERE a.no_nota = $no_nota;");
     }
 
+    public static function details($no_nota)
+    {
+        return DB::select("SELECT  
+            a.no_nota,
+            b.nm_partai,
+            b.box_pengiriman as no_box,
+            b.grade,
+            sum(b.pcs) as pcs,
+            sum(b.gr) as gr,
+            sum(b.ttl_rp) as ttl_rp,
+            sum(b.cost_bk) as cost_bk,
+            sum(b.cost_kerja) as cost_kerja,
+            sum(b.cost_cu) as cost_cu,
+            sum(b.cost_op) as cost_op
+            FROM `grading_partai` as b
+            left join pengiriman as a on b.box_pengiriman = a.no_box
+            WHERE a.no_nota = $no_nota and b.sudah_kirim = 'Y'
+            GROUP BY b.nm_partai,b.box_pengiriman 
+            ");
+    }
+
     public static function tbl_po($no_nota)
     {
         $pengiriman = DB::select("SELECT a.id_pengiriman,a.no_box,b.grade as grade1, b.pcs as pcs1, b.gr as gr1,a.grade as grade2, a.pcs as pcs2, a.gr as gr2,a.no_barcode
