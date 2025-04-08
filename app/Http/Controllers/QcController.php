@@ -65,7 +65,7 @@ class QcController extends Controller
                     group by b.box_pengiriman
                 ) as b on b.box_pengiriman = a.box_pengiriman
                 where a.invoice_qc = '$r->invoice_qc'
-                order by a.id ASC
+                order by a.id DESC
             ")
         ];
         return view('home.qc.listboxqc', $data);
