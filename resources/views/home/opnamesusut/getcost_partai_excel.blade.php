@@ -60,7 +60,10 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     <td class="text-end" style="border-right: 1px solid black;color: #44B3E1">
                         {{ number_format($bk->ttl_rp / $bk->gr_awal, 0) }}
                     </td>
-                    <td colspan="4" style="border-right: 1px solid black"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: 1px solid black"></td>
                     <td style="border-right: 1px solid black"></td>
                 </tr>
                 <tr>
@@ -217,13 +220,13 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
 
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->pcs_tdk + $cetak->pcs - $sortir->pcs, 0) }}
+                        {{ number_format(($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->gr_tdk + $cetak->gr - $sortir->gr_awal, 0) }}
+                        {{ number_format(($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1;border-right: 1px solid black">
                         @php
@@ -232,7 +235,7 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                         {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="border-right: 1px solid black">
-                        {{ empty($sortir->gr_awal) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja) + ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>
@@ -349,18 +352,18 @@ header('Content-Disposition: attachment; filename=Cost Partai.xls');
                     </td>
 
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
+                        {{ number_format(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0), 0) }}</td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->gr - $pengiriman->gr, 0) }}
+                        {{ number_format(($grading->gr ?? 0) - ($pengiriman->gr ?? 0), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="color: #44B3E1;border-right: 1px solid black">
-                        {{ $grading->gr - $pengiriman->gr == 0 || empty($pengiriman->gr) ? 0 : number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op)) / ($grading->gr - $pengiriman->gr), 0) }}
+                        {{ $grading->gr - $pengiriman->gr == 0 ? 0 : number_format((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0) }}
                     </td>
                     <td class="text-end" style="border-right: 1px solid black">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>

@@ -136,13 +136,13 @@
                     </td>
 
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->pcs_tdk + $cetak->pcs - $sortir->pcs, 0) }}
+                        {{ number_format(($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->gr_tdk + $cetak->gr - $sortir->gr_awal, 0) }}
+                        {{ number_format(($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
                         @php
@@ -151,7 +151,7 @@
                         {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($sortir->gr_awal) ? 0 : number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp - ($sortir->modal_rp + $sortir->cost_kerja) + ($sortir->modal_rp + $sortir->cost_kerja), 0) }}
+                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>
@@ -229,18 +229,18 @@
                     </td>
 
                     <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->pcs - $pengiriman->pcs, 0) }}</td>
+                        {{ number_format(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0), 0) }}</td>
                     <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->gr - $pengiriman->gr, 0) }}
+                        {{ number_format(($grading->gr ?? 0) - ($pengiriman->gr ?? 0), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ $grading->gr - $pengiriman->gr == 0 || empty($pengiriman->gr) ? 0 : number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op)) / ($grading->gr - $pengiriman->gr), 0) }}
+                        {{ $grading->gr - $pengiriman->gr == 0 ? 0 : number_format((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0) }}
                     </td>
                     <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op - ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op), 0) }}
+                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
                     </td>
                 </tr>
                 <tr>

@@ -192,114 +192,209 @@ class OpnameSusutController extends Controller
 
 
 
-        $title = 'Cost Partai';
+        $title = 'Cost Partai All';
         $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "$title");
         $sheet  = $spreadsheet->addSheet($worksheet);
-        $sheet->getStyle("A1:L1")->applyFromArray($style_atas);
-        $sheet->setCellValue('A1', 'Partai');
-        $sheet->setCellValue('B1', 'Ket');
-        $sheet->setCellValue('C1', 'Grade');
-        $sheet->setCellValue('D1', 'Pcs');
-        $sheet->setCellValue('E1', 'Gr');
-        $sheet->setCellValue('F1', 'Rp');
-        $sheet->setCellValue('G1', 'Pcs tidak cetak');
-        $sheet->setCellValue('H1', 'Gr tidak cetak');
-        $sheet->setCellValue('I1', 'Pcs akhir');
-        $sheet->setCellValue('J1', 'Gr akhir');
-        $sheet->setCellValue('K1', 'Cost Rp');
-        $sheet->setCellValue('L1', 'Rp/gr');
+        $sheet->getStyle("A1:R2")->applyFromArray($style_atas);
+        $sheet->setCellValue('A1', 'Kerja');
+        $sheet->setCellValue('N1', 'Gudang');
+        $sheet->setCellValue('R1', 'Pencocokan');
+        $sheet->setCellValue('A2', 'Partai');
+        $sheet->setCellValue('B2', 'Ket');
+        $sheet->setCellValue('C2', 'Grade');
+        $sheet->setCellValue('D2', 'Pcs Awal');
+        $sheet->setCellValue('E2', 'Gr Awal');
+        $sheet->setCellValue('F2', 'Pcs Akhir');
+        $sheet->setCellValue('G2', 'Gr Akhir');
+        $sheet->setCellValue('H2', 'Susut%');
+        $sheet->setCellValue('I2', 'Modal Rp');
+        $sheet->setCellValue('J2', 'Cost Kerja');
+        $sheet->setCellValue('K2', 'Cost Operasional');
+        $sheet->setCellValue('L2', 'Modal Tambah Cost');
+        $sheet->setCellValue('M2', 'Modal rata-rata');
 
-        $kolom = 2;
+        $sheet->setCellValue('N2', 'Sisa Pcs');
+        $sheet->setCellValue('O2', 'Sisa Gr');
+        $sheet->setCellValue('P2', 'Total Rp');
+        $sheet->setCellValue('Q2', 'Rata-rata');
+        $sheet->setCellValue('R2', '');
+
+        $kolom = 3;
         foreach ($bk as $i => $d) {
-
-
-
-
-
-
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
-            $sheet->setCellValue('B' . $kolom, 'bk');
-            $sheet->setCellValue('C' . $kolom, strtoupper($d->tipe));
-            $sheet->setCellValue('D' . $kolom, round($d->pcs_awal, 0));
-            $sheet->setCellValue('E' . $kolom, round($d->gr_awal, 0));
-            $sheet->setCellValue('F' . $kolom, round($d->ttl_rp, 0));
-            $sheet->setCellValue('G' . $kolom, 0);
-            $sheet->setCellValue('H' . $kolom, 0);
-            $sheet->setCellValue('I' . $kolom, 0);
-            $sheet->setCellValue('J' . $kolom, 0);
-            $sheet->setCellValue('K' . $kolom, round($d->ttl_rp, 0));
-            $sheet->setCellValue('L' . $kolom, empty($d->gr_awal) ? 0 : round($d->ttl_rp / $d->gr_awal, 0));
-
+            $sheet->setCellValue('B' . $kolom, "Bk Awal");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, "$d->pcs_awal");
+            $sheet->setCellValue('E' . $kolom, "$d->gr_awal");
+            $sheet->setCellValue('F' . $kolom, "0");
+            $sheet->setCellValue('G' . $kolom, "0");
+            $sheet->setCellValue('H' . $kolom, "0");
+            $sheet->setCellValue('I' . $kolom, "$d->ttl_rp");
+            $sheet->setCellValue('J' . $kolom, "0");
+            $sheet->setCellValue('K' . $kolom, "0");
+            $sheet->setCellValue('L' . $kolom, "$d->ttl_rp");
+            $sheet->setCellValue('M' . $kolom, round($d->ttl_rp / $d->gr_awal, 0));
             $kolom++;
-
             $cabut = CabutOpnameModel::cabutPartai($d->nm_partai);
             $eo = CabutOpnameModel::eotPartai($d->nm_partai);
 
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
-            $sheet->setCellValue('B' . $kolom, 'cabut');
-            $sheet->setCellValue('C' . $kolom, strtoupper($d->tipe));
-            $sheet->setCellValue('D' . $kolom, 0);
-            $sheet->setCellValue('E' . $kolom, 0);
-            $sheet->setCellValue('F' . $kolom, 0);
-            $sheet->setCellValue('G' . $kolom, 0);
-            $sheet->setCellValue('H' . $kolom, 0);
-            $gr_cabut =  $cabut->gr ?? 0;
-            $ttl_rp_cabut = $cabut->ttl_rp ?? 0;
-            $gr_eo = $eo->gr ?? 0;
-            $ttl_rp_eo = $eo->ttl_rp ?? 0;
-
-            $sheet->setCellValue('I' . $kolom, round($cabut->pcs ?? 0, 0));
-            $sheet->setCellValue('J' . $kolom, round($gr_cabut + $gr_eo, 0));
-            $sheet->setCellValue('K' . $kolom, round($ttl_rp_cabut + $ttl_rp_eo, 0));
-            $sheet->setCellValue('L' . $kolom, $ttl_rp_cabut + $ttl_rp_eo == 0 ? 0 : round(($ttl_rp_cabut + $ttl_rp_eo) / ($gr_cabut + $gr_eo), 0));
+            $sheet->setCellValue('B' . $kolom, "Cabut");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, $cabut->pcs ?? 0);
+            $sheet->setCellValue('E' . $kolom, ($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0));
+            $sheet->setCellValue('F' . $kolom, $cabut->pcs ?? 0);
+            $sheet->setCellValue('G' . $kolom, ($cabut->gr ?? 0) + ($eo->gr ?? 0));
+            $sheet->setCellValue('H' . $kolom, round((1 - (($cabut->gr ?? 0) + ($eo->gr ?? 0)) / (($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0))) * 100, 0) . "%");
+            $sheet->setCellValue('I' . $kolom, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0));
+            $sheet->setCellValue('J' . $kolom, ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0));
+            $sheet->setCellValue('K' . $kolom, 0);
+            $sheet->setCellValue('L' . $kolom, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0));
+            $sheet->setCellValue('M' . $kolom, ($cabut->gr ?? 0) + ($eo->gr ?? 0) == 0 ? 0 : round((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0)), 0));
+            $sheet->setCellValue('N' . $kolom, ($d->pcs_awal ?? 0) - ($cabut->pcs ?? 0));
+            $sheet->setCellValue('O' . $kolom, $d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0));
+            $sheet->setCellValue('P' . $kolom, $d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0));
+            $sheet->setCellValue('Q' . $kolom, $d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0) == 0 ? 0 : round(($d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)) / ($d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0)), 0));
+            $sheet->setCellValue('R' . $kolom, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)));
             $kolom++;
 
             $cetak = CabutOpnameModel::cetakPartai($d->nm_partai);
+
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
-            $sheet->setCellValue('B' . $kolom, 'cetak');
-            $sheet->setCellValue('C' . $kolom, strtoupper($d->tipe));
-            $sheet->setCellValue('D' . $kolom, 0);
-            $sheet->setCellValue('E' . $kolom, 0);
-            $sheet->setCellValue('F' . $kolom, 0);
-            $sheet->setCellValue('G' . $kolom, round($cetak->pcs_tdk, 0));
-            $sheet->setCellValue('H' . $kolom, round($cetak->gr_tdk, 0));
-            $sheet->setCellValue('I' . $kolom, round($cetak->pcs ?? 0, 0));
-            $sheet->setCellValue('J' . $kolom, round($cetak->gr ?? 0, 0));
-            $sheet->setCellValue('K' . $kolom, round($cetak->ttl_rp, 0));
-            $sheet->setCellValue('L' . $kolom, empty($cetak->gr) ? 0 : round($cetak->ttl_rp / $cetak->gr, 0));
+            $sheet->setCellValue('B' . $kolom, "Cetak");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, $cetak->pcs_tdk + $cetak->pcs);
+            $sheet->setCellValue('E' . $kolom, $cetak->gr_awal);
+            $sheet->setCellValue('F' . $kolom, $cetak->pcs_tdk + $cetak->pcs);
+            $sheet->setCellValue('G' . $kolom, $cetak->gr_tdk + $cetak->gr);
+            $sheet->setCellValue('H' . $kolom, empty($cetak->gr_awal) ? 0 : round((1 - ($cetak->gr_tdk + $cetak->gr) / $cetak->gr_awal) * 100, 0) . "%");
+            $sheet->setCellValue('I' . $kolom, $cetak->modal_rp + $cetak->cost_kerja);
+            $sheet->setCellValue('J' . $kolom, $cetak->ttl_rp);
+            $sheet->setCellValue('K' . $kolom, 0);
+            $sheet->setCellValue('L' . $kolom, $cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp);
+            $sheet->setCellValue('M' . $kolom, $cetak->gr_tdk + $cetak->gr == 0 ? 0 : round(($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp) / ($cetak->gr_tdk + $cetak->gr), 0));
+            $sheet->setCellValue('N' . $kolom, ($cabut->pcs ?? 0) - ($cetak->pcs_tdk ?? 0) - ($cetak->pcs ?? 0));
+            $sheet->setCellValue('O' . $kolom, ($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal);
+            $sheet->setCellValue('P' . $kolom, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja));
+            $sheet->setCellValue('Q' . $kolom, ($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal == 0 ? 0 : round((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal), 0));
+            $sheet->setCellValue('R' . $kolom, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja) + ($cetak->modal_rp + $cetak->cost_kerja));
             $kolom++;
 
             $sortir = CabutOpnameModel::sortirPartai($d->nm_partai);
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
-            $sheet->setCellValue('B' . $kolom, 'sortir');
-            $sheet->setCellValue('C' . $kolom, strtoupper($d->tipe));
-            $sheet->setCellValue('D' . $kolom, 0);
-            $sheet->setCellValue('E' . $kolom, 0);
-            $sheet->setCellValue('F' . $kolom, 0);
-            $sheet->setCellValue('G' . $kolom, 0);
-            $sheet->setCellValue('H' . $kolom, 0);
-            $sheet->setCellValue('I' . $kolom, round($sortir->pcs ?? 0, 0));
-            $sheet->setCellValue('J' . $kolom, round($sortir->gr ?? 0, 0));
-            $sheet->setCellValue('K' . $kolom, round($sortir->ttl_rp ?? 0, 0));
-            $sheet->setCellValue('L' . $kolom, empty($sortir->gr) ? 0 : round($sortir->ttl_rp / $sortir->gr, 0));
+            $sheet->setCellValue('B' . $kolom, "Sortir");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, $sortir->pcs ?? 0);
+            $sheet->setCellValue('E' . $kolom, $sortir->gr_awal ?? 0);
+            $sheet->setCellValue('F' . $kolom, $sortir->pcs ?? 0);
+            $sheet->setCellValue('G' . $kolom, $sortir->gr ?? 0);
+            $sheet->setCellValue('H' . $kolom, empty($sortir->gr_awal) ? 0 : round((1 - $sortir->gr / $sortir->gr_awal) * 100, 0) . "%");
+            $sheet->setCellValue('I' . $kolom, empty($sortir->modal_rp) ? 0 : round($sortir->modal_rp + $sortir->cost_kerja, 0));
+            $sheet->setCellValue('J' . $kolom, $sortir->ttl_rp ?? 0);
+            $sheet->setCellValue('K' . $kolom, 0);
+            $sheet->setCellValue('L' . $kolom, empty($sortir->modal_rp) ? 0 : round($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp, 0));
+            $sheet->setCellValue('M' . $kolom, empty($sortir->gr) ? 0 : round(($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp) / $sortir->gr, 0));
+            $sheet->setCellValue('N' . $kolom, ($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0));
+            $sheet->setCellValue('O' . $kolom, ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0));
+            $sheet->setCellValue('P' . $kolom, ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)));
+            $pembagi = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0);
+
+            $sheet->setCellValue('Q' . $kolom, $pembagi == 0 ? 0 : round((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0));
+            $sheet->setCellValue('R' . $kolom, ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)));
             $kolom++;
 
             $grading = CabutOpnameModel::gradingPartai($d->nm_partai);
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
-            $sheet->setCellValue('B' . $kolom, 'grading');
-            $sheet->setCellValue('C' . $kolom, strtoupper($d->tipe));
+            $sheet->setCellValue('B' . $kolom, "Grading");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, $grading->pcs);
+            $sheet->setCellValue('E' . $kolom, $grading->gr);
+            $sheet->setCellValue('F' . $kolom, $grading->pcs);
+            $sheet->setCellValue('G' . $kolom, $grading->gr);
+            $sheet->setCellValue('H' . $kolom,  "0%");
+            $sheet->setCellValue('I' . $kolom, $grading->cost_bk + $grading->cost_kerja);
+            $sheet->setCellValue('J' . $kolom, 0);
+            $sheet->setCellValue('K' . $kolom, $grading->cost_op);
+            $sheet->setCellValue('L' . $kolom, $grading->cost_bk + $grading->cost_kerja + $grading->cost_op);
+            $sheet->setCellValue('M' . $kolom, empty($grading->gr) ? 0 : round(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0));
+
+            $sheet->setCellValue('N' . $kolom, ($sortir->pcs ?? 0) - ($grading->pcs ?? 0));
+            $sheet->setCellValue('O' . $kolom, ($sortir->gr ?? 0) - ($grading->gr ?? 0));
+            $sheet->setCellValue('P' . $kolom, ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)));
+            $grading_gr = $grading->gr ?? 0;
+            $sortir_gr = $sortir->gr ?? 0;
+            $selisih_gr = $sortir_gr - $grading_gr;
+
+            $sheet->setCellValue('Q' . $kolom, $selisih_gr == 0
+                ? 0
+                : number_format(
+                    (($sortir->modal_rp ?? 0) +
+                        ($sortir->cost_kerja ?? 0) +
+                        ($sortir->ttl_rp ?? 0) -
+                        (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0))) /
+                        $selisih_gr,
+                    0,
+                ));
+            $sheet->setCellValue('R' . $kolom, ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)) + (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)));
+            $kolom++;
+
+            $pengiriman = CabutOpnameModel::pengiriman($d->nm_partai);
+            $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
+            $sheet->setCellValue('B' . $kolom, "Sisa Pengiriman");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
+            $sheet->setCellValue('D' . $kolom, $pengiriman->pcs);
+            $sheet->setCellValue('E' . $kolom, $pengiriman->gr);
+            $sheet->setCellValue('F' . $kolom, $pengiriman->pcs);
+            $sheet->setCellValue('G' . $kolom, $pengiriman->gr);
+            $sheet->setCellValue('H' . $kolom,  "0%");
+            $sheet->setCellValue('I' . $kolom, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+            $sheet->setCellValue('J' . $kolom, 0);
+            $sheet->setCellValue('K' . $kolom, 0);
+            $sheet->setCellValue('L' . $kolom, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+            $sheet->setCellValue('M' . $kolom, empty($pengiriman->gr) ? 0 : round(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
+
+            $sheet->setCellValue('N' . $kolom, ($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0));
+
+            $sheet->setCellValue('O' . $kolom, ($grading->gr ?? 0) - ($pengiriman->gr ?? 0));
+
+
+            $sheet->setCellValue('P' . $kolom, ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)));
+
+
+            $sheet->setCellValue('Q' . $kolom, $grading->gr - $pengiriman->gr == 0 ? 0 : round((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0));
+
+            $sheet->setCellValue('R' . $kolom, ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)));
+            $kolom++;
+
+            $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
+            $sheet->setCellValue('B' . $kolom, "Sudah Terkirim");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, 0);
             $sheet->setCellValue('E' . $kolom, 0);
             $sheet->setCellValue('F' . $kolom, 0);
             $sheet->setCellValue('G' . $kolom, 0);
-            $sheet->setCellValue('H' . $kolom, 0);
-            $sheet->setCellValue('I' . $kolom, round($grading->pcs ?? 0, 0));
-            $sheet->setCellValue('J' . $kolom, round($grading->gr ?? 0, 0));
-            $sheet->setCellValue('K' . $kolom, round($grading->ttl_rp ?? 0, 0));
-            $sheet->setCellValue('L' . $kolom, empty($grading->gr) ? 0 : round($grading->ttl_rp / $grading->gr, 0));
+            $sheet->setCellValue('H' . $kolom,  "0%");
+            $sheet->setCellValue('I' . $kolom, 0);
+            $sheet->setCellValue('J' . $kolom, 0);
+            $sheet->setCellValue('K' . $kolom, 0);
+            $sheet->setCellValue('L' . $kolom, 0);
+
+            $sheet->setCellValue('N' . $kolom, $pengiriman->pcs);
+
+            $sheet->setCellValue('O' . $kolom, $pengiriman->gr);
+
+
+            $sheet->setCellValue('P' . $kolom, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+
+
+            $sheet->setCellValue('Q' . $kolom, empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
+
+            $sheet->setCellValue('R' . $kolom, 0);
             $kolom++;
         }
-        $sheet->getStyle("A1:L" . $kolom - 1)->applyFromArray($style);
+
+
+        $sheet->getStyle("A1:R" . $kolom - 1)->applyFromArray($style);
         $namafile = "Cost Per Partai.xlsx";
 
         $writer = new Xlsx($spreadsheet);
