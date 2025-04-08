@@ -881,7 +881,7 @@ left join(
             FROM `grading_partai` as b
             left join pengiriman as a on b.box_pengiriman = a.no_box
             WHERE a.no_nota = $no_nota and b.sudah_kirim = 'Y'
-            GROUP BY b.nm_partai,b.box_pengiriman 
+            GROUP BY b.nm_partai
             ");
     }
 
