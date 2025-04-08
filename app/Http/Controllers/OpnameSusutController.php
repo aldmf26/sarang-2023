@@ -174,23 +174,47 @@ class OpnameSusutController extends Controller
         );
 
         $style = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
             'borders' => [
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    'color' => ['rgb' => '000000'], // hitam
                 ],
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+            ],
+        ];
+        $style3 = [
+            'font' => [
+                'color' => [
+                    'rgb' => '44B3E1', // warna merah
+                ],
+            ],
+        ];
+        $style2 = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    'color' => ['rgb' => '000000'], // hitam
+                ],
+            ],
+            'font' => [
+                'color' => [
+                    'rgb' => '44B3E1', // warna merah
                 ],
             ],
         ];
         $spreadsheet = new Spreadsheet();
         $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
+
         $bk = DB::select("SELECT a.nm_partai, a.tipe, a.ket, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.gr_awal * a.hrga_satuan) as ttl_rp
         FROM bk as a 
         where a.kategori = 'cabut' and a.baru = 'baru' and a.no_box != 9999 group by a.nm_partai ");
-
-
 
         $title = 'Cost Partai All';
         $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "$title");
@@ -327,7 +351,7 @@ class OpnameSusutController extends Controller
 
             $sheet->setCellValue('Q' . $kolom, $selisih_gr == 0
                 ? 0
-                : number_format(
+                : round(
                     (($sortir->modal_rp ?? 0) +
                         ($sortir->cost_kerja ?? 0) +
                         ($sortir->ttl_rp ?? 0) -
@@ -387,15 +411,18 @@ class OpnameSusutController extends Controller
             $sheet->setCellValue('P' . $kolom, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
 
 
-            $sheet->setCellValue('Q' . $kolom, empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
+            $sheet->setCellValue('Q' . $kolom, empty($pengiriman->gr) ? 0 : round(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
 
             $sheet->setCellValue('R' . $kolom, 0);
             $kolom++;
         }
 
 
-        $sheet->getStyle("A1:R" . $kolom - 1)->applyFromArray($style);
-        $namafile = "Cost Per Partai.xlsx";
+        $sheet->getStyle("A3:M" . $kolom - 1)->applyFromArray($style);
+        $sheet->getStyle("L3:M" . $kolom - 1)->applyFromArray($style3);
+        $sheet->getStyle("R3:R" . $kolom - 1)->applyFromArray($style);
+        $sheet->getStyle("N3:Q" . $kolom - 1)->applyFromArray($style2);
+        $namafile = "Export Global.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -633,4 +660,328 @@ class OpnameSusutController extends Controller
     //     $writer->save('php://output');
     //     exit();
     // }
+
+    public function exportCostpartai2(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    'color' => ['rgb' => '000000'], // hitam
+                ],
+            ],
+        ];
+        $style3 = [
+            'font' => [
+                'color' => [
+                    'rgb' => '44B3E1', // warna merah
+                ],
+            ],
+        ];
+        $style4 = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => 'FFC000'], // background warna biru
+            ],
+        ];
+        $style5 = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => 'FFFF00'], // background warna biru
+            ],
+        ];
+        $style6 = [
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+                'color' => [
+                    'rgb' => '000000', // warna merah
+                ],
+            ],
+
+        ];
+        $style2 = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    'color' => ['rgb' => '000000'], // hitam
+                ],
+            ],
+            'font' => [
+                'color' => [
+                    'rgb' => '44B3E1', // warna merah
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+        $dataBulan = DB::table('oprasional')->groupBy('bulan')->selectRaw('bulan, tahun')->get();
+
+        $d = DB::selectOne("SELECT a.nm_partai, a.tipe, a.ket, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.gr_awal * a.hrga_satuan) as ttl_rp
+        FROM bk as a 
+        where a.kategori = 'cabut' and a.baru = 'baru' and a.no_box != 9999 and a.nm_partai = '$r->partai'
+
+        group by a.nm_partai ");
+
+        $title = 'Cost Partai All';
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "$title");
+        $sheet  = $spreadsheet->addSheet($worksheet);
+        $sheet->getStyle("A1:Q2")->applyFromArray($style_atas);
+        $sheet->setCellValue('A1', $r->partai);
+        $sheet->setCellValue('M1', 'Gudang');
+        $sheet->setCellValue('Q1', 'Pencocokan');
+
+        $sheet->setCellValue('A2', 'Ket');
+        $sheet->setCellValue('B2', 'Grade');
+        $sheet->setCellValue('C2', 'Pcs Awal');
+        $sheet->setCellValue('D2', 'Gr Awal');
+        $sheet->setCellValue('E2', 'Pcs Akhir');
+        $sheet->setCellValue('F2', 'Gr Akhir');
+        $sheet->setCellValue('G2', 'Susut%');
+        $sheet->setCellValue('H2', 'Modal Rp');
+        $sheet->setCellValue('I2', 'Cost Kerja');
+        $sheet->setCellValue('J2', 'Cost Operasional');
+        $sheet->setCellValue('K2', 'Modal Tambah Cost');
+        $sheet->setCellValue('L2', 'Modal rata-rata');
+
+        $sheet->setCellValue('M2', 'Sisa Pcs');
+        $sheet->setCellValue('N2', 'Sisa Gr');
+        $sheet->setCellValue('O2', 'Total Rp');
+        $sheet->setCellValue('P2', 'Rata-rata');
+        $sheet->setCellValue('Q2', '');
+
+        $kolom = 3;
+
+        $sheet->setCellValue('A' . $kolom, "Bk Awal");
+        $sheet->setCellValue('B' . $kolom, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom, "$d->pcs_awal");
+        $sheet->setCellValue('D' . $kolom, "$d->gr_awal");
+        $sheet->setCellValue('E' . $kolom, "0");
+        $sheet->setCellValue('F' . $kolom, "0");
+        $sheet->setCellValue('G' . $kolom, "0");
+        $sheet->setCellValue('H' . $kolom, "$d->ttl_rp");
+        $sheet->setCellValue('I' . $kolom, "0");
+        $sheet->setCellValue('J' . $kolom, "0");
+        $sheet->setCellValue('K' . $kolom, "$d->ttl_rp");
+        $sheet->setCellValue('L' . $kolom, round($d->ttl_rp / $d->gr_awal, 0));
+
+        $kolom2 = $kolom + 2;
+
+
+        $cabut = CabutOpnameModel::cabutPartai($r->partai);
+        $eo = CabutOpnameModel::eotPartai($r->partai);
+        $sheet->setCellValue('A' . $kolom2, "Cabut");
+        $sheet->setCellValue('B' . $kolom2, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom2, $cabut->pcs ?? 0);
+        $sheet->setCellValue('D' . $kolom2, ($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0));
+        $sheet->setCellValue('E' . $kolom2, $cabut->pcs ?? 0);
+        $sheet->setCellValue('F' . $kolom2, ($cabut->gr ?? 0) + ($eo->gr ?? 0));
+        $sheet->setCellValue('G' . $kolom2, round((1 - (($cabut->gr ?? 0) + ($eo->gr ?? 0)) / (($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0))) * 100, 0) . "%");
+        $sheet->setCellValue('H' . $kolom2, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0));
+        $sheet->setCellValue('I' . $kolom2, ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0));
+        $sheet->setCellValue('J' . $kolom2, 0);
+        $sheet->setCellValue('K' . $kolom2, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0));
+        $sheet->setCellValue('L' . $kolom2, ($cabut->gr ?? 0) + ($eo->gr ?? 0) == 0 ? 0 : round((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0)), 0));
+        $sheet->setCellValue('M' . $kolom2, ($d->pcs_awal ?? 0) - ($cabut->pcs ?? 0));
+        $sheet->setCellValue('N' . $kolom2, $d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0));
+        $sheet->setCellValue('O' . $kolom2, $d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0));
+        $sheet->setCellValue('P' . $kolom2, $d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0) == 0 ? 0 : round(($d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)) / ($d->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0)), 0));
+        $sheet->setCellValue('Q' . $kolom2, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($d->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)));
+
+        $kolom3 = $kolom2 + 2;
+
+        $cetak = CabutOpnameModel::cetakPartai($r->partai);
+
+        $sheet->setCellValue('A' . $kolom3, "Cetak");
+        $sheet->setCellValue('B' . $kolom3, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom3, $cetak->pcs_tdk + $cetak->pcs);
+        $sheet->setCellValue('D' . $kolom3, $cetak->gr_awal);
+        $sheet->setCellValue('E' . $kolom3, $cetak->pcs_tdk + $cetak->pcs);
+        $sheet->setCellValue('F' . $kolom3, $cetak->gr_tdk + $cetak->gr);
+        $sheet->setCellValue('G' . $kolom3, empty($cetak->gr_awal) ? 0 : round((1 - ($cetak->gr_tdk + $cetak->gr) / $cetak->gr_awal) * 100, 0) . "%");
+        $sheet->setCellValue('H' . $kolom3, $cetak->modal_rp + $cetak->cost_kerja);
+        $sheet->setCellValue('I' . $kolom3, $cetak->ttl_rp);
+        $sheet->setCellValue('J' . $kolom3, 0);
+        $sheet->setCellValue('K' . $kolom3, $cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp);
+        $sheet->setCellValue('L' . $kolom3, $cetak->gr_tdk + $cetak->gr == 0 ? 0 : round(($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp) / ($cetak->gr_tdk + $cetak->gr), 0));
+        $sheet->setCellValue('M' . $kolom3, ($cabut->pcs ?? 0) - ($cetak->pcs_tdk ?? 0) - ($cetak->pcs ?? 0));
+        $sheet->setCellValue('N' . $kolom3, ($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal);
+        $sheet->setCellValue('O' . $kolom3, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja));
+        $sheet->setCellValue('P' . $kolom3, ($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal == 0 ? 0 : round((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal), 0));
+        $sheet->setCellValue('Q' . $kolom3, ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja) + ($cetak->modal_rp + $cetak->cost_kerja));
+
+        $kolom4 = $kolom3 + 2;
+
+        $sortir = CabutOpnameModel::sortirPartai($r->partai);
+        $sheet->setCellValue('A' . $kolom4, "Sortir");
+        $sheet->setCellValue('B' . $kolom4, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom4, $sortir->pcs ?? 0);
+        $sheet->setCellValue('D' . $kolom4, $sortir->gr_awal ?? 0);
+        $sheet->setCellValue('E' . $kolom4, $sortir->pcs ?? 0);
+        $sheet->setCellValue('F' . $kolom4, $sortir->gr ?? 0);
+        $sheet->setCellValue('G' . $kolom4, empty($sortir->gr_awal) ? 0 : round((1 - $sortir->gr / $sortir->gr_awal) * 100, 0) . "%");
+        $sheet->setCellValue('H' . $kolom4, empty($sortir->modal_rp) ? 0 : round($sortir->modal_rp + $sortir->cost_kerja, 0));
+        $sheet->setCellValue('I' . $kolom4, $sortir->ttl_rp ?? 0);
+        $sheet->setCellValue('J' . $kolom4, 0);
+        $sheet->setCellValue('K' . $kolom4, empty($sortir->modal_rp) ? 0 : round($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp, 0));
+        $sheet->setCellValue('L' . $kolom4, empty($sortir->gr) ? 0 : round(($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp) / $sortir->gr, 0));
+        $sheet->setCellValue('M' . $kolom4, ($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0));
+        $sheet->setCellValue('N' . $kolom4, ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0));
+        $sheet->setCellValue('O' . $kolom4, ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)));
+        $pembagi = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0);
+
+        $sheet->setCellValue('P' . $kolom4, $pembagi == 0 ? 0 : round((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0));
+        $sheet->setCellValue('Q' . $kolom4, ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)));
+
+
+        $kolom5 = $kolom4 + 2;
+        $grading = CabutOpnameModel::gradingPartai($r->partai);
+        $sheet->setCellValue('A' . $kolom5, "Grading");
+        $sheet->setCellValue('B' . $kolom5, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom5, $grading->pcs);
+        $sheet->setCellValue('D' . $kolom5, $grading->gr);
+        $sheet->setCellValue('E' . $kolom5, $grading->pcs);
+        $sheet->setCellValue('F' . $kolom5, $grading->gr);
+        $sheet->setCellValue('G' . $kolom5,  "0%");
+        $sheet->setCellValue('H' . $kolom5, $grading->cost_bk + $grading->cost_kerja);
+        $sheet->setCellValue('I' . $kolom5, 0);
+        $sheet->setCellValue('J' . $kolom5, $grading->cost_op);
+        $sheet->setCellValue('K' . $kolom5, $grading->cost_bk + $grading->cost_kerja + $grading->cost_op);
+        $sheet->setCellValue('L' . $kolom5, empty($grading->gr) ? 0 : round(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0));
+
+        $sheet->setCellValue('M' . $kolom5, ($sortir->pcs ?? 0) - ($grading->pcs ?? 0));
+        $sheet->setCellValue('N' . $kolom5, ($sortir->gr ?? 0) - ($grading->gr ?? 0));
+        $sheet->setCellValue('O' . $kolom5, ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)));
+        $grading_gr = $grading->gr ?? 0;
+        $sortir_gr = $sortir->gr ?? 0;
+        $selisih_gr = $sortir_gr - $grading_gr;
+
+        $sheet->setCellValue('P' . $kolom5, $selisih_gr == 0
+            ? 0
+            : round(
+                (($sortir->modal_rp ?? 0) +
+                    ($sortir->cost_kerja ?? 0) +
+                    ($sortir->ttl_rp ?? 0) -
+                    (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0))) /
+                    $selisih_gr,
+                0,
+            ));
+        $sheet->setCellValue('Q' . $kolom5, ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)) + (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)));
+
+        $kolom6 = $kolom5 + 2;
+
+        $pengiriman = CabutOpnameModel::pengiriman($r->partai);
+        $sheet->setCellValue('A' . $kolom6, "Sisa Pengiriman");
+        $sheet->setCellValue('B' . $kolom6, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom6, $pengiriman->pcs);
+        $sheet->setCellValue('D' . $kolom6, $pengiriman->gr);
+        $sheet->setCellValue('E' . $kolom6, $pengiriman->pcs);
+        $sheet->setCellValue('F' . $kolom6, $pengiriman->gr);
+        $sheet->setCellValue('G' . $kolom6,  "0%");
+        $sheet->setCellValue('H' . $kolom6, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+        $sheet->setCellValue('I' . $kolom6, 0);
+        $sheet->setCellValue('J' . $kolom6, 0);
+        $sheet->setCellValue('K' . $kolom6, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+        $sheet->setCellValue('L' . $kolom6, empty($pengiriman->gr) ? 0 : round(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
+
+        $sheet->setCellValue('M' . $kolom6, ($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0));
+
+        $sheet->setCellValue('N' . $kolom6, ($grading->gr ?? 0) - ($pengiriman->gr ?? 0));
+
+
+        $sheet->setCellValue('O' . $kolom6, ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)));
+
+
+        $sheet->setCellValue('P' . $kolom6, $grading->gr - $pengiriman->gr == 0 ? 0 : round((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0));
+
+        $sheet->setCellValue('Q' . $kolom6, ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)));
+
+        $kolom7 = $kolom6 + 2;
+
+        $sheet->setCellValue('A' . $kolom7, "Sudah Terkirim");
+        $sheet->setCellValue('B' . $kolom7, "$d->tipe");
+        $sheet->setCellValue('C' . $kolom7, 0);
+        $sheet->setCellValue('D' . $kolom7, 0);
+        $sheet->setCellValue('E' . $kolom7, 0);
+        $sheet->setCellValue('F' . $kolom7, 0);
+        $sheet->setCellValue('G' . $kolom7,  "0%");
+        $sheet->setCellValue('H' . $kolom7, 0);
+        $sheet->setCellValue('I' . $kolom7, 0);
+        $sheet->setCellValue('J' . $kolom7, 0);
+        $sheet->setCellValue('K' . $kolom7, 0);
+        $sheet->setCellValue('L' . $kolom7, 0);
+
+        $sheet->setCellValue('M' . $kolom7, $pengiriman->pcs);
+
+        $sheet->setCellValue('N' . $kolom7, $pengiriman->gr);
+
+
+        $sheet->setCellValue('O' . $kolom7, $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op);
+
+
+        $sheet->setCellValue('P' . $kolom7, empty($pengiriman->gr) ? 0 : round(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0));
+
+        $sheet->setCellValue('Q' . $kolom7, 0);
+
+        $sheet->setCellValue('A17', "Total");
+        $sheet->setCellValue('I17', "=H3+I5+I7+I9+J11");
+        $sheet->setCellValue('M17', "=SUM(M5:M15)");
+        $sheet->setCellValue('N17', "=SUM(N5:N15)");
+        $sheet->setCellValue('O17', "=SUM(O5:O15)");
+
+
+
+
+
+
+
+        $sheet->getStyle("A3:L" . $kolom7 + 2)->applyFromArray($style);
+        $sheet->getStyle("K3:L" . $kolom7 + 2)->applyFromArray($style3);
+        $sheet->getStyle("Q3:Q" . $kolom7 + 2)->applyFromArray($style);
+        $sheet->getStyle("M3:P" . $kolom7 + 2)->applyFromArray($style2);
+
+        $sheet->getStyle("C3")->applyFromArray($style4);
+        $sheet->getStyle("I17")->applyFromArray($style4);
+        $sheet->getStyle("M17")->applyFromArray($style4);
+        $sheet->getStyle("O17")->applyFromArray($style4);
+
+        $sheet->getStyle("H3")->applyFromArray($style5);
+        $sheet->getStyle("I5:J16")->applyFromArray($style5);
+
+        $sheet->getStyle("A17:Q17")->applyFromArray($style6);
+
+
+        $namafile = "Export Perpartai.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
 }
