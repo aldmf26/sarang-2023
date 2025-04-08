@@ -80,6 +80,8 @@
                                         @else
                                             <a href="{{ route('qc.listboxqc', ['invoice_qc' => $q->invoice_qc]) }}"
                                                 class="btn btn-primary btn-sm">Qc</a>
+                                            <a href="{{ route('qc.hapus_invoice_qc', ['invoice_qc' => $q->invoice_qc]) }}"
+                                                class="btn btn-primary btn-sm">Cancel</a>
                                         @endif
 
                                     </td>
