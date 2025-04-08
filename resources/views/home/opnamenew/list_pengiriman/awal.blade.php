@@ -51,7 +51,7 @@
 
                     <tfoot>
                         <tr>
-                            <th class="dheadstock " colspan="3">Box : {{ count($query) }}</th>
+                            <th class="dheadstock showChart" colspan="3">Box : {{ count($query) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'pcs'), 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format(sumBk($query, 'gr'), 0) }}</th>
 
@@ -63,7 +63,7 @@
                                     sumBk($query, 'cost_op');
                             @endphp
 
-                            <th class="dheadstock  text-end showChart">{{ number_format($sumTtlRp, 0) }}</th>
+                            <th class="dheadstock  text-end ">{{ number_format($sumTtlRp, 0) }}</th>
                             <th class="dheadstock  text-end">{{ number_format($sumTtlRp / sumBk($query, 'gr'), 0) }}
                             </th>
                         </tr>
