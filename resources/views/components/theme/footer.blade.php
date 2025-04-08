@@ -29,7 +29,7 @@
 <script src="{{ asset('theme') }}/assets/js/pages/horizontal-layout.js"></script>
 <script src="{{ asset('theme') }}/assets/extensions/dragula/dragula.min.js"></script>
 <script src="{{ asset('theme') }}/assets/js/pages/ui-todolist.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
