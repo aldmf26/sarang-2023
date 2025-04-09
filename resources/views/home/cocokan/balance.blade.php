@@ -29,6 +29,7 @@
                                 <th class="text-end dhead">Pcs</th>
                                 <th class="text-end dhead">Gr</th>
                                 <th class="text-end dhead">Ttl Rp</th>
+                                <th class="text-end dhead">Rata2</th>
                             </tr>
                             <tr>
                                 <td class="dhead"></td>
@@ -42,6 +43,9 @@
                                     {{ number_format(sumBk($bk, 'gr_bk') + sumBk($bk_suntik, 'gr'), 0) }}</td>
                                 <td class="text-end dhead">
                                     {{ number_format(sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
+                                <td class="text-end dhead">
+                                    {{ number_format((sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp')) / (sumBk($bk, 'gr_bk') + sumBk($bk_suntik, 'gr')), 0) }}
+                                </td>
 
                             </tr>
 
@@ -62,20 +66,13 @@
                                     <td class="text-end">{{ number_format($b->pcs_bk, 0) }}</td>
                                     <td class="text-end">{{ number_format($b->gr_bk, 0) }}</td>
                                     <td class="text-end">{{ number_format($b->cost_bk, 0) }}</td>
+                                    <td class="text-end">{{ number_format($b->cost_bk / $b->gr_bk, 0) }}</td>
                                 </tr>
                                 @php
                                     $no++;
                                 @endphp
                             @endforeach
-                            <tr>
-                                <td>{{ $no + 1 }}</td>
-                                <td>0</td>
-                                <td>Partai suntik</td>
-                                <td></td>
-                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'pcs'), 0) }}</td>
-                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'gr'), 0) }}</td>
-                                <td class="text-end">{{ number_format(sumBk($bk_suntik, 'ttl_rp'), 0) }}</td>
-                            </tr>
+
 
                         </tbody>
                     </table>
