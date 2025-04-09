@@ -560,6 +560,7 @@ where a.wip2 ='T';");
             SELECT c.no_box
                 FROM formulir_sarang as c 
                 where c.selesai = 'Y' and c.kategori = 'wip2'
+                group by c.no_box
         ) as c on c.no_box = a.box_pengiriman
         where a.formulir ='Y' and a.cek_qc = 'Y' ");
     }
