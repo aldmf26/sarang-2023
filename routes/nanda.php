@@ -599,6 +599,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_invoice_qc', 'save_invoice_qc')->name('save_invoice_qc');
             Route::get('/listqc', 'listqc')->name('listqc');
             Route::get('/listboxqc', 'listboxqc')->name('listboxqc');
+            Route::get('/hapus_invoice_qc', 'hapus_invoice_qc')->name('hapus_invoice_qc');
             Route::post('/save_akhir', 'save_akhir')->name('save_akhir');
             Route::post('/po_wip', 'po_wip')->name('po_wip');
         });

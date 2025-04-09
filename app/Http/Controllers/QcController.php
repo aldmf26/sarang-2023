@@ -65,6 +65,7 @@ class QcController extends Controller
                     group by b.box_pengiriman
                 ) as b on b.box_pengiriman = a.box_pengiriman
                 where a.invoice_qc = '$r->invoice_qc'
+                order by a.id DESC
             ")
         ];
         return view('home.qc.listboxqc', $data);
@@ -133,6 +134,12 @@ class QcController extends Controller
             }
         }
         DB::table('formulir_sarang')->insert($dataToInsert);
+        return redirect()->back()->with('sukses', 'Data Berhasil di simpan');
+    }
+
+    public function hapus_invoice_qc(Request $r)
+    {
+        DB::table('qc')->where('invoice_qc', $r->invoice_qc)->update(['invoice_qc' => 0]);
         return redirect()->back()->with('sukses', 'Data Berhasil di simpan');
     }
 }

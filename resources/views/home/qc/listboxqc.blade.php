@@ -10,11 +10,14 @@
         <form action="{{ route('qc.save_akhir') }}" method="post">
             @csrf
             <div class="row">
+                <div class="col-lg-4">
+                    <input type="text" id="tbl1input" class="form-control form-control-sm mb-2" placeholder="cari">
+                </div>
                 <div class="col-lg-12">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="tbl1">
                         <thead>
                             <tr>
-                                <th class="dhead">No Box Grading</th>
+                                <th class="dhead">No Box Grading fa</th>
                                 <th class="dhead">Grade</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
@@ -51,7 +54,11 @@
 
         </form>
 
-
+        @section('scripts')
+            <script>
+                pencarian('tbl1input', 'tbl1')
+            </script>
+        @endsection
     </x-slot>
 
 </x-theme.app>

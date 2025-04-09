@@ -123,62 +123,60 @@
                             </tr>
                         @endfor
                         @php
-                            $ttl_sisa_belum_kirim =
-                                $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
-
-                            $ttl_pengiriman =
+                            $ttl_rp1 = $cbt_proses->ttl_rp;
+                            $ttl_rp2 = $cbt_sisa_pgws->ttl_rp;
+                            $ttl_rp3 =
+                                sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
+                                sumBk($cabut_selesai_siap_cetak, 'cost_kerja');
+                            $ttl_rp4 = $cetak_proses->ttl_rp ?? (0 + $cetak_proses->cost_kerja ?? 0);
+                            $ttl_rp5 = $cetak_sisa->ttl_rp;
+                            $ttl_rp6 = sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja');
+                            $ttl_rp7 = $sedang_proses->ttl_rp + $sedang_proses->cost_kerja;
+                            $ttl_rp8 = $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja;
+                            $ttl_rp9 = sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja');
+                            $ttl_rp10 = $grading_sisa->cost_bk;
+                            $ttl_rp11 =
+                                $grading_proses->cost_bk +
+                                $grading_proses->cost_kerja +
+                                $grading_proses->cost_op +
+                                $grading_susut->cost_bk +
+                                $grading_susut->cost_kerja +
+                                $grading_susut->cost_cu +
+                                $grading_susut->cost_op;
+                            $ttl_rp12 = $sisa_belum_wip1->ttl_rp;
+                            $ttl_rp13 = $sisa_belum_qc->ttl_rp;
+                            $ttl_rp14 = $wip2proses->ttl_rp;
+                            $ttl_rp15 = $pengiriman_proses->ttl_rp;
+                            $ttl_rp16 =
                                 $pengiriman->cost_bk +
                                 $pengiriman->cost_kerja +
                                 $pengiriman->cost_cu +
                                 $pengiriman->cost_op;
 
-                            $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
-
-                            $ttl_cost_berjalan =
-                                $cbt_proses->ttl_rp +
-                                    $cbt_sisa_pgws->ttl_rp +
-                                    sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
-                                    sumBk($cabut_selesai_siap_cetak, 'cost_kerja') +
-                                    $cetak_proses->ttl_rp ??
-                                (0 + $cetak_proses->cost_kerja ?? 0) +
-                                    $cetak_sisa->ttl_rp +
-                                    sumBk($cetak_selesai, 'ttl_rp') +
-                                    sumBk($cetak_selesai, 'cost_kerja') +
-                                    $sedang_proses->ttl_rp +
-                                    $sedang_proses->cost_kerja +
-                                    $sortir_sisa->ttl_rp +
-                                    $sortir_sisa->cost_kerja +
-                                    sumBk($sortir_selesai, 'ttl_rp') +
-                                    sumBk($sortir_selesai, 'cost_kerja') +
-                                    $grading_sisa->cost_bk +
-                                    $grading_proses->cost_bk +
-                                    $grading_proses->cost_kerja +
-                                    $grading_proses->cost_op +
-                                    $grading_susut->cost_bk +
-                                    $grading_susut->cost_kerja +
-                                    $grading_susut->cost_cu +
-                                    $grading_susut->cost_op +
-                                    $sisa_belum_wip1->ttl_rp +
-                                    $sisa_belum_qc->ttl_rp +
-                                    $wip2proses->ttl_rp +
-                                    $pengiriman_proses->ttl_rp +
-                                    $pengiriman->cost_bk +
-                                    $pengiriman->cost_kerja +
-                                    $pengiriman->cost_cu +
-                                    $pengiriman->cost_op;
-
-                            $ttl_berjalan =
-                                $ttl_cost_berjalan -
-                                sumBk($uang_cost, 'total_operasional') -
-                                sumBk($bk, 'cost_bk') -
-                                sumBk($bk_suntik, 'ttl_rp');
+                            $total_semua =
+                                $ttl_rp1 +
+                                $ttl_rp2 +
+                                $ttl_rp3 +
+                                $ttl_rp4 +
+                                $ttl_rp5 +
+                                $ttl_rp6 +
+                                $ttl_rp7 +
+                                $ttl_rp8 +
+                                $ttl_rp9 +
+                                $ttl_rp10 +
+                                $ttl_rp11 +
+                                $ttl_rp12 +
+                                $ttl_rp13 +
+                                $ttl_rp14 +
+                                $ttl_rp15 +
+                                $ttl_rp16;
                         @endphp
                         <tr>
                             <th>Cost Berjalan</th>
                             <th></th>
                             <th></th>
                             <th class="text-end">
-                                {{ number_format($ttl_cost_berjalan, 0) }}
+                                {{ number_format($total_semua - sumBk($bk, 'cost_bk'), 0) }}
                             </th>
                         </tr>
                         <tr>
@@ -186,7 +184,7 @@
                             <th class="dhead"></th>
                             <th class="dhead"></th>
                             <th class="text-end dhead">
-                                {{ number_format(sumBk($uang_cost, 'total_operasional') + sumBk($bk, 'cost_bk') + sumBk($bk_suntik, 'ttl_rp') + $ttl_berjalan, 0) }}
+                                {{ number_format($total_semua, 0) }}
                             </th>
                         </tr>
 
