@@ -247,7 +247,7 @@ class OpnameSusutController extends Controller
         foreach ($bk as $i => $d) {
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Bk Awal");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, "$d->pcs_awal");
             $sheet->setCellValue('E' . $kolom, "$d->gr_awal");
             $sheet->setCellValue('F' . $kolom, "0");
@@ -264,7 +264,7 @@ class OpnameSusutController extends Controller
 
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Cabut");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, $cabut->pcs ?? 0);
             $sheet->setCellValue('E' . $kolom, ($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0));
             $sheet->setCellValue('F' . $kolom, $cabut->pcs ?? 0);
@@ -286,7 +286,7 @@ class OpnameSusutController extends Controller
 
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Cetak");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, $cetak->pcs_tdk + $cetak->pcs);
             $sheet->setCellValue('E' . $kolom, $cetak->gr_awal);
             $sheet->setCellValue('F' . $kolom, $cetak->pcs_tdk + $cetak->pcs);
@@ -307,7 +307,7 @@ class OpnameSusutController extends Controller
             $sortir = CabutOpnameModel::sortirPartai($d->nm_partai);
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Sortir");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, $sortir->pcs ?? 0);
             $sheet->setCellValue('E' . $kolom, $sortir->gr_awal ?? 0);
             $sheet->setCellValue('F' . $kolom, $sortir->pcs ?? 0);
@@ -330,7 +330,7 @@ class OpnameSusutController extends Controller
             $grading = CabutOpnameModel::gradingPartai($d->nm_partai);
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Grading");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, $grading->pcs);
             $sheet->setCellValue('E' . $kolom, $grading->gr);
             $sheet->setCellValue('F' . $kolom, $grading->pcs);
@@ -365,7 +365,7 @@ class OpnameSusutController extends Controller
             $pengiriman = CabutOpnameModel::pengiriman($d->nm_partai);
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Sisa Pengiriman");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, $pengiriman->pcs);
             $sheet->setCellValue('E' . $kolom, $pengiriman->gr);
             $sheet->setCellValue('F' . $kolom, $pengiriman->pcs);
@@ -392,7 +392,7 @@ class OpnameSusutController extends Controller
 
             $sheet->setCellValue('A' . $kolom, "$d->nm_partai");
             $sheet->setCellValue('B' . $kolom, "Sudah Terkirim");
-            $sheet->setCellValue('C' . $kolom, "$tipe");
+            $sheet->setCellValue('C' . $kolom, "$d->tipe");
             $sheet->setCellValue('D' . $kolom, 0);
             $sheet->setCellValue('E' . $kolom, 0);
             $sheet->setCellValue('F' . $kolom, 0);
