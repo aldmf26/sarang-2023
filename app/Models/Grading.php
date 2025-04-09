@@ -871,6 +871,7 @@ left join(
             b.nm_partai,
             b.box_pengiriman as no_box,
             b.grade,
+            b.tipe,
             sum(b.pcs) as pcs,
             sum(b.gr) as gr,
             sum(b.ttl_rp) as ttl_rp,
@@ -881,7 +882,7 @@ left join(
             FROM `grading_partai` as b
             left join pengiriman as a on b.box_pengiriman = a.no_box
             WHERE a.no_nota = $no_nota and b.sudah_kirim = 'Y'
-            GROUP BY b.nm_partai
+            GROUP BY b.nm_partai,b.box_pengiriman,b.grade 
             ");
     }
 

@@ -17,8 +17,9 @@
                             <th class="dhead">no</th>
                             <th class="dhead">No Nota</th>
                             <th class="dhead">partai</th>
-                            {{-- <th class="dhead">box grading</th>
-                            <th class="dhead">grade</th> --}}
+                            <th class="dhead">tipe</th>
+                            <th class="dhead">box grading</th>
+                            <th class="dhead">grade</th>
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp</th>
@@ -39,8 +40,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $no_nota }}</td>
                                 <td>{{ $d->nm_partai }}</td>
-                                {{-- <td>{{ $d->no_box }}</td>
-                                <td>{{ $d->grade }}</td> --}}
+                                <td>{{ $d->tipe }}</td>
+                                <td>{{ $d->no_box }}</td>
+                                <td>{{ $d->grade }}</td>
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr) }}</td>
                                 <td class="text-end">{{ number_format($total) }}</td>
