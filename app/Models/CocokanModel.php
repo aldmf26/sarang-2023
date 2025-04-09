@@ -563,7 +563,7 @@ where a.wip2 ='T';");
                 group by c.no_box
         ) as c on c.no_box = a.box_pengiriman
 
-        where a.formulir ='Y' and a.cek_qc = 'Y' and a.box_pengiriman not in (SELECT d.no_box FROM pengiriman as d ) ");
+        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T';");
     }
     public static function wip2akhir()
     {
@@ -574,13 +574,13 @@ where a.wip2 ='T';");
     public static function pengiriman_proses()
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp
-FROM (
-	SELECT a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr,sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
-    FROM grading_partai as a 
-   	where a.sudah_kirim = 'Y'
-    group by a.box_pengiriman
-) as a 
+        FROM (
+            SELECT a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr,sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
+            FROM grading_partai as a 
+            where a.sudah_kirim = 'Y'
+            group by a.box_pengiriman
+        ) as a 
 
-WHERE a.box_pengiriman not in (SELECT a.id_pengiriman FROM pengiriman_packing_list as a);");
+        WHERE a.box_pengiriman not in (SELECT a.id_pengiriman FROM pengiriman_packing_list as a);");
     }
 }
