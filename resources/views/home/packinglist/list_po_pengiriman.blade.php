@@ -63,10 +63,11 @@
                                     <td align="right">{{ number_format($d->pcs, 0) }}</td>
                                     <td align="right">{{ number_format($d->gr, 0) }}</td>
                                     <td align="center">
-                                        <a onclick="return confirm("yakin di cancel ?")" href="{{ route('pengiriman.batal', $d->no_nota) }}"
+                                        <a onclick="return confirm("yakin di cancel ?")"
+                                            href="{{ route('pengiriman.batal', $d->no_nota) }}"
                                             class="btn btn-sm btn-danger">Cancel</a>
-                                        <a href="{{ route('pengiriman.po', $d->no_nota) }}" class="btn btn-sm btn-info"
-                                            >Lanjutkan</a>
+                                        <a href="{{ route('pengiriman.po', $d->no_nota) }}"
+                                            class="btn btn-sm btn-info">Lanjutkan</a>
                                     </td>
                                 </tr>
                             @endforeach
