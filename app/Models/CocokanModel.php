@@ -555,12 +555,13 @@ where a.wip2 ='T';");
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
         FROM grading_partai as a 
+        
         join (
             SELECT c.no_box
                 FROM formulir_sarang as c 
                 where c.selesai = 'Y' and c.kategori = 'wip2'
         ) as c on c.no_box = a.box_pengiriman
-        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T';");
+        where a.formulir ='Y' and a.cek_qc = 'Y' ");
     }
     public static function wip2akhir()
     {
