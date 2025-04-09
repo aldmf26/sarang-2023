@@ -774,7 +774,7 @@ class OpnameSusutController extends Controller
         $sheet->setCellValue('Q2', '');
 
         $kolom = 3;
-        $tipe = $d->tipe ?? 'All';
+        $tipe = $d->partai == 'all' ? 'All' : $d->tipe;
         $sheet->setCellValue('A' . $kolom, "Bk Awal");
         $sheet->setCellValue('B' . $kolom,  $tipe);
         $sheet->setCellValue('C' . $kolom, "$d->pcs_awal");

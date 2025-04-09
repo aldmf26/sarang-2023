@@ -1,16 +1,19 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="11">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
+
     </x-slot>
 
     <x-slot name="cardBody">
         <section class="row">
             @include('home.opnamenew.nav')
-            {{-- @include('home.opnamenew.pengiriman.nav') --}}
 
             <div class="col-lg-12">
 
                 <h5 for="" class="fw-bold text-decoration-underline">{{ $title }}</h5>
+
+                @include('home.opnamenew.nav_pengiriman_detail')
+
                 <table class="table table-bordered " id="bk_stock">
                     <thead>
                         <tr>
@@ -23,7 +26,7 @@
                             <th class="dhead text-end">pcs</th>
                             <th class="dhead text-end">gr</th>
                             <th class="dhead text-end">ttl rp</th>
-                            <th class="dhead text-end">rp/gr</th>
+                            <th class="dhead text-end">rata2</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,8 +83,7 @@
 
         @section('scripts')
             <script>
-
-                $('.showChart').click(function (e) { 
+                $('.showChart').click(function(e) {
                     e.preventDefault();
                     $('#myChart').toggleClass('d-none');
                 });

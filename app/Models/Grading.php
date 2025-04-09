@@ -864,8 +864,10 @@ left join(
         WHERE a.no_nota = $no_nota;");
     }
 
-    public static function details($no_nota)
+    public static function details($no_nota, $per)
     {
+        $grup = $per == 'partai' ? 'b.nm_partai,' : '';
+        
         return DB::select("SELECT  
             a.no_nota,
             b.nm_partai,
@@ -882,7 +884,7 @@ left join(
             FROM `grading_partai` as b
             left join pengiriman as a on b.box_pengiriman = a.no_box
             WHERE a.no_nota = $no_nota and b.sudah_kirim = 'Y'
-            GROUP BY b.nm_partai,b.box_pengiriman,b.grade 
+            GROUP BY $grup b.box_pengiriman,b.grade 
             ");
     }
 
