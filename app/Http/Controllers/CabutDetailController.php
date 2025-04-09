@@ -464,15 +464,17 @@ class CabutDetailController extends Controller
     public function list_pengiriman(Request $r)
     {
         $no_nota = $r->no_nota;
+        $per = $r->per ?? 'partai';
         if(!$no_nota){
             return redirect()->route('cocokan.list_pengiriman')->with('error', 'No. nota harus dipilih');
         }
-        $belumKirim = Grading::details($no_nota);
+        $belumKirim = Grading::details($no_nota, $per);
     
         $data = [
             'title' => 'List pengiriman',
             'query' => $belumKirim,
             'no_nota' => $no_nota,
+            'per' => $per,
         ];
         return view('home.opnamenew.list_pengiriman.awal', $data);
     }
