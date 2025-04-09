@@ -11,6 +11,8 @@
             <th class="text-end dhead">susut</th>
             <th class="text-end dhead">Modal bk</th>
             <th class="text-end dhead">Cost Kerja</th>
+            <th class="text-end dhead">Total Rp</th>
+            <th class="text-end dhead">Rata-rata</th>
         </tr>
         <tr>
             <th colspan="3" class="dhead">Total</th>
@@ -22,6 +24,11 @@
                 {{ number_format((1 - sumBk($box_stock, 'gr_akhir') / sumBk($box_stock, 'gr_awal')) * 100, 0) }}%</th>
             <th class="text-end dhead">{{ number_format(sumBk($box_stock, 'modal_rp'), 0) }}</th>
             <th class="text-end dhead">{{ number_format(sumBk($box_stock, 'cost_kerja'), 0) }}</th>
+            <th class="text-end dhead">
+                {{ number_format(sumBk($box_stock, 'modal_rp') + sumBk($box_stock, 'cost_kerja'), 0) }}</th>
+            <th class="text-end dhead">
+                {{ number_format((sumBk($box_stock, 'modal_rp') + sumBk($box_stock, 'cost_kerja')) / sumBk($box_stock, 'gr_akhir'), 0) }}
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -41,6 +48,10 @@
                     {{ number_format((1 - $b->gr_akhir / $b->gr_awal) * 100, 0) }}%</td>
                 <td class="text-end">{{ number_format($b->modal_rp, 0) }}</td>
                 <td class="text-end">{{ number_format($b->cost_kerja, 0) }}</td>
+                <td class="text-end">{{ number_format($b->cost_kerja + $b->modal_rp, 0) }}</td>
+                <td class="text-end">
+                    {{ empty($b->gr_akhir) ? 0 : number_format(($b->cost_kerja + $b->modal_rp) / $b->gr_akhir, 0) }}
+                </td>
             </tr>
         @endforeach
     </tbody>

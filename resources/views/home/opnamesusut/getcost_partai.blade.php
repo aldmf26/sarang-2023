@@ -1,13 +1,11 @@
 @php
     // Helper function to format numbers
-    $formatNumber = function ($value, $decimals = 0)
-    {
+    $formatNumber = function ($value, $decimals = 0) {
         return number_format($value ?? 0, $decimals);
     };
 
     // Helper function to calculate percentage safely
-    $calculateSusut = function ($current, $original)
-    {
+    $calculateSusut = function ($current, $original) {
         if (empty($original)) {
             return 0;
         }
@@ -15,8 +13,7 @@
     };
 
     // Helper function to calculate average safely
-    $calculateRatarata = function ($total, $count)
-    {
+    $calculateRatarata = function ($total, $count) {
         if (empty($count)) {
             return 0;
         }
@@ -82,7 +79,6 @@
         ($sortirModalTbhCost - $gradingModalTotal) +
         ($gradingModalTbhCost - $pengirimanModalTotal) +
         $pengirimanModalTotal;
-
 @endphp
 
 <div class="row">
@@ -148,7 +144,8 @@
                     <td class="text-end">{{ $formatNumber($cabutTtlRp) }}</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($modalCabutTbhCost) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($modalCabutTbhCost, $grAkhirCabut)) }}</td>
+                    <td class="text-end">{{ $formatNumber($calculateRatarata($modalCabutTbhCost, $grAkhirCabut)) }}
+                    </td>
 
                     <td class="text-end">{{ $formatNumber(($bk->pcs_awal ?? 0) - ($cabut->pcs ?? 0)) }}</td>
                     <td class="text-end">{{ $formatNumber($bk->gr_awal - $grAwalCabut) }}</td>
@@ -176,7 +173,8 @@
                     <td class="text-end">{{ $formatNumber($cetak->ttl_rp) }}</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($cetakModalTbhCost) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($cetakModalTbhCost, $cetakGrTotal)) }}</td>
+                    <td class="text-end">{{ $formatNumber($calculateRatarata($cetakModalTbhCost, $cetakGrTotal)) }}
+                    </td>
 
                     <td class="text-end">{{ $formatNumber(($cabut->pcs ?? 0) - $cetakPcsTotal) }}</td>
                     <td class="text-end">{{ $formatNumber($grAkhirCabut - $cetak->gr_awal) }}</td>
@@ -204,7 +202,8 @@
                     <td class="text-end">{{ $formatNumber($sortir->ttl_rp ?? 0) }}</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($sortirModalTbhCost) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($sortirModalTbhCost, $sortir->gr ?? 0)) }}</td>
+                    <td class="text-end">{{ $formatNumber($calculateRatarata($sortirModalTbhCost, $sortir->gr ?? 0)) }}
+                    </td>
 
                     <td class="text-end">{{ $formatNumber($cetakPcsTotal - ($sortir->pcs ?? 0)) }}</td>
                     <td class="text-end">{{ $formatNumber($cetakGrTotal - ($sortir->gr_awal ?? 0)) }}</td>
@@ -260,7 +259,8 @@
                     <td class="text-end">0</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($pengirimanModalTotal) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
+                    <td class="text-end">
+                        {{ $formatNumber($calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
                     </td>
 
                     <td class="text-end">{{ $formatNumber(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0)) }}</td>
@@ -274,8 +274,7 @@
 
                 <tr>
                     <td>
-                        <a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sudah Terkirim</a>
+                        Sudah Terkirim
                     </td>
                     <td></td>
                     <td class="text-end"></td>
@@ -292,7 +291,8 @@
                     <td class="text-end">{{ $formatNumber($pengiriman->pcs) }}</td>
                     <td class="text-end">{{ $formatNumber($pengiriman->gr) }}</td>
                     <td class="text-end">{{ $formatNumber($pengirimanModalTotal) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
+                    <td class="text-end">
+                        {{ $formatNumber($calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
                     </td>
                     <td class="text-end"></td>
                 </tr>
