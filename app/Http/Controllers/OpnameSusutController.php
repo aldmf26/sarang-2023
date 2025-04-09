@@ -72,10 +72,10 @@ class OpnameSusutController extends Controller
 
     public function getCostpartai(Request $r)
     {
+        $partai = $r->partai == 'all' ? '' : "and a.nm_partai = '$r->partai'";
         $bk = DB::selectOne("SELECT a.nm_partai, a.tipe, a.ket, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.gr_awal * a.hrga_satuan) as ttl_rp
         FROM bk as a 
-        where a.kategori = 'cabut' and a.baru = 'baru' and a.nm_partai = '$r->partai';");
-
+        where a.kategori = 'cabut' and a.baru = 'baru' $partai");
         $data = [
             'bk' => $bk,
             'cabut' => CabutOpnameModel::cabutPartai($r->partai),

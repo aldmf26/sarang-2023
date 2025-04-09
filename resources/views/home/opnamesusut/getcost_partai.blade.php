@@ -1,9 +1,96 @@
+@php
+    // Helper function to format numbers
+    function formatNumber($value, $decimals = 0)
+    {
+        return number_format($value ?? 0, $decimals);
+    }
+
+    // Helper function to calculate percentage safely
+    function calculateSusut($current, $original)
+    {
+        if (empty($original)) {
+            return 0;
+        }
+        return (1 - $current / $original) * 100;
+    }
+
+    // Helper function to calculate average safely
+    function calculateRatarata($total, $count)
+    {
+        if (empty($count)) {
+            return 0;
+        }
+        return $total / $count;
+    }
+
+    // Pre-calculate common values
+    $grAwalCabut = ($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0);
+    $grAkhirCabut = ($cabut->gr ?? 0) + ($eo->gr ?? 0);
+    $cabutModal = ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0);
+    $cabutTtlRp = ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0);
+    $modalCabutTbhCost = $cabutModal + $cabutTtlRp;
+
+    // Cetak values
+    $cetakPcsTotal = ($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0);
+    $cetakGrTotal = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0);
+    $cetakModalTotal = ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0);
+    $cetakModalTbhCost = $cetakModalTotal + ($cetak->ttl_rp ?? 0);
+
+    // Sortir values
+    $sortirModalTotal = ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0);
+    $sortirModalTbhCost = $sortirModalTotal + ($sortir->ttl_rp ?? 0);
+
+    // Grading values
+    $gradingModalTotal = ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0);
+    $gradingModalTbhCost = $gradingModalTotal + ($grading->cost_op ?? 0);
+
+    // Pengiriman values
+    $pengirimanModalTotal = ($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0);
+
+    // Total values for footer
+    $totalCost =
+        ($cabut->ttl_rp ?? 0) +
+        ($eo->ttl_rp ?? 0) +
+        ($cetak->ttl_rp ?? 0) +
+        ($sortir->ttl_rp ?? 0) +
+        ($bk->ttl_rp ?? 0) +
+        ($grading->cost_op ?? 0);
+
+    $totalPcs =
+        ($bk->pcs_awal ?? 0) -
+        ($cabut->pcs ?? 0) +
+        (($cabut->pcs ?? 0) - $cetakPcsTotal) +
+        ($cetakPcsTotal - ($sortir->pcs ?? 0)) +
+        (($sortir->pcs ?? 0) - ($grading->pcs ?? 0)) +
+        (($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0)) +
+        ($pengiriman->pcs ?? 0);
+
+    $totalGr =
+        ($bk->gr_awal ?? 0) -
+        $grAwalCabut +
+        ($grAkhirCabut - ($cetak->gr_awal ?? 0)) +
+        ($cetakGrTotal - ($sortir->gr_awal ?? 0)) +
+        (($sortir->gr ?? 0) - ($grading->gr ?? 0)) +
+        (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)) +
+        ($pengiriman->gr ?? 0);
+
+    $totalRp =
+        ($bk->ttl_rp ?? 0) -
+        $cabutModal +
+        ($modalCabutTbhCost - $cetakModalTotal) +
+        ($cetakModalTbhCost - $sortirModalTotal) +
+        ($sortirModalTbhCost - $gradingModalTotal) +
+        ($gradingModalTbhCost - $pengirimanModalTotal) +
+        $pengirimanModalTotal;
+
+@endphp
+
 <div class="row">
     <div class="col-lg-12">
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="dhead text-center " colspan="12">{{ $bk->nm_partai }}</th>
+                    <th class="dhead text-center" colspan="12">{{ $bk->nm_partai }}</th>
                     <th class="dhead text-center" colspan="4">Gudang</th>
                     <th class="dhead text-center" rowspan="2">pencocokan rp</th>
                 </tr>
@@ -20,7 +107,6 @@
                     <th class="text-end dhead">Cost Operasional</th>
                     <th class="text-end dhead">Modal tambah cost</th>
                     <th class="text-end dhead">Modal rata-rata</th>
-
                     <th class="dhead text-end">sisa pcs</th>
                     <th class="dhead text-end">sisa gr</th>
                     <th class="dhead text-end">ttl rp</th>
@@ -29,322 +115,198 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="#" class="detail_bk fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_bk_tes">{{ $bk->nm_partai }}</a></td>
+                    <td>
+                        <a href="#" class="detail_bk fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_bk_tes">{{ $bk->nm_partai }}</a>
+                    </td>
                     <td>{{ $bk->tipe }}</td>
-                    <td class="text-end" style="background-color: #FFC000">{{ number_format($bk->pcs_awal, 0) }}</td>
-                    <td class="text-end">{{ number_format($bk->gr_awal, 0) }}</td>
+                    <td class="text-end" style="background-color: #FFC000">{{ formatNumber($bk->pcs_awal) }}</td>
+                    <td class="text-end">{{ formatNumber($bk->gr_awal) }}</td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
-                    <td class="text-end">{{ number_format($bk->ttl_rp, 0) }}</td>
+                    <td class="text-end">{{ formatNumber($bk->ttl_rp) }}</td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
-                    <td class="text-end">{{ number_format($bk->ttl_rp / $bk->gr_awal, 0) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($bk->ttl_rp, $bk->gr_awal)) }}</td>
                 </tr>
+
                 <tr>
-                    <td><a href="#" class="detail_cabut fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_cabut_tes">Cabut</a></td>
+                    <td>
+                        <a href="#" class="detail_cabut fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_cabut_tes">
+                            Cabut</a>
+                    </td>
                     <td></td>
-                    <td class="text-end">{{ number_format($cabut->pcs ?? 0, 0) }}</td>
-                    <td class="text-end">{{ number_format(($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0), 0) }}</td>
-                    <td class="text-end">{{ number_format($cabut->pcs ?? 0, 0) }}</td>
-                    <td class="text-end">{{ number_format(($cabut->gr ?? 0) + ($eo->gr ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format((1 - (($cabut->gr ?? 0) + ($eo->gr ?? 0)) / (($cabut->gr_awal ?? 0) + ($eo->gr_eo_awal ?? 0))) * 100, 0) }}%
-                    </td>
-                    <td class="text-end">{{ number_format(($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0), 0) }}</td>
-                    <td class="text-end">{{ number_format(($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}</td>
+                    <td class="text-end">{{ formatNumber($cabut->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($grAwalCabut) }}</td>
+                    <td class="text-end">{{ formatNumber($cabut->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($grAkhirCabut) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateSusut($grAkhirCabut, $grAwalCabut)) }}%</td>
+                    <td class="text-end">{{ formatNumber($cabutModal) }}</td>
+                    <td class="text-end">{{ formatNumber($cabutTtlRp) }}</td>
                     <td class="text-end">0</td>
+                    <td class="text-end">{{ formatNumber($modalCabutTbhCost) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($modalCabutTbhCost, $grAkhirCabut)) }}</td>
+
+                    <td class="text-end">{{ formatNumber(($bk->pcs_awal ?? 0) - ($cabut->pcs ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber($bk->gr_awal - $grAwalCabut) }}</td>
+                    <td class="text-end">{{ formatNumber($bk->ttl_rp - $cabutModal) }}</td>
                     <td class="text-end">
-                        {{ number_format(($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0), 0) }}
+                        {{ formatNumber(calculateRatarata($bk->ttl_rp - $cabutModal, $bk->gr_awal - $grAwalCabut)) }}
                     </td>
+                    <td class="text-end">{{ formatNumber($cabutModal + ($bk->ttl_rp - $cabutModal)) }}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a href="#" class="detail_cetak fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_cetak_tes">Cetak</a>
+                    </td>
+                    <td></td>
+                    <td class="text-end">{{ formatNumber($cetakPcsTotal) }}</td>
+                    <td class="text-end">{{ formatNumber($cetak->gr_awal) }}</td>
+                    <td class="text-end">{{ formatNumber($cetakPcsTotal) }}</td>
+                    <td class="text-end">{{ formatNumber($cetakGrTotal) }}</td>
                     <td class="text-end">
-                        {{ ($cabut->gr ?? 0) + ($eo->gr ?? 0) == 0 ? 0 : number_format((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0)), 0) }}
+                        {{ formatNumber(calculateSusut($cetakGrTotal, $cetak->gr_awal)) }}%
+                    </td>
+                    <td class="text-end">{{ formatNumber($cetakModalTotal) }}</td>
+                    <td class="text-end">{{ formatNumber($cetak->ttl_rp) }}</td>
+                    <td class="text-end">0</td>
+                    <td class="text-end">{{ formatNumber($cetakModalTbhCost) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($cetakModalTbhCost, $cetakGrTotal)) }}</td>
+
+                    <td class="text-end">{{ formatNumber(($cabut->pcs ?? 0) - $cetakPcsTotal) }}</td>
+                    <td class="text-end">{{ formatNumber($grAkhirCabut - $cetak->gr_awal) }}</td>
+                    <td class="text-end">{{ formatNumber($modalCabutTbhCost - $cetakModalTotal) }}</td>
+                    <td class="text-end">
+                        {{ formatNumber(calculateRatarata($modalCabutTbhCost - $cetakModalTotal, $grAkhirCabut - $cetak->gr_awal)) }}
+                    </td>
+                    <td class="text-end">{{ formatNumber($modalCabutTbhCost) }}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a href="#" class="detail_sortir fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_sortir_tes">Sortir</a>
+                    </td>
+                    <td></td>
+                    <td class="text-end">{{ formatNumber($sortir->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($sortir->gr_awal) }}</td>
+                    <td class="text-end">{{ formatNumber($sortir->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($sortir->gr) }}</td>
+                    <td class="text-end">
+                        {{ formatNumber(calculateSusut($sortir->gr, $sortir->gr_awal)) }}%
+                    </td>
+                    <td class="text-end">{{ formatNumber($sortirModalTotal) }}</td>
+                    <td class="text-end">{{ formatNumber($sortir->ttl_rp) }}</td>
+                    <td class="text-end">0</td>
+                    <td class="text-end">{{ formatNumber($sortirModalTbhCost) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($sortirModalTbhCost, $sortir->gr)) }}</td>
+
+                    <td class="text-end">{{ formatNumber($cetakPcsTotal - ($sortir->pcs ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber($cetakGrTotal - ($sortir->gr_awal ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber($cetakModalTbhCost - $sortirModalTotal) }}</td>
+                    <td class="text-end">
+                        {{ formatNumber(calculateRatarata($cetakModalTbhCost - $sortirModalTotal, $cetakGrTotal - ($sortir->gr_awal ?? 0))) }}
+                    </td>
+                    <td class="text-end">{{ formatNumber($cetakModalTbhCost) }}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a href="#" class="detail_grade fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_data">Grading</a>
+                    </td>
+                    <td></td>
+                    <td class="text-end">{{ formatNumber($grading->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($grading->gr) }}</td>
+                    <td class="text-end">{{ formatNumber($grading->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($grading->gr) }}</td>
+                    <td class="text-end">0%</td>
+                    <td class="text-end">{{ formatNumber($gradingModalTotal) }}</td>
+                    <td class="text-end">0</td>
+                    <td class="text-end">{{ formatNumber($grading->cost_op) }}</td>
+                    <td class="text-end">{{ formatNumber($gradingModalTbhCost) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($gradingModalTbhCost, $grading->gr)) }}
                     </td>
 
-                    <td class="text-end">{{ number_format(($bk->pcs_awal ?? 0) - ($cabut->pcs ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format($bk->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format($bk->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ $bk->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0) == 0 ? 0 : number_format(($bk->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)) / ($bk->gr_awal - ($cabut->gr_awal ?? 0) - ($eo->gr_eo_awal ?? 0)), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($bk->ttl_rp - ($cabut->modal_rp ?? 0) - ($eo->modal_rp ?? 0)), 0) }}
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#" class="detail_cetak fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_cetak_tes">Cetak</a></td>
-                    <td></td>
-                    <td class="text-end">{{ number_format($cetak->pcs_tdk + $cetak->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($cetak->gr_awal, 0) }}</td>
-                    <td class="text-end">{{ number_format($cetak->pcs_tdk + $cetak->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($cetak->gr_tdk + $cetak->gr, 0) }}</td>
-                    <td class="text-end">
-                        {{ empty($cetak->gr_awal) ? 0 : number_format((1 - ($cetak->gr_tdk + $cetak->gr) / $cetak->gr_awal) * 100, 0) }}%
-                    </td>
-                    <td class="text-end">{{ number_format($cetak->modal_rp + $cetak->cost_kerja, 0) }}</td>
-                    <td class="text-end">{{ number_format($cetak->ttl_rp, 0) }}</td>
-                    <td class="text-end">0</td>
-                    <td class="text-end">
-                        {{ number_format($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp, 0) }}</td>
-                    <td class="text-end">
-                        {{ $cetak->gr_tdk + $cetak->gr == 0 ? 0 : number_format(($cetak->modal_rp + $cetak->cost_kerja + $cetak->ttl_rp) / ($cetak->gr_tdk + $cetak->gr), 0) }}
-                    </td>
-
-                    <td class="text-end">
-                        {{ number_format(($cabut->pcs ?? 0) - ($cetak->pcs_tdk ?? 0) - ($cetak->pcs ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format(($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ ($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal == 0 ? 0 : number_format((($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja)) / (($cabut->gr ?? 0) + ($eo->gr ?? 0) - $cetak->gr_awal), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0) + ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) - ($cetak->modal_rp + $cetak->cost_kerja) + ($cetak->modal_rp + $cetak->cost_kerja), 0) }}
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#" class="detail_sortir fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_sortir_tes">Sortir</a></td>
-                    <td></td>
-                    <td class="text-end">{{ number_format($sortir->pcs ?? 0, 0) }}</td>
-                    <td class="text-end">{{ number_format($sortir->gr_awal ?? 0, 0) }}</td>
-                    <td class="text-end">{{ number_format($sortir->pcs ?? 0, 0) }}</td>
-                    <td class="text-end">{{ number_format($sortir->gr ?? 0, 0) }}</td>
-                    <td class="text-end">
-                        {{ empty($sortir->gr_awal) ? 0 : number_format((1 - $sortir->gr / $sortir->gr_awal) * 100, 0) }}%
-                    </td>
-                    <td class="text-end">
-                        {{ empty($sortir->modal_rp) ? 0 : number_format($sortir->modal_rp + $sortir->cost_kerja, 0) }}
-                    </td>
-                    <td class="text-end">{{ number_format($sortir->ttl_rp ?? 0, 0) }}</td>
-                    <td class="text-end">0</td>
-                    <td class="text-end">
-                        {{ empty($sortir->modal_rp) ? 0 : number_format($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ empty($sortir->gr) ? 0 : number_format(($sortir->modal_rp + $sortir->cost_kerja + $sortir->ttl_rp) / $sortir->gr, 0) }}
-                    </td>
-
-                    <td class="text-end">
-                        {{ number_format(($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
-                    </td>
+                    <td class="text-end">{{ formatNumber(($sortir->pcs ?? 0) - ($grading->pcs ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber(($sortir->gr ?? 0) - ($grading->gr ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber($sortirModalTbhCost - $gradingModalTotal) }}</td>
                     <td class="text-end">
                         @php
-                            $pembagi = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0);
+                            $selisih_gr = ($sortir->gr ?? 0) - ($grading->gr ?? 0);
                         @endphp
-                        {{ $pembagi == 0 ? 0 : number_format((($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) / (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)), 0) }}
+                        {{ formatNumber(calculateRatarata($sortirModalTbhCost - $gradingModalTotal, $selisih_gr)) }}
                     </td>
-                    <td class="text-end">
-                        {{ number_format(($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + ($cetak->ttl_rp ?? 0) - (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)) + (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0)), 0) }}
-                    </td>
+                    <td class="text-end">{{ formatNumber($sortirModalTbhCost) }}</td>
                 </tr>
+
                 <tr>
-                    <td><a href="#" class="detail_grade fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_data">Grading</a></td>
+                    <td>
+                        <a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sisa Pengiriman</a>
+                    </td>
                     <td></td>
-                    <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
-                    <td class="text-end">{{ number_format($grading->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($grading->gr, 0) }}</td>
-                    <td class="text-end">
-                        0%
-                    </td>
-                    <td class="text-end">{{ number_format($grading->cost_bk + $grading->cost_kerja, 0) }}</td>
+                    <td class="text-end">{{ formatNumber($pengiriman->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($pengiriman->gr) }}</td>
+                    <td class="text-end">{{ formatNumber($pengiriman->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($pengiriman->gr) }}</td>
+                    <td class="text-end">0%</td>
+                    <td class="text-end">{{ formatNumber($pengirimanModalTotal) }}</td>
                     <td class="text-end">0</td>
-                    <td class="text-end">{{ number_format($grading->cost_op, 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format($grading->cost_bk + $grading->cost_kerja + $grading->cost_op, 0) }}</td>
-                    <td class="text-end">
-                        {{ empty($grading->gr) ? 0 : number_format(($grading->cost_bk + $grading->cost_kerja + $grading->cost_op) / $grading->gr, 0) }}
+                    <td class="text-end">0</td>
+                    <td class="text-end">{{ formatNumber($pengirimanModalTotal) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
                     </td>
 
+                    <td class="text-end">{{ formatNumber(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber(($grading->gr ?? 0) - ($pengiriman->gr ?? 0)) }}</td>
+                    <td class="text-end">{{ formatNumber($gradingModalTbhCost - $pengirimanModalTotal) }}</td>
                     <td class="text-end">
-                        {{ number_format(($sortir->pcs ?? 0) - ($grading->pcs ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format(($sortir->gr ?? 0) - ($grading->gr ?? 0), 0) }}
+                        {{ formatNumber(calculateRatarata($gradingModalTbhCost - $pengirimanModalTotal, ($grading->gr ?? 0) - ($pengiriman->gr ?? 0))) }}
                     </td>
-                    <td class="text-end">
-                        {{ number_format(($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)), 0) }}
-                    </td>
-                    @php
-                        $grading_gr = $grading->gr ?? 0;
-                        $sortir_gr = $sortir->gr ?? 0;
-                        $selisih_gr = $sortir_gr - $grading_gr;
-                    @endphp
-
-                    <td class="text-end">
-                        {{ $selisih_gr == 0
-                            ? 0
-                            : number_format(
-                                (($sortir->modal_rp ?? 0) +
-                                    ($sortir->cost_kerja ?? 0) +
-                                    ($sortir->ttl_rp ?? 0) -
-                                    (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0))) /
-                                    $selisih_gr,
-                                0,
-                            ) }}
-                    </td>
-
-                    <td class="text-end">
-                        {{ number_format(($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + ($sortir->ttl_rp ?? 0) - (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)) + (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0)), 0) }}
-                    </td>
+                    <td class="text-end">{{ formatNumber($gradingModalTbhCost) }}</td>
                 </tr>
-                <tr>
-                    <td><a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sisa Pengiriman</a></td>
-                    <td></td>
-                    <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
-                    <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
-                    <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
-                    <td class="text-end">
-                        0%
-                    </td>
-                    <td class="text-end">
-                        {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
-                    </td>
-                    <td class="text-end">0</td>
-                    <td class="text-end">0</td>
-                    <td class="text-end">
-                        {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
-                    </td>
 
-                    <td class="text-end">
-                        {{ number_format(($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0), 0) }}</td>
-                    <td class="text-end">
-                        {{ number_format(($grading->gr ?? 0) - ($pengiriman->gr ?? 0), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ $grading->gr - $pengiriman->gr == 0 ? 0 : number_format((($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) / (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)), 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format(($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + ($grading->cost_op ?? 0) - (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)) + (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)), 0) }}
-                    </td>
-                </tr>
                 <tr>
-                    <td><a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sudah Terkirim</a></td>
+                    <td>
+                        <a href="#" class="detail_grade2 fw-bold" nm_partai="{{ $bk->nm_partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_data2">Sudah Terkirim</a>
+                    </td>
                     <td></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
-                    <td class="text-end">
-                        0%
-                    </td>
-                    <td class="text-end">
-
-                    </td>
+                    <td class="text-end">0%</td>
+                    <td class="text-end"></td>
                     <td class="text-end">0</td>
                     <td class="text-end">0</td>
-                    <td class="text-end">
+                    <td class="text-end"></td>
+                    <td class="text-end"></td>
 
+                    <td class="text-end">{{ formatNumber($pengiriman->pcs) }}</td>
+                    <td class="text-end">{{ formatNumber($pengiriman->gr) }}</td>
+                    <td class="text-end">{{ formatNumber($pengirimanModalTotal) }}</td>
+                    <td class="text-end">{{ formatNumber(calculateRatarata($pengirimanModalTotal, $pengiriman->gr)) }}
                     </td>
-                    <td class="text-end">
-
-                    </td>
-
-                    <td class="text-end">
-                        {{ number_format($pengiriman->pcs, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format($pengiriman->gr, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op, 0) }}
-                    </td>
-                    <td class="text-end">
-                        {{ empty($pengiriman->gr) ? 0 : number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
-                    </td>
-                    <td class="text-end">
-
-                    </td>
+                    <td class="text-end"></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="8">Total</th>
-                    <th class="text-end" style="background-color: #FFC000">
-                        {{ number_format(($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0) + ($cetak->ttl_rp ?? 0) + ($sortir->ttl_rp ?? 0) + ($bk->ttl_rp ?? 0) + ($grading->cost_op ?? 0), 0) }}
-                    </th>
+                    <th class="text-end" style="background-color: #FFC000">{{ formatNumber($totalCost) }}</th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th class="text-end" style="background-color: #FFC000">
-                        {{ number_format(
-                            ($bk->pcs_awal ?? 0) -
-                                ($cabut->pcs ?? 0) +
-                                (($cabut->pcs ?? 0) - ($cetak->pcs_tdk ?? 0) - ($cetak->pcs ?? 0)) +
-                                (($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0) - ($sortir->pcs ?? 0)) +
-                                (($sortir->pcs ?? 0) - ($grading->pcs ?? 0)) +
-                                (($grading->pcs ?? 0) - ($pengiriman->pcs ?? 0)) +
-                                ($pengiriman->pcs ?? 0),
-                            0,
-                        ) }}
-
-                    </th>
-                    <th class="text-end">
-                        {{ number_format(
-                            ($bk->gr_awal ?? 0) -
-                                ($cabut->gr_awal ?? 0) -
-                                ($eo->gr_eo_awal ?? 0) +
-                                (($cabut->gr ?? 0) + ($eo->gr ?? 0) - ($cetak->gr_awal ?? 0)) +
-                                (($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0) - ($sortir->gr_awal ?? 0)) +
-                                (($sortir->gr ?? 0) - ($grading->gr ?? 0)) +
-                                (($grading->gr ?? 0) - ($pengiriman->gr ?? 0)) +
-                                ($pengiriman->gr ?? 0),
-                            0,
-                        ) }}
-
-                    </th>
-                    <th class="text-end" style="background-color: #FFC000">
-                        {{ number_format(
-                            ($bk->ttl_rp ?? 0) -
-                                ($cabut->modal_rp ?? 0) -
-                                ($eo->modal_rp ?? 0) +
-                                (($cabut->modal_rp ?? 0) +
-                                    ($eo->modal_rp ?? 0) +
-                                    ($cabut->ttl_rp ?? 0) +
-                                    ($eo->ttl_rp ?? 0) -
-                                    (($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0))) +
-                                (($cetak->modal_rp ?? 0) +
-                                    ($cetak->cost_kerja ?? 0) +
-                                    ($cetak->ttl_rp ?? 0) -
-                                    (($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0))) +
-                                (($sortir->modal_rp ?? 0) +
-                                    ($sortir->cost_kerja ?? 0) +
-                                    ($sortir->ttl_rp ?? 0) -
-                                    (($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0))) +
-                                (($grading->cost_bk ?? 0) +
-                                    ($grading->cost_kerja ?? 0) +
-                                    ($grading->cost_op ?? 0) -
-                                    (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0))) +
-                                (($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0)),
-                            0,
-                        ) }}
-                    </th>
+                    <th class="text-end" style="background-color: #FFC000">{{ formatNumber($totalPcs) }}</th>
+                    <th class="text-end">{{ formatNumber($totalGr) }}</th>
+                    <th class="text-end" style="background-color: #FFC000">{{ formatNumber($totalRp) }}</th>
                     <th></th>
                     <th></th>
                 </tr>

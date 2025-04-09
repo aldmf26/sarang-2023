@@ -13,6 +13,7 @@
                         <div class="col-lg-3">
                             <select name="partai" id="select2" class="form-control pilih_partai">
                                 <option value="">Pilih Partai</option>
+                                <option value="all">All</option>
                                 @foreach ($partai as $p)
                                     <option value="{{ $p->nm_partai }}">{{ $p->nm_partai }}</option>
                                 @endforeach
