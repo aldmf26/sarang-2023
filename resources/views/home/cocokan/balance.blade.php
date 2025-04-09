@@ -176,7 +176,7 @@
                             <th></th>
                             <th></th>
                             <th class="text-end">
-                                {{ number_format($total_semua - sumBk($bk, 'cost_bk'), 0) }}
+                                {{ number_format($total_semua - sumBk($bk, 'cost_bk') - sumBk($uang_cost, 'total_operasional'), 0) }}
                             </th>
                         </tr>
                         <tr>
