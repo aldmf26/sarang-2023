@@ -20,9 +20,9 @@
                             </select>
                         </div>
                         <div class="col-lg-9">
-                            <a href="{{ route('cocokan.exportCostpartai') }}"
+                            <a href="{{ route('cocokan.exportCostpartai2', ['partai' => 'all']) }}"
                                 class="btn btn-primary btn-sm float-end mb-2"><i class="fas fa-file-excel"></i>Export
-                                All</a>
+                                Summary Semua Partai</a>
                             <button type="submit" class="btn btn-primary btn-sm float-end mb-2 me-2"><i
                                     class="fas fa-file-excel"></i>Export</button>
                         </div>
