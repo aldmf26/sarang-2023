@@ -867,13 +867,13 @@ left join(
     public static function details($no_nota, $per = 'partai')
     {
         $grup = $per == 'partai' ? 'b.nm_partai,' : '';
-        
+        $concat = $per != 'partai' ? 'group_concat(b.nm_partai) as nm_partai' : 'b.nm_partai';
         return DB::select("SELECT  
             a.no_nota,
-            b.nm_partai,
             b.box_pengiriman as no_box,
             b.grade,
             b.tipe,
+            $concat,
             sum(b.pcs) as pcs,
             sum(b.gr) as gr,
             sum(b.ttl_rp) as ttl_rp,
