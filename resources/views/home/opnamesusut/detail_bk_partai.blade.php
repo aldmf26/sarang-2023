@@ -6,12 +6,15 @@
             <th class="text-end dhead">pcs awal</th>
             <th class="text-end dhead">gr awal</th>
             <th class="text-end dhead">Modal bk</th>
+            <th class="text-end dhead">Rata2</th>
         </tr>
         <tr>
             <th colspan="2" class="dhead">Total</th>
             <th class="text-end dhead">{{ number_format(sumBk($box_stock, 'pcs_awal'), 0) }}</th>
             <th class="text-end dhead">{{ number_format(sumBk($box_stock, 'gr_awal', 0)) }}</th>
             <th class="text-end dhead">{{ number_format(sumBk($box_stock, 'ttl_rp'), 0) }}</th>
+            <th class="text-end dhead">
+                {{ number_format(sumBk($box_stock, 'ttl_rp') / sumBk($box_stock, 'gr_awal', 0), 0) }}</th>
 
         </tr>
     </thead>
@@ -23,6 +26,7 @@
                 <td class="text-end">{{ $b->pcs_awal }}</td>
                 <td class="text-end">{{ $b->gr_awal }}</td>
                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
+                <td class="text-end">{{ empty($b->gr_awal) ? 0 : number_format($b->ttl_rp / $b->gr_awal, 0) }}</td>
             </tr>
         @endforeach
     </tbody>

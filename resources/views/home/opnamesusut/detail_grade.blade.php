@@ -1,6 +1,6 @@
 <h6>Partai : {{ $partai }}</h6>
 <br>
-<table class="table table-bordered" id="tableHalaman">
+<table class="table table-bordered" id="load_grade">
     <thead>
         <tr>
             <th class="dhead text-center">Grade</th>
