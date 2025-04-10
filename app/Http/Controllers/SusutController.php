@@ -17,14 +17,15 @@ class SusutController extends Controller
         $cetakKeSortir = Susut::getSum('cetak');
         $sortirKeGrading = Susut::getSum('sortir');
 
-        $data = [
-            'title' => 'Cek Summary Susut',
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'cabutKeCetak' => $cabutKeCetak,
-            'cetakKeSortir' => $cetakKeSortir,
-            'sortirKeGrading' => $sortirKeGrading
-        ];
-        return view('home.susut.index', $data);
+        $title = 'Cek Summary Susut';
+        
+        return view('home.susut.index', compact(
+            'title',
+            'bulan',
+            'tahun',
+            'cabutKeCetak',
+            'cetakKeSortir',
+            'sortirKeGrading'
+        ));
     }
 }
