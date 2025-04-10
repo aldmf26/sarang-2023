@@ -1,6 +1,6 @@
 @php
     $rot = request()->route()->getName();
-    $reqPer = request('per');
+    $reqPer = request('per') ?? 'partai';
     $no_nota = request('no_nota');
 
     $navMenu = [
