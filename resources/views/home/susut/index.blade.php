@@ -104,7 +104,7 @@
                                     @php
                                         $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
                                     @endphp
-                                    <td align="right">{{ number_format(($d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td>
+                                    <td align="right">{{ number_format($sstPersen, 0) }}%</td>
                                     <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
                                     <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
                                 </tr>
@@ -137,7 +137,7 @@
                                     @php
                                         $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
                                     @endphp
-                                    <td align="right">{{ number_format(($d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td>
+                                    <td align="right">{{ number_format($sstPersen, 0) }}%</td>
                                     <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
                                     <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
                                 </tr>
@@ -180,7 +180,7 @@
             </div>
 
         </section>
-
+    
     </x-slot>
 
 </x-theme.app>

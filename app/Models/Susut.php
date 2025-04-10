@@ -20,6 +20,7 @@ class Susut extends Model
 
     public static function getSum($kategori)
     {
+        $bulan = 3;
         $cabutKeCetak =  DB::select("SELECT 
         b.name,
         SUM(c.pcs_awal) as pcs_awal,
@@ -32,7 +33,7 @@ class Susut extends Model
         join users as b on a.id_pemberi = b.id
         left join cabut as c on a.no_box = c.no_box
         LEFT JOIN eo as d ON a.no_box = d.no_box
-        WHERE a.kategori = 'cetak'
+        WHERE a.kategori = 'cetak' and month(a.tanggal) >= '$bulan'
         GROUP BY a.id_pemberi;");
 
         $cetakKeSortir =  DB::select("SELECT 
@@ -45,7 +46,7 @@ class Susut extends Model
         FROM formulir_sarang as a
         join users as b on a.id_pemberi = b.id
         left join cetak_new as c on a.no_box = c.no_box
-        WHERE a.kategori = 'sortir'
+        WHERE a.kategori = 'sortir' and month(a.tanggal) >= '$bulan'
         GROUP BY a.id_pemberi;");
 
         $sortirKeGrading =  DB::select("SELECT 
@@ -58,7 +59,7 @@ class Susut extends Model
         FROM formulir_sarang as a
         join users as b on a.id_pemberi = b.id
         left join sortir as c on a.no_box = c.no_box
-        WHERE a.kategori = 'grade'
+        WHERE a.kategori = 'grade' and month(a.tanggal) >= '$bulan'
         GROUP BY a.id_pemberi;");
 
         $datas = [
