@@ -864,7 +864,7 @@ left join(
         WHERE a.no_nota = $no_nota;");
     }
 
-    public static function details($no_nota, $per)
+    public static function details($no_nota, $per = 'partai')
     {
         $grup = $per == 'partai' ? 'b.nm_partai,' : '';
         
