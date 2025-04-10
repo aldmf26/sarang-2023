@@ -19,9 +19,12 @@
 <div class="col-lg-12">
     <ul class="nav nav-pills float-start">
         @foreach ($navMenu as $d)
+            @php
+                $active = $d['active'];
+            @endphp
             <li class="nav-item">
-                <a class="nav-link  {{ $reqPer == $d['active'] ? 'active' : '' }}" aria-current="page"
-                    href="{{ route($d['rot'], ['no_nota' => $no_nota, 'per' => $d['active']]) }}">{{ $d['nama'] }}</a>
+                <a class="nav-link  {{ $reqPer == $active ? 'active' : '' }}" aria-current="page"
+                    href="{{ route($d['rot'], ['no_nota' => $no_nota, 'per' => $active]) }}">{{ $d['nama'] }}</a>
             </li>
         @endforeach
     </ul>
