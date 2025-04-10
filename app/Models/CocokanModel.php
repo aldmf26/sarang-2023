@@ -317,7 +317,7 @@ class CocokanModel extends Model
 
     public static function cetak_proses_balance()
     {
-        $result = DB::selectOne("SELECT sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr , sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0)) as cost_kerja, sum(b.gr_awal + b.hrga_satuan) as ttl_rp
+        $result = DB::selectOne("SELECT sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr , sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0)) as cost_kerja, sum(b.gr_awal * b.hrga_satuan) as ttl_rp
         FROM (
             SELECT a.no_box, a.pcs_awal_ctk, a.gr_awal_ctk FROM cetak_new as a 
             LEFT join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak

@@ -603,4 +603,25 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_akhir', 'save_akhir')->name('save_akhir');
             Route::post('/po_wip', 'po_wip')->name('po_wip');
         });
+    Route::controller(CocokanController::class)
+        ->prefix('home/cocokan/detailbalance')
+        ->name('cocokan.')
+        ->group(function () {
+            Route::get('/detailCabutProses', 'detailCabutProses')->name('detailCabutProses');
+            Route::get('/detailCabutSisa', 'detailCabutSisa')->name('detailCabutSisa');
+            Route::get('/detailCabutBelumKirim', 'detailCabutBelumKirim')->name('detailCabutBelumKirim');
+            Route::get('/detailCetakSedangProses', 'detailCetakSedangProses')->name('detailCetakSedangProses');
+            Route::get('/detailCetakSisa', 'detailCetakSisa')->name('detailCetakSisa');
+            Route::get('/detailCetakBelumKirim', 'detailCetakBelumKirim')->name('detailCetakBelumKirim');
+            Route::get('/detailSortirProses', 'detailSortirProses')->name('detailSortirProses');
+            Route::get('/detailSortirSisa', 'detailSortirSisa')->name('detailSortirSisa');
+            Route::get('/detailSortirBelumKirim', 'detailSortirBelumKirim')->name('detailSortirBelumKirim');
+            Route::get('/detailSisaBelumGrading', 'detailSisaBelumGrading')->name('detailSisaBelumGrading');
+            Route::get('/detailGradingSedangProses', 'detailGradingSedangProses')->name('detailGradingSedangProses');
+            Route::get('/detailWip1SedangProses', 'detailWip1SedangProses')->name('detailWip1SedangProses');
+            Route::get('/detailQcSedangProses', 'detailQcSedangProses')->name('detailQcSedangProses');
+            Route::get('/detailWip2SedangProses', 'detailWip2SedangProses')->name('detailWip2SedangProses');
+            Route::get('/detailPengirimanSedangProses', 'detailPengirimanSedangProses')->name('detailPengirimanSedangProses');
+            Route::get('/detailPengiriman', 'detailPengiriman')->name('detailPengiriman');
+        });
 });

@@ -218,9 +218,14 @@
                             </td>
                         </tr> --}}
                         <tr>
-                            <td style="background-color: #F7BAC5;color:white">Cabut sedang proses</td>
+                            <td style="background-color: #F7BAC5;color:white">Cabut
+                                sedang proses
+                            </td>
                             <td class="text-end">{{ number_format($cbt_proses->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($cbt_proses->gr, 0) }}</td>
+                            <td class="text-end fw-bold"><a href="#" class="detailbalance" baris="1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">{{ number_format($cbt_proses->gr, 0) }}</a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($cbt_proses->ttl_rp, 0) }}
                                 @php
@@ -235,7 +240,11 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Cabut sisa pengawas</td>
                             <td class="text-end">{{ number_format($cbt_sisa_pgws->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($cbt_sisa_pgws->gr, 0) }}</td>
+
+                            <td class="text-end fw-bold"><a href="#" class="detailbalance" baris="2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a></td>
+
                             <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}
                                 @php
                                     $ttl_rp2 = $cbt_sisa_pgws->ttl_rp;
@@ -248,7 +257,12 @@
                         <tr>
                             <td style="background-color: #F7F700;">Cabut selesai siap cetak belum kirim</td>
                             <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'pcs'), 0) }}</td>
-                            <td class="text-end">{{ number_format(sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="3" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format(sumBk($cabut_selesai_siap_cetak, 'gr'), 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format(sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
                                 @php
@@ -278,12 +292,17 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Cetak sedang Proses</td>
                             <td class="text-end">{{ number_format($cetak_proses->pcs ?? 0, 0) }}</td>
-                            <td class="text-end">{{ number_format($cetak_proses->gr ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="4" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($cetak_proses->gr ?? 0, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
-                                {{ number_format($cetak_proses->ttl_rp ?? (0 + $cetak_proses->cost_kerja ?? 0), 0) }}
+                                {{ number_format(($cetak_proses->ttl_rp ?? 0) + ($cetak_proses->cost_kerja ?? 0), 0) }}
 
                                 @php
-                                    $ttl_rp4 = $cetak_proses->ttl_rp ?? (0 + $cetak_proses->cost_kerja ?? 0);
+                                    $ttl_rp4 = ($cetak_proses->ttl_rp ?? 0) + ($cetak_proses->cost_kerja ?? 0);
                                 @endphp
                             </td>
                             <td class="text-end">
@@ -294,7 +313,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Cetak sisa Pengawas</td>
                             <td class="text-end">{{ number_format($cetak_sisa->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($cetak_sisa->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="5" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($cetak_sisa->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">{{ number_format($cetak_sisa->ttl_rp, 0) }}
                                 @php
                                     $ttl_rp5 = $cetak_sisa->ttl_rp;
@@ -308,7 +332,12 @@
                         <tr>
                             <td style="background-color: #F7F700;">Cetak selesai siap sortir belum kirim</td>
                             <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'pcs'), 0) }}</td>
-                            <td class="text-end">{{ number_format(sumBk($cetak_selesai, 'gr'), 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="6" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format(sumBk($cetak_selesai, 'gr'), 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format(sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'), 0) }}
                                 @php
@@ -336,7 +365,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sortir sedang Proses</td>
                             <td class="text-end">{{ number_format($sedang_proses->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($sedang_proses->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="7" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($sedang_proses->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($sedang_proses->ttl_rp + $sedang_proses->cost_kerja, 0) }}
                                 @php
@@ -352,7 +386,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sortir sisa Pengawas</td>
                             <td class="text-end">{{ number_format($sortir_sisa->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($sortir_sisa->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="8" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($sortir_sisa->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja, 0) }}
                                 @php
@@ -368,7 +407,14 @@
                             <td style="background-color: #F7F700;">Sortir selesai siap grading belum kirim
                             </td>
                             <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'pcs'), 0) }}</td>
-                            <td class="text-end">{{ number_format(sumBk($sortir_selesai, 'gr'), 0) }}</td>
+
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="9" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format(sumBk($sortir_selesai, 'gr'), 0) }}
+                                </a>
+                            </td>
+
                             <td class="text-end">
                                 {{ number_format(sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'), 0) }}
                                 @php
@@ -384,7 +430,14 @@
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sisa belum grading</td>
                             <td class="text-end">{{ number_format($grading_sisa->pcs ?? 0, 0) }}</td>
-                            <td class="text-end">{{ number_format($grading_sisa->gr ?? 0, 0) }}</td>
+
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="10" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($grading_sisa->gr ?? 0, 0) }}
+                                </a>
+                            </td>
+
                             <td class="text-end">
                                 {{-- {{ number_format(sumbk($grading_sisa2, 'cost_bk') + sumbk($grading_sisa2, 'cost_kerja'), 0) }} --}}
                                 {{ number_format($grading_sisa->cost_bk, 0) }}
@@ -436,7 +489,14 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Grading sedang proses</td>
                             <td class="text-end">{{ number_format($grading_proses->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($grading_proses->gr, 0) }}</td>
+
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="11" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($grading_proses->gr, 0) }}
+                                </a>
+                            </td>
+
                             <td class="text-end">
                                 {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja + $grading_proses->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op, 0) }}
 
@@ -458,7 +518,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Wip1 sedang proses</td>
                             <td class="text-end">{{ number_format($sisa_belum_wip1->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($sisa_belum_wip1->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="12" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($sisa_belum_wip1->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($sisa_belum_wip1->ttl_rp, 0) }}
                                 @php
@@ -472,7 +537,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Qc sedang proses</td>
                             <td class="text-end">{{ number_format($sisa_belum_qc->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($sisa_belum_qc->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="13" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($sisa_belum_qc->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($sisa_belum_qc->ttl_rp, 0) }}
                                 @php
@@ -486,7 +556,11 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Wip2 sedang proses</td>
                             <td class="text-end">{{ number_format($wip2proses->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($wip2proses->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="14" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">{{ number_format($wip2proses->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($wip2proses->ttl_rp, 0) }}
                                 @php
@@ -500,7 +574,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Pengiriman sedang proses</td>
                             <td class="text-end">{{ number_format($pengiriman_proses->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($pengiriman_proses->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#" class="detailbalance" baris="15" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($pengiriman_proses->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($pengiriman_proses->ttl_rp, 0) }}
                                 @php
@@ -514,7 +593,12 @@
                         <tr>
                             <td style="background-color: #F7BAC5; color:white">Pengiriman</td>
                             <td class="text-end">{{ number_format($pengiriman->pcs, 0) }}</td>
-                            <td class="text-end">{{ number_format($pengiriman->gr, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                <a href="#"class="detailbalance" baris="16" data-bs-toggle="modal"
+                                    data-bs-target="#detailBalance">
+                                    {{ number_format($pengiriman->gr, 0) }}
+                                </a>
+                            </td>
                             <td class="text-end">
                                 {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
                                 @php
@@ -639,6 +723,30 @@
 
                 </table> --}}
             </div>
+            <div class="modal fade " id="detailBalance" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Detail Balance</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="load_detail"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Close</span>
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
 
@@ -678,6 +786,59 @@
                             },
                             success: function(response) {
                                 $('#cost_opr').html(response);
+                            }
+                        });
+
+                    });
+                    $(document).on("click", ".detailbalance", function(e) {
+                        e.preventDefault();
+                        var baris = $(this).attr('baris');
+
+                        if (baris == 1) {
+                            $url = "{{ route('cocokan.detailCabutProses') }}";
+                        } else if (baris == 2) {
+                            $url = "{{ route('cocokan.detailCabutSisa') }}";
+                        } else if (baris == 3) {
+                            $url = "{{ route('cocokan.detailCabutBelumKirim') }}";
+                        } else if (baris == 4) {
+                            $url = "{{ route('cocokan.detailCetakSedangProses') }}";
+                        } else if (baris == 5) {
+                            $url = "{{ route('cocokan.detailCetakSisa') }}";
+                        } else if (baris == 6) {
+                            $url = "{{ route('cocokan.detailCetakBelumKirim') }}";
+                        } else if (baris == 7) {
+                            $url = "{{ route('cocokan.detailSortirProses') }}";
+                        } else if (baris == 8) {
+                            $url = "{{ route('cocokan.detailSortirSisa') }}";
+                        } else if (baris == 9) {
+                            $url = "{{ route('cocokan.detailSortirBelumKirim') }}";
+                        } else if (baris == 10) {
+                            $url = "{{ route('cocokan.detailSisaBelumGrading') }}";
+                        } else if (baris == 11) {
+                            $url = "{{ route('cocokan.detailGradingSedangProses') }}";
+                        } else if (baris == 12) {
+                            $url = "{{ route('cocokan.detailWip1SedangProses') }}";
+                        } else if (baris == 13) {
+                            $url = "{{ route('cocokan.detailQcSedangProses') }}";
+                        } else if (baris == 14) {
+                            $url = "{{ route('cocokan.detailWip2SedangProses') }}";
+                        } else if (baris == 15) {
+                            $url = "{{ route('cocokan.detailPengirimanSedangProses') }}";
+                        } else if (baris == 16) {
+                            $url = "{{ route('cocokan.detailPengiriman') }}";
+                        }
+
+                        $.ajax({
+                            type: "get",
+                            url: $url,
+                            success: function(response) {
+                                $('#load_detail').html(response);
+                                $('#tableHalaman').DataTable({
+                                    "searching": true,
+                                    "autoWidth": true,
+                                    "paging": true,
+                                    "ordering": true
+                                });
                             }
                         });
 

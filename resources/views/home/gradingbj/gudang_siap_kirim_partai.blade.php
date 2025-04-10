@@ -72,7 +72,7 @@
                             $ttlPcs = 0;
                             $ttlGr = 0;
                             foreach ($gudang as $d) {
-                                if ($d->gr - $d->gr_pengiriman >= 0) {
+                                if ($d->cek_qc == 'T') {
                                     $ttlPcs += $d->pcs - $d->pcs_pengiriman;
                                     $ttlGr += $d->gr - $d->gr_pengiriman;
                                 }
@@ -88,7 +88,7 @@
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
-                                @if ($d->gr - $d->gr_pengiriman > 0 && $d->cek_qc == 'T')
+                                @if ($d->cek_qc == 'T')
                                     <tr
                                         @click="
                                                 if (cek.includes('{{ $d->no_box }}')) {
