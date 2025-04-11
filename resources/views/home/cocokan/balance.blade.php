@@ -125,7 +125,7 @@
                             $ttl_rp3 =
                                 sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
                                 sumBk($cabut_selesai_siap_cetak, 'cost_kerja');
-                            $ttl_rp4 = $cetak_proses->ttl_rp ?? (0 + $cetak_proses->cost_kerja ?? 0);
+                            $ttl_rp4 = ($cetak_proses->ttl_rp ?? 0) + ($cetak_proses->cost_kerja ?? 0);
                             $ttl_rp5 = $cetak_sisa->ttl_rp;
                             $ttl_rp6 = sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja');
                             $ttl_rp7 = $sedang_proses->ttl_rp + $sedang_proses->cost_kerja;
@@ -167,6 +167,7 @@
                                 $ttl_rp14 +
                                 $ttl_rp15 +
                                 $ttl_rp16;
+
                         @endphp
                         <tr>
                             <th>Cost Berjalan</th>

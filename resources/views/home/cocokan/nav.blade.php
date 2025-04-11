@@ -48,10 +48,10 @@
                 <a class="nav-link  {{ $rot == 'cocokan.opname' || $rot == 'cocokan.opname/cetak' || $rot == 'cocokan.opname/sortir' ? 'active' : '' }}"
                     aria-current="page" href="{{ route('cocokan.opname') }}">Opname</a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cost_global.index' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cost_global.index') }}">Cost Global</a>
-            </li>
+            </li> --}}
         </ul>
     </div>
     <div class="d-none">
@@ -79,8 +79,8 @@
         <div class="dropdown-menu" bis_skin_checked="1" style="">
             <h6 class="dropdown-header">Export</h6>
             <a href="{{ route('opnamenew.export') }}" class="dropdown-item">Opname</a>
-            <a href="{{ route('cocokan.export') }}" class="dropdown-item">Detail</a>
-            <a href="{{ route('exportcost.export') }}" class="dropdown-item">Rp + Cost Kerja</a>
+            {{-- <a href="{{ route('cocokan.export') }}" class="dropdown-item">Detail</a> --}}
+            {{-- <a href="{{ route('exportcost.export') }}" class="dropdown-item">Rp + Cost Kerja</a> --}}
             <a href="{{ route('cocokan.exportCabut') }}" class="dropdown-item">Rp All</a>
         </div>
     </div>
