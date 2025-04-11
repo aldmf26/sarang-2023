@@ -1816,7 +1816,7 @@ class ExportCocokanController extends Controller
         $sheet->setCellValue('G' . $rowTbh, "=SUM(G2:G$row)");
         $sheet->setCellValue('H' . $rowTbh, "=SUM(H2:H$row)");
         $sheet->setCellValue('I' . $rowTbh, "=SUM(I2:I$row)");
-        $sheet->setCellValue('I' . $rowTbh, "=SUM(I2:I$row) / SUM(H2:H$row)");
+        $sheet->setCellValue('J' . $rowTbh, "=SUM(I2:I$row) / SUM(H2:H$row)");
 
         $sheet->getStyle("B$rowTbh:J$rowTbh")->applyFromArray($style_atas);
 
@@ -1872,6 +1872,11 @@ class ExportCocokanController extends Controller
         $cetak_selesai = OpnameNewModel::cetak_selesai();
         $sortir_selesai = OpnameNewModel::sortir_selesai();
         $grading_susut = Grading::belumKirimSumsusut();
+        $grading_proses = CocokanModel::gradingProsesOne();
+        $wip1_proses = CocokanModel::sisa_belum_wip1();
+        $sisa_belum_qc = CocokanModel::sisa_belum_qc();
+        $wip2proses = CocokanModel::wip2proses();
+        $pengiriman_proses = CocokanModel::pengiriman_proses();
         $bk_suntik = DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'");
 
         $ttl_sisa_belum_kirim =
@@ -1992,22 +1997,41 @@ class ExportCocokanController extends Controller
                 'ttl_rp' => $grading_sisa->cost_bk,
             ],
             [
+                'ket' => 'Grading sedang proses',
+                'pcs' => $grading_proses->pcs ?? 0,
+                'gr' => $grading_proses->gr ?? 0,
+                'ttl_rp' => $grading_proses->cost_bk + $grading_proses->cost_kerja + $grading_proses->cost_op,
+            ],
+            [
+                'ket' => 'Wip1 sedang proses',
+                'pcs' => $wip1_proses->pcs ?? 0,
+                'gr' => $wip1_proses->gr ?? 0,
+                'ttl_rp' => $wip1_proses->ttl_rp,
+            ],
+            [
+                'ket' => 'Qc sedang proses',
+                'pcs' => $sisa_belum_qc->pcs ?? 0,
+                'gr' => $sisa_belum_qc->gr ?? 0,
+                'ttl_rp' => $sisa_belum_qc->ttl_rp ?? 0,
+            ],
+            [
+                'ket' => 'Wip2 sedang proses',
+                'pcs' => $wip2proses->pcs ?? 0,
+                'gr' => $wip2proses->gr ?? 0,
+                'ttl_rp' => $wip2proses->ttl_rp ?? 0,
+            ],
+            [
+                'ket' => 'Pengiriman sedang proses',
+                'pcs' => $pengiriman_proses->pcs ?? 0,
+                'gr' => $pengiriman_proses->gr ?? 0,
+                'ttl_rp' => $pengiriman_proses->ttl_rp ?? 0,
+            ],
+
+            [
                 'ket' => 'Pengiriman',
                 'pcs' => $pengiriman->pcs ?? 0,
                 'gr' => $pengiriman->gr ?? 0,
                 'ttl_rp' => $pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op,
-            ],
-            [
-                'ket' => 'Sisa belum kirim ( sisa + qc)',
-                'pcs' => $grading->pcs ?? 0,
-                'gr' => $grading->gr ?? 0,
-                'ttl_rp' => $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op + $grading_susut->cost_bk + $grading_susut->cost_kerja + $grading_susut->cost_cu + $grading_susut->cost_op,
-            ],
-            [
-                'ket' => 'Selisih',
-                'pcs' => $sortir_akhir->pcs + $opname->pcs - $grading->pcs - $pengiriman->pcs - $pcs_sisa_grading,
-                'gr' => 0,
-                'ttl_rp' => 0,
             ],
         ];
 

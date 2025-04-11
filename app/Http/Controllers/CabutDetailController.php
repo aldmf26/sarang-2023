@@ -465,11 +465,11 @@ class CabutDetailController extends Controller
     {
         $no_nota = $r->no_nota;
         $per = $r->per ?? 'partai';
-        if(!$no_nota){
+        if (!$no_nota) {
             return redirect()->route('cocokan.list_pengiriman')->with('error', 'No. nota harus dipilih');
         }
         $belumKirim = Grading::details($no_nota, $per);
-    
+
         $data = [
             'title' => 'List pengiriman',
             'query' => $belumKirim,

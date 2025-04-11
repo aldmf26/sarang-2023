@@ -817,4 +817,133 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.list_pengiriman', $data);
     }
+
+    public function detailCabutProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::bksedang_proses_sum(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailCabutSisa(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::bksisapgws(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailCabutBelumKirim(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::bkselesai_belum_kirim(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailCetakSedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::cetak_proses(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailCetakSisa(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::cetak_stok(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailCetakBelumKirim(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::cetak_selesai(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailSortirProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::sortir_proses(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailSortirSisa(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::sortir_stock(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailSortirBelumKirim(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::sortir_selesai(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailSisaBelumGrading(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::gradingSisa(),
+        ];
+        return view('home.cocokan.balance.detailcabutproses', $data);
+    }
+    public function detailGradingSedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::gradingSednagProses(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
+    public function detailWip1SedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::wip1SedangProses(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
+    public function detailQcSedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::qcSedangProses(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
+    public function detailWip2SedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::wip2SedangProses(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
+    public function detailPengirimanSedangProses(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::PengirimanSedangProses(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
+    public function detailPengiriman(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'box' => $model::Pengiriman(),
+        ];
+        return view('home.cocokan.balance.detailgradingProses', $data);
+    }
 }
