@@ -258,6 +258,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('susut.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/create', 'detail')->name('detail');
+            Route::post('/create', 'createAktualSusut')->name('createAktualSusut');
+            Route::get('/{id_penerima}', 'print')->name('print');
         });
     Route::controller(GlobalController::class)
         ->prefix('home/global')
