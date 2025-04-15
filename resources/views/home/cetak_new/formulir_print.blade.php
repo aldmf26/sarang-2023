@@ -63,7 +63,6 @@
                                     <th width="60" class="text-end">Pcs Awal</th>
                                     <th width="60" class="text-end">Gr Awal</th>
                                     <th width="60" class="text-end">Sst Program</th>
-                                    <th width="60" class="text-end">Sst Aktual</th>
                                     <th width="60" class="text-end">Pcs Akhir</th>
                                     <th width="60" class="text-end">Gr Akhir</th>
                                     <th width="60" class="text-end">Susut %</th>
@@ -99,12 +98,12 @@
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
                                         <td class="text-end">{{ $d->gr_cbt - $d->gr_awal }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @livewire('input-susut-aktual', [
                                                 'id_formulir' => $d->id_formulir,
                                                 'input' => $d->sst_aktual,
                                             ])
-                                        </td>
+                                        </td> --}}
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -121,7 +120,6 @@
                                     <th class="text-end">
                                         {{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}
                                     </th>
-                                    <th class="text-end">{{ number_format(sumCol($detail, 'sst_aktual'), 0) }}</th>
 
                                     <td></td>
                                     <td></td>
