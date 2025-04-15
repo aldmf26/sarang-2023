@@ -83,7 +83,7 @@
 
                     {{-- cabut --}}
                     <thead>
-                        <tr class="sticky-header">
+                        <tr class="sticky-header" @click="cabut = !cabut">
                             <th class="dhead text-center">Cabut ke Cetak <i class="fas fa-caret-down"></i></th>
                             <th class="dhead text-center"></th>
                             <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'pcs_awal'), 0) }}</th>
