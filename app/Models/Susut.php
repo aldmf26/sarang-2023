@@ -9,8 +9,25 @@ use Illuminate\Support\Facades\DB;
 class Susut extends Model
 {
     use HasFactory;
-    protected $table = 'formulir_sarang';
+    protected $table = 'tb_susut';
     protected $guarded = [];
+
+    public function pemberi()
+    {
+        return $this->belongsTo(User::class, 'id_pemberi');
+    }
+
+    public function getSusutAktualAttribute()
+    {
+        return $this->rambangan_1 +
+            $this->rambangan_2 +
+            $this->rambangan_3 +
+            $this->sapuan_lantai +
+            $this->sesetan +
+            $this->bulu +
+            $this->pasir +
+            $this->rontokan_bk;
+    }
 
     // Scope untuk memfilter berdasarkan kategori
     public function scopeKategori($query, $category)
@@ -23,6 +40,7 @@ class Susut extends Model
         $bulan = 3;
         $cabutKeCetak =  DB::select("SELECT 
         b.name,
+        b.id,
         SUM(c.pcs_awal) as pcs_awal,
         SUM(COALESCE(c.gr_awal, d.gr_eo_awal)) as gr_awal,
         SUM(a.pcs_awal) as pcs_akhir,
