@@ -87,7 +87,7 @@
                                         ->toArray();
                                 @endphp
                                 @foreach ($detail as $d)
-                                    <tr>
+                                    <tr>    
                                         <td style="width: 100px"></td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>

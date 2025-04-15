@@ -56,6 +56,7 @@ class Susut extends Model
 
         $cetakKeSortir =  DB::select("SELECT 
         b.name,
+        b.id,
         SUM(c.pcs_awal_ctk) as pcs_awal,
         SUM(c.gr_awal_ctk) as gr_awal,
         SUM(a.gr_awal) as gr_akhir,
@@ -69,6 +70,7 @@ class Susut extends Model
 
         $sortirKeGrading =  DB::select("SELECT 
         b.name,
+        b.id,
         SUM(c.pcs_awal) as pcs_awal,
         SUM(c.gr_awal) as gr_awal,
         SUM(a.gr_awal) as gr_akhir,

@@ -18,8 +18,15 @@ class SusutController extends Controller
         $cetakKeSortir = Susut::getSum('cetak');
         $sortirKeGrading = Susut::getSum('sortir');
 
-        $tbSusut = DB::selectOne("SELECT sum(rambangan_1 + rambangan_2 + rambangan_3 +sapuan_lantai + sesetan + bulu + pasir + rontokan_bk) as ttl_sst_aktual FROM `tb_susut` as a;");
+        $divisiList = ['cabut', 'cetak', 'sortir'];
+        $ttlSusut = [];
 
+        foreach ($divisiList as $divisi) {
+            $ttlSusut[$divisi] = Susut::selectRaw('sum(rambangan_1 + rambangan_2 + rambangan_3 + sapuan_lantai + sesetan + bulu + pasir + rontokan_bk) as ttl_sst_aktual')
+                ->where('divisi', $divisi)->first()->ttl_sst_aktual;
+        }
+
+        list($ttlSusutCbt, $ttlSusutCetak, $ttlSusutSortir) = array_values($ttlSusut);
         $title = 'Cek Summary Susut';
 
         return view('home.susut.index', compact(
@@ -28,7 +35,9 @@ class SusutController extends Controller
             'tahun',
             'cabutKeCetak',
             'cetakKeSortir',
-            'tbSusut',
+            'ttlSusutCbt',
+            'ttlSusutCetak',
+            'ttlSusutSortir',
             'sortirKeGrading'
         ));
     }
@@ -122,6 +131,7 @@ class SusutController extends Controller
             'id_penerima' => $idPenerima,
             'pcs_awal' => $r->pcs_awal,
             'gr_awal' => $r->gr_awal,
+            'divisi' => $r->divisi,
             'gr_akhir' => $r->gr_akhir,
             'sst_program' => $r->sst_program,
             'admin' => auth()->user()->name,
