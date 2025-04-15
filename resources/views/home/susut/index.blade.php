@@ -151,7 +151,7 @@
                                 <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
                                 <td align="right">
                                     @if (!$aktualNol)
-                                        <a href="{{ route('susut.print', $d->id) }}" target="_blank">
+                                        <a href="{{ route('susut.print', [$d->id, 'cabut']) }}" target="_blank">
                                             <span class="badge bg-primary">Print</span>
                                         </a>
                                     @endif
@@ -231,7 +231,7 @@
                                 <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
                                 <td align="right">
                                     @if (!$aktualNol)
-                                        <a href="{{ route('susut.print', $d->id) }}" target="_blank">
+                                        <a href="{{ route('susut.print', [$d->id, 'cetak']) }}" target="_blank">
                                             <span class="badge bg-primary">Print</span>
                                         </a>
                                     @endif
@@ -311,7 +311,7 @@
                                 <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
                                 <td align="right">
                                     @if (!$aktualNol)
-                                        <a href="{{ route('susut.print', $d->id) }}" target="_blank">
+                                        <a href="{{ route('susut.print', [$d->id, 'sortir']) }}" target="_blank">
                                             <span class="badge bg-primary">Print</span>
                                         </a>
                                     @endif

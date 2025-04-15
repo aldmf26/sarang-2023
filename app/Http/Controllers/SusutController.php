@@ -168,9 +168,9 @@ class SusutController extends Controller
         return redirect()->route('susut.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
-    public function print($id_penerima)
+    public function print($id_penerima, $divisi)
     {
-        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where('id_pemberi', $id_penerima)->get();
+        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->get();
         $title = 'Cek Detail Susut';
         $penerima = 'Sinta';
         return view('home.susut.print', compact('susut', 'title', 'penerima'));

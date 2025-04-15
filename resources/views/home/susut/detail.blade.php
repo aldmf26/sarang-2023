@@ -6,7 +6,7 @@
     <input type="hidden" name="pcs_awal" value="{{ $datas['pcs_awal'] }}">
     <input type="hidden" name="gr_awal" value="{{ $datas['gr_awal'] }}">
     <input type="hidden" name="gr_akhir" value="{{ $datas['gr_akhir'] }}">
-    <input type="text" name="divisi" value="{{ $datas['divisi'] }}">
+    <input type="hidden" name="divisi" value="{{ $datas['divisi'] }}">
     <table class="table table-sm table-bordered table-hover table-striped">
         <thead>
             <tr>
