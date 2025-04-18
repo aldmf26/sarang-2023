@@ -113,7 +113,7 @@ class SusutController extends Controller
     {
         // ID penerima tetap (SINTA)
         $idPenerima = 265;
-
+        $tgl = $r->tgl;
         // Mapping indeks input ke nama kolom database
         $kolumSusut = [
             'rambangan_1',
@@ -134,8 +134,9 @@ class SusutController extends Controller
             'divisi' => $r->divisi,
             'gr_akhir' => $r->gr_akhir,
             'sst_program' => $r->sst_program,
+            'ttl_aktual' => array_sum($r->detailSusut),
             'admin' => auth()->user()->name,
-            'tgl' => date('Y-m-d')
+            'tgl' => $tgl
         ];
 
         // Menambahkan detail susut ke data yang akan disimpan
@@ -148,7 +149,7 @@ class SusutController extends Controller
         // Cek apakah data untuk hari ini dan id_pemberi yang sama sudah ada
         $dataExisting = DB::table('tb_susut')
             ->where('id_pemberi', $r->id_pengawas)
-            ->where('tgl', date('Y-m-d'))
+            ->where('tgl',  $tgl)
             ->first();
 
         if ($dataExisting) {

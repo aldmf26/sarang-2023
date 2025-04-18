@@ -114,35 +114,25 @@
                                 <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
                                 @php
+                                    $totalSusutAktual = DB::table('tb_susut')
+                                            ->where([['id_pemberi', $d->id],['divisi', 'cabut']])
+                                            ->sum('ttl_aktual');
+
                                     $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
                                     $sstProgram = $d->gr_awal - $d->gr_akhir;
+                                    $sstPersenAktual = (1 - $totalSusutAktual / $sstProgram) * 100;
+                                    $aktualNol = $totalSusutAktual == 0;
                                 @endphp
                                 <td align="right">{{ number_format($sstPersen, 0) }}%</td>
                                 <td align="right"><a href="#" class="createAktualSusut"
                                     data-divisi="cabut"
                                         data-pcs_awal="{{ $d->pcs_awal }}" data-gr_awal="{{ $d->gr_awal }}"
                                         data-gr_akhir="{{ $d->gr_akhir }}" data-id_pengawas="{{ $d->id }}"
-                                        data-sst_program="{{ $sstProgram }}">{{ number_format($sstProgram, 0) }}</a>
+                                        data-sst_program="{{ $sstProgram - $totalSusutAktual }}">{{ number_format($sstProgram - $totalSusutAktual,  0) }}</a>
                                 </td>
                                 @php
-                                    $getSusut = DB::table('tb_susut')->where([['id_pemberi', $d->id],['divisi', 'cabut']])->first();
 
-                                    $totalSusutAktual = 0;
-
-                                    if ($getSusut) {
-                                        $totalSusutAktual =
-                                            $getSusut->rambangan_1 +
-                                            $getSusut->rambangan_2 +
-                                            $getSusut->rambangan_3 +
-                                            $getSusut->sapuan_lantai +
-                                            $getSusut->sesetan +
-                                            $getSusut->bulu +
-                                            $getSusut->pasir +
-                                            $getSusut->rontokan_bk;
-                                    }
-
-                                    $sstPersenAktual = (1 - $totalSusutAktual / $sstProgram) * 100;
-                                    $aktualNol = $totalSusutAktual == 0;
+                                    
 
                                 @endphp
                                 <td align="right">{{ number_format($totalSusutAktual, 0) }}</td>
