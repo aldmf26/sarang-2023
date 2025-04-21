@@ -129,7 +129,7 @@ class SusutController extends Controller
         $dataSusut = [
             'id_pemberi' => $r->id_pengawas,
             'id_penerima' => $idPenerima,
-            'pcs_awal' => $r->pcs_awal,
+            'pcs_awal' => $r->pcs_awal ?? 0,
             'gr_awal' => $r->gr_awal,
             'divisi' => $r->divisi,
             'gr_akhir' => $r->gr_akhir,
