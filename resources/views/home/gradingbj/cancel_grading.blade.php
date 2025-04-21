@@ -142,8 +142,8 @@
                                 <tr>
                                     <td x-text="index + 1"></td>
                                     <td>
-                                        <select  x-init="initSelect2"
-                                            required name="grade[]" class="selectGrade" id="">
+                                        <select x-init="initSelect2" required name="grade[]" class="selectGrade"
+                                            id="">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($gradeBentuk as $g)
                                                 <option :selected="row.grade === '{{ $g->nm_grade }}'"
@@ -151,7 +151,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                      
+
                                     </td>
                                     <td>
                                         <input :readonly="row.sudah_kirim === 'Y'" onclick="select()"
@@ -167,6 +167,7 @@
                                         <input :readonly="row.sudah_kirim === 'Y'" onclick="select()"
                                             :value="row.box_pengiriman" required type="text"
                                             class="form-control text-end" name="box_sp[]">
+                                        <input type="hidden" :value="row.cek_qc" name="cek_qc[]">
                                     </td>
                                     <td x-show="row.sudah_kirim === 'T'">
                                         <input type="hidden" :value="row.ttl_rp" name="ttl_rp[]">
@@ -180,6 +181,7 @@
                                         <input type="hidden" :value="row.formulir" name="formulir[]">
                                         <input type="hidden" :value="row.bulan" name="bulan[]">
                                         <input type="hidden" :value="row.tahun" name="tahun[]">
+
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
                                                 class="fas fa-trash"></i></span>
                                     </td>
