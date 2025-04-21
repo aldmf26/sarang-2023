@@ -6,7 +6,7 @@
 @endphp
 <p><b>{{ $title }}</b> Tgl : <input type="date" name="tgl" class="form-control form-control-sm" value="{{ $lastSusut->tgl ?? date('Y-m-d') }}"></p>
 <h5>Pengawas : {{ $nama }}</h5>
-<h5>Sst Program : {{ number_format($datas['sst_program'] - $totalSusutAktual, 0) }}</h5>
+<h5>Sst Program : {{ number_format($datas['sst_program'], 0) }}</h5>
 <input type="hidden" name="id_pengawas" value="{{ $id_pengawas }}">
 <input type="hidden" name="sst_program" value="{{ $datas['sst_program'] }}">
 <input type="hidden" name="pcs_awal" value="{{ $datas['pcs_awal'] }}">
