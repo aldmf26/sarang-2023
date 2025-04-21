@@ -40,7 +40,7 @@
                 Print</a>
         </div>
         <h5 class="fw-bold text-center" style="text-decoration: underline">PO SUSUT</h5>
-        <h6 class="fw-bold">Pengawas : {{ $susut[0]->pemberi->name }} ~ {{ $penerima }}</h6>
+        <h6 class="fw-bold">Pengawas : {{ $susut->pemberi->name }} ~ {{ $penerima }}</h6>
 
         <div class="row">
             <div class="col-lg-12">
@@ -76,64 +76,56 @@
                             $ttlGr_cbt = 0;
 
                         @endphp
-                        @foreach ($susut as $no => $f)
-                            {{-- @php
+                        {{-- @foreach ($susut as $no => $susut)
+             
+                        @endforeach --}}
+                        <tr>
+                            <td align="right">{{ 1 }}</td>
+                            <td align="right">{{ tanggal($susut->tgl) }}</td>
+                            <td align="right">{{ number_format($susut->pcs_awal, 0) }}</td>
+                            <td align="right">{{ number_format($susut->gr_awal, 0) }}</td>
+                            <td align="right">{{ number_format($susut->gr_akhir, 0) }}</td>
 
-                                $grCabut = $f->gr_cbt ?? (0 + $f->gr_eo ?? 0);
-                                $ttlPcs += $f->pcs_awal;
-                                $ttlGr += $f->gr_awal;
+                            @php
+                                $sst = (1 - $susut->gr_akhir / $susut->gr_awal) * 100;
+                            @endphp
+                            <td align="right">{{ number_format($sst, 0) }}%</td>
+                            <td align="right">{{ number_format($susut->sst_program, 0) }}</td>
+                            <td align="right">{{ number_format($susut->rambangan_1, 0) }}</td>
+                            <td align="right">{{ number_format($susut->rambangan_2, 0) }}</td>
+                            <td align="right">{{ number_format($susut->rambangan_3, 0) }}</td>
+                            <td align="right">{{ number_format($susut->sapuan_lantai, 0) }}</td>
+                            <td align="right">{{ number_format($susut->sesetan, 0) }}</td>
+                            <td align="right">{{ number_format($susut->bulu, 0) }}</td>
+                            <td align="right">{{ number_format($susut->pasir, 0) }}</td>
+                            <td align="right">{{ number_format($susut->rontokan_bk, 0) }}</td>
 
-                                $ttlPcs_cbt += $f->pcs_cbt;
-                                $ttlGr_cbt += $grCabut;
-                            @endphp --}}
-                            <tr>
-                                <td align="right">{{ $no + 1 }}</td>
-                                <td align="right">{{ tanggal($f->tgl) }}</td>
-                                <td align="right">{{ number_format($f->pcs_awal, 0) }}</td>
-                                <td align="right">{{ number_format($f->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($f->gr_akhir, 0) }}</td>
+                            @php
+                                $ttlAktual =
+                                    $susut->rambangan_1 +
+                                    $susut->rambangan_2 +
+                                    $susut->rambangan_3 +
+                                    $susut->sapuan_lantai +
+                                    $susut->sesetan +
+                                    $susut->bulu +
+                                    $susut->pasir +
+                                    $susut->rontokan_bk;
+                            @endphp
 
-                                @php
-                                    $sst = (1 - $f->gr_akhir / $f->gr_awal) * 100;
-                                @endphp
-                                <td align="right">{{ number_format($sst, 0) }}%</td>
-                                <td align="right">{{ number_format($f->sst_program, 0) }}</td>
-                                <td align="right">{{ number_format($f->rambangan_1, 0) }}</td>
-                                <td align="right">{{ number_format($f->rambangan_2, 0) }}</td>
-                                <td align="right">{{ number_format($f->rambangan_3, 0) }}</td>
-                                <td align="right">{{ number_format($f->sapuan_lantai, 0) }}</td>
-                                <td align="right">{{ number_format($f->sesetan, 0) }}</td>
-                                <td align="right">{{ number_format($f->bulu, 0) }}</td>
-                                <td align="right">{{ number_format($f->pasir, 0) }}</td>
-                                <td align="right">{{ number_format($f->rontokan_bk, 0) }}</td>
+                            <td align="right">{{ number_format($ttlAktual, 0) }}</td>
 
-                                @php
-                                    $ttlAktual =
-                                        $f->rambangan_1 +
-                                        $f->rambangan_2 +
-                                        $f->rambangan_3 +
-                                        $f->sapuan_lantai +
-                                        $f->sesetan +
-                                        $f->bulu +
-                                        $f->pasir +
-                                        $f->rontokan_bk;
-                                @endphp
+                            @php
+                                $selisih = $susut->sst_program - $ttlAktual;
 
-                                <td align="right">{{ number_format($ttlAktual, 0) }}</td>
+                                $sstPersenAktual = (1 - $ttlAktual / $susut->sst_program) * 100;
 
-                                @php
-                                    $selisih = $f->sst_program - $ttlAktual;
+                            @endphp
 
-                                    $sstPersenAktual = (1 - $ttlAktual / $f->sst_program) * 100;
-
-                                @endphp
-
-                                <td align="right">{{ number_format($selisih, 0) }}</td>
-                                <td align="right">{{ number_format($sstPersenAktual, 0) }} %</td>
+                            <td align="right">{{ number_format($selisih, 0) }}</td>
+                            <td align="right">{{ number_format($sstPersenAktual, 0) }} %</td>
 
 
-                            </tr>
-                        @endforeach
+                        </tr>
                     </tbody>
                     {{-- <tfoot>
                         <tr>
@@ -143,7 +135,7 @@
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr_cbt - $ttlGr, 0) }}</th>
-                            <th class="text-end">{{ number_format($formulir->sum('sst_aktual'), 0) }}</th>
+                            <th class="text-end">{{ number_format($susutormulir->sum('sst_aktual'), 0) }}</th>
                             @for ($i = 0; $i < 8; $i++)
                                 <th></th>
                             @endfor

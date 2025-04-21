@@ -171,7 +171,7 @@ class SusutController extends Controller
 
     public function print($id_penerima, $divisi)
     {
-        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->get();
+        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->first();
         $title = 'Cek Detail Susut';
         $penerima = 'Sinta';
         return view('home.susut.print', compact('susut', 'title', 'penerima'));
