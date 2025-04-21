@@ -83,7 +83,7 @@
 
                     {{-- cabut --}}
                     <thead>
-                        <tr class="sticky-header" >
+                        <tr class="sticky-header" @click="cabut = !cabut">
                             <th class="dhead text-center">Cabut ke Cetak <i class="fas fa-caret-down"></i></th>
                             <th class="dhead text-center"></th>
                             <th class="dhead text-end">{{ number_format(sumCol($cabutKeCetak, 'pcs_awal'), 0) }}</th>
@@ -92,13 +92,14 @@
                             <th class="dhead text-end">-</th>
                             <th class="dhead text-end">
                                 @php
-                                    $ttlSstProgram = sumCol($cabutKeCetak, 'gr_awal') - sumCol($cabutKeCetak, 'gr_akhir');
-                                    $ttlSelisih = $ttlSstProgram - $tbSusut->ttl_sst_aktual;
+                                    $ttlSstProgram =
+                                        sumCol($cabutKeCetak, 'gr_awal') - sumCol($cabutKeCetak, 'gr_akhir');
+                                    $ttlSelisih = $ttlSstProgram - $ttlSusutCbt;
 
                                 @endphp
                                 {{ number_format($ttlSstProgram, 0) }}
                             </th>
-                            <th class="dhead text-end">{{ number_format($tbSusut->ttl_sst_aktual, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($ttlSusutCbt, 0) }}</th>
                             <th class="dhead text-end">{{ number_format($ttlSelisih, 0) }}</th>
                             <th class="dhead text-end">-</th>
                             <th class="dhead text-end"></th>
@@ -113,17 +114,89 @@
                                 <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
                                 <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
                                 @php
+                                    $totalSusutAktual = DB::table('tb_susut')
+                                            ->where([['id_pemberi', $d->id],['divisi', 'cabut']])
+                                            ->sum('ttl_aktual');
+
+                                    $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                    $sstProgram = $d->gr_awal - $d->gr_akhir;
+                                    $sstPersenAktual = (1 - $totalSusutAktual / $sstProgram) * 100;
+                                    $aktualNol = $totalSusutAktual == 0;
+                                @endphp
+                                <td align="right">{{ number_format($sstPersen, 0) }}%</td>
+                                <td align="right"><a href="#" class="createAktualSusut"
+                                    data-divisi="cabut"
+                                        data-pcs_awal="{{ $d->pcs_awal }}" data-gr_awal="{{ $d->gr_awal }}"
+                                        data-gr_akhir="{{ $d->gr_akhir }}" data-id_pengawas="{{ $d->id }}"
+                                        data-sst_program="{{ $sstProgram - $totalSusutAktual }}">{{ number_format($sstProgram - $totalSusutAktual,  0) }}</a>
+                                </td>
+                                @php
+
+                                    
+
+                                @endphp
+                                <td align="right">{{ number_format($totalSusutAktual, 0) }}</td>
+                                <td align="right">
+                                    {{ number_format($aktualNol ? 0 : $sstProgram - $totalSusutAktual, 0) }}</td>
+                                <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
+                                <td align="right">
+                                    @if (!$aktualNol)
+                                        <a href="{{ route('susut.print', [$d->id, 'cabut']) }}" target="_blank">
+                                            <span class="badge bg-primary">Print</span>
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+
+                    {{-- cetak --}}
+                    <thead>
+                        <tr class="sticky-header" @click="cetak = !cetak">
+                            <th class="dhead text-center">Cetak ke Sortir <i class="fas fa-caret-down"></i></th>
+                            <th class="dhead text-center"></th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'pcs_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_awal'), 0) }}</th>
+                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_akhir'), 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end">
+                                @php
+                                    $ttlSstProgram =
+                                        sumCol($cetakKeSortir, 'gr_awal') - sumCol($cetakKeSortir, 'gr_akhir');
+                                    $ttlSelisih = $ttlSstProgram - $ttlSusutCetak;
+
+                                @endphp
+                                {{ number_format($ttlSstProgram, 0) }}
+                            </th>
+                            <th class="dhead text-end">{{ number_format($ttlSusutCetak, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($ttlSelisih, 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($cetakKeSortir as $d)
+                            <tr x-show="cetak">
+                                <td></td>
+                                <td>{{ $d->name }}</td>
+                                <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
+                                <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
+                                <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
+
+                                @php
                                     $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
                                     $sstProgram = $d->gr_awal - $d->gr_akhir;
                                 @endphp
                                 <td align="right">{{ number_format($sstPersen, 0) }}%</td>
                                 <td align="right"><a href="#" class="createAktualSusut"
+                                    data-divisi="cetak"
                                         data-pcs_awal="{{ $d->pcs_awal }}" data-gr_awal="{{ $d->gr_awal }}"
                                         data-gr_akhir="{{ $d->gr_akhir }}" data-id_pengawas="{{ $d->id }}"
                                         data-sst_program="{{ $sstProgram }}">{{ number_format($sstProgram, 0) }}</a>
                                 </td>
                                 @php
-                                    $getSusut = DB::table('tb_susut')->where('id_pemberi', $d->id)->first();
+                                    $getSusut = DB::table('tb_susut')->where([['id_pemberi', $d->id],['divisi', 'cetak']])->first();
+
                                     $totalSusutAktual = 0;
 
                                     if ($getSusut) {
@@ -143,56 +216,22 @@
 
                                 @endphp
                                 <td align="right">{{ number_format($totalSusutAktual, 0) }}</td>
-                                <td align="right">{{ number_format($aktualNol ? 0 : $sstProgram - $totalSusutAktual, 0) }}</td>
+                                <td align="right">
+                                    {{ number_format($aktualNol ? 0 : $sstProgram - $totalSusutAktual, 0) }}</td>
                                 <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
                                 <td align="right">
                                     @if (!$aktualNol)
-                                    <a href="{{ route('susut.print', $d->id) }}"
-                                        target="_blank">
-                                        <span class="badge bg-primary">Print</span>
-                                    </a>
+                                        <a href="{{ route('susut.print', [$d->id, 'cetak']) }}" target="_blank">
+                                            <span class="badge bg-primary">Print</span>
+                                        </a>
                                     @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
 
-                    {{-- cetak --}}
-                    {{-- <thead>
-                        <tr class="sticky-header" @click="cetak = !cetak">
-                            <th class="dhead text-center">Cetak ke Sortir <i class="fas fa-caret-down"></i></th>
-                            <th class="dhead text-center"></th>
-                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'pcs_awal'), 0) }}</th>
-                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_awal'), 0) }}</th>
-                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'gr_akhir'), 0) }}</th>
-                            <th class="dhead text-end">-</th>
-                            <th class="dhead text-end">
-                                {{ number_format(sumCol($cetakKeSortir, 'gr_awal') - sumCol($cetakKeSortir, 'gr_akhir'), 0) }}
-                            </th>
-                            <th class="dhead text-end">{{ number_format(sumCol($cetakKeSortir, 'sst_aktual'), 0) }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($cetakKeSortir as $d)
-                            <tr x-show="cetak">
-                                <td></td>
-                                <td>{{ $d->name }}</td>
-                                <td align="right">{{ number_format($d->pcs_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->gr_awal, 0) }}</td>
-                                <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
-                                @php
-                                    $sstPersen = (1 - $d->gr_akhir / $d->gr_awal) * 100;
-                                @endphp
-                                <td align="right">{{ number_format($sstPersen, 0) }}%</td>
-                                <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
-                                <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody> --}}
-
                     {{-- sortir --}}
-                    {{-- <thead>
+                    <thead>
                         <tr class="sticky-header" @click="sortir = !sortir">
                             <th class="dhead text-center">Sortir ke Grading <i class="fas fa-caret-down"></i></th>
                             <th class="dhead text-center"></th>
@@ -203,10 +242,18 @@
                             </th>
                             <th class="dhead text-end">-</th>
                             <th class="dhead text-end">
-                                {{ number_format(sumCol($sortirKeGrading, 'gr_awal') - sumCol($sortirKeGrading, 'gr_akhir'), 0) }}
+                                @php
+                                    $ttlSstProgram =
+                                        sumCol($sortirKeGrading, 'gr_awal') - sumCol($sortirKeGrading, 'gr_akhir');
+                                    $ttlSelisih = $ttlSstProgram - $ttlSusutSortir;
+
+                                @endphp
+                                {{ number_format($ttlSstProgram, 0) }}
                             </th>
-                            <th class="dhead text-end">{{ number_format(sumCol($sortirKeGrading, 'sst_aktual'), 0) }}
-                            </th>
+                            <th class="dhead text-end">{{ number_format($ttlSusutSortir, 0) }}</th>
+                            <th class="dhead text-end">{{ number_format($ttlSelisih, 0) }}</th>
+                            <th class="dhead text-end">-</th>
+                            <th class="dhead text-end"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -219,13 +266,49 @@
                                 <td align="right">{{ number_format($d->gr_akhir, 0) }}</td>
                                 @php
                                     $sstPersen = $d->gr_awal == 0 ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                                    $sstProgram = $d->gr_awal - $d->gr_akhir;
                                 @endphp
                                 <td align="right">{{ number_format($sstPersen, 0) }}%</td>
-                                <td align="right">{{ number_format($d->gr_awal - $d->gr_akhir, 0) }}</td>
-                                <td align="right">{{ number_format($d->sst_aktual, 0) }}</td>
+                                <td align="right"><a href="#" class="createAktualSusut"
+                                    data-divisi="sortir"
+                                        data-pcs_awal="{{ $d->pcs_awal }}" data-gr_awal="{{ $d->gr_awal }}"
+                                        data-gr_akhir="{{ $d->gr_akhir }}" data-id_pengawas="{{ $d->id }}"
+                                        data-sst_program="{{ $sstProgram }}">{{ number_format($sstProgram, 0) }}</a>
+                                </td>
+                                @php
+                                    $getSusut = DB::table('tb_susut')->where([['id_pemberi', $d->id],['divisi', 'sortir']])->first();
+                                    $totalSusutAktual = 0;
+
+                                    if ($getSusut) {
+                                        $totalSusutAktual =
+                                            $getSusut->rambangan_1 +
+                                            $getSusut->rambangan_2 +
+                                            $getSusut->rambangan_3 +
+                                            $getSusut->sapuan_lantai +
+                                            $getSusut->sesetan +
+                                            $getSusut->bulu +
+                                            $getSusut->pasir +
+                                            $getSusut->rontokan_bk;
+                                    }
+
+                                    $sstPersenAktual = (1 - $totalSusutAktual / $sstProgram) * 100;
+                                    $aktualNol = $totalSusutAktual == 0;
+
+                                @endphp
+                                <td align="right">{{ number_format($totalSusutAktual, 0) }}</td>
+                                <td align="right">
+                                    {{ number_format($aktualNol ? 0 : $sstProgram - $totalSusutAktual, 0) }}</td>
+                                <td align="right">{{ number_format($sstPersenAktual, 0) }}%</td>
+                                <td align="right">
+                                    @if (!$aktualNol)
+                                        <a href="{{ route('susut.print', [$d->id, 'sortir']) }}" target="_blank">
+                                            <span class="badge bg-primary">Print</span>
+                                        </a>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
-                    </tbody> --}}
+                    </tbody>
                 </table>
             </div>
 
@@ -244,6 +327,7 @@
                         const pcs_awal = $(this).data('pcs_awal');
                         const gr_awal = $(this).data('gr_awal');
                         const gr_akhir = $(this).data('gr_akhir');
+                        const divisi = $(this).data('divisi');
 
                         const id_pengawas = $(this).data('id_pengawas');
                         const sst_program = $(this).data('sst_program');
@@ -257,7 +341,8 @@
                                 sst_program,
                                 pcs_awal,
                                 gr_awal,
-                                gr_akhir
+                                gr_akhir,
+                                divisi
                             },
                             success: function(r) {
                                 $('#createAktualSusut').html(r);

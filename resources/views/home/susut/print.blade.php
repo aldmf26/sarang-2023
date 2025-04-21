@@ -58,7 +58,8 @@
                             <th class="text-center dhead">Rambangan 2</th>
                             <th class="text-center dhead">Rambangan 3</th>
                             <th class="text-center dhead">Sapuan Lantai</th>
-                            <th class="text-center dhead">Sesetan Bulu</th>
+                            <th class="text-center dhead">Sesetan</th>
+                            <th class="text-center dhead">Bulu</th>
                             <th class="text-center dhead">Pasir</th>
                             <th class="text-center dhead">Rontokan Bk</th>
                             <th class="text-center bg-warning">Ttl Aktual</th>
@@ -101,7 +102,8 @@
                                 <td align="right">{{ number_format($f->rambangan_2, 0) }}</td>
                                 <td align="right">{{ number_format($f->rambangan_3, 0) }}</td>
                                 <td align="right">{{ number_format($f->sapuan_lantai, 0) }}</td>
-                                <td align="right">{{ number_format($f->sesetan_bulu, 0) }}</td>
+                                <td align="right">{{ number_format($f->sesetan, 0) }}</td>
+                                <td align="right">{{ number_format($f->bulu, 0) }}</td>
                                 <td align="right">{{ number_format($f->pasir, 0) }}</td>
                                 <td align="right">{{ number_format($f->rontokan_bk, 0) }}</td>
 
@@ -111,7 +113,8 @@
                                         $f->rambangan_2 +
                                         $f->rambangan_3 +
                                         $f->sapuan_lantai +
-                                        $f->sesetan_bulu +
+                                        $f->sesetan +
+                                        $f->bulu +
                                         $f->pasir +
                                         $f->rontokan_bk;
                                 @endphp

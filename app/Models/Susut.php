@@ -45,17 +45,22 @@ class Susut extends Model
         SUM(COALESCE(c.gr_awal, d.gr_eo_awal)) as gr_awal,
         SUM(a.pcs_awal) as pcs_akhir,
         SUM(a.gr_awal) as gr_akhir,
-        SUM(a.sst_aktual) as sst_aktual,
+        -- SUM(a.sst_aktual) as sst_aktual,
+        e.ttl_aktual as sst_aktual,
         a.kategori 
         FROM formulir_sarang as a
         join users as b on a.id_pemberi = b.id
         left join cabut as c on a.no_box = c.no_box
         LEFT JOIN eo as d ON a.no_box = d.no_box
+        LEFT join (
+            select id_pemberi, sum(ttl_aktual) as ttl_aktual from tb_susut where divisi = 'cabut' group by id_pemberi        
+        ) as e on e.id_pemberi = b.id
         WHERE a.kategori = 'cetak' and month(a.tanggal) >= '$bulan'
         GROUP BY a.id_pemberi;");
 
         $cetakKeSortir =  DB::select("SELECT 
         b.name,
+        b.id,
         SUM(c.pcs_awal_ctk) as pcs_awal,
         SUM(c.gr_awal_ctk) as gr_awal,
         SUM(a.gr_awal) as gr_akhir,
@@ -69,6 +74,7 @@ class Susut extends Model
 
         $sortirKeGrading =  DB::select("SELECT 
         b.name,
+        b.id,
         SUM(c.pcs_awal) as pcs_awal,
         SUM(c.gr_awal) as gr_awal,
         SUM(a.gr_awal) as gr_akhir,

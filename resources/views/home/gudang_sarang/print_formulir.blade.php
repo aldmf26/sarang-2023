@@ -55,7 +55,6 @@
                             <th width="60" class="text-end">Pcs Awal</th>
                             <th width="60" class="text-end">Gr Awal</th>
                             <th width="60" class="text-end">Sst Program</th>
-                            <th width="60" class="text-end">Sst Aktual</th>
                             <th width="60" class="text-end">Pcs Tidak Ctk</th>
                             <th width="60" class="text-end">Gr Tidak Ctk</th>
                             <th width="200">Nama Anak</th>
@@ -97,12 +96,12 @@
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
                                 <td class="text-end">{{ $grCabut - $f->gr_awal }}</td>
-                                <td>
+                                {{-- <td>
                                     @livewire('input-susut-aktual', [
                                         'id_formulir' => $f->id_formulir,
                                         'input' => $f->sst_aktual,
                                     ])
-                                </td>
+                                </td> --}}
                                 @for ($i = 0; $i < 9; $i++)
                                     <td></td>
                                 @endfor
@@ -117,7 +116,6 @@
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr_cbt - $ttlGr, 0) }}</th>
-                            <th class="text-end">{{ number_format($formulir->sum('sst_aktual'), 0) }}</th>
                             @for ($i = 0; $i < 8; $i++)
                                 <th></th>
                             @endfor

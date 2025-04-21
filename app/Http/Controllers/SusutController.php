@@ -18,8 +18,15 @@ class SusutController extends Controller
         $cetakKeSortir = Susut::getSum('cetak');
         $sortirKeGrading = Susut::getSum('sortir');
 
-        $tbSusut = DB::selectOne("SELECT sum(rambangan_1 + rambangan_2 + rambangan_3 +sapuan_lantai + sesetan + bulu + pasir + rontokan_bk) as ttl_sst_aktual FROM `tb_susut` as a;");
+        $divisiList = ['cabut', 'cetak', 'sortir'];
+        $ttlSusut = [];
 
+        foreach ($divisiList as $divisi) {
+            $ttlSusut[$divisi] = Susut::selectRaw('sum(rambangan_1 + rambangan_2 + rambangan_3 + sapuan_lantai + sesetan + bulu + pasir + rontokan_bk) as ttl_sst_aktual')
+                ->where('divisi', $divisi)->first()->ttl_sst_aktual;
+        }
+
+        list($ttlSusutCbt, $ttlSusutCetak, $ttlSusutSortir) = array_values($ttlSusut);
         $title = 'Cek Summary Susut';
 
         return view('home.susut.index', compact(
@@ -28,7 +35,9 @@ class SusutController extends Controller
             'tahun',
             'cabutKeCetak',
             'cetakKeSortir',
-            'tbSusut',
+            'ttlSusutCbt',
+            'ttlSusutCetak',
+            'ttlSusutSortir',
             'sortirKeGrading'
         ));
     }
@@ -104,7 +113,7 @@ class SusutController extends Controller
     {
         // ID penerima tetap (SINTA)
         $idPenerima = 265;
-
+        $tgl = $r->tgl;
         // Mapping indeks input ke nama kolom database
         $kolumSusut = [
             'rambangan_1',
@@ -122,10 +131,12 @@ class SusutController extends Controller
             'id_penerima' => $idPenerima,
             'pcs_awal' => $r->pcs_awal,
             'gr_awal' => $r->gr_awal,
+            'divisi' => $r->divisi,
             'gr_akhir' => $r->gr_akhir,
             'sst_program' => $r->sst_program,
+            'ttl_aktual' => array_sum($r->detailSusut),
             'admin' => auth()->user()->name,
-            'tgl' => date('Y-m-d')
+            'tgl' => $tgl
         ];
 
         // Menambahkan detail susut ke data yang akan disimpan
@@ -138,7 +149,7 @@ class SusutController extends Controller
         // Cek apakah data untuk hari ini dan id_pemberi yang sama sudah ada
         $dataExisting = DB::table('tb_susut')
             ->where('id_pemberi', $r->id_pengawas)
-            ->where('tgl', date('Y-m-d'))
+            ->where('tgl',  $tgl)
             ->first();
 
         if ($dataExisting) {
@@ -158,9 +169,9 @@ class SusutController extends Controller
         return redirect()->route('susut.index')->with('sukses', 'Data Berhasil ditambahkan');
     }
 
-    public function print($id_penerima)
+    public function print($id_penerima, $divisi)
     {
-        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where('id_pemberi', $id_penerima)->get();
+        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->get();
         $title = 'Cek Detail Susut';
         $penerima = 'Sinta';
         return view('home.susut.print', compact('susut', 'title', 'penerima'));
