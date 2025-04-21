@@ -41,7 +41,8 @@
                                 class="btn btn-sm ">
                                 <i class="fas fa-clipboard-list"></i> Gudang
                             </a>
-                            <x-theme.button href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}"
+                            <x-theme.button
+                                href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}"
                                 icon="fa-clipboard-list" teks="Po Grading" />
                             <button name="submit" value="serah" x-transition x-show="cek.length"
                                 class="btn btn-sm btn-primary" type="submit">
@@ -86,31 +87,33 @@
                                     $duitKosong = DB::table('bk')
                                         ->where([['nm_partai', $d->nm_partai], ['hrga_satuan', 0]])
                                         ->first();
-                                    if(!empty($boxPoGrade) || !empty($duitKosong)) continue;
+                                    if (!empty($boxPoGrade) || !empty($duitKosong)) {
+                                        continue;
+                                    }
                                 @endphp
-                                    <tr class=""
-                                        @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
-                                        <td>{{ $i + 1 }}</td>
-                                        {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
-                                        <td>{{ $d->nm_partai }}</td>
-                                        <td align="center">{{ $d->no_box }}</td>
-                                        <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                        <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
-                                        <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
-                                        @role('presiden')
-                                            <td class="text-end">
-                                                {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
-                                            </td>
-                                            <td class="text-end">
-                                                {{-- {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }} --}}
-                                            </td>
-                                        @endrole
-                                        <td align="center">
-                                            <input type="checkbox" class="form-check"
-                                                :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
-                                                id="" value="{{ $d->no_box }}">
+                                <tr class=""
+                                    @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
+                                    <td>{{ $i + 1 }}</td>
+                                    {{-- <td>{{ tanggal($d->tanggal) }}</td> --}}
+                                    <td>{{ $d->nm_partai }}</td>
+                                    <td align="center">{{ $d->no_box }}</td>
+                                    <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
+                                    <td class="text-end">{{ number_format($d->pcs_awal, 0) }}</td>
+                                    <td class="text-end">{{ number_format($d->gr_awal, 0) }}</td>
+                                    @role('presiden')
+                                        <td class="text-end">
+                                            {{-- {{ number_format(($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu) / ($d->gr_awal ?? 1), 0) }} --}}
                                         </td>
-                                    </tr>
+                                        <td class="text-end">
+                                            {{-- {{ number_format($d->cost_bk + $d->cost_cbt + $d->cost_eo + $d->cost_ctk + $d->cost_str + $d->cost_cu, 0) }} --}}
+                                        </td>
+                                    @endrole
+                                    <td align="center">
+                                        <input type="checkbox" class="form-check"
+                                            :checked="cek.includes('{{ $d->no_box }}')" name="id[]"
+                                            id="" value="{{ $d->no_box }}">
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

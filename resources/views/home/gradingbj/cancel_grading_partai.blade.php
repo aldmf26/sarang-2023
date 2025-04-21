@@ -28,8 +28,8 @@
                                     <input type="hidden" name="id_grading" value="{{ $id_grading }}">
                                 </td>
                                 <td>
-                                    <input type="text" readonly value="{{$no_invoice}}" name="no_nota" class="form-control"
-                                        required>
+                                    <input type="text" readonly value="{{ $no_invoice }}" name="no_nota"
+                                        class="form-control" required>
                                 </td>
                                 <td>
                                     <input readonly type="date" value="{{ $tgl }}" name="tgl"
@@ -101,7 +101,7 @@
                         <tbody>
                             @foreach ($getFormulir as $d)
                                 <tr class="pointer">
-                                    <td>{{ $d->box_pengiriman }} <input type="hidden" 
+                                    <td>{{ $d->box_pengiriman }} <input type="hidden"
                                             value="{{ $d->box_pengiriman }}"></td>
                                     <td align="center">{{ $d->grade }}</td>
                                     <td align="right">{{ $d->pcs }}</td>

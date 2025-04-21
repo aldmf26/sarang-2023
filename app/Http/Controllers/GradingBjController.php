@@ -922,6 +922,7 @@ class GradingBjController extends Controller
             tgl,
             sudah_kirim,
             formulir,
+            cek_qc,
             ttl_rp,
             cost_bk,
             cost_kerja,
@@ -992,6 +993,7 @@ class GradingBjController extends Controller
                     return redirect()->route('gradingbj.index')->with('error', "ERROR! Box Pengiriman " . $r->box_sp[$i] . " sudah terdaftar di bulan " . $cekBox->bulan);
                 }
 
+
                 $data[] = [
                     'bulan' => $bulan,
                     'tahun' => $tahun,
@@ -1011,6 +1013,7 @@ class GradingBjController extends Controller
                     'cost_cu' => 0,
                     'cost_op' => $rpGrOp * $r->gr[$i],
                     'formulir' => 'Y',
+
                 ];
             }
             DB::table('grading_partai')->where('id_grading', $id_grading)->delete();
@@ -1106,6 +1109,7 @@ class GradingBjController extends Controller
                     'cost_kerja' => $sudahKrim ? $r->cost_kerja[$i] : $rpGrKerja * $r->gr[$i],
                     'cost_cu' => 0,
                     'cost_op' => $sudahKrim ? $r->cost_op[$i] : 0,
+                    'cek_qc' => $r->cek_qc[$i] ?? 'T',
                 ];
             }
 
