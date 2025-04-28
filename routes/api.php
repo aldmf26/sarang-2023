@@ -40,6 +40,7 @@ Route::controller(HasapController::class)
         Route::get('/cetak', 'cetak')->name('cetak');
         Route::get('/grading', 'grading')->name('grading');
         Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');
+        Route::get('/bk_awal', 'bk_awal')->name('bk_awal');
     });
 
 

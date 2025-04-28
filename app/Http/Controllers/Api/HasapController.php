@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\SummaryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -185,6 +186,15 @@ class HasapController extends Controller
         ) as d on d.box_pengiriman = a.no_box
         where b.tgl = '$tgl'
         GROUP by a.no_box;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function bk_awal(Request $r)
+    {
+        $data = SummaryModel::summarybk();
         return response()->json([
             'status' => 'success',
             'message' => 'success',
