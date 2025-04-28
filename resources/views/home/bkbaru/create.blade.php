@@ -50,7 +50,7 @@
                                 <th class="dhead">No</th>
                                 {{-- <th class="dhead">No Lot</th> --}}
                                 <th class="dhead">Nama Partai</th>
-                                {{-- <th class="dhead">No Box</th> --}}
+                                <th class="dhead">No Box</th>
                                 <th class="dhead">Tipe</th>
                                 <th class="dhead">Ket</th>
                                 <th class="dhead">Warna</th>
@@ -82,10 +82,10 @@
                                         <input required name="nm_partai[]" count="{{ $i }}" type="text"
                                             class="form-control namaPartai" autocomplete="off">
                                     </td>
-                                    {{-- <td>
+                                    <td>
                                         <input required name="no_box[]" count="{{ $i }}" type="text"
                                             class="form-control nobox">
-                                    </td> --}}
+                                    </td>
                                     <td>
                                         <input type="text" count="{{ $i }}" name="tipe[]"
                                             class="form-control tipe" autocomplete="off">

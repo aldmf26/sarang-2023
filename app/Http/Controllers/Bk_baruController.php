@@ -67,8 +67,8 @@ class Bk_baruController extends Controller
                 if (!empty($r->pcs_awal[$x]) || !empty($r->gr_awal[$x])) {
                     $pcs_awal = str()->remove(' ', $r->pcs_awal[$x]);
                     $gr_awal = str()->remove(' ', $r->gr_awal[$x]);
-                    // $nobox = $r->no_box[$x];
-                    $nobox = $this->getNoBoxTambah()['nobox'];
+                    $nobox = $r->no_box[$x];
+                    // $nobox = $this->getNoBoxTambah()['nobox'];
 
                     // $selectedValue = $r->no_lot[$x];
                     // list($noLot, $ket) = explode('-', $selectedValue);
