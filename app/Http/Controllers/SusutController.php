@@ -129,7 +129,7 @@ class SusutController extends Controller
         $dataSusut = [
             'id_pemberi' => $r->id_pengawas,
             'id_penerima' => $idPenerima,
-            'pcs_awal' => $r->pcs_awal,
+            'pcs_awal' => $r->pcs_awal ?? 0,
             'gr_awal' => $r->gr_awal,
             'divisi' => $r->divisi,
             'gr_akhir' => $r->gr_akhir,
@@ -171,7 +171,7 @@ class SusutController extends Controller
 
     public function print($id_penerima, $divisi)
     {
-        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->get();
+        $susut = Susut::with('pemberi')->orderBy('tgl', 'desc')->where([['id_pemberi', $id_penerima],['divisi', $divisi]])->first();
         $title = 'Cek Detail Susut';
         $penerima = 'Sinta';
         return view('home.susut.print', compact('susut', 'title', 'penerima'));
