@@ -206,7 +206,7 @@ class HasapController extends Controller
     {
         $bulan = empty($r->bulan) ? date('m') : $r->bulan;
         $tahun = empty($r->tahun) ? date('Y') : $r->tahun;
-        $data = DB::select("SELECT b.nama, a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
+        $data = DB::select("SELECT a.tgl_terima, b.nama, a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         join (
@@ -221,7 +221,7 @@ class HasapController extends Controller
         UNION ALL 
 
 
-        SELECT b.nama, b.id_anak, a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut
+        SELECT a.tgl_ambil as tgl_terima, b.nama, b.id_anak, a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut
         FROM eo as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         join (
