@@ -205,6 +205,7 @@ class HasapController extends Controller
     public function cabutbulan(Request $r)
     {
         $bulan = empty($r->bulan) ? date('m') : $r->bulan;
+        $tahun = empty($r->tahun) ? date('Y') : $r->tahun;
         $data = DB::select("SELECT b.nama, a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
@@ -215,7 +216,7 @@ class HasapController extends Controller
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru' and MONTH(a.tgl_terima) = '$bulan' and a.selesai = 'Y'
+        where c.baru = 'baru' and MONTH(a.tgl_terima) = '$bulan' and YEAR(a.tgl_terima) = '$tahun' and a.selesai = 'Y'
 
         UNION ALL 
 
@@ -229,7 +230,7 @@ class HasapController extends Controller
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and MONTH(a.tgl_ambil) = '$bulan' and a.selesai = 'Y';");
+        where c.baru = 'baru' and MONTH(a.tgl_ambil) = '$bulan' and YEAR(a.tgl_ambil) = '$tahun' and a.selesai = 'Y';");
 
         return response()->json([
             'status' => 'success',
