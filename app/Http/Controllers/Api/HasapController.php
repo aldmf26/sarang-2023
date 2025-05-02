@@ -242,7 +242,7 @@ class HasapController extends Controller
     {
         $bulan = empty($r->bulan) ? date('m') : $r->bulan;
         $tahun = empty($r->tahun) ? date('Y') : $r->tahun;
-        $data = DB::select("SELECT a.grade, GROUP_CONCAT(a.tgl_input SEPARATOR '\n') as tgl, GROUP_CONCAT(a.no_barcode SEPARATOR '\n') as barcode, GROUP_CONCAT(if(a.selesai = 'Y','Release','Pending') SEPARATOR '\n') as cek
+        $data = DB::select("SELECT a.grade, GROUP_CONCAT(DISTINCT a.tgl_input SEPARATOR '\n') as tgl, GROUP_CONCAT(DISTINCT a.no_barcode SEPARATOR '\n') as barcode, GROUP_CONCAT(DISTINCT if(a.selesai = 'Y','Release','Pending') SEPARATOR '\n') as cek
         FROM pengiriman as a 
         where MONTH(a.tgl_input) = '$bulan' and YEAR(a.tgl_input) = '$tahun'
         group by a.grade;");
