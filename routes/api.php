@@ -42,6 +42,7 @@ Route::controller(HasapController::class)
         Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');
         Route::get('/bk_awal', 'bk_awal')->name('bk_awal');
         Route::get('/cabutbulan', 'cabutbulan')->name('cabutbulan');
+        Route::get('/produkrelease', 'produkrelease')->name('produkrelease');
     });
 
 

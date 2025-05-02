@@ -238,4 +238,19 @@ class HasapController extends Controller
             'data' => $data
         ]);
     }
+    public function produkrelease(Request $r)
+    {
+        $bulan = empty($r->bulan) ? date('m') : $r->bulan;
+        $tahun = empty($r->tahun) ? date('Y') : $r->tahun;
+        $data = DB::select("SELECT a.grade, GROUP_CONCAT(a.tgl_input SEPARATOR '\n') as tgl, GROUP_CONCAT(a.no_barcode SEPARATOR '\n') as barcode, GROUP_CONCAT(if(a.selesai = 'Y','Release','Pending') SEPARATOR '\n') as barcode
+        FROM pengiriman as a 
+        where MONTH(a.tgl_input) = '$bulan' and YEAR(a.tgl_input) = '$tahun'
+        group by a.grade;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
