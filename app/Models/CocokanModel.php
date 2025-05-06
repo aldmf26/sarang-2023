@@ -562,8 +562,7 @@ where a.wip2 ='T';");
                 where c.selesai = 'Y' and c.kategori = 'wip2'
                 group by c.no_box
         ) as c on c.no_box = a.box_pengiriman
-
-        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T';");
+        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T' and a.box_pengiriman not in (SELECT d.no_box FROM pengiriman as d group by d.no_box);");
     }
     public static function wip2akhir()
     {
