@@ -43,6 +43,7 @@ Route::controller(HasapController::class)
         Route::get('/bk_awal', 'bk_awal')->name('bk_awal');
         Route::get('/cabutbulan', 'cabutbulan')->name('cabutbulan');
         Route::get('/produkrelease', 'produkrelease')->name('produkrelease');
+        Route::get('/monitoringProdukJadi', 'monitoringProdukJadi')->name('monitoringProdukJadi');
     });
 
 

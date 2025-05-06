@@ -243,14 +243,27 @@ class HasapController extends Controller
         $bulan = empty($r->bulan) ? date('m') : $r->bulan;
         $tahun = empty($r->tahun) ? date('Y') : $r->tahun;
         $data = DB::select("SELECT a.grade, GROUP_CONCAT(a.tgl_input) as tgl, GROUP_CONCAT(a.no_barcode SEPARATOR '\n') as barcode, GROUP_CONCAT(a.cek SEPARATOR '\n') as cek
-FROM(
-	SELECT a.grade, a.tgl_input, a.no_barcode, if(a.selesai = 'Y','Release','Hold') as cek
-FROM pengiriman as a 
-where MONTH(a.tgl_input) = '$bulan' and YEAR(a.tgl_input) = '$tahun'
-group by a.grade , a.no_barcode
-) as a 
-group by a.grade
-order by a.grade asc;");
+        FROM(
+            SELECT a.grade, a.tgl_input, a.no_barcode, if(a.selesai = 'Y','Release','Hold') as cek
+        FROM pengiriman as a 
+        where MONTH(a.tgl_input) = '$bulan' and YEAR(a.tgl_input) = '$tahun'
+        group by a.grade , a.no_barcode
+        ) as a 
+        group by a.grade
+        order by a.grade asc;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function monitoringProdukJadi()
+    {
+        $data = DB::select("SELECT a.tgl_input, a.grade , a.no_box, sum(a.gr) as gr
+        FROM pengiriman as a
+        group by a.tgl_input, a.no_box;");
 
         return response()->json([
             'status' => 'success',
