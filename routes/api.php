@@ -44,6 +44,7 @@ Route::controller(HasapController::class)
         Route::get('/cabutbulan', 'cabutbulan')->name('cabutbulan');
         Route::get('/produkrelease', 'produkrelease')->name('produkrelease');
         Route::get('/monitoringProdukJadi', 'monitoringProdukJadi')->name('monitoringProdukJadi');
+        Route::get('/kontrolPengemasan', 'kontrolPengemasan')->name('kontrolPengemasan');
     });
 
 
