@@ -271,4 +271,23 @@ class HasapController extends Controller
             'data' => $data
         ]);
     }
+
+    public function kontrolPengemasan()
+    {
+        $data = DB::select("SELECT a.no_barcode, a.tgl_input, a.grade, sum(a.pcs) as pcs, sum(a.gr_awal) as gr_awal, sum(a.gr) as gr
+        FROM (
+        SELECT a.no_barcode, a.no_box, a.tgl_input, a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr_awal, sum(a.gr + (a.gr * (b.kadar/100))) as gr
+        FROM pengiriman as a 
+        left join pengiriman_packing_list as b on b.id_pengiriman = a.no_box
+        group by a.no_box
+        ) as a 
+
+        group by a.no_barcode;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
