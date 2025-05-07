@@ -272,7 +272,7 @@ class HasapController extends Controller
         ]);
     }
 
-    public function kontrolPengemasan($tgl)
+    public function kontrolPengemasan(Request $r)
     {
         $data = DB::select("SELECT a.no_barcode, a.tgl_input, a.grade, sum(a.pcs) as pcs, sum(a.gr_awal) as gr_awal, sum(a.gr) as gr
         FROM (
@@ -281,7 +281,7 @@ class HasapController extends Controller
         left join pengiriman_packing_list as b on b.id_pengiriman = a.no_box
         group by a.no_box
         ) as a 
-        where a.tgl_input = '$tgl'
+        where a.tgl_input = '$r->tgl'
 
         group by a.no_barcode;");
 
