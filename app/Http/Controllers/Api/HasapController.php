@@ -151,7 +151,7 @@ class HasapController extends Controller
             $tgl = $r->tgl;
         }
 
-        $data = DB::select("SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , count(a.box_pengiriman) as box
+        $data = DB::select("SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , count(a.box_pengiriman) as box, a.box_pengiriman
         FROM (
             SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, a.box_pengiriman
             FROM grading_partai as a 
