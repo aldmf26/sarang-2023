@@ -4,7 +4,8 @@
         ->sum('ttl_aktual');
 
 @endphp
-<p><b>{{ $title }}</b> Tgl : <input type="date" name="tgl" class="form-control form-control-sm" value="{{ $lastSusut->tgl ?? date('Y-m-d') }}"></p>
+<p><b>{{ $title }}</b> Tgl : <input type="date" name="tgl" class="form-control form-control-sm"
+        value="{{ $lastSusut->tgl ?? date('Y-m-d') }}"></p>
 <h5>Pengawas : {{ $nama }}</h5>
 <h5>Sst Program : {{ number_format($datas['sst_program'], 0) }}</h5>
 <input type="hidden" name="id_pengawas" value="{{ $id_pengawas }}">
@@ -27,7 +28,7 @@
                 <td>{{ $i + 1 }}</td>
                 <td>{{ $d }}</td>
                 <td><input type="number" class="form-control form-control-sm" name="detailSusut[{{ $i }}]"
-                        value="{{ $defaultValues[$i] }}"></td>
+                        value="0"></td>
             </tr>
         @endforeach
     </tbody>
