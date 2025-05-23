@@ -623,5 +623,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/detailWip2SedangProses', 'detailWip2SedangProses')->name('detailWip2SedangProses');
             Route::get('/detailPengirimanSedangProses', 'detailPengirimanSedangProses')->name('detailPengirimanSedangProses');
             Route::get('/detailPengiriman', 'detailPengiriman')->name('detailPengiriman');
+            Route::get('/susutgrading', 'susutgrading')->name('susutgrading');
         });
 });
