@@ -15,7 +15,7 @@
                             <th class="text-end">Pcs</th>
                             <th class="text-end">Gr Awal</th>
                             <th class="text-end">Gr Akhir</th>
-                            <th class="text-end">Susut</th>
+                            <th class="text-end">Susut (gr)</th>
                         </tr>
                     </thead>
                     <tbody>
