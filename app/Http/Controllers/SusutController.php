@@ -137,7 +137,7 @@ class SusutController extends Controller
     public function store(Request $r)
     {
         $bulan = $r->bulan ?? date('m');
-        $divisi = $r->divisi ?? 'cabut';
+        $divisi = $r->divisi ?? 'cetak';
         DB::table('tb_susut')->where('divisi', $divisi)->where('bulan_dibayar', $bulan)->delete();
 
         $ttlAktual = [];
