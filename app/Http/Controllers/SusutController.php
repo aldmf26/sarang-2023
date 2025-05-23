@@ -117,10 +117,8 @@ class SusutController extends Controller
                     ->first();
             }
 
-            if ($hasil) {
-                if ($hasil->gr_awal > 0) {
-                    $susutData[$pegawai->name] = $hasil;
-                }
+            if ($hasil->gr_awal > 0) {
+                $susutData[$pegawai->name] = $hasil;
             }
         }
 
