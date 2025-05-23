@@ -168,7 +168,7 @@ class SusutController extends Controller
                     'pasir' => $r->pasir[$i] ?? 0,
                     'rontokan_bk' => $r->rontokan_bk[$i] ?? 0,
                     'flx' => $r->flx[$i] ?? 0,
-                    'divisi' => $r->divisi,
+                    'divisi' => $r->divisi ?? 'cabut',
                     'bulan_dibayar' => $r->bulan,
                     'ttl_aktual' => $ttlAktual[$id_pemberi],
                     'admin' => auth()->user()->name,
