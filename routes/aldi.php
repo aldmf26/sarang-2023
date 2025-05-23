@@ -258,6 +258,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('susut.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
             Route::get('/create', 'detail')->name('detail');
             Route::post('/create', 'createAktualSusut')->name('createAktualSusut');
             Route::get('/{id_penerima}/{divisi}', 'print')->name('print');
