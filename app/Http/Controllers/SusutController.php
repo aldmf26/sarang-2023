@@ -55,7 +55,7 @@ class SusutController extends Controller
 
         // Array untuk menyimpan data susut untuk setiap pegawai
         $susutData = collect([]);
-
+        $hasil = null;
         foreach ($pgwsBjm as $pegawai) {
             if ($divisi == 'eo') {
                 // Query untuk mendapatkan total gr_awal dan gr_akhir untuk setiap pegawai
@@ -117,8 +117,10 @@ class SusutController extends Controller
                     ->first();
             }
 
-            if ($hasil->gr_awal > 0) {
-                $susutData[$pegawai->name] = $hasil;
+            if ($hasil) {
+                if ($hasil->gr_awal > 0) {
+                    $susutData[$pegawai->name] = $hasil;
+                }
             }
         }
 
@@ -136,8 +138,9 @@ class SusutController extends Controller
 
     public function store(Request $r)
     {
-
-        DB::table('tb_susut')->where('divisi', $r->divisi)->where('bulan_dibayar', $r->bulan)->delete();
+        $bulan = $r->bulan ?? date('m');
+        $divisi = $r->divisi ?? 'cabut';
+        DB::table('tb_susut')->where('divisi', $divisi)->where('bulan_dibayar', $bulan)->delete();
 
         $ttlAktual = [];
         foreach ($r->id_pemberi as $i => $id_pemberi) {
@@ -168,8 +171,8 @@ class SusutController extends Controller
                     'pasir' => $r->pasir[$i] ?? 0,
                     'rontokan_bk' => $r->rontokan_bk[$i] ?? 0,
                     'flx' => $r->flx[$i] ?? 0,
-                    'divisi' => $r->divisi ?? 'cabut',
-                    'bulan_dibayar' => $r->bulan,
+                    'divisi' => $divisi,
+                    'bulan_dibayar' => $bulan,
                     'ttl_aktual' => $ttlAktual[$id_pemberi],
                     'admin' => auth()->user()->name,
                 ];
@@ -179,8 +182,8 @@ class SusutController extends Controller
         }
 
         return redirect()->route('susut.index', [
-            'divisi' => $r->divisi,
-            'bulan' => $r->bulan,
+            'divisi' => $divisi,
+            'bulan' => $bulan,
         ])->with('sukses', 'Data Berhasil ditambahkan');
     }
 
