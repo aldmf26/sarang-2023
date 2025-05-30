@@ -122,10 +122,9 @@ if (!function_exists('getListBulan')) {
         // } else {
         //     // Jika tahun berbeda, tampilkan semua bulan (Januari - Desember)
         // }
-        $listBulan = DB::table('bulan')->where('bulan',5)->get();
-        
-        return $listBulan; 
-        
+        $listBulan = DB::table('bulan')->where('bulan', 6)->get();
+
+        return $listBulan;
     }
 }
 
@@ -280,5 +279,3 @@ class SettingHal
         WHERE a.jenis = '$jenis' AND a.permission_id = '$halaman'");
     }
 }
-
-
