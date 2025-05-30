@@ -946,4 +946,12 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.balance.detailgradingProses', $data);
     }
+    public function susutgrading(OpnameNewModel $model)
+    {
+        $data = [
+            'title' => 'Data Opname',
+            'grading' => $model::Grading_susut(),
+        ];
+        return view('home.cocokan.susutgrading', $data);
+    }
 }

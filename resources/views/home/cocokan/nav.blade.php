@@ -48,6 +48,10 @@
                 <a class="nav-link  {{ $rot == 'cocokan.opname' || $rot == 'cocokan.opname/cetak' || $rot == 'cocokan.opname/sortir' ? 'active' : '' }}"
                     aria-current="page" href="{{ route('cocokan.opname') }}">Opname</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ $rot == 'cocokan.susutgrading' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.susutgrading') }}">Susut > 5gr</a>
+            </li>
             {{-- <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cost_global.index' ? 'active' : '' }}" aria-current="page"
                     href="{{ route('cost_global.index') }}">Cost Global</a>

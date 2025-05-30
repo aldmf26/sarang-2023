@@ -619,4 +619,11 @@ group by a.no_box;");
         group by a.no_box;
         ");
     }
+    public static function Grading_susut()
+    {
+        return  DB::select("SELECT *
+        FROM qc as a 
+        where (a.gr_awal - a.gr_akhir) > 5 and a.selesai = 'Y'
+        ");
+    }
 }
