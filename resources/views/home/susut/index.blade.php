@@ -153,7 +153,7 @@
                                             $ttlAktual = $susutSudahAda ? $susutSudahAda->ttl_aktual : 0;
                                             $susutPersenSelisih = empty($pengawas->gr_awal)
                                                 ? 0
-                                                : (1 - $pengawas->ttlAktual / $pengawas->sst_program) * 100;
+                                                : (1 - $ttlAktual / $pengawas->sst_program) * 100;
                                         @endphp
                                         {{ number_format($ttlAktual, 0) }}</td>
                                     <td align="right">{{ number_format($pengawas->sst_program - $ttlAktual, 0) }}</td>
