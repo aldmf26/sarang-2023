@@ -45,8 +45,7 @@
                                 $listBulan = DB::table('bulan')->get();
                             @endphp
                             @foreach ($listBulan as $l)
-                                <option value="{{ $l->bulan }}"
-                                    {{ (int) date('m') == $l->bulan ? 'selected' : '' }}>
+                                <option value="{{ $l->bulan }}" {{ $bulan == $l->bulan ? 'selected' : '' }}>
                                     {{ $l->nm_bulan }}</option>
                             @endforeach
                         </select>
