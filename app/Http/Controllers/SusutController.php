@@ -97,7 +97,7 @@ class SusutController extends Controller
                     ->select(
                         'a.id_pengawas',
                         DB::raw('SUM(a.gr_awal_ctk) as gr_awal'),
-                        DB::raw('SUM(a.gr_akhir) as gr_akhir'),
+                        DB::raw('SUM(a.gr_akhir) + sum(a.gr_tdk_cetak) as gr_akhir'),
                         DB::raw('SUM(a.gr_awal_ctk - a.gr_akhir) as sst_program'),
                     )
                     ->first();
