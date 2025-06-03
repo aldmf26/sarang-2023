@@ -83,8 +83,8 @@
                                 <th>Rtk Bk</th>
                                 <th>Flx</th>
                                 <th>Ttl Aktual</th>
-                                {{-- <th>Selisih</th>
-                                <th>Sst %</th> --}}
+                                <th>Selisih</th>
+                                <th>Sst %</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,8 +155,8 @@
                                                 : (1 - $ttlAktual / $pengawas->sst_program) * 100;
                                         @endphp
                                         {{ number_format($ttlAktual, 0) }}</td>
-                                    {{-- <td align="right">{{ number_format($pengawas->sst_program - $ttlAktual, 0) }}</td>
-                                    <td align="right">{{ number_format($susutPersenSelisih, 0) }}%</td> --}}
+                                    <td align="right">{{ number_format($pengawas->sst_program - $ttlAktual, 0) }}</td>
+                                    <td align="right">{{ number_format($susutPersenSelisih, 0) }}%</td>
                             @endforeach
                         </tbody>
                     </table>
