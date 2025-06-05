@@ -45,8 +45,7 @@
                                 $listBulan = DB::table('bulan')->get();
                             @endphp
                             @foreach ($listBulan as $l)
-                                <option value="{{ $l->bulan }}"
-                                    {{ (int) date('m') == $l->bulan ? 'selected' : '' }}>
+                                <option value="{{ $l->bulan }}" {{ $bulan == $l->bulan ? 'selected' : '' }}>
                                     {{ $l->nm_bulan }}</option>
                             @endforeach
                         </select>
@@ -149,9 +148,15 @@
                                             value="{{ $susutSudahAda ? $susutSudahAda->flx : '' }}">
                                     </td>
                                     <td align="right">
-                                        {{ number_format($susutSudahAda ? $susutSudahAda->ttl_aktual : 0, 0) }}</td>
-                                    <td align="right">{{ number_format(0, 0) }}</td>
-                                    <td align="right">{{ number_format(0, 0) }}%</td>
+                                        @php
+                                            $ttlAktual = $susutSudahAda ? $susutSudahAda->ttl_aktual : 0;
+                                            $susutPersenSelisih = empty($pengawas->gr_awal)
+                                                ? 0
+                                                : (1 - $ttlAktual / $pengawas->sst_program) * 100;
+                                        @endphp
+                                        {{ number_format($ttlAktual, 0) }}</td>
+                                    <td align="right">{{ number_format($pengawas->sst_program - $ttlAktual, 0) }}</td>
+                                    <td align="right">{{ number_format($susutPersenSelisih, 0) }}%</td>
                             @endforeach
                         </tbody>
                     </table>
