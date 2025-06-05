@@ -98,6 +98,8 @@
                                 <th class="dhead text-center">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Pcs Ok</th>
+                                <th class="dhead text-end">Turun Grade</th>
 
                                 @role('presiden')
                                     <th class="dhead text-end">Rp/gr</th>
@@ -152,6 +154,38 @@
                                         {{ $ttlGr }}
                                     </h6>
                                 </th>
+                                <th class="text-end">
+                                    @php
+                                        $turunGrade = 0;
+                                    @endphp
+                                    @foreach ($getFormulir as $d)
+                                        @php
+                                            $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                            FROM tb_hancuran as a
+                                            where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'
+                                            ");
+
+                                            $turunGrade += $pcsPth->pcs ?? 0;
+                                        @endphp
+                                    @endforeach
+                                    {{ number_format($ttlPcs - $turunGrade, 0) }}
+                                </th>
+                                <th class="text-end">
+                                    @php
+                                        $turunGrade = 0;
+                                    @endphp
+                                    @foreach ($getFormulir as $d)
+                                        @php
+                                            $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                            FROM tb_hancuran as a
+                                            where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'
+                                            ");
+
+                                            $turunGrade += $pcsPth->pcs ?? 0;
+                                        @endphp
+                                    @endforeach
+                                    {{ number_format($turunGrade, 0) }}
+                                </th>
                                 @role('presiden')
                                     <th class="text-end">
                                         <h6>
@@ -170,12 +204,20 @@
                         </thead>
                         <tbody>
                             @foreach ($getFormulir as $d)
+                                @php
+                                    $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'
+                                ");
+                                @endphp
                                 <tr class="pointer">
                                     <td>{{ $d->no_box }} <input type="hidden" name="no_box[]"
                                             value="{{ $d->no_box }}"></td>
                                     <td align="center">{{ $d->tipe }}-{{ $d->ket }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ $d->pcs_awal - ($pcsPth->pcs ?? 0) }}</td>
+                                    <td align="right">{{ $pcsPth->pcs }}</td>
                                     @php
                                         $ttl_rp =
                                             $d->cost_bk +

@@ -46,8 +46,9 @@
                                     $getCtk = DB::table('formulir_sarang as a')
                                         ->select('a.no_box')
                                         ->join('grading as b', 'a.no_box', 'b.no_box_sortir')
-                                        ->where([['a.no_invoice', $d->no_invoice],['a.kategori', 'grade']])
+                                        ->where([['a.no_invoice', $d->no_invoice], ['a.kategori', 'grade']])
                                         ->first();
+
                                 @endphp
                                 @if (!$getCtk)
                                     <a onclick="return confirm('Yakin dihapus ?')"
@@ -59,11 +60,28 @@
                                         data-kategori="cetak">
                                         <span class="badge bg-primary">Edit</span>
                                     </a>
-
-                                    <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('gudangsarang.selesai_grade', $param) }}">
-                                        <span class="badge bg-success">Selesai</span>
-                                    </a>
+                                    @php
+                                        $hcr = DB::table('tb_hancuran')
+                                            ->where('no_invoice', $d->no_invoice)
+                                            ->where('kategori', 'grade')
+                                            ->groupBy('no_invoice')
+                                            ->first();
+                                    @endphp
+                                    @if (empty($hcr))
+                                        <a
+                                            href="{{ route('gudangsarang.gethancuran.sortir', ['no_invoice' => $d->no_invoice]) }}">
+                                            <span class="badge bg-warning">Patah</span>
+                                        </a>
+                                    @else
+                                        <a
+                                            href="{{ route('gudangsarang.gethancuran.sortir', ['no_invoice' => $d->no_invoice]) }}">
+                                            <span class="badge bg-warning">Edit Patah</span>
+                                        </a>
+                                        <a onclick="return confirm('Yakin diselesaikan ?')"
+                                            href="{{ route('gudangsarang.selesai_grade', $param) }}">
+                                            <span class="badge bg-success">Selesai</span>
+                                        </a>
+                                    @endif
                                 @else
                                     <a href="{{ route('gudangsarang.print_formulir_grade', ['no_invoice' => $d->no_invoice]) }}"
                                         target="_blank">

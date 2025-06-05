@@ -256,6 +256,8 @@ class GudangSarangController extends Controller
         return view('home.gudang_sarang.get_formulircabut', $data);
     }
 
+
+
     public function save_formulir_cabut(Request $r)
     {
         $no_box = $r->no_box;
@@ -507,7 +509,7 @@ class GudangSarangController extends Controller
 
 
         $data = [
-            'title' => 'Po Sortir',
+            'title' => 'Po Grade',
             'formulir' => $formulir,
             'kategori' => $kategori,
             'route' => $route,

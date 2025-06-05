@@ -62,7 +62,7 @@
             </table>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <table class="table">
                     <thead>
                         <tr>
@@ -70,15 +70,29 @@
                             <th>No Box</th>
                             <th>Pcs</th>
                             <th>Gr</th>
+                            <th>Pcs Ok</th>
+                            <th>Turun Grade</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $ttlPcsTurunGrade = 0;
+                        @endphp
                         @foreach ($formulir as $i => $d)
+                            @php
+                                $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'
+                                ");
+                                $ttlPcsTurunGrade += $pcsPth->pcs ?? 0;
+                            @endphp
                             <tr>
                                 <td>{{ $d->pgws }}</td>
                                 <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->pcs }}</td>
                                 <td>{{ $d->gr }}</td>
+                                <td>{{ $d->pcs - ($pcsPth->pcs ?? 0) }}</td>
+                                <td>{{ $pcsPth->pcs ?? 0 }}</td>
                             </tr>
                         @endforeach
                         <!-- Add more rows as needed -->
@@ -88,10 +102,12 @@
                         <th colspan="2">Total :</th>
                         <th>{{ sumCol($formulir, 'pcs') }}</th>
                         <th>{{ sumCol($formulir, 'gr') }}</th>
+                        <th>{{ sumCol($formulir, 'pcs') - $ttlPcsTurunGrade }}</th>
+                        <th>{{ $ttlPcsTurunGrade }}</th>
                     </tfoot>
                 </table>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <table class="table">
                     <thead>
                         <tr>

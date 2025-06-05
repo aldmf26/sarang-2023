@@ -60,11 +60,28 @@
                                         data-kategori="cetak">
                                         <span class="badge bg-primary">Edit</span>
                                     </a>
-
-                                    <a onclick="return confirm('Yakin diselesaikan ?')"
-                                        href="{{ route('gudangsarang.selesai', $param) }}">
-                                        <span class="badge bg-success">Selesai</span>
-                                    </a>
+                                    @php
+                                        $hcr = DB::table('tb_hancuran')
+                                            ->where('no_invoice', $d->no_invoice)
+                                            ->where('kategori', 'cetak')
+                                            ->groupBy('no_invoice')
+                                            ->first();
+                                    @endphp
+                                    @if (empty($hcr))
+                                        <a
+                                            href="{{ route('gudangsarang.gethancuran.cabut', ['no_invoice' => $d->no_invoice]) }}">
+                                            <span class="badge bg-warning">Patah</span>
+                                        </a>
+                                    @else
+                                        <a
+                                            href="{{ route('gudangsarang.gethancuran.cabut', ['no_invoice' => $d->no_invoice]) }}">
+                                            <span class="badge bg-warning">Edit Patah</span>
+                                        </a>
+                                        <a onclick="return confirm('Yakin diselesaikan ?')"
+                                            href="{{ route('gudangsarang.selesai', $param) }}">
+                                            <span class="badge bg-success">Selesai</span>
+                                        </a>
+                                    @endif
                                 @else
                                     <a href="{{ $kategori == 'cetak' ? route('gudangsarang.print_formulir', ['no_invoice' => $d->no_invoice]) : "/home/cetaknew/formulir/$d->no_invoice" }}"
                                         target="_blank">

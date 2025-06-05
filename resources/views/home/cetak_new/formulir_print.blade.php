@@ -62,6 +62,8 @@
                                     <th width="60" class="text-end">Gr Awal Ctk</th>
                                     <th width="60" class="text-end">Pcs Awal</th>
                                     <th width="60" class="text-end">Gr Awal</th>
+                                    <th width="60" class="text-end">Turun Grade</th>
+                                    <th width="60" class="text-end">Pcs Ok</th>
                                     <th width="60" class="text-end">Sst Program</th>
                                     <th width="60" class="text-end">Pcs Akhir</th>
                                     <th width="60" class="text-end">Gr Akhir</th>
@@ -85,9 +87,24 @@
                                         )
                                         ->get()
                                         ->toArray();
+                                    $ttlPcs_cbt = 0;
+                                    $ttlPcs_ctk = 0;
                                 @endphp
                                 @foreach ($detail as $d)
-                                    <tr>    
+                                    @php
+                                        $pcs_pth_cabut = DB::table('tb_hancuran')
+                                            ->where('no_box', $d->no_box)
+                                            ->where('kategori', 'cetak')
+                                            ->first();
+                                        $pcs_pth_ctk = DB::table('tb_hancuran')
+                                            ->where('no_box', $d->no_box)
+                                            ->where('kategori', 'sortir')
+                                            ->first();
+
+                                        $ttlPcs_cbt += $pcs_pth_cabut->pcs ?? 0;
+                                        $ttlPcs_ctk += $pcs_pth_ctk->pcs ?? 0;
+                                    @endphp
+                                    <tr>
                                         <td style="width: 100px"></td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
@@ -97,6 +114,13 @@
                                         <td class="text-end">{{ $d->gr_cbt }}</td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
                                         <td class="text-end">{{ $d->gr_awal }}</td>
+                                        <td class="text-end bg-warning">
+                                            {{ number_format(($pcs_pth_ctk->pcs ?? 0) + ($pcs_pth_cabut->pcs ?? 0), 0) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($d->pcs_awal - ($pcs_pth_ctk->pcs ?? 0) - ($pcs_pth_cabut->pcs ?? 0), 0) }}
+                                        </td>
+
                                         <td class="text-end">{{ $d->gr_cbt - $d->gr_awal }}</td>
                                         {{-- <td>
                                             @livewire('input-susut-aktual', [
@@ -117,6 +141,10 @@
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_awal'), 0) }}</th>
+                                    <th class="text-end">{{ number_format($ttlPcs_cbt + $ttlPcs_ctk, 0) }}</th>
+                                    <th class="text-end">
+                                        {{ number_format(sumCol($detail, 'pcs_awal') - $ttlPcs_cbt - $ttlPcs_ctk, 0) }}
+                                    </th>
                                     <th class="text-end">
                                         {{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}
                                     </th>

@@ -1102,7 +1102,7 @@ class CetakNewController extends Controller
 
                 $pcs = $ambil->pcs_akhir;
                 $gr = $ambil->gr_akhir;
-    
+
                 $data[] = [
                     'no_invoice' => $inv,
                     'no_box' => $ambil->no_box,

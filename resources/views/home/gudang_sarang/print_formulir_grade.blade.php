@@ -55,12 +55,14 @@
                                 <th>Partai</th>
                                 <th>No Box</th>
                                 <th>Tipe - ket</th>
-                                <th class="text-end" width="100">Pcs Awal Sortir</th>
-                                <th class="text-end" width="100">Gr Awal Sortir</th>
-                                <th class="text-end" width="100">Pcs</th>
-                                <th class="text-end" width="100">Gr</th>
-                                <th width="60" class="text-end">Sst Program</th>
-                            <th width="60" class="text-end">Sst Aktual</th>
+                                <th class="text-end">Pcs Awal Sortir</th>
+                                <th class="text-end">Gr Awal Sortir</th>
+                                <th class="text-end">Pcs</th>
+                                <th class="text-end">Gr</th>
+                                <th class="text-end">Turun grade</th>
+                                <th class="text-end">Pcs Ok</th>
+
+
                             </tr>
                         </thead>
                         @php
@@ -69,6 +71,9 @@
 
                             $ttlPcsSrt = 0;
                             $ttlGrSrt = 0;
+
+                            $ttlPcsPth = 0;
+                            $ttlGrPth = 0;
                         @endphp
                         @foreach ($formulir as $d)
                             @php
@@ -77,22 +82,35 @@
 
                                 $ttlPcsSrt += $d->pcs_srt;
                                 $ttlGrSrt += $d->gr_srt;
+
+                                $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir') and a.no_box = '$d->no_box'
+                                ");
+
+                                $pcs_pth_grade = DB::table('tb_hancuran')
+                                    ->where('no_box', $d->no_box)
+                                    ->where('kategori', 'grade')
+                                    ->first();
+
+                                $ttlPcsPth += $pcsPth->pcs ?? 0;
+                                $ttlGrPth += $pcs_pth_grade->pcs ?? 0;
                             @endphp
                             <tbody>
                                 <tr>
                                     <td>{{ $d->nm_partai }}</td>
                                     <td>{{ $d->no_box }}</td>
                                     <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                    <td class="text-end">{{ $d->pcs_srt }}</td>
-                                    <td class="text-end">{{ $d->gr_srt }}</td>
-                                    <td class="text-end">{{ $d->pcs }}</td>
-                                    <td class="text-end">{{ $d->gr }}</td>
-                                    <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
-                                    <td>
-                                        @livewire('input-susut-aktual', [
-                                            'id_formulir' => $d->id_formulir,
-                                            'input' => $d->sst_aktual,
-                                        ])
+                                    <td width="10%" class="text-end">{{ $d->pcs_srt }}</td>
+                                    <td width="10%" class="text-end">{{ $d->gr_srt }}</td>
+                                    <td width="10%" class="text-end">{{ $d->pcs }}</td>
+                                    <td width="10%" class="text-end">{{ $d->gr }}</td>
+
+                                    <td class="text-end bg-warning">
+                                        {{ number_format(($pcsPth->pcs ?? 0) + ($pcs_pth_grade->pcs ?? 0)) }}
+                                    </td>
+                                    <td width="10%" class="text-end">
+                                        {{ number_format($d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0), 0) }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -105,8 +123,10 @@
 
                                 <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
-                                <th class="text-end">{{ number_format($ttlGrSrt - $ttlGr, 0) }}</th>
-                                <th class="text-end">{{ number_format($formulir->sum('sst_aktual'), 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlPcsPth + $ttlGrPth, 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlPcs - $ttlPcsPth - $ttlGrPth, 0) }}</th>
+
+
                             </tr>
                         </tfoot>
                     </table>
