@@ -48,6 +48,9 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
 Route::get('/template1', function () {
     return view('template-notable');
 })->name('template1');
