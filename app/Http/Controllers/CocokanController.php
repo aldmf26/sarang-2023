@@ -954,4 +954,12 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.susutgrading', $data);
     }
+
+    public function Susut()
+    {
+        $data = [
+            'title' => 'Susut',
+        ];
+        return view('home.cocokan.susut', $data);
+    }
 }

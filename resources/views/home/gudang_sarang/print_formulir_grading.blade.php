@@ -62,7 +62,7 @@
             </table>
         </div>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <table class="table">
                     <thead>
                         <tr>
@@ -72,11 +72,13 @@
                             <th>Gr</th>
                             <th>Pcs Ok</th>
                             <th>Turun Grade</th>
+                            <th>Pth Grading</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $ttlPcsTurunGrade = 0;
+                            $ttlPcsTurunGrade2 = 0;
                         @endphp
                         @foreach ($formulir as $i => $d)
                             @php
@@ -84,7 +86,12 @@
                                 FROM tb_hancuran as a
                                 where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'
                                 ");
+                                $pcsPth2 = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('grading') and a.no_box = '$d->no_box'
+                                ");
                                 $ttlPcsTurunGrade += $pcsPth->pcs ?? 0;
+                                $ttlPcsTurunGrade2 += $pcsPth2->pcs ?? 0;
                             @endphp
                             <tr>
                                 <td>{{ $d->pgws }}</td>
@@ -93,6 +100,7 @@
                                 <td>{{ $d->gr }}</td>
                                 <td>{{ $d->pcs - ($pcsPth->pcs ?? 0) }}</td>
                                 <td>{{ $pcsPth->pcs ?? 0 }}</td>
+                                <td>{{ $pcsPth2->pcs ?? '' }}</td>
                             </tr>
                         @endforeach
                         <!-- Add more rows as needed -->
@@ -102,12 +110,13 @@
                         <th colspan="2">Total :</th>
                         <th>{{ sumCol($formulir, 'pcs') }}</th>
                         <th>{{ sumCol($formulir, 'gr') }}</th>
-                        <th>{{ sumCol($formulir, 'pcs') - $ttlPcsTurunGrade }}</th>
+                        <th>{{ sumCol($formulir, 'pcs') - $ttlPcsTurunGrade - $ttlPcsTurunGrade2 }}</th>
                         <th>{{ $ttlPcsTurunGrade }}</th>
+                        <th>{{ $ttlPcsTurunGrade2 }}</th>
                     </tfoot>
                 </table>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <table class="table">
                     <thead>
                         <tr>

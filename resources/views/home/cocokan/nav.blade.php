@@ -49,8 +49,8 @@
                     aria-current="page" href="{{ route('cocokan.opname') }}">Opname</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ $rot == 'cocokan.susutgrading' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.susutgrading') }}">Susut > 5gr</a>
+                <a class="nav-link  {{ $rot == 'cocokan.susut' ? 'active' : '' }}" aria-current="page"
+                    href="{{ route('cocokan.susut') }}">Susut</a>
             </li>
             {{-- <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cost_global.index' ? 'active' : '' }}" aria-current="page"

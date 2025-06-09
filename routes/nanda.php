@@ -345,8 +345,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::post('/tutup', 'tutup')->name('tutup');
-            // Route::get('/opname', 'opname')->name('opname');
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
+            Route::get('/susut', 'susut')->name('susut');
         });
     Route::controller(OpnameNewController::class)
         ->prefix('home/opnamenew')

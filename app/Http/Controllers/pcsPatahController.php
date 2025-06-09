@@ -156,6 +156,6 @@ class pcsPatahController extends Controller
             ];
             DB::table('tb_hancuran')->insert($data);
         }
-        return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('sukses', 'Data berhasil disimpan');
+        return redirect()->route('gudangsarang.invoice_grading', ['kategori' => 'grade'])->with('sukses', 'Data berhasil disimpan');
     }
 }

@@ -69,6 +69,10 @@
                                         </a>
 
                                         @if (empty($getPatah))
+                                            <a href="{{ route('gudangsarang.print_formulir_grading', ['no_invoice' => $d->no_invoice]) }}"
+                                                target="_blank">
+                                                <span class="badge bg-primary">Print</span>
+                                            </a>
                                             <a
                                                 href="{{ route('gudangsarang.gethancuran.grading', ['no_invoice' => $d->no_invoice]) }}">
                                                 <span class="badge bg-warning">Patahan</span>
