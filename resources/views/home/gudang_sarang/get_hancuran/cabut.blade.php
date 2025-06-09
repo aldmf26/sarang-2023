@@ -37,7 +37,7 @@
                         class="fa-solid fa-save"></i>
                     Save</button>
             </div>
-            <h5 class="fw-bold text-center" style="text-decoration: underline">Hancuran : {{ $no_invoice }}</h5>
+            <h5 class="fw-bold text-center" style="text-decoration: underline">Po Cetak : {{ $no_invoice }}</h5>
 
             <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~ {{ $ket_formulir->penerima }} | Tanggal :
                 {{ tanggal($ket_formulir->tanggal) }}</h6>
