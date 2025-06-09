@@ -3,7 +3,8 @@
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
             <div>
-                <a class="btn btn-sm btn-info" href="{{ route('gradingbj.print_grading', $no_invoice) }}"><i class="fas fa-print"></i> Print</a>
+                <a class="btn btn-sm btn-info" href="{{ route('gradingbj.print_grading', $no_invoice) }}"><i
+                        class="fas fa-print"></i> Print</a>
             </div>
         </div>
     </x-slot>
@@ -42,16 +43,34 @@
                                 <th class="dhead text-center">Tipe</th>
                                 <th class="dhead text-end">Pcs</th>
                                 <th class="dhead text-end">Gr</th>
+                                <th class="dhead text-end">Pcs Ok</th>
+                                <th class="dhead text-end">Turun Grade</th>
                                 {{-- <th class="dhead text-end">Rp/gr</th>
                                 <th class="dhead text-end">Total Rp</th> --}}
                             </tr>
                         </thead>
                         <thead class="bg-white">
+                            @php
+                                $ttlPcsTurunGrade = 0;
+                            @endphp
+                            @foreach ($box_grading as $b)
+                                @php
+                                    $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$b->no_box_sortir'
+                                ");
+                                    $ttlPcsTurunGrade += $pcsPth->pcs ?? 0;
+                                @endphp
+                            @endforeach
                             <tr>
                                 <th>Total</th>
                                 <th></th>
                                 <th class="text-end">{{ number_format(sumBk($box_grading, 'pcs'), 0) }}</th>
                                 <th class="text-end">{{ number_format(sumBk($box_grading, 'gr'), 0) }}</th>
+                                <th class="text-end">
+                                    {{ number_format(sumBk($box_grading, 'pcs') - $ttlPcsTurunGrade, 0) }}</th>
+                                <th class="text-end">
+                                    {{ number_format($ttlPcsTurunGrade, 0) }}</th>
                                 {{-- <th class="text-end"></th> --}}
 
                                 @php
@@ -70,11 +89,19 @@
                         </thead>
                         <tbody>
                             @foreach ($box_grading as $b)
+                                @php
+                                    $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$b->no_box_sortir'
+                                ");
+                                @endphp
                                 <tr>
                                     <td>{{ $b->no_box_sortir }}</td>
                                     <td class="text-center">{{ $b->tipe }}</td>
                                     <td class="text-end">{{ $b->pcs }}</td>
                                     <td class="text-end">{{ $b->gr }}</td>
+                                    <td class="text-end">{{ $b->pcs - ($pcsPth->pcs ?? 0) }}</td>
+                                    <td class="text-end">{{ $pcsPth->pcs ?? 0 }}</td>
                                     @php
                                         $total =
                                             $b->cost_bk + $b->cost_cbt + $b->cost_ctk + $b->cost_eo + $b->cost_sortir;
