@@ -61,6 +61,7 @@
                                 <th class="text-end">Gr</th>
                                 <th class="text-end">Turun grade</th>
                                 <th class="text-end">Pcs Ok</th>
+                                <th class="text-end">Sst Program</th>
 
 
                             </tr>
@@ -112,6 +113,7 @@
                                     <td width="10%" class="text-end">
                                         {{ number_format($d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0), 0) }}
                                     </td>
+                                    <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
                                 </tr>
                             </tbody>
                         @endforeach
@@ -125,6 +127,7 @@
                                 <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlPcsPth + $ttlGrPth, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlPcs - $ttlPcsPth - $ttlGrPth, 0) }}</th>
+                                <th class="text-end">{{ number_format($ttlGrSrt - $ttlGr, 0) }}</th>
 
 
                             </tr>

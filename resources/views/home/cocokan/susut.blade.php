@@ -22,22 +22,28 @@
                         <tr>
                             <td>Cabut</td>
 
-                            <td></td>
+                            <td class="text-end">{{ number_format($cabut->gr, 0) }}</td>
                         </tr>
                         <tr>
                             <td>Cetak</td>
 
-                            <td></td>
+                            <td class="text-end">{{ number_format($cetak->gr, 0) }}</td>
                         </tr>
                         <tr>
                             <td>Sortir</td>
 
-                            <td></td>
+                            <td class="text-end">{{ number_format($sortir->gr, 0) }}</td>
                         </tr>
                         <tr>
                             <td>Eo</td>
 
-                            <td></td>
+                            <td class="text-end">{{ number_format($eo->gr, 0) }}</td>
+                        </tr>
+                        <tr>
+                            <th class="dhead">Total</th>
+                            <th class="text-end dhead">
+                                {{ number_format($cabut->gr + $cetak->gr + $sortir->gr + $eo->gr, 0) }}
+                            </th>
                         </tr>
                     </tbody>
 
