@@ -954,4 +954,24 @@ class CocokanController extends Controller
         ];
         return view('home.cocokan.susutgrading', $data);
     }
+
+    public function Susut()
+    {
+        $data = [
+            'title' => 'Susut',
+            'cabut' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
+            FROM tb_susut as a 
+            WHERE a.divisi = 'cetak' and a.bulan_dibayar = '5'"),
+            'cetak' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
+            FROM tb_susut as a 
+            WHERE a.divisi = 'sortir' and a.bulan_dibayar = '5'"),
+            'sortir' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
+            FROM tb_susut as a 
+            WHERE a.divisi = 'grade' and a.bulan_dibayar = '5'"),
+            'eo' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
+            FROM tb_susut as a 
+            WHERE a.divisi = 'eo' and a.bulan_dibayar = '5'"),
+        ];
+        return view('home.cocokan.susut', $data);
+    }
 }

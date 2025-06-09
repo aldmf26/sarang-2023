@@ -36,6 +36,7 @@ use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\OpnameNewController;
 use App\Http\Controllers\OpnameSusutController;
+use App\Http\Controllers\pcsPatahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QcController;
 use App\Http\Controllers\RekapanController;
@@ -347,8 +348,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::post('/tutup', 'tutup')->name('tutup');
-            // Route::get('/opname', 'opname')->name('opname');
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
+            Route::get('/susut', 'susut')->name('susut');
         });
     Route::controller(OpnameNewController::class)
         ->prefix('home/opnamenew')
@@ -627,5 +628,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/detailPengirimanSedangProses', 'detailPengirimanSedangProses')->name('detailPengirimanSedangProses');
             Route::get('/detailPengiriman', 'detailPengiriman')->name('detailPengiriman');
             Route::get('/susutgrading', 'susutgrading')->name('susutgrading');
+        });
+
+
+    Route::controller(pcsPatahController::class)
+        ->prefix('home/gudangsarang/gethancuran')
+        ->name('gudangsarang.gethancuran.')
+        ->group(function () {
+            Route::get('/cabut', 'getHancuranCabut')->name('cabut');
+            Route::post('/savePthCabut', 'savePthCabut')->name('savePthCabut');
+            Route::get('/cetak', 'getHancuranCetak')->name('cetak');
+            Route::post('/savePthCetak', 'savePthCetak')->name('savePthCetak');
+            Route::get('/sortir', 'getHancuranSortir')->name('sortir');
+            Route::post('/savePthSortir', 'savePthSortir')->name('savePthSortir');
+            Route::get('/grading', 'getHancuranGrading')->name('grading');
+            Route::post('/savePthGrading', 'savePthGrading')->name('savePthGrading');
         });
 });

@@ -28,7 +28,7 @@
     <br>
     <div class="container-fluid">
         <div class="d-flex justify-content-between print_hilang">
-            <a href="{{ route('gudangsarang.gudang_cbt_selesai') }}" class="print_hilang btn btn-sm btn-warning"><i
+            <a href="{{ route('gudangsarang.invoice') }}" class="print_hilang btn btn-sm btn-warning"><i
                     class="fa-solid fa-left-long"></i>
                 Kembali</a>
             <a onclick="window.print()" href="#" class="print print_hilang btn btn-sm btn-primary"><i
@@ -54,6 +54,8 @@
                             <th width="60" class="text-end">Gr Awal Cbt</th>
                             <th width="60" class="text-end">Pcs Awal</th>
                             <th width="60" class="text-end">Gr Awal</th>
+                            <th width="60" class="text-end">Turun Grade</th>
+                            <th width="60" class="text-end">Pcs Ok</th>
                             <th width="60" class="text-end">Sst Program</th>
                             <th width="60" class="text-end">Pcs Tidak Ctk</th>
                             <th width="60" class="text-end">Gr Tidak Ctk</th>
@@ -73,7 +75,7 @@
 
                             $ttlPcs_cbt = 0;
                             $ttlGr_cbt = 0;
-
+                            $ttlPcs_pth = 0;
                         @endphp
                         @foreach ($formulir as $no => $f)
                             @php
@@ -84,6 +86,11 @@
 
                                 $ttlPcs_cbt += $f->pcs_cbt;
                                 $ttlGr_cbt += $grCabut;
+                                $pcs_hcr = DB::table('tb_hancuran')
+                                    ->where('no_box', $f->no_box)
+                                    ->where('kategori', 'cetak')
+                                    ->first();
+                                $ttlPcs_pth += $pcs_hcr->pcs ?? 0;
                             @endphp
                             <tr>
                                 <td>{{ $no + 1 }}</td>
@@ -95,6 +102,10 @@
                                 <td class="text-end">{{ $grCabut }}</td>
                                 <td class="text-end">{{ $f->pcs_awal }}</td>
                                 <td class="text-end">{{ $f->gr_awal }}</td>
+
+                                <td class="text-end bg-warning">{{ number_format($pcs_hcr->pcs ?? 0, 0) }}</td>
+                                <td class="text-end ">
+                                    {{ number_format($f->pcs_awal - ($pcs_hcr->pcs ?? 0), 0) }}</td>
                                 <td class="text-end">{{ $grCabut - $f->gr_awal }}</td>
                                 {{-- <td>
                                     @livewire('input-susut-aktual', [
@@ -115,6 +126,8 @@
                             <th class="text-end">{{ number_format($ttlGr_cbt, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlPcs, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr, 0) }}</th>
+                            <th class="text-end">{{ number_format($ttlPcs_pth, 0) }}</th>
+                            <th class="text-end">{{ number_format($ttlPcs - $ttlPcs_pth, 0) }}</th>
                             <th class="text-end">{{ number_format($ttlGr_cbt - $ttlGr, 0) }}</th>
                             @for ($i = 0; $i < 8; $i++)
                                 <th></th>
