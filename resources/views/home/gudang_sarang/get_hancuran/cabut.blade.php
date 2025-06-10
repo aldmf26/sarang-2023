@@ -99,7 +99,7 @@
                                     <td>
                                         <input type="text" class="form-control form-control-sm text-end"
                                             name="pcs_pth[]"
-                                            value="{{ empty($pcs_hcr->pcs) ? $f->pcs_hcr ?? 0 : $pcs_hcr->pcs }}">
+                                            value="{{ empty($pcs_hcr->pcs) ? $f->ket_hcr ?? 0 : $pcs_hcr->pcs }}">
                                         <input type="hidden" name="no_box[]" value="{{ $f->no_box }}">
                                     </td>
 
