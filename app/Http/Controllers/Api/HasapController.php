@@ -183,7 +183,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
         left join tb_anak as c on c.id_anak = a.id_anak
         left join users as e on e.id = a.id_pengawas
-        left join hasil_wawancara as f on f.id_anak = b.id_anak
+        
         LEFT join (
         SELECT d.no_box , d.tipe, d.nm_partai
             FROM bk as d 
