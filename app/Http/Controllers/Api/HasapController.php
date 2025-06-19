@@ -177,12 +177,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
 
     public function cetak(Request $r)
     {
-        if (empty($r->tgl)) {
-            $tgl = date('Y-m-d');
-        } else {
-            $tgl = $r->tgl;
-        }
-        $data = DB::select("SELECT c.nama, a.no_box, d.tipe, a.pcs_awal_ctk, a.gr_awal_ctk, (COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir)) as pcs_akhir, (COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0)) as gr_akhir
+
+        $data = DB::select("SELECT c.nama, a.no_box, d.tipe, sum(a.pcs_awal_ctk) as pcs_awal_ctk, sum(a.gr_awal_ctk) as gr_awal_ctk, sum((COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir))) as pcs_akhir, sum((COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0))) as gr_akhir
         FROM cetak_new as a
         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
         left join tb_anak as c on c.id_anak = a.id_anak
@@ -191,7 +187,9 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             FROM bk as d 
             where d.kategori ='Cabut'
         ) as d on d.no_box = a.no_box
-        where a.tgl = '$tgl' and b.kelas = 'CTK' and a.selesai ='Y';");
+        where b.kelas = 'CTK' and a.selesai ='Y'
+        group by a.tgl, a.id_pengawas
+        ;");
 
         return response()->json([
             'status' => 'success',
