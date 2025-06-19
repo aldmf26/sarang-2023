@@ -191,6 +191,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         ) as d on d.no_box = a.no_box
         where b.kelas = 'CTK' and a.selesai ='Y'
         group by a.tgl, a.id_pengawas
+        order by a.tgl DESC
         ;");
 
         return response()->json([
@@ -215,6 +216,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         ) as d on d.no_box = a.no_box
         where b.kelas = 'CTK' and a.selesai ='Y' and a.id_pengawas = '$r->id_pengawas' and a.tgl = '$r->tgl'
         group by a.no_box
+    
         ;");
 
         return response()->json([
