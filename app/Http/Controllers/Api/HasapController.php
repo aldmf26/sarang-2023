@@ -202,7 +202,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function cetak_detail(Request $r)
     {
 
-        $data = DB::select("SELECT e.name, f.nama, a.id_pengawas, a.tgl, d.nm_partai, c.nama, a.no_box, d.tipe, sum(a.pcs_awal_ctk) as pcs_awal_ctk, sum(a.gr_awal_ctk) as gr_awal_ctk, sum((COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir))) as pcs_akhir, sum((COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0))) as gr_akhir
+        $data = DB::select("SELECT e.name, f.nama, a.id_pengawas, a.tgl, d.nm_partai,  a.no_box, d.tipe, sum(a.pcs_awal_ctk) as pcs_awal_ctk, sum(a.gr_awal_ctk) as gr_awal_ctk, sum((COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir))) as pcs_akhir, sum((COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0))) as gr_akhir
         FROM cetak_new as a
         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
         left join tb_anak as c on c.id_anak = a.id_anak
