@@ -37,6 +37,7 @@ Route::controller(HasapController::class)
         Route::get('/detail/{id_pengawas}/{tgl}', 'detail')->name('detail');
         Route::get('/bk', 'bk')->name('bk');
         Route::get('/cabut', 'cabut')->name('cabut');
+        Route::get('/cabut_detail', 'cabut_detail')->name('cabut_detail');
         Route::get('/cetak', 'cetak')->name('cetak');
         Route::get('/grading', 'grading')->name('grading');
         Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');

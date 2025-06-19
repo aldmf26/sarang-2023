@@ -128,6 +128,52 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function cabut_detail(Request $r)
+    {
+
+        $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut,
+        c.nm_partai,e.nama, f.name, a.tgl_serah as tgl
+        FROM cabut as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        left join hasil_wawancara as e on e.id_anak = b.id_anak
+         left join users as f on f.id = a.id_pengawas
+        join (
+        SELECT e.no_box, e.tipe, e.baru, e.nm_partai
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        left join tb_kelas as d on d.id_kelas = a.id_kelas
+        where c.baru = 'baru'  and a.selesai = 'Y' and a.tgl_serah = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
+        
+
+        UNION ALL 
+
+
+        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal, 0 as pcs_akhir, a.gr_eo_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name, a.tgl_serah as tgl
+        FROM eo as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        left join hasil_wawancara as e on e.id_anak = b.id_anak
+        left join users as f on f.id = a.id_pengawas
+        join (
+        SELECT e.no_box, e.tipe, e.baru, e.nm_partai
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        where c.baru = 'baru' and  a.selesai = 'Y' and a.tgl_serah = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
+        
+
+        order by tgl DESC
+        
+        ;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 
     public function cetak(Request $r)
     {
