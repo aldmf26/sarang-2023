@@ -117,6 +117,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         ) as c on c.no_box = a.no_box
         where c.baru = 'baru' and  a.selesai = 'Y'
         group by a.id_pengawas, a.tgl_serah
+
+        order by tgl DESC
         
         ;");
 
