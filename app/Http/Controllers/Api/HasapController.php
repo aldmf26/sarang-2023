@@ -86,7 +86,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     {
 
         $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, d.batas_susut,
-        c.nm_partai,e.nama, f.name
+        c.nm_partai,e.nama, f.name, a.tgl_serah as tgl
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join hasil_wawancara as e on e.id_anak = b.id_anak
@@ -104,7 +104,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         UNION ALL 
 
 
-        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name
+        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name, a.tgl_serah as tgl
         FROM eo as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join hasil_wawancara as e on e.id_anak = b.id_anak
