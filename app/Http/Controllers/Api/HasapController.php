@@ -22,7 +22,7 @@ class HasapController extends Controller
         FROM eo as d
         left join users as e on e.id = d.id_pengawas
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
-        where c.baru = 'baru'
+        where f.baru = 'baru'
         group by d.tgl_ambil, e.name
         ORDER BY tgl DESC;
         ");
