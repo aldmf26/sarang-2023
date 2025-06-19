@@ -33,25 +33,25 @@ class HasapController extends Controller
         ], 200);
     }
 
-    public function detail($no_invoice)
+    public function detail($id_pengawas, $tgl)
     {
-        $data = DB::select("SELECT d.nama, c.no_invoice, a.no_box, e.tipe, a.pcs_awal, a.gr_awal
+        $data = DB::select("SELECT a.tgl_terima as tgl, a.no_box, c.nm_partai, d.nama, b.nama, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
         FROM cabut as a 
-        left join users as b on b.id = a.id_pengawas
-        left join tb_anak as d on d.id_anak = a.id_anak
-        join (
-            SELECT c.no_invoice, c.no_box, c.pcs_awal, c.gr_awal, c.tanggal
-            FROM formulir_sarang as c 
-            where c.kategori ='cabut'
-            group by c.no_box
-        ) as c on c.no_box = a.no_box
-        left join (
-            SELECT e.no_box, e.tipe
-            FROM bk as e
-            where e.kategori = 'cabut'
-            group by e.no_box
-        ) as e on e.no_box = a.no_box
-        where c.no_invoice='$no_invoice';");
+        left join tb_anak as b on b.id_anak = a.id_anak
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
+        left join hasil_wawancara as d on d.id_anak = b.id_anak
+        where c.baru = 'baru' and a.id_pengawas = '$id_pengawas' and a.tgl_terima = '$tgl'
+        group by a.no_box
+UNION ALL
+SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, e.nama, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
+        FROM eo as d
+        left join tb_anak as e on e.id_anak = d.id_anak
+        left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
+        left join hasil_wawancara as g on g.id_anak = e.id_anak
+        where f.baru = 'baru' and d.id_pengawas ='$id_pengawas' and d.tgl_ambil = '$tgl'
+        group by d.no_box
+        
+        ORDER BY no_box ASC;");
 
         return response()->json([
             'status' => 'success',
