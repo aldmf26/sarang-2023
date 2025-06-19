@@ -11,16 +11,21 @@ class HasapController extends Controller
 {
     public function index()
     {
-        $data = DB::select("SELECT c.no_invoice, c.tanggal, b.name, sum(c.pcs_awal) as pcs, sum(c.gr_awal) as gr_awal
+        $data = DB::select("SELECT a.tgl_terima as tgl, c.nm_partai,  b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
-        join (
-            SELECT c.no_invoice, c.no_box, c.pcs_awal, c.gr_awal, c.tanggal
-            FROM formulir_sarang as c 
-            where c.kategori ='cabut'
-        ) as c on c.no_box = a.no_box
-        group by c.no_invoice
-        order by c.no_invoice DESC");
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
+        where c.baru = 'baru'
+        group by a.tgl_terima , b.name
+        UNION ALL
+        SELECT d.tgl_ambil as tgl, f.nm_partai, e.name, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
+        FROM eo as d
+        left join users as e on e.id = d.id_pengawas
+        left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
+        where c.baru = 'baru'
+        group by d.tgl_ambil, e.name
+        ORDER BY tgl DESC;
+        ");
         return response()->json([
             'status' => 'success',
             'message' => 'success',

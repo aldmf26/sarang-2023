@@ -478,6 +478,16 @@ class CocokanController extends Controller
         return view('home.cocokan.balance', $data);
     }
 
+    public function cek_cocokan()
+    {
+        $data = [
+            'cbt_proses' => CocokanModel::bksedang_proses_sum(),
+            'cbt_sisa_pgws' => CocokanModel::bksisapgws(),
+            'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
+        ];
+        return view('home.cocokan.ceck_cocokan', $data);
+    }
+
     public function tutup()
     {
 
