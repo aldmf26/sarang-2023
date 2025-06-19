@@ -84,12 +84,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     }
     public function cabut(Request $r)
     {
-        if (empty($r->tgl)) {
-            $tgl = date('Y-m-d');
-        } else {
-            $tgl = $r->tgl;
-        }
-        $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, a.pcs_awal, a.gr_awal, a.pcs_akhir, a.gr_akhir, d.batas_susut,
+
+        $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, d.batas_susut,
         c.nm_partai,e.nama
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
@@ -101,12 +97,13 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru' and a.tgl_terima = '$tgl' and a.selesai = 'Y'
+        where c.baru = 'baru'  and a.selesai = 'Y'
+        group by a.id_pengawas, a.tgl_terima
 
         UNION ALL 
 
 
-        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , a.gr_eo_awal as gr_awal, 0 as pcs_akhir, a.gr_eo_akhir as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama
+        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama
         FROM eo as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join hasil_wawancara as e on e.id_anak = b.id_anak
@@ -116,7 +113,10 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and a.tgl_ambil = '$tgl' and a.selesai = 'Y';");
+        where c.baru = 'baru' and  and a.selesai = 'Y'
+        group by a.id_pengawas, a.tgl_terima
+        
+        ;");
 
         return response()->json([
             'status' => 'success',
