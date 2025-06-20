@@ -98,7 +98,8 @@
                                     <td class="text-end">{{ $f->gr_awal }}</td>
                                     <td>
                                         <input type="text" class="form-control form-control-sm text-end"
-                                            name="pcs_pth[]" value="{{ $pcs_hcr->pcs ?? 0 }}">
+                                            name="pcs_pth[]"
+                                            value="{{ empty($pcs_hcr->pcs) ? $f->ket_hcr ?? 0 : $pcs_hcr->pcs }}">
                                         <input type="hidden" name="no_box[]" value="{{ $f->no_box }}">
                                     </td>
 

@@ -31,6 +31,7 @@
                             <th class="dhead text-end">Pcs</th>
                             <th class="dhead text-end">Gr</th>
                             <th class="dhead text-end">Cost Bk</th>
+                            <th class="dhead text-end">Cost Gaji</th>
                             <th class="dhead text-end">Cost Op</th>
                             <th class="dhead text-end">Ttl</th>
                             <th class="dhead text-end">Rata2</th>
@@ -45,6 +46,9 @@
                             </th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'gr'), 0) }}</th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_bk'), 0) }}
+                            </th>
+                            <th class="text-end bg-info text-white">
+                                {{ number_format(sumCol($grading, 'cost_kerja'), 0) }}
                             </th>
                             <th class="text-end bg-info text-white">{{ number_format(sumCol($grading, 'cost_op'), 0) }}
                             </th>
@@ -64,6 +68,7 @@
                                 <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk, 0) }}</td>
+                                <td class="text-end">{{ number_format($d->cost_kerja, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_op, 0) }}</td>
                                 <td class="text-end">{{ number_format($d->cost_bk + $d->cost_op, 0) }}</td>
                                 <td class="text-end">{{ number_format(($d->cost_bk + $d->cost_op) / $d->gr, 0) }}</td>

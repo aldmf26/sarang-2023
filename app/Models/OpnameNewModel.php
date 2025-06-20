@@ -78,9 +78,7 @@ class OpnameNewModel extends Model
     public static function bksedang_selesai_sum()
     {
         $result = DB::select("SELECT  c.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 
-        sum(a.ttl_rp) as cost_kerja, 
-        sum(a.gr_akhir * d.rp_gr) as cost_op, 
-        sum(a.gr_akhir * e.rp_gr) as cost_dll
+        sum(a.ttl_rp) as cost_kerja
     FROM cabut as a
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
     left join users as c on c.id = a.id_pengawas
@@ -93,9 +91,7 @@ class OpnameNewModel extends Model
     
     SELECT c.name, d.no_box, e.nm_partai, 0 as pcs, sum(d.gr_eo_akhir) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp,
 
-    sum(d.ttl_rp) as cost_kerja,
-    sum(d.gr_eo_akhir * f.rp_gr) as cost_op, 
-    sum(d.gr_eo_akhir * g.rp_gr) as cost_dll
+    sum(d.ttl_rp) as cost_kerja
 
     FROM eo as d
     LEFT JOIN bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'

@@ -350,6 +350,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/tutup', 'tutup')->name('tutup');
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');
             Route::get('/susut', 'susut')->name('susut');
+            Route::get('/cek_cocokan', 'cek_cocokan')->name('cek_cocokan');
         });
     Route::controller(OpnameNewController::class)
         ->prefix('home/opnamenew')

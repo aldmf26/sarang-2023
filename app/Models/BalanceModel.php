@@ -116,7 +116,7 @@ class BalanceModel extends Model
 
     public static function grading($bulan, $tahun = 2025)
     {
-        return DB::select("SELECT a.bulan,a.tahun,a.box_pengiriman as box_grading, sum(pcs) as pcs,sum(gr) as gr,sum(a.cost_bk) as cost_bk, sum(a.cost_op) as cost_op,a.grade 
+        return DB::select("SELECT a.bulan,a.tahun,a.box_pengiriman as box_grading, sum(pcs) as pcs,sum(gr) as gr,sum(a.cost_bk) as cost_bk,sum(a.cost_kerja) as cost_kerja, sum(a.cost_op) as cost_op,a.grade 
         FROM `grading_partai` as a
             WHERE a.bulan = $bulan and a.tahun = $tahun 
             GROUP BY a.bulan,a.box_pengiriman ORDER by a.box_pengiriman DESC");

@@ -34,10 +34,12 @@ Route::controller(HasapController::class)
     ->name('apihasap.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/detail/{no_invoice}', 'detail')->name('detail');
+        Route::get('/detail/{id_pengawas}/{tgl}', 'detail')->name('detail');
         Route::get('/bk', 'bk')->name('bk');
         Route::get('/cabut', 'cabut')->name('cabut');
+        Route::get('/cabut_detail', 'cabut_detail')->name('cabut_detail');
         Route::get('/cetak', 'cetak')->name('cetak');
+        Route::get('/cetak_detail', 'cetak_detail')->name('cetak_detail');
         Route::get('/grading', 'grading')->name('grading');
         Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');
         Route::get('/bk_awal', 'bk_awal')->name('bk_awal');

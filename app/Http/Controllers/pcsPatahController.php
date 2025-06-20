@@ -18,8 +18,9 @@ class pcsPatahController extends Controller
             ->leftJoin('eo as d', 'd.no_box', '=', 'a.no_box')
             ->where('a.kategori', 'cetak')
             ->where('a.no_invoice', $r->no_invoice)
-            ->selectRaw('a.id_formulir,a.sst_aktual,b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, c.pcs_awal as pcs_cbt, c.gr_awal as gr_cbt, d.gr_eo_awal as gr_eo')
+            ->selectRaw('a.id_formulir,a.sst_aktual,b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, b.tipe, b.ket, c.pcs_awal as pcs_cbt, c.gr_awal as gr_cbt, d.gr_eo_awal as gr_eo, c.ket_hcr')
             ->get();
+
 
 
         $ket_formulir = DB::selectOne("SELECT a.tanggal,  b.name, c.name as penerima, d.nm_partai
