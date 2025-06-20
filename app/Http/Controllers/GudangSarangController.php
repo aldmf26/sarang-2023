@@ -470,15 +470,10 @@ class GudangSarangController extends Controller
                   FROM formulir_sarang as a
                   left join users as b on b.id = a.id_pemberi
                   left join users as c on c.id = a.id_penerima
-                  WHERE a.kategori = ?";
+                  WHERE a.kategori = ? AND (a.tanggal BETWEEN ? AND ?)";
+        $params = [$kategori, $tgl1, $tgl2];
 
-        if ($tgl1 && $tgl2) {
-            $query .= " AND a.tanggal BETWEEN ? AND ?";
-            return DB::select($query, [$kategori, $tgl1, $tgl2]);
-        } else {
-            $query .= " AND year(a.tanggal) = 2025 AND MONTH(a.tanggal) = MONTH(NOW())";
-            return DB::select($query, [$kategori]);
-        }
+        return DB::select($query, $params);
     }
 
     public function invoice_sortir(Request $r)
