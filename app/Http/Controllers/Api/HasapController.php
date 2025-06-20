@@ -229,20 +229,11 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
 
     public function grading(Request $r)
     {
-        if (empty($r->tgl)) {
-            $tgl = date('Y-m-d');
-        } else {
-            $tgl = $r->tgl;
-        }
 
-        $data = DB::select("SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , count(a.box_pengiriman) as box, a.box_pengiriman , a.tgl
-        FROM (
-            SELECT a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, a.box_pengiriman, a.tgl
-            FROM grading_partai as a 
-            where a.tgl = '$tgl'
-            group by a.grade, a.box_pengiriman
-        ) as a 
-        group by a.grade;");
+        $data = DB::select("SELECT a.tgl, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
+        FROM grading_partai as a 
+        group by a.tgl, a.nm_partai
+        order by a.tgl DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
