@@ -707,7 +707,7 @@ left join(
             FROM opname_suntik as a 
             WHERE a.ket = 'sortir_selesai_diserahkan'
 
-            UNION ALL
+            UNION ALL 
 
             -- Query 3
             SELECT 
