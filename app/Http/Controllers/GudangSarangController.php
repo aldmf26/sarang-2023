@@ -466,14 +466,13 @@ class GudangSarangController extends Controller
 
     public function getFormulirKategori($kategori, $tgl1 = null, $tgl2 = null)
     {
-        $query = "SELECT a.selesai,a.print,count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        $query = "SELECT a.selesai, a.print, count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
                   FROM formulir_sarang as a
-                  left join users as b on b.id = a.id_pemberi
-                  left join users as c on c.id = a.id_penerima
-                  WHERE a.kategori = ? AND (a.tanggal BETWEEN ? AND ?)";
-        $params = [$kategori, $tgl1, $tgl2];
+                  LEFT JOIN users as b ON b.id = a.id_pemberi
+                  LEFT JOIN users as c ON c.id = a.id_penerima
+                  WHERE a.kategori = ? AND YEAR(a.tanggal) = YEAR(NOW())";
 
-        return DB::select($query, $params);
+        return DB::select($query, [$kategori]);
     }
 
     public function invoice_sortir(Request $r)
@@ -547,7 +546,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
 
-        $formulir = $this->getFormulirKategori('grading', $tgl1, $tgl2);
+        $formulir = $this->getFormulirKategori('grading');
 
 
         $data = [
