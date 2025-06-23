@@ -382,4 +382,20 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function detailBuktiPermintaan(Request $r)
+    {
+        $data = DB::select("SELECT b.nm_partai, c.name, a.tanggal, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join users as c on c.id = a.id_penerima
+        where a.kategori = 'cabut' and a.id_penerima = '$r->id_penerima' and a.tanggal = '$r->tanggal'
+        group by b.nm_partai
+        ORDER by a.tanggal DESC;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
