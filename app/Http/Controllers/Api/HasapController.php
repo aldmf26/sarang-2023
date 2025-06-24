@@ -11,6 +11,11 @@ class HasapController extends Controller
 {
     public function index(Request $r)
     {
+        if (empty($r->id_pengawas)) {
+            $where = '';
+        } else {
+            $where = "WHERE id = $r->id_pengawas";
+        }
         $data = DB::select("SELECT a.tgl_terima as tgl, c.nm_partai, b.id,  b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
@@ -25,7 +30,7 @@ class HasapController extends Controller
         where f.baru = 'baru' and d.no_box != '9999'
         group by d.tgl_ambil, e.name
 
-        where id = $r->id_pengawas
+         $where
         ORDER BY tgl DESC;
         ");
         return response()->json([
