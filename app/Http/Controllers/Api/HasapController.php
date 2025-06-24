@@ -127,6 +127,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where c.baru = 'baru' and  a.selesai = 'Y'
         group by a.id_pengawas, a.tgl_serah
 
+        having id_pengawas = 90
+
         order by tgl DESC
         
         ;");
