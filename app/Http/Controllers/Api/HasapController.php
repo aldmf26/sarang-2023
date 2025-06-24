@@ -9,21 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class HasapController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
         $data = DB::select("SELECT a.tgl_terima as tgl, c.nm_partai, b.id,  b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        where c.baru = 'baru'
+        where c.baru = 'baru' and a.no_box != '9999'
         group by a.tgl_terima , b.name
         UNION ALL
         SELECT d.tgl_ambil as tgl, f.nm_partai, e.id, e.name, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
         FROM eo as d
         left join users as e on e.id = d.id_pengawas
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
-        where f.baru = 'baru'
+        where f.baru = 'baru' and d.no_box != '9999'
         group by d.tgl_ambil, e.name
+
+        where id = $r->id_pengawas
         ORDER BY tgl DESC;
         ");
         return response()->json([
