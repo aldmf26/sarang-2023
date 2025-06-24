@@ -94,6 +94,11 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function cabut(Request $r)
     {
 
+        if (empty($r->id_pengawas)) {
+            $where = '';
+        } else {
+            $where = "AND a.id_pengawas = $r->id_pengawas";
+        }
         $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, d.batas_susut,
         c.nm_partai,e.nama, f.name, a.tgl_serah as tgl, a.id_pengawas
         FROM cabut as a 
@@ -107,7 +112,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru'  and a.selesai = 'Y'
+        where c.baru = 'baru'  and a.selesai = 'Y' $where 
         group by a.id_pengawas, a.tgl_serah
 
         UNION ALL 
@@ -124,10 +129,10 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and  a.selesai = 'Y'
+        where c.baru = 'baru' and  a.selesai = 'Y' $where
         group by a.id_pengawas, a.tgl_serah
 
-        having id_pengawas = 90
+       
 
         order by tgl DESC
         
