@@ -268,8 +268,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         $data = DB::select("SELECT a.tgl, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
         where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai'
-        group by a.tgl, a.nm_partai
-        order by a.tgl DESC;");
+        group by a.id_grading
+        order by a.id_grading DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
