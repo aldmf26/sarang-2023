@@ -130,7 +130,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         group by e.no_box
         ) as c on c.no_box = a.no_box
         where c.baru = 'baru' and  a.selesai = 'Y' $where
-        group by a.id_pengawas, a.tgl_terima
+        group by a.id_pengawas, a.tgl_ambil
 
        
 
@@ -177,7 +177,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and  a.selesai = 'Y' and a.tgl_serah = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
+        where c.baru = 'baru' and  a.selesai = 'Y' and a.tgl_ambil = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
         
 
         order by tgl DESC
