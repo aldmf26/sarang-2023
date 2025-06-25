@@ -265,9 +265,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function grading_detail(Request $r)
     {
 
-        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
-        FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai'
+        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
+        where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai' 
         group by a.grade
         order by a.id_grading DESC;");
         return response()->json([
