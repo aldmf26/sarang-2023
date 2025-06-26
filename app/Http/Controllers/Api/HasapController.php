@@ -280,6 +280,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
 
         $data = DB::select("SELECT 
         b.no_barcode, 
+        b.tgl_input,
         a.grade, 
         SUM(a.pcs) as pcs, 
         SUM(a.gr) as gr, 
