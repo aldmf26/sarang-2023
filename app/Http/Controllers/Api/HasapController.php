@@ -286,7 +286,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
         FROM grading_partai as a
         JOIN pengiriman as b ON b.no_box = a.box_pengiriman
-        GROUP BY b.tgl");
+        GROUP BY b.tgl_input");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
