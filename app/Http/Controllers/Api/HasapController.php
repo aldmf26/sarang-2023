@@ -277,25 +277,40 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     }
     public function pengiriman_akhir(Request $r)
     {
+
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        a.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        GROUP BY b.tgl");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function pengiriman_akhir_detail(Request $r)
+    {
         if (empty($r->tgl)) {
             $tgl = date('Y-m-d');
         } else {
             $tgl = $r->tgl;
         }
 
-        $data = DB::select("SELECT a.no_box, a.grade, a.pcs, a.gr, b.tgl, a.no_nota, a.no_barcode, a.tgl_input
-        FROM pengiriman as a 
-        join (
-        select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
-        ) as b on a.no_nota = b.no_nota
-        left join (
-                    SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, max(b.bulan) as bulan , max(b.tahun) as tahun
-                    FROM grading_partai as b 
-                    where b.sudah_kirim = 'Y'
-                    group by b.box_pengiriman
-        ) as d on d.box_pengiriman = a.no_box
-        where b.tgl = '$tgl'
-        GROUP by a.no_box;");
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        a.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        WHERE b.tgl_input = '$tgl'
+        GROUP BY b.no_barcode, a.grade");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
