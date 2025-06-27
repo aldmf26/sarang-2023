@@ -309,7 +309,8 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         a.grade, 
         SUM(a.pcs) as pcs, 
         SUM(a.gr) as gr, 
-        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+        b.no_barcode
         FROM grading_partai as a
         JOIN pengiriman as b ON b.no_box = a.box_pengiriman
         WHERE b.tgl_input = '$tgl'
