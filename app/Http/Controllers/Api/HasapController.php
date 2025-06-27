@@ -504,7 +504,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
-        where b.grade_id = '$r->grade_id'
+        where b.grade_id = '$r->id'
         group by b.tgl
 
         UNION all
@@ -512,7 +512,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         SELECT a.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
-        where b.grade_id = '$r->grade_id' and a.formulir = 'Y'
+        where b.grade_id = '$r->id' and a.formulir = 'Y'
         group by a.tgl
 
         order by tgl ASC, ket DESC;");
