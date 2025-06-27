@@ -53,6 +53,7 @@ Route::controller(HasapController::class)
         Route::get('/detailBuktiPermintaan', 'detailBuktiPermintaan')->name('detailBuktiPermintaan');
         Route::get('/ttlgrading', 'ttlgrading')->name('ttlgrading');
         Route::get('/ttlgrading_detail', 'ttlgrading_detail')->name('ttlgrading_detail');
+        Route::get('/stok_grade', 'stok_grade')->name('stok_grade');
     });
 
 

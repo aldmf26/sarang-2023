@@ -479,4 +479,23 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function stok_grade(Request $r)
+    {
+
+        $data = DB::select("SELECT b.grade_id, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_akhir)) as pcs, sum(COALESCE(a.gr_awal,0) - COALESCE(c.gr_akhir,0)) as gr
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        left join (
+            SELECT c.no_box, c.pcs_awal as pcs_akhir, c.gr_awal as gr_akhir
+            FROM bk as c 
+            where c.kategori = 'cabut' and c.formulir = 'Y'
+        ) as c on c.no_box = a.no_box
+        where a.kategori = 'cabut'
+        group by b.grade_id;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
