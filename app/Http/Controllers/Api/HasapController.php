@@ -537,4 +537,19 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function first_tracebelity2(Request $r)
+    {
+
+        $data = DB::selectOne("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        WHERE a.kategori = 'cabut' and a.nm_partai = '$r->nm_partai'
+        group by a.nm_partai
+        order by b.tgl asc;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
