@@ -540,7 +540,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function first_tracebelity2(Request $r)
     {
 
-        $data = DB::selectOne("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal
+        $data = DB::selectOne("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal, b.kg as berat_kotor
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         WHERE a.kategori = 'cabut' and a.nm_partai = '$r->nm_partai'
