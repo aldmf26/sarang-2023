@@ -55,6 +55,7 @@ Route::controller(HasapController::class)
         Route::get('/ttlgrading_detail', 'ttlgrading_detail')->name('ttlgrading_detail');
         Route::get('/stok_grade', 'stok_grade')->name('stok_grade');
         Route::get('/stok_grade_detail', 'stok_grade_detail')->name('stok_grade_detail');
+        Route::get('/first_tracebelity', 'first_tracebelity')->name('first_tracebelity');
     });
 
 
