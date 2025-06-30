@@ -505,7 +505,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         where b.grade_id = '$r->id'
-        group by b.tgl
+        group by b.tgl, b.no_invoice
 
         UNION all
 
@@ -513,7 +513,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         where b.grade_id = '$r->id' and a.formulir = 'Y'
-        group by a.tgl
+        group by a.tgl, b.no_invoice
 
         order by tgl ASC, ket DESC;");
         return response()->json([
