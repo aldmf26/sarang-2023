@@ -443,7 +443,7 @@ class SortirController extends Controller
         $tbl = DB::table('sortir as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-            ->where([['a.id_pengawas', auth()->user()->id], ['a.no_box', '!=', 9999]])
+            ->where([['a.id_pengawas', auth()->user()->id], ['a.no_box', '!=', 9999], ['a.tgl', '>=', $tgl1], ['a.tgl', '<=', $tgl2]])
             ->orderBy('id_sortir', 'DESC')
             ->get();
 
