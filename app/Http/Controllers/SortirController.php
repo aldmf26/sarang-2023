@@ -442,7 +442,7 @@ class SortirController extends Controller
         $id_user = auth()->user()->id;
         $view = 'home.sortir.export';
 
-        $tbl = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir 
+        $tbl = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas,c.kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir 
             FROM sortir as a 
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
