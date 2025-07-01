@@ -448,7 +448,7 @@ class SortirController extends Controller
             left join tb_anak as b on a.id_anak = b.id_anak
             left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
             left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-            where  a.no_box != '9999' and a.penutup = 'T' and a.tgl between '$tgl1' and '$tgl2' and a.id_pengawas = '$id_user'
+            where  a.no_box != '9999' and a.penutup = 'T' and a.id_pengawas = '$id_user'
             order by a.tgl ASC
             ");
 
