@@ -9,21 +9,30 @@ use Illuminate\Support\Facades\DB;
 
 class HasapController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
+        if (empty($r->id_pengawas)) {
+            $where = '';
+            $where2 = '';
+        } else {
+            $where = "AND b.id = $r->id_pengawas";
+            $where2 = "AND e.id = $r->id_pengawas";
+        }
         $data = DB::select("SELECT a.tgl_terima as tgl, c.nm_partai, b.id,  b.name, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        where c.baru = 'baru'
+        where c.baru = 'baru' and a.no_box != '9999' $where 
         group by a.tgl_terima , b.name
         UNION ALL
         SELECT d.tgl_ambil as tgl, f.nm_partai, e.id, e.name, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
         FROM eo as d
         left join users as e on e.id = d.id_pengawas
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
-        where f.baru = 'baru'
+        where f.baru = 'baru' and d.no_box != '9999' $where2
         group by d.tgl_ambil, e.name
+
+        
         ORDER BY tgl DESC;
         ");
         return response()->json([
@@ -85,8 +94,13 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function cabut(Request $r)
     {
 
+        if (empty($r->id_pengawas)) {
+            $where = '';
+        } else {
+            $where = "AND a.id_pengawas = $r->id_pengawas";
+        }
         $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, d.batas_susut,
-        c.nm_partai,e.nama, f.name, a.tgl_serah as tgl, a.id_pengawas
+        c.nm_partai,e.nama, f.name, a.tgl_terima as tgl, a.id_pengawas
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join hasil_wawancara as e on e.id_anak = b.id_anak
@@ -98,13 +112,13 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru'  and a.selesai = 'Y'
-        group by a.id_pengawas, a.tgl_serah
+        where c.baru = 'baru'  and a.selesai = 'Y' $where 
+        group by a.id_pengawas, a.tgl_terima
 
         UNION ALL 
 
 
-        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name, a.tgl_serah as tgl,a.id_pengawas
+        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name, a.tgl_ambil as tgl,a.id_pengawas
         FROM eo as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join hasil_wawancara as e on e.id_anak = b.id_anak
@@ -115,8 +129,10 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and  a.selesai = 'Y'
-        group by a.id_pengawas, a.tgl_serah
+        where c.baru = 'baru' and  a.selesai = 'Y' $where
+        group by a.id_pengawas, a.tgl_ambil
+
+       
 
         order by tgl DESC
         
@@ -144,7 +160,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         group by e.no_box
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
-        where c.baru = 'baru'  and a.selesai = 'Y' and a.tgl_serah = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
+        where c.baru = 'baru'  and a.selesai = 'Y' and a.tgl_terima = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
         
 
         UNION ALL 
@@ -161,7 +177,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         where e.kategori = 'cabut'
         group by e.no_box
         ) as c on c.no_box = a.no_box
-        where c.baru = 'baru' and  a.selesai = 'Y' and a.tgl_serah = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
+        where c.baru = 'baru' and  a.selesai = 'Y' and a.tgl_ambil = '$r->tgl' and a.id_pengawas = '$r->id_pengawas'
         
 
         order by tgl DESC
@@ -178,6 +194,12 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
     public function cetak(Request $r)
     {
 
+        if (empty($r->id_pengawas)) {
+            $where = '';
+        } else {
+            $where = "AND a.id_pengawas = $r->id_pengawas";
+        }
+
         $data = DB::select("SELECT e.name, a.id_pengawas, a.tgl, d.nm_partai, c.nama, a.no_box, d.tipe, sum(a.pcs_awal_ctk) as pcs_awal_ctk, sum(a.gr_awal_ctk) as gr_awal_ctk, sum((COALESCE(a.pcs_tdk_cetak,0) + COALESCE(a.pcs_akhir))) as pcs_akhir, sum((COALESCE(a.gr_tdk_cetak,0) + COALESCE(a.gr_akhir,0))) as gr_akhir
         FROM cetak_new as a
         left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
@@ -189,7 +211,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             FROM bk as d 
             where d.kategori ='Cabut'
         ) as d on d.no_box = a.no_box
-        where b.kategori = 'CTK' and a.selesai ='Y'
+        where b.kategori = 'CTK' and a.selesai ='Y' $where
         group by a.tgl, a.id_pengawas
         order by a.tgl DESC
         ;");
@@ -240,7 +262,41 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function grading_detail(Request $r)
+    {
+
+        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
+        where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai' 
+        group by a.grade
+        order by a.grade ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
     public function pengiriman_akhir(Request $r)
+    {
+
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        b.tgl_input,
+        a.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        GROUP BY b.tgl_input
+        Order by b.tgl_input DESC
+        ");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function pengiriman_akhir_detail(Request $r)
     {
         if (empty($r->tgl)) {
             $tgl = date('Y-m-d');
@@ -248,19 +304,17 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             $tgl = $r->tgl;
         }
 
-        $data = DB::select("SELECT a.no_box, a.grade, a.pcs, a.gr, b.tgl, a.no_nota, a.no_barcode, a.tgl_input
-        FROM pengiriman as a 
-        join (
-        select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
-        ) as b on a.no_nota = b.no_nota
-        left join (
-                    SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, max(b.bulan) as bulan , max(b.tahun) as tahun
-                    FROM grading_partai as b 
-                    where b.sudah_kirim = 'Y'
-                    group by b.box_pengiriman
-        ) as d on d.box_pengiriman = a.no_box
-        where b.tgl = '$tgl'
-        GROUP by a.no_box;");
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        a.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+        b.no_barcode
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        WHERE b.tgl_input = '$tgl'
+        GROUP BY b.no_barcode, a.grade");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -360,6 +414,139 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
 
         group by a.no_barcode;");
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function buktiPermintaan(Request $r)
+    {
+        $data = DB::select("SELECT a.id_penerima, c.name, a.tanggal, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join users as c on c.id = a.id_penerima
+        where a.kategori = 'cabut'
+        group by a.id_penerima, a.tanggal
+        ORDER by a.tanggal DESC;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function detailBuktiPermintaan(Request $r)
+    {
+        $data = DB::select("SELECT b.nm_partai, c.name, a.tanggal, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
+        FROM formulir_sarang as a
+        left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
+        left join users as c on c.id = a.id_penerima
+        where a.kategori = 'cabut' and a.id_penerima = '$r->id_penerima' and a.tanggal = '$r->tanggal'
+        group by b.nm_partai
+        ORDER by a.tanggal DESC;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function ttlgrading(Request $r)
+    {
+
+        $data = DB::select("SELECT a.tgl, sum(a.pcs) as pcs, sum(a.gr) as gr
+        FROM grading_partai as a 
+        group by a.tgl
+        order by a.tgl DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function ttlgrading_detail(Request $r)
+    {
+
+        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
+        where a.tgl = '$r->tgl'
+        group by a.grade
+        order by a.grade ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function stok_grade(Request $r)
+    {
+
+        $data = DB::select("SELECT b.grade_id, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_akhir)) as pcs, sum(COALESCE(a.gr_awal,0) - COALESCE(c.gr_akhir,0)) as gr
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        left join (
+            SELECT c.no_box, c.pcs_awal as pcs_akhir, c.gr_awal as gr_akhir
+            FROM bk as c 
+            where c.kategori = 'cabut' and c.formulir = 'Y'
+        ) as c on c.no_box = a.no_box
+        where a.kategori = 'cabut'
+        group by b.grade_id;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function stok_grade_detail(Request $r)
+    {
+
+        $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        where b.grade_id = '$r->id'
+        group by b.tgl, b.no_invoice
+
+        UNION all
+
+        SELECT a.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        where b.grade_id = '$r->id' and a.formulir = 'Y'
+        group by a.tgl, b.no_invoice
+
+        order by tgl ASC, ket DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function first_tracebelity(Request $r)
+    {
+
+        $data = DB::select("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        WHERE a.kategori = 'cabut'
+        group by a.nm_partai
+        order by b.tgl asc;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function first_tracebelity2(Request $r)
+    {
+
+        $data = DB::selectOne("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal, b.kg as berat_kotor, c.gr as gr_kotor
+        FROM bk as a
+        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        left join bk_awal as c on c.nm_partai = a.nm_partai
+        WHERE a.kategori = 'cabut' and a.nm_partai = '$r->nm_partai'
+        group by a.nm_partai
+        order by b.tgl asc;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',

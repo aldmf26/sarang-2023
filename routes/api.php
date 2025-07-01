@@ -41,12 +41,22 @@ Route::controller(HasapController::class)
         Route::get('/cetak', 'cetak')->name('cetak');
         Route::get('/cetak_detail', 'cetak_detail')->name('cetak_detail');
         Route::get('/grading', 'grading')->name('grading');
+        Route::get('/grading_detail', 'grading_detail')->name('grading_detail');
         Route::get('/pengiriman_akhir', 'pengiriman_akhir')->name('pengiriman_akhir');
+        Route::get('/pengiriman_akhir_detail', 'pengiriman_akhir_detail')->name('pengiriman_akhir_detail');
         Route::get('/bk_awal', 'bk_awal')->name('bk_awal');
         Route::get('/cabutbulan', 'cabutbulan')->name('cabutbulan');
         Route::get('/produkrelease', 'produkrelease')->name('produkrelease');
         Route::get('/monitoringProdukJadi', 'monitoringProdukJadi')->name('monitoringProdukJadi');
         Route::get('/kontrolPengemasan', 'kontrolPengemasan')->name('kontrolPengemasan');
+        Route::get('/buktiPermintaan', 'buktiPermintaan')->name('buktiPermintaan');
+        Route::get('/detailBuktiPermintaan', 'detailBuktiPermintaan')->name('detailBuktiPermintaan');
+        Route::get('/ttlgrading', 'ttlgrading')->name('ttlgrading');
+        Route::get('/ttlgrading_detail', 'ttlgrading_detail')->name('ttlgrading_detail');
+        Route::get('/stok_grade', 'stok_grade')->name('stok_grade');
+        Route::get('/stok_grade_detail', 'stok_grade_detail')->name('stok_grade_detail');
+        Route::get('/first_tracebelity', 'first_tracebelity')->name('first_tracebelity');
+        Route::get('/first_tracebelity2', 'first_tracebelity2')->name('first_tracebelity2');
     });
 
 
