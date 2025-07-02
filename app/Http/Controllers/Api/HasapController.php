@@ -596,4 +596,27 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function delivery_detail(Request $r)
+    {
+
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        b.tgl_input,
+        b.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        where b.no_nota = '$r->no_nota'
+        GROUP BY b.grade
+        Order by b.grade DESC");
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }

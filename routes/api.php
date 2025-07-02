@@ -58,6 +58,7 @@ Route::controller(HasapController::class)
         Route::get('/first_tracebelity', 'first_tracebelity')->name('first_tracebelity');
         Route::get('/first_tracebelity2', 'first_tracebelity2')->name('first_tracebelity2');
         Route::get('/delivery', 'delivery')->name('delivery');
+        Route::get('/delivery_detail', 'delivery_detail')->name('delivery_detail');
     });
 
 
