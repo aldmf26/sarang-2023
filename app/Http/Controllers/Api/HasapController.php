@@ -553,4 +553,47 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
             'data' => $data
         ]);
     }
+    public function delivery(Request $r)
+    {
+
+        $data = DB::select("SELECT 
+            a.no_nota,
+            b.nm_packing,
+            b.tujuan,
+            b.tgl,
+            c.box as ttl_box,
+            sum(a.pcs) as pcs,
+            sum(a.gr + (a.gr / b.kadar)) as gr_naik,
+            sum(a.gr) as gr,
+            sum(d.cost_bk) as cost_bk,
+            sum(d.cost_kerja) as cost_kerja,
+           sum(d.cost_cu) as cost_cu,
+            sum(d.cost_op) as cost_op,
+            max(d.bulan) bulan, max(d.tahun) as tahun
+        from pengiriman as a 
+        join (
+            select no_nota,kadar,nm_packing,tujuan,tgl from pengiriman_packing_list GROUP BY no_nota 
+        ) as b on a.no_nota = b.no_nota
+        join (
+            SELECT no_nota, COUNT(DISTINCT no_barcode) AS box, SUM(pcs) AS sum_pcs, SUM(gr) AS sum_gr
+            FROM `pengiriman`
+            GROUP BY no_nota
+        ) as c on a.no_nota = c.no_nota
+        left join (
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, sum(b.cost_cu) as cost_cu, max(b.bulan) as bulan , max(b.tahun) as tahun
+            FROM grading_partai as b 
+            where b.sudah_kirim = 'Y'
+            group by b.box_pengiriman
+        ) as d on d.box_pengiriman = a.no_box
+        
+        GROUP by a.no_nota 
+        order by a.no_nota ASC");
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
