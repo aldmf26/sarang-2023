@@ -138,6 +138,7 @@
                             $("#loadSelisih").html(r);
                             loadTable('tblSelisih')
                             loadTable('tblSusut')
+
                         }
                     });
                 });
