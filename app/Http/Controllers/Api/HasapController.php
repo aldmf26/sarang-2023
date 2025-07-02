@@ -587,7 +587,7 @@ SELECT d.tgl_ambil as tgl, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_
         ) as d on d.box_pengiriman = a.no_box
         
         GROUP by a.no_nota 
-        order by a.no_nota ASC");
+        order by b.no_nota DESC");
 
 
         return response()->json([
