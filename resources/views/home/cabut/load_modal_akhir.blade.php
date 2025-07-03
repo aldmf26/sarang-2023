@@ -19,7 +19,7 @@
         <table class="table table-bordered" style="border: 0.5px solid #a0a7c1; font-size: 12px" id="tablealdi2">
             <thead>
                 <tr>
-                    <th class="dhead">Tgl Terima</th>
+                    <th class="dhead">Tgl Serah</th>
                     <th class="dhead" width="60">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
                     <th class="dhead text-end" width="85">Pcs Awal</th>
@@ -101,8 +101,8 @@
                                 count="{{ $i + 1 }}">
                         </td>
                         <td>
-                            <input value="{{ $d->eot }}" value="0" name="eot{{ $i + 1 }}[]" type="text"
-                                class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
+                            <input value="{{ $d->eot }}" value="0" name="eot{{ $i + 1 }}[]"
+                                type="text" class="form-control text-end eotKeyup" count="{{ $i + 1 }}">
                         </td>
                         <td>
                             <input value="{{ $d->pcs_hcr }}" name="pcs_hcr{{ $i + 1 }}[]" type="text"
@@ -124,7 +124,7 @@
                         <td>
                             <select name="bulan{{ $i + 1 }}[]" class="form-control">
                                 <option value="0">Pilih Bulan</option>
-                              
+
                                 @foreach (getListBulan() as $l)
                                     <option value="{{ $l->bulan }}"
                                         {{ $d->bulan == $l->bulan ? 'selected' : '' }}>
@@ -148,7 +148,7 @@
                             @endif  --}}
 
                             <a style="font-size: 12px"
-                                class="{{empty($d->gr_akhir) ? 'd-none' : ''}} btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
+                                class="{{ empty($d->gr_akhir) ? 'd-none' : '' }} btn btn-success btn-sm selesai selesai{{ $i + 1 }}"
                                 href="#" id_cabut="{{ $d->id_cabut }}" href="#">Selesai </a>
 
                             <button style="font-size: 12px" class="btn btn-sm btn-danger cancelCabutAkhir"
