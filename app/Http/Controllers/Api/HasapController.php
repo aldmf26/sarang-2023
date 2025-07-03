@@ -619,4 +619,13 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             'data' => $data
         ]);
     }
+    public function tb_anak(Request $r)
+    {
+        $data = DB::select("SELECT a.id_anak, a.nama FROM tb_anak as a where a.id_pengawas = '$r->id_pengawas';");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
