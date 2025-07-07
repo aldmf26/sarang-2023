@@ -621,7 +621,9 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     }
     public function tb_anak(Request $r)
     {
-        $data = DB::select("SELECT a.id_anak, a.nama FROM tb_anak as a where a.id_pengawas = '$r->id_pengawas';");
+        $data = DB::select("SELECT a.id_anak, b.name FROM tb_anak as a 
+        left join hasil_wawancara as b on b.id_anak = a.id_anak
+        where a.id_pengawas = '$r->id_pengawas';");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
