@@ -60,6 +60,7 @@ Route::controller(HasapController::class)
         Route::get('/delivery', 'delivery')->name('delivery');
         Route::get('/delivery_detail', 'delivery_detail')->name('delivery_detail');
         Route::get('/tb_anak', 'tb_anak')->name('tb_anak');
+        Route::get('/no_box', 'no_box')->name('no_box');
     });
 
 
