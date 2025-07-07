@@ -641,4 +641,15 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             'data' => $data
         ]);
     }
+    public function detail_box(Request $r)
+    {
+        $data = DB::selectOne("SELECT a.nm_partai
+        FROM bk as a 
+        where a.no_box = '$r->no_box' and a.kategori = 'cabut';");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
