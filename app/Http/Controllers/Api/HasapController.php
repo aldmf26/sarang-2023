@@ -722,9 +722,9 @@ left join pengiriman_packing_list as c on c.no_nota = b.no_nota
 where b.grade = '$r->grade' and b.selesai ='Y'
 GROUP by c.tgl
 
-order by tgl ASC, ket DESC;
 
-ORDER by tgl ASC;");
+
+ORDER by tgl ASC, ket DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
