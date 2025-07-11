@@ -342,7 +342,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         ) as a
         group by a.grade;");
 
-        dd($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'success',
