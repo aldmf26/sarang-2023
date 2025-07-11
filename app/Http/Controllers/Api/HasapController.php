@@ -706,4 +706,27 @@ ON all_data.grade = done_data.grade;");
             'data' => $data
         ]);
     }
+    public function stok_produk_jadi_detail(Request $r)
+    {
+        $data = DB::select("SELECT b.tgl as tgl, sum(a.pcs) as pcs , sum(a.gr) as gr, 'masuk' as ket
+FROM pengiriman as a
+left join pengiriman_packing_list as b on b.no_nota = a.no_nota
+where a.grade = '$r->grade' 
+group by b.tgl
+
+UNION ALL
+
+SELECT c.tgl as tgl, sum(b.pcs) as pcs , sum(b.gr) as gr, 'keluar' as ket
+FROM pengiriman as b
+left join pengiriman_packing_list as c on c.no_nota = b.no_nota
+where b.grade = '$r->grade' and b.selesai ='Y'
+GROUP by c.tgl
+
+ORDER by tgl ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }

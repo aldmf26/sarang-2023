@@ -64,6 +64,7 @@ Route::controller(HasapController::class)
         Route::get('/detail_box', 'detail_box')->name('detail_box');
         Route::get('/pengiriman_akhir_detail_group_grade', 'pengiriman_akhir_detail_group_grade')->name('pengiriman_akhir_detail_group_grade');
         Route::get('/stok_produk_jadi', 'stok_produk_jadi')->name('stok_produk_jadi');
+        Route::get('/stok_produk_jadi_detail', 'stok_produk_jadi_detail')->name('stok_produk_jadi_detail');
     });
 
 
