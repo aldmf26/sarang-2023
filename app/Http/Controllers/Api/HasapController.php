@@ -327,7 +327,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         $tgl = $r->tgl;
 
 
-        $data = DB::select("SELECT a.no_barcode, a.pcs, a.gr, count(a.no_barcode) as jlh_box, a.nm_partai
+        $data = DB::select("SELECT a.no_barcode, a.grade, a.pcs, a.gr, count(a.no_barcode) as jlh_box, a.nm_partai
         FROM (
         SELECT 
                 b.no_barcode, 
