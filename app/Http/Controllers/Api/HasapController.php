@@ -682,7 +682,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     }
     public function stok_produk_jadi(Request $r)
     {
-        $data = DB::selectOne("SELECT 
+        $data = DB::select("SELECT 
     grade,
     SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN pcs ELSE 0 END) AS pcs,
     SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN gr ELSE 0 END) AS gr,
