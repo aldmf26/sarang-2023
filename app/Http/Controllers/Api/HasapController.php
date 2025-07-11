@@ -321,6 +321,31 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             'data' => $data
         ]);
     }
+    public function pengiriman_akhir_detail_group_grade(Request $r)
+    {
+        if (empty($r->tgl)) {
+            $tgl = date('Y-m-d');
+        } else {
+            $tgl = $r->tgl;
+        }
+
+        $data = DB::select("SELECT 
+        b.no_barcode, 
+        a.grade, 
+        SUM(a.pcs) as pcs, 
+        SUM(a.gr) as gr, 
+        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+        b.no_barcode
+        FROM grading_partai as a
+        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        WHERE b.tgl_input = '$tgl'
+        GROUP BY a.grade");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
     public function bk_awal(Request $r)
     {
         $data = SummaryModel::summarybk();

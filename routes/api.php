@@ -62,6 +62,7 @@ Route::controller(HasapController::class)
         Route::get('/tb_anak', 'tb_anak')->name('tb_anak');
         Route::get('/no_box', 'no_box')->name('no_box');
         Route::get('/detail_box', 'detail_box')->name('detail_box');
+        Route::get('/pengiriman_akhir_detail_group_grade', 'pengiriman_akhir_detail_group_grade')->name('pengiriman_akhir_detail_group_grade');
     });
 
 
