@@ -680,4 +680,20 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             'data' => $data
         ]);
     }
+    public function stok_produk_jadi(Request $r)
+    {
+        $data = DB::selectOne("SELECT 
+    grade,
+    SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN pcs ELSE 0 END) AS pcs,
+    SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN gr ELSE 0 END) AS gr,
+    SUM(CASE WHEN selesai = 'Y' THEN pcs ELSE 0 END) AS pcs_akhir,
+    SUM(CASE WHEN selesai = 'Y' THEN gr ELSE 0 END) AS gr_akhir
+FROM pengiriman
+GROUP BY grade;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
