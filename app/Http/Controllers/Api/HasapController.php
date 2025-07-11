@@ -683,13 +683,23 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function stok_produk_jadi(Request $r)
     {
         $data = DB::select("SELECT 
-    grade,
-    SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN pcs ELSE 0 END) AS pcs,
-    SUM(CASE WHEN selesai <> 'Y' OR selesai IS NULL THEN gr ELSE 0 END) AS gr,
-    SUM(CASE WHEN selesai = 'Y' THEN pcs ELSE 0 END) AS pcs_akhir,
-    SUM(CASE WHEN selesai = 'Y' THEN gr ELSE 0 END) AS gr_akhir
-FROM pengiriman
-GROUP BY grade;");
+    all_data.grade,
+    all_data.pcs,
+    all_data.gr,
+    COALESCE(done_data.pcs_akhir, 0) AS pcs_akhir,
+    COALESCE(done_data.gr_akhir, 0) AS gr_akhir
+FROM (
+    SELECT grade, SUM(pcs) AS pcs, SUM(gr) AS gr
+    FROM pengiriman
+    GROUP BY grade
+) AS all_data
+LEFT JOIN (
+    SELECT grade, SUM(pcs) AS pcs_akhir, SUM(gr) AS gr_akhir
+    FROM pengiriman
+    WHERE selesai = 'Y'
+    GROUP BY grade
+) AS done_data
+ON all_data.grade = done_data.grade;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
