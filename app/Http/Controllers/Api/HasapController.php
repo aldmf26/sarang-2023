@@ -337,7 +337,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
                 GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai
                 FROM grading_partai as a
                 JOIN pengiriman as b ON b.no_box = a.box_pengiriman
-                WHERE b.tgl_input = $tgl
+                WHERE b.tgl_input = '$tgl'
                 GROUP BY b.no_barcode, a.grade
         ) as a
         group by a.grade;");
