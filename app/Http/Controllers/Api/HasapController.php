@@ -335,7 +335,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         SUM(a.pcs) as pcs, 
         SUM(a.gr) as gr, 
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
-        b.no_barcode
+        b.no_barcode,
+        count(b.no_barcode) as jlh_box
         FROM grading_partai as a
         JOIN pengiriman as b ON b.no_box = a.box_pengiriman
         WHERE b.tgl_input = '$tgl'
