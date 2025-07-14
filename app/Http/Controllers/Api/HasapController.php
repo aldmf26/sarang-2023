@@ -709,21 +709,22 @@ ON all_data.grade = done_data.grade;");
     public function stok_produk_jadi_detail(Request $r)
     {
         $data = DB::select("SELECT b.tgl as tgl, sum(d.pcs) as pcs , sum(d.gr) as gr, 'masuk' as ket,  GROUP_CONCAT(DISTINCT CONCAT(\"'\", d.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
-FROM grading_partai as d
-left join pengiriman as a on a.no_box = d.box_pengiriman
-left join pengiriman_packing_list as b on b.no_nota = a.no_nota
-where a.grade = 'dg' 
-group by b.tgl
+        FROM grading_partai as d
+        left join pengiriman as a on a.no_box = d.box_pengiriman
+        left join pengiriman_packing_list as b on b.no_nota = a.no_nota
+        where a.grade = 'dg' 
+        group by b.tgl
 
-UNION ALL
+        UNION ALL
 
-SELECT c.tgl as tgl, sum(e.pcs) as pcs , sum(e.gr) as gr, 'keluar' as ket, GROUP_CONCAT(DISTINCT CONCAT(\"'\", e.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
-left join pengiriman as b on b.no_box = e.box_pengiriman
-left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-where b.grade = 'dg' and b.selesai ='Y'
-GROUP by c.tgl
+        SELECT c.tgl as tgl, sum(e.pcs) as pcs , sum(e.gr) as gr, 'keluar' as ket, GROUP_CONCAT(DISTINCT CONCAT(\"'\", e.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+        FROM grading_partai as e
+        left join pengiriman as b on b.no_box = e.box_pengiriman
+        left join pengiriman_packing_list as c on c.no_nota = b.no_nota
+        where b.grade = 'dg' and b.selesai ='Y'
+        GROUP by c.tgl
 
-ORDER by tgl ASC, ket DESC;");
+        ORDER by tgl ASC, ket DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
