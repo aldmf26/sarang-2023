@@ -708,21 +708,20 @@ ON all_data.grade = done_data.grade;");
     }
     public function stok_produk_jadi_detail(Request $r)
     {
-        $data = DB::select("SELECT b.tgl as tgl, sum(a.pcs) as pcs , sum(a.gr) as gr, 'masuk' as ket
-FROM pengiriman as a
+        $data = DB::select("SELECT b.tgl as tgl, sum(d.pcs) as pcs , sum(d.gr) as gr, 'masuk' as ket,  GROUP_CONCAT(DISTINCT CONCAT(\"'\", d.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+FROM grading_partai as d
+left join pengiriman as a on a.no_box = d.box_pengiriman
 left join pengiriman_packing_list as b on b.no_nota = a.no_nota
-where a.grade = '$r->grade' 
+where a.grade = 'dg' 
 group by b.tgl
 
 UNION ALL
 
-SELECT c.tgl as tgl, sum(b.pcs) as pcs , sum(b.gr) as gr, 'keluar' as ket
-FROM pengiriman as b
+SELECT c.tgl as tgl, sum(e.pcs) as pcs , sum(e.gr) as gr, 'keluar' as ket, GROUP_CONCAT(DISTINCT CONCAT(\"'\", e.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
+left join pengiriman as b on b.no_box = e.box_pengiriman
 left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-where b.grade = '$r->grade' and b.selesai ='Y'
+where b.grade = 'dg' and b.selesai ='Y'
 GROUP by c.tgl
-
-
 
 ORDER by tgl ASC, ket DESC;");
         return response()->json([
