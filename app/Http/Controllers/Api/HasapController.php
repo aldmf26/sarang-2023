@@ -144,6 +144,59 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             'data' => $data
         ]);
     }
+    public function cabut_pengeringan(Request $r)
+    {
+
+        if (empty($r->id_pengawas)) {
+            $where = '';
+        } else {
+            $where = "AND a.id_pengawas = $r->id_pengawas";
+        }
+        $data = DB::select("SELECT  a.id_anak, a.no_box, c.tipe, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, d.batas_susut,
+        c.nm_partai,e.nama, f.name, a.tgl_terima as tgl, a.id_pengawas, a.tgl_serah as tgl_akhir
+        FROM cabut as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        left join hasil_wawancara as e on e.id_anak = b.id_anak
+         left join users as f on f.id = a.id_pengawas
+        join (
+        SELECT e.no_box, e.tipe, e.baru, e.nm_partai
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        left join tb_kelas as d on d.id_kelas = a.id_kelas
+        where c.baru = 'baru'  and a.selesai = 'Y' $where 
+        group by a.id_pengawas, a.tgl_terima
+
+        UNION ALL 
+
+
+        SELECT  b.id_anak, a.no_box, c.tipe, 0 as pcs , sum(a.gr_eo_awal) as gr_awal, 0 as pcs_akhir, sum(a.gr_eo_akhir) as gr_akhir, 100 as batas_susut, c.nm_partai, e.nama, f.name, a.tgl_ambil as tgl,a.id_pengawas, a.tgl_serah as tgl_akhir
+        FROM eo as a 
+        left join tb_anak as b on b.id_anak = a.id_anak
+        left join hasil_wawancara as e on e.id_anak = b.id_anak
+        left join users as f on f.id = a.id_pengawas
+        join (
+        SELECT e.no_box, e.tipe, e.baru, e.nm_partai
+        FROM bk as e
+        where e.kategori = 'cabut'
+        group by e.no_box
+        ) as c on c.no_box = a.no_box
+        where c.baru = 'baru' and  a.selesai = 'Y' $where
+        group by a.id_pengawas, a.tgl_ambil
+
+       
+
+        order by tgl_akhir DESC
+        
+        ;");
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
     public function cabut_detail(Request $r)
     {
 
