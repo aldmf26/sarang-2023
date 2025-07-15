@@ -166,7 +166,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         ) as c on c.no_box = a.no_box
         left join tb_kelas as d on d.id_kelas = a.id_kelas
         where c.baru = 'baru'  and a.selesai = 'Y' $where 
-        group by a.id_pengawas, a.tgl_terima
+        group by a.id_pengawas, a.tgl_serah
 
         UNION ALL 
 
@@ -183,8 +183,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         group by e.no_box
         ) as c on c.no_box = a.no_box
         where c.baru = 'baru' and  a.selesai = 'Y' $where
-        group by a.id_pengawas, a.tgl_ambil
-
+        group by a.id_pengawas, a.tgl_serah
        
 
         order by tgl_akhir DESC
