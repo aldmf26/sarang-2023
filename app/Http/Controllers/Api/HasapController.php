@@ -653,7 +653,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT b.tgl, a.nm_partai, b.grade_id, b.rwb_id, b.no_invoice, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr_awal
         FROM bk as a
-        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        join sbw_kotor as b on b.nm_partai = a.nm_partai
         WHERE a.kategori = 'cabut'
         group by a.nm_partai
         order by b.tgl asc;");
@@ -673,6 +673,28 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         WHERE a.kategori = 'cabut' and a.nm_partai = '$r->nm_partai'
         group by a.nm_partai
         order by b.tgl asc;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function tracebelity1(Request $r)
+    {
+
+        $data = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, a.tgl_serah, 'cabut' as ket
+        FROM cabut as a
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        where b.nm_partai = '$r->nm_partai'
+        group by a.tgl_terima
+
+        UNION ALL
+
+        SELECT 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, c.tgl_serah, 'eo' as ket
+        FROM eo as c 
+        left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+        where d.nm_partai = '$r->nm_partai'
+        group by c.tgl_ambil;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
