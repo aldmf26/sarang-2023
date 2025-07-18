@@ -682,21 +682,27 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function tracebelity1(Request $r)
     {
 
-        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr / 1000) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id
+        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr / 1000) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id,
+max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awal_ctk) as gr_awal_ctk, sum(i.pcs_tdk_cetak + i.pcs_akhir) as pcs_akhir_ctk, sum(i.gr_tdk_cetak + i.gr_akhir) as gr_akhir_ctk
+
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join sbw_kotor as e on e.nm_partai = b.nm_partai
         left join bk_awal as f on f.nm_partai = b.nm_partai
+        left join cetak_new as i on i.no_box = a.no_box and i.id_kelas_cetak !='12'
         where b.nm_partai = '$r->nm_partai'
         group by a.tgl_terima
 
         UNION ALL
 
-        SELECT g.tgl as tgl_panen, g.no_invoice, g.kg as berat_bersih, (h.gr/1000) as gr_kotor, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, max(c.tgl_serah) as tgl_serah, 'eo' as ket, g.rwb_id
+        SELECT g.tgl as tgl_panen, g.no_invoice, g.kg as berat_bersih, (h.gr/1000) as gr_kotor, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, max(c.tgl_serah) as tgl_serah, 'eo' as ket, g.rwb_id,
+        max(j.tgl) as tgl_selesai_ctk, sum(j.pcs_awal_ctk) as pcs_awal_ctk, sum(j.gr_awal_ctk) as gr_awal_ctk,sum(j.pcs_tdk_cetak + j.pcs_akhir) as pcs_akhir_ctk, sum(j.gr_tdk_cetak + j.gr_akhir) as gr_akhir_ctk
+        
         FROM eo as c 
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join sbw_kotor as g on g.nm_partai = d.nm_partai
         left join bk_awal as h on h.nm_partai = d.nm_partai
+        left join cetak_new as j on j.no_box = c.no_box and j.id_kelas_cetak !='12'
         where d.nm_partai = '$r->nm_partai'
         group by c.tgl_ambil;");
         return response()->json([
