@@ -682,7 +682,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function tracebelity1(Request $r)
     {
 
-        $data = DB::selectOne("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr / 1000) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket
+        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr / 1000) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join sbw_kotor as e on e.nm_partai = b.nm_partai
