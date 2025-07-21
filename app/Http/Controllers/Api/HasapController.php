@@ -865,7 +865,7 @@ ON all_data.grade = done_data.grade;");
 
     public function detail_bjm_sinta(Request $r)
     {
-        $data = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal FROM bk as a where a.nm_partai = '$r->nm_partai' and a.kategori = 'cabut' group by a.nm_partai;");
+        $data = DB::selectOne("SELECT sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal FROM bk as a where a.nm_partai like '%$r->nm_partai%' and a.kategori = 'cabut' group by a.nm_partai;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
