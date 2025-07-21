@@ -68,6 +68,7 @@ Route::controller(HasapController::class)
         Route::get('/cabut_detail_pengeringan', 'cabut_detail_pengeringan')->name('cabut_detail_pengeringan');
         Route::get('/cabut_pengeringan', 'cabut_pengeringan')->name('cabut_pengeringan');
         Route::get('/tracebelity1', 'tracebelity1')->name('tracebelity1');
+        Route::get('/detail_bjm_sinta', 'detail_bjm_sinta')->name('detail_bjm_sinta');
     });
 
 
