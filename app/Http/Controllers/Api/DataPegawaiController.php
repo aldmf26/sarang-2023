@@ -67,7 +67,6 @@ class DataPegawaiController extends Controller
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
-            'total' => count($dataPegawai)
         ];
         return response()->json($datas, 200);
     }
