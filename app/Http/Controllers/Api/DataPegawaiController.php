@@ -69,8 +69,7 @@ class DataPegawaiController extends Controller
             ->join('users as b', 'a.id_pengawas', 'b.id')
             ->where('a.id_anak', $dataPegawai->id_anak)
             ->selectRaw("
-                            a.id,
-                            a.id_anak,
+                            a.id_anak
                             a.id_pengawas,
                             a.tgl,
                             a.bulan_dibayar,
