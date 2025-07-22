@@ -63,9 +63,7 @@ class DataPegawaiController extends Controller
                         a.deleted_at
                         ")
             ->where('a.id', $id)->first();
-        $absen = $dataPegawai ? DB::table('absen')
-            ->where('id_anak', $dataPegawai->id_anak)
-            ->get() : [];
+        $absen =[];
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
