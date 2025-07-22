@@ -78,10 +78,27 @@ class DataPegawaiController extends Controller
             ->orderBy('a.tgl', 'desc')
             ->get()
             : [];
+
+        // Hitung total hari absensi per bulan untuk tahun berjalan
+        $absenTotal = $dataPegawai ? DB::table('absen')
+            ->where('id_anak', $dataPegawai->id_anak)
+            ->whereYear('tgl', DB::raw('YEAR(CURDATE())'))
+            ->groupBy(DB::raw('MONTH(tgl)'))
+            ->selectRaw('MONTH(tgl) as bulan, COUNT(*) as total_hari')
+            ->get()
+            ->pluck('total_hari', 'bulan')
+            ->toArray() : [];
+
+        // Format total hari per bulan (1-12)
+        $totalPerBulan = array_fill(1, 12, 0);
+        foreach ($absenTotal as $bulan => $total) {
+            $totalPerBulan[$bulan] = $total;
+        }
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
             'absen' => $absen,
+            'total_per_bulan' => $totalPerBulan,
         ];
         return response()->json($datas, 200);
     }
