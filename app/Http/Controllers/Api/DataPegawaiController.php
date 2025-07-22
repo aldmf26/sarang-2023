@@ -30,6 +30,7 @@ class DataPegawaiController extends Controller
                         a.posisi2 as posisi,
                         a.deleted_at
                         ")
+            ->where('c.id_pengawas', '!=', null)
             ->get();
 
         $datas = [
