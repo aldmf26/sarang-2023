@@ -470,7 +470,7 @@ class GudangSarangController extends Controller
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = '$kategori' AND year(a.tanggal) = 2025
+        WHERE a.kategori = '$kategori' AND MONTH(a.tanggal) = MONTH(NOW())
         group by a.no_invoice
         order by a.id_formulir DESC
         ");

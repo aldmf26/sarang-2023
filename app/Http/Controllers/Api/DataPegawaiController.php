@@ -12,9 +12,9 @@ class DataPegawaiController extends Controller
     {
         // Ambil semua data pegawai
         $dataPegawai = DB::table('hasil_wawancara as a')
-                        ->leftJoin('divisis as b','a.id_divisi','b.id' )
-                        ->leftJoin('tb_anak as c','a.id_anak','c.id_anak' )
-                        ->selectRaw("
+            ->leftJoin('divisis as b', 'a.id_divisi', 'b.id')
+            ->leftJoin('tb_anak as c', 'a.id_anak', 'c.id_anak')
+            ->selectRaw("
                         a.id as id_pegawai,
                         a.nama,
                         c.id_kelas as kelas_cbt,
@@ -30,7 +30,7 @@ class DataPegawaiController extends Controller
                         a.posisi2 as posisi,
                         a.deleted_at
                         ")
-                        ->get();
+            ->get();
 
         $datas = [
             'sumber_data' => 'sarang',

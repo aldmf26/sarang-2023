@@ -57,6 +57,18 @@ Route::controller(HasapController::class)
         Route::get('/stok_grade_detail', 'stok_grade_detail')->name('stok_grade_detail');
         Route::get('/first_tracebelity', 'first_tracebelity')->name('first_tracebelity');
         Route::get('/first_tracebelity2', 'first_tracebelity2')->name('first_tracebelity2');
+        Route::get('/delivery', 'delivery')->name('delivery');
+        Route::get('/delivery_detail', 'delivery_detail')->name('delivery_detail');
+        Route::get('/tb_anak', 'tb_anak')->name('tb_anak');
+        Route::get('/no_box', 'no_box')->name('no_box');
+        Route::get('/detail_box', 'detail_box')->name('detail_box');
+        Route::get('/pengiriman_akhir_detail_group_grade', 'pengiriman_akhir_detail_group_grade')->name('pengiriman_akhir_detail_group_grade');
+        Route::get('/stok_produk_jadi', 'stok_produk_jadi')->name('stok_produk_jadi');
+        Route::get('/stok_produk_jadi_detail', 'stok_produk_jadi_detail')->name('stok_produk_jadi_detail');
+        Route::get('/cabut_detail_pengeringan', 'cabut_detail_pengeringan')->name('cabut_detail_pengeringan');
+        Route::get('/cabut_pengeringan', 'cabut_pengeringan')->name('cabut_pengeringan');
+        Route::get('/tracebelity1', 'tracebelity1')->name('tracebelity1');
+        Route::get('/detail_bjm_sinta', 'detail_bjm_sinta')->name('detail_bjm_sinta');
     });
 
 
