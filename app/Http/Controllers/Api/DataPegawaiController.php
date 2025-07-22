@@ -17,6 +17,7 @@ class DataPegawaiController extends Controller
             ->selectRaw("
                         a.id as id_pegawai,
                         a.nama,
+                        c.id_pengawas,
                         c.id_kelas as kelas_cbt,
                         a.nik,
                         a.tgl_lahir,
