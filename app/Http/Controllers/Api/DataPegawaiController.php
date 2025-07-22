@@ -75,7 +75,7 @@ class DataPegawaiController extends Controller
                             a.bulan_dibayar,
                             a.tahun_dibayar,
                             b.name as pengawas")
-            ->orderBy('a.tanggal', 'desc')
+            ->orderBy('a.tgl', 'desc')
             ->get()
             : [];
         $datas = [
