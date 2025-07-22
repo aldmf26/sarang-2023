@@ -51,6 +51,7 @@ class DataPegawaiController extends Controller
                         a.nama,
                         c.id_kelas as kelas_cbt,
                         a.nik,
+                        a.id_anak,
                         a.tgl_lahir,
                         a.jenis_kelamin,
                         a.tgl_masuk,
@@ -63,7 +64,9 @@ class DataPegawaiController extends Controller
                         a.deleted_at
                         ")
             ->where('a.id', $id)->first();
-        $absen =[];
+        $absen = $dataPegawai ? DB::table('absen')
+            ->where('id_anak', $dataPegawai->id_anak)
+            ->get() : [];
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
