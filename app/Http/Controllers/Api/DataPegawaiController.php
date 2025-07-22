@@ -39,4 +39,36 @@ class DataPegawaiController extends Controller
         ];
         return response()->json($datas, 200);
     }
+
+    public function detail($id)
+    {
+        // Ambil semua data pegawai
+        $dataPegawai = DB::table('hasil_wawancara as a')
+            ->leftJoin('divisis as b', 'a.id_divisi', 'b.id')
+            ->leftJoin('tb_anak as c', 'a.id_anak', 'c.id_anak')
+            ->selectRaw("
+                        a.id as id_pegawai,
+                        a.nama,
+                        c.id_kelas as kelas_cbt,
+                        a.nik,
+                        a.tgl_lahir,
+                        a.jenis_kelamin,
+                        a.tgl_masuk,
+                        a.id_divisi as divisi_id,
+                        a.kesimpulan,
+                        a.keputusan,
+                        a.periode_masa_percobaan as periode,
+                        a.keputusan_lulus as keputusan,
+                        a.posisi2 as posisi,
+                        a.deleted_at
+                        ")
+            ->where('a.id', $id)->first();
+
+        $datas = [
+            'sumber_data' => 'sarang',
+            'pegawai' => $dataPegawai,
+            'total' => count($dataPegawai)
+        ];
+        return response()->json($datas, 200);
+    }
 }

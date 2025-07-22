@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/data-pegawai', [DataPegawaiController::class, 'index']);
+Route::get('/data-pegawai/{id}', [DataPegawaiController::class, 'detail']);
 
 Route::controller(HasapController::class)
     ->prefix('apihasap')
