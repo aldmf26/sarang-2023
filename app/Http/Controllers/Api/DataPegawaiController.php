@@ -16,6 +16,7 @@ class DataPegawaiController extends Controller
             ->leftJoin('tb_anak as c', 'a.id_anak', 'c.id_anak')
             ->selectRaw("
                         a.id as id_pegawai,
+                        a.id_anak,
                         a.nama,
                         c.id_pengawas,
                         c.id_kelas as kelas_cbt,
