@@ -72,22 +72,26 @@ class hrga2HasilWawancaraController extends Controller
         return view('hccp.hrga1_penerimaan.hrga2.form_isi', $data);
     }
 
-
-
     public function store(Request $r)
     {
-        $data = [
-            'nama' => $r->nama,
-            'nik' => $r->nik,
-            'tgl_lahir' => $r->tgl_lahir,
-            'jenis_kelamin' => $r->jenis_kelamin,
-            'id_divisi' => $r->id_divisi,
-            'kesimpulan' => $r->kesimpulan,
-            'keputusan' => $r->keputusan,
+        $cek_nik = DB::table('hasil_wawancara')->where('nik', $r->nik)->first();
+        $cek_nama = DB::table('hasil_wawancara')->where('nama', $r->nama)->first();
+        if (empty($cek_nik->nik) && empty($cek_nama->nama)) {
+            $data = [
+                'nama' => $r->nama,
+                'nik' => $r->nik,
+                'tgl_lahir' => $r->tgl_lahir,
+                'jenis_kelamin' => $r->jenis_kelamin,
+                'id_divisi' => $r->id_divisi,
+                'kesimpulan' => $r->kesimpulan,
+                'keputusan' => $r->keputusan,
 
-            'created_at' => date('Y-m-d H:i:s'),
-        ];
-        DB::table('hasil_wawancara')->insert($data);
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+            DB::table('hasil_wawancara')->insert($data);
+        } else {
+            return redirect()->back()->with('gagal', 'Data NIK dan Nama Sudah Ada di Database');
+        }
 
         return redirect()->route('hrga2.index', ['divisi' => $r->id_divisi])->with('sukses', 'Data Berhasil ditambahkan');
     }
