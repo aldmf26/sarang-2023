@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,16 +92,28 @@ class DataPegawaiController extends Controller
             ->pluck('total_hari', 'bulan')
             ->toArray() : [];
 
-        // Format total hari per bulan (1-12)
-        $totalPerBulan = array_fill(1, 12, 0);
-        foreach ($absenTotal as $bulan => $total) {
-            $totalPerBulan[$bulan] = $total;
+        // Format total hari per bulan (1-12) dan estimasi hari libur
+        $totalPerBulan = [];
+        $currentYear = Carbon::now()->year; // 2025
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+            $totalHariBulan = Carbon::create($currentYear, $bulan)->daysInMonth;
+            $hariAbsen = $absenTotal[$bulan] ?? 0;
+            $hariLiburEstimasi = $totalHariBulan - $hariAbsen; // Estimasi libur (tanpa akhir pekan spesifik)
+            $totalPerBulan[$bulan] = [
+                'absen' => $hariAbsen,
+                'libur' => max(0, $hariLiburEstimasi)
+            ];
         }
+
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
             'absen' => $absen,
             'total_per_bulan' => $totalPerBulan,
+            'grand_total' => [
+                'absen' => array_sum(array_column($totalPerBulan, 'absen')),
+                'libur' => array_sum(array_column($totalPerBulan, 'libur'))
+            ]
         ];
         return response()->json($datas, 200);
     }
