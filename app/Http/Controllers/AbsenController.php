@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AbsenTemplateExport;
+use App\Imports\AbsenTemplateImport;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenController extends Controller
 {
@@ -21,17 +24,30 @@ class AbsenController extends Controller
     {
         $tgl = $r->tgl ?? date('Y-m-d');
         $id_pengawas = auth()->user()->id;
+        $divisi = $r->divisi;
         $data = [
             'title' => 'Form Absensi',
             'tgl' => $tgl,
+            'divisi' => $divisi,
             'bulan' => DB::table('bulan')->get(),
             'pengawas' => DB::table('users as a')->join('tb_anak as b', 'a.id', 'b.id_pengawas')->groupBy('a.id')->get(),
             'anak' =>  DB::table('tb_anak as a')
                 ->join('users as b', 'a.id_pengawas', 'b.id')
-                ->where([['a.id_pengawas', $id_pengawas],['a.berhenti', 'T']])
+                ->where([['a.id_pengawas', $id_pengawas], ['a.berhenti', 'T']])
                 ->get()
         ];
         return view('home.absen.index', $data);
+    }
+
+    public function template()
+    {
+        return Excel::download(new AbsenTemplateExport, 'template_absen_pgws.xlsx');
+    }
+
+    public function import()
+    {
+        Excel::import(new AbsenTemplateImport, request()->file('file'));
+        return redirect()->route('absen.index', ['divisi' => 'pgws'])->with('sukses', 'Data Berhasil diimport');
     }
     public function getQueryDetail($id_pengawas, $bulan, $tahun)
     {

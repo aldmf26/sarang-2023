@@ -186,6 +186,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/create_stgh_hari', 'create_stgh_hari')->name('create_stgh_hari');
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::get('/detail/{id_anak}', 'detail')->name('detail');
+            Route::get('/template', 'template')->name('template');
+            Route::post('/import', 'import')->name('import');
         });
     Route::controller(RekapGajiPeranakController::class)
         ->prefix('home/rekapan')

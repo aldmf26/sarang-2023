@@ -68,15 +68,13 @@ class DataPegawaiController extends Controller
             ->where('a.id', $id)->first();
         $absen = $dataPegawai ?
             DB::table('absen as a')
-            ->join('users as b', 'a.id_pengawas', 'b.id')
             ->where('a.id_anak', $dataPegawai->id_anak)
             ->selectRaw("
                             a.id_anak,
                             a.id_pengawas,
                             a.tgl,
                             a.bulan_dibayar,
-                            a.tahun_dibayar,
-                            b.name as pengawas")
+                            a.tahun_dibayar")
             ->orderBy('a.tgl', 'desc')
             ->get()
             : [];
@@ -96,6 +94,7 @@ class DataPegawaiController extends Controller
         foreach ($absenTotal as $bulan => $total) {
             $totalPerBulan[$bulan] = $total;
         }
+
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
