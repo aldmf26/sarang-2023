@@ -68,7 +68,7 @@ class DataPegawaiController extends Controller
             ->where('a.id', $id)->first();
         $absen = $dataPegawai ?
             DB::table('absen as a')
-            ->where('a.id_anak', $dataPegawai->id_anak)
+            ->where('a.id_anak', $dataPegawai->id_anak ?? $dataPegawai->id)
             ->selectRaw("
                             a.id_anak,
                             a.id_pengawas,
