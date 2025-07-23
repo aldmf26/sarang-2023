@@ -872,4 +872,77 @@ ON all_data.grade = done_data.grade;");
             'data' => $data
         ]);
     }
+    public function cabut_pengeringan_new(Request $r)
+    {
+        $data = DB::select("SELECT id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
+        SELECT 
+            DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
+            c.no_box,
+            c.tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS pcs,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS gr,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.gr_awal - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS gr_akhir
+        FROM cabut c
+        JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+        left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+        left join tb_anak as e on e.id_anak = c.id_anak
+        left join users as f on f.id = c.id_pengawas
+        ) AS hasil
+        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        Group by id_pengawas
+        ORDER BY tgl DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function cabut_pengeringan_new_detail(Request $r)
+    {
+        $data = DB::select("SELECT * FROM (
+  SELECT 
+    DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
+    c.no_box,
+    c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS pcs,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS gr,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS gr_akhir
+  FROM cabut c
+  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+  left join tb_anak as e on e.id_anak = c.id_anak
+  left join hasil_wawancara as f on f.id_anak = e.id_anak
+) AS hasil
+WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
+ORDER BY  tgl ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }

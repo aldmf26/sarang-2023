@@ -19,6 +19,7 @@
         <table class="table table-bordered" style="border: 0.5px solid #a0a7c1; font-size: 12px" id="tablealdi2">
             <thead>
                 <tr>
+                    <th class="dhead">Tgl Terima</th>
                     <th class="dhead">Tgl Selesai</th>
                     <th class="dhead" width="60">No Box</th>
                     <th class="dhead" width="100">Nama Anak</th>
@@ -44,6 +45,7 @@
                     @endphp
 
                     <tr data-csrf-token="{{ csrf_token() }}">
+                        <td>{{ date('d-m-Y', strtotime($d->tgl_terima)) }}</td>
                         <td class="d-none">
                             <input type="text" name="id_anak{{ $i + 1 }}[]" value="{{ $d->id_anak }}">
                             <input type="text" name="id_cabut{{ $i + 1 }}[]" value="{{ $d->id_cabut }}">
