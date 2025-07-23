@@ -8,7 +8,8 @@
                     <th class="dhead" width="50">Bulan</th>
                     <th class="dhead">No Box</th>
                     <th class="dhead">Anak</th>
-                    <th class="dhead">Tgl Terima - serah Brg</th>
+                    <th class="dhead">Tgl Terima </th>
+                    <th class="dhead">Tgl serah Brg</th>
                     <th class="text-end dhead">Pcs Awal</th>
                     <th class="text-end dhead">Gr Awal</th>
                     <th class="text-end dhead">Gr Flx</th>
@@ -52,7 +53,8 @@
                                 id_cabut="{{ $d->id_cabut }}">{{ $d->no_box }}</a>
                         </td>
                         <td>{{ $d->nama }}</td>
-                        <td>{{ date('d', strtotime($d->tgl_terima)) }} - {{ date('d', strtotime($d->tgl_serah)) }} {{ date('M Y', strtotime($d->tgl_serah)) }}</td>
+                        <td>{{ date('d-m-Y', strtotime($d->tgl_terima)) }}</td>
+                        <td>{{ date('d-m-Y', strtotime($d->tgl_serah)) }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
                         <td align="right">{{ $d->gr_flx }}</td>
