@@ -9,7 +9,7 @@
                     <th class="dhead">No Box</th>
                     <th class="dhead">Anak</th>
                     <th class="dhead">Tgl Terima </th>
-                    <th class="dhead">Tgl serah Brg</th>
+                    <th class="dhead">Tgl Selesai</th>
                     <th class="text-end dhead">Pcs Awal</th>
                     <th class="text-end dhead">Gr Awal</th>
                     <th class="text-end dhead">Gr Flx</th>
@@ -54,7 +54,7 @@
                         </td>
                         <td>{{ $d->nama }}</td>
                         <td>{{ date('d-m-Y', strtotime($d->tgl_terima)) }}</td>
-                        <td>{{ date('d-m-Y', strtotime($d->tgl_serah)) }}</td>
+                        <td>{{ empty($d->tgl_serah) ? '-' : date('d-m-Y', strtotime($d->tgl_serah)) }}</td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
                         <td align="right">{{ $d->gr_flx }}</td>
