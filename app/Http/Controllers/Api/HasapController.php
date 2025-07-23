@@ -935,7 +935,7 @@ ON all_data.grade = done_data.grade;");
   JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
   left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
   left join tb_anak as e on e.id_anak = c.id_anak
-  left join hasil_wawancara as f on f.id_anak = b.id_anak
+  left join hasil_wawancara as f on f.id_anak = e.id_anak
 ) AS hasil
 WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
 ORDER BY  tgl ASC;");
