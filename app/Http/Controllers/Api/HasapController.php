@@ -940,7 +940,7 @@ ON all_data.grade = done_data.grade;");
   SELECT 
     DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
     c.no_box,
-    c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai,
+    c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'cabut' as kategori,
     CASE 
       WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
       THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
@@ -973,7 +973,7 @@ ON all_data.grade = done_data.grade;");
     SELECT 
     DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
     c.no_box,
-    c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai,
+    c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'eo' as kategori,
     0 AS pcs,
     CASE 
       WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
