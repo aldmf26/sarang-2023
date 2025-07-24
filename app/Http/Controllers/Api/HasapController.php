@@ -1005,7 +1005,7 @@ ORDER BY  tgl ASC;");
 
     public function cuci_nitrit(Request $r)
     {
-        $data = DB::select("SELECT id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
+        $data = DB::select("SELECT tgl, id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
         SELECT 
             DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
             c.no_box,
