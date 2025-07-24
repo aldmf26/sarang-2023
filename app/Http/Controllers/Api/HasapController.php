@@ -1001,4 +1001,68 @@ ORDER BY  tgl ASC;");
             'data' => $data
         ]);
     }
+
+
+    public function cuci_nitrit(Request $r)
+    {
+        $data = DB::select("SELECT id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
+        SELECT 
+            DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
+            c.no_box,
+            c.tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS pcs,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS gr,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+            THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+            END AS gr_akhir
+        FROM cabut c
+        JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+        left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+        left join tb_anak as e on e.id_anak = c.id_anak
+        left join users as f on f.id = c.id_pengawas
+    
+    	UNION ALL
+    	
+    SELECT 
+            DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
+            c.no_box,
+            c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+            0 AS pcs,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+            THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+            ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+            END AS gr,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+            THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+            ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+            END AS gr_akhir
+        FROM eo c
+        JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
+        left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+        left join tb_anak as e on e.id_anak = c.id_anak
+        left join users as f on f.id = c.id_pengawas
+    
+    
+        ) AS hasil
+        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        Group by tgl, id_pengawas
+        ORDER BY tgl DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
