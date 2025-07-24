@@ -1065,4 +1065,72 @@ ORDER BY  tgl ASC;");
             'data' => $data
         ]);
     }
+
+    public function nitrit_detail(Request $r)
+    {
+        $data = DB::select("SELECT * FROM (
+  SELECT 
+    DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
+    c.no_box,
+    c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'cabut' as kategori,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS pcs,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS gr,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS gr_akhir,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+      THEN g.pcs - FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+      ELSE FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+    END AS pcs_not_ok
+  FROM cabut c
+  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+  left join tb_anak as e on e.id_anak = c.id_anak
+  left join hasil_wawancara as f on f.id_anak = e.id_anak
+  left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+    
+    UNION ALL 
+    
+    SELECT 
+    DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
+    c.no_box,
+    c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'eo' as kategori,
+    0 AS pcs,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+      THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+      ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+    END AS gr,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+      THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+      ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+    END AS gr_akhir,
+    0 AS pcs_not_ok
+  FROM eo c
+  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
+  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+  left join tb_anak as e on e.id_anak = c.id_anak
+  left join hasil_wawancara as f on f.id_anak = e.id_anak
+  left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+) AS hasil
+WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
+ORDER BY  tgl ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }

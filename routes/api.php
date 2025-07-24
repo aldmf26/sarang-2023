@@ -73,6 +73,7 @@ Route::controller(HasapController::class)
         Route::get('/cabut_pengeringan_new', 'cabut_pengeringan_new')->name('cabut_pengeringan_new');
         Route::get('/cabut_pengeringan_new_detail', 'cabut_pengeringan_new_detail')->name('cabut_pengeringan_new_detail');
         Route::get('/cuci_nitrit', 'cuci_nitrit')->name('cuci_nitrit');
+        Route::get('/nitrit_detail', 'nitrit_detail')->name('nitrit_detail');
     });
 
 
