@@ -891,7 +891,7 @@ ON all_data.grade = done_data.grade;");
             END AS gr,
             CASE 
             WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-            THEN c.gr_awal - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+            THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
             ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
             END AS gr_akhir
         FROM cabut c
@@ -899,6 +899,31 @@ ON all_data.grade = done_data.grade;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+    
+    	UNION ALL
+    	
+    SELECT 
+            DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
+            c.no_box,
+            c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+            0 AS pcs,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+            THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+            ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+            END AS gr,
+            CASE 
+            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+            THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+            ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+            END AS gr_akhir
+        FROM eo c
+        JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
+        left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+        left join tb_anak as e on e.id_anak = c.id_anak
+        left join users as f on f.id = c.id_pengawas
+    
+    
         ) AS hasil
         where tgl_terima BETWEEN '2025-07-01' and NOW()
         Group by id_pengawas
@@ -938,6 +963,31 @@ ON all_data.grade = done_data.grade;");
     END AS pcs_not_ok
   FROM cabut c
   JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+  left join tb_anak as e on e.id_anak = c.id_anak
+  left join hasil_wawancara as f on f.id_anak = e.id_anak
+  left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+    
+    UNION ALL 
+    
+    SELECT 
+    DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
+    c.no_box,
+    c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai,
+    0 AS pcs,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+      THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+      ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+    END AS gr,
+    CASE 
+      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+      THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+      ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+    END AS gr_akhir,
+    0 AS pcs_not_ok
+  FROM eo c
+  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
   left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
