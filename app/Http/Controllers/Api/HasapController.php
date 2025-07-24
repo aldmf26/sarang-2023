@@ -1126,7 +1126,7 @@ ORDER BY  tgl ASC;");
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
 ) AS hasil
 WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
-ORDER BY  tgl ASC;");
+ORDER BY  no_box ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
