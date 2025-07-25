@@ -214,7 +214,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice";
 
-        $formulir = $this->getFormulirKategori($kategori);
+        $formulir = $this->getFormulirKategori($kategori, $tgl1, $tgl2);
 
 
         $data = [
@@ -464,13 +464,20 @@ class GudangSarangController extends Controller
         return redirect()->route('gudangsarang.invoice_grade', ['kategori' => 'grade'])->with('sukses', 'Data Berhasil');
     }
 
-    public function getFormulirKategori($kategori)
+    public function getFormulirKategori($kategori, $tgl1, $tgl2)
     {
+        if (empty($tgl1) || empty($tgl2)) {
+            $tgl1 = date('Y-m-01');
+            $tgl2 = date('Y-m-t');
+        } else {
+            $tgl1 = $tgl1;
+            $tgl2 = $tgl2;
+        }
         return DB::select("SELECT a.selesai,a.print,count(a.no_box) as ttl_box, a.id_formulir, a.no_invoice, a.tanggal, b.name as pemberi, c.name as penerima, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr
         FROM formulir_sarang as a
         left join users as b on b.id = a.id_pemberi
         left join users as c on c.id = a.id_penerima
-        WHERE a.kategori = '$kategori' AND MONTH(a.tanggal) = MONTH(NOW())
+        WHERE a.kategori = '$kategori' AND a.tanggal between '$tgl1' and '$tgl2'
         group by a.no_invoice
         order by a.id_formulir DESC
         ");
@@ -485,7 +492,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_sortir";
 
-        $formulir = $this->getFormulirKategori('sortir');
+        $formulir = $this->getFormulirKategori('sortir', $tgl1, $tgl2);
 
         $data = [
             'title' => 'Po Sortir',
@@ -505,7 +512,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grade";
 
-        $formulir = $this->getFormulirKategori('grade');
+        $formulir = $this->getFormulirKategori('grade', $tgl1, $tgl2);
 
 
         $data = [
@@ -527,7 +534,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grade";
 
-        $formulir = $this->getFormulirKategori('wip');
+        $formulir = $this->getFormulirKategori('wip', $tgl1, $tgl2);
         $data = [
             'title' => 'Po Sortir',
             'formulir' => $formulir,
@@ -547,7 +554,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
 
-        $formulir = $this->getFormulirKategori('grading');
+        $formulir = $this->getFormulirKategori('grading', $tgl1, $tgl2);
 
 
         $data = [
@@ -638,7 +645,7 @@ class GudangSarangController extends Controller
         $kategori = $r->kategori ?? 'cetak';
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
-        $formulir = $this->getFormulirKategori('qc');
+        $formulir = $this->getFormulirKategori('qc', $tgl1, $tgl2);
         $data = [
             'title' => 'Po QC',
             'formulir' => $formulir,
@@ -704,7 +711,7 @@ class GudangSarangController extends Controller
         $kategori = $r->kategori ?? 'cetak';
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
-        $formulir = $this->getFormulirKategori('wip2');
+        $formulir = $this->getFormulirKategori('wip2', $tgl1, $tgl2);
         $data = [
             'title' => 'Po Wip2',
             'formulir' => $formulir,
