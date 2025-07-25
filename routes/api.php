@@ -75,6 +75,7 @@ Route::controller(HasapController::class)
         Route::get('/cuci_nitrit', 'cuci_nitrit')->name('cuci_nitrit');
         Route::get('/nitrit_detail', 'nitrit_detail')->name('nitrit_detail');
         Route::get('/ttlgrading_detail2', 'ttlgrading_detail2')->name('ttlgrading_detail2');
+        Route::get('/steaming_new_detail', 'steaming_new_detail')->name('steaming_new_detail');
     });
 
 

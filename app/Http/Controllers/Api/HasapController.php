@@ -1150,4 +1150,45 @@ ORDER BY  no_box ASC;");
             'data' => $data
         ]);
     }
+    public function steaming_new_detail(Request $r)
+    {
+        $data = DB::select("SELECT 
+    group_id,
+    GROUP_CONCAT(no_barcode) AS barcodes,
+    GROUP_CONCAT(DISTINCT grade ORDER BY grade) AS grades,
+    SUM(pcs) AS total_pcs,
+    SUM(gr) AS total_gr,
+    GROUP_CONCAT(DISTINCT nm_partai SEPARATOR ', ') AS nm_partai
+FROM (
+    SELECT 
+        *,
+        FLOOR(running_gr / 1000) AS group_id
+    FROM (
+        SELECT 
+            x.*,
+            @running_gr := @running_gr + x.gr AS running_gr
+        FROM (
+            SELECT 
+                b.no_barcode, 
+                a.grade, 
+                SUM(a.pcs) AS pcs, 
+                SUM(a.gr) AS gr, 
+                GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS nm_partai
+            FROM grading_partai AS a
+            JOIN pengiriman AS b ON b.no_box = a.box_pengiriman
+            WHERE b.tgl_input = '$r->tgl'
+            GROUP BY b.no_barcode, a.grade
+            ORDER BY b.no_barcode
+        ) AS x,
+        (SELECT @running_gr := 0) AS vars
+    ) AS step1
+) AS grouped
+GROUP BY group_id
+ORDER BY group_id;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
