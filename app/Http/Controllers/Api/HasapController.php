@@ -595,33 +595,10 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function ttlgrading_detail(Request $r)
     {
 
-        $data = DB::select("SELECT 
-    g.grade,
-    (
-        SELECT 
-            GROUP_CONCAT(CONCAT(nm_partai, ': ', pcs, ' pcs, ', gr, ' gr') SEPARATOR '\n')
-        FROM (
-            SELECT 
-                b.nm_partai,
-                SUM(b.pcs) AS pcs,
-                SUM(b.gr) AS gr
-            FROM grading_partai b
-            WHERE b.grade = g.grade AND b.tgl = g.tgl
-            GROUP BY b.nm_partai
-        ) AS sub
-    ) AS detail_partai,
-    SUM(g.pcs) AS total_pcs,
-    SUM(g.gr) AS total_gr
-FROM 
-    grading_partai g
-WHERE 
-    g.tgl = '2025-07-24'
-GROUP BY 
-    g.grade
-ORDER BY 
-    g.grade ASC;
-
-        ");
+        $data = DB::select("SELECT a.tgl, a.grade, GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai , sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
+        where a.tgl = '$r->tgl'
+        group by a.grade
+        order by a.grade ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
