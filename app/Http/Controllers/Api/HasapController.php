@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grading;
 use App\Models\SummaryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -362,6 +363,15 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     }
     public function grading_detail(Request $r)
     {
+        $box_grading = Grading::detailPengiriman($r->no_invoice);
+
+        $ttlPcsTurunGrade = 0;
+        foreach ($box_grading as $b) {
+            $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
+                                FROM tb_hancuran as a
+                                where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$b->no_box_sortir'
+                                ");
+        }
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
         where a.no_invoice = '$r->no_invoice'

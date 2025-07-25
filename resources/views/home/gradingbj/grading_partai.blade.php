@@ -42,6 +42,7 @@
                 this.rows.splice(index, 1);
                 this.pcs.splice(index, 1);
                 this.gr.splice(index, 1);
+                alert(index + ' removed');
             },
         
         }" x-init="initSelect2()" action="{{ route('gradingbj.create_partai') }}"
@@ -250,6 +251,7 @@
                                 <th class="dhead text-end" width="210">Gr</th>
                                 <th class="dhead " width="300">Box Grade</th>
                                 <th class="dhead" width="300">Cek</th>
+                                <th class="dhead" width="300">Not Oke</th>
                                 <th class="dhead">Aksi</th>
                             </tr>
                         </thead>
@@ -294,6 +296,7 @@
                                     </td>
 
                                     <td class="cek" :urutan="index + 1"></td>
+                                    <td><input type="checkbox" :name="`not_oke[${index}]`"></td>
                                     <td>
                                         <span @click="removeRow(index)" class="badge bg-danger pointer"><i
                                                 class="fas fa-trash"></i></span>
