@@ -350,9 +350,9 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function grading(Request $r)
     {
 
-        $data = DB::select("SELECT a.tgl, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
+        $data = DB::select("SELECT a.tgl, a.no_invoice, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        group by a.tgl, a.nm_partai
+        group by a.no_invoice
         order by a.tgl DESC;");
         return response()->json([
             'status' => 'success',
@@ -364,7 +364,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     {
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai' 
+        where a.no_invoice = '$r->no_invoice'
         group by a.grade
         order by a.grade ASC;");
         return response()->json([
