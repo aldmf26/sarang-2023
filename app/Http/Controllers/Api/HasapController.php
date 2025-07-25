@@ -596,19 +596,31 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     {
 
         $data = DB::select("SELECT 
-            a.grade,
-            GROUP_CONCAT(DISTINCT CONCAT(a.nm_partai, ': ', SUM(a.pcs), ' pcs, ', SUM(a.gr), ' gr') 
-                ORDER BY a.nm_partai SEPARATOR '\n') AS detail_partai,
-            SUM(a.pcs) AS total_pcs,
-            SUM(a.gr) AS total_gr
-        FROM 
-            grading_partai AS a
-        WHERE 
-            a.tgl = '$r->tgl'
-        GROUP BY 
-            a.grade
-        ORDER BY 
-            a.grade ASC;
+    g.grade,
+    (
+        SELECT 
+            GROUP_CONCAT(CONCAT(nm_partai, ': ', pcs, ' pcs, ', gr, ' gr') SEPARATOR '\n')
+        FROM (
+            SELECT 
+                b.nm_partai,
+                SUM(b.pcs) AS pcs,
+                SUM(b.gr) AS gr
+            FROM grading_partai b
+            WHERE b.grade = g.grade AND b.tgl = g.tgl
+            GROUP BY b.nm_partai
+        ) AS sub
+    ) AS detail_partai,
+    SUM(g.pcs) AS total_pcs,
+    SUM(g.gr) AS total_gr
+FROM 
+    grading_partai g
+WHERE 
+    g.tgl = '2025-07-24'
+GROUP BY 
+    g.grade
+ORDER BY 
+    g.grade ASC;
+
         ");
         return response()->json([
             'status' => 'success',
