@@ -1155,7 +1155,7 @@ ORDER BY  no_box ASC;");
         $data = DB::select("SELECT 
     group_id,
     GROUP_CONCAT(no_barcode) AS barcodes,
-    GROUP_CONCAT(DISTINCT grade ORDER BY grade) AS grades,
+    GROUP_CONCAT(DISTINCT grade SEPARATOR ', ') AS grades,
     SUM(pcs) AS total_pcs,
     SUM(gr) AS total_gr,
     GROUP_CONCAT(DISTINCT nm_partai SEPARATOR ', ') AS nm_partai
