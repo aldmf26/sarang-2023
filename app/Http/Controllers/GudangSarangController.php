@@ -554,6 +554,8 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
 
+
+
         $formulir = $this->getFormulirKategori('grading', $tgl1, $tgl2);
 
 

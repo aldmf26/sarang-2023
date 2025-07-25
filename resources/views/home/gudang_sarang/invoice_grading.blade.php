@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <h6 class="">Po Grading</h6>
             <div>
-                <x-theme.btn_filter />
+                <x-theme.btn_filter2 kategori="grading" />
             </div>
         </div>
 
