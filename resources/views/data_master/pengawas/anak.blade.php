@@ -120,15 +120,37 @@
         {{-- ALL MODAL --}}
         <form action="{{ route('pengawas.create_anak') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah" title="tambah user" btnSave="Y">
+            <x-theme.modal idModal="tambah" size="modal-lg" title="tambah user" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="">Nama Anak</label>
+                            <label for="">Nama Panggilan</label>
                             <input required type="text" name="nama" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Nama Lengkap</label>
+                            <input required type="text" name="nama_lengkap" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">No KTP</label>
+                            <input required type="text" name="nik" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Jenis Kelamin</label>
+                            <select name="jenis_kelamin" class="select2" id="">
+                                <option value="">Jenis Kelamin</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="">Kelas</label>
                             <select name="kelas" class="select2" id="">
@@ -142,11 +164,22 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="">Pembawa</label>
                             <input type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
                                 class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Divisi</label>
+                            <select name="id_divisi" id="" class="select2">
+                                <option value="">Posisi</option>
+                                @foreach ($divisi as $d)
+                                    <option value="{{ $d->id }}">{{ $d->divisi }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -163,11 +196,17 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Tgl Lahir</label>
+                            <input required type="date" name="tgl_lahir" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Tgl Masuk</label>
-                            <input required type="date" id="tgl_masuk" value="{{ date('Y-m-d') }}" name="tgl_masuk"
-                                class="form-control">
+                            <input required type="date" id="tgl_masuk" value="{{ date('Y-m-d') }}"
+                                name="tgl_masuk" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -193,6 +232,90 @@
                             <input readonly id="tgl_dibayar" required type="date" value="{{ date('Y-m-d') }}"
                                 name="tgl_dibayar" class="form-control">
                         </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="">Kesimpulan Hasil Wawancara : </label>
+                            <textarea name="kesimpulan" class="form-control text_akhir" id="" cols="15" rows="3"
+                                style="text-align: left;">{{ $cth_wawancara->wawancara }}</textarea>
+
+                            <input type="hidden"class="text_awal" name="cth_wawancara"
+                                value="{{ $cth_wawancara->wawancara }}">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="">Periode Masa Percobaan :</label>
+                        <input type="radio" name="periode" id="" checked value="1"> 1 bulan
+                        <input type="radio" name="periode" id="" value="3"> 3 bulan
+                        <input type="radio" name="periode" id="" value="6"> 6 bulan
+                    </div>
+                    <div class="col-lg-12">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="4" class="text-center">PENILAIAN KARYAWAN</th>
+                                </tr>
+                                <tr>
+                                    <th>Kriteria Penilaian</th>
+                                    <th>Standar Penilaian</th>
+                                    <th>Hasil Penilaian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pendidikan</td>
+                                    <td><input type="text" name="pendidikan_standar" class="form-control"
+                                            value="{{ $cth2->pendidikan_standar }}">
+                                    </td>
+                                    <td><input type="text" name="pendidikan_hasil" class="form-control"
+                                            value="{{ $cth2->pendidikan_hasil }}">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>Pengalaman</td>
+                                    <td><input type="text" name="pengalaman_standar" class="form-control"
+                                            value="{{ $cth2->pengalaman_standar }}">
+                                    </td>
+                                    <td><input type="text" name="pengalaman_hasil" class="form-control"
+                                            value="{{ $cth2->pengalaman_hasil }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pelatihan</td>
+                                    <td><input type="text" name="pelatihan_standar" class="form-control"
+                                            value="{{ $cth2->pelatihan_standar }}">
+                                    </td>
+                                    <td><input type="text" name="pelatihan_hasil" class="form-control"
+                                            value="{{ $cth2->pelatihan_hasil }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Keterampilan</td>
+                                    <td><input type="text" name="keterampilan_standar" class="form-control"
+                                            value="{{ $cth2->keterampilan_standar }}"></td>
+                                    <td><input type="text" name="keterampilan_hasil" class="form-control"
+                                            value="{{ $cth2->keterampilan_hasil }}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Kompetensi Inti</td>
+                                    <td>
+                                        <textarea name="kompetensi_inti_standar" class="form-control" id="" cols="30" rows="4"
+                                            style="text-align: left">
+{{ $cth2->kompetensi_inti_standar }}
+                                        </textarea>
+                                    </td>
+                                    <td>
+                                        <textarea name="kompetensi_inti_hasil" class="form-control" id="" cols="30" rows="4"
+                                            style="text-align: left">
+{{ $cth2->kompetensi_inti_hasil }}
+                                        </textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
                     </div>
 
 
@@ -230,6 +353,17 @@
                         let tglDibayar = tgl.toISOString().split('T')[0];
                         $(`#tgl_dibayar`).val(tglDibayar);
                     }
+                });
+
+                $('.text_akhir').keyup(function(e) {
+                    var textAwal = $('.text_awal').val()
+                    var textAkhir = $(this).val();
+                    if (textAwal != textAkhir) {
+                        console.log('beda');
+                    } else {
+                        console.log('sama');
+                    }
+
                 });
             });
         </script>
