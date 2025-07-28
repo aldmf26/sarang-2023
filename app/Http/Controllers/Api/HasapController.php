@@ -368,7 +368,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM grading_partai as a 
         where a.no_invoice = '$r->no_invoice'
         group by a.grade
-        order by a.grade ASC;");
+        order by a.not_oke DESC, a.grade ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
