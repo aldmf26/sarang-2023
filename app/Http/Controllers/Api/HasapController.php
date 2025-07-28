@@ -423,10 +423,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     }
     public function pengiriman_akhir_detail_group_grade(Request $r)
     {
-
         $tgl = $r->tgl;
-
-
         $data = DB::select("SELECT a.no_barcode, a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.no_barcode) as jlh_box, a.nm_partai
         FROM (
         SELECT 
@@ -441,6 +438,27 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
                 GROUP BY b.no_barcode, a.grade
         ) as a
         group by a.grade;");
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function pengiriman_akhir_detail_group_grade2(Request $r)
+    {
+        $tgl = $r->tgl;
+        $data = DB::select("SELECT 
+                b.no_barcode, 
+                a.grade, 
+                SUM(a.pcs) as pcs, 
+                SUM(a.gr) as gr,
+                a.nm_partai
+                FROM grading_partai as a
+                JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+                WHERE b.tgl_input = '$tgl'
+                GROUP BY b.no_barcode, a.grade, a.nm_partai;");
 
 
         return response()->json([
