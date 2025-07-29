@@ -72,6 +72,11 @@ Route::controller(HasapController::class)
         Route::get('/detail_bjm_sinta', 'detail_bjm_sinta')->name('detail_bjm_sinta');
         Route::get('/cabut_pengeringan_new', 'cabut_pengeringan_new')->name('cabut_pengeringan_new');
         Route::get('/cabut_pengeringan_new_detail', 'cabut_pengeringan_new_detail')->name('cabut_pengeringan_new_detail');
+        Route::get('/cuci_nitrit', 'cuci_nitrit')->name('cuci_nitrit');
+        Route::get('/nitrit_detail', 'nitrit_detail')->name('nitrit_detail');
+        Route::get('/ttlgrading_detail2', 'ttlgrading_detail2')->name('ttlgrading_detail2');
+        Route::get('/steaming_new_detail', 'steaming_new_detail')->name('steaming_new_detail');
+        Route::get('/pengiriman_akhir_detail_group_grade2', 'pengiriman_akhir_detail_group_grade2')->name('pengiriman_akhir_detail_group_grade2');
     });
 
 

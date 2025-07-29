@@ -452,7 +452,7 @@ class GradingBjController extends Controller
             $cost_cu_sisa = $total_cost_cu;
 
             $data2 = [];
-
+            $not_oke_arr = $r->not_oke ?? [];
             // Proses simpan data grading_partai
             for ($i = 0; $i < count($r->grade); $i++) {
                 if (!$r->box_sp[$i]) continue;
@@ -461,6 +461,7 @@ class GradingBjController extends Controller
                 $pcs = $r->pcs[$i];
                 $gr = $r->gr[$i];
                 $boxsp = $r->box_sp[$i];
+                $not_oke = isset($not_oke_arr[$i]) ? 'Y' : 'T';
 
                 $gradeData = $gradeMaster[$grade] ?? null;
                 if (!$gradeData) {
@@ -498,6 +499,7 @@ class GradingBjController extends Controller
                     'cost_bk' => $cost_bk,
                     'cost_kerja' => $cost_kerja,
                     'cost_cu' => $cost_cu,
+                    'not_oke' => $not_oke,
                 ];
 
                 $data2[] = $data;

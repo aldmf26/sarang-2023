@@ -37,7 +37,11 @@ class PengawasController extends Controller
                 ->get(),
 
             'pengawas' => User::with('posisi')->whereIn('posisi_id', [13, 14])->get(),
-            'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
+            'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get(),
+            'divisi' => DB::table('divisis')->get(),
+            'cth_wawancara' => DB::table('cth_wawancara')->where('id_cth_wawancara', '1')->first(),
+            'cth2' => DB::table('cth_penialain_karyawan')->where('id', '1')->first(),
+
 
         ];
         return view('data_master.pengawas.anak', $data);
@@ -45,7 +49,7 @@ class PengawasController extends Controller
 
     public function create_anak(Request $r)
     {
-        DB::table('tb_anak')->insert([
+        $id_anak = DB::table('tb_anak')->insertGetId([
             'tgl_masuk' => $r->tgl_masuk,
             'nama' => $r->nama,
             'pembawa' => $r->pembawa,
@@ -55,6 +59,32 @@ class PengawasController extends Controller
             'id_kelas' => $r->kelas,
             'id_pengawas' => $r->id_pengawas,
         ]);
+        $data = [
+            'id_anak' => $id_anak,
+            'nama' => $r->nama_lengkap,
+            'nik' => $r->nik,
+            'tgl_lahir' => $r->tgl_lahir,
+            'jenis_kelamin' => $r->jenis_kelamin,
+            'id_divisi' => $r->id_divisi,
+            'kesimpulan' => $r->kesimpulan,
+            'keputusan' => 'dilanjutkan',
+            'tgl_masuk' => $r->tgl_masuk,
+        ];
+        DB::table('hasil_wawancara')->insert($data);
+
+        $data = [
+            'id_anak' => $id_anak,
+            'periode' => $r->periode,
+            'pendidikan_standar' => $r->pendidikan_standar,
+            'pendidikan_hasil' => $r->pendidikan_hasil,
+            'pelatihan_standar' => $r->pelatihan_standar,
+            'pelatihan_hasil' => $r->pelatihan_hasil,
+            'keterampilan_standar' => $r->keterampilan_standar,
+            'keterampilan_hasil' => $r->keterampilan_hasil,
+            'kompetensi_inti_standar' => $r->kompetensi_inti_standar,
+            'kompetensi_inti_hasil' => $r->kompetensi_inti_hasil
+        ];
+        DB::table('penilaian_karyawan')->insert($data);
 
         return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
     }
@@ -74,14 +104,14 @@ class PengawasController extends Controller
             $no_invoice = DB::table('invoice_karyawan')->max('no_invoice');
             $no_invoice = !$no_invoice ? 1001 : $no_invoice + 1;
             $anak = DB::table('tb_anak as a')
-            ->leftJoin('users as b', 'a.id_pengawas', 'b.id')
-            ->where(function ($query) {
-                $query->where('b.posisi_id', '!=', 1)
-                    ->orWhereNull('a.id_pengawas');
-            })
-            ->whereIn('a.id_anak', $id_anak)
-            ->orderBy('a.id_anak', 'DESC')
-            ->get()->toArray();
+                ->leftJoin('users as b', 'a.id_pengawas', 'b.id')
+                ->where(function ($query) {
+                    $query->where('b.posisi_id', '!=', 1)
+                        ->orWhereNull('a.id_pengawas');
+                })
+                ->whereIn('a.id_anak', $id_anak)
+                ->orderBy('a.id_anak', 'DESC')
+                ->get()->toArray();
 
             $cekSudahSave = DB::table('invoice_karyawan')->where('no_invoice', $no_invoice)->get();
 
@@ -98,8 +128,8 @@ class PengawasController extends Controller
 
     public function invoice(Request $r)
     {
-            $no_invoice = $r->no_invoice;
-            $anak = DB::table('tb_anak as a')
+        $no_invoice = $r->no_invoice;
+        $anak = DB::table('tb_anak as a')
             ->leftJoin('users as b', 'a.id_pengawas', 'b.id')
             ->where(function ($query) {
                 $query->where('b.posisi_id', '!=', 1)
@@ -110,21 +140,21 @@ class PengawasController extends Controller
             ->orderBy('a.id_anak', 'DESC')
             ->get()->toArray();
 
-            $cekSudahSave = DB::table('invoice_karyawan')->where('no_invoice', $no_invoice)->get();
+        $cekSudahSave = DB::table('invoice_karyawan')->where('no_invoice', $no_invoice)->get();
 
-            $data = [
-                'title' => 'Tambah Invoice',
-                'no_invoice' => $no_invoice,
-                'anak' => $anak,
-                'cekSudahSave' => $cekSudahSave,
-            ];
+        $data = [
+            'title' => 'Tambah Invoice',
+            'no_invoice' => $no_invoice,
+            'anak' => $anak,
+            'cekSudahSave' => $cekSudahSave,
+        ];
 
-            return view('data_master.pengawas.create_invoice', $data);
+        return view('data_master.pengawas.create_invoice', $data);
     }
 
     public function save_invoice(Request $r)
     {
-        foreach($r->id_anak as $id){
+        foreach ($r->id_anak as $id) {
             $data[] = [
                 'tgl_lunas' => $r->tgl_lunas,
                 'pembayar' => $r->pembayar,
