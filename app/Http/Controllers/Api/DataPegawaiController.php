@@ -47,7 +47,7 @@ class DataPegawaiController extends Controller
             ->get();
 
         $dataPenilaianKaryawan = DB::table('penilaian_karyawan')
-            ->selectRaw('id,
+            ->selectRaw('id_anak,
              periode,
              pendidikan_standar,
              pendidikan_hasil,
