@@ -14,15 +14,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class Hrga1PermohonanKaryawanBaru extends Controller
 {
-
     public function index(Request $r)
     {
         setSessionDivisi($r);
 
         $hrga1 = DB::table('hrga1_permohonan_karyawan_baru')
-                    ->where('id_divisi', session('id_divisi'))
-                    ->orderBy('id', 'desc')
-                    ->get();
+            ->where('id_divisi', session('id_divisi'))
+            ->orderBy('id', 'desc')
+            ->get();
         $data = [
             'title' => 'Hrga 1 Permohonan Karyawan Baru',
             'hrga1' => $hrga1
