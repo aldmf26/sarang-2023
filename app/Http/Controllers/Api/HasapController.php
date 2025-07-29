@@ -470,7 +470,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         WHERE b.tgl_input = '$tgl'
         GROUP BY b.no_barcode, a.grade, a.nm_partai
     ) AS x
-    GROUP BY x.no_barcode, x.grade
+    GROUP BY x.grade
 
 ");
         return response()->json([
