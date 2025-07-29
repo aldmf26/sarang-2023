@@ -315,13 +315,13 @@
                                     <td>
                                         <textarea name="kompetensi_inti_standar" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-{{ $cth2->kompetensi_inti_standar }}
+            {{ $cth2->kompetensi_inti_standar }}
                                         </textarea>
                                     </td>
                                     <td>
                                         <textarea name="kompetensi_inti_hasil" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-{{ $cth2->kompetensi_inti_hasil }}
+            {{ $cth2->kompetensi_inti_hasil }}
                                         </textarea>
                                     </td>
                                 </tr>
