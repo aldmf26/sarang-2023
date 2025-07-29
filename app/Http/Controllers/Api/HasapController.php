@@ -454,7 +454,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
                 a.grade, 
                 SUM(a.pcs) as pcs, 
                 SUM(a.gr) as gr,
-                a.nm_partai
+                a.nm_partai, a.box_pengiriman
                 FROM grading_partai as a
                 JOIN pengiriman as b ON b.no_box = a.box_pengiriman
                 WHERE b.tgl_input = '$tgl'
