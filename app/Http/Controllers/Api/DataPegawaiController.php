@@ -34,7 +34,7 @@ class DataPegawaiController extends Controller
                         ")
             ->get();
         $dataHasilWawancara = DB::table('hasil_wawancara')
-            ->selectRaw("id_anak as id_anak,
+            ->selectRaw("
              nama as nama_lengkap,
              id,
              id_divisi,
