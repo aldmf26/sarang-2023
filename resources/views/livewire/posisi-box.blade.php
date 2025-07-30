@@ -6,7 +6,7 @@
 }">
     <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box</a>
 
-    <x-theme.modal wire:ignore.self id="cariBox" title="Cek Posisi No Box" size="modal-lg">
+    <x-theme.modal wire:ignore.self id="cariBox" btnSave="T" title="Cek Posisi No Box" size="modal-lg">
         <input type="text" wire:model.live="cariBox" class="form-control mt-2" placeholder="Cari Posisi No Box">
         <div wire:loading class="text-center">
             <div class="spinner-border text-primary" role="status">
