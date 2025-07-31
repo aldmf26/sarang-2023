@@ -104,7 +104,6 @@
                         @foreach ($grading as $s)
                             @php
                                 $sbw = DB::table('sbw_kotor')
-                                    ->leftJoin('grade_sbw_kotor', 'sbw_kotor.grade_id', '=', 'grade_sbw_kotor.id')
                                     ->where('nm_partai', 'like', '%' . $s->nm_partai . '%')
                                     ->first();
                             @endphp
