@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class NavbarController extends Controller
 {
@@ -35,6 +36,26 @@ class NavbarController extends Controller
         $data = $this->queryNavbar(2);
 
         $title = 'Data Master';
+        $sbw = Http::get("https://gudangsarang.ptagafood.com/api/sbw/sbw_kotor");
+        $sbw = json_decode($sbw, TRUE);
+
+        $sbw = $sbw['data']['sbw'];
+
+        DB::table('sbw_kotor')->truncate();
+
+        foreach ($sbw as $s) {
+            DB::table('sbw_kotor')->insert([
+                'grade_id' => $s['grade_id'],
+                'rwb_id' => $s['rwb_id'],
+                'nm_partai' => $s['nm_partai'],
+                'no_invoice' => $s['no_invoice'],
+                'pcs' => $s['pcs'],
+                'kg' => $s['kg'],
+                'no_kendaraan' => $s['no_kendaraan'],
+                'pengemudi' => $s['pengemudi'],
+                'tgl' => $s['tgl'],
+            ]);
+        }
         return view('navbar.data_master', compact(['data', 'title']));
     }
     public function summary()
