@@ -244,11 +244,23 @@
 
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-7 d-flex align-items-center">
                         <label for="">Periode Masa Percobaan :</label>
-                        <input type="radio" name="periode" id="" checked value="1"> 1 bulan
-                        <input type="radio" name="periode" id="" value="3"> 3 bulan
-                        <input type="radio" name="periode" id="" value="6"> 6 bulan
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="radio" name="periode" id="1bulan" checked
+                                value="1">
+                            <label class="form-check-label" for="1bulan">1 bulan</label>
+                        </div>
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="radio" name="periode" id="3bulan"
+                                value="3">
+                            <label class="form-check-label" for="3bulan">3 bulan</label>
+                        </div>
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="radio" name="periode" id="6bulan"
+                                value="6">
+                            <label class="form-check-label" for="6bulan">6 bulan</label>
+                        </div>
                     </div>
                     <div class="col-lg-12">
                         <table class="table table-bordered">
@@ -303,13 +315,13 @@
                                     <td>
                                         <textarea name="kompetensi_inti_standar" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-{{ $cth2->kompetensi_inti_standar }}
+            {{ $cth2->kompetensi_inti_standar }}
                                         </textarea>
                                     </td>
                                     <td>
                                         <textarea name="kompetensi_inti_hasil" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-{{ $cth2->kompetensi_inti_hasil }}
+            {{ $cth2->kompetensi_inti_hasil }}
                                         </textarea>
                                     </td>
                                 </tr>

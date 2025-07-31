@@ -33,10 +33,38 @@ class DataPegawaiController extends Controller
                         a.deleted_at
                         ")
             ->get();
+        $dataHasilWawancara = DB::table('hasil_wawancara')
+            ->selectRaw("
+             nama as nama_lengkap,
+             id,
+             id_divisi,
+             nik,
+             tgl_lahir,
+             jenis_kelamin,
+             tgl_masuk,
+             kesimpulan
+            ")
+            ->get();
+
+        $dataPenilaianKaryawan = DB::table('penilaian_karyawan')
+            ->selectRaw('id_anak,
+             periode,
+             pendidikan_standar,
+             pendidikan_hasil,
+             pelatihan_standar,
+             pelatihan_hasil,
+             keterampilan_standar,
+             keterampilan_hasil,
+             kompetensi_inti_standar,
+             kompetensi_inti_hasil
+            ')
+            ->get();
 
         $datas = [
             'sumber_data' => 'sarang',
             'pegawai' => $dataPegawai,
+            'hasil_wawancara' => $dataHasilWawancara,
+            'penilaian_karyawan' => $dataPenilaianKaryawan,
             'total' => count($dataPegawai)
         ];
         return response()->json($datas, 200);

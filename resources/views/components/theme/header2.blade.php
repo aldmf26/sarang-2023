@@ -7,8 +7,10 @@
                 </center>
             </a>
             <h6 class="text-white">KERJA SARANG</h6>
+
         </div>
         <div class="header-top-right ">
+            @livewire('posisi-box')
 
             <div class="dropdown">
                 <a href="#" id="topbarUserDropdown"
