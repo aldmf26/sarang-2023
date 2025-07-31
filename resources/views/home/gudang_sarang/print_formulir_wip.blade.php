@@ -25,7 +25,7 @@
             margin-bottom: 0.5rem;
             table-layout: fixed;
         }
-    
+
         .po-table th,
         .po-table td {
             padding: 4px;
@@ -33,44 +33,44 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-    
+
         @media (min-width: 768px) {
             .po-table {
                 width: calc(50% - 0.5rem);
             }
         }
-    
+
         @media print {
             @page {
                 size: landscape;
                 margin: 1cm;
             }
-    
+
             .po-table {
                 page-break-inside: avoid;
                 border-collapse: collapse;
             }
-    
+
             .table th,
             .table td {
                 padding: 4px !important;
                 border: 1px solid #000 !important;
             }
-    
+
             thead {
                 display: table-header-group;
             }
-    
+
             .table {
                 border: none !important;
             }
         }
     </style>
-    
+
     <div class="container-fluid">
         <h5 class="fw-bold mb-3" style="text-decoration: underline">PO Wip : {{ $no_invoice }} | Tanggal :
             {{ tanggal($formulir[0]->tanggal) }}</h5>
-    
+
         <div class="d-flex flex-wrap" style="gap: 0.5rem;">
             @foreach ($formulir as $d)
                 <table class="table table-sm table-bordered po-table">
@@ -97,12 +97,19 @@
                     <tbody>
                         @php
                             $grading = DB::table('grading_partai')
+
                                 ->where('box_pengiriman', $d->no_box)
                                 ->get();
                         @endphp
                         @foreach ($grading as $s)
+                            @php
+                                $sbw = DB::table('sbw_kotor')
+                                    ->leftJoin('grade_sbw_kotor', 'sbw_kotor.grade_id', '=', 'grade_sbw_kotor.id')
+                                    ->where('nm_partai', 'like', '%' . $s['nm_partai'] . '%')
+                                    ->first();
+                            @endphp
                             <tr>
-                                <td colspan="2">{{ $s->nm_partai }}</td>
+                                <td colspan="2">{{ $sbw->no_invoice }}</td>
                                 <td align="right">{{ $s->pcs }}</td>
                                 <td align="right">{{ $s->gr }}</td>
                                 <td colspan="2"></td>
