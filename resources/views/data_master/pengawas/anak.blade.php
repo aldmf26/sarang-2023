@@ -150,7 +150,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Kelas</label>
                             <select name="kelas" class="select2" id="">
@@ -164,14 +164,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Pembawa</label>
                             <input type="text" id="pembawa" placeholder="pembawa karyawan" name="pembawa"
                                 class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="">Divisi</label>
                             <select name="id_divisi" id="" class="select2">
@@ -182,7 +182,13 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="">Posisi</label>
+                            <input type="text" id="pembawa" placeholder="contoh : staff cabut" name="posisi"
+                                class="form-control">
+                        </div>
+                    </div>
 
                     <div class="col-lg-6">
                         <div class="form-group">

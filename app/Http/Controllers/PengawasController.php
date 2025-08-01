@@ -66,6 +66,7 @@ class PengawasController extends Controller
             'tgl_lahir' => $r->tgl_lahir,
             'jenis_kelamin' => $r->jenis_kelamin,
             'id_divisi' => $r->id_divisi,
+            'posisi2' => $r->posisi,
             'kesimpulan' => $r->kesimpulan,
             'keputusan' => 'dilanjutkan',
             'tgl_masuk' => $r->tgl_masuk,
