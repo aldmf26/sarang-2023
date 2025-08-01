@@ -80,6 +80,8 @@ class PengawasController extends Controller
             'pendidikan_hasil' => $r->pendidikan_hasil,
             'pelatihan_standar' => $r->pelatihan_standar,
             'pelatihan_hasil' => $r->pelatihan_hasil,
+            'pengalaman_standar' => $r->pengalaman_standar,
+            'pengalaman_hasil' => $r->pengalaman_hasil,
             'keterampilan_standar' => $r->keterampilan_standar,
             'keterampilan_hasil' => $r->keterampilan_hasil,
             'kompetensi_inti_standar' => $r->kompetensi_inti_standar,
