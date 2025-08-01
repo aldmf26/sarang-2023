@@ -645,7 +645,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT b.grade_id, sum(COALESCE(a.pcs_awal,0) - COALESCE(c.pcs_akhir)) as pcs, sum(COALESCE(a.gr_awal,0) - COALESCE(c.gr_akhir,0)) as gr
         FROM bk as a
-        left join sbw_kotor as b on b.nm_partai = a.nm_partai
+        join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join (
             SELECT c.no_box, c.pcs_awal as pcs_akhir, c.gr_awal as gr_akhir
             FROM bk as c 
