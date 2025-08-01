@@ -17,7 +17,7 @@ class PenutupController extends Controller
     {
         $bln = DB::table('tb_gaji_penutup')->latest('bulan_dibayar')->latest('tahun_dibayar')->first();
         // edit tiap bulan untuk tutup gajih
-        $bulan = 6;
+        $bulan = 7;
         $tahun = 2025;
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
