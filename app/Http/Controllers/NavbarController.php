@@ -39,7 +39,7 @@ class NavbarController extends Controller
         $sbw = Http::get("https://gudangsarang.ptagafood.com/api/sbw/sbw_kotor");
         $sbw = json_decode($sbw, TRUE);
 
-        dd($sbw);
+
 
         $sbw = $sbw['data']['sbw'];
 
