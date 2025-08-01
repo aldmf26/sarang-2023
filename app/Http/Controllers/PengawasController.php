@@ -59,6 +59,7 @@ class PengawasController extends Controller
             'id_kelas' => $r->kelas,
             'id_pengawas' => $r->id_pengawas,
         ]);
+
         $data = [
             'id_anak' => $id_anak,
             'nama' => $r->nama_lengkap,
@@ -71,10 +72,10 @@ class PengawasController extends Controller
             'keputusan' => 'dilanjutkan',
             'tgl_masuk' => $r->tgl_masuk,
         ];
-        DB::table('hasil_wawancara')->insert($data);
+        $id_karyawan = DB::table('hasil_wawancara')->insertGetId($data);
 
         $data = [
-            'id_anak' => $id_anak,
+            'id_anak' => $id_karyawan,
             'periode' => $r->periode,
             'pendidikan_standar' => $r->pendidikan_standar,
             'pendidikan_hasil' => $r->pendidikan_hasil,
