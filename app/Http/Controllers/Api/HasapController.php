@@ -960,7 +960,7 @@ ON all_data.grade = done_data.grade;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
@@ -1028,7 +1028,7 @@ ON all_data.grade = done_data.grade;");
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
 ) AS hasil
-WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
+WHERE tgl_terima BETWEEN '2025-07-28' and now() and id_pengawas = $r->id_pengawas
 ORDER BY  tgl ASC;");
         return response()->json([
             'status' => 'success',
@@ -1094,7 +1094,7 @@ ORDER BY  tgl ASC;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by tgl, id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
