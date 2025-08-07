@@ -21,6 +21,7 @@
                     <th class="text-end dhead">Rp Trgt</th>
                     <th class="text-end dhead">Total Gaji</th>
                     <th class="dhead">Selesai</th>
+                    <th class="dhead">Aksi</th>
                     <th class="dhead" width="70">
                         <center>
                             @php
@@ -74,7 +75,7 @@
                         <td align="right">{{ number_format($d->rupiah, 0) }}
                         <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                         </td>
-                        <td align="center">
+                        <td align="center" class="text-nowrap">
                             @if ($d->selesai == 'T')
                                 <a class="btn btn-warning btn-sm inputAkhir" href="#"
                                     gr_flx="{{ $d->gr_flx }}" gr_awal="{{ $d->gr_awal }}"
@@ -83,6 +84,13 @@
                                     data-bs-target="#inputAkhir"></i>Akhir</a>
                             @else
                                 <span class="badge bg-primary">SELESAI</span>
+                            @endif
+                        </td>
+                        <td align="center" class="text-nowrap">
+                            @if ($d->selesai == 'T')
+                            @else
+                                <a href="#" class="btn btn-sm btn-warning edit_cabut" data-bs-toggle="modal"
+                                    data-bs-target="#edit" no_box="{{ $d->no_box }}">edit</a>
                             @endif
                         </td>
                         <td align="center">

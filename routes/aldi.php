@@ -252,6 +252,8 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/save_formulir_eo', 'save_formulir_eo')->name('save_formulir_eo');
+            Route::get('/load_edit_cabut', 'load_edit_cabut')->name('load_edit_cabut');
+            Route::post('/edit_cabut', 'edit_cabut')->name('edit_cabut');
         });
     Route::controller(SusutController::class)
         ->prefix('home/susut')

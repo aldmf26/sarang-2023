@@ -633,7 +633,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
         where a.tgl = '$r->tgl'
         group by a.grade , a.nm_partai
-        order by a.grade ASC;");
+        order by a.nm_partai ASC, a.grade ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -934,6 +934,7 @@ ON all_data.grade = done_data.grade;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+        where c.no_box != '9999'
     
     	UNION ALL
     	
@@ -957,6 +958,7 @@ ON all_data.grade = done_data.grade;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+        where c.no_box != '9999'
     
     
         ) AS hasil
@@ -1002,6 +1004,7 @@ ON all_data.grade = done_data.grade;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+  where c.no_box != '9999'
     
     UNION ALL 
     
@@ -1027,8 +1030,11 @@ ON all_data.grade = done_data.grade;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+  where c.no_box != '9999'
+
 ) AS hasil
 WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
+group by tgl, no_box
 ORDER BY  tgl ASC;");
         return response()->json([
             'status' => 'success',
@@ -1065,6 +1071,8 @@ ORDER BY  tgl ASC;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+
+        where c.no_box != '9999'
     
     	UNION ALL
     	
@@ -1088,6 +1096,7 @@ ORDER BY  tgl ASC;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+        where c.no_box != '9999'
     
     
         ) AS hasil
@@ -1134,6 +1143,7 @@ ORDER BY  tgl ASC;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+  where c.no_box != '9999'
     
     UNION ALL 
     
@@ -1159,8 +1169,10 @@ ORDER BY  tgl ASC;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+  where c.no_box != '9999'
 ) AS hasil
 WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
+group by tgl, no_box
 ORDER BY  no_box ASC;");
         return response()->json([
             'status' => 'success',
@@ -1203,6 +1215,168 @@ FROM (
 ) AS grouped
 GROUP BY group_id
 ORDER BY group_id;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+
+
+    public function steaming_baru(Request $r)
+    {
+        $data = DB::select("WITH RECURSIVE data_pecah AS (
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs,
+    gr,
+    1 AS bagian_ke
+  FROM grading_partai
+  WHERE gr <= 1000
+
+  UNION ALL
+
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs * LEAST(1000, gr - bagian_ke * 1000 + 1000) / gr AS pcs,
+    LEAST(1000, gr - bagian_ke * 1000 + 1000) AS gr,
+    bagian_ke + 1
+  FROM data_pecah
+  WHERE gr > bagian_ke * 1000
+),
+
+data_dengan_urut AS (
+  SELECT 
+    *,
+    ROW_NUMBER() OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY id_grading, bagian_ke
+    ) AS urut
+  FROM data_pecah
+),
+
+gruping AS (
+  SELECT 
+    *,
+    SUM(gr) OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY urut
+    ) AS gr_akumulasi
+  FROM data_dengan_urut
+),
+
+final_grup AS (
+  SELECT 
+    *,
+    FLOOR((gr_akumulasi - 1) / 1000) + 1 AS grup_ke
+  FROM gruping
+),
+
+grup_akhir AS (
+  SELECT 
+    nm_partai,
+    grade,
+    grup_ke,
+    MAX(DATE(tgl)) AS tgl_terakhir,
+    ROUND(SUM(pcs)) AS total_pcs,
+    SUM(gr) AS total_gr
+  FROM final_grup
+  GROUP BY nm_partai, grade, grup_ke
+)
+
+-- Filter hanya grup yang genap 1000 gr
+SELECT tgl_terakhir, sum(total_pcs) as pcs, sum(total_gr) as gr
+FROM grup_akhir
+WHERE total_gr = 1000 
+group by tgl_terakhir
+ORDER BY tgl_terakhir DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+
+    public function steaming_baru_detail(Request $r)
+    {
+        $data = DB::select("WITH RECURSIVE data_pecah AS (
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs,
+    gr,
+    1 AS bagian_ke
+  FROM grading_partai
+  WHERE gr <= 1000
+
+  UNION ALL
+
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs * LEAST(1000, gr - bagian_ke * 1000 + 1000) / gr AS pcs,
+    LEAST(1000, gr - bagian_ke * 1000 + 1000) AS gr,
+    bagian_ke + 1
+  FROM data_pecah
+  WHERE gr > bagian_ke * 1000
+),
+
+data_dengan_urut AS (
+  SELECT 
+    *,
+    ROW_NUMBER() OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY id_grading, bagian_ke
+    ) AS urut
+  FROM data_pecah
+),
+
+gruping AS (
+  SELECT 
+    *,
+    SUM(gr) OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY urut
+    ) AS gr_akumulasi
+  FROM data_dengan_urut
+),
+
+final_grup AS (
+  SELECT 
+    *,
+    FLOOR((gr_akumulasi - 1) / 1000) + 1 AS grup_ke
+  FROM gruping
+),
+
+grup_akhir AS (
+  SELECT 
+    nm_partai,
+    grade,
+    grup_ke,
+    MAX(DATE(tgl)) AS tgl_terakhir,
+    ROUND(SUM(pcs)) AS total_pcs,
+    SUM(gr) AS total_gr
+  FROM final_grup
+  GROUP BY nm_partai, grade, grup_ke
+)
+
+-- Filter hanya grup yang genap 1000 gr
+SELECT *
+FROM grup_akhir
+WHERE total_gr = 1000 and tgl_terakhir = '$r->tgl'
+ORDER BY grade DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
