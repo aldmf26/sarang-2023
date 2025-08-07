@@ -78,6 +78,7 @@ Route::controller(HasapController::class)
         Route::get('/steaming_new_detail', 'steaming_new_detail')->name('steaming_new_detail');
         Route::get('/pengiriman_akhir_detail_group_grade2', 'pengiriman_akhir_detail_group_grade2')->name('pengiriman_akhir_detail_group_grade2');
         Route::get('/steaming_baru', 'steaming_baru')->name('steaming_baru');
+        Route::get('/steaming_baru_detail', 'steaming_baru_detail')->name('steaming_baru_detail');
     });
 
 
