@@ -201,6 +201,11 @@ class PengawasController extends Controller
             'tgl_dibayar' => $r->tgl_dibayar,
         ]);
 
+    
+        $id_karyawan = DB::table('hasil_wawancara')->where('id_anak', $r->id)->update([
+            'tgl_masuk' => $r->tgl_masuk,
+        ];);
+
         return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
     }
     public function destroy_anak($id)
