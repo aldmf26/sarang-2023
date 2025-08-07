@@ -1099,7 +1099,7 @@ ORDER BY  tgl ASC;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-28' and NOW()
+        where tgl_terima BETWEEN '2025-07-01' and NOW()
         Group by tgl, id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
