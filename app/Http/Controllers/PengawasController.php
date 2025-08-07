@@ -202,7 +202,7 @@ class PengawasController extends Controller
         ]);
 
 
-        $id_karyawan = DB::table('hasil_wawancara')->where('id_anak', $r->id)->update([
+        DB::table('hasil_wawancara')->where('id_anak', $r->id)->update([
             'tgl_masuk' => $r->tgl_masuk,
         ]);
 
