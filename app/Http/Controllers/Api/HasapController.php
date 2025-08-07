@@ -1219,4 +1219,86 @@ ORDER BY group_id;");
             'data' => $data
         ]);
     }
+
+
+
+    public function steaming_baru(Request $r)
+    {
+        $data = DB::select("WITH RECURSIVE data_pecah AS (
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs,
+    gr,
+    1 AS bagian_ke
+  FROM grading_partai
+  WHERE gr <= 1000
+
+  UNION ALL
+
+  SELECT 
+    id_grading,
+    nm_partai,
+    grade,
+    tgl,
+    pcs * LEAST(1000, gr - bagian_ke * 1000 + 1000) / gr AS pcs,
+    LEAST(1000, gr - bagian_ke * 1000 + 1000) AS gr,
+    bagian_ke + 1
+  FROM data_pecah
+  WHERE gr > bagian_ke * 1000
+),
+
+data_dengan_urut AS (
+  SELECT 
+    *,
+    ROW_NUMBER() OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY id_grading, bagian_ke
+    ) AS urut
+  FROM data_pecah
+),
+
+gruping AS (
+  SELECT 
+    *,
+    SUM(gr) OVER (
+      PARTITION BY nm_partai, grade
+      ORDER BY urut
+    ) AS gr_akumulasi
+  FROM data_dengan_urut
+),
+
+final_grup AS (
+  SELECT 
+    *,
+    FLOOR((gr_akumulasi - 1) / 1000) + 1 AS grup_ke
+  FROM gruping
+),
+
+grup_akhir AS (
+  SELECT 
+    nm_partai,
+    grade,
+    grup_ke,
+    MAX(DATE(tgl)) AS tgl_terakhir,
+    ROUND(SUM(pcs)) AS total_pcs,
+    SUM(gr) AS total_gr
+  FROM final_grup
+  GROUP BY nm_partai, grade, grup_ke
+)
+
+-- Filter hanya grup yang genap 1000 gr
+SELECT tgl_terakhir, sum(total_pcs) as pcs, sum(total_gr) as gr
+FROM grup_akhir
+WHERE total_gr = 1000 
+group by tgl_terakhir
+ORDER BY tgl_terakhir DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
