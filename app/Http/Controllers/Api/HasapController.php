@@ -1034,7 +1034,7 @@ ON all_data.grade = done_data.grade;");
 
 ) AS hasil
 WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
-group by tgl
+group by tgl, no_box
 ORDER BY  tgl ASC;");
         return response()->json([
             'status' => 'success',
@@ -1172,6 +1172,7 @@ ORDER BY  tgl ASC;");
   where c.no_box != '9999'
 ) AS hasil
 WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
+group by
 ORDER BY  no_box ASC;");
         return response()->json([
             'status' => 'success',
