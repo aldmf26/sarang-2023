@@ -122,6 +122,17 @@
             </div>
         </x-theme.modal>
 
+        <form action="{{ route('cabut.edit_cabut') }}" method="POST">
+            @csrf
+            <x-theme.modal idModal="edit" title="Edit Cabut" size="modal-md" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="load_edit_cabut"></div>
+                    </div>
+                </div>
+            </x-theme.modal>
+        </form>
+
         <x-theme.modal idModal="history" title="History Cabut" size="modal-lg-max" btnSave="T">
             <div id="load_history_cabut"></div>
         </x-theme.modal>
@@ -786,6 +797,23 @@
                     const count = $(this).attr('count')
                     $(".selesai" + count).toggleClass('d-none', !(val > 0));
 
+                })
+
+                $(document).on('click', '.edit_cabut', function() {
+                    var no_box = $(this).attr('no_box')
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('cabut.load_edit_cabut') }}",
+                        data: {
+                            no_box: no_box
+                        },
+                        success: function(response) {
+                            $("#load_edit_cabut").html(response);
+                            $(".select4").select2({
+                                dropdownParent: $(`#edit .modal-content`)
+                            });
+                        }
+                    });
                 })
             </script>
         @endsection

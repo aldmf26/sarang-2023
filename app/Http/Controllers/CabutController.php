@@ -50,6 +50,28 @@ class CabutController extends Controller
         ];
         return view('home.cabut.load_halaman', $data);
     }
+    public function load_edit_cabut(Request $r)
+    {
+
+        $id = $r->no_box;
+        $cabut = DB::table('cabut')->where('no_box', $id)->first();
+        $data = [
+            'title' => 'Divisi Cabut',
+            'anak' => Cabut::getAnak(),
+            'cabut' => $cabut,
+        ];
+        return view('home.cabut.load_edit', $data);
+    }
+    public function edit_cabut(Request $r)
+    {
+        $data = [
+            'id_anak' => $r->id_anak,
+            'tgl_terima' => $r->tgl_terima,
+            'tgl_serah' => $r->tgl_serah
+        ];
+        DB::table('cabut')->where('no_box', $r->no_box)->update($data);
+        return redirect()->route('cabut.index')->with('sukses', 'Data telah diubah');
+    }
     public function load_tambah_anak(Request $r)
     {
         $data = [

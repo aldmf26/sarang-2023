@@ -1,8 +1,7 @@
 <tr class="baris{{ $count }}">
     <td>
         <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">
-        <input type="hidden" class="form-control" name="id_pengawas[]" readonly
-            value="{{ auth()->user()->id }}">
+        <input type="hidden" class="form-control" name="id_pengawas[]" readonly value="{{ auth()->user()->id }}">
     </td>
     <td>
         <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tgl_terima[]">
@@ -33,8 +32,7 @@
         <input type="hidden" class="setHargaSatuanPcs{{ $count + 1 }}">
     </td>
     <td>
-        <select name="hitung[]" id=""
-            class="form-control pilihHitung pilihHitung{{ $count + 1 }}"
+        <select name="hitung[]" id="" class="form-control pilihHitung pilihHitung{{ $count + 1 }}"
             count="{{ $count + 1 }}">
             <option value="">Pilih</option>
             <option value="1">Pcs</option>
@@ -45,25 +43,24 @@
     </td>
     <td>
 
-        <select name="id_paket[]" id=""
-            class="select2-tambah pilihAnak pilihAnak{{ $count + 1 }}" count="{{ $count + 1 }}">
+        <select name="id_paket[]" id="" class="select2-tambah pilihAnak pilihAnak{{ $count + 1 }}"
+            count="{{ $count + 1 }}">
             <option value="">Pilih</option>
         </select>
     </td>
     <td>
-        <input type="text" class="form-control text-end setPcs setPcs{{ $count + 1 }}"
-            value="0" id="pcsInput" name="pcs_awal[]" count="{{ $count + 1 }}">
+        <input type="text" class="form-control text-end setPcs setPcs{{ $count + 1 }}" value="0"
+            id="pcsInput" name="pcs_awal[]" count="{{ $count + 1 }}">
     </td>
     <td>
-        <input type="text" class="form-control text-end setGr setGr{{ $count + 1 }}"
-            count="{{ $count + 1 }}" value="0" id="grInput" name="gr_awal[]">
+        <input type="text" class="form-control text-end setGr setGr{{ $count + 1 }}" count="{{ $count + 1 }}"
+            value="0" id="grInput" name="gr_awal[]">
     </td>
     <td>
-        <input readonly type="text"
-            class="form-control rupiahInput text-end setRupiah{{ $count + 1 }}" value="0">
-        <input readonly type="hidden"
-            class="form-control rupiahInput text-end rupiahBiasa{{ $count + 1 }}" value="0"
-            name="rupiah[]">
+        <input readonly type="text" class="form-control rupiahInput text-end setRupiah{{ $count + 1 }}"
+            value="0">
+        <input readonly type="hidden" class="form-control rupiahInput text-end rupiahBiasa{{ $count + 1 }}"
+            value="0" name="rupiah[]">
     </td>
     <td align="center">
         <button type="button" class="btn rounded-pill remove_baris" count="{{ $count }}"><i
