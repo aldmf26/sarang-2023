@@ -1313,6 +1313,7 @@ ORDER BY tgl_terakhir DESC;");
     nm_partai,
     grade,
     tgl,
+    box_pengiriman,
     pcs,
     gr,
     1 AS bagian_ke
@@ -1326,6 +1327,7 @@ ORDER BY tgl_terakhir DESC;");
     nm_partai,
     grade,
     tgl,
+    box_pengiriman,
     pcs * LEAST(1000, gr - bagian_ke * 1000 + 1000) / gr AS pcs,
     LEAST(1000, gr - bagian_ke * 1000 + 1000) AS gr,
     bagian_ke + 1
@@ -1360,6 +1362,20 @@ final_grup AS (
   FROM gruping
 ),
 
+-- Ambil grup lengkap dengan info box_pengiriman
+grup_lengkap AS (
+  SELECT 
+    nm_partai,
+    grade,
+    grup_ke,
+    tgl,
+    box_pengiriman,
+    pcs,
+    gr
+  FROM final_grup
+),
+
+-- Cek total gr dan box_pengiriman unik per grup_ke
 grup_akhir AS (
   SELECT 
     nm_partai,
@@ -1368,15 +1384,34 @@ grup_akhir AS (
     MAX(DATE(tgl)) AS tgl_terakhir,
     ROUND(SUM(pcs)) AS total_pcs,
     SUM(gr) AS total_gr
-  FROM final_grup
+  FROM grup_lengkap
   GROUP BY nm_partai, grade, grup_ke
+),
+
+-- Ambil hanya yang 1000 gr dan tgl cocok
+grup_valid AS (
+  SELECT *
+  FROM grup_akhir
+  WHERE total_gr = 1000 AND tgl_terakhir = '$r->tgl'
 )
 
--- Filter hanya grup yang genap 1000 gr
-SELECT *
-FROM grup_akhir
-WHERE total_gr = 1000 and tgl_terakhir = '$r->tgl'
-ORDER BY grade DESC;");
+-- JOIN kembali untuk hitung box_pengiriman unik
+SELECT 
+  g.*,
+  COUNT(DISTINCT gl.box_pengiriman) AS jumlah_box_didalamnya
+FROM grup_valid g
+JOIN grup_lengkap gl
+  ON g.nm_partai = gl.nm_partai 
+ AND g.grade = gl.grade 
+ AND g.grup_ke = gl.grup_ke
+GROUP BY 
+  g.nm_partai,
+  g.grade,
+  g.grup_ke,
+  g.tgl_terakhir,
+  g.total_pcs,
+  g.total_gr
+ORDER BY g.grade DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
