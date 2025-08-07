@@ -1172,7 +1172,7 @@ ORDER BY  tgl ASC;");
   where c.no_box != '9999'
 ) AS hasil
 WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
-group by
+group by tgl, no_box
 ORDER BY  no_box ASC;");
         return response()->json([
             'status' => 'success',
