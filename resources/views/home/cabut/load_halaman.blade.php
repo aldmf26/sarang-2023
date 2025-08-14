@@ -45,7 +45,9 @@
             </thead>
             <tbody>
                 @foreach ($cabut as $no => $d)
-                    <tr>
+                    <tr
+                        style="{{ (strtotime($d->tgl_serah) - strtotime($d->tgl_terima)) / 86400 > 20 ? 'background-color: red;color: white;' : '' }}; ">
+
                         <td>{{ $no + 1 }}</td>
                         <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
                         </td>
