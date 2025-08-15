@@ -1415,6 +1415,12 @@ ORDER BY g.grade DESC;");
             ]);
         }
 
-        return response()->json($batches);
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'success',
+                'data' => $batches
+            ]
+        );
     }
 }
