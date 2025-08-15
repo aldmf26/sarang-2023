@@ -1423,9 +1423,11 @@ ORDER BY g.grade DESC;");
     {
         $query = DB::table('grading_partai')
             ->select('nm_partai', 'tgl', 'gr', 'id_grading')
+            ->orderBy('nm_partai')
             ->orderBy('tgl')
             ->orderBy('id_grading');
 
+        // Filter tanggal jika ada parameter tgl
         if ($request->has('tgl')) {
             $query->whereDate('tgl', $request->tgl);
         }
@@ -1433,22 +1435,22 @@ ORDER BY g.grade DESC;");
         $results = $query->get();
 
         $batches = collect();
+        $currentPartai = null;
         $currentTanggal = null;
         $currentBatchGr = 0;
-        $currentBatchPartai = [];
 
         foreach ($results as $row) {
-            if ($currentTanggal !== $row->tgl) {
+            if ($currentPartai !== $row->nm_partai || $currentTanggal !== $row->tgl) {
                 if ($currentBatchGr > 0) {
                     $batches->push([
-                        'nm_partai' => implode(', ', $currentBatchPartai),
+                        'nm_partai' => $currentPartai,
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr
                     ]);
                 }
+                $currentPartai = $row->nm_partai;
                 $currentTanggal = $row->tgl;
                 $currentBatchGr = 0;
-                $currentBatchPartai = [];
             }
 
             $remaining = $row->gr;
@@ -1456,19 +1458,14 @@ ORDER BY g.grade DESC;");
             while ($remaining > 0) {
                 $space = 1000 - $currentBatchGr;
 
-                if (!in_array($row->nm_partai, $currentBatchPartai)) {
-                    $currentBatchPartai[] = $row->nm_partai;
-                }
-
                 if ($remaining >= $space) {
                     $currentBatchGr += $space;
                     $batches->push([
-                        'nm_partai' => implode(', ', $currentBatchPartai),
+                        'nm_partai' => $currentPartai,
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr
                     ]);
                     $currentBatchGr = 0;
-                    $currentBatchPartai = [];
                     $remaining -= $space;
                 } else {
                     $currentBatchGr += $remaining;
@@ -1479,7 +1476,7 @@ ORDER BY g.grade DESC;");
 
         if ($currentBatchGr > 0) {
             $batches->push([
-                'nm_partai' => implode(', ', $currentBatchPartai),
+                'nm_partai' => $currentPartai,
                 'tgl'       => $currentTanggal,
                 'gr'        => $currentBatchGr
             ]);
