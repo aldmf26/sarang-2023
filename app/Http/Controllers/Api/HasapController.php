@@ -962,7 +962,7 @@ ON all_data.grade = done_data.grade;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
@@ -1033,7 +1033,7 @@ ON all_data.grade = done_data.grade;");
   where c.no_box != '9999'
 
 ) AS hasil
-WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
+WHERE tgl_terima BETWEEN '2025-07-28' and now() and id_pengawas = $r->id_pengawas
 group by tgl, no_box
 ORDER BY  tgl ASC;");
         return response()->json([
@@ -1100,7 +1100,7 @@ ORDER BY  tgl ASC;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by tgl, id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
