@@ -1484,7 +1484,7 @@ ORDER BY g.grade DESC;");
 FROM pengiriman_packing_list as a 
 where MONTH(a.tgl) = '$r->bulan' and YEAR(a.tgl) = '$r->tahun'
 group by a.tgl
-ORDER by a.tgl DESC;");
+ORDER by a.tgl ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
