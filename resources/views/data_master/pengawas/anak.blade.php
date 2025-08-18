@@ -218,7 +218,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="">Periode Bulan Bayar</label>
-                            <select name="periode" id="periode" class="select2">
+                            <select name="periode"  class="select2">
                                 <option value="">- Periode -</option>
                                 @for ($i = 1; $i < 13; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -321,13 +321,13 @@
                                     <td>
                                         <textarea name="kompetensi_inti_standar" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-            {{ $cth2->kompetensi_inti_standar }}
+                            {{ $cth2->kompetensi_inti_standar }}
                                         </textarea>
                                     </td>
                                     <td>
                                         <textarea name="kompetensi_inti_hasil" class="form-control" id="" cols="30" rows="4"
                                             style="text-align: left">
-            {{ $cth2->kompetensi_inti_hasil }}
+                                {{ $cth2->kompetensi_inti_hasil }}
                                         </textarea>
                                     </td>
                                 </tr>
@@ -335,8 +335,6 @@
 
                         </table>
                     </div>
-
-
                 </div>
             </x-theme.modal>
         </form>
@@ -344,12 +342,11 @@
         {{-- update --}}
         <form action="{{ route('pengawas.update_anak') }}" method="post">
             @csrf
-            <x-theme.modal title="Edit Anak" idModal="edit">
+            <x-theme.modal title="Edit Anak" idModal="edit" size="modal-lg">
                 <div id="get_edit">
                 </div>
             </x-theme.modal>
         </form>
-        </div>
     </x-slot>
 
     @section('scripts')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HasilWawancaraModel;
 use App\Models\Posisi;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -69,6 +70,7 @@ class PengawasController extends Controller
             'id_divisi' => $r->id_divisi,
             'posisi2' => $r->posisi,
             'kesimpulan' => $r->kesimpulan,
+            'periode_masa_percobaan' => $r->periode,
             'keputusan' => 'dilanjutkan',
             'tgl_masuk' => $r->tgl_masuk,
         ];
@@ -178,8 +180,13 @@ class PengawasController extends Controller
         if (empty($detail)) {
             abort(404);
         }
+        $hasilWawancara = HasilWawancaraModel::where('id_anak', $id)->first();
+        $penilaian = DB::table('penilaian_karyawan')->where('id_anak', $hasilWawancara->id)->first();
         $data = [
             'detail' => $detail,
+            'hasilWawancara' => $hasilWawancara,
+            'penilaian' => $penilaian,
+            'divisi' => DB::table('divisis')->get(),
             'pengawas' => User::with('posisi')->whereIn('posisi_id', [13, 14])->get(),
             'uang_makan' => DB::table('uang_makan')->where('aktiv', 'Y')->get()
 
@@ -189,24 +196,57 @@ class PengawasController extends Controller
 
     public function update_anak(Request $r)
     {
-        DB::table('tb_anak')->where('id_anak', $r->id)->update([
-            'tgl_masuk' => $r->tgl_masuk,
-            'nama' => $r->nama,
-            'id_kelas' => $r->kelas,
-            'id_pengawas' => $r->id_pengawas,
-            'id_uang_makan' => $r->id_uang_makan,
-            'pembawa' => $r->pembawa,
-            'periode' => $r->periode,
-            'komisi' => $r->komisi,
-            'tgl_dibayar' => $r->tgl_dibayar,
-        ]);
 
+        DB::beginTransaction();
+        try {
+            DB::table('tb_anak')->where('id_anak', $r->id)->update([
+                'tgl_masuk' => $r->tgl_masuk,
+                'nama' => $r->nama,
+                'id_kelas' => $r->kelas,
+                'id_pengawas' => $r->id_pengawas,
+                'id_uang_makan' => $r->id_uang_makan,
+                'pembawa' => $r->pembawa,
+                'periode' => $r->periode,
+                'komisi' => $r->komisi,
+                'tgl_dibayar' => $r->tgl_dibayar,
+            ]);
 
-        DB::table('hasil_wawancara')->where('id_anak', $r->id)->update([
-            'tgl_masuk' => $r->tgl_masuk,
-        ]);
+            $data = [
+                'nama' => $r->nama_lengkap,
+                'nik' => $r->nik,
+                'tgl_lahir' => $r->tgl_lahir,
+                'jenis_kelamin' => $r->jenis_kelamin,
+                'id_divisi' => $r->id_divisi,
+                'posisi2' => $r->posisi,
+                'kesimpulan' => $r->kesimpulan,
+                'periode_masa_percobaan' => $r->periode,
+                'keputusan' => 'dilanjutkan',
+                'tgl_masuk' => $r->tgl_masuk,
+            ];
 
-        return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
+            DB::table('hasil_wawancara')->where('id_anak', $r->id)->update($data);
+
+            $data = [
+                'periode' => $r->periode,
+                'pendidikan_standar' => $r->pendidikan_standar,
+                'pendidikan_hasil' => $r->pendidikan_hasil,
+                'pelatihan_standar' => $r->pelatihan_standar,
+                'pelatihan_hasil' => $r->pelatihan_hasil,
+                'pengalaman_standar' => $r->pengalaman_standar,
+                'pengalaman_hasil' => $r->pengalaman_hasil,
+                'keterampilan_standar' => $r->keterampilan_standar,
+                'keterampilan_hasil' => $r->keterampilan_hasil,
+                'kompetensi_inti_standar' => $r->kompetensi_inti_standar,
+                'kompetensi_inti_hasil' => $r->kompetensi_inti_hasil
+            ];
+            DB::table('penilaian_karyawan')->where('id_anak', $r->hasilWawancaraId)->update($data);
+
+            DB::commit();
+            return redirect()->route('pengawas.anak')->with('sukses', 'Data Berhasil ditambahkan');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('pengawas.anak')->with('gagal', 'Data Gagal ditambahkan');
+        }
     }
     public function destroy_anak($id)
     {
