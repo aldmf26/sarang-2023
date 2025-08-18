@@ -1464,4 +1464,18 @@ ORDER BY g.grade DESC;");
             ]
         );
     }
+
+
+    public function pengiriman_bulan(Request $r)
+    {
+        $data = DB::select("SELECT MONTH(a.tgl) , YEAR(a.tgl)
+        FROM pengiriman_packing_list as a 
+        group by MONTH(a.tgl) , YEAR(a.tgl)
+        ORDER by a.tgl DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
