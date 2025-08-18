@@ -962,7 +962,7 @@ ON all_data.grade = done_data.grade;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
@@ -1033,7 +1033,7 @@ ON all_data.grade = done_data.grade;");
   where c.no_box != '9999'
 
 ) AS hasil
-WHERE tgl_terima BETWEEN '2025-07-01' and now() and id_pengawas = $r->id_pengawas
+WHERE tgl_terima BETWEEN '2025-07-28' and now() and id_pengawas = $r->id_pengawas
 group by tgl, no_box
 ORDER BY  tgl ASC;");
         return response()->json([
@@ -1100,7 +1100,7 @@ ORDER BY  tgl ASC;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-01' and NOW()
+        where tgl_terima BETWEEN '2025-07-28' and NOW()
         Group by tgl, id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
@@ -1226,77 +1226,7 @@ ORDER BY group_id;");
 
     public function steaming_baru(Request $r)
     {
-        $data = DB::select("WITH RECURSIVE data_pecah AS (
-  SELECT 
-    id_grading,
-    nm_partai,
-    grade,
-    tgl,
-    pcs,
-    gr,
-    1 AS bagian_ke
-  FROM grading_partai
-  WHERE gr <= 1000
-
-  UNION ALL
-
-  SELECT 
-    id_grading,
-    nm_partai,
-    grade,
-    tgl,
-    pcs * LEAST(1000, gr - bagian_ke * 1000 + 1000) / gr AS pcs,
-    LEAST(1000, gr - bagian_ke * 1000 + 1000) AS gr,
-    bagian_ke + 1
-  FROM data_pecah
-  WHERE gr > bagian_ke * 1000
-),
-
-data_dengan_urut AS (
-  SELECT 
-    *,
-    ROW_NUMBER() OVER (
-      PARTITION BY nm_partai, grade
-      ORDER BY id_grading, bagian_ke
-    ) AS urut
-  FROM data_pecah
-),
-
-gruping AS (
-  SELECT 
-    *,
-    SUM(gr) OVER (
-      PARTITION BY nm_partai, grade
-      ORDER BY urut
-    ) AS gr_akumulasi
-  FROM data_dengan_urut
-),
-
-final_grup AS (
-  SELECT 
-    *,
-    FLOOR((gr_akumulasi - 1) / 1000) + 1 AS grup_ke
-  FROM gruping
-),
-
-grup_akhir AS (
-  SELECT 
-    nm_partai,
-    grade,
-    grup_ke,
-    MAX(DATE(tgl)) AS tgl_terakhir,
-    ROUND(SUM(pcs)) AS total_pcs,
-    SUM(gr) AS total_gr
-  FROM final_grup
-  GROUP BY nm_partai, grade, grup_ke
-)
-
--- Filter hanya grup yang genap 1000 gr
-SELECT tgl_terakhir, sum(total_pcs) as pcs, sum(total_gr) as gr
-FROM grup_akhir
-WHERE total_gr = 1000 
-group by tgl_terakhir
-ORDER BY tgl_terakhir DESC;");
+        $data = DB::select("SELECT a.tgl , sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a group by a.tgl order by a.tgl DESC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -1417,5 +1347,102 @@ ORDER BY g.grade DESC;");
             'message' => 'success',
             'data' => $data
         ]);
+    }
+
+    public function coba_steaming(Request $request)
+    {
+        $query = DB::table('grading_partai')
+            ->select('nm_partai', 'tgl', 'gr', 'pcs', 'id_grading')
+            ->orderBy('tgl')
+            ->orderBy('id_grading');
+
+        if ($request->has('tgl')) {
+            $query->whereDate('tgl', $request->tgl);
+        }
+
+        $results = $query->get();
+
+        $batches = collect();
+        $currentTanggal = null;
+        $currentBatchGr = 0;
+        $currentBatchPcs = 0;
+        $currentBatchPartai = [];
+
+        foreach ($results as $row) {
+            if ($currentTanggal !== $row->tgl) {
+                if ($currentBatchGr > 0) {
+                    $batches->push([
+                        'nm_partai' => implode(', ', $currentBatchPartai),
+                        'tgl'       => $currentTanggal,
+                        'gr'        => $currentBatchGr,
+                        'pcs'       => $currentBatchPcs
+                    ]);
+                }
+                $currentTanggal = $row->tgl;
+                $currentBatchGr = 0;
+                $currentBatchPcs = 0;
+                $currentBatchPartai = [];
+            }
+
+            $remainingGr = $row->gr;
+            $remainingPcs = $row->pcs;
+
+            while ($remainingGr > 0) {
+                $space = 1000 - $currentBatchGr;
+
+                if (!in_array($row->nm_partai, $currentBatchPartai)) {
+                    $currentBatchPartai[] = $row->nm_partai;
+                }
+
+                if ($remainingGr >= $space) {
+                    // Hitung proporsi pcs yang masuk batch
+                    $pcsToAdd = round($remainingPcs * ($space / $remainingGr), 2);
+
+                    $currentBatchGr += $space;
+                    $currentBatchPcs += $pcsToAdd;
+
+                    $batches->push([
+                        'nm_partai' => implode(', ', $currentBatchPartai),
+                        'tgl'       => $currentTanggal,
+                        'gr'        => $currentBatchGr,
+                        'pcs'       => $currentBatchPcs
+                    ]);
+
+                    // Reset batch
+                    $currentBatchGr = 0;
+                    $currentBatchPcs = 0;
+                    $currentBatchPartai = [];
+
+                    // Kurangi sisa
+                    $remainingGr -= $space;
+                    $remainingPcs -= $pcsToAdd;
+                } else {
+                    // Semua sisa masuk batch
+                    $currentBatchGr += $remainingGr;
+                    $currentBatchPcs += $remainingPcs;
+                    $remainingGr = 0;
+                    $remainingPcs = 0;
+                }
+            }
+        }
+
+        if ($currentBatchGr > 0) {
+            $batches->push([
+                'nm_partai' => implode(', ', $currentBatchPartai),
+                'tgl'       => $currentTanggal,
+                'gr'        => $currentBatchGr,
+                'pcs'       => $currentBatchPcs
+            ]);
+        }
+
+
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'success',
+                'data' => $batches
+            ]
+        );
     }
 }

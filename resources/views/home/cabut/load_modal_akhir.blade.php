@@ -74,6 +74,8 @@
                         <td>
                             <input style="width:140px" value="{{ $d->tgl_serah ?? date('Y-m-d') }}"
                                 name="tgl_serah{{ $i + 1 }}[]" type="date" class="form-control">
+                            <input value="{{ $d->tgl_terima ?? date('Y-m-d') }}"
+                                name="tgl_terima{{ $i + 1 }}[]" type="hidden" class="form-control">
                         </td>
                         <td class="fs-bold">
                             {{ $d->no_box }}

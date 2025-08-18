@@ -705,8 +705,24 @@
                     e.preventDefault()
                     var count = $(this).attr('count')
                     var row = $(this).closest("tr");
+
+                    var tgl_serah = row.find(`input[name='tgl_serah${count}[]']`).val();
+                    var tgl_terima = row.find(`input[name='tgl_terima${count}[]']`).val();
+
+                    if (tgl_serah && tgl_terima) {
+                        var serahDate = new Date(tgl_serah);
+                        var terimaDate = new Date(tgl_terima);
+
+                        var diffTime = terimaDate - serahDate; // selisih dalam milidetik
+                        var diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+                        if (diffDays <= 20) {
+                            alert("Selisih tanggal terima dan serah melebihi 20 hari cek kembali !!!!");
+                        }
+                    }
                     var data = {
                         tgl_serah: row.find(`input[name='tgl_serah${count}[]']`).val(),
+                        tgl_terima: row.find(`input[name='tgl_terima${count}[]']`).val(),
                         id_anak: row.find(`input[name='id_anak${count}[]']`).val(),
                         id_cabut: row.find(`input[name='id_cabut${count}[]']`).val(),
                         no_box: row.find(`input[name='no_box${count}[]']`).val(),
