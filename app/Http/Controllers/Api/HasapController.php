@@ -1233,6 +1233,23 @@ ORDER BY group_id;");
             'data' => $data
         ]);
     }
+    public function hasil_penimbangan_new(Request $r)
+    {
+        $data = DB::select("SELECT 
+            GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS nm_partai, 
+            COUNT(DISTINCT a.box_pengiriman) AS box, 
+            a.grade, 
+            SUM(a.pcs) AS pcs, 
+            SUM(a.gr) AS gr
+        FROM grading_partai AS a 
+        WHERE a.tgl = '$r->tgl'
+        GROUP BY a.grade;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 
 
     public function steaming_baru_detail(Request $r)
