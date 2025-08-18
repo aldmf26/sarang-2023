@@ -1481,10 +1481,10 @@ ORDER BY g.grade DESC;");
     public function pengiriman_bulan_detaiil(Request $r)
     {
         $data = DB::select("SELECT a.tgl,`tujuan`
-FROM pengiriman_packing_list as a 
-where MONTH(a.tgl) = '$r->bulan' and YEAR(a.tgl) = '$r->tahun'
-group by a.tgl
-ORDER by a.tgl ASC;");
+        FROM pengiriman_packing_list as a 
+        where MONTH(a.tgl) = '$r->bulan' and YEAR(a.tgl) = '$r->tahun'
+        group by a.tgl
+        ORDER by a.tgl ASC;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
