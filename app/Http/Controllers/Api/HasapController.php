@@ -1243,7 +1243,9 @@ ORDER BY group_id;");
             SUM(a.gr) AS gr
         FROM grading_partai AS a 
         WHERE a.tgl = '$r->tgl'
-        GROUP BY a.grade;");
+        GROUP BY a.grade
+        order by a.grade ASC
+        ;");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
