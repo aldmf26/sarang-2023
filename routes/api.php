@@ -82,6 +82,7 @@ Route::controller(HasapController::class)
         Route::get('/coba_steaming', 'coba_steaming')->name('coba_steaming');
         Route::get('/hasil_penimbangan_new', 'hasil_penimbangan_new')->name('hasil_penimbangan_new');
         Route::get('/pengiriman_bulan', 'pengiriman_bulan')->name('pengiriman_bulan');
+        Route::get('/pengiriman_bulan_detaiil', 'pengiriman_bulan_detaiil')->name('pengiriman_bulan_detaiil');
     });
 
 
