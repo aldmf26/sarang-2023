@@ -701,6 +701,11 @@
                         }
                     });
                 })
+
+                function parseDate(input) {
+                    var parts = input.split("-"); // [YYYY, MM, DD]
+                    return new Date(parts[0], parts[1] - 1, parts[2]); // bulan dimulai dari 0
+                }
                 $(document).on('click', '.saveCabutAkhir', function(e) {
                     e.preventDefault()
                     var count = $(this).attr('count')
@@ -710,14 +715,16 @@
                     var tgl_terima = row.find(`input[name='tgl_terima${count}[]']`).val();
 
                     if (tgl_serah && tgl_terima) {
-                        var serahDate = new Date(tgl_serah);
-                        var terimaDate = new Date(tgl_terima);
+                        var serahDate = parseDate(tgl_serah);
+                        var terimaDate = parseDate(tgl_terima);
 
-                        var diffTime = terimaDate - serahDate; // selisih dalam milidetik
+                        var diffTime = serahDate - terimaDate; // selisih dalam milidetik
                         var diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-                        if (diffDays <= 20) {
-                            alert("Selisih tanggal terima dan serah melebihi 20 hari cek kembali !!!!");
+                        console.log(diffDays);
+
+                        if (diffDays => 10) {
+                            alert("Selisih tanggal terima dan serah melebihi 10 hari cek kembali !!!!");
                         }
                     }
                     var data = {

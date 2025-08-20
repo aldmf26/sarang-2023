@@ -1233,6 +1233,25 @@ ORDER BY group_id;");
             'data' => $data
         ]);
     }
+    public function hasil_penimbangan_new(Request $r)
+    {
+        $data = DB::select("SELECT 
+            GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS nm_partai, 
+            COUNT(DISTINCT a.box_pengiriman) AS box, 
+            a.grade, 
+            SUM(a.pcs) AS pcs, 
+            SUM(a.gr) AS gr
+        FROM grading_partai AS a 
+        WHERE a.tgl = '$r->tgl'
+        GROUP BY a.grade
+        order by a.grade ASC
+        ;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 
 
     public function steaming_baru_detail(Request $r)
@@ -1444,5 +1463,32 @@ ORDER BY g.grade DESC;");
                 'data' => $batches
             ]
         );
+    }
+
+
+    public function pengiriman_bulan(Request $r)
+    {
+        $data = DB::select("SELECT MONTH(a.tgl) as bulan , YEAR(a.tgl) as tahun
+        FROM pengiriman_packing_list as a 
+        group by MONTH(a.tgl) , YEAR(a.tgl)
+        ORDER by a.tgl DESC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public function pengiriman_bulan_detaiil(Request $r)
+    {
+        $data = DB::select("SELECT a.tgl,`tujuan`
+        FROM pengiriman_packing_list as a 
+        where MONTH(a.tgl) = '$r->bulan' and YEAR(a.tgl) = '$r->tahun'
+        group by a.tgl
+        ORDER by a.tgl ASC;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
     }
 }
