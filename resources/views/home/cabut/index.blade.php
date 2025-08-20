@@ -723,8 +723,8 @@
 
                         console.log(diffDays);
 
-                        if (diffDays => 20) {
-                            alert("Selisih tanggal terima dan serah melebihi 20 hari cek kembali !!!!");
+                        if (diffDays => 10) {
+                            alert("Selisih tanggal terima dan serah melebihi 10 hari cek kembali !!!!");
                         }
                     }
                     var data = {
