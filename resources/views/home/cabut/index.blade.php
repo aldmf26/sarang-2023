@@ -723,7 +723,7 @@
 
                         console.log(diffDays);
 
-                        if (diffDays => 10) {
+                        if (diffDays > 10) {
                             alert("Selisih tanggal terima dan serah melebihi 10 hari cek kembali !!!!");
                         }
                     }
