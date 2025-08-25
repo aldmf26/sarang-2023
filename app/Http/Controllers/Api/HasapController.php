@@ -717,8 +717,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function tracebelity1(Request $r)
     {
 
-        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr / 1000) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id,
-max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awal_ctk) as gr_awal_ctk, sum(i.pcs_tdk_cetak + i.pcs_akhir) as pcs_akhir_ctk, sum(i.gr_tdk_cetak + i.gr_akhir) as gr_akhir_ctk, sum(k.pcs) as pcs_grading, sum(k.gr) as gr_grading, max(k.tgl) as tgl_grading
+        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr ) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id,
+max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awal_ctk) as gr_awal_ctk, sum(i.pcs_tdk_cetak + i.pcs_akhir) as pcs_akhir_ctk, sum(i.gr_tdk_cetak + i.gr_akhir) as gr_akhir_ctk, sum(k.pcs) as pcs_grading, sum(k.gr) as gr_grading, max(k.tgl) as tgl_grading, m.pcs_kirim, m.gr_kirim, m.tgl_kirim
 
         FROM cabut as a
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
@@ -726,13 +726,20 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
         left join bk_awal as f on f.nm_partai = b.nm_partai
         left join cetak_new as i on i.no_box = a.no_box and i.id_kelas_cetak !='12'
         left join grading as k on k.no_box_sortir = a.no_box and k.no_invoice is not null
-        where b.nm_partai = '$r->nm_partai'
+        left join (
+        	SELECT m.nm_partai, sum(m.pcs) as pcs_kirim , sum(m.gr) as gr_kirim , max(n.tgl_input) as tgl_kirim
+            FROM grading_partai as m 
+            left join pengiriman as n on n.no_box = m.box_pengiriman
+            WHERE m.sudah_kirim ='Y'
+            group by m.nm_partai
+        ) as m on m.nm_partai = b.nm_partai
+        where b.nm_partai = 'bjm 1142'
         group by a.tgl_terima
 
         UNION ALL
 
         SELECT g.tgl as tgl_panen, g.no_invoice, g.kg as berat_bersih, (h.gr/1000) as gr_kotor, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, max(c.tgl_serah) as tgl_serah, 'eo' as ket, g.rwb_id,
-        max(j.tgl) as tgl_selesai_ctk, sum(j.pcs_awal_ctk) as pcs_awal_ctk, sum(j.gr_awal_ctk) as gr_awal_ctk,sum(j.pcs_tdk_cetak + j.pcs_akhir) as pcs_akhir_ctk, sum(j.gr_tdk_cetak + j.gr_akhir) as gr_akhir_ctk, sum(l.pcs) as pcs_grading, sum(l.gr) as gr_grading,max(l.tgl) as tgl_grading
+        max(j.tgl) as tgl_selesai_ctk, sum(j.pcs_awal_ctk) as pcs_awal_ctk, sum(j.gr_awal_ctk) as gr_awal_ctk,sum(j.pcs_tdk_cetak + j.pcs_akhir) as pcs_akhir_ctk, sum(j.gr_tdk_cetak + j.gr_akhir) as gr_akhir_ctk, sum(l.pcs) as pcs_grading, sum(l.gr) as gr_grading,max(l.tgl) as tgl_grading, m.pcs_kirim,m.gr_kirim, m.tgl_kirim
         
         FROM eo as c 
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
@@ -740,7 +747,14 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
         left join bk_awal as h on h.nm_partai = d.nm_partai
         left join cetak_new as j on j.no_box = c.no_box and j.id_kelas_cetak !='12'
         left join grading as l on l.no_box_sortir = c.no_box and l.no_invoice is not null
-        where d.nm_partai = '$r->nm_partai'
+       left join (
+        	SELECT m.nm_partai, sum(m.pcs) as pcs_kirim , sum(m.gr) as gr_kirim , max(n.tgl_input) as tgl_kirim
+            FROM grading_partai as m 
+            left join pengiriman as n on n.no_box = m.box_pengiriman
+            WHERE m.sudah_kirim ='Y'
+            group by m.nm_partai
+        ) as m on m.nm_partai = d.nm_partai
+        where d.nm_partai = 'bjm 1142'
         group by c.tgl_ambil;");
         return response()->json([
             'status' => 'success',
