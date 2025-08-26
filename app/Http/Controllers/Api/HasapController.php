@@ -773,7 +773,7 @@ SELECT c.no_nota, c.tujuan
     FROM pengiriman_packing_list as c 
     GROUP by c.no_nota
 ) as c on c.no_nota = b.no_nota
-where a.nm_partai = '$r->nm_partai''
+where a.nm_partai = '$r->nm_partai'
 GROUP by b.no_nota;");
         return response()->json([
             'status' => 'success',
