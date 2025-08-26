@@ -717,7 +717,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function tracebelity1(Request $r)
     {
 
-        $data = DB::select("SELECT e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr ) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id,
+        $data = DB::select("SELECT b.nm_partai, e.tgl as tgl_panen, e.no_invoice, e.kg as berat_bersih, (f.gr ) as gr_kotor,  sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, a.tgl_terima, sum(a.pcs_akhir) as pcs_akhir, sum(a.gr_akhir) as gr_akhir, max(a.tgl_serah) as tgl_serah, 'cabut' as ket, e.rwb_id,
 max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awal_ctk) as gr_awal_ctk, sum(i.pcs_tdk_cetak + i.pcs_akhir) as pcs_akhir_ctk, sum(i.gr_tdk_cetak + i.gr_akhir) as gr_akhir_ctk, sum(k.pcs) as pcs_grading, sum(k.gr) as gr_grading, max(k.tgl) as tgl_grading, m.pcs_kirim, m.gr_kirim, m.tgl_kirim
 
         FROM cabut as a
@@ -738,7 +738,7 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
 
         UNION ALL
 
-        SELECT g.tgl as tgl_panen, g.no_invoice, g.kg as berat_bersih, (h.gr/1000) as gr_kotor, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, max(c.tgl_serah) as tgl_serah, 'eo' as ket, g.rwb_id,
+        SELECT g.nm_partai, g.tgl as tgl_panen, g.no_invoice, g.kg as berat_bersih, (h.gr/1000) as gr_kotor, 0 as pcs_awal, sum(c.gr_eo_awal) as gr_awal, c.tgl_ambil as tgl_terima, 0 as pcs_akhir, sum(c.gr_eo_akhir) as gr_akhir, max(c.tgl_serah) as tgl_serah, 'eo' as ket, g.rwb_id,
         max(j.tgl) as tgl_selesai_ctk, sum(j.pcs_awal_ctk) as pcs_awal_ctk, sum(j.gr_awal_ctk) as gr_awal_ctk,sum(j.pcs_tdk_cetak + j.pcs_akhir) as pcs_akhir_ctk, sum(j.gr_tdk_cetak + j.gr_akhir) as gr_akhir_ctk, sum(l.pcs) as pcs_grading, sum(l.gr) as gr_grading,max(l.tgl) as tgl_grading, m.pcs_kirim,m.gr_kirim, m.tgl_kirim
         
         FROM eo as c 
