@@ -767,7 +767,7 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
 
         $data = DB::select("SELECT a.nm_partai, sum(a.pcs) as  pcs, sum(a.gr) as gr, a.box_pengiriman, b.no_nota, max(b.tgl_input) as tgl_input, c.tujuan
 FROM grading_partai as a 
-left join pengiriman as b on b.no_box = a.box_pengiriman
+ join pengiriman as b on b.no_box = a.box_pengiriman
 left join (
 SELECT c.no_nota, c.tujuan
     FROM pengiriman_packing_list as c 
