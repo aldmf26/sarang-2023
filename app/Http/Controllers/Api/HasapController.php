@@ -762,6 +762,20 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
             'data' => $data
         ]);
     }
+    public function tracebelity2(Request $r)
+    {
+
+        $data = DB::select("SELECT a.nm_partai, sum(a.pcs), sum(a.gr), a.box_pengiriman, b.no_nota, b.tgl_input
+FROM grading_partai as a 
+left join pengiriman as b on b.no_box = a.box_pengiriman
+where a.nm_partai = '$r->nm_partai'
+GROUP by b.no_nota;");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
     public function delivery(Request $r)
     {
 
