@@ -765,11 +765,15 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
     public function tracebelity2(Request $r)
     {
 
-        $data = DB::select("SELECT a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, a.box_pengiriman, b.no_nota, b.tgl_input, c.tujuan
+        $data = DB::select("SELECT a.nm_partai, sum(a.pcs) as  pcs, sum(a.gr) as gr, a.box_pengiriman, b.no_nota, b.tgl_input, c.tujuan
 FROM grading_partai as a 
 left join pengiriman as b on b.no_box = a.box_pengiriman
-left join pengiriman_packing_list as c on c.no_nota = b.no_nota 
-where a.nm_partai = '$r->nm_partai'
+left join (
+SELECT c.no_nota, c.tujuan
+    FROM pengiriman_packing_list as c 
+    GROUP by c.no_nota
+) as c on c.no_nota = b.no_nota
+where a.nm_partai = '$r->nm_partai''
 GROUP by b.no_nota;");
         return response()->json([
             'status' => 'success',
