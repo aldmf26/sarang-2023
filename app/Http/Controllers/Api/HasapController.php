@@ -733,7 +733,7 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
             WHERE m.sudah_kirim ='Y'
             group by m.nm_partai
         ) as m on m.nm_partai = b.nm_partai
-        where b.nm_partai = 'bjm 1142'
+        where b.nm_partai = '$r->nm_partai'
         group by a.tgl_terima
 
         UNION ALL
@@ -754,7 +754,7 @@ max(i.tgl) as tgl_selesai_ctk, sum(i.pcs_awal_ctk) as pcs_awal_ctk, sum(i.gr_awa
             WHERE m.sudah_kirim ='Y'
             group by m.nm_partai
         ) as m on m.nm_partai = d.nm_partai
-        where d.nm_partai = 'bjm 1142'
+        where d.nm_partai = '$r->nm_partai'
         group by c.tgl_ambil;");
         return response()->json([
             'status' => 'success',
