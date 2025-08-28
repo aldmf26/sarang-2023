@@ -29,6 +29,7 @@ use App\Http\Controllers\Hrga7_3IdentifikasiLimbahController;
 use App\Http\Controllers\Hrga8_CeklistPengecekanAirController;
 use App\Http\Controllers\Hrga8_CeklistSuhuColdStorageController;
 use App\Http\Controllers\Hrga8_CeklistSuhuRuanganController;
+use App\Http\Controllers\KasbonController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
 use App\Http\Controllers\PengirimanController;
@@ -354,6 +355,19 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
     Route::controller(DendaController::class)
         ->prefix('data_master/denda')
         ->name('denda.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/detail', 'detail')->name('detail');
+            Route::get('/add', 'add')->name('add');
+            Route::post('/', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/edit', 'update')->name('update');
+            Route::get('/delete', 'delete')->name('delete');
+            Route::get('/print', 'print')->name('print');
+        });
+    Route::controller(KasbonController::class)
+        ->prefix('data_master/kasbon')
+        ->name('kasbon.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail', 'detail')->name('detail');

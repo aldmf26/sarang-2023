@@ -1,5 +1,5 @@
 <div class="row">
-    <input type="hidden" name="id" value="{{ $detail->id_denda }}">
+    <input type="hidden" name="id" value="{{ $detail->id }}">
     <div class="col-lg-12">
         <div class="form-group">
             <label for="">Nama Anak</label>
@@ -35,11 +35,6 @@
                 class="form-control">
         </div>
     </div>
-    <div class="col-lg-12">
-        <div class="form-group">
-            <label for="">Keterangan</label>
-            <input type="text" name="ket" value="{{ $detail->ket }}" class="form-control">
-        </div>
-    </div>
+
 
 </div>

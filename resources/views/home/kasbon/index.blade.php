@@ -26,30 +26,27 @@
                 <thead>
                     <tr>
                         <th width="5">#</th>
-                        <th>Bulan dibayar</th>
-                        <th>Tgl</th>
+                        <th>Tanggal</th>
                         <th>Nama</th>
                         <th class="text-end">Nominal (Rp. {{ number_format($ttlNominal, 0) }})</th>
-                        <th>Ket</th>
                         <th width="20%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($denda as $no => $d)
+                    @foreach ($kasbon as $no => $d)
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>{{ !empty($d->bulan_dibayar) ? date('M y', strtotime('01-' . $d->bulan_dibayar . '-' . date('Y'))) : '' }}
                             <td>{{ tanggal($d->tgl) }}</td>
                             <td>{{ ucwords($d->nama) }}</td>
                             <td align="right">{{ number_format($d->nominal, 0) }}</td>
-                            <td>{{ ucwords($d->ket) }}</td>
+
                             <td>
                                 <x-theme.button modal="Y" idModal="delete" href="#" icon="fa-trash"
                                     variant="danger" addClass="float-end delete_nota" teks=""
-                                    data="no_nota={{ $d->id_denda }}" />
+                                    data="no_nota={{ $d->id }}" />
 
                                 <x-theme.button modal="Y" idModal="edit" href="#" icon="fa-pen"
-                                    addClass="float-end edit" teks="" data="id={{ $d->id_denda }}" />
+                                    addClass="float-end edit" teks="" data="id={{ $d->id }}" />
                             </td>
                         </tr>
                     @endforeach
@@ -58,9 +55,9 @@
         </section>
 
         {{-- ALL MODAL --}}
-        <form action="{{ route('denda.create') }}" method="post">
+        <form action="{{ route('kasbon.create') }}" method="post">
             @csrf
-            <x-theme.modal idModal="tambah" title="tamba denda" btnSave="Y">
+            <x-theme.modal idModal="tambah" title="tambah kasbon" btnSave="Y">
                 <div class="row">
 
                     <div class="col-lg-12">
@@ -95,28 +92,23 @@
                             <input required type="number" min="0" name="nominal" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="">Keterangan</label>
-                            <input type="text" name="ket" class="form-control">
-                        </div>
-                    </div>
+
 
                 </div>
             </x-theme.modal>
         </form>
 
         {{-- update --}}
-        <form action="{{ route('denda.update') }}" method="post">
+        <form action="{{ route('kasbon.update') }}" method="post">
             @csrf
-            <x-theme.modal title="Edit Denda" idModal="edit">
+            <x-theme.modal title="Edit Kasbon" idModal="edit">
                 <div id="get_edit">
                 </div>
             </x-theme.modal>
         </form>
 
         {{-- delete --}}
-        <x-theme.btn_alert_delete route="denda.delete" name="id_denda" tgl1="2022" tgl2="2022" id_proyek="1" />
+        <x-theme.btn_alert_delete route="kasbon.delete" name="id_denda" tgl1="2022" tgl2="2022" id_proyek="1" />
 
     </x-slot>
 
@@ -128,7 +120,7 @@
                     var id = $(this).attr('id')
                     $.ajax({
                         type: "GET",
-                        url: `{{ route('denda.detail') }}?id=` + id,
+                        url: `{{ route('kasbon.detail') }}?id=` + id,
                         success: function(r) {
 
                             $("#get_edit").html(r);
