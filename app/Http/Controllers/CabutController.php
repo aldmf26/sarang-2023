@@ -750,6 +750,8 @@ class CabutController extends Controller
 
                 'Z2' => 'ttl gaji',
                 'AA2' => 'rata2',
+                'AB2' => 'kasbon',
+                'AC2' => 'sisa gaji',
             ];
 
             foreach ($koloms as $kolom => $isiKolom) {
@@ -859,7 +861,10 @@ class CabutController extends Controller
                 $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $uang_makan - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
                 $sheet->setCellValue('Z' . $row, $ttl)
-                    ->setCellValue('AA' . $row, $rata);
+                    ->setCellValue('AA' . $row, $rata)
+                    ->setCellValue('AB' . $row, $data->kasbon)
+                    ->setCellValue('AC' . $row, $ttl - $data->kasbon)
+                ;
 
                 $ttlCbtPcsAwal += $data->pcs_awal;
                 $ttlCbtGrAwal += $data->gr_awal;
@@ -919,10 +924,10 @@ class CabutController extends Controller
             $sheet->setCellValue('Y' . $rowTotal, $dendaTtlRp);
             $sheet->setCellValue('Z' . $rowTotal, $ttlTtlRp);
 
-            $sheet->getStyle("A$rowTotal:AA$rowTotal")->applyFromArray($styleBold);
+            $sheet->getStyle("A$rowTotal:AC$rowTotal")->applyFromArray($styleBold);
 
             $baris = $rowTotal - 1;
-            $sheet->getStyle('A2:AA' . $baris)->applyFromArray($styleBaris);
+            $sheet->getStyle('A2:AC' . $baris)->applyFromArray($styleBaris);
         }
         $writer = new Xlsx($spreadsheet);
 

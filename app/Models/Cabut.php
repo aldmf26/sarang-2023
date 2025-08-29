@@ -369,7 +369,8 @@ class Cabut extends Model
         ctk.gr_akhir_ctk,
         ctk.ttl_rp_cetak,
         b.lokasi,
-        umk.nominal as umk_nominal
+        umk.nominal as umk_nominal,
+        ksbn.kasbon
         FROM 
             (
                 SELECT id_anak,id_pengawas
@@ -449,6 +450,13 @@ class Cabut extends Model
         ) as ctk on ctk.id_anak = a.id_anak
 
         left join uang_makan as umk on umk.id_uang_makan = a.id_uang_makan
+
+        left join (
+         SELECT c.id_anak, sum(c.nominal) as kasbon
+            FROM kasbon as c
+            where c.bulan_dibayar = '$bulan' and c.tahun_dibayar = '$tahun'
+            GROUP by c.id_anak
+        ) as ksbn on ksbn.id_anak = a.id_anak
 
 
         WHERE b.id = '$id_pengawas' ORDER BY a.id_kelas DESC");
