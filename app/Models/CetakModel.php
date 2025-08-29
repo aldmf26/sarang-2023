@@ -398,7 +398,7 @@ class CetakModel extends Model
         left join (
          SELECT k.id_anak , sum(k.nominal) as kasbon
             FROM kasbon as k 
-            where k.bulan_dibayar = '$bulan_dibayar'
+            where k.bulan_dibayar = '$bulan_dibayar' and k.tahun_dibayar = '$tahun_dibayar'
             GROUP by k.id_anak
         ) as j on j.id_anak = a.id_anak
         
