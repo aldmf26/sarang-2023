@@ -323,7 +323,7 @@ class CetakModel extends Model
         $result = DB::select("SELECT h.name, a.nama , a.id_kelas, b.ttl_hari, c.pcs_awal_ctk,c.gr_awal_ctk, c.pcs_akhir_ctk, c.gr_akhir_ctk, c.ttl_rp_cetak, 
         d.pcs_awal_cbt, d.gr_awal_cbt, d.pcs_akhir_cbt, d.gr_akhir_cbt, d.ttl_rp_cbt,
         e.pcs_awal_str, e.gr_awal_str, e.pcs_akhir_str, e.gr_akhir_str, e.ttl_rp_str, f.ttl_harian, g.ttl_rp_denda,
-        i.gr_awal_eo, i.gr_eo_akhir, i.ttl_rp_eo, j.nominal as uang_makan
+        i.gr_awal_eo, i.gr_eo_akhir, i.ttl_rp_eo, j.nominal as uang_makan, j.kasbon
         FROM tb_anak as a 
         left join (
          SELECT b.id_anak, count(b.tgl) as ttl_hari
@@ -394,6 +394,13 @@ class CetakModel extends Model
             where i.bulan_dibayar = '$bulan_dibayar' and i.no_box != '9999' and i.selesai = 'Y'
             group by i.id_anak
         ) as i on i.id_anak = a.id_anak
+
+        left join (
+         SELECT k.id_anak , sum(k.nominal) as kasbon
+            FROM kasbon as k 
+            where k.bulan_dibayar = '$bulan_dibayar'
+            GROUP by k.id_anak
+        ) as j on j.id_anak = a.id_anak
         
         where a.id_pengawas = '$id_pengawas';");
         return $result;

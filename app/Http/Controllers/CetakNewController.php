@@ -1341,6 +1341,8 @@ class CetakNewController extends Controller
             'U' => 'Rp Denda',
             'V' => 'Total Gaji',
             'W' => 'Rata-rata',
+            'X' => 'Kasbon',
+            'Y' => 'Sisa Gaji',
 
         ];
         foreach ($kolom as $k => $v) {
@@ -1383,11 +1385,14 @@ class CetakNewController extends Controller
 
             $sheet->setCellValue('W' . $no, empty($item->ttl_hari) ? 0 : ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda + ($item->uang_makan * $item->ttl_hari)) / $item->ttl_hari);
 
+            $sheet->setCellValue('X' . $no, $item->kasbon);
+            $sheet->setCellValue('Y' . $no, ($item->ttl_rp_cetak + $item->ttl_rp_cbt + $item->ttl_rp_eo + $item->ttl_rp_str + $item->ttl_harian - $item->ttl_rp_denda + ($item->uang_makan * $item->ttl_hari)) - $item->kasbon);
+
             $no++;
         }
 
-        $sheet->getStyle('A1:W1')->applyFromArray($style_atas);
-        $sheet->getStyle('A2:W' . $no - 1)->applyFromArray($styleBaris);
+        $sheet->getStyle('A1:Y1')->applyFromArray($style_atas);
+        $sheet->getStyle('A2:Y' . $no - 1)->applyFromArray($styleBaris);
 
 
         $writer = new Xlsx($spreadsheet);
