@@ -47,7 +47,6 @@ class KasbonController extends Controller
         $kasbon = DB::table('kasbon as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->where('a.id_pengawas', auth()->user()->id)
-            ->whereBetween('a.tgl', [$tgl1, $tgl2])
             ->orderBy('a.id', 'DESC')
             ->get();
         $ttlNominal = 0;
