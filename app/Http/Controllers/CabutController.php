@@ -567,7 +567,6 @@ class CabutController extends Controller
 
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
-
         $sumPgws = [];
         foreach ($pengawas as $p) {
 

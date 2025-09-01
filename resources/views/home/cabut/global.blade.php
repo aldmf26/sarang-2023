@@ -195,7 +195,7 @@
                                 class="text-center text-white bg-primary" :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
-                            <th class="text-center {{ $bgDanger }}" colspan="5">Gajih</th>
+                            <th class="text-center {{ $bgDanger }}" colspan="7">Gajih</th>
                         </tr>
                         <tr>
                             <th class="dhead">Pgws</th>
@@ -266,7 +266,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                 @foreach ($tbl as $data)
+                                  @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
@@ -400,9 +400,9 @@
                             <th>{{ number_format($dendaTtlRp, 0) }}</th>
                             <th>{{ number_format($ttlTtlRp, 0) }}</th>
 
+                            <th></th>
                             <th>{{ number_format($ttlKasbon, 0) }}</th>
                             <th>{{ number_format($ttlSisaGaji, 0) }}</th>
-                            <th></th>
                         </tr>
                     </tfoot>
                 </table>
