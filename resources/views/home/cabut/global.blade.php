@@ -230,7 +230,7 @@
                             <th class="{{ $bgDanger }}">Ttl Gaji</th>
                             <th class="dhead">Rata2</th>
                             <th class="dhead">Kasbon</th>
-                            <th class="dhead">Sisa Gaji</th>
+                            <th class="{{ $bgDanger }}">Sisa Gaji</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -266,7 +266,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                  @foreach ($tbl as $data)
+                                    @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
