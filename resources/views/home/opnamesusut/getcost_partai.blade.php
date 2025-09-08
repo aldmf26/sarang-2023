@@ -135,7 +135,7 @@
                             Cabut</a>
                     </td>
                     <td></td>
-                    <td class="text-end">{{ $formatNumber($cabut->pcs) }}</td>
+                    <td class="text-end">{{ $formatNumber($cabut->pcs ?? 0) }}</td>
                     <td class="text-end">{{ $formatNumber($grAwalCabut) }}</td>
                     <td class="text-end">{{ $formatNumber($cabut->pcs) }}</td>
                     <td class="text-end">{{ $formatNumber($grAkhirCabut) }}</td>
