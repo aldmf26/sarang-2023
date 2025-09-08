@@ -89,13 +89,12 @@
                     </thead>
                     <tbody>
                         @forelse ($sumPgws as $d)
-                        <tr>
-                            <td class="text-start">{{ $d['lokasi'] }}</td>
-                            <td class="text-start">{{ $d['pgws'] }}</td>
-                            <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
-                        </tr>
+                            <tr>
+                                <td class="text-start">{{ $d['lokasi'] }}</td>
+                                <td class="text-start">{{ $d['pgws'] }}</td>
+                                <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                            </tr>
                         @empty
-                            
                         @endforelse
                     </tbody>
                     <tfoot class="bg-info text-white">
@@ -107,8 +106,8 @@
                         </tr>
                     </tfoot>
                 </table>
-                
-                
+
+
             </div>
             <div class="col-lg-2">
                 <h6 x-transition x-show="sum">Summary Gaji Perlokasi </h6>
@@ -128,7 +127,7 @@
                                 </tr>
                             </template>
                         </template>
-                        
+
                         <!-- Tampilan jika array kosong -->
                         <template x-if="Object.keys(totalPerLokasi).length === 0">
                             <tr>
@@ -196,7 +195,7 @@
                                 class="text-center text-white bg-primary" :colspan="sortir ? '6' : ''" " >
                                 Sortir {!! $buka !!}
                             </th>
-                            <th class="text-center {{ $bgDanger }}" colspan="5">Gajih</th>
+                            <th class="text-center {{ $bgDanger }}" colspan="7">Gajih</th>
                         </tr>
                         <tr>
                             <th class="dhead">Pgws</th>
@@ -230,6 +229,8 @@
                             <th class="dhead">Rp Denda</th>
                             <th class="{{ $bgDanger }}">Ttl Gaji</th>
                             <th class="dhead">Rata2</th>
+                            <th class="dhead">Kasbon</th>
+                            <th class="{{ $bgDanger }}">Sisa Gaji</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -261,8 +262,11 @@
                             $ttlEoRp = 0;
                             $ttlUangMakan = 0;
 
+                            $ttlKasbon = 0;
+                            $ttlSisaGaji = 0;
+
                         @endphp
-                            @foreach ($tbl as $data)
+                                    @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
@@ -321,9 +325,14 @@
                                     $data->ttl_rp_denda;
                                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
 
+                                $kasbon = $data->kasbon;
+                                $sisaGaji = $ttl - $kasbon;
+
                             @endphp
                             <td>{{ number_format($ttl, 0) }}</td>
                             <td>{{ number_format($rata, 0) }}</td>
+                            <td>{{ number_format($kasbon, 0) }}</td>
+                            <td>{{ number_format($sisaGaji, 0) }}</td>
                         </tr>
 
                         @php
@@ -351,7 +360,11 @@
                             $dllTtlRp += $data->ttl_rp_dll;
                             $dendaTtlRp += $data->ttl_rp_denda;
                             $ttlUangMakan += $uang_makan;
+
                             $ttlTtlRp += $ttl;
+
+                            $ttlKasbon += $kasbon;
+                            $ttlSisaGaji += $sisaGaji;
                         @endphp
                         @endforeach
                         </tbody>
@@ -386,7 +399,10 @@
                             <th>{{ number_format($ttlUangMakan, 0) }}</th>
                             <th>{{ number_format($dendaTtlRp, 0) }}</th>
                             <th>{{ number_format($ttlTtlRp, 0) }}</th>
+
                             <th></th>
+                            <th>{{ number_format($ttlKasbon, 0) }}</th>
+                            <th>{{ number_format($ttlSisaGaji, 0) }}</th>
                         </tr>
                     </tfoot>
                 </table>

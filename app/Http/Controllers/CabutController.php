@@ -567,7 +567,6 @@ class CabutController extends Controller
 
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
-
         $sumPgws = [];
         foreach ($pengawas as $p) {
 
@@ -582,7 +581,7 @@ class CabutController extends Controller
                     $data->ttl_rp_cetak +
                     $uangMakan +
                     $data->ttl_rp_dll -
-                    $data->ttl_rp_denda;
+                    $data->ttl_rp_denda - $data->kasbon;
                 $ttlRp += $ttl;
             }
             if ($ttlRp != 0) {
@@ -795,7 +794,7 @@ class CabutController extends Controller
             $style = $sheet->getStyle('A1:X1');
             $style->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $style->getFont()->setBold(true);
-            $sheet->getStyle('A2:AA2')->applyFromArray($styleBold);
+            $sheet->getStyle('A2:AC2')->applyFromArray($styleBold);
 
             $TtlRp = 0;
             $eoTtlRp = 0;
@@ -822,6 +821,9 @@ class CabutController extends Controller
             $ttlEoGrAkhir  = 0;
             $ttlEoRp  = 0;
             $ttlUangMakan = 0;
+
+            $ttlKasbon = 0;
+            $ttlSisaGaji = 0;
 
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
@@ -892,6 +894,10 @@ class CabutController extends Controller
                 $dendaTtlRp += $data->ttl_rp_denda;
                 $ttlTtlRp += $ttl;
 
+                $ttlKasbon += $data->kasbon;
+                $ttlSisaGaji += $ttl - $data->kasbon;
+
+
                 $row++;
             }
 
@@ -923,6 +929,8 @@ class CabutController extends Controller
             $sheet->setCellValue('X' . $rowTotal, $ttlUangMakan);
             $sheet->setCellValue('Y' . $rowTotal, $dendaTtlRp);
             $sheet->setCellValue('Z' . $rowTotal, $ttlTtlRp);
+            $sheet->setCellValue('AB' . $rowTotal, $ttlKasbon);
+            $sheet->setCellValue('AC' . $rowTotal, $ttlSisaGaji);
 
             $sheet->getStyle("A$rowTotal:AC$rowTotal")->applyFromArray($styleBold);
 
@@ -933,6 +941,7 @@ class CabutController extends Controller
 
         // Menggunakan response untuk mengirimkan file ke browser
         $fileName = "Gaji Export Global $bulanDibayar $tahun";
+        
         return response()->stream(
             function () use ($writer) {
                 $writer->save('php://output');
