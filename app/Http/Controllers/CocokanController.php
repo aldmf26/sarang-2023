@@ -967,20 +967,18 @@ class CocokanController extends Controller
 
     public function Susut()
     {
+        $bk = DB::select("SELECT a.nm_partai, a.tipe, sum(a.pcs_awal) as pcs , sum(a.gr_awal) as gr, sum(a.gr_awal * a.hrga_satuan) as modal_awal , b.pcs_akhir, b.gr_akhir, b.cost_op, b.cost_kerja
+        FROM bk as a  
+        left join (
+        SELECT sum(a.pcs) as pcs_akhir, sum(a.gr) as gr_akhir, sum(a.cost_bk) as cost_bk, sum(a.cost_op) as cost_op, sum(a.cost_kerja) as cost_kerja, a.nm_partai
+        FROM grading_partai as a
+        where a.grade != 'susut' 
+        group by a.nm_partai
+        )  as b on b.nm_partai = a.nm_partai
+        where a.kategori = 'cabut' and a.baru = 'baru' and a.no_box != 9999 group by a.nm_partai order by a.nm_partai ASC;");
         $data = [
-            'title' => 'Susut',
-            'cabut' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
-            FROM tb_susut as a 
-            WHERE a.divisi = 'cetak' and a.bulan_dibayar = '5'"),
-            'cetak' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
-            FROM tb_susut as a 
-            WHERE a.divisi = 'sortir' and a.bulan_dibayar = '5'"),
-            'sortir' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
-            FROM tb_susut as a 
-            WHERE a.divisi = 'grade' and a.bulan_dibayar = '5'"),
-            'eo' => DB::selectOne("SELECT sum(a.ttl_aktual) as gr
-            FROM tb_susut as a 
-            WHERE a.divisi = 'eo' and a.bulan_dibayar = '5'"),
+            'title' => 'Laporan Partai',
+            'bk' => $bk,
         ];
         return view('home.cocokan.susut', $data);
     }
