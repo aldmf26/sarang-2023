@@ -411,7 +411,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         SUM(gp.gr) AS total_gr,
         GROUP_CONCAT(CONCAT(\"'\", gp.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
         GROUP_CONCAT(
-            CONCAT(gp.pcs, ' pcs / ', gp.gr, ' gr')
+            CONCAT(gp.nm_partai, ' : ',gp.pcs, ' pcs / ', gp.gr, ' gr')
             ORDER BY gp.nm_partai SEPARATOR '<br>'
         ) AS detail_partai
     FROM (
