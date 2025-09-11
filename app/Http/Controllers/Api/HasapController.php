@@ -410,8 +410,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             SUM(a.pcs) AS total_pcs, 
             SUM(a.gr) AS total_gr, 
             GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
-            GROUP_CONCAT(a.pcs ORDER BY a.nm_partai SEPARATOR ', ') AS pcs_per_partai,
-            GROUP_CONCAT(a.gr ORDER BY a.nm_partai SEPARATOR ', ') AS gr_per_partai,
+            GROUP_CONCAT(DISTINCT a.pcs ORDER BY a.nm_partai SEPARATOR '<br>') AS pcs_per_partai,
+            GROUP_CONCAT(DISTINCT a.gr ORDER BY a.nm_partai SEPARATOR '<br>') AS gr_per_partai,
             b.no_barcode
         FROM grading_partai AS a
         JOIN pengiriman AS b ON b.no_box = a.box_pengiriman
