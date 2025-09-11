@@ -405,16 +405,19 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         }
 
         $data = DB::select("SELECT 
-        b.no_barcode, 
-        a.grade, 
-        SUM(a.pcs) as pcs, 
-        SUM(a.gr) as gr, 
-        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
-        b.no_barcode
-        FROM grading_partai as a
-        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+            b.no_barcode, 
+            a.grade, 
+            SUM(a.pcs) AS total_pcs, 
+            SUM(a.gr) AS total_gr, 
+            GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+            GROUP_CONCAT(a.pcs ORDER BY a.nm_partai SEPARATOR ', ') AS pcs_per_partai,
+            GROUP_CONCAT(a.gr ORDER BY a.nm_partai SEPARATOR ', ') AS gr_per_partai,
+            b.no_barcode
+        FROM grading_partai AS a
+        JOIN pengiriman AS b ON b.no_box = a.box_pengiriman
         WHERE b.tgl_input = '$tgl'
-        GROUP BY b.no_barcode, a.grade");
+        GROUP BY b.no_barcode, a.grade;
+        ");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
