@@ -409,7 +409,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     gp.grade,
     SUM(gp.pcs) AS total_pcs,
     SUM(gp.gr) AS total_gr,
-    GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+    GROUP_CONCAT(DISTINCT CONCAT(\"'\", gp.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
     GROUP_CONCAT(gp.pcs ORDER BY gp.nm_partai SEPARATOR '<br>') AS pcs_per_partai,
     GROUP_CONCAT(gp.gr ORDER BY gp.nm_partai SEPARATOR '<br>') AS gr_per_partai
 FROM (
