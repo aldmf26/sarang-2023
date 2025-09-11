@@ -418,15 +418,18 @@ FROM (
     SELECT 
         box_pengiriman,
         grade,
-        TRIM(nm_partai) AS nm_partai,
+        -- perbaikan: hapus spasi ganda & trim
+        REGEXP_REPLACE(TRIM(nm_partai), '\\s+', ' ') AS nm_partai,
         SUM(pcs) AS pcs,
         SUM(gr) AS gr
     FROM grading_partai
-    GROUP BY box_pengiriman, grade, TRIM(nm_partai)
+    GROUP BY box_pengiriman, grade, 
+        REGEXP_REPLACE(TRIM(nm_partai), '\\s+', ' ')
 ) AS gp
 JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
 WHERE b.tgl_input = '$tgl'
 GROUP BY b.no_barcode, gp.grade;
+
 
 
 
