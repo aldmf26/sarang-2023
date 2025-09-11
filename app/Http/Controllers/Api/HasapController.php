@@ -405,28 +405,29 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         }
 
         $data = DB::select("SELECT 
-        b.no_barcode,
-        gp.grade,
-        SUM(gp.pcs) AS total_pcs,
-        SUM(gp.gr) AS total_gr,
-        GROUP_CONCAT(DISTINCT CONCAT('''', gp.nm_partai, '''') ORDER BY gp.nm_partai SEPARATOR ', ') AS nm_partai,
-        GROUP_CONCAT(
-            CONCAT(gp.nm_partai, ' : ', gp.pcs, ' pcs / ', gp.gr, ' gr')
-            ORDER BY gp.nm_partai SEPARATOR '<br>'
-        ) AS detail_partai
-    FROM (
-        SELECT 
-            box_pengiriman,
-            grade,
-            nm_partai,
-            SUM(pcs) AS pcs,
-            SUM(gr) AS gr
-        FROM grading_partai
-        GROUP BY box_pengiriman, grade, nm_partai
-    ) AS gp
-    JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
-    WHERE b.tgl_input = '$tgl'
-    GROUP BY b.no_barcode, gp.grade
+    b.no_barcode,
+    gp.grade,
+    SUM(gp.pcs) AS total_pcs,
+    SUM(gp.gr) AS total_gr,
+    GROUP_CONCAT(DISTINCT CONCAT('''', gp.nm_partai, '''') ORDER BY gp.nm_partai SEPARATOR ', ') AS nm_partai,
+    GROUP_CONCAT(
+        CONCAT(gp.nm_partai, ' : ', gp.pcs, ' pcs / ', gp.gr, ' gr')
+        ORDER BY gp.nm_partai SEPARATOR '<br>'
+    ) AS detail_partai
+FROM (
+    SELECT 
+        box_pengiriman,
+        grade,
+        TRIM(nm_partai) AS nm_partai,
+        SUM(pcs) AS pcs,
+        SUM(gr) AS gr
+    FROM grading_partai
+    GROUP BY box_pengiriman, grade, TRIM(nm_partai)
+) AS gp
+JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
+WHERE b.tgl_input = '$tgl'
+GROUP BY b.no_barcode, gp.grade;
+
 
 
         ");
