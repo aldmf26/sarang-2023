@@ -216,6 +216,58 @@
 
             function keyupBp(kelas, ditambah = false) {
                 $('.' + kelas).on('keyup', function() {
+                    if (kelas == 'namaPartai') {
+
+                        var self = $(this); // simpan input yang sedang aktif
+                        var nm_partai = self.val();
+
+                        $.ajax({
+                            type: "get",
+                            url: "https://gudangsarang.ptagafood.com/api/sbw/getPartai?partai=" +
+                                encodeURIComponent(nm_partai),
+                            success: function(response) {
+                                var currentCount = self.attr('count');
+                                var currentValue = self.val();
+                                var hasil = 0;
+
+                                var shouldUpdate = false;
+                                $('.tipe').each(function() {
+                                    var count = $(this).attr('count');
+
+                                    // update semua elemen dengan count yang sama
+                                    if (count === currentCount) {
+                                        $(this).val(response.data.tipe.nm_grade); // ambil dari API
+                                    }
+
+                                    // update elemen setelahnya
+                                    if (shouldUpdate) {
+                                        if (ditambah) {
+                                            currentValue++;
+                                            hasil = parseFloat(currentValue);
+                                        } else {
+                                            hasil = currentValue;
+                                        }
+                                        $(this).val(response.data.tipe
+                                            .nm_grade); // isi dari API juga
+                                    }
+
+                                    if (count === currentCount) {
+                                        shouldUpdate = true;
+                                    }
+                                });
+                            }
+                        });
+
+
+
+
+
+
+
+                    } else {
+
+
+                    }
                     var currentCount = $(this).attr('count');
                     var currentValue = $(this).val();
                     var hasil = 0
