@@ -136,6 +136,8 @@ class PenutupController extends Controller
                     'denda' => $data->ttl_rp_denda,
                     'ttl_gaji' => $ttl,
                     'ratarata' => $rata,
+                    'kasbon' => $data->kasbon,
+                    'sisa_gaji' => $ttl - $data->kasbon,
                     'tgl_input' => now(),
                     'paid' => 0,
                     'admin' => auth()->user()->name,
