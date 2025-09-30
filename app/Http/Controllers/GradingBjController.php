@@ -438,7 +438,7 @@ class GradingBjController extends Controller
                 }
 
                 $tipe = $gradeData->tipe;
-                $harga_satuan = $gradeData->harga_satuan ?? 0;
+                $harga_satuan = $gradeData->hrga_satuan ?? 0;
 
                 if ($tipe == 'hrga') {
                     $cost_kerja_hrga += $harga_satuan * $gr;

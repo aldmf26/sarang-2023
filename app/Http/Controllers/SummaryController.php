@@ -89,8 +89,6 @@ class SummaryController extends Controller
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
 
-
-
         $bulan_array = DB::table('oprasional')->get();
         $data = [
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji

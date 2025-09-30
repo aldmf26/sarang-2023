@@ -7,44 +7,68 @@
         <section class="row">
             @include('home.cocokan.nav')
 
-            <div class="col-lg-3">
+            <div class="col-lg-12">
                 <div>
-                    <h6> Total susut aktual</h6>
+                    <h6>Laporan Partai</h6>
                 </div>
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="table">
                     <thead>
                         <tr>
-                            <th class="dhead">Ket</th>
-                            <th class="dhead text-end">Gr</th>
+                            <th class="dhead">No</th>
+                            <th class="dhead">Partai</th>
+                            <th class="dhead ">Grade</th>
+                            <th class="dhead text-end">Pcs Awal</th>
+                            <th class="dhead text-end">Gr Awal</th>
+                            <th class="dhead text-end">Modal Awal</th>
+                            <th class="dhead text-end">Pcs Akhir</th>
+                            <th class="dhead text-end">Gr Akhir</th>
+                            <th class="dhead text-end">Susut</th>
+                            <th class="dhead text-end">Modal + Gaji + Cost operasional</th>
+                            <th class="dhead text-end">Rata-rata</th>
+                            <th class="dhead ">Status</th>
+                            <th class="dhead ">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Cabut</td>
+                        @foreach ($bk as $b)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $b->nm_partai }}</td>
+                                <td>{{ $b->tipe }}</td>
+                                <td class="text-end">{{ number_format($b->pcs, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->gr, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->modal_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->pcs_akhir, 0) }}</td>
+                                <td class="text-end">{{ number_format($b->gr_akhir, 0) }}</td>
+                                <td class="text-end">
+                                    {{ empty($b->gr_akhir) ? 0 : number_format((1 - $b->gr_akhir / $b->gr) * 100, 0) }}%
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format($b->modal_awal + ($b->cost_kerja ?? 0) + ($b->cost_op ?? 0), 0) }}
+                                </td>
+                                <td class="text-end">
+                                    @php
+                                        $cost = $b->modal_awal + ($b->cost_kerja ?? 0) + ($b->cost_op ?? 0);
+                                        $susut = (1 - $b->gr_akhir / $b->gr) * 100;
 
-                            <td class="text-end">{{ number_format($cabut->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Cetak</td>
+                                    @endphp
+                                    {{ empty($b->gr_akhir) ? 0 : number_format($cost / $b->gr_akhir, 0) }}
+                                </td>
+                                <td>
+                                    @if ($b->pcs == $b->pcs_akhir)
+                                        <span class="badge bg-success">Selesai</span>
+                                    @else
+                                        @if ($susut < 50)
+                                            <span class="badge bg-success">Selesai</span>
+                                        @else
+                                            <span class="badge bg-danger">Belum Selesai</span>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td><input type="checkbox" name="" id=""></td>
+                            </tr>
+                        @endforeach
 
-                            <td class="text-end">{{ number_format($cetak->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sortir</td>
-
-                            <td class="text-end">{{ number_format($sortir->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Eo</td>
-
-                            <td class="text-end">{{ number_format($eo->gr, 0) }}</td>
-                        </tr>
-                        <tr>
-                            <th class="dhead">Total</th>
-                            <th class="text-end dhead">
-                                {{ number_format($cabut->gr + $cetak->gr + $sortir->gr + $eo->gr, 0) }}
-                            </th>
-                        </tr>
                     </tbody>
 
                 </table>

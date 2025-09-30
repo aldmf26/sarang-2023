@@ -519,7 +519,7 @@ left join users as g on g.id = a.id_pengawas
 
     public static function sisa_belum_wip1()
     {
-        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
+        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp , sum(a.cost_bk) as modal
 FROM grading_partai as a 
 where a.formulir ='Y' and a.cek_qc = 'T';");
     }
@@ -531,10 +531,10 @@ where a.formulir ='Y' and a.cek_qc = 'Y';");
     }
     public static function sisa_belum_qc()
     {
-        return DB::selectOne("SELECT a.box_pengiriman, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(b.ttl_rp) as ttl_rp
+        return DB::selectOne("SELECT a.box_pengiriman, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(b.ttl_rp) as ttl_rp, sum(b.cost_bk) as cost_bk
 FROM qc as a 
 left join (
-	SELECT b.box_pengiriman, sum(COALESCE(b.cost_bk,0) + COALESCE(b.cost_kerja,0) + COALESCE(b.cost_op,0)) as ttl_rp
+	SELECT b.box_pengiriman, sum(COALESCE(b.cost_bk,0) + COALESCE(b.cost_kerja,0) + COALESCE(b.cost_op,0)) as ttl_rp, sum(b.cost_bk) as cost_bk
     FROM grading_partai as b 
     group by b.box_pengiriman
 ) as b on b.box_pengiriman = a.box_pengiriman
@@ -553,7 +553,7 @@ where a.wip2 ='T';");
     }
     public static function wip2proses()
     {
-        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
+        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp, sum(a.cost_bk) as modal
         FROM grading_partai as a 
         
         join (

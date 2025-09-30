@@ -364,7 +364,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function grading_detail(Request $r)
     {
 
-        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box , a.not_oke
+        $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box , a.not_oke, a.box_pengiriman
         FROM grading_partai as a 
         where a.no_invoice = '$r->no_invoice'
         group by a.grade
@@ -405,16 +405,30 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         }
 
         $data = DB::select("SELECT 
-        b.no_barcode, 
-        a.grade, 
-        SUM(a.pcs) as pcs, 
-        SUM(a.gr) as gr, 
-        GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
-        b.no_barcode
-        FROM grading_partai as a
-        JOIN pengiriman as b ON b.no_box = a.box_pengiriman
-        WHERE b.tgl_input = '$tgl'
-        GROUP BY b.no_barcode, a.grade");
+        b.no_barcode,
+        gp.grade,
+        SUM(gp.pcs) AS total_pcs,
+        SUM(gp.gr) AS total_gr,
+        GROUP_CONCAT(CONCAT(\"'\", gp.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai,
+        GROUP_CONCAT(
+            CONCAT(gp.nm_partai, ' : ',gp.pcs, ' pcs / ', gp.gr, ' gr')
+            ORDER BY gp.nm_partai SEPARATOR '<br>'
+        ) AS detail_partai
+    FROM (
+        SELECT 
+            box_pengiriman,
+            grade,
+            nm_partai,
+            SUM(pcs) AS pcs,
+            SUM(gr) AS gr
+        FROM grading_partai
+        GROUP BY box_pengiriman, grade, nm_partai
+    ) AS gp
+    JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
+    WHERE b.tgl_input = '$tgl'
+    GROUP BY b.no_barcode, gp.grade
+
+        ");
         return response()->json([
             'status' => 'success',
             'message' => 'success',

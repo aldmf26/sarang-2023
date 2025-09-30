@@ -50,7 +50,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cocokan.susut' ? 'active' : '' }}" aria-current="page"
-                    href="{{ route('cocokan.susut') }}">Susut</a>
+                    href="{{ route('cocokan.susut') }}">Laporan Per Partai</a>
             </li>
             {{-- <li class="nav-item">
                 <a class="nav-link  {{ $rot == 'cost_global.index' ? 'active' : '' }}" aria-current="page"
