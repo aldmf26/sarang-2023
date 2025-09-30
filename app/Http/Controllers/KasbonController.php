@@ -112,7 +112,7 @@ class KasbonController extends Controller
 
     public function delete(Request $r)
     {
-        DB::table('kasbon')->where('id', $r->id)->delete();
+        DB::table('kasbon')->where('id', $r->no_nota)->delete();
         return redirect()->route('kasbon.index')->with('sukses', 'Data Berhasil dihapus');
     }
 
