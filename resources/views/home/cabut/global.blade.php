@@ -266,7 +266,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                    @foreach ($tbl as $data)
+                                     @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
