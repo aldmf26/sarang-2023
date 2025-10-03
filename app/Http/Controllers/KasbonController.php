@@ -45,7 +45,6 @@ class KasbonController extends Controller
         $tgl1 =  $this->tgl1;
         $tgl2 =  $this->tgl2;
 
-
         $kasbon = DB::table('kasbon as a')
             ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
             ->where('a.id_pengawas', auth()->user()->id)
@@ -78,7 +77,6 @@ class KasbonController extends Controller
                 'tahun_dibayar' => date('Y'),
                 'tgl' => $r->tgl,
                 'nominal' => $r->nominal,
-
             ]);
         }
         return redirect()->route('kasbon.index')->with('sukses', 'Data Berhasil ditambahkan');
@@ -112,7 +110,7 @@ class KasbonController extends Controller
 
     public function delete(Request $r)
     {
-        DB::table('kasbon')->where('id', $r->id)->delete();
+        DB::table('kasbon')->where('id', $r->id_denda)->delete();
         return redirect()->route('kasbon.index')->with('sukses', 'Data Berhasil dihapus');
     }
 

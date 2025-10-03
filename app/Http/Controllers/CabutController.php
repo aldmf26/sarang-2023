@@ -581,7 +581,7 @@ class CabutController extends Controller
                     $data->ttl_rp_cetak +
                     $uangMakan +
                     $data->ttl_rp_dll -
-                    $data->ttl_rp_denda - $data->kasbon;
+                    $data->ttl_rp_denda;
                 $ttlRp += $ttl;
             }
             if ($ttlRp != 0) {
@@ -941,7 +941,7 @@ class CabutController extends Controller
 
         // Menggunakan response untuk mengirimkan file ke browser
         $fileName = "Gaji Export Global $bulanDibayar $tahun";
-        
+
         return response()->stream(
             function () use ($writer) {
                 $writer->save('php://output');
