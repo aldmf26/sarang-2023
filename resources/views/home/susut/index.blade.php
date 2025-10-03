@@ -147,14 +147,22 @@
                                         <input type="text" class="form-control form-control-sm" name="flx[]"
                                             value="{{ $susutSudahAda ? $susutSudahAda->flx : '' }}">
                                     </td>
-                                    <td align="right">
-                                        @php
-                                            $ttlAktual = $susutSudahAda ? $susutSudahAda->ttl_aktual : 0;
-                                            $susutPersenSelisih = empty($pengawas->gr_awal)
-                                                ? 0
-                                                : (1 - $ttlAktual / $pengawas->sst_program) * 100;
-                                        @endphp
-                                        {{ number_format($ttlAktual, 0) }}</td>
+                                    @php
+                                        $ttlAktual = $susutSudahAda ? $susutSudahAda->ttl_aktual : 0;
+
+                                        if (
+                                            empty($pengawas->gr_awal) ||
+                                            empty($pengawas->sst_program) ||
+                                            $pengawas->sst_program == 0
+                                        ) {
+                                            $susutPersenSelisih = 0;
+                                        } else {
+                                            $susutPersenSelisih = (1 - $ttlAktual / $pengawas->sst_program) * 100;
+                                        }
+                                    @endphp
+
+                                    <td align="right">{{ number_format($ttlAktual, 0) }}</td>
+
                                     <td align="right">{{ number_format($pengawas->sst_program - $ttlAktual, 0) }}</td>
                                     <td align="right">{{ number_format($susutPersenSelisih, 0) }}%</td>
                             @endforeach
