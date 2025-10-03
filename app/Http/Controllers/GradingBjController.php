@@ -469,11 +469,17 @@ class GradingBjController extends Controller
                     return redirect()->back()->withInput()->with('error', 'Grade tidak ditemukan di table_grade: ' . $grade);
                 }
 
+
+
                 $tipe = $gradeData->tipe;
-                $harga_satuan = $gradeData->harga_satuan ?? 0;
+
+
+                $harga_satuan = $gradeData->hrga_satuan ?? 0;
 
                 if ($tipe == 'hrga') {
+
                     $cost_kerja = $harga_satuan * $gr;
+
                     $cost_bk = 0;
                     $cost_cu = 0;
                 } else {
