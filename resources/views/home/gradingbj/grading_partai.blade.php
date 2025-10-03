@@ -74,7 +74,7 @@
                                 </td>
                                 <td>
                                     <select name="bulan" class="form-control" required>
-                                        <option value="0">Pilih Bulan</option>
+                                        <option value="">Pilih Bulan</option>
                                         @foreach (getListBulan() as $l)
                                             <option value="{{ $l->bulan }}"
                                                 {{ date('m') == $l->bulan ? 'selected' : '' }}>

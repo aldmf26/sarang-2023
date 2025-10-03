@@ -468,12 +468,7 @@ class GradingBjController extends Controller
                     DB::rollBack();
                     return redirect()->back()->withInput()->with('error', 'Grade tidak ditemukan di table_grade: ' . $grade);
                 }
-
-
-
                 $tipe = $gradeData->tipe;
-
-
                 $harga_satuan = $gradeData->hrga_satuan ?? 0;
 
                 if ($tipe == 'hrga') {
