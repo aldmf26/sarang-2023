@@ -7,9 +7,11 @@
             <th class="dhead">Tanggal</th>
             <th class="dhead">No Box</th>
             <th class="dhead">Nama Karyawan</th>
-            <th class="dhead" width="70">Paket</th>
+            <th class="dhead" width="100">Paket</th>
             <th class="text-end dhead">Pcs Awal</th>
             <th class="text-end dhead">Gr Awal</th>
+            <th width="70px" class="text-end dhead">Pcs Tdk Sortir</th>
+            <th width="70px" class="text-end dhead">Gr Tdk Sortir</th>
             <th width="70px" class="text-end dhead">Pcs Akhir</th>
             <th width="70px" class="text-end dhead">Gr Akhir</th>
             <th class="text-end dhead">Susut%</th>
@@ -82,9 +84,16 @@
 
                 <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
                 <td align="right">{{ $d->gr_awal ?? 0 }}</td>
+                <td>
+                    <input type="text" class="form-control text-end pcs_tdk_sortir{{ $d->id_sortir }}"
+                        value="{{ $d->pcs_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+                </td>
+                <td>
+                    <input type="text" class="form-control text-end gr_tdk_sortir{{ $d->id_sortir }}"
+                        value="{{ $d->gr_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+                </td>
                 <td align="right">
                     <input type="hidden" class="no{{ $d->id_sortir }}" value="{{ $no + 1 }}">
-
                     <input type="hidden" class="form-control text-end pcs_awal{{ $d->id_sortir }}"
                         value="{{ $d->pcs_awal ?? 0 }}">
                     <input type="text" class="form-control text-end pcs_akhir{{ $d->id_sortir }}"
@@ -93,15 +102,14 @@
 
                 </td>
                 <td align="right">
-
                     <input type="text" class="form-control text-end gr_akhir{{ $d->id_sortir }}"
                         value="{{ $d->gr_akhir ?? 0 }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
                     <input type="hidden" class="form-control text-end gr_awal{{ $d->id_sortir }}"
                         value="{{ $d->gr_awal ?? 0 }}">
-
                 </td>
                 @php
-                    $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+                    $gr_awal_hitung = $d->gr_awal - $d->gr_tdk_sortir;
+                    $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $gr_awal_hitung) * 100;
                 @endphp
                 <td align="right">{{ number_format($susut, 0) }}%</td>
                 <td align="right">{{ number_format($d->denda_sp ?? 0, 0) }}</td>

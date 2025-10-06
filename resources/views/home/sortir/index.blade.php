@@ -738,32 +738,45 @@
                         var id_anak = $('.id_anak' + id_sortir).val();
                         var id_kelas = $('.id_kelas' + id_sortir).val();
                         var id_paket = $('.id_paket' + id_sortir).val();
+                        var pcs_awal = $('.pcs_awal' + id_sortir).val();
                         var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
+                        var pcs_tdk_sortir = $('.pcs_tdk_sortir' + id_sortir).val();
                         var gr_akhir = $('.gr_akhir' + id_sortir).val();
+                        var gr_tdk_sortir = $('.gr_tdk_sortir' + id_sortir).val();
                         var gr_awal = $('.gr_awal' + id_sortir).val();
                         var tgl = $('.tgl' + id_sortir).val();
                         var bulan_dibayar = $('.bulan_dibayar' + id_sortir).val();
                         var no = $('.no' + id_sortir).val();
 
+                        if (pcs_awal != (parseInt(pcs_akhir) + parseInt(pcs_tdk_sortir))) {
+                            alertToast('error', 'Jumlah Pcs tidak sama');
 
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('sortir.save_akhir') }}",
-                            data: {
-                                id_sortir: id_sortir,
-                                id_anak: id_anak,
-                                id_kelas: id_kelas,
-                                pcs_akhir: pcs_akhir,
-                                gr_akhir: gr_akhir,
-                                gr_awal: gr_awal,
-                                bulan_dibayar: bulan_dibayar,
-                                tgl: tgl
-                            },
-                            success: function(response) {
-                                alertToast('sukses', 'Berhasil ditambahkan');
-                                loadRowData(id_sortir, no);
-                            }
-                        });
+
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ route('sortir.save_akhir') }}",
+                                data: {
+                                    id_sortir: id_sortir,
+                                    id_anak: id_anak,
+                                    id_kelas: id_kelas,
+                                    pcs_akhir: pcs_akhir,
+                                    gr_akhir: gr_akhir,
+                                    gr_awal: gr_awal,
+                                    bulan_dibayar: bulan_dibayar,
+                                    pcs_tdk_sortir: pcs_tdk_sortir,
+                                    gr_tdk_sortir: gr_tdk_sortir,
+                                    tgl: tgl
+                                },
+                                success: function(response) {
+                                    alertToast('sukses', 'Berhasil ditambahkan');
+                                    loadRowData(id_sortir, no);
+                                }
+                            });
+                        }
+
+
+
                     });
 
                     function loadRowData(id_sortir, no) {
@@ -788,12 +801,13 @@
                         var id_sortir = $(this).attr('id_sortir');
                         var pcs_awal = $('.pcs_awal' + id_sortir).val();
                         var pcs_akhir = $('.pcs_akhir' + id_sortir).val();
+                        var pcs_tdk_sortir = $('.pcs_tdk_sortir' + id_sortir).val();
                         var no = $('.no' + id_sortir).val();
 
 
 
 
-                        if (pcs_awal != pcs_akhir) {
+                        if (pcs_awal != parseInt(pcs_akhir) + parseInt(pcs_tdk_sortir)) {
                             alertToast('error', 'Jumlah Pcs tidak sama');
                         } else {
                             $.ajax({

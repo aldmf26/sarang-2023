@@ -130,7 +130,7 @@ class Sortir extends Model
         } else {
             $id_pengawas = "AND a.id_pengawas = $id_user";
         }
-        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str, g.ttl_rp as cost_eo
+        $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str, g.ttl_rp as cost_eo, a.pcs_tdk_sortir, a.gr_tdk_sortir
         FROM sortir as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         join formulir_sarang as c on c.no_box = a.no_box and c.kategori = 'sortir'
