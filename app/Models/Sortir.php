@@ -33,7 +33,7 @@ class Sortir extends Model
                             SELECT 
                                 id_pengawas,no_box, 
                                 sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal, 
-                                sum(gr_akhir) as gr_akhir, sum(pcs_akhir) as pcs_akhir,
+                                sum(COALESCE(gr_akhir,0) + COALESCE(gr_tdk_sortir,0)) as gr_akhir, sum(COALESCE(pcs_akhir,0) + COALESCE(pcs_tdk_sortir,0)) as pcs_akhir,
                                 SUM(rp_target) as rp_target,
                                 SUM(ttl_rp) as ttl_rp
                                 FROM sortir WHERE no_box != 9999 AND penutup = 'T' AND bulan = '$bulan' AND tahun_dibayar = '$tahun' GROUP BY id_pengawas
