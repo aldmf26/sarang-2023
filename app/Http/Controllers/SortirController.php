@@ -725,7 +725,7 @@ class SortirController extends Controller
 
             foreach ($no_box as $d) {
                 $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , sum(pcs_tdk_sortir) as pcs_tdk_sortir, sum(gr_tdk_sortir) as gr_tdk_sortir, formulir_sarang.id_pemberi
                         FROM sortir 
                         left join formulir_sarang on formulir_sarang.no_box = sortir.no_box and formulir_sarang.kategori = 'grade'
                         WHERE sortir.no_box = $d AND sortir.selesai = 'Y' GROUP BY sortir.no_box ");
@@ -737,8 +737,8 @@ class SortirController extends Controller
                     ->exists();
                 if (!$cek) {
 
-                    $pcs = $ambil->pcs_akhir;
-                    $gr = $ambil->gr_akhir;
+                    $pcs = $ambil->pcs_akhir + $ambil->pcs_tdk_sortir;
+                    $gr = $ambil->gr_akhir + $ambil->gr_tdk_sortir;
 
                     $data[] = [
                         'no_invoice' => $inv,
