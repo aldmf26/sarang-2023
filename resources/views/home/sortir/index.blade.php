@@ -852,6 +852,15 @@
                     '.pcucAkhirKeyup',
                 ]
                 clickSelectInput(inputNya)
+
+                $(document).on('keyup', '.pcs_tidak', function(e) {
+                    var count = $(this).attr('count');
+                    var pcs_awal = parseInt($('.pcs_awal' + count).val());
+                    var pcs_tdk_sortir = $('.pcs_tdk_sortir' + count).val();
+
+                    var pcs_akhir = pcs_awal - parseInt(pcs_tdk_sortir);
+                    $('.pcs_akhir' + count).val(pcs_akhir);
+                });
             </script>
             <script>
                 document.body.style.zoom = "80%";

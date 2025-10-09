@@ -85,8 +85,9 @@
                 <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
                 <td align="right">{{ $d->gr_awal ?? 0 }}</td>
                 <td>
-                    <input type="text" class="form-control text-end pcs_tdk_sortir{{ $d->id_sortir }}"
-                        value="{{ $d->pcs_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+                    <input type="text" class="form-control text-end pcs_tidak pcs_tdk_sortir{{ $d->id_sortir }}"
+                        value="{{ $d->pcs_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}
+                        count="{{ $d->id_sortir }}">
                 </td>
                 <td>
                     <input type="text" class="form-control text-end gr_tdk_sortir{{ $d->id_sortir }}"
@@ -97,8 +98,8 @@
                     <input type="hidden" class="form-control text-end pcs_awal{{ $d->id_sortir }}"
                         value="{{ $d->pcs_awal ?? 0 }}">
                     <input type="text" class="form-control text-end pcs_akhir{{ $d->id_sortir }}"
-                        value="{{ empty($d->pcs_akhir) ? $d->pcs_awal : $d->pcs_akhir }}"
-                        {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+                        value="{{ $d->pcs_akhir == 0 ? $d->pcs_awal : $d->pcs_akhir }}"
+                        {{ $d->selesai == 'Y' ? 'readonly' : '' }} readonly>
 
                 </td>
                 <td align="right">
