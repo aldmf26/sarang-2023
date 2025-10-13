@@ -13,7 +13,7 @@
             <th width="70px" class="text-end dhead">Pcs Tdk Sortir</th>
             <th width="70px" class="text-end dhead">Gr Tdk Sortir</th>
             <th width="70px" class="text-end dhead">Pcs Akhir</th>
-            <th width="70px" class="text-end dhead">Gr Akhir</th>
+            <th width="120px" class="text-end dhead">Gr Akhir</th>
             <th class="text-end dhead">Susut%</th>
             <th class="text-end dhead">Denda</th>
             <th class="text-end dhead">Rp Target</th>
