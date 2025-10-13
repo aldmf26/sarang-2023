@@ -112,7 +112,7 @@
                     $gr_awal_hitung = $d->gr_awal - $d->gr_tdk_sortir;
                     $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $gr_awal_hitung) * 100;
                 @endphp
-                <td align="right">{{ number_format($susut, 0) }}%</td>
+                <td align="right">{{ number_format($susut, 0) }}% {{ $gr_awal_hitung }}</td>
                 <td align="right">{{ number_format($d->denda_sp ?? 0, 0) }}</td>
                 <td align="right">{{ number_format($d->rp_target ?? 0, 0) }}</td>
                 <td align="right">{{ number_format($d->ttl_rp ?? 0, 0) }}</td>
