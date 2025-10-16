@@ -21,7 +21,7 @@
                 <br><br>
                 <!-- Gambar -->
                 <img src="https://ptagrikagatyaarum.com/img/success.svg" alt="" height="350px" width="400px">
-                <h1 class="text-center text-success mt-4">Data berhasil diajukan</h1>
+                <h1 class="text-center text-success mt-4">Data berhasil disimpan</h1>
             </div>
 
         </div>
