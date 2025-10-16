@@ -45,7 +45,7 @@
                 <label for="jenisKelamin" class="form-label">Jabatan</label>
                 <select class="form-select" name="jabatan" required>
                     <option value="">Pilih Jabatan</option>
-                    <option value="Kepala">Kapala</option>
+                    <option value="Kepala">Kepala</option>
                     <option value="Staff">Staff</option>
                 </select>
             </div>
