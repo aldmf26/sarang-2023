@@ -1420,7 +1420,7 @@ ORDER BY g.grade DESC;");
     public function coba_steaming(Request $request)
     {
         $query = DB::table('grading_partai')
-            ->select('nm_partai', 'tgl', 'gr', 'pcs', 'id_grading')
+            ->select('nm_partai', 'tgl', 'gr', 'pcs', 'id_grading', 'grade')
             ->orderBy('tgl')
             ->orderBy('id_grading');
 
@@ -1435,21 +1435,27 @@ ORDER BY g.grade DESC;");
         $currentBatchGr = 0;
         $currentBatchPcs = 0;
         $currentBatchPartai = [];
+        $currentBatchGrade = [];
 
         foreach ($results as $row) {
+            // Ganti tanggal → push batch lama
             if ($currentTanggal !== $row->tgl) {
                 if ($currentBatchGr > 0) {
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
+                        'grade'     => implode(', ', $currentBatchGrade),
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr,
                         'pcs'       => $currentBatchPcs
                     ]);
                 }
+
+                // Reset untuk tanggal baru
                 $currentTanggal = $row->tgl;
                 $currentBatchGr = 0;
                 $currentBatchPcs = 0;
                 $currentBatchPartai = [];
+                $currentBatchGrade = [];
             }
 
             $remainingGr = $row->gr;
@@ -1462,8 +1468,11 @@ ORDER BY g.grade DESC;");
                     $currentBatchPartai[] = $row->nm_partai;
                 }
 
+                if (!in_array($row->grade, $currentBatchGrade)) {
+                    $currentBatchGrade[] = $row->grade;
+                }
+
                 if ($remainingGr >= $space) {
-                    // Hitung proporsi pcs yang masuk batch
                     $pcsToAdd = round($remainingPcs * ($space / $remainingGr), 2);
 
                     $currentBatchGr += $space;
@@ -1471,21 +1480,21 @@ ORDER BY g.grade DESC;");
 
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
+                        'grade'     => implode(', ', $currentBatchGrade),
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr,
                         'pcs'       => $currentBatchPcs
                     ]);
 
-                    // Reset batch
+                    // Reset batch setelah penuh
                     $currentBatchGr = 0;
                     $currentBatchPcs = 0;
                     $currentBatchPartai = [];
+                    $currentBatchGrade = [];
 
-                    // Kurangi sisa
                     $remainingGr -= $space;
                     $remainingPcs -= $pcsToAdd;
                 } else {
-                    // Semua sisa masuk batch
                     $currentBatchGr += $remainingGr;
                     $currentBatchPcs += $remainingPcs;
                     $remainingGr = 0;
@@ -1497,21 +1506,18 @@ ORDER BY g.grade DESC;");
         if ($currentBatchGr > 0) {
             $batches->push([
                 'nm_partai' => implode(', ', $currentBatchPartai),
+                'grade'     => implode(', ', $currentBatchGrade),
                 'tgl'       => $currentTanggal,
                 'gr'        => $currentBatchGr,
                 'pcs'       => $currentBatchPcs
             ]);
         }
 
-
-
-        return response()->json(
-            [
-                'status' => 'success',
-                'message' => 'success',
-                'data' => $batches
-            ]
-        );
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $batches
+        ]);
     }
 
 
