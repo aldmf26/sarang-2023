@@ -576,7 +576,7 @@ class GudangSarangController extends Controller
             ->join('bk as b', 'a.no_box', '=', 'b.no_box')
             ->leftJoin('sortir as c', 'a.no_box', '=', 'c.no_box')
             ->groupBy('a.no_box', 'a.kategori')
-            ->selectRaw('a.sst_aktual,a.id_formulir,a.id_pemberi,a.id_penerima,a.tanggal,b.nm_partai,b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.pcs_awal) as pcs_srt, sum(c.gr_awal) as gr_srt, sum(a.pcs_tdk_sortir) as pcs_tdk_sortir, sum(a.gr_tdk_sortir) as gr_tdk_sortir')
+            ->selectRaw('a.sst_aktual,a.id_formulir,a.id_pemberi,a.id_penerima,a.tanggal,b.nm_partai,b.ket,b.tipe,a.no_box, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(c.pcs_awal) as pcs_srt, sum(c.gr_awal) as gr_srt, sum(c.pcs_tdk_sortir) as pcs_tdk_sortir, sum(c.gr_tdk_sortir) as gr_tdk_sortir')
             ->get();
 
         $ket_formulir = DB::selectOne("SELECT  a.tanggal,b.name, c.name  as penerima,a.no_invoice
