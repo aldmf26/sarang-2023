@@ -59,6 +59,7 @@
             sum: false,
             data: {{ json_encode($sumPgws) }},
             totalPerLokasi: {},
+            totalPerLokasiPotongKasbon: {},
         
             init() {
                 // Menghitung total per lokasi
@@ -103,11 +104,10 @@
                             <th class="text-end">
                                 <h6 class="text-white">{{ number_format(sumCol($sumPgws, 'ttlRp')) }}</h6>
                             </th>
+
                         </tr>
                     </tfoot>
                 </table>
-
-
             </div>
             <div class="col-lg-2">
                 <h6 x-transition x-show="sum">Summary Gaji Perlokasi </h6>
@@ -124,6 +124,7 @@
                                 <tr>
                                     <td x-text="lokasi" class="text-start"></td>
                                     <td x-text="formatRupiah(total)" class="text-end"></td>
+                                    <td x-text="formatRupiah(total)" class="text-end"></td>
                                 </tr>
                             </template>
                         </template>
@@ -138,7 +139,6 @@
                 </table>
             </div>
             <div class="col-lg-12">
-
             </div>
             <div class="col-lg-6">
                 <span class="me-2">Filter : </span>
@@ -266,7 +266,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                     @foreach ($tbl as $data)
+                                             @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
