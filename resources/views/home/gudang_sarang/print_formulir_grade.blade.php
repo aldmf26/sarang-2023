@@ -113,7 +113,7 @@
                                     <td width="10%" class="text-end">
                                         {{ number_format($d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0), 0) }}
                                     </td>
-                                    <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
+                                    <td class="text-end">{{ $d->gr_srt - ($d->gr + $d->gr_tdk_sortir) }}</td>
                                 </tr>
                             </tbody>
                         @endforeach
