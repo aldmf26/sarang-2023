@@ -260,7 +260,7 @@ class SortirController extends Controller
         $posisi_id = auth()->user()->posisi_id;
 
         if ($id_anak == 'All') {
-            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai, d.no_box as no_box_formulir 
+            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai, d.no_box as no_box_formulir , a.pcs_tdk_sortir,a.gr_tdk_sortir
             FROM sortir as a 
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
@@ -269,7 +269,7 @@ class SortirController extends Controller
                 order by a.selesai ASC
                 ");
         } else {
-            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir 
+            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir ,a.pcs_tdk_sortir,a.gr_tdk_sortir
             FROM sortir as a 
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
@@ -299,7 +299,7 @@ class SortirController extends Controller
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'd' => DB::selectOne("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir FROM sortir as a 
+            'd' => DB::selectOne("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir , a.pcs_tdk_sortir,a.gr_tdk_sortir FROM sortir as a 
             left join tb_anak as b on a.id_anak = b.id_anak
             left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
             left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
@@ -725,7 +725,7 @@ class SortirController extends Controller
 
             foreach ($no_box as $d) {
                 $ambil = DB::selectOne("SELECT 
-                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , formulir_sarang.id_pemberi
+                        sum(pcs_akhir) as pcs_akhir, sum(gr_akhir) as gr_akhir , sum(pcs_tdk_sortir) as pcs_tdk_sortir, sum(gr_tdk_sortir) as gr_tdk_sortir, formulir_sarang.id_pemberi
                         FROM sortir 
                         left join formulir_sarang on formulir_sarang.no_box = sortir.no_box and formulir_sarang.kategori = 'grade'
                         WHERE sortir.no_box = $d AND sortir.selesai = 'Y' GROUP BY sortir.no_box ");
@@ -737,8 +737,8 @@ class SortirController extends Controller
                     ->exists();
                 if (!$cek) {
 
-                    $pcs = $ambil->pcs_akhir;
-                    $gr = $ambil->gr_akhir;
+                    $pcs = $ambil->pcs_akhir + $ambil->pcs_tdk_sortir;
+                    $gr = $ambil->gr_akhir + $ambil->gr_tdk_sortir;
 
                     $data[] = [
                         'no_invoice' => $inv,
@@ -767,9 +767,10 @@ class SortirController extends Controller
     {
         $kelas = DB::table('tb_kelas_sortir')->where('id_kelas', $r->id_kelas)->first();
         $rupiah =  empty($kelas->rupiah) ? 0 : $kelas->rupiah / $kelas->gr;
-        $rp_target = $rupiah == 0 ? 0 : $rupiah * $r->gr_awal;
+        $rp_target = $rupiah == 0 ? 0 : $rupiah * ($r->gr_awal - $r->gr_tdk_sortir);
+        $gr_awal_hitung = $r->gr_awal - $r->gr_tdk_sortir;
 
-        $susut = $r->gr_akhir == 0  ? 0 : (1 - $r->gr_akhir / $r->gr_awal) * 100;
+        $susut = $r->gr_akhir == 0  ? 0 : (1 - ($r->gr_akhir / $gr_awal_hitung)) * 100;
 
         $denda = 0;
         $rupiah = $rp_target;
@@ -789,6 +790,8 @@ class SortirController extends Controller
             'denda_sp' => $denda,
             'tgl' => $r->tgl,
             'selesai' => 'T',
+            'pcs_tdk_sortir' => $r->pcs_tdk_sortir,
+            'gr_tdk_sortir' => $r->gr_tdk_sortir,
 
         ];
         DB::table('sortir')->where('id_sortir', $r->id_sortir)->update($data);
@@ -833,6 +836,8 @@ class SortirController extends Controller
             'ttl_rp' => $rupiah,
             'tgl' => $tgl,
             'denda_sp' => $denda,
+            'pcs_tdk_sortir' => $r->pcs_tdk_sortir,
+            'gr_tdk_sortir' => $r->gr_tdk_sortir,
         ]);
         return [
             'tipe' => 'sukses',

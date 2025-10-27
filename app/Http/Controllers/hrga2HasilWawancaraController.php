@@ -112,7 +112,7 @@ class hrga2HasilWawancaraController extends Controller
                 'kesimpulan' => ' ',
                 'keputusan' => 'dilanjutkan',
                 'status' => 'Kontrak',
-                'posisi2' => 'Staf ' . $devis->divisi,
+                'posisi2' => $r->jabatan . ' ' . $devis->divisi,
                 'keputusan_lulus' => 'lulus',
                 'created_at' => date('Y-m-d H:i:s'),
             ];

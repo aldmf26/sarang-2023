@@ -41,6 +41,14 @@
                     <option value="P">Perempuan</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="jenisKelamin" class="form-label">Jabatan</label>
+                <select class="form-select" name="jabatan" required>
+                    <option value="">Pilih Jabatan</option>
+                    <option value="Kepala">Kepala</option>
+                    <option value="Staff">Staff</option>
+                </select>
+            </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>

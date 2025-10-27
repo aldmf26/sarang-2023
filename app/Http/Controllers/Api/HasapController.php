@@ -1420,36 +1420,55 @@ ORDER BY g.grade DESC;");
     public function coba_steaming(Request $request)
     {
         $query = DB::table('grading_partai')
-            ->select('nm_partai', 'tgl', 'gr', 'pcs', 'id_grading')
-            ->orderBy('tgl')
-            ->orderBy('id_grading');
+            ->join('tb_grade', 'grading_partai.grade', '=', 'tb_grade.nm_grade')
+            ->select(
+                'grading_partai.nm_partai',
+                'grading_partai.tgl',
+                'grading_partai.gr',
+                'grading_partai.pcs',
+                'grading_partai.id_grading',
+                'grading_partai.grade',
+                'tb_grade.kelompok'
+            )
+            ->orderBy('grading_partai.tgl')
+            ->orderBy('tb_grade.kelompok')
+            ->orderBy('grading_partai.id_grading');
 
         if ($request->has('tgl')) {
-            $query->whereDate('tgl', $request->tgl);
+            $query->whereDate('grading_partai.tgl', $request->tgl);
         }
 
         $results = $query->get();
 
         $batches = collect();
         $currentTanggal = null;
+        $currentKelompok = null;
         $currentBatchGr = 0;
         $currentBatchPcs = 0;
         $currentBatchPartai = [];
+        $currentBatchGrade = [];
 
         foreach ($results as $row) {
-            if ($currentTanggal !== $row->tgl) {
+            // Kalau tanggal atau kelompok berubah → simpan batch lama
+            if ($currentTanggal !== $row->tgl || $currentKelompok !== $row->kelompok) {
                 if ($currentBatchGr > 0) {
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
+                        'grade'     => implode(', ', $currentBatchGrade),
+                        'kelompok'  => $currentKelompok,
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr,
-                        'pcs'       => $currentBatchPcs
+                        'pcs'       => $currentBatchPcs,
                     ]);
                 }
+
+                // Reset batch
                 $currentTanggal = $row->tgl;
+                $currentKelompok = $row->kelompok;
                 $currentBatchGr = 0;
                 $currentBatchPcs = 0;
                 $currentBatchPartai = [];
+                $currentBatchGrade = [];
             }
 
             $remainingGr = $row->gr;
@@ -1462,8 +1481,11 @@ ORDER BY g.grade DESC;");
                     $currentBatchPartai[] = $row->nm_partai;
                 }
 
+                if (!in_array($row->grade, $currentBatchGrade)) {
+                    $currentBatchGrade[] = $row->grade;
+                }
+
                 if ($remainingGr >= $space) {
-                    // Hitung proporsi pcs yang masuk batch
                     $pcsToAdd = round($remainingPcs * ($space / $remainingGr), 2);
 
                     $currentBatchGr += $space;
@@ -1471,21 +1493,21 @@ ORDER BY g.grade DESC;");
 
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
+                        'grade'     => implode(', ', $currentBatchGrade),
+                        'kelompok'  => $currentKelompok,
                         'tgl'       => $currentTanggal,
                         'gr'        => $currentBatchGr,
-                        'pcs'       => $currentBatchPcs
+                        'pcs'       => $currentBatchPcs,
                     ]);
 
-                    // Reset batch
+                    // Reset batch penuh
                     $currentBatchGr = 0;
                     $currentBatchPcs = 0;
                     $currentBatchPartai = [];
-
-                    // Kurangi sisa
+                    $currentBatchGrade = [];
                     $remainingGr -= $space;
                     $remainingPcs -= $pcsToAdd;
                 } else {
-                    // Semua sisa masuk batch
                     $currentBatchGr += $remainingGr;
                     $currentBatchPcs += $remainingPcs;
                     $remainingGr = 0;
@@ -1494,25 +1516,25 @@ ORDER BY g.grade DESC;");
             }
         }
 
+        // Simpan batch terakhir kalau masih ada sisa
         if ($currentBatchGr > 0) {
             $batches->push([
                 'nm_partai' => implode(', ', $currentBatchPartai),
+                'grade'     => implode(', ', $currentBatchGrade),
+                'kelompok'  => $currentKelompok,
                 'tgl'       => $currentTanggal,
                 'gr'        => $currentBatchGr,
-                'pcs'       => $currentBatchPcs
+                'pcs'       => $currentBatchPcs,
             ]);
         }
 
-
-
-        return response()->json(
-            [
-                'status' => 'success',
-                'message' => 'success',
-                'data' => $batches
-            ]
-        );
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $batches
+        ]);
     }
+
 
 
     public function pengiriman_bulan(Request $r)

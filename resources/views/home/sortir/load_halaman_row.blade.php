@@ -10,17 +10,17 @@
     </td>
     <td>
         @if ($d->selesai == 'Y')
-                        {{$d->nama}}
-                    @else
-                    <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
-                        {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
-                        <option value="">Pilih Anak</option>
-                        @foreach ($anak as $a)
-                            <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
-                                {{ ucwords($a->nama) }}</option>
-                        @endforeach
-                    </select>
-                    @endif
+            {{ $d->nama }}
+        @else
+            <select name="id_anak[]" id="" class="select2_add id_anak{{ $d->id_sortir }}"
+                {{ $d->selesai == 'Y' ? 'disabled' : '' }}>
+                <option value="">Pilih Anak</option>
+                @foreach ($anak as $a)
+                    <option value="{{ $a->id_anak }}" {{ $a->id_anak == $d->id_anak ? 'selected' : '' }}>
+                        {{ ucwords($a->nama) }}</option>
+                @endforeach
+            </select>
+        @endif
     </td>
     <td>
         <select name="" id="" class="form-control id_kelas{{ $d->id_sortir }}"
@@ -38,6 +38,14 @@
 
     <td align="right">{{ $d->pcs_awal ?? 0 }}</td>
     <td align="right">{{ $d->gr_awal ?? 0 }}</td>
+    <td>
+        <input type="text" class="form-control text-end pcs_tdk_sortir{{ $d->id_sortir }}"
+            value="{{ $d->pcs_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+    </td>
+    <td>
+        <input type="text" class="form-control text-end gr_tdk_sortir{{ $d->id_sortir }}"
+            value="{{ $d->gr_tdk_sortir }}" {{ $d->selesai == 'Y' ? 'readonly' : '' }}>
+    </td>
     <td align="right">
 
         <input type="hidden" class="form-control text-end pcs_awal{{ $d->id_sortir }}"
@@ -54,7 +62,8 @@
 
     </td>
     @php
-        $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $d->gr_awal) * 100;
+        $gr_awal_hitung = $d->gr_awal - $d->gr_tdk_sortir;
+        $susut = empty($d->gr_akhir) ? 0 : (1 - $d->gr_akhir / $gr_awal_hitung) * 100;
     @endphp
     <td align="right">{{ number_format($susut, 0) }}%</td>
     <td align="right">{{ number_format($d->denda_sp ?? 0, 0) }}</td>

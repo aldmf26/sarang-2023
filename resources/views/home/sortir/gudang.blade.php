@@ -19,7 +19,7 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">({{count($siap_sortir)}}) Sortir stock</th>
+                            <th class="dhead text-center" colspan="5">({{ count($siap_sortir) }}) Sortir stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">No Box</th>
@@ -35,8 +35,9 @@
                                     return [
                                         'pcs_awal' => array_sum(array_column($tl, 'pcs_awal')),
                                         'gr_awal' => array_sum(array_column($tl, 'gr_awal')),
-
                                         'ttl_rp' => array_sum(array_column($tl, 'ttl_rp')),
+                                        'pcs_tdk_sortir' => array_sum(array_column($tl, 'pcs_tdk_sortir')),
+                                        'gr_tdk_sortir' => array_sum(array_column($tl, 'gr_tdk_sortir')),
                                     ];
                                 }
                             }
@@ -71,7 +72,8 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="5">({{count($sortir_proses)}}) Sortir sedang proses</th>
+                            <th class="dhead text-center" colspan="5">({{ count($sortir_proses) }}) Sortir sedang
+                                proses</th>
                         </tr>
                         <tr>
 
@@ -141,7 +143,7 @@
                         <thead>
                             <tr>
                                 <th class="dhead text-center" colspan="5">
-                                    <span>({{count($sortir_selesai)}}) Sortir selesai siap grading</span>
+                                    <span>({{ count($sortir_selesai) }}) Sortir selesai siap grading</span>
                                 </th>
                             </tr>
                             <tr>
@@ -153,12 +155,15 @@
                                 <th class="dhead text-center">Aksi </th>
                             </tr>
                             <tr>
+                                {{-- @php
+                                    dd($sortir_selesai);
+                                @endphp --}}
                                 <th class="dheadstock text-center">Total</th>
                                 <th class="dheadstock text-end">
-                                    {{ number_format(ttl($sortir_selesai)['pcs_awal'], 0) }}
+                                    {{ number_format(ttl($sortir_selesai)['pcs_awal'] + ttl($sortir_selesai)['pcs_tdk_sortir'], 0) }}
                                 </th>
                                 <th class="dheadstock text-end">
-                                    {{ number_format(ttl($sortir_selesai)['gr_awal'], 0) }}
+                                    {{ number_format(ttl($sortir_selesai)['gr_awal'] + ttl($sortir_selesai)['gr_tdk_sortir'], 0) }}
                                 </th>
                                 <th class="dheadstock text-center">
                                     <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
@@ -171,13 +176,13 @@
                                 <tr>
                                     <td align="center">{{ $d->no_box }}</td>
                                     {{-- <td align="center">{{ $d->name }}</td> --}}
-                                    <td align="right">{{ $d->pcs_awal }}</td>
-                                    <td align="right">{{ $d->gr_awal }}</td>
+                                    <td align="right">{{ $d->pcs_awal + $d->pcs_tdk_sortir }}</td>
+                                    <td align="right">{{ $d->gr_awal + $d->gr_tdk_sortir }}</td>
                                     <td align="right" class="{{ $posisi == 1 ? '' : 'd-none' }}">
                                         {{ number_format($d->ttl_rp, 0) }}</td>
                                     <td align="center">
                                         <input type="checkbox" class="form-check"
-                                            @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal }}, {{ $d->gr_awal }},{{ $d->ttl_rp }})"
+                                            @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal + $d->pcs_tdk_sortir }}, {{ $d->gr_awal + $d->gr_tdk_sortir }},{{ $d->ttl_rp }})"
                                             value="{{ $d->no_box }}" x-model="cek">
                                     </td>
                                 </tr>

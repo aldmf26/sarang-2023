@@ -104,8 +104,8 @@
                                     <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
                                     <td width="10%" class="text-end">{{ $d->pcs_srt }}</td>
                                     <td width="10%" class="text-end">{{ $d->gr_srt }}</td>
-                                    <td width="10%" class="text-end">{{ $d->pcs }}</td>
-                                    <td width="10%" class="text-end">{{ $d->gr }}</td>
+                                    <td width="10%" class="text-end">{{ $d->pcs + $d->pcs_tdk_sortir }}</td>
+                                    <td width="10%" class="text-end">{{ $d->gr + $d->gr_tdk_sortir }}</td>
 
                                     <td class="text-end bg-warning">
                                         {{ number_format(($pcsPth->pcs ?? 0) + ($pcs_pth_grade->pcs ?? 0)) }}
@@ -113,7 +113,7 @@
                                     <td width="10%" class="text-end">
                                         {{ number_format($d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0), 0) }}
                                     </td>
-                                    <td class="text-end">{{ $d->gr_srt - $d->gr }}</td>
+                                    <td class="text-end">{{ $d->gr_srt - ($d->gr + $d->gr_tdk_sortir) }}</td>
                                 </tr>
                             </tbody>
                         @endforeach
