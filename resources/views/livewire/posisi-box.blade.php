@@ -4,17 +4,23 @@
         modal.show();
     },
     posisi: false,
-    anak: false
+    anak: false,
+    grading: false
 }">
-    <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak</a>
+    <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak / Edit Grading
+        Kode</a>
 
     <x-theme.modal wire:ignore.self id="cariBox" btnSave="T" title="Cek Posisi No Box" size="modal-lg">
 
         <div class="d-flex gap-1">
-            <button type="button" @click="posisi = !posisi; anak = false" class="btn btn-sm btn-primary">Cek Posisi No
+            <button type="button" @click="posisi = !posisi; anak = false; grading = false"
+                class="btn btn-sm btn-primary">Cek Posisi No
                 Box</button>
-            <button type="button" @click="anak = !anak; posisi = false" class="btn btn-sm btn-primary">Ganti Nama
+            <button type="button" @click="anak = !anak; posisi = false; grading = false"
+                class="btn btn-sm btn-primary">Ganti Nama
                 Anak</button>
+            <button type="button" @click="grading = !grading; posisi = false; anak = false"
+                class="btn btn-sm btn-primary">Grading edit kode</button>
         </div>
 
         <div x-show='posisi'>
@@ -93,6 +99,55 @@
             @endif
             <div class="col-12">
                 <button wire:click='updateAnak' class="btn btn-sm btn-success btn-block" type="button">Simpan</button>
+            </div>
+        </div>
+
+        <div x-show="grading">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="">No Invoice</label>
+                    <input type="text" wire:model="noInvoice" class="form-control">
+                </div>
+                <div class="form-group col-4">
+                    <label for="">Kode Sebelumnya</label>
+                    <input type="text" wire:model.change="kodeSebelumnya" class="form-control">
+                </div>
+                <div class="form-group col-4">
+                    <label for="">Kode Setelahnya</label>
+                    <input type="text" wire:model="kodeSesudahnya" class="form-control">
+                </div>
+                @if ($dataGrading)
+                    <div class="col-12">
+                        <table class="table table-striped table-dark table-bordered mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Nama Partai</th>
+                                    <th>No Invoice</th>
+                                    <th>Box Pengiriman</th>
+                                    <th>Grade</th>
+                                    <th>Tipe</th>
+                                    <th>Pcs</th>
+                                    <th>Gr</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $dataGrading->nm_partai }}</td>
+                                    <td>{{ $dataGrading->no_invoice }}</td>
+                                    <td>{{ $dataGrading->box_pengiriman }}</td>
+                                    <td>{{ $dataGrading->grade }}</td>
+                                    <td>{{ $dataGrading->tipe }}</td>
+                                    <td>{{ $dataGrading->pcs }}</td>
+                                    <td>{{ $dataGrading->gr }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+                <div class="col-12">
+                    <button wire:click='updateGrading' class="btn btn-sm btn-success btn-block"
+                        type="button">Simpan</button>
+                </div>
             </div>
         </div>
 

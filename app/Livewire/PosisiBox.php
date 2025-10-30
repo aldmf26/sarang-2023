@@ -10,7 +10,17 @@ use Livewire\Component;
 
 class PosisiBox extends Component
 {
-    public $cariBox, $dataBox, $selectedPengawas, $selectedDivisi, $anak, $noBox, $selectedNama;
+    public $cariBox,
+        $noInvoice,
+        $kodeSebelumnya,
+        $kodeSesudahnya,
+        $dataGrading,
+        $dataBox,
+        $selectedPengawas,
+        $selectedDivisi,
+        $anak,
+        $noBox,
+        $selectedNama;
 
     public function mount()
     {
@@ -50,6 +60,19 @@ class PosisiBox extends Component
 
         DB::table($table)->where('no_box', $this->noBox)->update([
             'id_anak' => $this->selectedNama
+        ]);
+        $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
+    }
+
+    public function updatedKodeSebelumnya($value)
+    {
+        $this->dataGrading = DB::table('grading_partai')->where([['no_invoice', $this->noInvoice], ['box_pengiriman', $value]])->first();
+    }
+
+    public function updateGrading()
+    {
+        DB::table('grading_partai')->where([['no_invoice', $this->noInvoice], ['box_pengiriman', $this->kodeSebelumnya]])->update([
+            'box_pengiriman' => $this->kodeSesudahnya
         ]);
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
     }
