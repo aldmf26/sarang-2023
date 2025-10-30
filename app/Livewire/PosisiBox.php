@@ -41,6 +41,13 @@ class PosisiBox extends Component
             'sortir' => 'sortir',
         };
 
+        $cekNoBox = DB::table($table)->where('no_box', $this->noBox)->first();
+
+        if (empty($cekNoBox)) {
+            $this->dispatch('showAlert', ['type' => 'error', 'message' => 'No Box tidak ditemukan di tabel ' . $table]);
+            return;
+        }
+
         DB::table($table)->where('no_box', $this->noBox)->update([
             'id_anak' => $this->selectedNama
         ]);
