@@ -104,19 +104,19 @@
 
         <div x-show="grading">
             <div class="row">
-                <div class="form-group col-4">
+                <div class="form-group col-3">
                     <label for="">No Invoice</label>
                     <input type="text" wire:model="noInvoice" class="form-control">
                 </div>
-                <div class="form-group col-4">
+                <div class="form-group col-3">
                     <label for="">Kode Sebelumnya</label>
                     <input type="text" wire:model="kodeSebelumnya" class="form-control">
                 </div>
-                <div class="form-group col-4">
-                    <label for="">Kode Sebelumnya</label>
+                <div class="form-group col-3">
+                    <label for="">Gr</label>
                     <input type="text" wire:model.change="grGrading" class="form-control">
                 </div>
-                <div class="form-group col-4">
+                <div class="form-group col-3">
                     <label for="">Kode Setelahnya</label>
                     <input type="text" wire:model="kodeSesudahnya" class="form-control">
                 </div>
