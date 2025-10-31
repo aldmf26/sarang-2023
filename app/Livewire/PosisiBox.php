@@ -11,6 +11,7 @@ use Livewire\Component;
 class PosisiBox extends Component
 {
     public $cariBox,
+        $grGrading,
         $noInvoice,
         $kodeSebelumnya,
         $kodeSesudahnya,
@@ -64,14 +65,22 @@ class PosisiBox extends Component
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
     }
 
-    public function updatedKodeSebelumnya($value)
+    public function updatedGrGrading($value)
     {
-        $this->dataGrading = DB::table('grading_partai')->where([['no_invoice', $this->noInvoice], ['box_pengiriman', $value]])->first();
+        $this->dataGrading = DB::table('grading_partai')->where([
+            ['no_invoice', $this->noInvoice],
+            ['box_pengiriman', $this->kodeSebelumnya],
+            ['gr', $value]
+        ])->first();
     }
 
     public function updateGrading()
     {
-        DB::table('grading_partai')->where([['no_invoice', $this->noInvoice], ['box_pengiriman', $this->kodeSebelumnya]])->update([
+        DB::table('grading_partai')->where([
+            ['no_invoice', $this->noInvoice], 
+            ['box_pengiriman', $this->kodeSebelumnya],
+            ['gr', $this->grGrading]
+            ])->update([
             'box_pengiriman' => $this->kodeSesudahnya
         ]);
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
