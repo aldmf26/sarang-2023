@@ -148,6 +148,7 @@
                             <a href="#" class="btn btn-danger btn-sm cancel_new cancel_new{{ $d->id_sortir }}"
                                 id_sortir="{{ $d->id_sortir }}"><i class="fas fa-redo"></i>
                             </a>
+                            asd
                         @endif
                     @endif
                 </td>

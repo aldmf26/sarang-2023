@@ -582,14 +582,18 @@ class CabutController extends Controller
                     $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
+                $ttlRpPotongKasbon = $ttl - $data->kasbon;
+
                 $ttlRp += $ttl;
+                $ttlRpPotongKasbon += $ttlRpPotongKasbon;
             }
             if ($ttlRp != 0) {
 
                 $sumPgws[] = [
                     'pgws' => $p->name,
                     'lokasi' => $p->lokasi,
-                    'ttlRp' => $ttlRp
+                    'ttlRp' => $ttlRp,
+                    'ttlRpPotongKasbon' => $ttlRpPotongKasbon,
                 ];
             }
         }
