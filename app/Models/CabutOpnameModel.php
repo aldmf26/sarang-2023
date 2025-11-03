@@ -145,8 +145,6 @@ class CabutOpnameModel extends Model
         where a.selesai = 'Y' and b.baru='baru' and a.no_box != '9999' 
         $all
         ");
-
-        
     }
     public static function cabutPartaiDetail($partai)
     {
