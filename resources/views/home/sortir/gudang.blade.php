@@ -148,7 +148,6 @@
                                 <th class="dheadstock text-center">
                                     <input type="checkbox" x-model="allChecked" @change="toggleAll()">
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody>
