@@ -19,7 +19,7 @@
                 <table id="tbl1" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="6">({{count($cabut_selesai)}})Cetak stock</th>
+                            <th class="dhead text-center" colspan="6">({{ count($cabut_selesai) }})Cetak stock</th>
                         </tr>
                         <tr>
                             <th class="dhead text-center">Pemilik</th>
@@ -77,7 +77,8 @@
                 <table id="tbl2" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th class="dhead text-center" colspan="6">({{count($cetak_proses)}}) Cetak sedang proses</th>
+                            <th class="dhead text-center" colspan="6">({{ count($cetak_proses) }}) Cetak sedang
+                                proses</th>
                         </tr>
                         <tr>
 
@@ -158,7 +159,7 @@
                     <thead>
                         <tr>
                             <th class="dhead text-center" colspan="8">
-                                <span>({{count($cetak_selesai)}}) Cetak selesai siap sortir</span>
+                                <span>({{ count($cetak_selesai) }}) Cetak selesai siap sortir</span>
                             </th>
                         </tr>
                         <tr>
@@ -169,14 +170,39 @@
                             <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
                             <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Cbt</th>
                             <th class="dhead text-end {{ $posisi == 1 ? '' : 'd-none' }}">Total Ctk</th>
-                            <th class="dhead text-center">Aksi</th>
+                            <th class="dhead text-center">
+                                <input type="checkbox"
+                                    @change="($event.target.checked)
+            ? (
+                cek = {{ json_encode(collect($cetak_selesai)->pluck('id_cetak')->values()) }},
+                selectedItem = {{ json_encode(
+                    collect($cetak_selesai)->map(function ($i) {
+                            return [
+                                'id_cetak' => $i->id_cetak,
+                                'no_box' => $i->no_box,
+                                'name' => $i->name,
+                                'pcs_awal' => (float) $i->pcs_awal,
+                                'gr_awal' => (float) $i->gr_awal,
+                                'ttl_rp' => (float) ($i->ttl_rp ?? 0),
+                                'cost_cbt' => (float) ($i->cost_cbt ?? 0),
+                                'cost_ctk' => (float) ($i->cost_ctk ?? 0),
+                            ];
+                        })->values(),
+                ) }}
+            )
+            : (cek = [], selectedItem = [])">
+                            </th>
+
+
+
                         </tr>
                         <tr>
                             <th class="dheadstock text-center">Total</th>
                             <th class="dheadstock text-center"></th>
                             <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['pcs_awal'], 0) }}
                             </th>
-                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['gr_awal'], 0) }}</th>
+                            <th class="dheadstock text-end">{{ number_format(ttl($cetak_selesai)['gr_awal'], 0) }}
+                            </th>
                             <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                 {{ number_format(ttl($cetak_selesai)['ttl_rp'], 0) }}</th>
                             <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
@@ -185,7 +211,8 @@
                             <th class="dheadstock text-end {{ $posisi == 1 ? '' : 'd-none' }}">
                                 {{ number_format(ttl($cetak_selesai)['cost_ctk'], 0) }}
                             </th>
-                            <th class="dheadstock text-center"><span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span></th>
+                            <th class="dheadstock text-center"><span class="badge bg-primary" x-show="cek.length"
+                                    x-text="cek.length"></span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -246,7 +273,7 @@
                             <thead>
                                 <tr>
                                     <th class="dhead">No Box</th>
-                                    <th class="dhead">Pemilik</th>
+                                    <th class="dhead">Barang dari</th>
                                     <th class="dhead">Pcs</th>
                                     <th class="dhead">Gr</th>
                                     <th class="dhead {{ $posisi == 1 ? '' : 'd-none' }}">Total Rp</th>
