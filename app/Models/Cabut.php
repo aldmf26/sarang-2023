@@ -687,6 +687,10 @@ class Cabut extends Model
                 SELECT no_box 
                 FROM `cetak_new`
             )
+        AND a.no_box NOT IN (
+                SELECT no_box 
+                FROM `eo`
+            )
         ");
     }
 
