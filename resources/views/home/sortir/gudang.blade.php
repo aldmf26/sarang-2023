@@ -109,27 +109,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-4" x-data="{
-                cek: [],
-                selectedItem: [],
-                tambah(no_box, pcs_awal, gr_awal, ttl_rp) {
-                    const selectedItem = this.selectedItem
-                    const cetak = this.cetak
-            
-                    const index = selectedItem.findIndex(item => item.no_box === no_box);
-                    if (index === -1) {
-                        selectedItem.push({
-                            no_box: no_box,
-                            pcs_awal: parseFloat(pcs_awal),
-                            gr_awal: parseFloat(gr_awal),
-                            ttl_rp: parseFloat(ttl_rp),
-                        });
-                    } else {
-                        selectedItem.splice(index, 1);
-                    }
-            
-                },
-            }">
+            <div class="col-lg-4" x-data="sortirGudang">
                 <div class="row">
                     <div class="col">
                         <input type="text" id="tbl3input" class="form-control form-control-sm mb-2"
@@ -166,9 +146,8 @@
                                     {{ number_format(ttl($sortir_selesai)['gr_awal'] + ttl($sortir_selesai)['gr_tdk_sortir'], 0) }}
                                 </th>
                                 <th class="dheadstock text-center">
-                                    <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
+                                    <input type="checkbox" x-model="allChecked" @change="toggleAll()">
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -243,6 +222,67 @@
 
         </div>
         @section('scripts')
+            <script>
+                document.addEventListener('alpine:init', () => {
+                    Alpine.data('sortirGudang', () => ({
+                        cek: [],
+                        selectedItem: [],
+                        allChecked: false,
+
+                        tambah(no_box, pcs, gr, ttl_rp) {
+                            const index = this.selectedItem.findIndex(item => item.no_box == no_box);
+
+                            if (index === -1) {
+                                // Tambah
+                                this.selectedItem.push({
+                                    no_box,
+                                    pcs_awal: Number(pcs) || 0,
+                                    gr_awal: Number(gr) || 0,
+                                    ttl_rp: Number(ttl_rp) || 0,
+                                });
+                                this.cek.push(no_box);
+                            } else {
+                                // Hapus
+                                this.selectedItem.splice(index, 1);
+                                this.cek = this.cek.filter(i => i != no_box);
+                            }
+
+                            this.syncAllCheckState();
+                        },
+
+                        toggleAll() {
+                            const checkboxes = document.querySelectorAll('#tbl3 tbody input[type=checkbox]');
+                            this.selectedItem = [];
+                            this.cek = [];
+
+                            if (this.allChecked) {
+                                checkboxes.forEach(cb => {
+                                    cb.checked = true;
+                                    const tr = cb.closest('tr');
+
+                                    this.tambah(
+                                        tr.children[0].innerText.trim(),
+                                        tr.children[1].innerText.trim(),
+                                        tr.children[2].innerText.trim(),
+                                        tr.children[3].innerText.replace(/\./g, '').trim(),
+                                    );
+                                });
+                            } else {
+                                checkboxes.forEach(cb => cb.checked = false);
+                                this.selectedItem = [];
+                                this.cek = [];
+                            }
+                        },
+
+                        syncAllCheckState() {
+                            const total = {{ count($sortir_selesai) }};
+                            this.allChecked = this.selectedItem.length === total;
+                        }
+                    }));
+                });
+            </script>
+
+
             <script>
                 ["tbl1", "tbl2", "tbl3"].forEach((tbl, i) => pencarian(`tbl${i+1}input`, tbl));
             </script>
