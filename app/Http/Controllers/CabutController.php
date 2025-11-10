@@ -137,7 +137,8 @@ class CabutController extends Controller
                 'selesai' => 'Y',
                 'ttl_rp' => 0,
                 'penutup' => 'T',
-                'formulir_invoice' => 1,
+                'formulir' => 'T',
+                'invoice' => 'T',
                 'ket_hcr' => 0,
             ]);
         }
