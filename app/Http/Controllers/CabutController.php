@@ -110,8 +110,36 @@ class CabutController extends Controller
             'getAnak' => Cabut::getAnakTambah()
         ];
 
+        $idPengawas = 99;
+        $idAnak = 618;
+        $idKelas = 166;
+
         foreach ($data['boxBk'] as $d) {
-            echo $d->no_box . "<br>";
+            DB::table('cabut')->insert([
+                'no_box' => $d->no_box,
+                'id_pengawas' => $idPengawas,
+                'id_anak' => $idAnak,
+                'id_kelas' => $idKelas,
+                'tgl_terima' => date('Y-m-d'),
+                'tgl_serah' => date('Y-m-d'),
+                'bulan_dibayar' => 11,
+                'tahun_dibayar' => 2025,
+                'pcs_awal' => $d->pcs_awal,
+                'gr_awal' => $d->gr_awal,
+                'pcs_akhir' => $d->pcs_awal,
+                'gr_akhir' => $d->gr_awal,
+                'pcs_hcr' => 0,
+                'gr_hcr' => 0,
+                'pcs_flx' => 0,
+                'gr_flx' => 0,
+                'eot' => 0,
+                'rupiah' => 0,
+                'selesai' => 'Y',
+                'ttl_rp' => 0,
+                'penutup' => 'T',
+                'formulir_invoice' => null,
+                'ket_hcr' => null,
+            ]);
         }
 
         return view('home.cabut.load_tambah_cabut', $data);
