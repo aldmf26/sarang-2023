@@ -246,12 +246,12 @@ class GradingBjController extends Controller
             'partai' => $partaiData->pluck('nm_partai')->map(function ($item) {
                 return strtolower($item);
             })->unique()->count(),
-            'tipe' => $partaiData->pluck('tipe')->map(function ($item) {
-                return strtolower($item);
-            })->unique()->count(),
-            'ket' => $partaiData->pluck('ket')->map(function ($item) {
-                return strtolower($item);
-            })->unique()->count(),
+            // 'tipe' => $partaiData->pluck('tipe')->map(function ($item) {
+            //     return strtolower($item);
+            // })->unique()->count(),
+            // 'ket' => $partaiData->pluck('ket')->map(function ($item) {
+            //     return strtolower($item);
+            // })->unique()->count(),
         ];
 
 
