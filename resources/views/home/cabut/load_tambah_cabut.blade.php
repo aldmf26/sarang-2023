@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($getAnak as $i => $x)
+                @foreach ($boxBk as $i => $x)
                     <tr class="baris{{ $i + 1 }}">
                         <td>
                             <input type="text" class="form-control" readonly value="{{ auth()->user()->name }}">

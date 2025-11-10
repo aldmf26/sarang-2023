@@ -689,7 +689,7 @@ class Cabut extends Model
             )
         AND a.no_box NOT IN (
                 SELECT no_box 
-                FROM `eo`
+                FROM `eo`   
             )
         ");
     }
