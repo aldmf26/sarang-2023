@@ -400,7 +400,7 @@
                                 @endphp
                             </td>
                             <td class="text-end">
-                                {{ number_format(($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja) / $sortir_sisa->gr, 0) }}
+                                {{ $sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja == 0 ? 0 : number_format(($sortir_sisa->ttl_rp + $sortir_sisa->cost_kerja) / $sortir_sisa->gr, 0) }}
                             </td>
 
                         </tr>
