@@ -103,14 +103,16 @@ class CabutController extends Controller
     }
     public function load_tambah_cabut(Request $r)
     {
-        
+
         $data = [
             'title' => 'Tambah Divisi Cabut',
             'boxBk' => Cabut::getStokBk(),
             'getAnak' => Cabut::getAnakTambah()
         ];
 
-        dd($data['boxBk'])
+        foreach ($data['boxBk'] as $d) {
+            echo $d->no_box . "<br>";
+        }
 
         return view('home.cabut.load_tambah_cabut', $data);
     }
