@@ -251,7 +251,8 @@
                                     $ttl_rp2 = $cbt_sisa_pgws->ttl_rp;
                                 @endphp
                             </td>
-                            <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr, 0) }}
+                            <td class="text-end">
+                                {{ empty($cbt_sisa_pgws->gr) ? 0 : number_format($cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr, 0) }}
                             </td>
 
                         </tr>
@@ -351,18 +352,7 @@
                             </td>
 
                         </tr>
-                        {{-- <tr>
-                            <td style="background-color: #F7F700">Sortir Akhir</td>
-                            <td class="text-end">
-                                {{ number_format($sortir_akhir->pcs, 0) }}
-                            </td>
-                            <td class="text-end">
-                                {{ number_format($sortir_akhir->gr, 0) }}
-                            </td>
-                            <td class="text-end">
-                                {{ number_format($sortir_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $sortir_akhir->gr + ($cost_op / $ttl_gr) * $sortir_akhir->gr, 0) }}
-                            </td>
-                        </tr> --}}
+
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Sortir sedang Proses</td>
                             <td class="text-end">{{ number_format($sedang_proses->pcs, 0) }}</td>
