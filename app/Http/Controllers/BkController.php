@@ -238,6 +238,7 @@ class BkController extends Controller
                             'pcs_awal' => $row[5],
                             'gr_awal' => $row[6],
                             'kategori' => 'cabut',
+                            'hrga_satuan' => $row[8],
                         ]);
                     }
                 }
