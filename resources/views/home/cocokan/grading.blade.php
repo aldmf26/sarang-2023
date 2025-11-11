@@ -95,7 +95,7 @@
                             {{ number_format($grading_proses->cost_bk + $grading_proses->cost_kerja, 0) }}
                         </td>
                         <td class="text-end ">
-                            {{ number_format(($grading_proses->cost_bk + $grading_proses->cost_kerja) / $grading_proses->gr, 0) }}
+                            {{ empty($grading_proses->gr) ? 0 : number_format(($grading_proses->cost_bk + $grading_proses->cost_kerja) / $grading_proses->gr, 0) }}
                         </td>
                         <td class="text-end ">
                             {{ number_format($grading_proses->cost_op, 0) }}
