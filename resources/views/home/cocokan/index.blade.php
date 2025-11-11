@@ -102,7 +102,9 @@
                                 href="{{ route('detail.cabut.sisa') }}">{{ number_format($cbt_sisa_pgws->gr, 0) }}</a>
                         </td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
-                        <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr, 0) }}</td>
+                        <td class="text-end">
+                            {{ empty($cbt_sisa_pgws->gr) ? 0 : number_format($cbt_sisa_pgws->ttl_rp / $cbt_sisa_pgws->gr, 0) }}
+                        </td>
                         <td class="text-end">0</td>
                         <td class="text-end">{{ number_format($cbt_sisa_pgws->ttl_rp, 0) }}</td>
                     </tr>
