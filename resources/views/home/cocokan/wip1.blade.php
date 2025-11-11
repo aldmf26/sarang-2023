@@ -65,7 +65,8 @@
                         <td class="text-end">{{ number_format($sisa_belum_wip1->pcs, 0) }}</td>
                         <td class="text-end">{{ number_format($sisa_belum_wip1->gr, 0) }}</td>
                         <td class="text-end">{{ number_format($sisa_belum_wip1->ttl_rp, 0) }}</td>
-                        <td class="text-end">{{ number_format($sisa_belum_wip1->ttl_rp / $sisa_belum_wip1->gr, 0) }}
+                        <td class="text-end">
+                            {{ empty($sisa_belum_wip1->gr) ? 0 : number_format($sisa_belum_wip1->ttl_rp / $sisa_belum_wip1->gr, 0) }}
                         </td>
                         <td class="text-end">0</td>
                         <td class="text-end">
