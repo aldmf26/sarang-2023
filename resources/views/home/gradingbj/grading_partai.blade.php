@@ -87,6 +87,7 @@
                         </thead>
                     </table>
                 </div>
+                <script>alert('ini fitur baru')</script>
             </div>
             <x-theme.alert pesan="{{ session()->get('error') }}" />
             <div class="row">
