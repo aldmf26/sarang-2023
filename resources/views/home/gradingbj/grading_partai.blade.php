@@ -11,11 +11,12 @@
         <form x-data="{
             cek: [],
             rows: [],
-            baris: 1,
+            baris: {{ session('form_data') ? session('form_data.baris') : 1 }},
             isDisabled: false,
             selectedRowIndex: null,
-            pcs: Array().fill(''),
-            gr: Array().fill(''),
+            pcs: {{ session('form_data') ? json_encode(session('form_data.pcs')) : '[]' }},
+            gr: {{ session('form_data') ? json_encode(session('form_data.gr')) : '[]' }},
+            boxkirim: {{ session('form_data') ? json_encode(session('form_data.box_sp')) : '[]' }},
             susut: {
                 pcs: 0,
                 gr: 0
@@ -25,9 +26,9 @@
                 const total = array.reduce((acc, value) => acc + (parseInt(value) || 0), 0);
         
                 if (type === 'pcs') {
-                    return total + (parseInt(this.susut.pcs) || 0); // Kurangi nilai susut dari total pcs
+                    return total + (parseInt(this.susut.pcs) || 0);
                 } else if (type === 'gr') {
-                    return total + (parseInt(this.susut.gr) || 0); // Kurangi nilai susut dari total gr jika diperlukan
+                    return total + (parseInt(this.susut.gr) || 0);
                 }
         
                 return total;
@@ -290,7 +291,7 @@
                                             class="text-end form-control" name="gr[]">
                                     </td>
                                     <td>
-                                        <input required type="text" autocomplete="off"
+                                        <input x-model="boxkirim[index]" required type="text" autocomplete="off"
                                             class="form-control boxkirim" :urutan="index + 1" name="box_sp[]">
                                     </td>
 
@@ -307,27 +308,6 @@
                                         class="btn btn-sm btn-primary btn-block"><i class="fas fa-plus"></i>
                                         Tambah</button></td>
                             </tr>
-                            <!-- Add more rows as needed -->
-
-                            {{-- <tr>
-                                <td>Susut
-
-                                    <input type="hidden" class="form-control" name="grade[]" value="62">
-                                </td>
-                                <td>
-                                    <input x-model="susut.pcs" type="number" class="text-end form-control"
-                                        name="pcs[]">
-                                </td>
-                                <td>
-                                    <input x-model="susut.gr" type="number" class="text-end form-control"
-                                        name="gr[]">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="box_sp[]">
-                                </td>
-                                <td></td>
-                            </tr> --}}
-
                         </tbody>
                     </table>
                 </div>
@@ -361,9 +341,16 @@
                     }
                 });
             </script>
+
             <script>
                 $(document).ready(function() {
+                    
+                    // FLAG untuk mencegah AJAX saat restore
+                    var isRestoring = false;
+
                     $(document).on("keyup", ".boxkirimd", function(e) {
+                        if (isRestoring) return; // Skip saat restore
+                        
                         var urutan = $(this).attr('urutan');
                         var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
                         var grade = $('.grade[urutan="' + urutan + '"]').val();
@@ -379,11 +366,11 @@
                                 $('.cek[urutan="' + urutan + '"]').html(response);
                             }
                         });
-
-
                     });
 
                     $(document).on("change", ".grade", function(e) {
+                        if (isRestoring) return; // Skip saat restore
+                        
                         var urutan = $(this).attr('urutan');
                         var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
                         var grade = $('.grade[urutan="' + urutan + '"]').val();
@@ -397,19 +384,53 @@
                             },
                             dataType: "json",
                             success: function(r) {
-                                // if(r.html){
-                                //     $('.cek[urutan="' + urutan + '"]').html(r.html);
-                                // }
-
-                                $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
-                                $('.cek[urutan="' + urutan + '"]').html(r.html);
-
+                                if (!isRestoring) { // Hanya update jika bukan restore
+                                    $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
+                                    $('.cek[urutan="' + urutan + '"]').html(r.html);
+                                }
                             }
                         });
-
-
                     });
 
+                    // ============================================
+                    // RESTORE DATA DARI SESSION - FIXED!
+                    // ============================================
+                    @if (session('form_data'))
+                        setTimeout(function() {
+                            var formData = @json(session('form_data'));
+                            
+                            console.log('🔄 Memulihkan data...', formData);
+                            
+                            // SET FLAG - NONAKTIFKAN AJAX
+                            isRestoring = true;
+                            
+                            // Set nilai untuk setiap row
+                            formData.grade.forEach(function(grade, index) {
+                                
+                                // Set Grade dengan Select2 (tanpa trigger change!)
+                                var gradeSelect = $('select[name="grade[]"]').eq(index);
+                                if (gradeSelect.length && grade) {
+                                    gradeSelect.val(grade); // JANGAN pakai .trigger('change')
+                                    gradeSelect.select2(); // Refresh select2 saja
+                                }
+                                
+                                // Set Box SP (sudah di-set oleh Alpine via boxkirim[index])
+                                // Tidak perlu set lagi karena sudah x-model="boxkirim[index]"
+                                
+                                // Set Not Oke Checkbox
+                                if (formData.not_oke && formData.not_oke[index]) {
+                                    $('input[name="not_oke[' + index + ']"]').prop('checked', true);
+                                }
+                            });
+                            
+                            // SETELAH SELESAI RESTORE - AKTIFKAN LAGI AJAX
+                            setTimeout(function() {
+                                isRestoring = false;
+                                console.log('✅ Data berhasil dimuat! AJAX aktif kembali.');
+                            }, 1000);
+                            
+                        }, 500);
+                    @endif
                 });
             </script>
         @endsection

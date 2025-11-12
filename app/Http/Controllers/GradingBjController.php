@@ -466,6 +466,16 @@ class GradingBjController extends Controller
                 $gradeData = $gradeMaster[$grade] ?? null;
                 if (!$gradeData) {
                     DB::rollBack();
+
+                    session()->flash('form_data', [
+                        'baris' => count($r->grade ?? []),
+                        'grade' => $r->grade ?? [],
+                        'pcs' => $r->pcs ?? [],
+                        'gr' => $r->gr ?? [],
+                        'box_sp' => $r->box_sp ?? [],
+                        'not_oke' => $r->not_oke ?? []
+                    ]);
+
                     return redirect()->back()->withInput()->with('error', 'Grade tidak ditemukan di table_grade: ' . $grade);
                 }
                 $tipe = $gradeData->tipe;
@@ -517,12 +527,32 @@ class GradingBjController extends Controller
 
                 if ($cekBoxSudahKirim) {
                     DB::rollBack();
+
+                    session()->flash('form_data', [
+                        'baris' => count($r->grade ?? []),
+                        'grade' => $r->grade ?? [],
+                        'pcs' => $r->pcs ?? [],
+                        'gr' => $r->gr ?? [],
+                        'box_sp' => $r->box_sp ?? [],
+                        'not_oke' => $r->not_oke ?? []
+                    ]);
+
                     return redirect()->back()->withInput()->with('error', 'BOX SUDAH DIKIRIM : ' . $boxsp);
                 }
 
                 if (!empty($getBoxkirim)) {
                     if ($getBoxkirim->grade != $grade) {
                         DB::rollBack();
+
+                        session()->flash('form_data', [
+                            'baris' => count($r->grade ?? []),
+                            'grade' => $r->grade ?? [],
+                            'pcs' => $r->pcs ?? [],
+                            'gr' => $r->gr ?? [],
+                            'box_sp' => $r->box_sp ?? [],
+                            'not_oke' => $r->not_oke ?? []
+                        ]);
+
                         return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade: ' . $getBoxkirim->box_pengiriman);
                     }
                 }
@@ -538,15 +568,37 @@ class GradingBjController extends Controller
 
             if ($ttlPcsGrading != $ttlPcsSortir || $ttlGrGrading != $ttlGrSortir) {
                 DB::rollBack();
+                session()->flash('form_data', [
+                    'baris' => count($r->grade ?? []),
+                    'grade' => $r->grade ?? [],
+                    'pcs' => $r->pcs ?? [],
+                    'gr' => $r->gr ?? [],
+                    'box_sp' => $r->box_sp ?? [],
+                    'not_oke' => $r->not_oke ?? []
+                ]);
+
                 return redirect()->back()->withInput()->with('error', 'Total pcs atau gr grading tidak sesuai sortir');
             }
 
             DB::table('grading')->insert($dataGrading);
+            // SUKSES - Hapus session
+            session()->forget('form_data');
+
 
             DB::commit();
             return redirect()->route('gradingbj.index')->with('sukses', 'Berhasil');
         } catch (\Exception $e) {
             DB::rollBack();
+            // SIMPAN DATA KE SESSION
+            session()->flash('form_data', [
+                'baris' => count($r->grade ?? []),
+                'grade' => $r->grade ?? [],
+                'pcs' => $r->pcs ?? [],
+                'gr' => $r->gr ?? [],
+                'box_sp' => $r->box_sp ?? [],
+                'not_oke' => $r->not_oke ?? []
+            ]);
+
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
