@@ -12,6 +12,49 @@
             cek: [],
             rows: [],
             baris: {{ session('form_data') ? session('form_data.baris') : 1 }},
+            bulkInput: '',
+            importBulk() {
+                const lines = this.bulkInput.trim().split('\n');
+                this.baris = lines.length;
+                this.pcs = [];
+                this.gr = [];
+                this.boxkirim = [];
+                this.gradesToSelect = []; // Reset
+        
+                lines.forEach((line, index) => {
+                    const parts = line.trim().split(/\s+/);
+                    const grade = parts[0] || '';
+                    const pcs = parts[1] || '';
+                    const gr = parts[2] || '';
+                    const box = parts[3] || '';
+        
+                    this.pcs.push(pcs);
+                    this.gr.push(gr);
+                    this.boxkirim.push(box);
+                    this.gradesToSelect[index] = grade.toUpperCase();
+                });
+        
+                // Tunggu Alpine render DOM baru
+                this.$nextTick(() => {
+                    // 1. Init Select2 untuk elemen baru
+                    this.initSelect2();
+        
+                    // 2. Set nilai grade & trigger change
+                    $('.selectGrade').each((i, el) => {
+                        const gradeValue = this.gradesToSelect[i];
+                        if (gradeValue) {
+                            const $select = $(el);
+                            $select.val(gradeValue);
+        
+                            // Pastikan Select2 tahu nilai berubah
+                            $select.trigger('change.select2');
+                        }
+                    });
+                });
+        
+                this.bulkInput = '';
+                alert('Data bulk berhasil dimasukkan!');
+            },
             isDisabled: false,
             selectedRowIndex: null,
             pcs: {{ session('form_data') ? json_encode(session('form_data.pcs')) : '[]' }},
@@ -37,7 +80,11 @@
                 return parseFloat(value).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\./g, ',');
             },
             initSelect2: function() {
-                $('.selectGrade').select2();
+                this.$nextTick(() => {
+                    $('.selectGrade').not('.select2-hidden-accessible').select2({
+                        width: '100%'
+                    });
+                });
             },
             removeRow: function(index) {
                 this.rows.splice(index, 1);
@@ -87,7 +134,7 @@
                         </thead>
                     </table>
                 </div>
-                <script>alert('ini fitur baru')</script>
+
             </div>
             <x-theme.alert pesan="{{ session()->get('error') }}" />
             <div class="row">
@@ -243,6 +290,15 @@
                 </div>
                 <div class="col-lg-7">
                     <h6>Hasil Grading</h6>
+                    <div class="mb-3">
+                        <h6>Input Cepat (Bulk)</h6>
+                        <textarea x-model="bulkInput" class="form-control" rows="4"
+                            placeholder="Contoh:&#10;VR 65 250 4001&#10;DR 58 250 4002&#10;VR 67 250 4003"></textarea>
+                        <button type="button" class="btn btn-sm btn-success mt-2" @click="importBulk">Import
+                            Bulk</button>
+                    </div>
+
+
                     <table class="table table-bordered" id="tbl3">
                         <thead>
                             <tr>
@@ -274,8 +330,8 @@
                                 <tr>
                                     <td x-text="index + 1"></td>
                                     <td>
-                                        <select x-init="initSelect2" required name="grade[]"
-                                            class="selectGrade grade" :urutan="index + 1" id="">
+                                        <select x-init="initSelect2()" required name="grade[]"
+                                            class="selectGrade grade" :urutan="index + 1">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($gradeBentuk as $g)
                                                 <option value="{{ $g->nm_grade }}">{{ strtoupper($g->nm_grade) }}
@@ -345,13 +401,13 @@
 
             <script>
                 $(document).ready(function() {
-                    
+
                     // FLAG untuk mencegah AJAX saat restore
                     var isRestoring = false;
 
                     $(document).on("keyup", ".boxkirimd", function(e) {
                         if (isRestoring) return; // Skip saat restore
-                        
+
                         var urutan = $(this).attr('urutan');
                         var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
                         var grade = $('.grade[urutan="' + urutan + '"]').val();
@@ -371,7 +427,7 @@
 
                     $(document).on("change", ".grade", function(e) {
                         if (isRestoring) return; // Skip saat restore
-                        
+
                         var urutan = $(this).attr('urutan');
                         var boxkirim = $('.boxkirim[urutan="' + urutan + '"]').val();
                         var grade = $('.grade[urutan="' + urutan + '"]').val();
@@ -399,37 +455,37 @@
                     @if (session('form_data'))
                         setTimeout(function() {
                             var formData = @json(session('form_data'));
-                            
+
                             console.log('🔄 Memulihkan data...', formData);
-                            
+
                             // SET FLAG - NONAKTIFKAN AJAX
                             isRestoring = true;
-                            
+
                             // Set nilai untuk setiap row
                             formData.grade.forEach(function(grade, index) {
-                                
+
                                 // Set Grade dengan Select2 (tanpa trigger change!)
                                 var gradeSelect = $('select[name="grade[]"]').eq(index);
                                 if (gradeSelect.length && grade) {
                                     gradeSelect.val(grade); // JANGAN pakai .trigger('change')
                                     gradeSelect.select2(); // Refresh select2 saja
                                 }
-                                
+
                                 // Set Box SP (sudah di-set oleh Alpine via boxkirim[index])
                                 // Tidak perlu set lagi karena sudah x-model="boxkirim[index]"
-                                
+
                                 // Set Not Oke Checkbox
                                 if (formData.not_oke && formData.not_oke[index]) {
                                     $('input[name="not_oke[' + index + ']"]').prop('checked', true);
                                 }
                             });
-                            
+
                             // SETELAH SELESAI RESTORE - AKTIFKAN LAGI AJAX
                             setTimeout(function() {
                                 isRestoring = false;
                                 console.log('✅ Data berhasil dimuat! AJAX aktif kembali.');
                             }, 1000);
-                            
+
                         }, 500);
                     @endif
                 });
