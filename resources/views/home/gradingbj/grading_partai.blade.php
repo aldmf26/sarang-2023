@@ -442,7 +442,7 @@
                             dataType: "json",
                             success: function(r) {
                                 if (!isRestoring) { // Hanya update jika bukan restore
-                                    $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
+                                    // $('.boxkirim[urutan="' + urutan + '"]').val(r.box_pengiriman);
                                     $('.cek[urutan="' + urutan + '"]').html(r.html);
                                 }
                             }
