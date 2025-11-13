@@ -848,7 +848,8 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::bkselesai_belum_kirim(),
+            'box' => $model::bksedang_selesai_sum(),
+
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
