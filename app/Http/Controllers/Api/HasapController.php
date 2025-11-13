@@ -23,14 +23,14 @@ class HasapController extends Controller
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        where c.baru = 'baru' and a.no_box != '9999' $where 
+        where c.baru = 'baru' and a.no_box != '9999' and a.id_kelas =26 $where 
         group by a.tgl_terima , b.name
         UNION ALL
         SELECT d.tgl_ambil as tgl, f.nm_partai, e.id, e.name, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
         FROM eo as d
         left join users as e on e.id = d.id_pengawas
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
-        where f.baru = 'baru' and d.no_box != '9999' $where2
+        where f.baru = 'baru' and d.no_box != '9999' and a.id_kelas =26 $where2
         group by d.tgl_ambil, e.name
 
         

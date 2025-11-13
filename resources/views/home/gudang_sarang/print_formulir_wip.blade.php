@@ -108,7 +108,7 @@
                                     ->first();
                             @endphp
                             <tr>
-                                <td colspan="2">{{ $sbw->no_invoice }}</td>
+                                <td colspan="2">{{ $sbw->no_invoice ?? $s->nm_partai }}</td>
                                 <td align="right">{{ $s->pcs }}</td>
                                 <td align="right">{{ $s->gr }}</td>
                                 <td colspan="2"></td>
