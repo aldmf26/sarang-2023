@@ -983,7 +983,7 @@ ON all_data.grade = done_data.grade;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
-        where c.no_box != '9999'
+        where c.no_box != '9999'  and c.id_kelas not in('126','166','152') and c.id_pengawas not in ('104','421','99','101','285')
     
     	UNION ALL
     	
@@ -1007,7 +1007,7 @@ ON all_data.grade = done_data.grade;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
-        where c.no_box != '9999'
+        where c.no_box != '9999' and c.id_kelas not in('126','166','152') and c.id_pengawas not in ('104','421','99','101','285')
     
     
         ) AS hasil
