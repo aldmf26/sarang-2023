@@ -23,7 +23,7 @@ class HasapController extends Controller
         FROM cabut as a 
         left join users as b on b.id = a.id_pengawas
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        where c.baru = 'baru' and a.no_box != '9999' and a.id_kelas != '126' $where 
+        where c.baru = 'baru' and a.no_box != '9999' and a.id_kelas not in('126','166','152') $where 
         group by a.tgl_terima , b.name
         UNION ALL
         SELECT d.tgl_ambil as tgl, f.nm_partai, e.id, e.name, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
@@ -50,7 +50,7 @@ class HasapController extends Controller
         left join tb_anak as b on b.id_anak = a.id_anak
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
         left join hasil_wawancara as d on d.id_anak = b.id_anak
-        where c.baru = 'baru' and a.id_pengawas = '$id_pengawas' and a.id_kelas != '126' and a.tgl_terima = '$tgl'
+        where c.baru = 'baru' and a.id_pengawas = '$id_pengawas' and a.id_kelas not in('126','166','152') and a.tgl_terima = '$tgl'
         group by a.no_box
 UNION ALL
 SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
