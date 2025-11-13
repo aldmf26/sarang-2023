@@ -266,7 +266,7 @@
                                 </a>
                             </td>
                             <td class="text-end">
-                                {{ number_format(sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
+                                {{ number_format(sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'), 0) }}
                                 @php
                                     $ttl_rp3 =
                                         sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
