@@ -1276,7 +1276,7 @@ ORDER BY group_id;");
     public function steaming_baru(Request $r)
     {
         $data = DB::select("SELECT a.tgl , sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000'))
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
          group by a.tgl order by a.tgl DESC;");
         return response()->json([
             'status' => 'success',
