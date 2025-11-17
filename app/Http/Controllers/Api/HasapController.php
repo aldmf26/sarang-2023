@@ -353,6 +353,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.no_invoice, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
+        where a.nm_partai != 'BJM 1001'
         group by a.no_invoice
         order by a.tgl DESC;");
         return response()->json([
@@ -366,7 +367,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box , a.not_oke, a.box_pengiriman
         FROM grading_partai as a 
-        where a.no_invoice = '$r->no_invoice'
+        where a.no_invoice = '$r->no_invoice' and a.nm_partai != 'BJM 1001'
         group by a.grade
         order by a.not_oke DESC, a.grade ASC;");
         return response()->json([
