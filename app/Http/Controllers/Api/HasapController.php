@@ -678,7 +678,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function stok_grade_detail(Request $r)
     {
 
-        $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket
+        $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         where b.grade_id = '$r->id'
@@ -686,7 +686,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         UNION all
 
-        SELECT a.tgl, b.grade_id, b.no_invoice, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket
+        SELECT a.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         where b.grade_id = '$r->id' and a.formulir = 'Y'
