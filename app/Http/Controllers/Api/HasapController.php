@@ -692,7 +692,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         where b.grade_id = '$r->id' and a.formulir = 'Y'
         group by a.tgl, b.no_invoice
 
-        order by no_invoice ASC, tgl ASC, ket DESC; ");
+        order by  tgl ASC, no_invoice ASC,  ket DESC; ");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
