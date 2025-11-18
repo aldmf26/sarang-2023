@@ -2031,6 +2031,7 @@ class CabutController extends Controller
             return redirect()->route('cabut.gudang')->with('error', 'No Box / Penerima Kosong !');
         }
         $no_box = explode(',', $r->no_box[0]);
+        dd($no_box);
         foreach ($no_box as $d) {
             $cek = DB::table('formulir_sarang')->where([['no_box', $d], ['kategori', 'cetak']])->exists();
             if (!$cek) {

@@ -251,7 +251,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <input class="d-none" name="no_box[]" type="text"
+                                                <input class="" name="no_box[]" type="text"
                                                     :value="cek">
                                                 <template x-for="item in selectedItem" :key="item.no_box">
                                                     <tr>
