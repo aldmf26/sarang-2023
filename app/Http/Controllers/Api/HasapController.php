@@ -678,16 +678,16 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     public function stok_grade_detail(Request $r)
     {
 
-        $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket, c.name
+        $data = DB::select("SELECT b.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'masuk' as ket, 'sinta' as nama
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
         where b.grade_id = '$r->id'
-        group by b.tgl, b.no_invoice, a.penerima
+        group by b.tgl, b.no_invoice
 
         UNION all
 
-        SELECT a.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket, c.name
+        SELECT a.tgl, b.grade_id, b.no_invoice, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 'keluar' as ket, c.name as nama
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
