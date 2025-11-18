@@ -185,7 +185,7 @@
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah('{{ $d->no_box }}', {{ $d->pcs }}, {{ $d->gr }}, {{ $d->ttl_rp_cbt }}, {{ $d->ttl_rp }})"
-                                                value="{{ $d->no_box }}" x-model="cek" style="cursor: pointer;">
+                                                value="{{ $d->no_box }}" style="cursor: pointer;">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -203,7 +203,7 @@
                                         <td align="center">
                                             <input type="checkbox"
                                                 @change="tambah('{{ $d->no_box }}', 0, {{ $d->gr }}, {{ $d->ttl_rp_cbt }}, {{ $d->ttl_rp }})"
-                                                value="{{ $d->no_box }}" x-model="cek" style="cursor: pointer;">
+                                                value="{{ $d->no_box }}" style="cursor: pointer;">
                                         </td>
                                     </tr>
                                 @endforeach
