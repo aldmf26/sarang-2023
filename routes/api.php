@@ -36,6 +36,7 @@ Route::controller(HasapController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/detail/{id_pengawas}/{tgl}', 'detail')->name('detail');
+        Route::get('/download', 'download')->name('download');
         Route::get('/bk', 'bk')->name('bk');
         Route::get('/cabut', 'cabut')->name('cabut');
         Route::get('/cabut_detail', 'cabut_detail')->name('cabut_detail');
