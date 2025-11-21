@@ -85,7 +85,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         left join tb_anak as e on e.id_anak = d.id_anak
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
         left join hasil_wawancara as g on g.id_anak = e.id_anak
-        left join users as h on h.id = a.id_pengawas
+        left join users as h on h.id = d.id_pengawas
         where f.baru = 'baru' and  d.id_kelas != '142' 
         group by d.no_box
         
