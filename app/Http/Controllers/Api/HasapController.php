@@ -71,19 +71,21 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
     }
     public function download()
     {
-        $data = DB::select("SELECT a.tgl_terima as tgl, a.tgl_serah as tgl_selesai, a.no_box, c.nm_partai, d.nama,  sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal
+        $data = DB::select("SELECT a.tgl_terima as tgl, a.tgl_serah as tgl_selesai, a.no_box, c.nm_partai, d.nama,  sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal, h.name
         FROM cabut as a 
         left join tb_anak as b on b.id_anak = a.id_anak
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
         left join hasil_wawancara as d on d.id_anak = b.id_anak
+        left join users as h on h.id = a.id_pengawas
         where c.baru = 'baru'  and a.id_kelas not in('126','166','152') 
         group by a.no_box
 UNION ALL
-SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_awal) as gr_awal
+SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_awal) as gr_awal, h.name
         FROM eo as d
         left join tb_anak as e on e.id_anak = d.id_anak
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
         left join hasil_wawancara as g on g.id_anak = e.id_anak
+        left join users as h on h.id = a.id_pengawas
         where f.baru = 'baru' and  d.id_kelas != '142' 
         group by d.no_box
         
