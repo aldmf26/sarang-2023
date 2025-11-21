@@ -251,28 +251,41 @@
                         },
 
                         toggleAll() {
-                            const checkboxes = document.querySelectorAll('#tbl3 tbody input[type=checkbox]');
-                            this.selectedItem = [];
-                            this.cek = [];
+    const rows = document.querySelectorAll('#tbl3 tbody tr');
 
-                            if (this.allChecked) {
-                                checkboxes.forEach(cb => {
-                                    cb.checked = true;
-                                    const tr = cb.closest('tr');
+    this.selectedItem = [];
+    this.cek = [];
 
-                                    this.tambah(
-                                        tr.children[0].innerText.trim(),
-                                        tr.children[1].innerText.trim(),
-                                        tr.children[2].innerText.trim(),
-                                        tr.children[3].innerText.replace(/\./g, '').trim(),
-                                    );
-                                });
-                            } else {
-                                checkboxes.forEach(cb => cb.checked = false);
-                                this.selectedItem = [];
-                                this.cek = [];
-                            }
-                        },
+    if (this.allChecked) {
+        rows.forEach(tr => {
+            const no_box = tr.children[0].innerText.trim();
+            const pcs = Number(tr.children[1].innerText.trim());
+            const gr = Number(tr.children[2].innerText.trim());
+            const ttl_rp = Number(tr.children[3].innerText.replace(/\./g, '').trim() || 0);
+
+            this.selectedItem.push({
+                no_box,
+                pcs_awal: pcs,
+                gr_awal: gr,
+                ttl_rp: ttl_rp
+            });
+
+            this.cek.push(no_box);
+
+            // set checkboxes checked
+            tr.querySelector('input[type=checkbox]').checked = true;
+        });
+    } else {
+        rows.forEach(tr => {
+            tr.querySelector('input[type=checkbox]').checked = false;
+        });
+
+        this.selectedItem = [];
+        this.cek = [];
+    }
+},
+
+
 
                         syncAllCheckState() {
                             const total = {{ count($sortir_selesai) }};
