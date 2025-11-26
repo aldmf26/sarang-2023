@@ -1600,7 +1600,7 @@ ORDER BY g.grade DESC;");
     }
     public function no_box_label(Request $r)
     {
-        $data = DB::select("SELECT a.nm_partai, a.no_box, a.pcs_awal, a.gr_awal FROM bk as a where a.tgl_input between '$r->tgl1' and '$r->tgl2' and a.kategori = 'cabut'
+        $data = DB::select("SELECT a.nm_partai, a.no_box as kode_lot, a.pcs_awal, a.gr_awal FROM bk as a where a.tgl_input between '$r->tgl1' and '$r->tgl2' and a.kategori = 'cabut'
         order by no_box desc
         ");
         return response()->json([
