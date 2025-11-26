@@ -225,7 +225,7 @@ class Bk_baruController extends Controller
     public function print_label(Request $r)
     {
         $formulir =  DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, c.no_invoice, c.tgl , b.nm_partai, c.grade_id, c.rwb_id FROM formulir_sarang as a
-        left join bk as b on b.no_box = a.no_box
+        left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
         left join sbw_kotor as c on c.nm_partai = b.nm_partai
         where a.no_invoice = $r->no_invoice and a.kategori = 'cabut'
         ");
