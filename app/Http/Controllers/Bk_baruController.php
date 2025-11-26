@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class Bk_baruController extends Controller
 {
@@ -220,6 +221,56 @@ class Bk_baruController extends Controller
             'ket_formulir' => $ket_formulir
         ];
         return view('home.bkbaru.print_formulir', $data);
+    }
+    public function print_label(Request $r)
+    {
+        $formulir =  DB::select("SELECT a.no_box, a.pcs_awal, a.gr_awal, c.no_invoice, c.tgl , b.nm_partai, c.grade_id, c.rwb_id FROM formulir_sarang as a
+        left join bk as b on b.no_box = a.no_box
+        left join sbw_kotor as c on c.nm_partai = b.nm_partai
+        where a.no_invoice = $r->no_invoice and a.kategori = 'cabut'
+        ");
+
+        $grades = [];
+
+        foreach ($formulir as $f) {
+            $idg = $f->grade_id;
+
+            if (!isset($grades[$idg])) {
+                $res = Http::get("https://ptagrikagatyaarum.com/api/apikodesbw/detail_grade_sbw?id=$idg");
+                $res = json_decode($res, true);
+                $grades[$idg] = $res['data']; // simpan grade sesuai ID
+            }
+        }
+        $rm_walet = [];
+
+        foreach ($formulir as $f) {
+            $idrm = $f->rwb_id;
+
+            if (!isset($rm_walet[$idg])) {
+                $res = Http::get("https://ptagrikagatyaarum.com/api/apikodesbw/detail_rumah_walet?id=$idrm");
+                $res = json_decode($res, true);
+                $rm_walet[$idrm] = $res['data']; // simpan grade sesuai ID
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        $data = [
+            'title' => 'Gudang Sarang',
+            'formulir' => $formulir,
+            'no_invoice' => $r->no_invoice,
+            'grades'   => $grades,
+            'rm_walet' => $rm_walet
+            // 'ket_formulir' => $ket_formulir
+        ];
+        return view('home.bkbaru.print_label', $data);
     }
 
     public function batal(Request $r)

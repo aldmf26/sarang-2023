@@ -68,6 +68,10 @@
                                     target="_blank">
                                     <span class="badge bg-primary">Print</span>
                                 </a>
+                                <a href="{{ route('bkbaru.print_label', ['no_invoice' => $d->no_invoice]) }}"
+                                    target="_blank">
+                                    <span class="badge bg-primary">Print Label</span>
+                                </a>
 
 
 
