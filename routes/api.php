@@ -86,6 +86,7 @@ Route::controller(HasapController::class)
         Route::get('/pengiriman_bulan', 'pengiriman_bulan')->name('pengiriman_bulan');
         Route::get('/pengiriman_bulan_detaiil', 'pengiriman_bulan_detaiil')->name('pengiriman_bulan_detaiil');
         Route::get('/no_box_label', 'no_box_label')->name('no_box_label');
+        Route::get('/no_box_label_detail', 'no_box_label_detail')->name('no_box_label_detail');
     });
 
 

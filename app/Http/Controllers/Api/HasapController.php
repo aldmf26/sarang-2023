@@ -1609,4 +1609,15 @@ ORDER BY g.grade DESC;");
             'data' => $data
         ]);
     }
+    public function no_box_label_detail(Request $r)
+    {
+        $data = DB::selectOne("SELECT a.nm_partai, a.no_box as kode_lot, a.pcs_awal, a.gr_awal FROM bk as a where a.no_box = '$r->no_box' and a.kategori = 'cabut'
+        
+        ");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }
