@@ -72,11 +72,6 @@
                                     target="_blank">
                                     <span class="badge bg-primary">Print Label</span>
                                 </a>
-
-
-
-
-
                             </td>
                         </tr>
                     @endforeach
