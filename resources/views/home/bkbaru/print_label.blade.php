@@ -159,10 +159,10 @@
 
                             <tr>
                                 <td>
-                                    {!! QrCode::size(30)->generate('https://ptagrikagatyaarum.com/verify-ttd/1069') !!}
+                                    {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1069') !!}
                                 </td>
                                 <td>
-                                    {!! QrCode::size(30)->generate('https://ptagrikagatyaarum.com/verify-ttd/1060') !!}
+                                    {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1060') !!}
                                 </td>
                                 <td>
                                     PASS / REJECT <br>
