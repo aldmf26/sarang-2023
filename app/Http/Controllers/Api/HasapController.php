@@ -1598,4 +1598,13 @@ ORDER BY g.grade DESC;");
             'data' => $data
         ]);
     }
+    public function no_box_label(Request $r)
+    {
+        $data = DB::select("SELECT a.nm_partai, a.no_box, a.pcs, a.gr FROM bk as a where a.tgl_input between '$r->tgl1' and '$r->tgl2' and a.kategori = 'cabut'");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
 }

@@ -85,6 +85,7 @@ Route::controller(HasapController::class)
         Route::get('/hasil_penimbangan_new', 'hasil_penimbangan_new')->name('hasil_penimbangan_new');
         Route::get('/pengiriman_bulan', 'pengiriman_bulan')->name('pengiriman_bulan');
         Route::get('/pengiriman_bulan_detaiil', 'pengiriman_bulan_detaiil')->name('pengiriman_bulan_detaiil');
+        Route::get('/no_box_label', 'no_box_label')->name('no_box_label');
     });
 
 
