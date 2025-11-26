@@ -158,7 +158,7 @@
                             </tr>
 
                             <tr>
-                                <td>
+                                <td style="height: 55px">
                                     {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1069') !!}
                                 </td>
                                 <td>
