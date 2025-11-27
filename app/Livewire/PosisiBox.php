@@ -77,10 +77,10 @@ class PosisiBox extends Component
     public function updateGrading()
     {
         DB::table('grading_partai')->where([
-            ['no_invoice', $this->noInvoice], 
+            ['no_invoice', $this->noInvoice],
             ['box_pengiriman', $this->kodeSebelumnya],
             ['gr', $this->grGrading]
-            ])->update([
+        ])->update([
             'box_pengiriman' => $this->kodeSesudahnya
         ]);
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
@@ -89,7 +89,7 @@ class PosisiBox extends Component
     public function render()
     {
         $data = [
-            'pengawas' => User::where('posisi_id', '13')->get(),
+            'pengawas' => User::wherein('posisi_id', [13, 14])->get(),
         ];
         return view('livewire.posisi-box', $data);
     }
