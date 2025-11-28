@@ -220,6 +220,7 @@ class GudangSarangController extends Controller
         foreach ($formulir as $f) {
             $idrm = $f->rwb_id;
 
+
             if (!isset($rm_walet[$idg])) {
                 $res = Http::get("https://ptagrikagatyaarum.com/api/apikodesbw/detail_rumah_walet?id=$idrm");
                 $res = json_decode($res, true);

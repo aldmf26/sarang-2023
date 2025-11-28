@@ -114,7 +114,7 @@
                             <tr>
                                 <td>Nama Produsen</td>
                                 <td>:</td>
-                                <td>{{ $rm_walet[$d->rwb_id]['rumah_walet']['nama'] }}</td>
+                                <td>{{ $rm_walet[$d->rwb_id]['rumah_walet']['nama'] ?? '-' }}</td>
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td>Pcs</td>
@@ -144,7 +144,7 @@
                             <tr>
                                 <td>Kode Grading</td>
                                 <td>:</td>
-                                <td>{{ $grades[$d->grade_id]['grade']['kode'] }}</td>
+                                <td>{{ $grades[$d->grade_id]['grade']['kode'] ?? '-' }}</td>
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td>Nama Anak</td>
