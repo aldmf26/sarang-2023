@@ -114,7 +114,7 @@
                             <tr>
                                 <td>Nama Produsen</td>
                                 <td>:</td>
-                                <td>{{ $rm_walet[4]['rumah_walet']['nama'] ?? $d->rwb_id }}</td>
+                                <td>{{ $rm_walet[$d->rwb_id]['rumah_walet']['nama'] ?? $d->rwb_id }}</td>
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td>Pcs</td>
