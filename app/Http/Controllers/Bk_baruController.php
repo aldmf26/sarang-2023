@@ -253,15 +253,6 @@ class Bk_baruController extends Controller
             }
         }
 
-
-
-
-
-
-
-
-
-
         $data = [
             'title' => 'Gudang Sarang',
             'formulir' => $formulir,
