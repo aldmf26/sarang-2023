@@ -165,7 +165,7 @@
                                     {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1060') !!}
                                 </td>
                                 <td>
-                                    PASS / REJECT <br>
+                                    PASS / <span style="text-decoration: line-through;">REJECT</span> <br>
                                     <span style="font-size: 8px">(Coret yang tidak perlu)</span>
                                 </td>
                             </tr>
