@@ -296,6 +296,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/selesai_grading', 'selesai_grading')->name('selesai_grading');
             Route::get('/batal_grading', 'batal_grading')->name('batal_grading');
             Route::get('/print_formulir_grading', 'print_formulir_grading')->name('print_formulir_grading');
+            Route::get('/print_label', 'print_label')->name('print_label');
         });
     // Route::controller(RekapanController::class)
     //     ->prefix('home/rekapan')
@@ -408,6 +409,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/add', 'add')->name('add');
             Route::get('/invoice', 'invoice')->name('invoice');
             Route::get('/print_formulir', 'print_formulir')->name('print_formulir');
+            Route::get('/print_label', 'print_label')->name('print_label');
             Route::get('/batal', 'batal')->name('batal');
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::get('/selesai', 'selesai')->name('selesai');

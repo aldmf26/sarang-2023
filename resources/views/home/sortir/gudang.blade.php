@@ -162,7 +162,7 @@
                                     <td align="center">
                                         <input type="checkbox" class="form-check"
                                             @change="tambah({{ $d->no_box }}, {{ $d->pcs_awal + $d->pcs_tdk_sortir }}, {{ $d->gr_awal + $d->gr_tdk_sortir }},{{ $d->ttl_rp }})"
-                                            value="{{ $d->no_box }}" x-model="cek">
+                                            value="{{ $d->no_box }}">
                                     </td>
                                 </tr>
                             @endforeach
@@ -251,39 +251,40 @@
                         },
 
                         toggleAll() {
-    const rows = document.querySelectorAll('#tbl3 tbody tr');
+                            const rows = document.querySelectorAll('#tbl3 tbody tr');
 
-    this.selectedItem = [];
-    this.cek = [];
+                            this.selectedItem = [];
+                            this.cek = [];
 
-    if (this.allChecked) {
-        rows.forEach(tr => {
-            const no_box = tr.children[0].innerText.trim();
-            const pcs = Number(tr.children[1].innerText.trim());
-            const gr = Number(tr.children[2].innerText.trim());
-            const ttl_rp = Number(tr.children[3].innerText.replace(/\./g, '').trim() || 0);
+                            if (this.allChecked) {
+                                rows.forEach(tr => {
+                                    const no_box = tr.children[0].innerText.trim();
+                                    const pcs = Number(tr.children[1].innerText.trim());
+                                    const gr = Number(tr.children[2].innerText.trim());
+                                    const ttl_rp = Number(tr.children[3].innerText.replace(/\./g, '')
+                                        .trim() || 0);
 
-            this.selectedItem.push({
-                no_box,
-                pcs_awal: pcs,
-                gr_awal: gr,
-                ttl_rp: ttl_rp
-            });
+                                    this.selectedItem.push({
+                                        no_box,
+                                        pcs_awal: pcs,
+                                        gr_awal: gr,
+                                        ttl_rp: ttl_rp
+                                    });
 
-            this.cek.push(no_box);
+                                    this.cek.push(no_box);
 
-            // set checkboxes checked
-            tr.querySelector('input[type=checkbox]').checked = true;
-        });
-    } else {
-        rows.forEach(tr => {
-            tr.querySelector('input[type=checkbox]').checked = false;
-        });
+                                    // set checkboxes checked
+                                    tr.querySelector('input[type=checkbox]').checked = true;
+                                });
+                            } else {
+                                rows.forEach(tr => {
+                                    tr.querySelector('input[type=checkbox]').checked = false;
+                                });
 
-        this.selectedItem = [];
-        this.cek = [];
-    }
-},
+                                this.selectedItem = [];
+                                this.cek = [];
+                            }
+                        },
 
 
 
