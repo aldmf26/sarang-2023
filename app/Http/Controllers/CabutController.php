@@ -612,7 +612,6 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
-            'cabut' => $cabut,
             'sumPgws' => $sumPgws,
         ];
         return view('home.cabut.global', $data);
