@@ -29,12 +29,8 @@
                             ]) }}">{{ $d->name }}</a>
                     </li>
                 @endforeach
-
             </ul>
-
-
         </div>
-
     </x-slot>
 
     <x-slot name="cardBody">
