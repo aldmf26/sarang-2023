@@ -116,8 +116,7 @@
                         </tr>
                     </tfoot>
                 </table>
-            </div>
-            <div class="col-lg-3">
+
                 <h6 x-transition x-show="sum">Summary Gaji Perlokasi </h6>
                 <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
                     <thead>
@@ -148,7 +147,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-8">
                 <h6 x-transition x-show="sum">Summary Pcs Gr Cabut</h6>
                 <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
                     <thead>
@@ -342,7 +341,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                                                              @foreach ($tbl as $data)
+                                                                               @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
