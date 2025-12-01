@@ -184,7 +184,8 @@
                                 $totalHcr += $c->hcr;
                             @endphp
                             <tr>
-                                <td class="text-start">{{ $c->pengawas_name }}</td>
+                                <td class="text-start">
+                                    {{ $c->pengawas_name == 'Arbayah' ? 'Steven' : $c->pengawas_name }}</td>
                                 <td class="text-end">{{ number_format($c->pcs_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($c->gr_awal, 0) }}</td>
                                 <td class="text-end">{{ number_format($c->pcs_akhir, 0) }}</td>
@@ -340,7 +341,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                                                          @foreach ($tbl
+                                                                           @foreach ($tbl
                                 as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
