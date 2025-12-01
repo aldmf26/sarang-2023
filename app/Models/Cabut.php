@@ -11,6 +11,12 @@ class Cabut extends Model
     use HasFactory;
     protected $table = 'cabut';
     protected $guarded = [];
+
+    public function pengawas()
+    {
+        return $this->belongsTo(User::class, 'id_pengawas', 'id');
+    }
+
     public static function getCabut($history = false)
     {
         $id_user = auth()->user()->id;
