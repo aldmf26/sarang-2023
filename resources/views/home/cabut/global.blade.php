@@ -150,7 +150,69 @@
             </div>
             <div class="col-lg-12">
                 <h6 x-transition x-show="sum">Summary Pcs Gr Cabut</h6>
+                <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="bg-primary text-white">Pgws</th>
+                            <th class="bg-primary text-white text-end">Pcs Awal</th>
+                            <th class="bg-primary text-white text-end">Gr Awal</th>
+                            <th class="bg-primary text-white text-end">Pcs Akhir</th>
+                            <th class="bg-primary text-white text-end">Gr Akhir</th>
+                            <th class="bg-primary text-white text-end">Hcr</th>
+                            <th class="bg-primary text-white text-end">Susut</th>
+                            <th class="bg-primary text-white text-end">Susut + hcr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $totalPcsAwal = 0;
+                            $totalGrAwal = 0;
+                            $totalPcsAkhir = 0;
+                            $totalGrAkhir = 0;
+                            $totalHcr = 0;
+                        @endphp
 
+                        @foreach ($cabut as $c)
+                            @php
+                                $susut = $c->gr_awal > 0 ? (1 - $c->gr_akhir / $c->gr_awal) * 100 : 0;
+                                $susutHcr = $c->gr_awal > 0 ? (1 - ($c->gr_akhir + $c->hcr) / $c->gr_awal) * 100 : 0;
+
+                                $totalPcsAwal += $c->pcs_awal;
+                                $totalGrAwal += $c->gr_awal;
+                                $totalPcsAkhir += $c->pcs_akhir;
+                                $totalGrAkhir += $c->gr_akhir;
+                                $totalHcr += $c->hcr;
+                            @endphp
+                            <tr>
+                                <td class="text-start">{{ $c->pengawas_name }}</td>
+                                <td class="text-end">{{ number_format($c->pcs_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($c->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($c->pcs_akhir, 0) }}</td>
+                                <td class="text-end">{{ number_format($c->gr_akhir, 0) }}</td>
+                                <td class="text-end">{{ number_format($c->hcr, 0) }}</td>
+                                <td class="text-end">{{ number_format($susut, 0) }}</td>
+                                <td class="text-end">{{ number_format($susutHcr, 0) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="bg-info text-white">
+                        @php
+                            $totalSusut = $totalGrAwal > 0 ? (1 - $totalGrAkhir / $totalGrAwal) * 100 : 0;
+                            $totalSusutHcr =
+                                $totalGrAwal > 0 ? (1 - ($totalGrAkhir + $totalHcr) / $totalGrAwal) * 100 : 0;
+                        @endphp
+                        <tr>
+                            <th>Total</th>
+                            <th class="text-end">{{ number_format($totalPcsAwal, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalGrAwal, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalPcsAkhir, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalGrAkhir, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalHcr, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalSusut, 0) }}</th>
+                            <th class="text-end">{{ number_format($totalSusutHcr, 0) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <div class="col-lg-6">
                 <span class="me-2">Filter : </span>

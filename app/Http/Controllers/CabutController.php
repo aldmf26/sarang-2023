@@ -560,7 +560,44 @@ class CabutController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
-
+        $cabut = DB::select("
+        SELECT 
+            id_pengawas,
+            SUM(pcs_awal) as pcs_awal,
+            SUM(gr_awal) as gr_awal,
+            SUM(pcs_akhir) as pcs_akhir,
+            SUM(gr_akhir) as gr_akhir,
+            SUM(hcr) as hcr,
+            u.name as pengawas_name
+        FROM (
+            SELECT 
+                id_pengawas,
+                sum(pcs_awal) as pcs_awal,
+                sum(gr_awal) as gr_awal,
+                sum(pcs_akhir) as pcs_akhir,
+                sum(gr_akhir) as gr_akhir,
+                sum(pcs_hcr) as hcr
+            FROM cabut
+            WHERE bulan_dibayar = ? AND tahun_dibayar = ?
+            GROUP BY id_pengawas
+            
+            UNION ALL
+            
+            SELECT 
+                id_pengawas,
+                0 as pcs_awal,
+                sum(gr_eo_awal) as gr_awal,
+                0 as pcs_akhir,
+                sum(gr_eo_akhir) as gr_akhir,
+                0 as hcr
+            FROM eo
+            WHERE bulan_dibayar = ? AND tahun_dibayar = ?
+            GROUP BY id_pengawas
+        ) as combined
+        LEFT JOIN users as u ON combined.id_pengawas = u.id
+        GROUP BY id_pengawas, u.name
+        ORDER BY u.name
+    ", [$bulan, $tahun, $bulan, $tahun]);
 
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
@@ -612,6 +649,7 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
+            'cabut' => $cabut,
             'sumPgws' => $sumPgws,
         ];
         return view('home.cabut.global', $data);
