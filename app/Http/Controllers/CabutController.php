@@ -854,8 +854,8 @@ class CabutController extends Controller
                 $data->kelas_number = $kelasNumber;
                 return $data;
             })->sortBy([
-                ['total_gaji_calc', 'desc'],   // Dalam kelas yang sama, urutkan gaji (besar ke kecil)
-                ['kelas_number', 'desc']
+                ['kelas_number', 'desc'],
+                ['total_gaji_calc', 'desc']   // Dalam kelas yang sama, urutkan gaji (besar ke kecil)
             ])->values();
 
 
