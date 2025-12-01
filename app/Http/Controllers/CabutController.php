@@ -839,7 +839,27 @@ class CabutController extends Controller
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
-            foreach ($tbl as $data) {
+
+            // URUTKAN DATA DI SINI
+            $tblSorted = collect($tbl)->map(function ($data) {
+                // Hitung total gaji untuk setiap row
+                $uang_makan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
+                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $uang_makan - $data->ttl_rp_denda;
+
+                // Ambil angka dari kelas (misal: "Kelas 2" => 2)
+                preg_match('/\d+/', $data->kelas, $matches);
+                $kelasNumber = isset($matches[0]) ? (int)$matches[0] : 999;
+
+                $data->total_gaji_calc = $ttl;
+                $data->kelas_number = $kelasNumber;
+                return $data;
+            })->sortBy([
+                ['total_gaji_calc', 'desc'],   // Dalam kelas yang sama, urutkan gaji (besar ke kecil)
+                ['kelas_number', 'desc']
+            ])->values();
+
+
+            foreach ($tblSorted as $data) {
                 $sheet->setCellValue('A' . $row, $data->pgws)
                     ->setCellValue('B' . $row, $data->hariMasuk)
                     ->setCellValue('C' . $row, $data->nm_anak)
