@@ -79,7 +79,7 @@
                 return new Intl.NumberFormat().format(value);
             }
         }">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <h6 @click="sum = !sum">Summary Gaji <span class="badge bg-primary text-white">tampilkan <i
                             class="fas fa-eye"></i></span></h6>
                 <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
@@ -117,7 +117,7 @@
                     </tfoot>
                 </table>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <h6 x-transition x-show="sum">Summary Gaji Perlokasi </h6>
                 <table x-transition x-show="sum" class="table table-stripped table-bordered table-hover">
                     <thead>
@@ -276,7 +276,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                                    @foreach ($tbl as $data)
+                                                      @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
