@@ -562,10 +562,10 @@ class CabutController extends Controller
         $tahun =  $r->tahun ?? date('Y');
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
-        JOIN users as b on a.penerima = b.id
-        WHERE b.posisi_id = 13
-        
-        group by b.id ORDER BY b.lokasi ASC");
+    JOIN users as b on a.penerima = b.id
+    WHERE b.posisi_id = 13
+    
+    group by b.id ORDER BY b.lokasi ASC");
 
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
 
@@ -575,6 +575,8 @@ class CabutController extends Controller
         foreach ($pengawas as $p) {
 
             $ttlRp = 0;
+            $ttlRpPotongKasbon = 0; // PERBAIKAN: inisialisasi di sini
+
             $tbl2 = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl2 as $data) {
                 $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
@@ -586,10 +588,11 @@ class CabutController extends Controller
                     $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
-                $ttlRpPotongKasbon = $ttl - $data->kasbon;
+
+                $sisaGaji = $ttl - $data->kasbon; // PERBAIKAN: rename variable
 
                 $ttlRp += $ttl;
-                $ttlRpPotongKasbon += $ttlRpPotongKasbon;
+                $ttlRpPotongKasbon += $sisaGaji; // PERBAIKAN: gunakan += bukan =
             }
             if ($ttlRp != 0) {
 

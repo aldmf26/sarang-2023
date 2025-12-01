@@ -66,8 +66,10 @@
                 this.data.forEach(d => {
                     if (!this.totalPerLokasi[d.lokasi]) {
                         this.totalPerLokasi[d.lokasi] = 0;
+                        this.totalPerLokasiPotongKasbon[d.lokasi] = 0;
                     }
                     this.totalPerLokasi[d.lokasi] += d.ttlRp;
+                    this.totalPerLokasiPotongKasbon[d.lokasi] += d.ttlRpPotongKasbon;
                 });
             },
         
@@ -85,7 +87,8 @@
                         <tr>
                             <th class="bg-primary text-white">Lokasi</th>
                             <th class="bg-primary text-white">Pgws</th>
-                            <th class="bg-primary text-white text-end">Gaji</th>
+                            <th class="bg-primary text-white text-end">Total Gaji</th>
+                            <th class="bg-primary text-white text-end">Sisa Gaji</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,6 +97,7 @@
                                 <td class="text-start">{{ $d['lokasi'] }}</td>
                                 <td class="text-start">{{ $d['pgws'] }}</td>
                                 <td class="text-end">{{ number_format($d['ttlRp']) }}</td>
+                                <td class="text-end">{{ number_format($d['ttlRpPotongKasbon']) }}</td>
                             </tr>
                         @empty
                         @endforelse
@@ -103,6 +107,10 @@
                             <th colspan="2" class="text-center">Total</th>
                             <th class="text-end">
                                 <h6 class="text-white">{{ number_format(sumCol($sumPgws, 'ttlRp')) }}</h6>
+
+                            </th>
+                            <th class="text-end">
+                                <h6 class="text-white">{{ number_format(sumCol($sumPgws, 'ttlRpPotongKasbon')) }}</h6>
                             </th>
 
                         </tr>
@@ -116,6 +124,8 @@
                         <tr>
                             <th class="bg-primary text-white">Lokasi</th>
                             <th class="bg-primary text-white text-end">Ttl Gaji</th>
+                            <th class="bg-primary text-white text-end">Sisa Gaji</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -124,7 +134,7 @@
                                 <tr>
                                     <td x-text="lokasi" class="text-start"></td>
                                     <td x-text="formatRupiah(total)" class="text-end"></td>
-                                    <td x-text="formatRupiah(total)" class="text-end"></td>
+                                    <td x-text="formatRupiah(totalPerLokasiPotongKasbon[lokasi])" class="text-end"></td>
                                 </tr>
                             </template>
                         </template>
@@ -132,7 +142,7 @@
                         <!-- Tampilan jika array kosong -->
                         <template x-if="Object.keys(totalPerLokasi).length === 0">
                             <tr>
-                                <td colspan="2" class="text-center">Data tidak tersedia</td>
+                                <td colspan="3" class="text-center">Data tidak tersedia</td>
                             </tr>
                         </template>
                     </tbody>
@@ -266,7 +276,7 @@
                             $ttlSisaGaji = 0;
 
                         @endphp
-                                             @foreach ($tbl as $data)
+                                                    @foreach ($tbl as $data)
                         <tr>
                             <td>{{ $data->pgws }}</td>
                             <td>{{ $data->hariMasuk }}</td>
