@@ -560,19 +560,7 @@ class CabutController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
-        $cabut = Cabut::select(
-            'id_pengawas',
-            DB::raw('sum(pcs_awal) as pcs_awal'),
-            DB::raw('sum(gr_awal) as gr_awal'),
-            DB::raw('sum(pcs_akhir) as pcs_akhir'),
-            DB::raw('sum(gr_akhir) as gr_akhir'),
-            DB::raw('sum(pcs_hcr) as hcr')
-        )
-            ->with('pengawas:id,name') // eager load hanya id dan name
-            ->where('bulan_dibayar', $bulan)
-            ->where('tahun', $tahun)
-            ->groupBy('id_pengawas')
-            ->get();
+
 
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
