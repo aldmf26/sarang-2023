@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\DB;
 
 class Eo extends Model
 {
+    use HasFactory;
+    protected $table = 'eo';
+    protected $guarded = [];
+
+    public function pengawas()
+    {
+        return $this->belongsTo(User::class, 'id_pengawas', 'id');
+    }
+    
     public static function queryRekap($id_pengawas = null,$bulan = null, $tahun = null)
     {
         return DB::select("SELECT a.no_box,b.gr_bk, sum(a.gr_eo_awal) as gr_eo_awal, sum(a.gr_eo_akhir) as gr_eo_akhir, (b.gr_bk - sum(a.gr_eo_awal)) as gr_sisa, sum(a.ttl_rp) as rupiah,

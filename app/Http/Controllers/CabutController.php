@@ -560,21 +560,61 @@ class CabutController extends Controller
     {
         $bulan =  $r->bulan ?? date('m');
         $tahun =  $r->tahun ?? date('Y');
+        $cabut = DB::select("
+        SELECT 
+            id_pengawas,
+            SUM(pcs_awal) as pcs_awal,
+            SUM(gr_awal) as gr_awal,
+            SUM(pcs_akhir) as pcs_akhir,
+            SUM(gr_akhir) as gr_akhir,
+            SUM(hcr) as hcr,
+            u.name as pengawas_name
+        FROM (
+            SELECT 
+                id_pengawas,
+                sum(pcs_awal) as pcs_awal,
+                sum(gr_awal) as gr_awal,
+                sum(pcs_akhir) as pcs_akhir,
+                sum(gr_akhir) as gr_akhir,
+                sum(pcs_hcr) as hcr
+            FROM cabut
+            WHERE bulan_dibayar = ? AND tahun_dibayar = ?
+            GROUP BY id_pengawas
+            
+            UNION ALL
+            
+            SELECT 
+                id_pengawas,
+                0 as pcs_awal,
+                sum(gr_eo_awal) as gr_awal,
+                0 as pcs_akhir,
+                sum(gr_eo_akhir) as gr_akhir,
+                0 as hcr
+            FROM eo
+            WHERE bulan_dibayar = ? AND tahun_dibayar = ?
+            GROUP BY id_pengawas
+        ) as combined
+        LEFT JOIN users as u ON combined.id_pengawas = u.id
+        GROUP BY id_pengawas, u.name
+        ORDER BY u.name
+    ", [$bulan, $tahun, $bulan, $tahun]);
+
 
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
-        JOIN users as b on a.penerima = b.id
-        WHERE b.posisi_id = 13
-        
-        group by b.id ORDER BY b.lokasi ASC");
+    JOIN users as b on a.penerima = b.id
+    WHERE b.posisi_id = 13
+    
+    group by b.id ORDER BY b.lokasi ASC");
 
         $id_pengawas = $r->id_pengawas ?? auth()->user()->id;
-
         $tbl = Cabut::getRekapGlobal($bulan, $tahun, $id_pengawas);
 
         $sumPgws = [];
         foreach ($pengawas as $p) {
 
             $ttlRp = 0;
+            $ttlRpPotongKasbon = 0; // PERBAIKAN: inisialisasi di sini
+
             $tbl2 = Cabut::getRekapGlobal($bulan, $tahun, $p->id_pengawas);
             foreach ($tbl2 as $data) {
                 $uangMakan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
@@ -586,10 +626,11 @@ class CabutController extends Controller
                     $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
-                $ttlRpPotongKasbon = $ttl - $data->kasbon;
+
+                $sisaGaji = $ttl - $data->kasbon; // PERBAIKAN: rename variable
 
                 $ttlRp += $ttl;
-                $ttlRpPotongKasbon += $ttlRpPotongKasbon;
+                $ttlRpPotongKasbon += $sisaGaji; // PERBAIKAN: gunakan += bukan =
             }
             if ($ttlRp != 0) {
 
@@ -608,6 +649,7 @@ class CabutController extends Controller
             'pengawas' => $pengawas,
             'id_pengawas' => $id_pengawas,
             'tbl' => $tbl,
+            'cabut' => $cabut,
             'sumPgws' => $sumPgws,
         ];
         return view('home.cabut.global', $data);
@@ -836,7 +878,27 @@ class CabutController extends Controller
             $bulanDibayar = date('M Y', strtotime('01-' . $bulan . '-' . date('Y', strtotime($tahun))));
             $row = 3;
             $tbl = Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas);
-            foreach ($tbl as $data) {
+
+            // URUTKAN DATA DI SINI
+            $tblSorted = collect($tbl)->map(function ($data) {
+                // Hitung total gaji untuk setiap row
+                $uang_makan = empty($data->umk_nominal) ? 0 : $data->umk_nominal * $data->hariMasuk;
+                $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $uang_makan - $data->ttl_rp_denda;
+
+                // Ambil angka dari kelas (misal: "Kelas 2" => 2)
+                preg_match('/\d+/', $data->kelas, $matches);
+                $kelasNumber = isset($matches[0]) ? (int)$matches[0] : 999;
+
+                $data->total_gaji_calc = $ttl;
+                $data->kelas_number = $kelasNumber;
+                return $data;
+            })->sortBy([
+                ['kelas_number', 'desc'],
+                ['total_gaji_calc', 'desc']   // Dalam kelas yang sama, urutkan gaji (besar ke kecil)
+            ])->values();
+
+
+            foreach ($tblSorted as $data) {
                 $sheet->setCellValue('A' . $row, $data->pgws)
                     ->setCellValue('B' . $row, $data->hariMasuk)
                     ->setCellValue('C' . $row, $data->nm_anak)
