@@ -15,7 +15,10 @@ if (!function_exists('tanggalFilter')) {
 
         $result = [];
         $today = date('Y-m-d');
-        $firstDayOfMonth = date('Y-m-01');
+
+
+        $firstDayOfLastMonth = date('Y-m-01', strtotime('-1 month'));
+
 
         switch ($period) {
             case 'daily':
