@@ -84,34 +84,37 @@
                 @foreach ($formulir as $i => $d)
                     <div class="label mt-1">
 
-                        <div class="header">
+                        <div class="header mb-2">
                             <div class="d-flex align-items-start">
                                 <img src="{{ asset('img/logo.jpeg') }}" class="logo" alt="Logo"
                                     style="height:40px;">
                                 <div class="flex-grow-1 text-center">
                                     <p style="font-size: 9px; margin:0;">PT. AGRIKA GATYA ARUM</p>
                                     <p style="font-size: 9px; margin:0;">
-                                        <strong><u>Identitas Bahan Baku</u></strong>
+                                        <strong><u>Label Cabut</u></strong>
                                     </p>
                                 </div>
                             </div>
+
                         </div>
                         @php
 
                         @endphp
 
-                        <table style="font-size: 9px; text-align: left">
+                        <table style="font-size: 9px; text-align: left" width="100%">
                             <tr>
-                                <td>Nama Bahan Baku</td>
+                                <td>Grade</td>
                                 <td>:</td>
                                 <th>{{ ucwords($d->ket) }}</th>
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                <td>No Box</td>
-                                <td>: {{ $d->no_box }}</td>
+                                {{-- <td>No Box</td>
+                                <td>: {{ $d->no_box }}</td> --}}
+                                <td>Nama Anak</td>
+                                <td>: {{ ucfirst($d->nama_anak) }}</td>
                             </tr>
 
-                            <tr>
+                            {{-- <tr>
                                 <td>Nama Produsen</td>
                                 <td>:</td>
                                 <td>{{ $rm_walet[$d->rwb_id]['rumah_walet']['nama'] ?? $d->rwb_id }}</td>
@@ -129,55 +132,64 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td>Gram</td>
                                 <td>: {{ $d->gr_awal }} awal - {{ $d->gr_akhir }} akhir</td>
+                            </tr> --}}
+
+                            <tr>
+                                <td>Partai</td>
+                                <td>:</td>
+                                <td>{{ $d->nm_partai }}</td>
+                                <td colspan="8">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>No Box</td>
+                                <td>: {{ $d->no_box }}</td>
+                                {{-- <td>: {{ number_format((1 - $d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td> --}}
                             </tr>
 
                             <tr>
-                                <td>Kode Lot</td>
+                                <td>Pengawas</td>
                                 <td>:</td>
-                                <td>{{ $d->no_invoice }}</td>
+                                <td>{{ $d->pengawas }}</td>
+                                <td colspan="8">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Pcs</td>
+                                <td>: {{ $d->pcs_awal }} awal - {{ $d->pcs_akhir }} akhir</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+
+                                <td colspan="8">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Gram</td>
+                                <td>: {{ $d->gr_awal }} awal - {{ $d->gr_akhir }} akhir</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td>Susut</td>
                                 <td>: {{ number_format((1 - $d->gr_akhir / $d->gr_awal) * 100, 0) }}%</td>
                             </tr>
-
                             <tr>
-                                <td>Kode Grading</td>
-                                <td>:</td>
-                                <td>{{ $grades[$d->grade_id]['grade']['kode'] ?? '-' }}</td>
+                                <td colspan="3"></td>
+
                                 <td colspan="8">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                <td>Nama Anak</td>
-                                <td>: {{ ucfirst($d->nama_anak) }}</td>
+                                <td>Nama Cetak</td>
+                                <td>: </td>
                             </tr>
 
-                            <tr>
-                                <td>Keterangan</td>
-                                <td>:</td>
-                                <td>{{ substr($d->nm_partai, 3) }}</td>
-                            </tr>
+
                         </table>
 
-                        <table class="signature-table">
+                        <table>
                             <tr>
-                                <td>KEPALA GUDANG BAHAN BAKU</td>
-                                <td>KEPALA QC</td>
-                                <td>STATUS</td>
+                                <td style="height: 60px">&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
 
-                            <tr>
-                                <td style="height: 55px">
-                                    {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1069') !!}
-                                </td>
-                                <td>
-                                    {!! QrCode::size(40)->generate('https://ptagrikagatyaarum.com/verify-ttd/1060') !!}
-                                </td>
-                                <td>
-                                    PASS / <span style="text-decoration: line-through;">REJECT</span>
-                                    <br>
-                                    <span style="font-size: 8px">(Coret yang tidak perlu)</span>
-                                </td>
-                            </tr>
+
                         </table>
 
                     </div>
