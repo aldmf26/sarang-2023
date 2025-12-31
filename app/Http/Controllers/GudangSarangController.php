@@ -202,7 +202,7 @@ class GudangSarangController extends Controller
         LEFT JOIN tb_anak AS f ON f.id_anak = d.id_anak
         LEFT JOIN tb_anak AS g ON g.id_anak = e.id_anak
         left join users as h on h.id = a.id_pemberi
-        where a.no_invoice = 2405 and a.kategori = 'cetak'
+        where a.no_invoice = $r->no_invoice and a.kategori = 'cetak'
         group by a.no_box;
         ");
 
