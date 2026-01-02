@@ -129,7 +129,7 @@ class AbsenController extends Controller
     public function create(Request $r)
     {
         $tgl = Carbon::parse($r->tgl);
-        $tahun = 2025;
+        $tahun = date('Y');
         $bulan = $tgl->month;
         if ($tgl->day >= 27 && $tgl->day <= 31) {
             $bulan += 1;

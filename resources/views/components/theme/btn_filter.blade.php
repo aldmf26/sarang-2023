@@ -42,19 +42,17 @@
             <div class="col-lg-4 bulan_muncul mt-2">
                 <label for="">Tahun</label>
                 <select name="tahun" id="" class="selectView bulan">
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024" selected>2024</option>
-                    <option value="2025" selected>2025</option>
+                   @for($i = 2022; $i <= 2026; $i++)
+                    <option :value="$i">{{$i}}</option>
+                    @endfor
                 </select>
             </div>
             <div class="col-lg-8 tahun_muncul mt-2">
                 <label for="">Tahun</label>
                 <select name="tahun" id="" class="selectView tahun">
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
+                    @for($i = 2022; $i <= 2026; $i++)
+                    <option :value="$i">{{$i}}</option>
+                    @endfor
                 </select>
             </div>
         </div>
