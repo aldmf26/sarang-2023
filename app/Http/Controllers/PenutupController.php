@@ -21,7 +21,7 @@ class PenutupController extends Controller
         if ($bulan == 0) {
             $bulan = 12;
         }
-        $tahun = date('Y');
+        $tahun = 2025;
         $pengawas = DB::select("SELECT b.id as id_pengawas,b.name,b.lokasi FROM bk as a
                 JOIN users as b on a.penerima = b.id
                 WHERE  b.lokasi != ''
