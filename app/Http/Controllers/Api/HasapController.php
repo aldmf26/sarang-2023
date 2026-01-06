@@ -1252,7 +1252,7 @@ ORDER BY  tgl ASC;");
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
   where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') and d.nm_partai  in('bjm 1003','bjm 1004')
 ) AS hasil
-WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
+WHERE tgl = '$r->tgl' 
 group by tgl, no_box
 ORDER BY  no_box ASC;");
         return response()->json([
