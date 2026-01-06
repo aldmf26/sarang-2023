@@ -19,7 +19,7 @@
                     <th class="text-end dhead">Susut</th>
                     <th class="text-end dhead">Rp Trgt</th>
                     <th class="text-end dhead">Total Gaji</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -33,8 +33,21 @@
                                 id_cabut="{{ $d->id_cabut }}">{{ $d->no_box }}</a>
                         </td>
                         <td>{{ $d->nama }}</td>
-                        <td>{{ date('d M y', strtotime($d->tgl_terima)) }}</td>
-                        <td>{{ date('d M y', strtotime($d->tgl_serah)) }}</td>
+                        @php
+                            use Carbon\Carbon;
+
+                            $tglTerima = Carbon::parse($d->tgl_terima);
+                            $tglSerah = Carbon::parse($d->tgl_serah);
+                            $selisihHari = $tglTerima->diffInDays($tglSerah);
+                        @endphp
+
+                        <td class="{{ $selisihHari > 3 ? 'text-danger fw-bold' : '' }}">
+                            {{ $tglTerima->format('d M y') }}
+                        </td>
+
+                        <td class="{{ $selisihHari > 3 ? 'text-danger fw-bold' : '' }}">
+                            {{ $tglSerah->format('d M y') }}
+                        </td>
                         <td align="right">{{ $d->pcs_awal }}</td>
                         <td align="right">{{ $d->gr_awal }}</td>
                         <td align="right">{{ $d->gr_flx }}</td>
@@ -54,7 +67,7 @@
                         <td align="right">{{ number_format($d->rupiah, 0) }}
                         <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                         </td>
-                     
+
                     </tr>
                 @endforeach
             </tbody>

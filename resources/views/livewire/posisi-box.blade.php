@@ -182,9 +182,9 @@
                     <label for="">No Box</label>
                     <input type="text" wire:model="noBoxArr" class="form-control">
                 </div>
-                {{$noBoxArr}}
+                {{ $noBoxArr }}
                 <div class="col-12">
-                    <button wire:click='updateGrading' class="btn btn-sm btn-success btn-block"
+                    <button wire:click='updateGantiTgl' class="btn btn-sm btn-success btn-block"
                         type="button">Simpan</button>
                 </div>
             </div>

@@ -87,6 +87,32 @@ class PosisiBox extends Component
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
     }
 
+    public function updateGantiTgl()
+    {
+        $noBoxArr = explode(',', $this->noBoxArr);
+        $table = match ($this->selectedDivisi) {
+            'cabut' => 'cabut',
+            'cetak' => 'cetak_new',
+            'sortir' => 'sortir',
+        };
+
+        foreach ($noBoxArr as $noBox) {
+            $cekNoBox = DB::table($table)->where('no_box', trim($noBox))->first();
+
+            if (empty($cekNoBox)) {
+                $this->dispatch('showAlert', ['type' => 'error', 'message' => 'No Box ' . trim($noBox) . ' tidak ditemukan di tabel ' . $table]);
+                continue;
+            }
+
+            DB::table($table)->where('no_box', trim($noBox))->update([
+                'tgl_terima' => now(),
+                'tgl_serah' => now(),
+            ]);
+        }
+
+        $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Proses update tanggal selesai. Refresh halamannya']);
+    }
+
     public function render()
     {
         $data = [
