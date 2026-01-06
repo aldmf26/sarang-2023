@@ -52,7 +52,7 @@ class Cabut extends Model
             )
             ->join('tb_anak as b', 'a.id_anak', '=', 'b.id_anak')
             ->join('tb_kelas as c', 'a.id_kelas', '=', 'c.id_kelas')
-            ->join('tb_bk as d', 'a.no_box', '=', 'd.no_box')
+            ->join('bk as d', 'a.no_box', '=', 'd.no_box')
             ->where('a.no_box', '!=', '9999')
             ->where('a.id_pengawas', $id_user)
             ->whereIn('d.nm_partai', ['bjm 1003', 'bjm 1004'])
