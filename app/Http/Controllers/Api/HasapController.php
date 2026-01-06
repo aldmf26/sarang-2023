@@ -338,7 +338,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             FROM bk as d 
             where d.kategori ='Cabut'
         ) as d on d.no_box = a.no_box
-        where b.kategori = 'CTK' and a.selesai ='Y' and a.id_kelas_cetak != 14 $where
+        where b.kategori = 'CTK' and a.selesai ='Y' and a.id_kelas_cetak != 14 and d.nm_partai in('bjm 1003','bjm 1004')  $where
         group by a.tgl, a.id_pengawas
         order by a.tgl DESC
         ;");
