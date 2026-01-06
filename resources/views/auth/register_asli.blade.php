@@ -17,6 +17,9 @@
                 autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        @for ($i = 0; $i < $count; $i++)
+            
+        @endfor
 
         <!-- Password -->
         <div class="mt-4">
