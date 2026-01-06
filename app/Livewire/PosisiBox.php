@@ -21,6 +21,7 @@ class PosisiBox extends Component
         $selectedDivisi,
         $anak,
         $noBox,
+        $noBoxArr,
         $selectedNama;
 
     public function mount()
