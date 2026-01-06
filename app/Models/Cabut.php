@@ -20,7 +20,7 @@ class Cabut extends Model
     public static function getCabut($history = false)
     {
         $id_user = auth()->user()->id;
-        $cabut = DB::table('cabut as a')
+        $cabut =  DB::table('cabut as a')
             ->select(
                 'b.id_anak',
                 'a.no_box',
@@ -39,6 +39,7 @@ class Cabut extends Model
                 'a.bulan_dibayar',
                 'a.tgl_terima',
                 'a.id_cabut',
+                'a.selesai',
                 'b.nama',
                 'a.pcs_awal',
                 'a.gr_awal',
@@ -46,20 +47,15 @@ class Cabut extends Model
                 'a.pcs_akhir',
                 'a.pcs_hcr',
                 'a.gr_akhir',
+                'a.gr_awal',
                 'a.eot',
                 'c.denda_susut_persen',
-                'd.nm_partai' // opsional kalau mau ditampilkan
             )
-            ->join('tb_anak as b', 'a.id_anak', '=', 'b.id_anak')
-            ->join('tb_kelas as c', 'a.id_kelas', '=', 'c.id_kelas')
-            ->join('bk as d', 'a.no_box', '=', 'd.no_box')
-            ->where('a.no_box', '!=', '9999')
-            ->where('a.id_pengawas', $id_user)
-            ->whereIn('d.nm_partai', ['bjm 1003', 'bjm 1004'])
-            ->orderBy('a.selesai', 'ASC')
-            ->orderBy('a.tgl_terima', 'ASC')
-            ->get();
-
+            ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
+            ->join('tb_kelas as c', 'a.id_kelas', 'c.id_kelas')
+            ->where([['a.no_box', '!=', '9999'], ['a.id_pengawas', $id_user]])
+            ->orderBY('a.selesai', 'ASC')
+            ->orderBY('a.tgl_terima', 'ASC');
 
         if ($history) {
             return $cabut->where('a.penutup', 'Y')->get();
