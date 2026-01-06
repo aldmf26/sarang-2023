@@ -1085,7 +1085,7 @@ ON all_data.grade = done_data.grade;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') 
+  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and d.nm_partai not in('bjm 1003','bjm 1004')
     
     UNION ALL 
     
@@ -1111,7 +1111,7 @@ ON all_data.grade = done_data.grade;");
   left join tb_anak as e on e.id_anak = c.id_anak
   left join hasil_wawancara as f on f.id_anak = e.id_anak
   left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') 
+  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and d.nm_partai not in('bjm 1003','bjm 1004')
 
 ) AS hasil
 WHERE tgl_terima BETWEEN '2025-07-28' and now() and id_pengawas = $r->id_pengawas
