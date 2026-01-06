@@ -96,19 +96,7 @@ class PosisiBox extends Component
             'sortir' => 'sortir',
         };
 
-        foreach ($noBoxArr as $noBox) {
-            $cekNoBox = DB::table($table)->where('no_box', trim($noBox))->first();
 
-            if (empty($cekNoBox)) {
-                $this->dispatch('showAlert', ['type' => 'error', 'message' => 'No Box ' . trim($noBox) . ' tidak ditemukan di tabel ' . $table]);
-                continue;
-            }
-
-            DB::table($table)->where('no_box', trim($noBox))->update([
-                'tgl_terima' => now(),
-                'tgl_serah' => now(),
-            ]);
-        }
 
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Proses update tanggal selesai. Refresh halamannya']);
     }
