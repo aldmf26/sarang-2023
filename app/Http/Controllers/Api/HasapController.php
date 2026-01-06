@@ -613,7 +613,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM formulir_sarang as a
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
         left join users as c on c.id = a.id_penerima
-        where a.kategori = 'cabut' and b.nm_partai in('bjm 1004', 'bjm 1003')
+        where a.kategori = 'cabut' and b.nm_partai in('bjm 1004', 'bjm 1003') and c.lokasi = 'bjm'
         group by a.id_penerima, a.tanggal
         ORDER by a.tanggal DESC;");
 
