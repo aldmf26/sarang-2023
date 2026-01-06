@@ -18,7 +18,7 @@
                     <th class="text-end dhead">Susut</th>
                     <th class="text-end dhead">Rp Trgt</th>
                     <th class="text-end dhead">Total Gaji</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +52,7 @@
                         <td align="right">{{ number_format($d->rupiah, 0) }}
                         <td align="right">{{ number_format($hasil->ttl_rp, 0) }}
                         </td>
-                     
+
                     </tr>
                 @endforeach
             </tbody>

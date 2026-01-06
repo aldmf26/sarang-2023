@@ -5,22 +5,25 @@
     },
     posisi: false,
     anak: false,
-    grading: false
+    grading: false,
+    gantiTgl: false
 }">
     <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak / Edit Grading
-        Kode</a>
+        Kode / Ganti Tanggal</a>
 
     <x-theme.modal wire:ignore.self id="cariBox" btnSave="T" title="Cek Posisi No Box" size="modal-lg">
 
         <div class="d-flex gap-1">
-            <button type="button" @click="posisi = !posisi; anak = false; grading = false"
+            <button type="button" @click="posisi = !posisi; anak = false; grading = false; gantiTgl=false"
                 class="btn btn-sm btn-primary">Cek Posisi No
                 Box</button>
-            <button type="button" @click="anak = !anak; posisi = false; grading = false"
+            <button type="button" @click="anak = !anak; posisi = false; grading = false; gantiTgl=false"
                 class="btn btn-sm btn-primary">Ganti Nama
                 Anak</button>
-            <button type="button" @click="grading = !grading; posisi = false; anak = false"
+            <button type="button" @click="grading = !grading; posisi = false; anak = false; gantiTgl=false"
                 class="btn btn-sm btn-primary">Grading edit kode</button>
+            <button type="button" @click="gantiTgl = !gantiTgl; posisi = false; anak = false; grading=false"
+                class="btn btn-sm btn-primary">Ganti Tanggal</button>
         </div>
 
         <div x-show='posisi'>
@@ -150,6 +153,38 @@
                 @endif
                 <div class="col-12">
                     <button wire:click='updateGrading' class="btn btn-sm btn-success btn-block"
+                        type="button">Simpan</button>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="gantiTgl">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="">Divisi</label>
+                    <select class="form-select" wire:model.live="selectedDivisi" id="">
+                        <option value="">Pilih Divisi</option>
+                        <option value="cabut">Cabut</option>
+                        <option value="cetak">Cetak</option>
+                        <option value="sortir">Sortir</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="">Pengawas</label>
+                    <select class="form-select" wire:model.live="selectedPengawas" id="">
+                        <option value="">Pilih Pengawas</option>
+                        @foreach ($pengawas as $p)
+                            <option value="{{ $p->id }}">{{ $p->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="">No Box</label>
+                    <input type="text" wire:model="noBoxArr" class="form-control">
+                </div>
+                {{ $noBoxArr }}
+                <div class="col-12">
+                    <button wire:click='updateGantiTgl' class="btn btn-sm btn-success btn-block"
                         type="button">Simpan</button>
                 </div>
             </div>

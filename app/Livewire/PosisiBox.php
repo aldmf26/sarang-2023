@@ -21,6 +21,7 @@ class PosisiBox extends Component
         $selectedDivisi,
         $anak,
         $noBox,
+        $noBoxArr,
         $selectedNama;
 
     public function mount()
@@ -84,6 +85,20 @@ class PosisiBox extends Component
             'box_pengiriman' => $this->kodeSesudahnya
         ]);
         $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Data anak berhasil diupdate. Refresh halamannya']);
+    }
+
+    public function updateGantiTgl()
+    {
+        $noBoxArr = explode(',', $this->noBoxArr);
+        $table = match ($this->selectedDivisi) {
+            'cabut' => 'cabut',
+            'cetak' => 'cetak_new',
+            'sortir' => 'sortir',
+        };
+
+
+
+        $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Proses update tanggal selesai. Refresh halamannya']);
     }
 
     public function render()
