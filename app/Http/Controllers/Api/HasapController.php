@@ -1129,7 +1129,13 @@ ORDER BY  tgl ASC;");
     {
         $data = DB::select("SELECT tgl, id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
         SELECT 
-            DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
+            -- MODIFIKASI DISINI: Jika Jatuh Minggu (1), tambah 1 hari
+            CASE 
+                WHEN DAYOFWEEK(DATE_ADD(c.tgl_terima, INTERVAL a.n DAY)) = 1 
+                THEN DATE_ADD(c.tgl_terima, INTERVAL a.n + 1 DAY) 
+                ELSE DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) 
+            END AS tgl,
+            
             c.no_box,
             c.tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
             CASE 
@@ -1152,13 +1158,18 @@ ORDER BY  tgl ASC;");
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
-
         where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and c.id_pengawas not in ('104','421','99','101','285') 
     
-    	UNION ALL
-    	
-    SELECT 
-            DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
+        UNION ALL
+        
+        SELECT 
+            -- MODIFIKASI DISINI JUGA (Bagian EO):
+            CASE 
+                WHEN DAYOFWEEK(DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY)) = 1 
+                THEN DATE_ADD(c.tgl_ambil, INTERVAL a.n + 1 DAY) 
+                ELSE DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) 
+            END AS tgl,
+
             c.no_box,
             c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
             0 AS pcs,
@@ -1179,11 +1190,12 @@ ORDER BY  tgl ASC;");
         left join users as f on f.id = c.id_pengawas
         where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and c.id_pengawas not in ('104','421','99','101','285') 
     
-    
         ) AS hasil
         where nm_partai in ('bjm 1003' , 'bjm 1004')
-        Group by tgl, id_pengawas
+        -- Group By di bawah ini yang akan menyatukan data Minggu (yg digeser) dan Senin
+        Group by tgl, id_pengawas 
         ORDER BY tgl DESC;");
+
         return response()->json([
             'status' => 'success',
             'message' => 'success',
