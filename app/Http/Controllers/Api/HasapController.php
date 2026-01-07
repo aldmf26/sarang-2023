@@ -381,7 +381,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.no_invoice, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1003','bjm 1004')
         group by a.no_invoice
         order by a.tgl DESC;");
         return response()->json([
