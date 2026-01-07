@@ -645,7 +645,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
         group by a.tgl
         order by a.tgl DESC;");
         return response()->json([
@@ -661,7 +661,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai ,
         
          sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
         group by a.grade
         order by a.grade ASC;");
         return response()->json([
