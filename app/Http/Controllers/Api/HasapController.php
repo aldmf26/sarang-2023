@@ -1522,9 +1522,10 @@ ORDER BY g.grade DESC;");
     {
         $query = DB::table('grading_partai')
             ->join('tb_grade', 'grading_partai.grade', '=', 'tb_grade.nm_grade')
+            ->join('pengiriman', 'grading_partai.no_box', '=', 'pengiriman.box_pengiriman')
             ->select(
                 'grading_partai.nm_partai',
-                'grading_partai.tgl',
+                'pengiriman.tgl_input as tgl',
                 'grading_partai.gr',
                 'grading_partai.pcs',
                 'grading_partai.id_grading',
@@ -1532,13 +1533,12 @@ ORDER BY g.grade DESC;");
                 'tb_grade.kelompok'
             )
             ->whereNotIn('grading_partai.box_pengiriman', ['30000', '300000', '400000', '700000', '800000', '900000'])
-
-            ->orderBy('grading_partai.tgl')
+            ->orderBy('pengiriman.tgl_input')
             ->orderBy('tb_grade.kelompok')
             ->orderBy('grading_partai.id_grading');
 
         if ($request->has('tgl')) {
-            $query->whereDate('grading_partai.tgl', $request->tgl);
+            $query->whereDate('pengiriman.tgl_input', $request->tgl);
         }
 
         $results = $query->get();
