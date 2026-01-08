@@ -1522,7 +1522,7 @@ ORDER BY g.grade DESC;");
     {
         $query = DB::table('grading_partai')
             ->join('tb_grade', 'grading_partai.grade', '=', 'tb_grade.nm_grade')
-            ->join('pengiriman', 'grading_partai.no_box', '=', 'pengiriman.box_pengiriman')
+            ->join('pengiriman', 'grading_partai.box_pengiriman', '=', 'pengiriman.no_box')
             ->select(
                 'grading_partai.nm_partai',
                 'pengiriman.tgl_input as tgl',
