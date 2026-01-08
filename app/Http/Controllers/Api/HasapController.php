@@ -1364,9 +1364,19 @@ ORDER BY group_id;");
 
     public function steaming_baru(Request $r)
     {
-        $data = DB::select("SELECT a.tgl , sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
-         group by a.tgl order by a.tgl DESC;");
+        $data = DB::select("SELECT a.tgl_input , sum(a.pcs) as pcs, sum(a.gr) as gr 
+FROM grading_partai as a
+JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
+         
+
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and c.tujuan = 'hk'
+         GROUP BY b.tgl_input
+        Order by b.tgl_input DESC");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
