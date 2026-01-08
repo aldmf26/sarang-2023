@@ -1391,8 +1391,10 @@ left join (
             a.grade, 
             SUM(a.pcs) AS pcs, 
             SUM(a.gr) AS gr
-        FROM grading_partai AS a 
-        WHERE a.tgl = '$r->tgl'
+        FROM grading_partai AS a
+        join pengiriman as b on b.no_box = a.box_pengiriman
+
+        WHERE b.tgl_input = '$r->tgl'
         GROUP BY a.grade
         order by a.grade ASC
         ;");
