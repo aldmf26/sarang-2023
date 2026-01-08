@@ -454,7 +454,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP BY box_pengiriman, grade, nm_partai
     ) AS gp
     JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
-    WHERE b.tgl_input = '$tgl'
+    left join pengiriman_packing_list as c on c.no_nota = b.no_nota
+    WHERE b.tgl_input = '$tgl' and c.tujuan ='hk'
     GROUP BY b.no_barcode, gp.grade
 
         ");
