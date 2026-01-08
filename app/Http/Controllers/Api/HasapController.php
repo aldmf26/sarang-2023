@@ -1364,7 +1364,7 @@ ORDER BY group_id;");
 
     public function steaming_baru(Request $r)
     {
-        $data = DB::select("SELECT b.tgl_input , sum(a.pcs) as pcs, sum(a.gr) as gr 
+        $data = DB::select("SELECT b.tgl_input as tgl, sum(a.pcs) as pcs, sum(a.gr) as gr 
 FROM grading_partai as a
 JOIN pengiriman as b ON b.no_box = a.box_pengiriman
 left join (
