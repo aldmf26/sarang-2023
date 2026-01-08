@@ -978,7 +978,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as e
         left join pengiriman as b on b.no_box = e.box_pengiriman
         left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-        where b.grade = '$r->grade' and b.selesai ='Y' and b.tgl between '2025-11-01' and '2026-02-28'
+        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2025-11-01' and '2026-02-28'
         GROUP by c.tgl
 
         ORDER by tgl ASC, ket DESC;");
