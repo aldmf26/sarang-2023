@@ -416,7 +416,11 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
         FROM grading_partai as a
         JOIN pengiriman as b ON b.no_box = a.box_pengiriman
-        left join pengiriman_packing_list as c on c.no_nota = b.no_nota
+        left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
         where c.tujuan = 'hk'
         GROUP BY b.tgl_input
         Order by b.tgl_input DESC
@@ -456,7 +460,11 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP BY box_pengiriman, grade, nm_partai
     ) AS gp
     JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
-    left join pengiriman_packing_list as c on c.no_nota = b.no_nota
+    left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
     WHERE b.tgl_input = '$tgl' and c.tujuan ='hk'
     GROUP BY b.no_barcode, gp.grade
 
