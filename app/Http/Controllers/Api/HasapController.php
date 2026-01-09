@@ -730,7 +730,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
-        where b.grade_id = '$r->id' and a.formulir = 'Y' and  a.tgl between '2025-11-01' and '2026-01-01' and a.nm_partai in ('Bjm 1003','Bjm 1004') and c.lokasi = 'bjm'
+        where b.grade_id = '$r->id' and a.formulir = 'Y'   and a.nm_partai in ('Bjm 1003','Bjm 1004') and c.lokasi = 'bjm'
         group by a.tgl, b.no_invoice, a.penerima
 
         order by  tgl ASC, no_invoice ASC,  ket DESC; ");
