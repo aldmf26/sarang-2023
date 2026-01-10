@@ -1537,6 +1537,8 @@ ORDER BY g.grade DESC;");
             ->whereNotIn('grading_partai.box_pengiriman', ['30000', '300000', '400000', '700000', '800000', '900000'])
             ->orderBy('pengiriman.tgl_input')
             ->orderBy('tb_grade.kelompok')
+            // Disarankan: Tambahkan order by nm_partai agar data yang sama berurutan
+            ->orderBy('grading_partai.nm_partai')
             ->orderBy('grading_partai.id_grading');
 
         if ($request->has('tgl')) {
@@ -1546,16 +1548,24 @@ ORDER BY g.grade DESC;");
         $results = $query->get();
 
         $batches = collect();
+
+        // Inisialisasi variabel pembanding
         $currentTanggal = null;
         $currentKelompok = null;
+        $currentPartai = null; // Tambahan: variable untuk melacak partai saat ini
+
         $currentBatchGr = 0;
         $currentBatchPcs = 0;
         $currentBatchPartai = [];
         $currentBatchGrade = [];
 
         foreach ($results as $row) {
-            // Kalau tanggal atau kelompok berubah → simpan batch lama
-            if ($currentTanggal !== $row->tgl || $currentKelompok !== $row->kelompok) {
+            // PERUBAHAN DISINI:
+            // Tambahkan cek "$currentPartai !== $row->nm_partai"
+            // Jadi kalau Tanggal Beda ATAU Kelompok Beda ATAU Partai Beda -> Buat Batch Baru
+            if ($currentTanggal !== $row->tgl || $currentKelompok !== $row->kelompok || $currentPartai !== $row->nm_partai) {
+
+                // Simpan batch sebelumnya jika ada isinya
                 if ($currentBatchGr > 0) {
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
@@ -1567,9 +1577,11 @@ ORDER BY g.grade DESC;");
                     ]);
                 }
 
-                // Reset batch
+                // Reset batch dengan data baru
                 $currentTanggal = $row->tgl;
                 $currentKelompok = $row->kelompok;
+                $currentPartai = $row->nm_partai; // Update partai saat ini
+
                 $currentBatchGr = 0;
                 $currentBatchPcs = 0;
                 $currentBatchPartai = [];
@@ -1580,6 +1592,7 @@ ORDER BY g.grade DESC;");
             $remainingPcs = $row->pcs;
 
             while ($remainingGr > 0) {
+                // Target per batch adalah 1000 gram
                 $space = 1000 - $currentBatchGr;
 
                 if (!in_array($row->nm_partai, $currentBatchPartai)) {
@@ -1591,11 +1604,13 @@ ORDER BY g.grade DESC;");
                 }
 
                 if ($remainingGr >= $space) {
-                    $pcsToAdd = round($remainingPcs * ($space / $remainingGr), 2);
+                    // Jika sisa barang lebih besar dari sisa tempat di batch (batch penuh)
+                    $pcsToAdd = ($remainingGr > 0) ? round($remainingPcs * ($space / $remainingGr), 2) : 0;
 
                     $currentBatchGr += $space;
                     $currentBatchPcs += $pcsToAdd;
 
+                    // Push batch yang sudah penuh (1000gr)
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
                         'grade'     => implode(', ', $currentBatchGrade),
@@ -1605,14 +1620,17 @@ ORDER BY g.grade DESC;");
                         'pcs'       => $currentBatchPcs,
                     ]);
 
-                    // Reset batch penuh
+                    // Reset batch baru (tapi partai/kelompok/tanggal masih sama dengan row ini)
                     $currentBatchGr = 0;
                     $currentBatchPcs = 0;
-                    $currentBatchPartai = [];
-                    $currentBatchGrade = [];
+                    // Opsional: kosongkan array partai/grade jika ingin bersih di batch pecahan berikutnya
+                    // $currentBatchPartai = []; 
+                    // $currentBatchGrade = [];
+
                     $remainingGr -= $space;
                     $remainingPcs -= $pcsToAdd;
                 } else {
+                    // Jika sisa barang muat di batch ini
                     $currentBatchGr += $remainingGr;
                     $currentBatchPcs += $remainingPcs;
                     $remainingGr = 0;
@@ -1621,7 +1639,7 @@ ORDER BY g.grade DESC;");
             }
         }
 
-        // Simpan batch terakhir kalau masih ada sisa
+        // Simpan sisa data terakhir (loop selesai)
         if ($currentBatchGr > 0) {
             $batches->push([
                 'nm_partai' => implode(', ', $currentBatchPartai),
