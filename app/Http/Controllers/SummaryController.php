@@ -81,13 +81,15 @@ class SummaryController extends Controller
 
     public function get_operasional(Request $r)
     {
-        $thn = date('Y');
+        $thn = date('2025');
         if (empty($r->id_oprasional)) {
             $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
-        FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn'");
+        FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn' and a.bulan_dibayar = '12';");
         } else {
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
+
+
 
         $bulan_array = DB::table('oprasional')->get();
         $data = [
@@ -1136,17 +1138,24 @@ class SummaryController extends Controller
         $bulan = $r->bulan;
         $tahun = $r->tahun;
 
+
+
         $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan ='$bulan' and a.tahun = '$tahun' ");
         $ttl_gr = sumBk($grading_partai, 'gr');
+
+
 
 
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
         $rawNumber = str_replace(',', '', $formattedNumber);
 
+
+
         // Validasi angka mentah
         if (!is_numeric($rawNumber)) {
-            return redirect()->back()->withErrors(['biaya_oprasional' => 'The number is not valid.']);
+
+            return redirect()->back()->with('error', 'The number is not valid');
         }
         DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
 
@@ -1161,6 +1170,7 @@ class SummaryController extends Controller
             'total_operasional' => $rawNumber
         ];
         DB::table('oprasional')->insert($data);
+
 
         foreach ($grading_partai as $p) {
             $data = [

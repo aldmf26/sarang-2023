@@ -39,7 +39,6 @@
             </td>
             <td x-data="numberFormat({{ empty($cost_oprasional->ttl_rp) ? 0 : $cost_oprasional->ttl_rp }})">
                 <input type="text" class="form-control" autofocus name="biaya_oprasional" id="number"
-                    x-model="formattedNumber" @keyup="formatNumber"
                     value="{{ empty($cost_oprasional->ttl_rp) ? 0 : $cost_oprasional->ttl_rp }}">
 
                 <input type="hidden" class="form-control" name="bulan" value="{{ $bulan }}">
