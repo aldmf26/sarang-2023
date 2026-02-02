@@ -378,7 +378,7 @@ class CetakModel extends Model
         left join (
          SELECT g.id_anak , sum(g.nominal) as ttl_rp_denda
             FROM tb_denda as g 
-            where g.bulan_dibayar = '$bulan_dibayar'
+            where g.bulan_dibayar = '$bulan_dibayar' and Year(g.tgl) = '$tahun_dibayar'
             GROUP by g.id_anak
         ) as g on g.id_anak = a.id_anak
 

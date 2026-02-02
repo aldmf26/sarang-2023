@@ -338,7 +338,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             FROM bk as d 
             where d.kategori ='Cabut'
         ) as d on d.no_box = a.no_box
-        where b.kategori = 'CTK' and a.selesai ='Y' and a.id_kelas_cetak != 14 $where
+        where b.kategori = 'CTK' and a.selesai ='Y' and a.id_kelas_cetak != 14 and d.nm_partai in('bjm 1003','bjm 1004')  $where
         group by a.tgl, a.id_pengawas
         order by a.tgl DESC
         ;");
@@ -381,8 +381,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.no_invoice, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
-        group by a.no_invoice
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1003','bjm 1004')
+        group by a.tgl, a.nm_partai
         order by a.tgl DESC;");
         return response()->json([
             'status' => 'success',
@@ -395,8 +395,8 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai, sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box , a.not_oke, a.box_pengiriman
         FROM grading_partai as a 
-        where a.no_invoice = '$r->no_invoice' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
-        group by a.grade
+        where a.tgl = '$r->tgl' and a.nm_partai = '$r->nm_partai' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1003','bjm 1004')
+        group by a.grade, a.box_pengiriman
         order by a.not_oke DESC, a.grade ASC;");
         return response()->json([
             'status' => 'success',
@@ -416,6 +416,12 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai 
         FROM grading_partai as a
         JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+        left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
+        where c.tujuan = 'hk'
         GROUP BY b.tgl_input
         Order by b.tgl_input DESC
         ");
@@ -454,7 +460,12 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP BY box_pengiriman, grade, nm_partai
     ) AS gp
     JOIN pengiriman AS b ON b.no_box = gp.box_pengiriman
-    WHERE b.tgl_input = '$tgl'
+    left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
+    WHERE b.tgl_input = '$tgl' and c.tujuan ='hk'
     GROUP BY b.no_barcode, gp.grade
 
         ");
@@ -645,7 +656,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
         group by a.tgl
         order by a.tgl DESC;");
         return response()->json([
@@ -661,7 +672,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai ,
         
          sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
         group by a.grade
         order by a.grade ASC;");
         return response()->json([
@@ -675,7 +686,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai,
         sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
+        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
         group by a.grade , a.nm_partai
         order by a.nm_partai ASC, a.grade ASC;");
         return response()->json([
@@ -710,7 +721,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
-        where b.grade_id = '$r->id' and b.tgl between '2025-11-01' and '2026-01-01' and a.nm_partai in ('Bjm 1003','Bjm 1004') and c.lokasi = 'bjm'
+        where b.grade_id = '$r->id'  and a.nm_partai in ('Bjm 1003','Bjm 1004') 
         group by b.tgl, b.no_invoice
 
         UNION all
@@ -719,7 +730,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
-        where b.grade_id = '$r->id' and a.formulir = 'Y' and  a.tgl between '2025-11-01' and '2026-01-01' and a.nm_partai in ('Bjm 1003','Bjm 1004') and c.lokasi = 'bjm'
+        where b.grade_id = '$r->id' and a.formulir = 'Y'   and a.nm_partai in ('Bjm 1003','Bjm 1004') 
         group by a.tgl, b.no_invoice, a.penerima
 
         order by  tgl ASC, no_invoice ASC,  ket DESC; ");
@@ -859,7 +870,8 @@ GROUP by c.tujuan;");
             where b.sudah_kirim = 'Y'
             group by b.box_pengiriman
         ) as d on d.box_pengiriman = a.no_box
-        
+
+        where b.tujuan ='hk'
         GROUP by a.no_nota 
         order by b.no_nota DESC");
 
@@ -958,7 +970,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as d
         left join pengiriman as a on a.no_box = d.box_pengiriman
         left join pengiriman_packing_list as b on b.no_nota = a.no_nota
-        where a.grade = 'dg' 
+        where a.grade = '$r->grade'  and b.tgl between '2025-11-01' and '2026-02-28'
         group by b.tgl
 
         UNION ALL
@@ -967,7 +979,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as e
         left join pengiriman as b on b.no_box = e.box_pengiriman
         left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-        where b.grade = 'dg' and b.selesai ='Y'
+        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2025-11-01' and '2026-02-28'
         GROUP by c.tgl
 
         ORDER by tgl ASC, ket DESC;");
@@ -1127,63 +1139,81 @@ ORDER BY  tgl ASC;");
 
     public function cuci_nitrit(Request $r)
     {
+        // OPSI TAMBAHAN: Perpanjang limit waktu eksekusi PHP (misal jadi 5 menit)
+        ini_set('max_execution_time', 300);
+
         $data = DB::select("SELECT tgl, id_pengawas, nm_pengawas, sum(pcs) as pcs, sum(gr)as gr, sum(gr_akhir) as gr_akhir FROM (
         SELECT 
-            DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
-            c.no_box,
-            c.tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
             CASE 
-            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-            THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-            ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                WHEN DAYOFWEEK(DATE_ADD(c.tgl_terima, INTERVAL a.n DAY)) = 1 
+                THEN DATE_ADD(c.tgl_terima, INTERVAL a.n + 1 DAY) 
+                ELSE DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) 
+            END AS tgl,
+            
+            c.no_box, c.tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+            CASE 
+                WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
             END AS pcs,
             CASE 
-            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-            THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-            ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
             END AS gr,
             CASE 
-            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-            THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-            ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
             END AS gr_akhir
         FROM cabut c
         JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
+        -- FILTER PINDAH KESINI:
+        where c.no_box != '9999' 
+          and c.id_kelas not in('126','166','152','142')  
+          and c.id_pengawas not in ('104','421','99','101','285') 
+          and d.nm_partai in ('bjm 1003' , 'bjm 1004') 
 
-        where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and c.id_pengawas not in ('104','421','99','101','285')
-    
-    	UNION ALL
-    	
-    SELECT 
-            DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
-            c.no_box,
-            c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
+        UNION ALL
+        
+        SELECT 
+            CASE 
+                WHEN DAYOFWEEK(DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY)) = 1 
+                THEN DATE_ADD(c.tgl_ambil, INTERVAL a.n + 1 DAY) 
+                ELSE DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) 
+            END AS tgl,
+
+            c.no_box, c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, f.name as nm_pengawas, c.id_anak, e.nama as nm_anak, d.nm_partai,
             0 AS pcs,
             CASE 
-            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
-            THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
-            ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+                WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+                THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+                ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
             END AS gr,
             CASE 
-            WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
-            THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
-            ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+                WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+                THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+                ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
             END AS gr_akhir
         FROM eo c
         JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
         left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
         left join tb_anak as e on e.id_anak = c.id_anak
         left join users as f on f.id = c.id_pengawas
-        where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  and c.id_pengawas not in ('104','421','99','101','285')
-    
-    
+        -- FILTER PINDAH KESINI JUGA:
+        where c.no_box != '9999' 
+          and c.id_kelas not in('126','166','152','142')  
+          and c.id_pengawas not in ('104','421','99','101','285') 
+          and d.nm_partai in ('bjm 1003' , 'bjm 1004')
+
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-28' and NOW()
+        -- Filter nm_partai di bagian luar DIHAPUS karena sudah di filter di dalam
         Group by tgl, id_pengawas
         ORDER BY tgl DESC;");
+
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -1193,68 +1223,96 @@ ORDER BY  tgl ASC;");
 
     public function nitrit_detail(Request $r)
     {
-        $data = DB::select("SELECT * FROM (
-  SELECT 
-    DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) AS tgl,
-    c.no_box,
-    c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'cabut' as kategori,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-      THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-      ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
-    END AS pcs,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-      THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-      ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
-    END AS gr,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-      THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-      ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
-    END AS gr_akhir,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
-      THEN g.pcs - FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
-      ELSE FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
-    END AS pcs_not_ok
-  FROM cabut c
-  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
-  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
-  left join tb_anak as e on e.id_anak = c.id_anak
-  left join hasil_wawancara as f on f.id_anak = e.id_anak
-  left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')
-    
-    UNION ALL 
-    
-    SELECT 
-    DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) AS tgl,
-    c.no_box,
-    c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'eo' as kategori,
-    0 AS pcs,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
-      THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
-      ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
-    END AS gr,
-    CASE 
-      WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
-      THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
-      ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
-    END AS gr_akhir,
-    0 AS pcs_not_ok
-  FROM eo c
-  JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
-  left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
-  left join tb_anak as e on e.id_anak = c.id_anak
-  left join hasil_wawancara as f on f.id_anak = e.id_anak
-  left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-  where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')
-) AS hasil
-WHERE tgl = '$r->tgl' and id_pengawas = $r->id_pengawas
-group by tgl, no_box
-ORDER BY  no_box ASC;");
+        // Kita ubah SELECT * menjadi SUM(...) untuk angka, agar jika ada box yang sama 
+        // di hari minggu (digeser) dan senin, angkanya dijumlahkan.
+        $data = DB::select("SELECT 
+            tgl, 
+            no_box, 
+            nm_anak, 
+            nm_partai, 
+            kategori,
+            SUM(pcs) as pcs, 
+            SUM(gr) as gr, 
+            SUM(gr_akhir) as gr_akhir,
+            SUM(pcs_not_ok) as pcs_not_ok
+        FROM (
+            SELECT 
+                -- LOGIKA GESER HARI MINGGU
+                CASE 
+                    WHEN DAYOFWEEK(DATE_ADD(c.tgl_terima, INTERVAL a.n DAY)) = 1 
+                    THEN DATE_ADD(c.tgl_terima, INTERVAL a.n + 1 DAY) 
+                    ELSE DATE_ADD(c.tgl_terima, INTERVAL a.n DAY) 
+                END AS tgl,
+
+                c.no_box,
+                c.tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'cabut' as kategori,
+                
+                -- Perhitungan PCS/GR (Sama seperti sebelumnya)
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                    THEN c.pcs_awal - FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                    ELSE FLOOR(c.pcs_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                END AS pcs,
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                    THEN c.gr_awal - FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                    ELSE FLOOR(c.gr_awal / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                END AS gr,
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                    THEN c.gr_akhir - FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                    ELSE FLOOR(c.gr_akhir / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                END AS gr_akhir,
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_terima) 
+                    THEN g.pcs - FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_terima))
+                    ELSE FLOOR(g.pcs / (DATEDIFF(c.tgl_serah, c.tgl_terima) + 1))
+                END AS pcs_not_ok
+            FROM cabut c
+            JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_terima)
+            left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+            left join tb_anak as e on e.id_anak = c.id_anak
+            left join hasil_wawancara as f on f.id_anak = e.id_anak
+            left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') and d.nm_partai in('bjm 1003','bjm 1004')
+            
+            UNION ALL 
+            
+            SELECT 
+                -- LOGIKA GESER HARI MINGGU (BAGIAN EO)
+                CASE 
+                    WHEN DAYOFWEEK(DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY)) = 1 
+                    THEN DATE_ADD(c.tgl_ambil, INTERVAL a.n + 1 DAY) 
+                    ELSE DATE_ADD(c.tgl_ambil, INTERVAL a.n DAY) 
+                END AS tgl,
+
+                c.no_box,
+                c.tgl_ambil as tgl_terima, c.tgl_serah, c.id_pengawas, c.id_anak, f.nama as nm_anak, d.nm_partai, 'eo' as kategori,
+                0 AS pcs,
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+                    THEN c.gr_eo_awal - FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+                    ELSE FLOOR(c.gr_eo_awal / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+                END AS gr,
+                CASE 
+                    WHEN a.n = DATEDIFF(c.tgl_serah, c.tgl_ambil) 
+                    THEN c.gr_eo_akhir - FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1)) * (DATEDIFF(c.tgl_serah, c.tgl_ambil))
+                    ELSE FLOOR(c.gr_eo_akhir / (DATEDIFF(c.tgl_serah, c.tgl_ambil) + 1))
+                END AS gr_akhir,
+                0 AS pcs_not_ok
+            FROM eo c
+            JOIN angka a ON a.n <= DATEDIFF(c.tgl_serah, c.tgl_ambil)
+            left join bk as d on d.no_box = c.no_box and d.kategori = 'cabut'
+            left join tb_anak as e on e.id_anak = c.id_anak
+            left join hasil_wawancara as f on f.id_anak = e.id_anak
+            left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
+            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') and d.nm_partai in('bjm 1003','bjm 1004')
+        ) AS hasil
+        
+        WHERE tgl = ? and id_pengawas = ?
+        GROUP BY tgl, no_box, nm_anak, nm_partai, kategori
+        ORDER BY no_box ASC;", [$r->tgl, $r->id_pengawas]); // Menggunakan binding parameter agar lebih aman
+
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -1307,9 +1365,19 @@ ORDER BY group_id;");
 
     public function steaming_baru(Request $r)
     {
-        $data = DB::select("SELECT a.tgl , sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000')
-         group by a.tgl order by a.tgl DESC;");
+        $data = DB::select("SELECT b.tgl_input as tgl, sum(a.pcs) as pcs, sum(a.gr) as gr 
+FROM grading_partai as a
+JOIN pengiriman as b ON b.no_box = a.box_pengiriman
+left join (
+            SELECT c.no_nota  , c.tujuan
+            FROM pengiriman_packing_list as c 
+            group by c.no_nota
+        ) as c on c.no_nota = b.no_nota
+         
+
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and c.tujuan = 'hk'
+         GROUP BY b.tgl_input
+        Order by b.tgl_input DESC");
         return response()->json([
             'status' => 'success',
             'message' => 'success',
@@ -1324,8 +1392,10 @@ ORDER BY group_id;");
             a.grade, 
             SUM(a.pcs) AS pcs, 
             SUM(a.gr) AS gr
-        FROM grading_partai AS a 
-        WHERE a.tgl = '$r->tgl'
+        FROM grading_partai AS a
+        join pengiriman as b on b.no_box = a.box_pengiriman
+
+        WHERE b.tgl_input = '$r->tgl'
         GROUP BY a.grade
         order by a.grade ASC
         ;");
@@ -1455,9 +1525,10 @@ ORDER BY g.grade DESC;");
     {
         $query = DB::table('grading_partai')
             ->join('tb_grade', 'grading_partai.grade', '=', 'tb_grade.nm_grade')
+            ->join('pengiriman', 'grading_partai.box_pengiriman', '=', 'pengiriman.no_box')
             ->select(
                 'grading_partai.nm_partai',
-                'grading_partai.tgl',
+                'pengiriman.tgl_input as tgl',
                 'grading_partai.gr',
                 'grading_partai.pcs',
                 'grading_partai.id_grading',
@@ -1465,28 +1536,37 @@ ORDER BY g.grade DESC;");
                 'tb_grade.kelompok'
             )
             ->whereNotIn('grading_partai.box_pengiriman', ['30000', '300000', '400000', '700000', '800000', '900000'])
-
-            ->orderBy('grading_partai.tgl')
+            ->orderBy('pengiriman.tgl_input')
             ->orderBy('tb_grade.kelompok')
+            // Disarankan: Tambahkan order by nm_partai agar data yang sama berurutan
+            ->orderBy('grading_partai.nm_partai')
             ->orderBy('grading_partai.id_grading');
 
         if ($request->has('tgl')) {
-            $query->whereDate('grading_partai.tgl', $request->tgl);
+            $query->whereDate('pengiriman.tgl_input', $request->tgl);
         }
 
         $results = $query->get();
 
         $batches = collect();
+
+        // Inisialisasi variabel pembanding
         $currentTanggal = null;
         $currentKelompok = null;
+        $currentPartai = null; // Tambahan: variable untuk melacak partai saat ini
+
         $currentBatchGr = 0;
         $currentBatchPcs = 0;
         $currentBatchPartai = [];
         $currentBatchGrade = [];
 
         foreach ($results as $row) {
-            // Kalau tanggal atau kelompok berubah → simpan batch lama
-            if ($currentTanggal !== $row->tgl || $currentKelompok !== $row->kelompok) {
+            // PERUBAHAN DISINI:
+            // Tambahkan cek "$currentPartai !== $row->nm_partai"
+            // Jadi kalau Tanggal Beda ATAU Kelompok Beda ATAU Partai Beda -> Buat Batch Baru
+            if ($currentTanggal !== $row->tgl || $currentKelompok !== $row->kelompok || $currentPartai !== $row->nm_partai) {
+
+                // Simpan batch sebelumnya jika ada isinya
                 if ($currentBatchGr > 0) {
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
@@ -1498,9 +1578,11 @@ ORDER BY g.grade DESC;");
                     ]);
                 }
 
-                // Reset batch
+                // Reset batch dengan data baru
                 $currentTanggal = $row->tgl;
                 $currentKelompok = $row->kelompok;
+                $currentPartai = $row->nm_partai; // Update partai saat ini
+
                 $currentBatchGr = 0;
                 $currentBatchPcs = 0;
                 $currentBatchPartai = [];
@@ -1511,6 +1593,7 @@ ORDER BY g.grade DESC;");
             $remainingPcs = $row->pcs;
 
             while ($remainingGr > 0) {
+                // Target per batch adalah 1000 gram
                 $space = 1000 - $currentBatchGr;
 
                 if (!in_array($row->nm_partai, $currentBatchPartai)) {
@@ -1522,11 +1605,13 @@ ORDER BY g.grade DESC;");
                 }
 
                 if ($remainingGr >= $space) {
-                    $pcsToAdd = round($remainingPcs * ($space / $remainingGr), 2);
+                    // Jika sisa barang lebih besar dari sisa tempat di batch (batch penuh)
+                    $pcsToAdd = ($remainingGr > 0) ? round($remainingPcs * ($space / $remainingGr), 2) : 0;
 
                     $currentBatchGr += $space;
                     $currentBatchPcs += $pcsToAdd;
 
+                    // Push batch yang sudah penuh (1000gr)
                     $batches->push([
                         'nm_partai' => implode(', ', $currentBatchPartai),
                         'grade'     => implode(', ', $currentBatchGrade),
@@ -1536,14 +1621,17 @@ ORDER BY g.grade DESC;");
                         'pcs'       => $currentBatchPcs,
                     ]);
 
-                    // Reset batch penuh
+                    // Reset batch baru (tapi partai/kelompok/tanggal masih sama dengan row ini)
                     $currentBatchGr = 0;
                     $currentBatchPcs = 0;
-                    $currentBatchPartai = [];
-                    $currentBatchGrade = [];
+                    // Opsional: kosongkan array partai/grade jika ingin bersih di batch pecahan berikutnya
+                    // $currentBatchPartai = []; 
+                    // $currentBatchGrade = [];
+
                     $remainingGr -= $space;
                     $remainingPcs -= $pcsToAdd;
                 } else {
+                    // Jika sisa barang muat di batch ini
                     $currentBatchGr += $remainingGr;
                     $currentBatchPcs += $remainingPcs;
                     $remainingGr = 0;
@@ -1552,7 +1640,7 @@ ORDER BY g.grade DESC;");
             }
         }
 
-        // Simpan batch terakhir kalau masih ada sisa
+        // Simpan sisa data terakhir (loop selesai)
         if ($currentBatchGr > 0) {
             $batches->push([
                 'nm_partai' => implode(', ', $currentBatchPartai),
@@ -1600,7 +1688,9 @@ ORDER BY g.grade DESC;");
     }
     public function no_box_label(Request $r)
     {
-        $data = DB::select("SELECT a.nm_partai, a.no_box as kode_lot, a.pcs_awal, a.gr_awal FROM bk as a where a.tgl between '$r->tgl1' and '$r->tgl2' and a.kategori = 'cabut'
+        $data = DB::select("SELECT a.nm_partai, a.no_box as kode_lot, b.name as pengawas, a.pcs_awal, a.gr_awal FROM bk as a 
+        left join users as b on a.penerima = b.id
+        where a.tgl between '$r->tgl1' and '$r->tgl2' and a.kategori = 'cabut'
         order by no_box desc
         ");
         return response()->json([
