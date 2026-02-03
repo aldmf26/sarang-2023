@@ -81,10 +81,10 @@ class SummaryController extends Controller
 
     public function get_operasional(Request $r)
     {
-        $thn = date('2025');
+        $thn = date('Y');
         if (empty($r->id_oprasional)) {
             $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
-        FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn' and a.bulan_dibayar = '12';");
+        FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn'");
         } else {
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
