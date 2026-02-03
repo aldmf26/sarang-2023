@@ -123,7 +123,7 @@ class BkController extends Controller
     public function getNoBoxTambah()
     {
         $cekBox = DB::selectOne("SELECT CAST(no_box AS UNSIGNED) as no_box FROM `bk` WHERE kategori like '%cabut%' and baru = 'baru' ORDER BY CAST(no_box AS UNSIGNED) DESC LIMIT 1;");
-        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 1001;
+        $nobox = isset($cekBox->no_box) ? $cekBox->no_box + 1 : 101;
         return $nobox;
     }
 
@@ -238,7 +238,7 @@ class BkController extends Controller
                             'pcs_awal' => $row[5],
                             'gr_awal' => $row[6],
                             'kategori' => 'cabut',
-                            'hrga_satuan' => $row[8],
+                            'hrga_satuan' => 0,
                         ]);
                     }
                 }
