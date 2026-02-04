@@ -443,9 +443,10 @@
 
                         </tr>
                         @php
-                            $rp_satuan =
-                                ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja + $opname->ttl_rp) /
-                                ($sortir_akhir->gr + $opname->gr);
+                            $rp_satuan = empty($opname->gr)
+                                ? 0
+                                : ($sortir_akhir->ttl_rp + $sortir_akhir->cost_kerja + $opname->ttl_rp) /
+                                    ($sortir_akhir->gr + $opname->gr);
                         @endphp
 
                         {{-- <tr>
