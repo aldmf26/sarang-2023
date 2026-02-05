@@ -227,7 +227,7 @@ class BkController extends Controller
                         DB::table('bk')->insert([
                             'no_lot' => '0',
                             'nm_partai' => $row[0],
-                            'no_box' => $nobox,
+                            'no_box' => $row[9],
                             'tipe' => $row[1],
                             'ket' => $row[2],
                             'warna' => $row[3],
@@ -238,7 +238,8 @@ class BkController extends Controller
                             'pcs_awal' => $row[5],
                             'gr_awal' => $row[6],
                             'kategori' => 'cabut',
-                            'hrga_satuan' => 0,
+                            'hrga_satuan' => $row[8],
+
                         ]);
                     }
                 }
