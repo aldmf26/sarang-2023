@@ -762,7 +762,7 @@ left join(
         
         GROUP by a.no_nota 
         
-        order by a.no_nota ASC
+        order by a.no_nota DESC
         ");
     }
     public static function list_pengiriman_sum2()
