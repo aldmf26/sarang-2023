@@ -208,13 +208,13 @@ class OpnameNewController extends Controller
         $this->datasortir($spreadsheet, $style_atas, $style, $model);
 
         $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
-        $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
-        $this->rekap($spreadsheet, $style_atas, $style, $model);
-        $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
-        $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
-        $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
+        // $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
+        // $this->rekap($spreadsheet, $style_atas, $style, $model);
+        // $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
+        // $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
+        // $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
 
-        $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
+        // $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
 
         $namafile = "Opname Gudang.xlsx";
 
@@ -463,9 +463,9 @@ class OpnameNewController extends Controller
 
         foreach ($pengirimanNota  as $d) {
             $belumKirim = Grading::details($d);
-            
+
             $kolom = 2;
-            foreach($belumKirim as $b){
+            foreach ($belumKirim as $b) {
                 $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
                 $sheet3->setCellValue('C' . $kolom, $b->no_box);
                 $sheet3->setCellValue('D' . $kolom, $b->grade);
@@ -482,7 +482,6 @@ class OpnameNewController extends Controller
                 $sheet3->setCellValue('L' . $kolom, $ttlRp  / $b->gr);
                 $kolom++;
             }
-
         }
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 

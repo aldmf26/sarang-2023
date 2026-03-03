@@ -84,10 +84,10 @@
                                         ->where([['kategori', 'grading'], ['no_box', $d->no_box]])
                                         ->first();
 
-                                    $duitKosong = DB::table('bk')
-                                        ->where([['nm_partai', $d->nm_partai], ['hrga_satuan', 0]])
-                                        ->first();
-                                    if (!empty($boxPoGrade) || !empty($duitKosong)) {
+                                    // $duitKosong = DB::table('bk')
+                                    //     ->where([['nm_partai', $d->nm_partai], ['hrga_satuan', 0]])
+                                    //     ->first();
+                                    if (!empty($boxPoGrade)) {
                                         continue;
                                     }
                                 @endphp
