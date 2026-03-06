@@ -142,6 +142,7 @@ class CabutOpnameModel extends Model
         return DB::selectOne("SELECT b.nm_partai, sum(a.gr_awal) as gr_awal, sum(a.pcs_akhir) as pcs , sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp, sum(b.hrga_satuan * b.gr_awal) as modal_rp
         FROM cabut as a 
         left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
+        
         where a.selesai = 'Y' and b.baru='baru' and a.no_box != '9999' 
         $all
         ");
@@ -195,6 +196,19 @@ SELECT a.no_box, c.name, d.nama, b.nm_partai, 0 as pcs_awal , a.gr_eo_awal as gr
         left join cabut as d on d.no_box = a.no_box
         left join eo as e on e.no_box = a.no_box
         where b.kategori ='CTK' and c.baru='baru' $partai;
+        ");
+    }
+    public static function cetakPartai2()
+    {
+
+        return DB::selectOne("SELECT c.nm_partai, sum(a.pcs_tdk_cetak ) as pcs_tdk, sum(a.pcs_akhir) as pcs , sum(a.gr_tdk_cetak ) as gr_tdk, sum(a.gr_akhir) as gr, sum(a.ttl_rp) as ttl_rp, sum(a.gr_awal_ctk) as gr_awal, sum(c.hrga_satuan * c.gr_awal) as modal_rp,
+        sum(COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) ) as cost_kerja
+        FROM cetak_new as a 
+        left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
+        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
+        left join cabut as d on d.no_box = a.no_box
+        left join eo as e on e.no_box = a.no_box
+        where   b.kategori != 'CTK';
         ");
     }
     public static function cetakPartaiDetail($partai)

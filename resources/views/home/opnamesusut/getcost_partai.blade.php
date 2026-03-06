@@ -25,24 +25,30 @@
     $grAkhirCabut = ($cabut->gr ?? 0) + ($eo->gr ?? 0);
     $cabutModal = ($cabut->modal_rp ?? 0) + ($eo->modal_rp ?? 0);
     $cabutTtlRp = ($cabut->ttl_rp ?? 0) + ($eo->ttl_rp ?? 0);
-    $modalCabutTbhCost = $cabutModal + $cabutTtlRp;
+    $modalCabutTbhCost = $cabutModal + $cabutTtlRp + $dll_cabut;
 
     // Cetak values
     $cetakPcsTotal = ($cetak->pcs_tdk ?? 0) + ($cetak->pcs ?? 0);
     $cetakGrTotal = ($cetak->gr_tdk ?? 0) + ($cetak->gr ?? 0);
-    $cetakModalTotal = ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0);
-    $cetakModalTbhCost = $cetakModalTotal + ($cetak->ttl_rp ?? 0);
+    $cetakModalTotal = ($cetak->modal_rp ?? 0) + ($cetak->cost_kerja ?? 0) + $dll_cabut;
+    $cetakModalTbhCost = $cetakModalTotal + ($cetak->ttl_rp ?? 0) + $cu + $dll_cetak;
 
     // Sortir values
-    $sortirModalTotal = ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0);
+    $sortirModalTotal = ($sortir->modal_rp ?? 0) + ($sortir->cost_kerja ?? 0) + $dll_cabut + $dll_cetak + $cu;
     $sortirModalTbhCost = $sortirModalTotal + ($sortir->ttl_rp ?? 0);
 
     // Grading values
-    $gradingModalTotal = ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0);
+    $gradingModalTotal = ($grading->cost_bk ?? 0) + ($grading->cost_kerja ?? 0) + $dll_cabut + $dll_cetak + $cu;
     $gradingModalTbhCost = $gradingModalTotal + ($grading->cost_op ?? 0);
 
     // Pengiriman values
-    $pengirimanModalTotal = ($pengiriman->cost_bk ?? 0) + ($pengiriman->cost_kerja ?? 0) + ($pengiriman->cost_op ?? 0);
+    $pengirimanModalTotal =
+        ($pengiriman->cost_bk ?? 0) +
+        ($pengiriman->cost_kerja ?? 0) +
+        ($pengiriman->cost_op ?? 0) +
+        $dll_cabut +
+        $dll_cetak +
+        $cu;
 
     // Total values for footer
     $totalCost =
@@ -51,6 +57,9 @@
         ($cetak->ttl_rp ?? 0) +
         ($sortir->ttl_rp ?? 0) +
         ($bk->ttl_rp ?? 0) +
+        ($dll_cabut ?? 0) +
+        ($dll_cetak ?? 0) +
+        ($cu ?? 0) +
         ($grading->cost_op ?? 0);
 
     $totalPcs =
@@ -86,7 +95,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="dhead text-center" colspan="12">{{ $bk->nm_partai }}</th>
+                    <th class="dhead text-center" colspan="13">{{ $partai }}</th>
                     <th class="dhead text-center" colspan="4">Gudang</th>
                     <th class="dhead text-center" rowspan="2">pencocokan rp</th>
                 </tr>
@@ -100,6 +109,7 @@
                     <th class="text-end dhead">Susut %</th>
                     <th class="text-end dhead">Modal Rp</th>
                     <th class="text-end dhead">Cost Kerja</th>
+                    <th class="text-end dhead">Cost Dll</th>
                     <th class="text-end dhead">Cost Operasional</th>
                     <th class="text-end dhead">Modal tambah cost</th>
                     <th class="text-end dhead">Modal rata-rata</th>
@@ -112,10 +122,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="#" class="detail_bk fw-bold" nm_partai="{{ $bk->nm_partai }}"
-                            data-bs-toggle="modal" data-bs-target="#detail_bk_tes">{{ $bk->nm_partai }}</a>
+                        <a href="#" class="detail_bk fw-bold" nm_partai="{{ $partai }}"
+                            data-bs-toggle="modal" data-bs-target="#detail_bk_tes">{{ $partai }}</a>
                     </td>
-                    <td>{{ $bk->tipe }}</td>
+                    <td>{{ $partai == 'All' ? 'Mix' : $bk->tipe }}</td>
                     <td class="text-end" style="background-color: #FFC000">{{ $formatNumber($bk->pcs_awal) }}</td>
                     <td class="text-end">{{ $formatNumber($bk->gr_awal) }}</td>
                     <td class="text-end"></td>
@@ -123,6 +133,7 @@
                     <td class="text-end"></td>
                     <td class="text-end">{{ $formatNumber($bk->ttl_rp) }}</td>
                     <td class="text-end"></td>
+                    <td class="text-end">0</td>
                     <td class="text-end"></td>
                     <td class="text-end"></td>
                     <td class="text-end">{{ $formatNumber($calculateRatarata($bk->ttl_rp, $bk->gr_awal)) }}</td>
@@ -142,6 +153,7 @@
                     <td class="text-end">{{ $formatNumber($calculateSusut($grAkhirCabut, $grAwalCabut)) }}%</td>
                     <td class="text-end">{{ $formatNumber($cabutModal) }}</td>
                     <td class="text-end">{{ $formatNumber($cabutTtlRp) }}</td>
+                    <td class="text-end">{{ number_format($dll_cabut, 0) }}</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($modalCabutTbhCost) }}</td>
                     <td class="text-end">{{ $formatNumber($calculateRatarata($modalCabutTbhCost, $grAkhirCabut)) }}
@@ -170,7 +182,8 @@
                         {{ $formatNumber($calculateSusut($cetakGrTotal, $cetak->gr_awal)) }}%
                     </td>
                     <td class="text-end">{{ $formatNumber($cetakModalTotal) }}</td>
-                    <td class="text-end">{{ $formatNumber($cetak->ttl_rp) }}</td>
+                    <td class="text-end">{{ $formatNumber($cetak->ttl_rp + $cu) }}</td>
+                    <td class="text-end">{{ number_format($dll_cetak, 0) }}</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($cetakModalTbhCost) }}</td>
                     <td class="text-end">{{ $formatNumber($calculateRatarata($cetakModalTbhCost, $cetakGrTotal)) }}
@@ -201,8 +214,10 @@
                     <td class="text-end">{{ $formatNumber($sortirModalTotal) }}</td>
                     <td class="text-end">{{ $formatNumber($sortir->ttl_rp ?? 0) }}</td>
                     <td class="text-end">0</td>
+                    <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($sortirModalTbhCost) }}</td>
-                    <td class="text-end">{{ $formatNumber($calculateRatarata($sortirModalTbhCost, $sortir->gr ?? 0)) }}
+                    <td class="text-end">
+                        {{ $formatNumber($calculateRatarata($sortirModalTbhCost, $sortir->gr ?? 0)) }}
                     </td>
 
                     <td class="text-end">{{ $formatNumber($cetakPcsTotal - ($sortir->pcs ?? 0)) }}</td>
@@ -226,6 +241,7 @@
                     <td class="text-end">{{ $formatNumber($grading->gr) }}</td>
                     <td class="text-end">0%</td>
                     <td class="text-end">{{ $formatNumber($gradingModalTotal) }}</td>
+                    <td class="text-end">0</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($grading->cost_op) }}</td>
                     <td class="text-end">{{ $formatNumber($gradingModalTbhCost) }}</td>
@@ -256,6 +272,7 @@
                     <td class="text-end">{{ $formatNumber($pengiriman->gr) }}</td>
                     <td class="text-end">0%</td>
                     <td class="text-end">{{ $formatNumber($pengirimanModalTotal) }}</td>
+                    <td class="text-end">0</td>
                     <td class="text-end">0</td>
                     <td class="text-end">0</td>
                     <td class="text-end">{{ $formatNumber($pengirimanModalTotal) }}</td>
@@ -301,6 +318,7 @@
                 <tr>
                     <th colspan="8">Total</th>
                     <th class="text-end" style="background-color: #FFC000">{{ $formatNumber($totalCost) }}</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>

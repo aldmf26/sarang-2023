@@ -43,7 +43,6 @@ class OpnameSusutController extends Controller
         $data = [
             'title' => 'Data Opname',
             'pgws_cabut' => $pgws_cabut,
-
         ];
         return view('home.opnamesusut.cetak', $data);
     }
@@ -73,17 +72,31 @@ class OpnameSusutController extends Controller
     public function getCostpartai(Request $r)
     {
         $partai = $r->partai == 'all' ? '' : "and a.nm_partai = '$r->partai'";
-        $bk = DB::selectOne("SELECT a.nm_partai, a.tipe, a.ket, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.gr_awal * a.hrga_satuan) as ttl_rp
+        $bk = DB::selectOne("SELECT a.nm_partai, b.grade as tipe, a.ket, sum(a.pcs_awal) as pcs_awal, sum(a.gr_awal) as gr_awal, sum(a.gr_awal * a.hrga_satuan) as ttl_rp
         FROM bk as a 
+        left join bk_awal as b on b.nm_partai = a.nm_partai
         where a.kategori = 'cabut' and a.baru = 'baru' $partai");
+
+        $dll_cabut =  DB::selectOne("SELECT sum(a.rupiah) as rupiah FROM tb_hariandll as a where a.id_pengawas not in ('462','463')");
+        $ks_cabut =  DB::selectOne("SELECT sum(a.nominal) as rupiah FROM kasbon as a where a.id_pengawas not in ('462','463')");
+
+        $dll_cetak =  DB::selectOne("SELECT sum(a.rupiah) as rupiah FROM tb_hariandll as a where a.id_pengawas  in ('462','463')");
+        $ks_cetak =  DB::selectOne("SELECT sum(a.nominal) as rupiah FROM kasbon as a where a.id_pengawas  in ('462','463')");
+        $cu = CabutOpnameModel::cetakPartai2();
+
+
         $data = [
             'bk' => $bk,
             'cabut' => CabutOpnameModel::cabutPartai($r->partai),
             'eo' => CabutOpnameModel::eotPartai($r->partai),
             'cetak' => CabutOpnameModel::cetakPartai($r->partai),
+            'cu' => $r->partai != 'all' ? 0 : $cu->ttl_rp,
             'sortir' => CabutOpnameModel::sortirPartai($r->partai),
             'grading' => CabutOpnameModel::gradingPartai($r->partai),
             'pengiriman' => CabutOpnameModel::pengiriman($r->partai),
+            'partai' => $r->partai != 'all' ? $r->partai : 'All',
+            'dll_cabut' =>  $r->partai != 'all' ? 0 : $dll_cabut->rupiah,
+            'dll_cetak' =>  $r->partai != 'all' ? 0 : $dll_cetak->rupiah
         ];
         return view('home.opnamesusut.getcost_partai', $data);
     }

@@ -474,6 +474,7 @@ class CocokanController extends Controller
             'grading_proses' => $grading_proses,
 
 
+
         ];
         return view('home.cocokan.balance', $data);
     }
