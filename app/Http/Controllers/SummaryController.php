@@ -88,9 +88,6 @@ class SummaryController extends Controller
         } else {
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
-
-
-
         $bulan_array = DB::table('oprasional')->get();
         $data = [
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji
@@ -1134,17 +1131,10 @@ class SummaryController extends Controller
 
     public function saveoprasional(Request $r)
     {
-
         $bulan = $r->bulan;
         $tahun = $r->tahun;
-
-
-
         $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan ='$bulan' and a.tahun = '$tahun' ");
         $ttl_gr = sumBk($grading_partai, 'gr');
-
-
-
 
         $formattedNumber = $r->biaya_oprasional;
         // Hapus pemisah ribuan untuk mendapatkan angka mentah
