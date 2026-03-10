@@ -106,9 +106,6 @@ class SummaryController extends Controller
         return view('home.summary.operasional', $data);
     }
 
-
-
-
     public function detail_partai(Request $r)
     {
         $data = [
