@@ -49,48 +49,49 @@
                 <input type="text" id="search-box-lewat" class="form-control form-control-sm"
                     placeholder="Cari No Box...">
             </div>
-            <table class="table table-bordered table-sm" id="table-lewat">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <th width="5%" class="text-center">
-                            <input type="checkbox" id="check-all-lewat" class="form-check-input">
-                        </th>
-                        <th>No Box</th>
-                        <th width="20%">Pcs Sisa</th>
-                        <th width="20%">Gram Sisa</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($box as $i => $b)
-                        @php
-                            $sisa_pcs = $b->pcs_awal - $b->pcs_cabut;
-                            $sisa_gr = $b->gr_awal - $b->gr_cabut;
-                        @endphp
+            <div style="overflow-y: scroll; height: 300px;">
+                <table class="table table-bordered table-sm" id="table-lewat">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="pilih[]" value="{{ $i }}"
-                                    class="form-check-input check-box-lewat">
-                            </td>
-                            <td>
-                                {{ $b->no_box }}
-                                <input type="hidden" name="no_box[]" value="{{ $b->no_box }}">
-                            </td>
-                            <td>
-                                <input readonly type="number" name="pcs[]" class="form-control form-control-sm"
-                                    value="{{ $sisa_pcs }}" required>
-                            </td>
-                            <td>
-                                <input readonly type="number" step="any" name="gr[]" class="form-control form-control-sm"
-                                    value="{{ $sisa_gr }}" required>
-                            </td>
+                            <th width="5%" class="text-center">
+                                <input type="checkbox" id="check-all-lewat" class="form-check-input">
+                            </th>
+                            <th>No Box</th>
+                            <th width="20%">Pcs Sisa</th>
+                            <th width="20%">Gram Sisa</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($box as $i => $b)
+                            @php
+                                $sisa_pcs = $b->pcs_awal - $b->pcs_cabut;
+                                $sisa_gr = $b->gr_awal - $b->gr_cabut;
+                            @endphp
+                            <tr>
+                                <td class="text-center">
+                                    <input type="checkbox" name="pilih[]" value="{{ $i }}"
+                                        class="form-check-input check-box-lewat">
+                                </td>
+                                <td>
+                                    {{ $b->no_box }}
+                                    <input type="hidden" name="no_box[]" value="{{ $b->no_box }}">
+                                </td>
+                                <td>
+                                    <input readonly type="number" name="pcs[]" class="form-control form-control-sm"
+                                        value="{{ $sisa_pcs }}" required>
+                                </td>
+                                <td>
+                                    <input readonly type="number" step="any" name="gr[]"
+                                        class="form-control form-control-sm" value="{{ $sisa_gr }}" required>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary" {{ !$kelas ? 'disabled' : '' }}>Simpan Batch</button>
     </div>
 </form>
