@@ -2209,4 +2209,86 @@ class CabutController extends Controller
         DB::table('formulir_sarang')->insert($data);
         return redirect()->route('cabut.gudang')->with('sukses', 'Data Berhasil');
     }
+
+    public function load_modal_lewat(Request $r)
+    {
+        $id_user = auth()->user()->id;
+        $lokasi = auth()->user()->lokasi;
+
+        $box = DB::select("SELECT a.no_box, a.pcs_awal, COALESCE(b.pcs_awal, 0) as pcs_cabut, a.gr_awal, COALESCE(b.gr_awal, 0) as gr_cabut FROM `bk` as a
+        LEFT JOIN (
+            SELECT no_box, SUM(pcs_awal) as pcs_awal, SUM(gr_awal) as gr_awal FROM `cabut` GROUP BY no_box
+        ) as b ON a.no_box = b.no_box 
+        WHERE a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' AND a.selesai = 'T' AND a.baru = 'baru' 
+        AND a.no_box NOT IN (SELECT no_box FROM `cetak_new`)
+        AND a.no_box NOT IN (SELECT no_box FROM `eo`)
+        HAVING a.gr_awal - gr_cabut > 1
+        ");
+
+        $anak = DB::table('tb_anak')->where('id_pengawas', $id_user)->get();
+        // Cari kelas lewat (rupiah 0 atau ada nama lewat)
+        $kelas = DB::table('tb_kelas as a')
+            ->join('paket_cabut as b', 'a.id_paket', 'b.id_paket')
+            ->where('a.lokasi', $lokasi)
+            ->where(function ($query) {
+                $query->where('a.rupiah', 0)
+                    ->orWhere('b.paket', 'like', '%lewat%');
+            })
+            ->where('a.nonaktif', 'T')
+            ->select('a.*', 'b.paket')
+            ->first();
+
+        $data = [
+            'box' => $box,
+            'anak' => $anak,
+            'kelas' => $kelas
+        ];
+        return view('home.cabut.load_modal_lewat', $data);
+    }
+
+    public function create_lewat(Request $r)
+    {
+        $id_pengawas = auth()->user()->id;
+        $tgl = $r->tgl;
+        $id_anak = $r->id_anak;
+        $id_kelas = $r->id_kelas;
+        $bulan = $r->bulan;
+        $tahun = date('Y');
+
+        if (empty($id_kelas)) {
+            return redirect()->back()->with('error', 'Paket Lewat tidak ditemukan (Rupiah 0)');
+        }
+
+        $no_box = $r->no_box;
+        $pcs = $r->pcs;
+        $gr = $r->gr;
+        $pilih = $r->pilih;
+
+        if (empty($pilih)) {
+            return redirect()->back()->with('error', 'Pilih minimal satu box');
+        }
+
+        foreach ($pilih as $i) {
+            DB::table('cabut')->insert([
+                'no_box' => $no_box[$i],
+                'id_anak' => $id_anak,
+                'id_kelas' => $id_kelas,
+                'tgl_terima' => $tgl,
+                'tgl_serah' => $tgl,
+                'pcs_awal' => $pcs[$i],
+                'gr_awal' => $gr[$i],
+                'pcs_akhir' => $pcs[$i],
+                'gr_akhir' => $gr[$i],
+                'selesai' => 'Y',
+                'rupiah' => 0,
+                'ttl_rp' => 0,
+                'id_pengawas' => $id_pengawas,
+                'bulan_dibayar' => $bulan,
+                'tahun_dibayar' => $tahun,
+                'penutup' => 'T'
+            ]);
+        }
+
+        return redirect()->back()->with('sukses', 'Sukes input Box Lewat (Multiple)');
+    }
 }
