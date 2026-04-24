@@ -232,6 +232,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::get('/export_gaji_global', 'export_gaji_global')->name('export_gaji_global');
+            Route::get('/load_modal_lewat', 'load_modal_lewat')->name('load_modal_lewat');
+            Route::post('/create_lewat', 'create_lewat')->name('create_lewat');
         });
     Route::controller(Laporan_akhir::class)
         ->prefix('home/laporanakhir')

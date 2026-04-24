@@ -6,7 +6,8 @@
         <div class="d-flex justify-content-between">
             <div>
                 <h6 class="">{{ $title }} {{ date('d M y', strtotime($tgl1)) }} ~
-                    {{ date('d M y', strtotime($tgl2)) }}</h6>
+                    {{ date('d M y', strtotime($tgl2)) }}
+                </h6>
                 <h6>Anak : {{ $anak }}</h6>
                 <p class="badge bg-danger" style="font-size: 14px">Setor lewat jam 09:30 AM = tidak capai</p>
             </div>
@@ -14,8 +15,8 @@
                 <a href="{{ route('cetaknew.gudangcetak') }}" class="float-end btn btn-sm ms-2"
                     style="background-color: #E11583; color: white"><i class="fas fa-warehouse"></i> Gudang</a>
 
-                <x-theme.button modal="Y" idModal="gaji" href="#" icon="fa-file-excel"
-                    addClass="float-end ms-2" teks="Gaji Global" />
+                <x-theme.button modal="Y" idModal="gaji" href="#" icon="fa-file-excel" addClass="float-end ms-2"
+                    teks="Gaji Global" />
                 {{-- @if (!auth()->user()->posisi_id == '1') --}}
                 <x-theme.button href="#" modal="Y" idModal="tambah" icon="fa-plus"
                     addClass="float-end tambah_kerja ms-2" teks="Kerja CU" />
@@ -24,11 +25,14 @@
                 <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end ms-2"
                     teks="Summary" />
 
-                <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
-                    addClass="float-end ms-2" teks="Export" />
+                <x-theme.button modal="Y" idModal="lewat" href="#" icon="fa-forward" addClass="float-end ms-2 btn_lewat"
+                    teks="Box Lewat" />
 
-                <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week"
-                    addClass="float-end" teks="View" />
+                <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel" addClass="float-end ms-2"
+                    teks="Export" />
+
+                <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end"
+                    teks="View" />
                 {{-- @include('home.cetak_new.btn_import') --}}
 
 
@@ -121,7 +125,7 @@
                             <select name="id_pemberi" id="" class="select2">
                                 <option value="">Pilih Pengawas</option>
                                 @foreach ($users as $u)
-                                    <option value="{{ $u->id }}">{{ $u->name }}</option>
+                                <option value="{{ $u->id }}">{{ $u->name }}</option>
                                 @endforeach
                             </select>
                         </div> --}}
@@ -157,7 +161,7 @@
         </form>
         @section('scripts')
             <script>
-                $(document).ready(function() {
+                $(document).ready(function () {
 
                     load_cetak();
 
@@ -176,7 +180,7 @@
                                 hal: hal
                             },
                             url: "{{ route('cetaknew.get_cetak') }}",
-                            success: function(r) {
+                            success: function (r) {
                                 $("#load-cetak").html(r);
                                 // $('.select2_add').select2({});
                                 $('#tableHalaman').DataTable({
@@ -229,7 +233,7 @@
                                 pcs_awal: pcs_awal,
                                 gr_awal: gr_awal
                             },
-                            success: function(response) {
+                            success: function (response) {
                                 loadRowData(id_cetak, no, hal)
                                 alertToast('sukses', 'Berhasil ditambahkan');
                             }
@@ -237,7 +241,7 @@
 
 
                     }
-                    $(document).on("click", ".btn_save_akhir", function(e) {
+                    $(document).on("click", ".btn_save_akhir", function (e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
                         saveAkhir(id_cetak);
@@ -248,7 +252,7 @@
                         $.get("{{ route('cetaknew.getRowData') }}", {
                             id_cetak: id_cetak,
                             no: no
-                        }, function(data) {
+                        }, function (data) {
                             var tr = $('tr[data-id="' + id_cetak + '"]');
                             tr.replaceWith(data);
 
@@ -262,7 +266,7 @@
                         });
                     }
 
-                    $(document).on("click", ".btn_selesai", function(e) {
+                    $(document).on("click", ".btn_selesai", function (e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
                         var no = $('.no' + id_cetak).val();
@@ -290,7 +294,7 @@
                                     data: {
                                         id_cetak: id_cetak,
                                     },
-                                    success: function(response) {
+                                    success: function (response) {
                                         loadRowData(id_cetak, no)
                                         alertToast('sukses', 'Berhasil ditambahkan');
                                     }
@@ -303,7 +307,7 @@
 
 
                     });
-                    $(document).on("click", ".btn_cancel", function(e) {
+                    $(document).on("click", ".btn_cancel", function (e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
                         var form = $(this).attr('form');
@@ -316,7 +320,7 @@
                                 id_cetak: id_cetak,
                                 form: form,
                             },
-                            success: function(response) {
+                            success: function (response) {
 
                                 if (response.success) {
                                     // Berhasil, lakukan sesuatu
@@ -331,7 +335,7 @@
                             }
                         });
                     });
-                    $(document).on("click", ".btn_hapus", function(e) {
+                    $(document).on("click", ".btn_hapus", function (e) {
                         e.preventDefault();
                         var id_cetak = $(this).attr('id_cetak');
                         var id_paket = $(this).attr('id_paket');
@@ -342,14 +346,14 @@
                                 id_cetak: id_cetak,
                                 id_paket: id_paket
                             },
-                            success: function(response) {
+                            success: function (response) {
                                 alertToast('sukses', 'Data berhasil di hapus');
                                 load_cetak();
                             }
                         });
                     });
 
-                    $(document).on('click', '.capai', function(e) {
+                    $(document).on('click', '.capai', function (e) {
                         e.preventDefault()
                         const val = $(this).attr('capaiVal')
                         const id_cetak = $(this).attr('id_cetak')
@@ -363,7 +367,7 @@
                                 id_cetak
                             },
                             dataType: 'json',
-                            success: function(r) {
+                            success: function (r) {
                                 // alertToast(r.status, r.pesan);
                                 loadRowData(id_cetak, no)
 
@@ -377,7 +381,7 @@
                 var tgl2 = new Date("{{ $tgl2 }}");
 
 
-                $(document).keydown(function(event) {
+                $(document).keydown(function (event) {
                     if (event.ctrlKey && (event.keyCode === 37 || event.keyCode === 39)) {
                         var offset = event.keyCode === 37 ? -1 : 1;
                         tgl1.setDate(tgl1.getDate() + offset);
@@ -399,7 +403,7 @@
                 }
 
 
-                $(document).on('change', '.tipe_bayar', function() {
+                $(document).on('change', '.tipe_bayar', function () {
                     var id_cetak = $(this).attr('id_cetak');
                     var tipe_bayar = $(this).val();
 
@@ -409,7 +413,7 @@
                         data: {
                             tipe_bayar: tipe_bayar,
                         },
-                        success: function(response) {
+                        success: function (response) {
                             $('.id_paket' + id_cetak).html(response);
                         }
                     });
@@ -426,7 +430,7 @@
                         method: "GET",
                         url: "{{ route('cetaknew.load_tambah_data') }}",
                         dataType: "html",
-                        success: function(hasil) {
+                        success: function (hasil) {
                             $("#load_menu").html(hasil);
                             $('.select').select2({
                                 dropdownParent: $('#tambah .modal-content')
@@ -436,13 +440,13 @@
                     });
                 }
 
-                $(document).on("click", ".remove_baris", function() {
+                $(document).on("click", ".remove_baris", function () {
                     var delete_row = $(this).attr("count");
                     $(".baris" + delete_row).remove();
                 });
 
                 var count = 2;
-                $(document).on("click", ".tbh_baris", function() {
+                $(document).on("click", ".tbh_baris", function () {
                     count = count + 1;
                     $.ajax({
                         url: "{{ route('cetaknew.tambah_baris') }}",
@@ -450,7 +454,7 @@
                             count: count,
                         },
                         type: "Get",
-                        success: function(data) {
+                        success: function (data) {
                             $("#tb_baris").append(data);
                             $('.select').select2({
                                 dropdownParent: $('#tambah .modal-content')
@@ -459,7 +463,7 @@
                     });
                 });
 
-                $(document).on("submit", "#save_awal", function(e) {
+                $(document).on("submit", "#save_awal", function (e) {
                     e.preventDefault();
                     var csrfToken = $('meta[name="csrf-token"]').attr('content');
                     var formData = $(this).serialize();
@@ -469,7 +473,7 @@
                         type: "POST",
                         url: "{{ route('cetaknew.save_target') }}",
                         data: formData,
-                        success: function(response) {
+                        success: function (response) {
                             alertToast('sukses', 'Berhasil ditambahkan');
                             // $('.input_awal').val('');
                             load_menu();
@@ -478,7 +482,18 @@
                         },
                     });
                 });
-                $(document).on('change', '.box', function() {
+
+                $(document).on('click', '.btn_lewat', function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cetaknew.load_modal_lewat') }}",
+                        success: function (data) {
+                            $("#load_modal_lewat").html(data);
+                        },
+                    });
+                });
+
+                $(document).on('change', '.box', function () {
                     var urutan = $(this).attr('urutan');
                     var box = $(this).val();
 
@@ -489,13 +504,16 @@
                         data: {
                             box: box
                         },
-                        success: function(response) {
+                        success: function (response) {
                             $('.pcs_awal' + urutan).val(response['pcs_awal']);
                             $('.gr_awal' + urutan).val(response['gr_awal']);
                         }
                     });
                 });
             </script>
+            <x-theme.modal title="Box Lewat" btnSave="T" idModal="lewat" size="modal-lg">
+                <div id="load_modal_lewat"></div>
+            </x-theme.modal>
         @endsection
     </x-slot>
 </x-theme.app>
