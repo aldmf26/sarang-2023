@@ -46,14 +46,19 @@ class CocokanModel extends Model
 
     public static function bksisapgws()
     {
-        $result = DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 
-        sum(a.gr_awal * a.hrga_satuan) as ttl_rp
-            FROM bk as a 
-            where a.kategori ='cabut' and a.baru ='baru' 
-            AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
-            AND NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
-            AND a.baru = 'baru'
-            ");
+        $result = DB::selectOne("
+        SELECT 
+            SUM(fs.pcs_awal) as pcs, 
+            SUM(fs.gr_awal) as gr, 
+            SUM(fs.gr_awal * bk.hrga_satuan) as ttl_rp
+        FROM formulir_sarang fs
+        INNER JOIN bk ON bk.no_box = fs.no_box
+        WHERE fs.kategori = 'cabut'
+          AND bk.baru = 'baru'
+          AND NOT EXISTS (SELECT 1 FROM cabut WHERE cabut.no_box = fs.no_box)
+          AND NOT EXISTS (SELECT 1 FROM eo WHERE eo.no_box = fs.no_box)
+    ");
+
         return $result;
     }
 
