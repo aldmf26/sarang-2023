@@ -582,10 +582,10 @@ where a.wip2 ='T';");
         left join (
             SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja
             FROM grading_partai as b 
-            where b.sudah_kirim = 'Y'
+            where b.sudah_kirim = 'T'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
-        where a.selesai ='Y';
+        where a.selesai ='T';
         ");
     }
 }
