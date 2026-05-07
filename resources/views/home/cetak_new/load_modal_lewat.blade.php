@@ -37,8 +37,8 @@
                         <td>{{ $b->pcs_awal_ctk }}</td>
                         <td>{{ $b->gr_awal_ctk }}</td>
                         <td>
-                            <input type="number" step="any" name="gr_akhir[{{ $index }}]"
-                                class="form-control form-control-sm">
+                            <input type="number" value="{{ $b->gr_awal_ctk }}" step="any"
+                                name="gr_akhir[{{ $index }}]" class="form-control form-control-sm">
                         </td>
                     </tr>
                 @endforeach
@@ -51,9 +51,9 @@
 </form>
 
 <script>
-    $('#pencarian').keyup(function () {
+    $('#pencarian').keyup(function() {
         var value = $(this).val().toLowerCase();
-        $("#tbl_lewat tr").filter(function () {
+        $("#tbl_lewat tr").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
