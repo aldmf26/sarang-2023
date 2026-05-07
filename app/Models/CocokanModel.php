@@ -577,14 +577,15 @@ where a.wip2 ='T';");
     }
     public static function pengiriman_proses()
     {
-        return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp
-        FROM (
-            SELECT a.box_pengiriman, sum(a.pcs) as pcs, sum(a.gr) as gr,sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
-            FROM grading_partai as a 
-            where a.sudah_kirim = 'Y'
-            group by a.box_pengiriman
-        ) as a 
-
-        WHERE a.box_pengiriman not in (SELECT a.id_pengiriman FROM pengiriman_packing_list as a);");
+        return DB::selectOne("SELECT  a.cost_op,a.cost_cu,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(COALESCE(b.cost_bk,0) + COALESCE(b.cost_kerja,0) + COALESCE(b.cost_op,0)) as ttl_rp, sum(b.cost_bk) as cost_bk, sum(b.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(b.cost_op) as cost_op
+        FROM pengiriman as a
+        left join (
+            SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja
+            FROM grading_partai as b 
+            where b.sudah_kirim = 'Y'
+            group by b.box_pengiriman
+        ) as b on b.box_pengiriman = a.no_box
+        where a.selesai ='Y';
+        ");
     }
 }
