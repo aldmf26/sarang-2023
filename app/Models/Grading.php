@@ -138,7 +138,7 @@ class Grading extends Model
         WHERE a.selesai  = 'T'
         GROUP BY b.no_box
         HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
-        ORDER BY b.tanggal DESC");
+        ORDER BY e.nm_partai DESC");
 
         $arr = [
             'formulir' => $formulir,
