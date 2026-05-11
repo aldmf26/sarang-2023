@@ -29,7 +29,7 @@ class SortirController extends Controller
     {
         return DB::table('tb_anak as a')
             ->join('tb_kelas_sortir as b', 'a.id_kelas', 'b.id_kelas')
-            ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
+            ->where('id_pengawas', '!=', null)
             ->get();
     }
     public function updateAnakBelum()
@@ -265,7 +265,7 @@ class SortirController extends Controller
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
                 left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T'
+                where a.no_box != '9999' and a.penutup = 'T'
                 order by a.selesai ASC
                 ");
         } else {
@@ -274,7 +274,7 @@ class SortirController extends Controller
                 left join tb_anak as b on a.id_anak = b.id_anak
                 left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
                 left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
+                where a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
                 order by a.selesai ASC
                 ");
         }
