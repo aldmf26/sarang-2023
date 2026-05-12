@@ -284,7 +284,7 @@
                         var ttl_pcs = (parseFloat(pcs_akhir) + parseFloat(pcs_tdk_ctk));
 
 
-                        if (pcs_awal != ttl_pcs || gr_awal < ttl_gr_akhir) {
+                        if (pcs_awal != ttl_pcs) {
                             alertToast('error', 'Cek kembali pcs dan gr sebelum diselesaikan');
                         } else {
                             if (id_anak != 0) {
