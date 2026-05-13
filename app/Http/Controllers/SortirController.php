@@ -286,6 +286,7 @@ class SortirController extends Controller
             )
             ->where('a.no_box', '!=', '9999')
             ->where('a.penutup', 'T')
+            ->where('d.no_box', null)
             ->orderBy('a.selesai', 'ASC');
 
         if ($id_anak && $id_anak !== 'All') {
