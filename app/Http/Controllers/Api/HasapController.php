@@ -1175,7 +1175,7 @@ ORDER BY  tgl ASC;");
         where c.no_box != '9999' 
           and c.id_kelas not in('126','166','152','142')  
           and c.id_pengawas not in ('104','421','99','101','285') 
-          and d.nm_partai in ('bjm 1003' , 'bjm 1004') 
+          
 
         UNION ALL
         
@@ -1207,7 +1207,7 @@ ORDER BY  tgl ASC;");
         where c.no_box != '9999' 
           and c.id_kelas not in('126','166','152','142')  
           and c.id_pengawas not in ('104','421','99','101','285') 
-          and d.nm_partai in ('bjm 1003' , 'bjm 1004')
+          
 
         ) AS hasil
         -- Filter nm_partai di bagian luar DIHAPUS karena sudah di filter di dalam
@@ -1274,7 +1274,7 @@ ORDER BY  tgl ASC;");
             left join tb_anak as e on e.id_anak = c.id_anak
             left join hasil_wawancara as f on f.id_anak = e.id_anak
             left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') and d.nm_partai in('bjm 1003','bjm 1004')
+            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') 
             
             UNION ALL 
             
@@ -1306,7 +1306,7 @@ ORDER BY  tgl ASC;");
             left join tb_anak as e on e.id_anak = c.id_anak
             left join hasil_wawancara as f on f.id_anak = e.id_anak
             left join tb_hancuran as g on g.no_box = c.no_box and g.kategori = 'cetak'
-            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') and d.nm_partai in('bjm 1003','bjm 1004')
+            where c.no_box != '9999' and c.id_kelas not in('126','166','152','142') 
         ) AS hasil
         
         WHERE tgl = ? and id_pengawas = ?
