@@ -144,7 +144,9 @@ class Sortir extends Model
         
         left join users as f on f.id = a.id_pengawas
         left join eo as g on g.no_box = a.no_box
-        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' $id_pengawas; ");
+        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' $id_pengawas
+        order by a.no_box asc
+        ; ");
 
         return $result;
     }
