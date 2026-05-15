@@ -79,7 +79,7 @@ class Sortir extends Model
         if (auth()->user()->posisi_id == 1) {
             $id_pengawas = '';
         } else {
-            $id_pengawas = "AND a.id_penerima = $id_user";
+            $id_pengawas = '';
         }
         $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
         (if(c.ttl_rp is null,0,c.ttl_rp) + if(e.ttl_rp is null,0,e.ttl_rp)) as cost_cbt, d.ttl_rp as cost_ctk, f.name, g.ttl_rp as cost_eo
@@ -103,7 +103,7 @@ class Sortir extends Model
         if (auth()->user()->posisi_id == 1) {
             $id_pengawas = '';
         } else {
-            $id_pengawas = "AND a.id_pengawas = $id_user";
+            $id_pengawas = '';
         }
 
         $result = DB::select("SELECT b.nm_partai,  a.no_box, a.pcs_awal, a.gr_awal, (b.hrga_satuan * b.gr_awal) as ttl_rp,
@@ -128,7 +128,7 @@ class Sortir extends Model
         if (auth()->user()->posisi_id == 1) {
             $id_pengawas = '';
         } else {
-            $id_pengawas = "AND a.id_pengawas = $id_user";
+            $id_pengawas = '';
         }
         $result = DB::select("SELECT b.nm_partai, a.no_box, a.pcs_akhir as pcs_awal, a.gr_akhir as gr_awal,(b.hrga_satuan * b.gr_awal) as ttl_rp, d.ttl_rp as cost_cbt, e.ttl_rp as cost_ctk, f.name, a.ttl_rp as cost_str, g.ttl_rp as cost_eo, a.pcs_tdk_sortir, a.gr_tdk_sortir
         FROM sortir as a 
@@ -144,7 +144,9 @@ class Sortir extends Model
         
         left join users as f on f.id = a.id_pengawas
         left join eo as g on g.no_box = a.no_box
-        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' $id_pengawas; ");
+        WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') $id_pengawas and a.selesai = 'Y' $id_pengawas
+        order by a.no_box asc
+        ; ");
 
         return $result;
     }

@@ -29,7 +29,7 @@ class SortirController extends Controller
     {
         return DB::table('tb_anak as a')
             ->join('tb_kelas_sortir as b', 'a.id_kelas', 'b.id_kelas')
-            ->where('id_pengawas', empty($id) ? auth()->user()->id : null)
+            ->where('id_pengawas', '!=', null)
             ->get();
     }
     public function updateAnakBelum()
@@ -253,42 +253,138 @@ class SortirController extends Controller
 
     public function load_halaman(Request $r)
     {
-        $tgl1 = $r->tgl1 ?? date('Y-m-d');
-        $tgl2 = $r->tgl2 ?? date('Y-m-t');
+        $tgl1    = $r->tgl1 ?? date('Y-m-d');
+        $tgl2    = $r->tgl2 ?? date('Y-m-t');
         $id_anak = $r->id_anak;
-        $id_user = auth()->user()->id;
-        $posisi_id = auth()->user()->posisi_id;
 
-        if ($id_anak == 'All') {
-            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai, d.no_box as no_box_formulir , a.pcs_tdk_sortir,a.gr_tdk_sortir
-            FROM sortir as a 
-                left join tb_anak as b on a.id_anak = b.id_anak
-                left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
-                left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T'
-                order by a.selesai ASC
-                ");
-        } else {
-            $sortir = DB::select("SELECT b.nama, a.id_sortir,a.tgl, a.no_box,a.id_anak, a.id_kelas, a.pcs_awal, a.gr_awal,a.pcs_akhir, a.gr_akhir, a.denda_sp,a.rp_target, a.ttl_rp, a.bulan, a.selesai , d.no_box as no_box_formulir ,a.pcs_tdk_sortir,a.gr_tdk_sortir
-            FROM sortir as a 
-                left join tb_anak as b on a.id_anak = b.id_anak
-                left join tb_kelas_sortir as c on a.id_kelas = c.id_kelas
-                left join formulir_sarang as d on a.no_box = d.no_box and d.kategori = 'grade'
-                where a.id_pengawas = '$id_user' and a.no_box != '9999' and a.penutup = 'T' and a.id_anak = '$id_anak'
-                order by a.selesai ASC
-                ");
+        $query = DB::table('sortir as a')
+            ->leftJoin('tb_anak as b', 'a.id_anak', '=', 'b.id_anak')
+            ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', '=', 'c.id_kelas')
+            ->leftJoin('formulir_sarang as d', function ($join) {
+                $join->on('a.no_box', '=', 'd.no_box')
+                    ->where('d.kategori', '=', 'grade');
+            })
+            ->select(
+                'b.nama',
+                'a.id_sortir',
+                'a.tgl',
+                'a.no_box',
+                'a.id_anak',
+                'a.id_kelas',
+                'a.pcs_awal',
+                'a.gr_awal',
+                'a.pcs_akhir',
+                'a.gr_akhir',
+                'a.denda_sp',
+                'a.rp_target',
+                'a.ttl_rp',
+                'a.bulan',
+                'a.selesai',
+                'd.no_box as no_box_formulir',
+                'a.pcs_tdk_sortir',
+                'a.gr_tdk_sortir'
+            )
+            ->where('a.no_box', '!=', '9999')
+            ->where('a.penutup', 'T')
+            ->where('d.no_box', null)
+            ->orderBy('a.selesai', 'ASC');
+
+        if ($id_anak && $id_anak !== 'All') {
+            $query->where('a.id_anak', $id_anak);
         }
+
+        // Pindahkan query ini dari view ke controller
+        $adaDitutup = DB::table('sortir')
+            ->where('selesai', 'Y')
+            ->where('penutup', 'T')
+            ->exists(); // pakai exists() lebih cepat dari first()
+
         $data = [
-            'title' => 'Sortir Divisi',
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
-            'cabut' => $sortir,
-            'kelas' => DB::table('tb_kelas_sortir')->orderBy('id_kelas', 'ASC')->get(),
-            'anak' => $this->getAnak(),
-            'bulan' => DB::table('bulan')->get(),
+            'title'       => 'Sortir Divisi',
+            'tgl1'        => $tgl1,
+            'tgl2'        => $tgl2,
+            'cabut'       => $query->get(),
+            'kelas'       => DB::table('tb_kelas_sortir')->orderBy('id_kelas')->get(),
+            'anak'        => $this->getAnak(),
+            'list_bulan'  => getListBulan(), // ← sekali saja, bukan per row
+            'adaDitutup'  => $adaDitutup,
         ];
 
         return view('home.sortir.load_halaman', $data);
+    }
+
+    private function datatableServerSide(Request $r, $tgl1, $tgl2, $id_anak)
+    {
+        $query = DB::table('sortir as a')
+            ->leftJoin('tb_anak as b', 'a.id_anak', '=', 'b.id_anak')
+            ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', '=', 'c.id_kelas')
+            ->leftJoin('formulir_sarang as d', function ($join) {
+                $join->on('a.no_box', '=', 'd.no_box')
+                    ->where('d.kategori', '=', 'grade');
+            })
+            ->select(
+                'b.nama',
+                'a.id_sortir',
+                'a.tgl',
+                'a.no_box',
+                'a.id_anak',
+                'a.id_kelas',
+                'a.pcs_awal',
+                'a.gr_awal',
+                'a.pcs_akhir',
+                'a.gr_akhir',
+                'a.denda_sp',
+                'a.rp_target',
+                'a.ttl_rp',
+                'a.bulan',
+                'a.selesai',
+                'd.no_box as no_box_formulir',
+                'a.pcs_tdk_sortir',
+                'a.gr_tdk_sortir'
+            )
+            ->where('a.no_box', '!=', '9999')
+            ->where('a.penutup', 'T');
+
+        // Filter id_anak
+        if ($id_anak && $id_anak !== 'All') {
+            $query->where('a.id_anak', $id_anak);
+        }
+
+        // Filter tanggal — sesuaikan kolom tanggalnya
+        // $query->whereBetween('a.tgl', [$tgl1, $tgl2]);
+
+        // Total sebelum filter search
+        $totalFiltered = $totalData = (clone $query)->count();
+
+        // Search global DataTables
+        if (!empty($r->search['value'])) {
+            $search = $r->search['value'];
+            $query->where(function ($q) use ($search) {
+                $q->where('b.nama',    'like', "%$search%")
+                    ->orWhere('a.no_box', 'like', "%$search%")
+                    ->orWhere('a.tgl',    'like', "%$search%");
+            });
+            $totalFiltered = (clone $query)->count();
+        }
+
+        // Ordering
+        $orderCol   = $r->input('order.0.column', 0);
+        $orderDir   = $r->input('order.0.dir', 'asc');
+        $columns    = ['a.selesai', 'b.nama', 'a.tgl', 'a.no_box']; // sesuaikan urutan kolom tabel
+        $sortColumn = $columns[$orderCol] ?? 'a.selesai';
+        $query->orderBy($sortColumn, $orderDir);
+
+        // Pagination
+        $start  = $r->input('start', 0);
+        $length = $r->input('length', 25);
+        $data   = $query->offset($start)->limit($length)->get();
+
+        return response()->json([
+            'draw'            => intval($r->draw),
+            'recordsTotal'    => $totalData,
+            'recordsFiltered' => $totalFiltered,
+            'data'            => $data,
+        ]);
     }
     public function load_halamanrow(Request $r)
     {

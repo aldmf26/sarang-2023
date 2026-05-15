@@ -435,39 +435,57 @@
                             }
                         });
                     }
-                    loadHalaman()
                     loadInputAkhir()
-
-
+                    let tableHalaman = null;
 
                     function loadHalaman() {
+                        if (tableHalaman !== null) {
+                            tableHalaman.destroy();
+                            tableHalaman = null;
+                        }
+
                         $.ajax({
                             type: "GET",
                             url: "{{ route('sortir.load_halaman') }}",
                             data: {
-                                tgl1: "{{ $tgl1 }}",
-                                tgl2: "{{ $tgl2 }}",
-                                id_anak: "{{ $id_anak }}",
+                                tgl1: $('.tgl1').val(),
+                                tgl2: $('.tgl2').val(),
+                                id_anak: $('.id_anak').val(),
+                            },
+                            beforeSend: function() {
+                                $("#loadHalaman").html(
+                                    '<div class="text-center p-4">' +
+                                    '<i class="fas fa-spinner fa-spin fa-2x"></i>' +
+                                    '<p class="mt-2">Memuat data...</p></div>'
+                                );
                             },
                             success: function(r) {
                                 $("#loadHalaman").html(r);
-                                $('#tableHalaman').DataTable({
-                                    "searching": true,
+
+                                tableHalaman = $('#tablestr').DataTable({
+                                    searching: false, // pakai pencarian manual (#tblinput1)
                                     scrollY: '400px',
                                     scrollX: true,
                                     scrollCollapse: true,
-                                    "autoWidth": false,
-                                    "paging": false,
-                                    "ordering": true
+                                    autoWidth: false,
+                                    paging: false,
+                                    ordering: true,
+                                    deferRender: true, // render DOM bertahap, lebih cepat
+                                    orderCellsTop: true,
                                 });
-                                inputChecked('cekSemuaTutup', 'cekTutup')
-                                $('.select2_add').select2({});
+
+                                // Select2 — init sekali setelah tabel siap
+                                $('.select2_add').select2({
+                                    width: '120px'
+                                });
+
+                                inputChecked('cekSemuaTutup', 'cekTutup');
                                 pencarian('tblinput1', 'tablestr');
                             }
                         });
-
-
                     }
+
+                    loadHalaman(); // ← pastikan dipanggil!
                     $(document).on('click', '.detail', function() {
                         var id_sortir = $(this).attr('id_sortir')
                         $.ajax({
