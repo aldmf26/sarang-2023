@@ -511,9 +511,9 @@
                     });
                 });
             </script>
-            {{-- <x-theme.modal title="Box Lewat" btnSave="T" idModal="lewat" size="modal-lg">
+            <x-theme.modal title="Box Lewat" btnSave="T" idModal="lewat" size="modal-lg">
                 <div id="load_modal_lewat"></div>
-            </x-theme.modal> --}}
+            </x-theme.modal>
         @endsection
     </x-slot>
 </x-theme.app>
