@@ -25,8 +25,8 @@
                 <x-theme.button href="{{ route('cabut.summary') }}" icon="fa-clipboard-list" addClass="float-end ms-2"
                     teks="Summary" />
 
-                {{-- <x-theme.button modal="Y" idModal="lewat" href="#" icon="fa-forward" addClass="float-end ms-2 btn_lewat"
-                    teks="Box Lewat" /> --}}
+                <x-theme.button modal="Y" idModal="lewat" href="#" icon="fa-forward"
+                    addClass="float-end ms-2 btn_lewat" teks="Box Lewat" />
 
                 <x-theme.button modal="Y" idModal="export" href="#" icon="fa-file-excel"
                     addClass="float-end ms-2" teks="Export" />
