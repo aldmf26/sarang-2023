@@ -460,11 +460,11 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('L1', 'rp/gr');
 
         $pengirimanNota = DB::table('pengiriman')->groupBy('no_nota')->pluck('no_nota');
+            $kolom = 2;
 
         foreach ($pengirimanNota  as $d) {
             $belumKirim = Grading::details($d);
 
-            $kolom = 2;
             foreach ($belumKirim as $b) {
                 $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
                 $sheet3->setCellValue('C' . $kolom, $b->no_box);
