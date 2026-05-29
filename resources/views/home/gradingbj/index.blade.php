@@ -87,9 +87,9 @@
                                     $duitKosong = DB::table('bk')
                                         ->where([['nm_partai', $d->nm_partai], ['hrga_satuan', 0]])
                                         ->first();
-                                    if (!empty($boxPoGrade) || !empty($duitKosong)) {
-                                        continue;
-                                    }
+                                    // if (!empty($boxPoGrade) || !empty($duitKosong)) {
+                                    //     continue;
+                                    // }
                                 @endphp
                                 <tr class=""
                                     @click="cek.includes('{{ $d->no_box }}') ? cek = cek.filter(x => x !== '{{ $d->no_box }}') : cek.push('{{ $d->no_box }}')">
