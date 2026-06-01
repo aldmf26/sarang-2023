@@ -533,6 +533,9 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create', 'create')->name('create');
             Route::get('/print', 'print')->name('print');
             Route::post('/create_partai', 'create_partai')->name('create_partai');
+            Route::post('/tb-grade', 'storeGrade')->name('storeGrade');
+            Route::patch('/tb-grade/{id_grade}', 'updateGrade')->name('updateGrade');
+            Route::delete('/tb-grade/{id_grade}', 'deleteGrade')->name('deleteGrade');
             Route::post('/createUlang', 'createUlang')->name('createUlang');
             Route::post('/createUlangPartai', 'createUlangPartai')->name('createUlangPartai');
             Route::get('/opname', 'opname')->name('opname');

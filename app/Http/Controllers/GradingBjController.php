@@ -284,7 +284,6 @@ class GradingBjController extends Controller
             DB::table('formulir_sarang')->insert($data);
             return redirect()->back()->with('sukses', 'berhasil di po');
         }
-
         // Redirect ke rute yang akan ditampilkan sebagai GET
         return redirect()->route('gradingbj.grading_partai_result', [
             'no_box' => $no_box, // Kirim data yang diperlukan ke halaman GET,
@@ -303,17 +302,90 @@ class GradingBjController extends Controller
         $getFormulir = Grading::dapatkanStokBoxtesting('formulir', $r->no_box);
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
 
+        $usedGrades = DB::table('grading_partai')
+            ->selectRaw('grade, count(*) as total')
+            ->groupBy('grade')
+            ->pluck('total', 'grade')
+            ->toArray();
+
         $data = [
             'title' => 'Grading Partai',
             'user' => auth()->user()->name,
             'nm_partai' => $partaiData->first()->nm_partai,
             'getFormulir' => $getFormulir,
             'gradeBentuk' => $tb_grade,
+            'tbGradeAll' => DB::table('tb_grade')->orderBy('status', 'ASC')->orderBy('nm_grade', 'ASC')->get(),
+            'gradeUsed' => $usedGrades,
             'no_box' => $no_box,
             'no_invoice' => $r->no_invoice
         ];
 
         return view('home.gradingbj.grading_partai', $data);
+    }
+
+    public function storeGrade(Request $r)
+    {
+        $r->validate([
+            'nm_grade' => 'required|string|max:255|unique:tb_grade,nm_grade',
+            'status' => 'required|string|max:50',
+            'tipe' => 'required|string|max:255',
+        ]);
+
+        DB::table('tb_grade')->insert([
+            'nm_grade' => strtoupper($r->nm_grade),
+            'status' => $r->status,
+            'tipe' => $r->tipe,
+            'urutan' => 1,
+        ]);
+
+        return redirect()->back()->with('sukses', 'Grade berhasil ditambahkan');
+    }
+
+    public function updateGrade(Request $r, $id_grade)
+    {
+        $grade = DB::table('tb_grade')->where('id_grade', $id_grade)->first();
+        if (!$grade) {
+            return redirect()->back()->with('error', 'Grade tidak ditemukan');
+        }
+
+        $rules = [
+            'status' => 'required|string|max:50',
+            'tipe' => 'required|string|max:255',
+        ];
+
+        $used = DB::table('grading_partai')->where('grade', $grade->nm_grade)->exists();
+        if ($r->filled('nm_grade') && strtoupper($r->nm_grade) !== strtoupper($grade->nm_grade)) {
+            if ($used) {
+                return redirect()->back()->with('error', 'Grade sudah digunakan, nama tidak bisa diubah');
+            }
+            $rules['nm_grade'] = 'required|string|max:255|unique:tb_grade,nm_grade';
+        }
+
+        $validated = $r->validate($rules);
+        if (isset($validated['nm_grade'])) {
+            $validated['nm_grade'] = strtoupper($validated['nm_grade']);
+        }
+
+        DB::table('tb_grade')->where('id_grade', $id_grade)->update($validated);
+
+        return redirect()->back()->with('sukses', 'Grade berhasil diperbarui');
+    }
+
+    public function deleteGrade(Request $r, $id_grade)
+    {
+        $grade = DB::table('tb_grade')->where('id_grade', $id_grade)->first();
+        if (!$grade) {
+            return redirect()->back()->with('error', 'Grade tidak ditemukan');
+        }
+
+        $used = DB::table('grading_partai')->where('grade', $grade->nm_grade)->exists();
+        if ($used) {
+            return redirect()->back()->with('error', 'Tidak bisa menghapus grade yang sudah dipakai');
+        }
+
+        DB::table('tb_grade')->where('id_grade', $id_grade)->delete();
+
+        return redirect()->back()->with('sukses', 'Grade berhasil dihapus');
     }
 
     public function cek_box_kirim(Request $r)
