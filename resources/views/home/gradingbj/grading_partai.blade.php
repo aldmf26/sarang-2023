@@ -312,19 +312,23 @@
                                 <strong><i class="fas fa-plus-circle"></i> Tambah Grade Baru</strong>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('gradingbj.storeGrade') }}" method="post" class="row g-2 align-items-end">
+                                <form action="{{ route('gradingbj.storeGrade') }}" method="post"
+                                    class="row g-2 align-items-end">
                                     @csrf
                                     <div class="col-md-4">
                                         <label class="form-label">Grade</label>
-                                        <input type="text" name="nm_grade" class="form-control" value="{{ old('nm_grade') }}" placeholder="Misal: VR" required>
+                                        <input type="text" name="nm_grade" class="form-control"
+                                            value="{{ old('nm_grade') }}" placeholder="Misal: VR" required>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Status</label>
-                                        <input type="text" name="status" class="form-control" value="{{ old('status') }}" placeholder="Misal: bentuk / turun" required>
+                                        <input type="text" name="status" class="form-control"
+                                            value="{{ old('status') }}" placeholder="Misal: bentuk / turun" required>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Tipe</label>
-                                        <input type="text" name="tipe" class="form-control" value="{{ old('tipe') }}" placeholder="Misal: VR / DR" required>
+                                        <input type="text" name="tipe" class="form-control"
+                                            value="{{ old('tipe') }}" placeholder="Misal: VR / DR" required>
                                     </div>
                                     <div class="col-md-2 text-end">
                                         <button type="submit" class="btn btn-success w-100">
