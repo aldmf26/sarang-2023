@@ -292,6 +292,7 @@ class GradingBjController extends Controller
 
     public function gradingPartaiResult(Request $r)
     {
+
         $no_box = $r->no_box;
         // Ambil data yang sama seperti pada POST
         $partaiData = DB::table('bk')
@@ -386,6 +387,43 @@ class GradingBjController extends Controller
         DB::table('tb_grade')->where('id_grade', $id_grade)->delete();
 
         return redirect()->back()->with('sukses', 'Grade berhasil dihapus');
+    }
+
+    public function bulkDeleteGrade(Request $r)
+    {
+        $ids = array_filter(array_map('trim', explode(',', $r->ids ?? '')));
+        if (!$ids) {
+            return redirect()->back()->with('error', 'Tidak ada grade yang dipilih.');
+        }
+
+        $deleted = 0;
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $grade = DB::table('tb_grade')->where('id_grade', $id)->first();
+            if (!$grade) {
+                continue;
+            }
+
+            $used = DB::table('grading_partai')->where('grade', $grade->nm_grade)->exists();
+            if ($used) {
+                $skipped[] = $grade->nm_grade;
+                continue;
+            }
+
+            DB::table('tb_grade')->where('id_grade', $id)->delete();
+            $deleted++;
+        }
+
+        $message = $deleted > 0 ? "Berhasil menghapus $deleted grade." : '';
+        if ($skipped) {
+            $message .= ($message ? ' ' : '') . 'Grade tidak dihapus karena sudah digunakan: ' . implode(', ', $skipped) . '.';
+        }
+        if (!$message) {
+            $message = 'Tidak ada grade yang berhasil dihapus.';
+        }
+
+        return redirect()->back()->with('sukses', $message);
     }
 
     public function cek_box_kirim(Request $r)

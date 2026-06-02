@@ -2,9 +2,14 @@
     <x-slot name="cardHeader">
         <div class="d-flex justify-content-between">
             <h6>{{ $title }}</h6>
-            <a target="_blank" href="{{ route('gradingbj.gudang') }}" class="btn btn-sm btn-info">
-                <i class="fa fa-warehouse"></i> List Gudang Box
-            </a>
+            <div>
+                <a target="_blank" href="{{ route('gradingbj.gudang') }}" class="btn btn-sm btn-info">
+                    <i class="fa fa-warehouse"></i> List Gudang Box
+                </a>
+                <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#gradeModal">
+                    <i class="fa fa-list"></i> List Grade
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -292,6 +297,110 @@
             </button>
         </form>
 
+        <div class="modal fade" id="gradeModal" tabindex="-1" aria-labelledby="gradeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="gradeModalLabel"><i class="fa fa-list"></i> Daftar Grade</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card border-success mb-3">
+                            <div class="card-header bg-success text-white py-2">
+                                <strong><i class="fas fa-plus-circle"></i> Tambah Grade Baru</strong>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('gradingbj.storeGrade') }}" method="post" class="row g-2 align-items-end">
+                                    @csrf
+                                    <div class="col-md-4">
+                                        <label class="form-label">Grade</label>
+                                        <input type="text" name="nm_grade" class="form-control" value="{{ old('nm_grade') }}" placeholder="Misal: VR" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Status</label>
+                                        <input type="text" name="status" class="form-control" value="{{ old('status') }}" placeholder="Misal: bentuk / turun" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Tipe</label>
+                                        <input type="text" name="tipe" class="form-control" value="{{ old('tipe') }}" placeholder="Misal: VR / DR" required>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <button type="submit" class="btn btn-success w-100">
+                                            <i class="fas fa-save"></i> Simpan
+                                        </button>
+                                    </div>
+                                </form>
+
+                                @if ($errors->any())
+                                    <div class="alert alert-danger mt-3 mb-0">
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <input id="gradeSearch" type="text" class="form-control"
+                                    placeholder="Cari grade, status, atau tipe...">
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover table-bordered" id="gradeListTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Grade</th>
+                                        <th>Status</th>
+                                        <th>Tipe</th>
+                                        <th>Terpakai</th>
+                                        <th width="180">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($tbGradeAll as $grade)
+                                        @php $used = $gradeUsed[$grade->nm_grade] ?? 0; @endphp
+                                        <tr class="{{ $used ? 'table-secondary' : '' }}">
+                                            <td class="align-middle">{{ strtoupper($grade->nm_grade) }}</td>
+                                            <td class="align-middle">{{ $grade->status }}</td>
+                                            <td class="align-middle">{{ $grade->tipe }}</td>
+                                            <td class="align-middle text-center">
+                                                @if ($used)
+                                                    <span class="badge bg-info">Dipakai {{ $used }}</span>
+                                                @else
+                                                    <span class="badge bg-secondary">Belum dipakai</span>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle">
+                                                @if (!$used)
+                                                    <form
+                                                        action="{{ route('gradingbj.deleteGrade', $grade->id_grade) }}"
+                                                        method="post" class="d-inline delete-grade-form">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-danger delete-grade-btn">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @section('scripts')
             <script>
                 function gradingData() {
@@ -487,6 +596,25 @@
                                 isRestoring = false;
                             }, 1000);
                         }, 500);
+                    @endif
+                });
+            </script>
+
+            <script>
+                function filterGradeTable() {
+                    const query = $('#gradeSearch').val().toLowerCase();
+                    $('#gradeListTable tbody tr').each(function() {
+                        const text = $(this).text().toLowerCase();
+                        $(this).toggle(text.indexOf(query) !== -1);
+                    });
+                }
+
+                $(document).ready(function() {
+                    $('#gradeSearch').on('input', filterGradeTable);
+
+                    @if ($errors->any())
+                        var gradeModal = new bootstrap.Modal(document.getElementById('gradeModal'));
+                        gradeModal.show();
                     @endif
                 });
             </script>
