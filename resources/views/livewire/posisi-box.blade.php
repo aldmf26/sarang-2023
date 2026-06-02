@@ -6,7 +6,8 @@
     posisi: false,
     anak: false,
     grading: false,
-    gantiTgl: false
+    gantiTgl: false,
+    gantiLewat: false
 }">
     <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak / Edit Grading
         Kode / Ganti Tanggal</a>
@@ -24,6 +25,14 @@
                 class="btn btn-sm btn-primary">Grading edit kode</button>
             <button type="button" @click="gantiTgl = !gantiTgl; posisi = false; anak = false; grading=false"
                 class="btn btn-sm btn-primary">Ganti Tanggal</button>
+
+            @if ($canUseGantiLewat)
+                <button type="button"
+                    @click="gantiLewat = !gantiLewat; posisi = false; anak = false; grading=false; gantiTgl=false"
+                    class="btn btn-sm btn-primary">Ganti Lewat</button>
+            @else
+                <button type="button" class="btn btn-sm btn-secondary" disabled>Ganti Lewat (Aldi/Nanda)</button>
+            @endif
         </div>
 
         <div x-show='posisi'>
@@ -185,6 +194,67 @@
                 {{ $noBoxArr }}
                 <div class="col-12">
                     <button wire:click='updateGantiTgl' class="btn btn-sm btn-success btn-block"
+                        type="button">Simpan</button>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="gantiLewat">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="">No Box</label>
+                    <input type="text" wire:model.change="noBoxLewat" class="form-control"
+                        placeholder="Cari No Box untuk Ganti Lewat">
+                </div>
+                <div class="form-group col-4">
+                    <label for="">Pcs</label>
+                    <input type="text" wire:model="pcsLewat" class="form-control" placeholder="Pcs baru">
+                </div>
+                <div class="form-group col-4">
+                    <label for="">GR</label>
+                    <input type="text" wire:model="grLewat" class="form-control" placeholder="GR baru">
+                </div>
+
+                @if ($dataLewat && count($dataLewat) > 0)
+                    <div class="col-12 mt-3">
+                        <table class="table table-striped table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tabel</th>
+                                    <th>No Box</th>
+                                    <th>Kategori</th>
+                                    <th>No Invoice</th>
+                                    <th>Pcs Awal</th>
+                                    <th>Gr Awal</th>
+                                    <th>Pcs Akhir</th>
+                                    <th>Gr Akhir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dataLewat as $d)
+                                    <tr>
+                                        <td>{{ $d['source'] }}</td>
+                                        <td>{{ $d['no_box'] }}</td>
+                                        <td>{{ $d['kategori'] ?? '-' }}</td>
+                                        <td>{{ $d['no_invoice'] ?? '-' }}</td>
+                                        <td>{{ $d['pcs_awal'] ?? '-' }}</td>
+                                        <td>{{ $d['gr_awal'] ?? '-' }}</td>
+                                        <td>{{ $d['pcs_akhir'] ?? '-' }}</td>
+                                        <td>{{ $d['gr_akhir'] ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @elseif (!empty($noBoxLewat))
+                    <div class="col-12 mt-3">
+                        <div class="alert alert-warning">No Box tidak ditemukan di tabel bk, cabut, cetak_new, sortir,
+                            atau formulir_sarang.</div>
+                    </div>
+                @endif
+
+                <div class="col-12">
+                    <button wire:click='updateGantiLewat' class="btn btn-sm btn-success btn-block"
                         type="button">Simpan</button>
                 </div>
             </div>

@@ -61,28 +61,33 @@ class CetakNewController extends Controller
     {
         $id_user = auth()->user()->id;
         $posisi_id = auth()->user()->posisi_id;
-        if ($posisi_id == '1') {
-            $anak = DB::table('tb_anak')->get();
-        } else {
-            $anak = DB::table('tb_anak')->where('id_pengawas', $id_user)->get();
-        }
-        $data = [
-            'users' => DB::table('users')->where('posisi_id', '13')->get(),
-            'bulan' => DB::table('bulan')->get(),
-            'tb_anak' => $anak,
-            'paket' => DB::table('kelas_cetak')->get(),
-            'nobox' => DB::table('formulir_sarang')
-                ->select('no_box')
-                ->where([['id_penerima', $id_user], ['kategori', 'cetak']])
-                ->whereNotNull('no_box')
-                ->whereNotIn('no_box', function ($query) {
-                    $query->select('no_box')
-                        ->from('cetak_new');
-                })
-                ->get()
 
-        ];
-        return $data[$key];
+        switch ($key) {
+            case 'users':
+                return DB::table('users')->where('posisi_id', '13')->get();
+            case 'bulan':
+                return DB::table('bulan')->get();
+            case 'tb_anak':
+                if ($posisi_id == '1') {
+                    return DB::table('tb_anak')->get();
+                } else {
+                    return DB::table('tb_anak')->where('id_pengawas', $id_user)->get();
+                }
+            case 'paket':
+                return DB::table('kelas_cetak')->get();
+            case 'nobox':
+                return DB::table('formulir_sarang')
+                    ->select('no_box')
+                    ->where([['id_penerima', $id_user], ['kategori', 'cetak']])
+                    ->whereNotNull('no_box')
+                    ->whereNotIn('no_box', function ($query) {
+                        $query->select('no_box')
+                            ->from('cetak_new');
+                    })
+                    ->get();
+            default:
+                return collect();
+        }
     }
     public function index(Request $r)
     {
@@ -143,8 +148,8 @@ class CetakNewController extends Controller
             'tb_anak' => $this->getData('tb_anak'),
             'paket' => $this->getData('paket'),
             'bulan' => $this->getData('bulan'),
-            'hal' => $hal
-
+            'hal' => $hal,
+            'bulan_list' => DB::table('bulan')->where('bulan', date('m'))->get(),
 
         ];
         return view('home.cetak_new.getdata', $data);
@@ -293,7 +298,8 @@ class CetakNewController extends Controller
             'tb_anak' => $this->getData('tb_anak'),
             'bulan' => $this->getData('bulan'),
             'paket' => $this->getData('paket'),
-            'hal' => $r->hal
+            'hal' => $r->hal,
+            'bulan_list' => DB::table('bulan')->where('bulan', date('m'))->get(),
         ];
 
         return view('home.cetak_new.getRowData', $data);

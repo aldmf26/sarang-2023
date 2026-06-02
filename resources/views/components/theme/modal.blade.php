@@ -5,11 +5,12 @@
     'btnSave' => 'Y',
     'color_header' => '',
     'disabled' => false,
+    'scrollable' => false
 ])
 
 <div {{ $attributes->merge(['id' => $idModal]) }} @if ($disabled) data-bs-backdrop="false" @endif
     class="modal tambah" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog   {{ $size }}" role="document">
+    <div class="modal-dialog   {{ $size }} {{ $scrollable ? 'modal-dialog-scrollable' : '' }} " role="document">
         <div class="modal-content">
             <div class="modal-header {{ $color_header }}">
                 <h4 class="modal-title" {{ $attributes->merge(['id' => $idModal]) }}>
@@ -21,7 +22,7 @@
                     </button>
                 @endif
             </div>
-            <div class="modal-body">
+            <div class="modal-body ">
                 {{ $slot }}
             </div>
             <div class="modal-footer">
