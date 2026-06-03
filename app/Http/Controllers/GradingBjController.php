@@ -650,22 +650,22 @@ class GradingBjController extends Controller
                     return redirect()->back()->withInput()->with('error', 'BOX SUDAH DIKIRIM : ' . $boxsp);
                 }
 
-                if (!empty($getBoxkirim)) {
-                    if ($getBoxkirim->grade != $grade) {
-                        DB::rollBack();
+                // if (!empty($getBoxkirim)) {
+                //     if ($getBoxkirim->grade != $grade) {
+                //         DB::rollBack();
 
-                        session()->flash('form_data', [
-                            'baris' => count($r->grade ?? []),
-                            'grade' => $r->grade ?? [],
-                            'pcs' => $r->pcs ?? [],
-                            'gr' => $r->gr ?? [],
-                            'box_sp' => $r->box_sp ?? [],
-                            'not_oke' => $r->not_oke ?? []
-                        ]);
+                //         session()->flash('form_data', [
+                //             'baris' => count($r->grade ?? []),
+                //             'grade' => $r->grade ?? [],
+                //             'pcs' => $r->pcs ?? [],
+                //             'gr' => $r->gr ?? [],
+                //             'box_sp' => $r->box_sp ?? [],
+                //             'not_oke' => $r->not_oke ?? []
+                //         ]);
 
-                        return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade: ' . $getBoxkirim->box_pengiriman);
-                    }
-                }
+                //         return redirect()->back()->withInput()->with('error', 'Box grading tidak boleh lebih dari satu grade: ' . $getBoxkirim->box_pengiriman);
+                //     }
+                // }
 
                 DB::table('grading_partai')->insert($data);
             }
