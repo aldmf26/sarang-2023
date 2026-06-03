@@ -53,7 +53,7 @@
                         <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
                             <thead>
                                 <tr class="align-middle">
-                                    <th>Tgl</th>
+                                    {{-- <th>Tgl</th> --}}
                                     <th width="80">Nama Partai</th>
                                     <th width="70">No Box</th>
                                     <th width="89">Grade</th>
@@ -105,7 +105,7 @@
                                         $ttlPcs_ctk += $pcs_pth_ctk->pcs ?? 0;
                                     @endphp
                                     <tr>
-                                        <td style="width: 100px"></td>
+                                        {{-- <td style="width: 100px"></td> --}}
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
@@ -136,7 +136,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4">Total</th>
+                                    <th colspan="3">Total</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
