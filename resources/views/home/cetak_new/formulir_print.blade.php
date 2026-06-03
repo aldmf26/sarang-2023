@@ -149,9 +149,9 @@
                                         {{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}
                                     </th>
 
+                                    {{-- <td></td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td></td> --}}
                                 </tr>
                             </tfoot>
 
