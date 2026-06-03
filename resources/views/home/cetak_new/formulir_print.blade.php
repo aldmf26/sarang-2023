@@ -53,11 +53,11 @@
                         <table class="table table-bordered" style="font-size: 13px; border:1px solid black">
                             <thead>
                                 <tr class="align-middle">
-                                    <th>Tgl</th>
+                                    {{-- <th>Tgl</th> --}}
                                     <th width="80">Nama Partai</th>
                                     <th width="70">No Box</th>
                                     <th width="89">Grade</th>
-                                    <th width="200">Nama Anak</th>
+                                    {{-- <th width="200">Nama Anak</th> --}}
                                     <th width="60" class="text-end">Pcs Awal Ctk</th>
                                     <th width="60" class="text-end">Gr Awal Ctk</th>
                                     <th width="60" class="text-end">Pcs Awal</th>
@@ -65,10 +65,10 @@
                                     <th width="60" class="text-end">Turun Grade</th>
                                     <th width="60" class="text-end">Pcs Ok</th>
                                     <th width="60" class="text-end">Sst Program</th>
-                                    <th width="60" class="text-end">Pcs Akhir</th>
+                                    {{-- <th width="60" class="text-end">Pcs Akhir</th>
                                     <th width="60" class="text-end">Gr Akhir</th>
                                     <th width="60" class="text-end">Susut %</th>
-                                    <th width="130" class="text-end">Total Rp</th>
+                                    <th width="130" class="text-end">Total Rp</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,11 +105,11 @@
                                         $ttlPcs_ctk += $pcs_pth_ctk->pcs ?? 0;
                                     @endphp
                                     <tr>
-                                        <td style="width: 100px"></td>
+                                        {{-- <td style="width: 100px"></td> --}}
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                        <td></td>
+                                        {{-- <td></td> --}}
                                         <td class="text-end">{{ $d->pcs_cbt }}</td>
                                         <td class="text-end">{{ $d->gr_cbt }}</td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
@@ -128,15 +128,15 @@
                                                 'input' => $d->sst_aktual,
                                             ])
                                         </td> --}}
+                                        {{-- <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td></td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="5">Total</th>
+                                    <th colspan="3">Total</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
@@ -149,9 +149,9 @@
                                         {{ number_format(sumCol($detail, 'gr_cbt') - sumCol($detail, 'gr_awal'), 0) }}
                                     </th>
 
+                                    {{-- <td></td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td></td> --}}
                                 </tr>
                             </tfoot>
 
