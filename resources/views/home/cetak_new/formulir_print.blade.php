@@ -57,7 +57,7 @@
                                     <th width="80">Nama Partai</th>
                                     <th width="70">No Box</th>
                                     <th width="89">Grade</th>
-                                    <th width="200">Nama Anak</th>
+                                    {{-- <th width="200">Nama Anak</th> --}}
                                     <th width="60" class="text-end">Pcs Awal Ctk</th>
                                     <th width="60" class="text-end">Gr Awal Ctk</th>
                                     <th width="60" class="text-end">Pcs Awal</th>
@@ -109,7 +109,7 @@
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
-                                        <td></td>
+                                        {{-- <td></td> --}}
                                         <td class="text-end">{{ $d->pcs_cbt }}</td>
                                         <td class="text-end">{{ $d->gr_cbt }}</td>
                                         <td class="text-end">{{ $d->pcs_awal }}</td>
