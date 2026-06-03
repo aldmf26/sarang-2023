@@ -136,7 +136,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="5">Total</th>
+                                    <th colspan="4">Total</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
