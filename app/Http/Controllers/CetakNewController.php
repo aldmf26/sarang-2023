@@ -71,7 +71,7 @@ class CetakNewController extends Controller
                 if ($posisi_id == '1') {
                     return DB::table('tb_anak')->get();
                 } else {
-                    return DB::table('tb_anak')->where('id_pengawas', $id_user)->get();
+                    return DB::table('tb_anak')->whereIn('id_pengawas', $id_user)->get();
                 }
             case 'paket':
                 return DB::table('kelas_cetak')->get();
