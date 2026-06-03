@@ -65,10 +65,10 @@
                                     <th width="60" class="text-end">Turun Grade</th>
                                     <th width="60" class="text-end">Pcs Ok</th>
                                     <th width="60" class="text-end">Sst Program</th>
-                                    <th width="60" class="text-end">Pcs Akhir</th>
+                                    {{-- <th width="60" class="text-end">Pcs Akhir</th>
                                     <th width="60" class="text-end">Gr Akhir</th>
                                     <th width="60" class="text-end">Susut %</th>
-                                    <th width="130" class="text-end">Total Rp</th>
+                                    <th width="130" class="text-end">Total Rp</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -128,9 +128,9 @@
                                                 'input' => $d->sst_aktual,
                                             ])
                                         </td> --}}
+                                        {{-- <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td></td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
