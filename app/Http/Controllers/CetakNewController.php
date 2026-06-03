@@ -71,7 +71,7 @@ class CetakNewController extends Controller
                 if ($posisi_id == '1') {
                     return DB::table('tb_anak')->get();
                 } else {
-                    return DB::table('tb_anak')->whereIn('id_pengawas', ['462', '463'])->get();
+                    return DB::table('tb_anak')->whereIn('id_pengawas', $id_user)->get();
                 }
             case 'paket':
                 return DB::table('kelas_cetak')->get();
@@ -145,7 +145,7 @@ class CetakNewController extends Controller
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
-            'tb_anak' => DB::select("SELECT * FROM tb_anak as a where a.id_pengawas in(462,463)"),
+            'tb_anak' => $this->getData('tb_anak'),
             'paket' => $this->getData('paket'),
             'bulan' => $this->getData('bulan'),
             'hal' => $hal,
