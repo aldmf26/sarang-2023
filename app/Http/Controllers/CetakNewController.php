@@ -145,7 +145,7 @@ class CetakNewController extends Controller
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
-            'tb_anak' => $this->getData('tb_anak'),
+            'tb_anak' => DB::select("SELECT * FROM tb_anak as a where a.id_pengawas in(462,463)"),
             'paket' => $this->getData('paket'),
             'bulan' => $this->getData('bulan'),
             'hal' => $hal,
