@@ -25,8 +25,16 @@
                 teks="Ambil Box Bk" /> --}}
         <x-theme.button href="#" modal="Y" idModal="history" icon="fa-history"
             addClass="float-end history me-2" teks="History" />
+        <x-theme.button modal="Y" idModal="lewat" href="#" icon="fa-forward"
+            addClass="float-end ms-2 me-2 btn_lewat" teks="Box Lewat" />
         <x-theme.button href="#" modal="Y" idModal="view" icon="fa-calendar-week" addClass="float-end me-2"
             teks="View" />
+
+
+        <x-theme.modal title="Box Lewat" btnSave="T" idModal="lewat" size="modal-lg">
+            <div id="load_modal_lewat"></div>
+        </x-theme.modal>
+
     </x-slot>
 
     <x-slot name="cardBody">
@@ -878,6 +886,27 @@
 
                     var pcs_akhir = pcs_awal - parseInt(pcs_tdk_sortir);
                     $('.pcs_akhir' + count).val(pcs_akhir);
+                });
+                $(document).on('click', '.btn_lewat', function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('sortir.load_modal_lewat') }}",
+                        success: function(data) {
+                            $("#load_modal_lewat").html(data);
+                        },
+                    });
+                });
+                $(document).on('click', '.row-clickable', function(e) {
+                    // 1. Antisipasi agar saat mengklik checkbox atau input angka, tidak terjadi bug/double toggle
+                    if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('input[type="number"]')) {
+                        return;
+                    }
+
+                    // 2. Cari checkbox di dalam baris (tr) yang sedang diklik
+                    var checkbox = $(this).find('.row-checkbox');
+
+                    // 3. Balikkan status checked-nya (jika true jadi false, jika false jadi true)
+                    checkbox.prop('checked', !checkbox.prop('checked'));
                 });
             </script>
             <script>

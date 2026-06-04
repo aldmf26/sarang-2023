@@ -1027,4 +1027,68 @@ class SortirController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function load_modal_lewat(Request $r)
+    {
+
+        $data = [
+            'box' => DB::table('sortir as a')
+                ->where('a.selesai', 'T')
+                ->whereNotIn('a.no_box', function ($query) {
+                    $query->select('no_box')->from('formulir_sarang')->where('kategori', 'grade');
+                })
+                ->get(),
+
+        ];
+        return view('home.sortir.load_modal_lewat', $data);
+    }
+
+    public function create_lewat(Request $r)
+    {
+        $no_box = $r->no_box;
+        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+        if (empty($urutan_invoice->no_invoice)) {
+            $inv = 1001;
+        } else {
+            $inv = $urutan_invoice->no_invoice + 1;
+        }
+        foreach ($no_box as $key => $value) {
+            $sortir = DB::table('sortir')->where('no_box', $value)->first();
+            $data = [
+                'id_anak' => 2,
+                'id_kelas' => 11,
+                'pcs_akhir' => $sortir->pcs_awal,
+                'gr_akhir' => $sortir->gr_awal,
+                'bulan' => date('m'),
+                'selesai' => 'Y',
+            ];
+            DB::table('sortir')->where('no_box', $value)->update($data);
+
+
+            $cek = DB::table('formulir_sarang')
+                ->where('no_box', $value)
+                ->where('kategori', 'grade')
+                ->exists();
+
+            if (!$cek) {
+
+                $pcs = $sortir->pcs_awal;
+                $gr = $sortir->gr_awal;
+
+                $data = [
+                    'no_invoice' => $inv,
+                    'no_box' => $value,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => 459,
+                    'pcs_awal' => $pcs,
+                    'gr_awal' => $gr,
+                    'tanggal' => date('Y-m-d'),
+                    'kategori' => 'grade',
+                ];
+
+                DB::table('formulir_sarang')->insert($data);
+            }
+        }
+        return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil');
+    }
 }
