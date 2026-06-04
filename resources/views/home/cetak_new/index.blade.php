@@ -182,19 +182,43 @@
                             url: "{{ route('cetaknew.get_cetak') }}",
                             success: function(r) {
                                 $("#load-cetak").html(r);
-                                // $('.select2_add').select2({});
+                                // Initialize DataTable with pagination
+                                if ($.fn.DataTable.isDataTable('#tableHalaman')) {
+                                    $('#tableHalaman').DataTable().destroy();
+                                }
                                 $('#tableHalaman').DataTable({
                                     "searching": true,
+                                    "paging": true,
+                                    "pageLength": 10,
+                                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                                     scrollY: '400px',
                                     scrollX: true,
                                     scrollCollapse: true,
                                     "autoWidth": false,
-                                    "paging": false,
                                     "ordering": false
                                 });
                             }
                         });
                     }
+
+                    // Handle modal view filter change
+                    $(document).on('hide.bs.modal', '#view', function() {
+                        var newTgl1 = $('#tgl1').val();
+                        var newTgl2 = $('#tgl2').val();
+                        var newIdAnak = $('.selectView').val();
+
+                        var oldTgl1 = $('.tgl1').val();
+                        var oldTgl2 = $('.tgl2').val();
+                        var oldIdAnak = $('.id_anak').val();
+
+                        if (newTgl1 !== oldTgl1 || newTgl2 !== oldTgl2 || newIdAnak !== oldIdAnak) {
+                            $('.tgl1').val(newTgl1);
+                            $('.tgl2').val(newTgl2);
+                            $('.id_anak').val(newIdAnak);
+                            load_cetak();
+                        }
+                    });
+
 
                     function saveAkhir(id_cetak) {
                         var pcs_akhir = $('.pcs_akhir' + id_cetak).val();
