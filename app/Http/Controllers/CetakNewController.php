@@ -136,7 +136,9 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
         $hal = $r->hal;
+
         $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal);
+
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
@@ -145,7 +147,6 @@ class CetakNewController extends Controller
             'bulan' => $this->getData('bulan'),
             'hal' => $hal,
             'bulan_list' => DB::table('bulan')->where('bulan', date('m'))->get(),
-
         ];
         return view('home.cetak_new.getdata', $data);
     }
