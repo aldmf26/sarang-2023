@@ -24,6 +24,16 @@
             </div>
         </div>
     </div>
+    {{-- ini info pas dichecklist ada berapa box pcs gr --}}
+    <div class="row mb-2">
+        <div class="alert alert-info">
+            <strong>Total Box Ceklist:</strong> <span id="totalChecked">0</span> | <span id="totalPcs">0</span> Pcs |
+            <span id="totalGr">0</span> Gr
+        </div>
+    </div>
+
+
+
     <div style="overflow-y: scroll; height: 300px;">
         <table class="table table-bordered table-sm">
             <thead>
@@ -45,8 +55,8 @@
                         <td>
                             {{ $b->no_box }}
                         </td>
-                        <td>{{ $b->pcs_awal_ctk }}</td>
-                        <td>{{ $b->gr_awal_ctk }}</td>
+                        <td class="row-pcs">{{ $b->pcs_awal_ctk }}</td>
+                        <td class="row-gr">{{ $b->gr_awal_ctk }}</td>
                         <td>
                             <input type="number" value="{{ $b->gr_awal_ctk }}" step="any"
                                 name="gr_akhir[{{ $b->no_box }}]" class="form-control form-control-sm input-akhir">
@@ -72,7 +82,11 @@
 
     // Bulk select functionality
     $('#applyBulkBtn').click(function() {
+
         var bulkInput = $('#bulkNoBoxInput').val();
+        var totalPcs = 0;
+        var totalGr = 0;
+
         if (!bulkInput.trim()) {
             alert('Masukkan no box terlebih dahulu (pisahkan dengan koma)');
             return;
@@ -93,9 +107,19 @@
             $('#tbl_lewat .row-checkbox').each(function() {
                 if ($(this).val() === noBox) {
                     $(this).prop('checked', true);
+                    // Tambahkan pcs dan gr ke total jika checkbox dicentang
+                    var row = $(this).closest('tr');
+                    totalPcs += parseInt(row.find('.row-pcs').text()) || 0;
+                    totalGr += parseFloat(row.find('.row-gr').text()) || 0;
                 }
             });
         });
+        // total box ceklist        var totalChecked = $('#tbl_lewat .row-checkbox:checked').length;
+        // alert('Total box yang dicentang: ' + $('#tbl_lewat .row-checkbox:checked').length);
+        $('#totalChecked').text($('#tbl_lewat .row-checkbox:checked').length);
+        $('#totalPcs').text(totalPcs);
+        $('#totalGr').text(totalGr);
+
     });
 
     // Clear bulk input and uncheck all
