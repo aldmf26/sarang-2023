@@ -483,15 +483,15 @@
                     });
                 });
 
-                // $(document).on('click', '.btn_lewat', function() {
-                //     $.ajax({
-                //         type: "GET",
-                //         url: "{{ route('cetaknew.load_modal_lewat') }}",
-                //         success: function(data) {
-                //             $("#load_modal_lewat").html(data);
-                //         },
-                //     });
-                // });
+                $(document).on('click', '.btn_lewat', function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cetaknew.load_modal_lewat') }}",
+                        success: function(data) {
+                            $("#load_modal_lewat").html(data);
+                        },
+                    });
+                });
 
                 $(document).on('change', '.box', function() {
                     var urutan = $(this).attr('urutan');
