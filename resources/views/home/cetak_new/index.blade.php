@@ -190,7 +190,10 @@
                                     "searching": true,
                                     "paging": true,
                                     "pageLength": 10,
-                                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                                    "lengthMenu": [
+                                        [10, 25, 50, -1],
+                                        [10, 25, 50, "All"]
+                                    ],
                                     scrollY: '400px',
                                     scrollX: true,
                                     scrollCollapse: true,
