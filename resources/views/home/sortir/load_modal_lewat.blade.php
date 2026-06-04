@@ -1,6 +1,6 @@
 <form id="form_lewat" action="{{ route('sortir.create_lewat') }}" method="post">
     @csrf
-    <div class="row mb-3">
+    {{-- <div class="row mb-3">
         <div class="col-lg-6">
             <label for="">Karyawan Default (Pilih Otomatis)</label>
             <input type="text" class="form-control" value="{{ $anak->nama ?? 'Tidak ada anak' }}" readonly>
@@ -11,7 +11,7 @@
             <input type="text" class="form-control" value="{{ $paket->kelas ?? 'Cetak Lewat' }}" readonly>
             <input type="hidden" name="id_kelas_default" value="{{ $paket->id_kelas_cetak ?? 0 }}">
         </div>
-    </div>
+    </div> --}}
     <div class="row mb-2">
         <div class="col-lg-12">
             <input type="text" id="pencarian" class="form-control" placeholder="Cari No Box...">
