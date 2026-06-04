@@ -510,15 +510,15 @@
                     });
                 });
 
-                // $(document).on('click', '.btn_lewat', function() {
-                //     $.ajax({
-                //         type: "GET",
-                //         url: "{{ route('cetaknew.load_modal_lewat') }}",
-                //         success: function(data) {
-                //             $("#load_modal_lewat").html(data);
-                //         },
-                //     });
-                // });
+                $(document).on('click', '.btn_lewat', function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('cetaknew.load_modal_lewat') }}",
+                        success: function(data) {
+                            $("#load_modal_lewat").html(data);
+                        },
+                    });
+                });
 
                 $(document).on('change', '.box', function() {
                     var urutan = $(this).attr('urutan');
@@ -536,8 +536,23 @@
                             $('.gr_awal' + urutan).val(response['gr_awal']);
                         }
                     });
+
+
+                });
+                $(document).on('click', '.row-clickable', function(e) {
+                    // 1. Antisipasi agar saat mengklik checkbox atau input angka, tidak terjadi bug/double toggle
+                    if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('input[type="number"]')) {
+                        return;
+                    }
+
+                    // 2. Cari checkbox di dalam baris (tr) yang sedang diklik
+                    var checkbox = $(this).find('.row-checkbox');
+
+                    // 3. Balikkan status checked-nya (jika true jadi false, jika false jadi true)
+                    checkbox.prop('checked', !checkbox.prop('checked'));
                 });
             </script>
+
             <x-theme.modal title="Box Lewat" btnSave="T" idModal="lewat" size="modal-lg">
                 <div id="load_modal_lewat"></div>
             </x-theme.modal>

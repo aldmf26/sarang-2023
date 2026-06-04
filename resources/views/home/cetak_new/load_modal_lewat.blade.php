@@ -1,4 +1,4 @@
-<form action="{{ route('cetaknew.create_lewat') }}" method="post">
+<form id="form_lewat" action="{{ route('cetaknew.create_lewat') }}" method="post">
     @csrf
     <div class="row mb-3">
         <div class="col-lg-6">
@@ -21,6 +21,7 @@
         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>No Box</th>
                     <th>Pcs Awal</th>
                     <th>Gr Awal</th>
@@ -28,17 +29,20 @@
                 </tr>
             </thead>
             <tbody id="tbl_lewat">
-                @foreach ($box as $index => $b)
-                    <tr>
+                @foreach ($box as $b)
+                    {{-- Hilangkan $index karena kita pakai $b->no_box sebagai key --}}
+                    <tr class="row-clickable" style="cursor: pointer;">
                         <td>
-                            <input type="hidden" name="no_box[{{ $index }}]" value="{{ $b->no_box }}">
+                            <input type="checkbox" name="no_box[]" class="row-checkbox" value="{{ $b->no_box }}">
+                        </td>
+                        <td>
                             {{ $b->no_box }}
                         </td>
                         <td>{{ $b->pcs_awal_ctk }}</td>
                         <td>{{ $b->gr_awal_ctk }}</td>
                         <td>
                             <input type="number" value="{{ $b->gr_awal_ctk }}" step="any"
-                                name="gr_akhir[{{ $index }}]" class="form-control form-control-sm">
+                                name="gr_akhir[{{ $b->no_box }}]" class="form-control form-control-sm input-akhir">
                         </td>
                     </tr>
                 @endforeach
@@ -51,10 +55,27 @@
 </form>
 
 <script>
+    // Script pencarian bawaan Anda
     $('#pencarian').keyup(function() {
         var value = $(this).val().toLowerCase();
         $("#tbl_lewat tr").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
+    });
+
+    // SOLUSI UTAMA: Jinakkan form agar hanya mengirim checkbox yang dicentang
+    $('#form_lewat').on('submit', function() {
+        // Cari semua checkbox .row-checkbox yang TIDAK dicentang
+        $('#tbl_lewat .row-checkbox').each(function() {
+            if (!$(this).is(':checked')) {
+                // Nonaktifkan checkbox yang tidak dicentang agar TIDAK terkirim ke Laravel
+                $(this).prop('disabled', true);
+
+                // Nonaktifkan juga input gr_akhir pasangannya agar tidak jadi sampah di request
+                $(this).closest('tr').find('.input-akhir').prop('disabled', true);
+            }
+        });
+
+        return true; // Lanjutkan submit form ke controller
     });
 </script>

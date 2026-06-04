@@ -1417,7 +1417,7 @@ class CetakNewController extends Controller
         $id_user = auth()->user()->id;
         $data = [
             'box' => DB::table('cetak_new as a')
-                ->where('a.id_pengawas', $id_user)
+
                 ->where('a.selesai', 'T')
                 ->whereNotIn('a.no_box', function ($query) {
                     $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
@@ -1431,131 +1431,52 @@ class CetakNewController extends Controller
 
     public function create_lewat(Request $r)
     {
-        DB::beginTransaction();
-        try {
-            $user = auth()->user()->id;
-            $no_box = $r->no_box;
-            $gr_akhir = $r->gr_akhir;
-
-            // Generate Invoice Sortir
-            $urutan_invoice_sortir = DB::selectOne("SELECT max(a.no_invoice * 1) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
-            if (empty($urutan_invoice_sortir->no_invoice)) {
-                $inv_sortir = 1001;
-            } else {
-                $inv_sortir = (int)$urutan_invoice_sortir->no_invoice + 1;
-            }
-
-            // Generate Invoice Grade
-            $urutan_invoice_grade = DB::selectOne("SELECT max(a.no_invoice * 1) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
-            if (empty($urutan_invoice_grade->no_invoice)) {
-                $inv_grade = 1001;
-            } else {
-                $inv_grade = (int)$urutan_invoice_grade->no_invoice + 1;
-            }
-
-            // Identify Jenah and child for automatic Sortir assignment
-            $jenah = DB::table('users')->where('email', 'jenah@gmail.com')->first();
-            if ($jenah) {
-                $jenah_id = $jenah->id;
-                $anak_jenah = DB::table('tb_anak')->where('id_pengawas', $jenah_id)->first();
-                $id_anak_sortir = $anak_jenah ? $anak_jenah->id_anak : 0;
-            } else {
-                $jenah_id = $user;
-                $id_anak_sortir = 0;
-            }
-            $id_kelas_sortir = 11;
-            $rp_sortir =  0;
-
-            foreach ($no_box as $i => $box) {
-                if (empty($gr_akhir[$i])) continue;
-
-                $cetak = DB::table('cetak_new')->where('no_box', $box)->where('id_pengawas', $user)->where('selesai', 'T')->first();
-                if ($cetak) {
-                    $id_anak = $cetak->id_anak != 0 ? $cetak->id_anak : $r->id_anak_default;
-                    $id_kelas = $r->id_kelas_default;
-
-                    DB::table('cetak_new')->where('id_cetak', $cetak->id_cetak)->update([
-                        'id_anak' => $id_anak,
-                        'id_kelas_cetak' => $id_kelas,
-                        'pcs_akhir' => $cetak->pcs_awal_ctk,
-                        'gr_akhir' => $gr_akhir[$i],
-                        'selesai' => 'Y',
-                        'formulir' => 'Y',
-                        'bulan_dibayar' => date('m'),
-                        'tahun_dibayar' => date('Y'),
-                    ]);
-
-                    // PO to Sortir (formulir_sarang)
-                    DB::table('formulir_sarang')->insert([
-                        'no_invoice' => $inv_sortir,
-                        'no_box' => $box,
-                        'id_pemberi' => $user,
-                        'id_penerima' => $user,
-                        'pcs_awal' => $cetak->pcs_awal_ctk,
-                        'gr_awal' => $gr_akhir[$i],
-                        'tanggal' => date('Y-m-d'),
-                        'kategori' => 'sortir',
-                    ]);
-
-                    // Insert into BK Sortir (as stok)
-                    DB::table('bk')->insert([
-                        'no_box' => $box,
-                        'pcs_awal' => $cetak->pcs_awal_ctk,
-                        'gr_awal' => $gr_akhir[$i],
-                        'kategori' => 'sortir',
-                        'tgl' => date('Y-m-d'),
-                        'penerima' => $jenah_id,
-                        'selesai' => 'Y', // Marked as finished in sortir
-                    ]);
-
-                    // Insert into Sortir Table (Process)
-                    DB::table('sortir')->insert([
-                        'no_box' => $box,
-                        'tgl' => date('Y-m-d'),
-                        'id_pengawas' => $jenah_id,
-                        'id_anak' => $id_anak_sortir,
-                        'id_kelas' => $id_kelas_sortir,
-                        'pcs_awal' => $cetak->pcs_awal_ctk,
-                        'gr_awal' => $gr_akhir[$i],
-                        'pcs_akhir' => $cetak->pcs_awal_ctk,
-                        'gr_akhir' => $gr_akhir[$i],
-                        'rp_target' => 0,
-                        'ttl_rp' => 0,
-                        'selesai' => 'Y',
-                        'penutup' => 'T',
-                        'tgl_input' => date('Y-m-d'),
-                        'bulan' => date('m'),
-                        'tahun_dibayar' => date('Y'),
-                    ]);
-
-                    // PO to Grading (formulir_sarang)
-                    DB::table('formulir_sarang')->insert([
-                        'no_invoice' => $inv_grade,
-                        'no_box' => $box,
-                        'id_pemberi' => $user,
-                        'id_penerima' => $user,
-                        'pcs_awal' => $cetak->pcs_awal_ctk,
-                        'gr_awal' => $gr_akhir[$i],
-                        'tanggal' => date('Y-m-d'),
-                        'kategori' => 'grade',
-                    ]);
-
-                    $cekGrading = DB::table('grading')->where('no_box_sortir', $box)->exists();
-                    if (!$cekGrading) {
-                        DB::table('grading')->insert([
-                            'no_box_sortir' => $box,
-                            'tgl' => date('Y-m-d'),
-                            'pcs' => 0,
-                            'gr' => 0,
-                        ]);
-                    }
-                }
-            }
-            DB::commit();
-            return redirect()->back()->with('sukses', 'Berhasil Lewat Box');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', $e->getMessage());
+        $no_box = $r->no_box;
+        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+        if (empty($urutan_invoice->no_invoice)) {
+            $inv = 1001;
+        } else {
+            $inv = $urutan_invoice->no_invoice + 1;
         }
+        foreach ($no_box as $key => $value) {
+            $cetak = DB::table('cetak_new')->where('no_box', $value)->first();
+            $data = [
+                'id_anak' => 157,
+                'id_kelas_cetak' => 14,
+                'pcs_akhir' => $cetak->pcs_awal_ctk,
+                'gr_akhir' => $cetak->gr_awal_ctk,
+                'bulan_dibayar' => date('m'),
+                'selesai' => 'Y',
+                'capai' => 'Y',
+                'tipe_bayar' => 2
+            ];
+            DB::table('cetak_new')->where('no_box', $value)->update($data);
+
+
+            $cek = DB::table('formulir_sarang')
+                ->where('no_box', $value)
+                ->where('kategori', 'sortir')
+                ->exists();
+
+            if (!$cek) {
+
+                $pcs = $cetak->pcs_awal_ctk;
+                $gr = $cetak->gr_awal_ctk;
+
+                $data = [
+                    'no_invoice' => $inv,
+                    'no_box' => $value,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => 467,
+                    'pcs_awal' => $pcs,
+                    'gr_awal' => $gr,
+                    'tanggal' => date('Y-m-d'),
+                    'kategori' => 'sortir',
+                ];
+
+                DB::table('formulir_sarang')->insert($data);
+            }
+        }
+        return redirect()->route('cetaknew.index')->with('sukses', 'Data Berhasil');
     }
 }
