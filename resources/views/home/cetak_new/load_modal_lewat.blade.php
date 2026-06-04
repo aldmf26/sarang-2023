@@ -13,8 +13,15 @@
         </div>
     </div>
     <div class="row mb-2">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <input type="text" id="pencarian" class="form-control" placeholder="Cari No Box...">
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group input-group-sm">
+                <input type="text" id="bulkNoBoxInput" class="form-control" placeholder="Bulk: 8509,2890,2093">
+                <button type="button" class="btn btn-primary" id="applyBulkBtn">Apply</button>
+                <button type="button" class="btn btn-secondary" id="clearBulkBtn">Clear</button>
+            </div>
         </div>
     </div>
     <div style="overflow-y: scroll; height: 300px;">
@@ -61,6 +68,40 @@
         $("#tbl_lewat tr").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
+    });
+
+    // Bulk select functionality
+    $('#applyBulkBtn').click(function() {
+        var bulkInput = $('#bulkNoBoxInput').val();
+        if (!bulkInput.trim()) {
+            alert('Masukkan no box terlebih dahulu (pisahkan dengan koma)');
+            return;
+        }
+
+        // Parse comma-separated values
+        var noBoxList = bulkInput.split(',').map(function(val) {
+            return val.trim();
+        }).filter(function(val) {
+            return val.length > 0;
+        });
+
+        // Uncheck all first
+        $('#tbl_lewat .row-checkbox').prop('checked', false);
+
+        // Check only the ones in the list
+        noBoxList.forEach(function(noBox) {
+            $('#tbl_lewat .row-checkbox').each(function() {
+                if ($(this).val() === noBox) {
+                    $(this).prop('checked', true);
+                }
+            });
+        });
+    });
+
+    // Clear bulk input and uncheck all
+    $('#clearBulkBtn').click(function() {
+        $('#bulkNoBoxInput').val('');
+        $('#tbl_lewat .row-checkbox').prop('checked', false);
     });
 
     // SOLUSI UTAMA: Jinakkan form agar hanya mengirim checkbox yang dicentang
