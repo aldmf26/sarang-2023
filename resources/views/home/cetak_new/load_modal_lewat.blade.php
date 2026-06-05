@@ -128,6 +128,10 @@
         $('#tbl_lewat .row-checkbox').prop('checked', false);
     });
 
+
+
+
+
     // SOLUSI UTAMA: Jinakkan form agar hanya mengirim checkbox yang dicentang
     $('#form_lewat').on('submit', function() {
         // Cari semua checkbox .row-checkbox yang TIDAK dicentang

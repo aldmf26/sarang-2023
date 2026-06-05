@@ -66,6 +66,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>No</th>
                             <th>Pgws</th>
                             <th>No Box</th>
                             <th>Pcs</th>
@@ -94,6 +95,7 @@
                                 $ttlPcsTurunGrade2 += $pcsPth2->pcs ?? 0;
                             @endphp
                             <tr>
+                                <td>{{ $i + 1 }}</td>
                                 <td>{{ $d->pgws }}</td>
                                 <td>{{ $d->no_box }}</td>
                                 <td>{{ $d->pcs }}</td>

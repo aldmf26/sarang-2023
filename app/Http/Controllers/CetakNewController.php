@@ -1431,6 +1431,7 @@ class CetakNewController extends Controller
 
     public function create_lewat(Request $r)
     {
+        $alert = '';
         $no_box = $r->no_box;
         $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
         if (empty($urutan_invoice->no_invoice)) {
@@ -1475,8 +1476,10 @@ class CetakNewController extends Controller
                 ];
 
                 DB::table('formulir_sarang')->insert($data);
+
             }
         }
+        
         return redirect()->route('cetaknew.index')->with('sukses', 'Data Berhasil');
     }
 }
