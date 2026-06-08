@@ -46,8 +46,7 @@ class CocokanModel extends Model
 
     public static function bksisapgws()
     {
-        $result = DB::selectOne("
-        SELECT 
+        $result = DB::selectOne("SELECT 
             SUM(fs.pcs_awal) as pcs, 
             SUM(fs.gr_awal) as gr, 
             SUM(fs.gr_awal * bk.hrga_satuan) as ttl_rp
@@ -591,7 +590,7 @@ where a.wip2 ='T';");
     public static function summarybk_sisa()
     {
         return DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(a.gr_awal * a.hrga_satuan) as ttl_rp FROM bk as a
-        WHERE a.penerima = 0 and a.kategori = 'cabut'
+        WHERE a.penerima = 0 and a.kategori = 'cabut' and a.formulir = 'T';
         ");
     }
 }
