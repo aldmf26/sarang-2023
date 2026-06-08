@@ -67,8 +67,6 @@ class SortirController extends Controller
         $tgl = tanggalFilter($r);
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
-
-
         $data = [
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
@@ -94,7 +92,6 @@ class SortirController extends Controller
         DB::table('pengiriman_list_gradingbj')->whereIn('no_box', $r->no_box)->update([
             'pengawas' => $idPengwas
         ]);
-
         return redirect()->route('sortir.index')->with('sukses', 'Box berhasil diambil');
     }
 
@@ -121,7 +118,6 @@ class SortirController extends Controller
     public function get_box_sinta(Request $r)
     {
         $bk = $this->getStokBk($r->no_box);
-
         $data = [
             'pcs_awal' => $bk->pcs_awal,
             'gr_awal' => $bk->gr_awal,
