@@ -135,7 +135,12 @@ class Grading extends Model
             group by no_box_sortir
         ) as d on d.no_box = b.no_box
         JOIN users as c on c.id = b.id_pemberi
-        WHERE a.selesai  = 'T'
+        WHERE a.selesai  = 'T' AND NOT EXISTS (
+          SELECT 1 
+          FROM formulir_sarang fs 
+          WHERE fs.no_box = b.no_box 
+            AND fs.kategori = 'grading'
+      )
         GROUP BY b.no_box
         HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
         ORDER BY e.nm_partai DESC");
