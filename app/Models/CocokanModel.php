@@ -588,4 +588,10 @@ where a.wip2 ='T';");
         where a.selesai ='T';
         ");
     }
+    public static function summarybk_sisa()
+    {
+        return DB::selectOne("SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(a.gr_awal * a.hrga_satuan) as ttl_rp FROM bk as a
+        WHERE a.penerima = 0 and a.kategori = 'cabut'
+        ");
+    }
 }

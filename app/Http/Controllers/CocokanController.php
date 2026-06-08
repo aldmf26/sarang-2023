@@ -453,6 +453,7 @@ class CocokanController extends Controller
         $data = [
             'title' => 'Balance Sheet ',
             'bk' => SummaryModel::summarybk(),
+            'bk_sisa' => CocokanModel::summarybk_sisa(),
             'bk_suntik' => [],
             'uang_cost' => BalanceModel::uangCost(),
             'bk_akhir' => $bk_akhir,

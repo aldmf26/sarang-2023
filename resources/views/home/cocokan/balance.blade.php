@@ -120,6 +120,7 @@
                             </tr>
                         @endfor
                         @php
+                            $ttl_rp_bk_sisa = $bk_sisa->ttl_rp;
                             $ttl_rp1 = $cbt_proses->ttl_rp;
                             $ttl_rp2 = $cbt_sisa_pgws->ttl_rp;
                             $ttl_rp3 =
@@ -151,6 +152,7 @@
                                 $pengiriman->cost_op;
 
                             $total_semua =
+                                $ttl_rp_bk_sisa +
                                 $ttl_rp1 +
                                 $ttl_rp2 +
                                 $ttl_rp3 +
@@ -208,16 +210,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td style="background-color: #F7F700">Cabut akhir</td>
-                            <td class="text-end">{{ number_format($bk_akhir->pcs, 0) }}
+                        <tr>
+                            <td style="background-color: #F7F700">BK Sisa</td>
+                            <td class="text-end">{{ number_format($bk_sisa->pcs, 0) }}
                             </td>
-                            <td class="text-end">{{ number_format($bk_akhir->gr, 0) }}
+                            <td class="text-end">{{ number_format($bk_sisa->gr, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format($bk_akhir->cost_kerja + ($cost_dll / $ttl_gr) * $bk_akhir->gr + ($cost_op / $ttl_gr) * $bk_akhir->gr, 0) }}
+                                {{ number_format($bk_sisa->ttl_rp, 0) }}
                             </td>
-                        </tr> --}}
+                            <td class="text-end">
+                                {{ number_format($bk_sisa->ttl_rp / $bk_sisa->gr, 0) }}
+                            </td>
+                        </tr>
                         <tr>
                             <td style="background-color: #F7BAC5;color:white">Cabut
                                 sedang proses
@@ -610,17 +615,17 @@
                         <td class="dhead fw-bold">Total</td>
 
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + sumBk($cabut_selesai_siap_cetak, 'pcs') + $cetak_proses->pcs + $cetak_sisa->pcs + sumBk($cetak_selesai, 'pcs') + $sedang_proses->pcs + $sortir_sisa->pcs + sumBk($sortir_selesai, 'pcs') + $grading_sisa->pcs + $grading_proses->pcs + $sisa_belum_wip1->pcs + $sisa_belum_qc->pcs + $wip2proses->pcs + $pengiriman_proses->pcs + $pengiriman->pcs, 0) }}
+                            {{ number_format($cbt_proses->pcs + $cbt_sisa_pgws->pcs + sumBk($cabut_selesai_siap_cetak, 'pcs') + $cetak_proses->pcs + $cetak_sisa->pcs + sumBk($cetak_selesai, 'pcs') + $sedang_proses->pcs + $sortir_sisa->pcs + sumBk($sortir_selesai, 'pcs') + $grading_sisa->pcs + $grading_proses->pcs + $sisa_belum_wip1->pcs + $sisa_belum_qc->pcs + $wip2proses->pcs + $pengiriman_proses->pcs + $pengiriman->pcs + $bk_sisa->pcs, 0) }}
                         </td>
 
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + $cetak_proses->gr + $cetak_sisa->gr + sumBk($cetak_selesai, 'gr') + $sedang_proses->gr + $sortir_sisa->gr + sumBk($sortir_selesai, 'gr') + $grading_sisa->gr + $grading_proses->gr + $sisa_belum_wip1->gr + $sisa_belum_qc->gr + $wip2proses->gr + $pengiriman_proses->gr + $pengiriman->gr, 0) }}
+                            {{ number_format($cbt_proses->gr + $cbt_sisa_pgws->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + $cetak_proses->gr + $cetak_sisa->gr + sumBk($cetak_selesai, 'gr') + $sedang_proses->gr + $sortir_sisa->gr + sumBk($sortir_selesai, 'gr') + $grading_sisa->gr + $grading_proses->gr + $sisa_belum_wip1->gr + $sisa_belum_qc->gr + $wip2proses->gr + $pengiriman_proses->gr + $pengiriman->gr + $bk_sisa->gr, 0) }}
                         </td>
                         <td class="dhead text-end fw-bold">
-                            {{ number_format($ttl_rp1 + $ttl_rp2 + $ttl_rp3 + $ttl_rp4 + $ttl_rp5 + $ttl_rp6 + $ttl_rp7 + $ttl_rp8 + $ttl_rp9 + $ttl_rp10 + $ttl_rp11 + $ttl_rp12 + $ttl_rp13 + $ttl_rp14 + $ttl_rp15 + $ttl_rp16, 0) }}
+                            {{ number_format($ttl_rp1 + $ttl_rp2 + $ttl_rp3 + $ttl_rp4 + $ttl_rp5 + $ttl_rp6 + $ttl_rp7 + $ttl_rp8 + $ttl_rp9 + $ttl_rp10 + $ttl_rp11 + $ttl_rp12 + $ttl_rp13 + $ttl_rp14 + $ttl_rp15 + $ttl_rp16 + $bk_sisa->ttl_rp, 0) }}
                         </td>
                         <td class="dhead text-end fw-bold">
-                            {{ number_format(($ttl_rp1 + $ttl_rp2 + $ttl_rp3 + $ttl_rp4 + $ttl_rp5 + $ttl_rp6 + $ttl_rp7 + $ttl_rp8 + $ttl_rp9 + $ttl_rp10 + $ttl_rp11 + $ttl_rp12 + $ttl_rp13 + $ttl_rp14 + $ttl_rp15 + $ttl_rp16) / ($cbt_proses->gr + $cbt_sisa_pgws->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + $cetak_proses->gr + $cetak_sisa->gr + sumBk($cetak_selesai, 'gr') + $sedang_proses->gr + $sortir_sisa->gr + sumBk($sortir_selesai, 'gr') + $grading_sisa->gr + $grading_proses->gr + $sisa_belum_wip1->gr + $sisa_belum_qc->gr + $wip2proses->gr + $pengiriman_proses->gr + $pengiriman->gr), 0) }}
+                            {{ number_format(($ttl_rp1 + $ttl_rp2 + $ttl_rp3 + $ttl_rp4 + $ttl_rp5 + $ttl_rp6 + $ttl_rp7 + $ttl_rp8 + $ttl_rp9 + $ttl_rp10 + $ttl_rp11 + $ttl_rp12 + $ttl_rp13 + $ttl_rp14 + $ttl_rp15 + $ttl_rp16 + $bk_sisa->ttl_rp) / ($cbt_proses->gr + $cbt_sisa_pgws->gr + sumBk($cabut_selesai_siap_cetak, 'gr') + $cetak_proses->gr + $cetak_sisa->gr + sumBk($cetak_selesai, 'gr') + $sedang_proses->gr + $sortir_sisa->gr + sumBk($sortir_selesai, 'gr') + $grading_sisa->gr + $grading_proses->gr + $sisa_belum_wip1->gr + $sisa_belum_qc->gr + $wip2proses->gr + $pengiriman_proses->gr + $pengiriman->gr + $bk_sisa->gr), 0) }}
                         </td>
 
                     </tfoot>
