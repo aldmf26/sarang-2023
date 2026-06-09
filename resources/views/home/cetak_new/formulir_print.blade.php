@@ -54,6 +54,7 @@
                             <thead>
                                 <tr class="align-middle">
                                     {{-- <th>Tgl</th> --}}
+                                    <th width="80">No</th>
                                     <th width="80">Nama Partai</th>
                                     <th width="70">No Box</th>
                                     <th width="89">Grade</th>
@@ -106,6 +107,7 @@
                                     @endphp
                                     <tr>
                                         {{-- <td style="width: 100px"></td> --}}
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->no_box }}</td>
                                         <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
