@@ -1,9 +1,18 @@
 <x-theme.app title="{{ $title }}" table="T" cont="container-fluid">
     <x-slot name="slot">
         <div x-data="{
+            bulkBoxChecklist: false,
+            bulkNoBoxInput: '',
             cek: [],
             cekPrint: [],
             selectedItem: [],
+            applyBulkSelect() {
+                const values = this.bulkNoBoxInput
+                    .split(',')
+                    .map(value => value.trim())
+                    .filter(value => value.length);
+                this.cek = Array.from(new Set(values));
+            },
             tambah(no_box, grade, pcs, gr) {
                 const selectedItem = this.selectedItem
                 const index = selectedItem.findIndex(item => item.no_box === no_box);
