@@ -8,7 +8,28 @@
             cek: [],
             cekPrint: [],
             ttlPcs: 0,
-            ttlGr: 0
+            ttlGr: 0,
+            toggleAll() {
+                const data = @js(
+    collect($qc)->map(
+        fn($d) => [
+            'box' => $d->box_pengiriman,
+            'pcs' => $d->pcs_awal,
+            'gr' => $d->gr_awal,
+        ],
+    ),
+);
+        
+                if (this.cek.length === data.length) {
+                    this.cek = [];
+                    this.ttlPcs = 0;
+                    this.ttlGr = 0;
+                } else {
+                    this.cek = data.map(item => item.box);
+                    this.ttlPcs = data.reduce((a, b) => a + Number(b.pcs), 0);
+                    this.ttlGr = data.reduce((a, b) => a + Number(b.gr), 0);
+                }
+            }
         }">
             <div class="row">
                 <div class="col-lg-4">
@@ -55,21 +76,25 @@
                             <td class="dheadstock"></td>
                             <td class="text-end dheadstock h6 ">{{ number_format(sumBk($qc, 'pcs_awal'), 0) }}</td>
                             <td class="text-end dheadstock h6 ">{{ number_format(sumBk($qc, 'gr_awal'), 0) }}</td>
-                            <td class="dheadstock"></td>
+                            <td class="dheadstock text-center">
+                                <input type="checkbox" class="form-check-input" @click.stop="toggleAll()"
+                                    :checked="cek.length === {{ count($qc) }} && {{ count($qc) }} > 0">
+                            </td>
                         </tr>
                         <tbody>
                             @foreach ($qc as $d)
                                 <tr
-                                    @click="
-                                                if (cek.includes('{{ $d->box_pengiriman }}')) {
-                                                    cek = cek.filter(x => x !== '{{ $d->box_pengiriman }}')
-                                                    ttlPcs -= {{ $d->pcs_awal }}
-                                                    ttlGr -= {{ $d->gr_awal }}
-                                                } else {
-                                                    cek.push('{{ $d->box_pengiriman }}')
-                                                    ttlPcs += {{ $d->pcs_awal }}
-                                                    ttlGr += {{ $d->gr_awal }}
-                                                }">
+    @click="
+        if (cek.includes('{{ $d->box_pengiriman }}')) {
+            cek = cek.filter(x => x !== '{{ $d->box_pengiriman }}')
+            ttlPcs -= {{ $d->pcs_awal }}
+            ttlGr -= {{ $d->gr_awal }}
+        } else {
+            cek.push('{{ $d->box_pengiriman }}')
+            ttlPcs += {{ $d->pcs_awal }}
+            ttlGr += {{ $d->gr_awal }}
+        }
+    ">
 
                                     <td>{{ $d->box_pengiriman }}</td>
                                     <td class="text-center">
@@ -77,9 +102,12 @@
                                     <td class="text-end">{{ $d->pcs_awal }}</td>
                                     <td class="text-end">{{ $d->gr_awal }}</td>
                                     <td class="text-center">
-                                        <input type="checkbox" class="form-check"
-                                            :checked="cek.includes('{{ $d->box_pengiriman }}')" name="id[]"
-                                            id="" value="{{ $d->box_pengiriman }}">
+                                        <input
+    type="checkbox"
+    class="form-check-input"
+    :checked="cek.includes('{{ $d->box_pengiriman }}')"
+    @click.stop
+>
                                     </td>
                                 </tr>
                             @endforeach
