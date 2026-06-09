@@ -131,7 +131,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-">
+                <div class="col-lg-4">
                     <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
                     <div style="overflow-y: scroll; height: 700px">
                         <table id="tbl3" class="table table-bordered table-hover table-striped">
