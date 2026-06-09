@@ -647,7 +647,7 @@ class GudangSarangController extends Controller
 
 
         $data = [
-            'title' => 'Po Grading',
+            'title' => 'Po Grade',
             'formulir' => $formulir,
             'no_invoice' => $r->no_invoice,
             'ket_formulir' => $ket_formulir
