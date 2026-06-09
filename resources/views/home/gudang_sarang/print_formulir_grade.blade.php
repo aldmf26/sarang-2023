@@ -52,6 +52,7 @@
                         <thead>
 
                             <tr class="align-middle">
+                                <th>No</th>
                                 <th>Partai</th>
                                 <th>No Box</th>
                                 <th>Tipe - ket</th>
@@ -99,6 +100,7 @@
                             @endphp
                             <tbody>
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $d->nm_partai }}</td>
                                     <td>{{ $d->no_box }}</td>
                                     <td>{{ $d->tipe . ' - ' . $d->ket }}</td>
@@ -119,7 +121,7 @@
                         @endforeach
                         <tfoot>
                             <tr>
-                                <th colspan="3">Total</th>
+                                <th colspan="4">Total</th>
                                 <th class="text-end">{{ number_format($ttlPcsSrt, 0) }}</th>
                                 <th class="text-end">{{ number_format($ttlGrSrt, 0) }}</th>
 
