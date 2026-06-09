@@ -1,9 +1,18 @@
 <x-theme.app title="{{ $title }}" table="T" cont="container-fluid">
     <x-slot name="slot">
         <div x-data="{
+            bulkBoxChecklist: false,
+            bulkNoBoxInput: '',
             cek: [],
             cekPrint: [],
             selectedItem: [],
+            applyBulkSelect() {
+                const values = this.bulkNoBoxInput
+                    .split(',')
+                    .map(value => value.trim())
+                    .filter(value => value.length);
+                this.cek = Array.from(new Set(values));
+            },
             tambah(no_box, grade, pcs, gr) {
                 const selectedItem = this.selectedItem
                 const index = selectedItem.findIndex(item => item.no_box === no_box);
@@ -123,6 +132,23 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
+                    <button class="btn btn-xs btn-primary" @click="bulkBoxChecklist = !bulkBoxChecklist">Bulk No box
+                    Checklist</button>
+                <div class="row mb-2 mt-2">
+                    <div class="col-lg-8" x-show="bulkBoxChecklist" x-transition>
+                        <input type="text" x-model="bulkNoBoxInput" class="form-control form-control-sm"
+                            placeholder="Masukkan no box, pisahkan dengan koma">
+                    </div>
+                    <div class="col-lg-4 d-flex gap-2" x-show="bulkBoxChecklist" x-transition>
+                        <button x-show="bulkBoxChecklist" type="button" @click="applyBulkSelect()"
+                            class="btn btn-sm btn-primary">Apply
+                            Bulk</button>
+                        <button x-show="bulkBoxChecklist" type="button"
+                            @click="bulkNoBoxInput=''; cek=[]; updateTotals()"
+                            class="btn btn-sm btn-secondary">Clear</button>
+                    </div>
+                </div>
+                
                     <input type="text" id="tbl3input" class="form-control form-control-sm mb-2" placeholder="cari">
                     <div style="overflow-y: scroll; height: 700px">
                         <table id="tbl3" class="table table-bordered table-hover table-striped">
@@ -157,7 +183,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($gradingSelesai as $d)
-                                    <tr>
+                                    <tr @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})">
                                         <td>{{ $d->urutan }}</td>
                                         <td>{{ $d->nm_partai }}</td>
                                         <td>{{ $d->box_pengiriman }}</td>
@@ -167,7 +193,7 @@
                                         <td class="text-end">{{ number_format(floor($d->gr), 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
-                                                @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})"
+                                                
                                                 value="{{ $d->box_pengiriman }}" class="pointer" x-model="cek">
                                         </td>
                                         <td align="center" class="d-none">
