@@ -21,12 +21,12 @@ class HariandllController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
         $id_user = auth()->user()->id;
-
         if (empty($r->kategori)) {
             $kategori =  'biasa';
         } else {
             $kategori = $r->kategori;
         }
+
 
         $data = [
             'title' => 'Harian DLL',
