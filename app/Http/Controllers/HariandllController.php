@@ -13,8 +13,9 @@ class HariandllController extends Controller
 
     public function anak()
     {
-        $auth = auth()->user();
-        return DB::table('tb_anak')->where('id_pengawas', $auth)->get();
+        return DB::table('tb_anak as a')
+            ->join('users as b', 'a.id_pengawas', 'b.id')
+            ->where('a.id_pengawas', '!=', null)->get();
     }
     public function index(Request $r)
     {
@@ -22,12 +23,12 @@ class HariandllController extends Controller
         $tgl1 = $tgl['tgl1'];
         $tgl2 = $tgl['tgl2'];
         $id_user = auth()->user()->id;
+
         if (empty($r->kategori)) {
             $kategori =  'biasa';
         } else {
             $kategori = $r->kategori;
         }
-
 
         $data = [
             'title' => 'Harian DLL',
