@@ -90,6 +90,7 @@
                                         ->toArray();
                                     $ttlPcs_cbt = 0;
                                     $ttlPcs_ctk = 0;
+                                    $ttl_susut = 0;
                                 @endphp
                                 @foreach ($detail as $d)
                                     @php
@@ -104,6 +105,7 @@
 
                                         $ttlPcs_cbt += $pcs_pth_cabut->pcs ?? 0;
                                         $ttlPcs_ctk += $pcs_pth_ctk->pcs ?? 0;
+
                                     @endphp
                                     <tr>
                                         {{-- <td style="width: 100px"></td> --}}
@@ -138,7 +140,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3">Total</th>
+                                    <th colspan="4">Total</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'gr_cbt'), 0) }}</th>
                                     <th class="text-end">{{ number_format(sumCol($detail, 'pcs_awal'), 0) }}</th>
