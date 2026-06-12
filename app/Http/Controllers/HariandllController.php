@@ -13,7 +13,8 @@ class HariandllController extends Controller
 
     public function anak()
     {
-        return DB::table('tb_anak')->where('id_pengawas', '!=', null)->get();
+        $auth = auth()->user();
+        return DB::table('tb_anak')->where('id_pengawas', $auth)->get();
     }
     public function index(Request $r)
     {
