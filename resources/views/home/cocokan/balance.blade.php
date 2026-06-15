@@ -220,7 +220,7 @@
                                 {{ number_format($bk_sisa->ttl_rp, 0) }}
                             </td>
                             <td class="text-end">
-                                {{ number_format($bk_sisa->ttl_rp / $bk_sisa->gr, 0) }}
+                                {{ number_format(empty($bk_sisa->gr) ? '0' : $bk_sisa->ttl_rp / $bk_sisa->gr, 0) }}
                             </td>
                         </tr>
                         <tr>
