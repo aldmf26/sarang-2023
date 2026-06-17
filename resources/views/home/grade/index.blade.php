@@ -207,7 +207,7 @@
                                         <select name="grade[]" id="" class="select3_grade ">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($tipe2 as $t)
-                                                <option value="{{ $t->id_tipe }}">{{ $t->tipe }}</option>
+                                                <option value="{{ $t->id_grade }}">{{ $t->tipe }}</option>
                                             @endforeach
                                         </select>
                                     </td>
