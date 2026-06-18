@@ -160,8 +160,22 @@
                                         {{ number_format(sumCol($gradingSelesai, 'pcs'), 0) }}</th>
                                     <th class="dheadstock text-end">
                                         {{ number_format(sumCol($gradingSelesai, 'gr'), 0) }}</th>
-                                    <th class="dheadstock text-center"> <span class="badge bg-primary"
-                                            x-show="cek.length" x-text="cek.length"></span></th>
+                                    <th class="dheadstock text-center">
+                                        <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
+                                        <input type="checkbox"
+                                            @change="
+            if ($event.target.checked) {
+                // Masukkan semua box_pengiriman ke dalam array cek
+                cek = {{ Js::from($gradingSelesai->pluck('box_pengiriman')) }};
+            } else {
+                // Kosongkan array cek
+                cek = [];
+            }
+        "
+                                            :checked="cek.length === {{ count($gradingSelesai) }} &&
+                                                {{ count($gradingSelesai) }} > 0">
+
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
