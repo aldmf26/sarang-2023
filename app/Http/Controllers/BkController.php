@@ -222,7 +222,7 @@ class BkController extends Controller
                     } else {
 
                         $nobox = $this->getNoBoxTambah();
-                        // $nobox = $row[9];
+                        $nobox = $row[9];
 
                         DB::table('bk')->insert([
                             'no_lot' => '0',
@@ -232,7 +232,7 @@ class BkController extends Controller
                             'ket' => $row[2],
                             'warna' => $row[3],
                             'tgl' => date('Y-m-d'),
-                            'pengawas' => 'nanda',
+                            'pengawas' => 'sinta',
                             // 'penerima' => $row[4],
                             'pgws_grade' => $row[4],
                             'pcs_awal' => $row[5],

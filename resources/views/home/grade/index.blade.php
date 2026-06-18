@@ -23,24 +23,24 @@
                 </thead>
                 <tbody>
                     @foreach ($grade as $no => $g)
-                    <tr>
-                        <td>{{$no+1}}</td>
-                        <td>{{$g->no_box}}</td>
-                        <td>{{date('d M y',strtotime($g->tgl))}}</td>
-                        <td>{{$g->nama}}</td>
-                        <td align="right">{{$g->pcs_awal}}</td>
-                        <td align="right">{{$g->gr_awal}}</td>
-                        <td align="right">{{empty($g->pcs_akhir) ? '0' : $g->pcs_akhir}}</td>
-                        <td align="right">{{empty($g->gr_akhir) ? '0' : $g->gr_akhir}}</td>
-                        <td align="center">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
-                                class="btn btn-sm btn-primary detail" no_box="{{$g->no_box}}"><i
-                                    class="fas fa-eye"></i></a>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#akhir"
-                                class="btn btn-sm btn-warning akhir" tgl_grade="{{$g->tgl}}"
-                                no_box="{{$g->no_box}}">Grade</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $g->no_box }}</td>
+                            <td>{{ date('d M y', strtotime($g->tgl)) }}</td>
+                            <td>{{ $g->nama }}</td>
+                            <td align="right">{{ $g->pcs_awal }}</td>
+                            <td align="right">{{ $g->gr_awal }}</td>
+                            <td align="right">{{ empty($g->pcs_akhir) ? '0' : $g->pcs_akhir }}</td>
+                            <td align="right">{{ empty($g->gr_akhir) ? '0' : $g->gr_akhir }}</td>
+                            <td align="center">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#detail"
+                                    class="btn btn-sm btn-primary detail" no_box="{{ $g->no_box }}"><i
+                                        class="fas fa-eye"></i></a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#akhir"
+                                    class="btn btn-sm btn-warning akhir" tgl_grade="{{ $g->tgl }}"
+                                    no_box="{{ $g->no_box }}">Grade</a>
+                            </td>
+                        </tr>
                     @endforeach
 
 
@@ -72,16 +72,18 @@
                                         <select name="no_box[]" id="" class="select3 pilihBox" count="1">
                                             <option value="">Pilih Box</option>
                                             @foreach ($no_box as $n)
-                                            <option value="{{$n->no_box}}">{{$n->no_box}}</option>
+                                                <option value="{{ $n->no_box }}">{{ $n->no_box }}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="id_anak[]" id="" class="select3 pilihAnak" count="1">
+                                        <select name="id_anak[]" id="" class="select3 pilihAnak"
+                                            count="1">
                                             <option value="">Pilih Anak</option>
                                             @foreach ($anak as $d)
-                                            <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
-                                                ({{ $d->kelas }}) {{ ucwords($d->nama) }}</option>
+                                                <option data-kelas="{{ $d->kelas }}" value="{{ $d->id_anak }}">
+                                                    ({{ $d->kelas }})
+                                                    {{ ucwords($d->nama) }}</option>
                                             @endforeach
                                         </select>
                                         {{-- <input type="hidden" class="setHargaSatuan1"> --}}
@@ -154,12 +156,14 @@
                                         <select name="grade[]" id="" class="select3_grade ">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($tipe as $t)
-                                            <option value="{{$t->id_tipe}}">{{$t->tipe}}</option>
+                                                <option value="{{ $t->id_grade }}">{{ $t->tipe }}</option>
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control pcs" name="pcs[]" value="0"></td>
-                                    <td><input type="text" class="form-control gr" name="gr[]" value="0"></td>
+                                    <td><input type="text" class="form-control pcs" name="pcs[]"
+                                            value="0"></td>
+                                    <td><input type="text" class="form-control gr" name="gr[]" value="0">
+                                    </td>
                                 </tr>
                             </tbody>
                             <tbody id="tbh_baris_bentuk">
@@ -203,12 +207,14 @@
                                         <select name="grade[]" id="" class="select3_grade ">
                                             <option value="">Pilih Grade</option>
                                             @foreach ($tipe2 as $t)
-                                            <option value="{{$t->id_tipe}}">{{$t->tipe}}</option>
+                                                <option value="{{ $t->id_grade }}">{{ $t->tipe }}</option>
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control pcs" name="pcs[]" value="0"></td>
-                                    <td><input type="text" class="form-control gr" name="gr[]" value="0"></td>
+                                    <td><input type="text" class="form-control pcs" name="pcs[]"
+                                            value="0"></td>
+                                    <td><input type="text" class="form-control gr" name="gr[]" value="0">
+                                    </td>
                                 </tr>
                             </tbody>
                             <tbody id="tbh_baris_turun">
@@ -244,75 +250,75 @@
 
 
         @section('scripts')
-        <script>
-            $(".select3").select2()
-            $(".select3_grade").select2({
-                dropdownParent: $('#akhir .modal-content')
-            })
+            <script>
+                $(".select3").select2()
+                $(".select3_grade").select2({
+                    dropdownParent: $('#akhir .modal-content')
+                })
 
-            plusRow(1, 'tbh_baris', "grading/tbh_baris_target")
+                plusRow(1, 'tbh_baris', "grading/tbh_baris_target")
 
-            plusRow2(1, 'tbh_baris_bentuk', "grading/tbh_baris")
-            plusRow2(1, 'tbh_baris_turun', "grading/tbh_baris_turun")
+                plusRow2(1, 'tbh_baris_bentuk', "grading/tbh_baris")
+                plusRow2(1, 'tbh_baris_turun', "grading/tbh_baris_turun")
 
-            $(document).on('click', '.akhir', function() {
-              var no_box = $(this).attr('no_box');
-            
-              $.ajax({
-                type: "GET",
-                url: "grading/load_grade",
-                data: {
-                    no_box:no_box,
-                },
-                dataType: "json",
-                success: function (r) {
-                    $(".no_box").text(r['no_box']);
-                    $(".box_input").val(r['no_box']);
-                    $(".tgl_grading").text(r['tgl']);
-                    $(".pcs_awal").text(r['pcs']);
-                    $(".gr_awal").text(r['gr']);
-                }
+                $(document).on('click', '.akhir', function() {
+                    var no_box = $(this).attr('no_box');
+
+                    $.ajax({
+                        type: "GET",
+                        url: "grading/load_grade",
+                        data: {
+                            no_box: no_box,
+                        },
+                        dataType: "json",
+                        success: function(r) {
+                            $(".no_box").text(r['no_box']);
+                            $(".box_input").val(r['no_box']);
+                            $(".tgl_grading").text(r['tgl']);
+                            $(".pcs_awal").text(r['pcs']);
+                            $(".gr_awal").text(r['gr']);
+                        }
+                    });
+
+
+                });
+                $(document).on('keyup', '.pcs', function() {
+                    var pcs = $(this).val();
+
+                    var total_pcs = 0;
+                    $(".pcs").each(function() {
+                        total_pcs += parseFloat($(this).val());
+                    });
+
+
+                    $('.ttl_pcs').text(total_pcs);
+                });
+                $(document).on('keyup', '.gr', function() {
+                    var gr = $(this).val();
+
+                    var total_gr = 0;
+                    $(".gr").each(function() {
+                        total_gr += parseFloat($(this).val());
+                    });
+
+
+                    $('.ttl_gr').text(total_gr);
                 });
 
-                          
-            });
-            $(document).on('keyup', '.pcs', function() {
-              var pcs = $(this).val();
-
-              var total_pcs = 0;
-              $(".pcs").each(function() {
-                total_pcs += parseFloat($(this).val());
-              });
-
-              
-              $('.ttl_pcs').text(total_pcs);
-            });
-            $(document).on('keyup', '.gr', function() {
-              var gr = $(this).val();
-
-              var total_gr = 0;
-              $(".gr").each(function() {
-                total_gr += parseFloat($(this).val());
-              });
-
-              
-              $('.ttl_gr').text(total_gr);
-            });
-
-            $(document).on('click', '.detail', function(){
+                $(document).on('click', '.detail', function() {
                     var no_box = $(this).attr('no_box')
                     $.ajax({
                         type: "GET",
                         url: "grading/load_detail_grading",
                         data: {
-                            no_box:no_box,
+                            no_box: no_box,
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_detail_grading").html(r);
                         }
                     });
-            })
-        </script>
+                })
+            </script>
         @endsection
     </x-slot>
 </x-theme.app>
