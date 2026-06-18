@@ -154,29 +154,27 @@
                                         <input type="checkbox" class="pointer" title="Pilih semua"
                                             :checked="(() => {
                                                 let items =
-                                                    {{ Js::from($gradingSelesai->map(fn($d) => $d->box_pengiriman)) }};
+                                                    {{ Js::from(collect($gradingSelesai)->pluck('box_pengiriman')) }};
                                                 return items.length > 0 && items.every(b => cek.includes(b));
                                             })()"
                                             @change="
-                    let items = {{ Js::from(
-                        $gradingSelesai->map(
-                            fn($d) => [
-                                'box' => $d->box_pengiriman,
-                                'grade' => $d->grade,
-                                'pcs' => $d->pcs,
-                                'gr' => $d->gr,
-                            ],
-                        ),
-                    ) }};
-                    let allChecked = items.every(it => cek.includes(it.box));
-                    if (allChecked) {
-                        // uncheck semua yang sedang tercentang di tabel ini
-                        items.forEach(it => { if (cek.includes(it.box)) tambah(it.box, it.grade, it.pcs, it.gr) });
-                    } else {
-                        // checklist semua yang belum tercentang
-                        items.forEach(it => { if (!cek.includes(it.box)) tambah(it.box, it.grade, it.pcs, it.gr) });
-                    }
-                ">
+    let items = {{ Js::from(
+        collect($gradingSelesai)->map(
+            fn($d) => [
+                'box' => $d->box_pengiriman,
+                'grade' => $d->grade,
+                'pcs' => $d->pcs,
+                'gr' => $d->gr,
+            ],
+        ),
+    ) }};
+    let allChecked = items.every(it => cek.includes(it.box));
+    if (allChecked) {
+        items.forEach(it => { if (cek.includes(it.box)) tambah(it.box, it.grade, it.pcs, it.gr) });
+    } else {
+        items.forEach(it => { if (!cek.includes(it.box)) tambah(it.box, it.grade, it.pcs, it.gr) });
+    }
+">
                                     </th>
                                 </tr>
                                 <tr>
