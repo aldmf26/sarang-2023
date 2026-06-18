@@ -64,24 +64,24 @@
                     <tr>
                         <td>Cetak awal</td>
                         <td class="text-end">
-                            {{ number_format($ctk_opname->pcs + $akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs, 0) }}
+                            {{ number_format($akhir_cbt->pcs - $cetak_proses->pcs - $cetak_sisa->pcs, 0) }}
                         </td>
                         <td class="text-end ">
                             <a href="{{ route('detail.cetak.cetak_awal') }}" target="_blank">
-                                {{ number_format($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr, 0) }}
+                                {{ number_format($akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr, 0) }}
                             </a>
                         </td>
                         <td class="text-end ">
-                            {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp, 0) }}
+                            {{ number_format($akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp, 0) }}
                         </td>
                         <td class="text-end ">
-                            {{ number_format(($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp) / ($ctk_opname->gr + $akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr), 0) }}
+                            {{ number_format(($akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp) / ($akhir_cbt->gr - $cetak_proses->gr - $cetak_sisa->gr), 0) }}
                         </td>
                         <td class="text-end">
                             {{ number_format($cetak_akhir->cost_kerja, 0) }}</td>
                         </td>
                         <td class="text-end">
-                            {{ number_format($ctk_opname->ttl_rp + $akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp + $cetak_akhir->cost_kerja, 0) }}
+                            {{ number_format($akhir_cbt->ttl_rp - $cetak_proses->ttl_rp - $cetak_sisa->ttl_rp + $cetak_akhir->cost_kerja, 0) }}
                         </td>
                     </tr>
 
