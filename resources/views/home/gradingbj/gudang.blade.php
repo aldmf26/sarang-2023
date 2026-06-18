@@ -164,14 +164,13 @@
                                         <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
                                         <input type="checkbox"
                                             @change="
-            if ($event.target.checked) {
-                // Masukkan semua box_pengiriman ke dalam array cek
-                cek = {{ Js::from($gradingSelesai->pluck('box_pengiriman')) }};
-            } else {
-                // Kosongkan array cek
-                cek = [];
-            }
-        "
+        if ($event.target.checked) {
+            // Bungkus dengan collect() agar bisa menggunakan pluck()
+            cek = {{ Js::from(collect($gradingSelesai)->pluck('box_pengiriman')) }};
+        } else {
+            cek = [];
+        }
+    "
                                             :checked="cek.length === {{ count($gradingSelesai) }} &&
                                                 {{ count($gradingSelesai) }} > 0">
 
