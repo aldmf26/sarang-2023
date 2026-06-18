@@ -31,11 +31,11 @@
             <span id="totalGr">0</span> Gr
         </div>
     </div>
-    <div class="row mb-2">
+    {{-- <div class="row mb-2">
         <div class="col-lg-12">
             <input type="text" id="pencarian" class="form-control" placeholder="Cari No Box...">
         </div>
-    </div>
+    </div> --}}
     <div style="overflow-y: scroll; height: 300px;">
         <table class="table table-bordered table-sm">
             <thead>
