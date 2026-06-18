@@ -57,8 +57,8 @@
                         <td>
                             {{ $b->no_box }}
                         </td>
-                        <td>{{ $b->pcs_awal }}</td>
-                        <td>{{ $b->gr_awal }}</td>
+                        <td class="row-pcs">{{ $b->pcs_awal }}</td>
+                        <td class="row-gr">{{ $b->gr_awal }}</td>
                         <td>
                             <input type="number" value="{{ $b->gr_awal }}" step="any"
                                 name="gr_akhir[{{ $b->no_box }}]" class="form-control form-control-sm input-akhir">
