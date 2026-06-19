@@ -211,6 +211,7 @@
             <div class="row">
                 <div class="form-group col-4">
                     <label for="">Kategori</label>
+
                     <select wire:model="cancelKategori" class="form-select">
                         <option value="">Pilih Kategori</option>
                         <option value="cabut">Cabut</option>
@@ -231,36 +232,85 @@
                         Box</button>
                 </div>
                 @if ($dataCancelBox && count($dataCancelBox))
-                    <div class="col-12 mt-2">
-                        <div x-data="{ cari: '' }">
-                            <input type="text" x-model="cari" placeholder="Cari No Box"
-                                class="form-control mb-2" />
-                            <table class="table table-sm table-striped table-dark table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Select</th>
-                                        <th>No Box</th>
-                                        <th>Pcs Awal</th>
-                                        <th>Gr Awal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($dataCancelBox as $box)
-                                        <tr x-show="!cari || '{{ $box->no_box }}'.includes(cari)">
-                                            <td><input type="checkbox" wire:model="selectedBoxes"
-                                                    value="{{ $box->no_box }}" /></td>
-                                            <td>{{ $box->no_box }}</td>
-                                            <td>{{ $box->pcs_awal }}</td>
-                                            <td>{{ $box->gr_awal }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    <div class="col-12 mt-2" x-data="{
+                        cari: '',
+                        bulkNoBoxInput: '',
+                        boxData: {
+                            @foreach ($dataCancelBox as $box)
+                                    '{{ $box->no_box }}': { pcs: {{ $box->pcs_awal }}, gr: {{ $box->gr_awal }} }, @endforeach
+                        },
+                        ttlPcs: 0,
+                        ttlGr: 0,
+                        hitungTotal() {
+                            this.ttlPcs = 0;
+                            this.ttlGr = 0;
+                            (this.$wire.selectedBoxes ?? []).forEach(box => {
+                                if (this.boxData[box]) {
+                                    this.ttlPcs += this.boxData[box].pcs;
+                                    this.ttlGr += this.boxData[box].gr;
+                                }
+                            });
+                        },
+                        applyBulk() {
+                            const values = this.bulkNoBoxInput.split(',').map(v => v.trim()).filter(v => v.length);
+                            this.$wire.selectedBoxes = Array.from(new Set(values));
+                            this.hitungTotal();
+                        },
+                        clearBulk() {
+                            this.bulkNoBoxInput = '';
+                            this.$wire.selectedBoxes = [];
+                            this.hitungTotal();
+                        }
+                    }" x-init="$nextTick(() => hitungTotal())">
+                        <div class="row mb-2">
+                            <div class="col-8">
+                                <input type="text" x-model="bulkNoBoxInput" class="form-control form-control-sm"
+                                    placeholder="Masukkan no box, pisahkan dengan koma">
+                            </div>
+                            <div class="col-4 d-flex gap-2">
+                                <button type="button" @click="applyBulk()" class="btn btn-sm btn-primary">Apply
+                                    Bulk</button>
+                                <button type="button" @click="clearBulk()"
+                                    class="btn btn-sm btn-secondary">Clear</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <button type="button" wire:click="cancelBoxes" class="btn btn-sm btn-danger">Cancel
-                            Selected</button>
+                        <input type="text" x-model="cari" placeholder="Cari No Box" class="form-control mb-2" />
+                        <table class="table table-sm table-striped table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>No Box</th>
+                                    <th>Pcs Awal</th>
+                                    <th>Gr Awal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dataCancelBox as $box)
+                                    <tr x-show="!cari || '{{ $box->no_box }}'.includes(cari)"
+                                        @click="
+                                            $wire.selectedBoxes.includes('{{ $box->no_box }}')
+                                                ? $wire.selectedBoxes = $wire.selectedBoxes.filter(b => b !== '{{ $box->no_box }}')
+                                                : $wire.selectedBoxes.push('{{ $box->no_box }}');
+                                            hitungTotal();
+                                        "
+                                        :class="$wire.selectedBoxes.includes('{{ $box->no_box }}') && 'table-primary'"
+                                        style="cursor: pointer">
+                                        <td><input type="checkbox" wire:model="selectedBoxes"
+                                                value="{{ $box->no_box }}" @change="hitungTotal()"
+                                                @click.stop /></td>
+                                        <td>{{ $box->no_box }}</td>
+                                        <td>{{ $box->pcs_awal }}</td>
+                                        <td>{{ $box->gr_awal }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <button type="button" wire:click="cancelBoxes" class="btn btn-sm btn-danger">
+                            Cancel Selected
+                            <span class="" x-text="$wire.selectedBoxes.length"></span> Box |
+                            <span x-text="ttlPcs.toLocaleString('id-ID')"></span> Pcs |
+                            <span x-text="ttlGr.toLocaleString('id-ID')"></span> Gr
+                        </button>
                     </div>
                 @elseif ($cancelInvoice && $cancelKategori)
                     <div class="col-12 mt-2">
