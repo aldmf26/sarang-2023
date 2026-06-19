@@ -232,27 +232,31 @@
                 </div>
                 @if ($dataCancelBox && count($dataCancelBox))
                     <div class="col-12 mt-2">
-                        <table class="table table-sm table-striped table-dark table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Select</th>
-                                    <th>No Box</th>
-                                    <th>Pcs Awal</th>
-                                    <th>Gr Awal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dataCancelBox as $box)
+                        <div x-data="{ cari: '' }">
+                            <input type="text" x-model="cari" placeholder="Cari No Box"
+                                class="form-control mb-2" />
+                            <table class="table table-sm table-striped table-dark table-bordered">
+                                <thead>
                                     <tr>
-                                        <td><input type="checkbox" wire:model="selectedBoxes"
-                                                value="{{ $box->no_box }}" /></td>
-                                        <td>{{ $box->no_box }}</td>
-                                        <td>{{ $box->pcs_awal }}</td>
-                                        <td>{{ $box->gr_awal }}</td>
+                                        <th>Select</th>
+                                        <th>No Box</th>
+                                        <th>Pcs Awal</th>
+                                        <th>Gr Awal</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dataCancelBox as $box)
+                                        <tr x-show="!cari || '{{ $box->no_box }}'.includes(cari)">
+                                            <td><input type="checkbox" wire:model="selectedBoxes"
+                                                    value="{{ $box->no_box }}" /></td>
+                                            <td>{{ $box->no_box }}</td>
+                                            <td>{{ $box->pcs_awal }}</td>
+                                            <td>{{ $box->gr_awal }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-12">
                         <button type="button" wire:click="cancelBoxes" class="btn btn-sm btn-danger">Cancel
