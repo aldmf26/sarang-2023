@@ -148,11 +148,48 @@
                                     <th class="dhead">Grade</th>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-center">Serah</th>
-                                    {{-- <th class="dhead text-center">Print</th> --}}
-
+                                    <th class="dhead text-center">
+                                        Serah
+                                        <br>
+                                        <input type="checkbox" class="pointer" title="Pilih semua"
+                                            :checked="(() => {
+                                                let items =
+                                                    {{ Js::from(collect($gradingSelesai)->pluck('box_pengiriman')) }};
+                                                return items.length > 0 && items.every(b => cek.includes(String(
+                                                    b)));
+                                            })()"
+                                            @change="
+            let items = {{ Js::from(
+                collect($gradingSelesai)->map(
+                    fn($d) => [
+                        'box' => $d->box_pengiriman,
+                        'grade' => $d->grade,
+                        'pcs' => $d->pcs,
+                        'gr' => $d->gr,
+                    ],
+                ),
+            ) }};
+            let allChecked = items.every(it => cek.includes(String(it.box)));
+            if (allChecked) {
+                items.forEach(it => {
+                    let boxStr = String(it.box);
+                    if (cek.includes(boxStr)) {
+                        cek = cek.filter(b => b !== boxStr);
+                        tambah(it.box, it.grade, it.pcs, it.gr);
+                    }
+                });
+            } else {
+                items.forEach(it => {
+                    let boxStr = String(it.box);
+                    if (!cek.includes(boxStr)) {
+                        cek.push(boxStr);
+                        tambah(it.box, it.grade, it.pcs, it.gr);
+                    }
+                });
+            }
+        ">
+                                    </th>
                                 </tr>
-
                                 <tr>
                                     <th></th>
                                     <th class="dheadstock text-center" colspan="3">Total</th>
@@ -160,8 +197,9 @@
                                         {{ number_format(sumCol($gradingSelesai, 'pcs'), 0) }}</th>
                                     <th class="dheadstock text-end">
                                         {{ number_format(sumCol($gradingSelesai, 'gr'), 0) }}</th>
-                                    <th class="dheadstock text-center"> <span class="badge bg-primary"
-                                            x-show="cek.length" x-text="cek.length"></span></th>
+                                    <th class="dheadstock text-center">
+                                        <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
