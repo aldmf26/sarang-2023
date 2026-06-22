@@ -84,7 +84,7 @@
                                 <th class="text-end">{{ number_format(sumBk($formulir, 'gr_awal'), 0) }}</th>
                                 <th class="text-end">{{ number_format(sumBk($formulir, 'gr_akhir'), 0) }}</th>
                                 <th class="text-end">
-                                    {{ number_format(sumBk($formulir, 'gr_awal') - sumBk($formulir, 'gr_akhir'), 0) }}
+                                    {{-- {{ number_format(sumBk($formulir, 'gr_awal') - sumBk($formulir, 'gr_akhir'), 0) }} --}}
                                 </th>
                                 <th></th>
                                 <th class="text-end">
