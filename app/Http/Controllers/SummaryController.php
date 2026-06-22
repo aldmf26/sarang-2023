@@ -1130,7 +1130,7 @@ class SummaryController extends Controller
     {
         $bulan = $r->bulan;
         $tahun = $r->tahun;
-        $grading_partai = DB::select("SELECT * FROM grading_partai as a where   a.bulan ='$bulan' and a.tahun = '$tahun' ");
+        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.bulan ='$bulan' and a.tahun = '$tahun' ");
         $ttl_gr = sumBk($grading_partai, 'gr');
 
         $formattedNumber = $r->biaya_oprasional;
