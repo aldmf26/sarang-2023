@@ -805,7 +805,7 @@ class GudangSarangController extends Controller
             FROM grading_partai as b
             group by b.box_pengiriman
         ) as b on b.no_box = a.no_box
-        left join qc as c on c.box_pengiriman = a.no_box and c.no_invoice = a.no_invoice
+        left join qc as c on c.box_pengiriman = a.no_box and c.invoice_qc = a.no_invoice
         where a.no_invoice = '$r->no_invoice' and a.kategori = 'wip2'
         group by a.no_invoice,a.no_box, a.kategori;");
 
