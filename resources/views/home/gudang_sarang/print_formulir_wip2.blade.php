@@ -68,7 +68,7 @@
                                     <td class="text-end">{{ $f->gr_akhir }}</td>
                                     <td class="text-end">{{ $f->gr_awal - $f->gr_akhir }}</td>
                                     <td></td>
-                                    <td class="text-end">{{ (1 - $f->gr_akhir / $f->gr_awal) * 100 }} %</td>
+                                    {{-- <td class="text-end">{{ (1 - $f->gr_akhir / $f->gr_awal) * 100 }} %</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
