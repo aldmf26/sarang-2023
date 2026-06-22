@@ -84,7 +84,7 @@
                                 </th>
                                 <th></th>
                                 <th class="text-end">
-                                    {{ number_format((1 - sumBk($formulir, 'gr_akhir') / sumBk($formulir, 'gr_awal')) * 100, 1) }}
+                                    {{-- {{ number_format((1 - sumBk($formulir, 'gr_akhir') / sumBk($formulir, 'gr_awal')) * 100, 1) }} --}}
                                     %</th>
                             </tr>
                         </tfoot>
