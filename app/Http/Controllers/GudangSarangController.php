@@ -807,7 +807,7 @@ class GudangSarangController extends Controller
         ) as b on b.no_box = a.no_box
         left join qc as c on c.box_pengiriman = a.no_box
         where a.no_invoice = '$r->no_invoice' and a.kategori = 'wip2'
-        group by a.no_box, a.kategori;");
+        group by a.no_invoice,a.no_box, a.kategori;");
 
         $data = [
             'title' => 'Po Wip2',
