@@ -27,13 +27,21 @@ class PosisiBox extends Component
         $noBoxLewat,
         $pcsLewat,
         $grLewat,
-        $selectedNama;
+        $selectedNama,
+        $selectedBoxes = [],
+        $cancelInvoice = '',
+        $cancelKategori = '',
+        $dataCancelBox = [],
+        $gradedBoxes = [];
 
     public function mount()
     {
         $this->anak = [];
         $this->dataLewat = [];
+        $this->selectedBoxes = [];
         $this->canUseGantiLewat = auth()->check() && in_array(strtolower(auth()->user()->name), ['aldi', 'nanda']);
+        // fetch already graded boxes
+        $this->gradedBoxes = DB::table('grading')->pluck('no_box_sortir')->toArray();
     }
     public function updatedCariBox($value)
     {
@@ -45,6 +53,93 @@ class PosisiBox extends Component
         $this->dataBox = Formulir::with(['penerima', 'pemberi'])->where('no_box', 'like', '%' . $value . '%')
             ->get();
         // Optionally, you can add any additional logic here when the search term changes
+    }
+
+    public function loadCancelBoxes()
+    {
+        if (empty(trim($this->cancelInvoice))) {
+            $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Isi No Invoice.']);
+            return;
+        }
+
+        if (empty($this->cancelKategori)) {
+            $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Pilih kategori.']);
+            return;
+        }
+
+        if (DB::table('grading_partai')->where('no_invoice', $this->cancelInvoice)->exists()) {
+            $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Invoice sudah selesai grading, tidak bisa cancel.']);
+            return;
+        }
+
+
+
+        $this->gradedBoxes = DB::table('grading')->where('pcs', '>', 0)->where('gr', '>', 0)->select('no_box_sortir')->pluck('no_box_sortir')->toArray();
+        $this->selectedBoxes = [];
+        $this->dataCancelBox = DB::table('formulir_sarang')
+            ->where('no_invoice', $this->cancelInvoice)
+            ->where('kategori', $this->cancelKategori)
+            ->get();
+    }
+
+    public function cancelBoxes()
+    {
+        if (empty($this->selectedBoxes)) {
+            $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Pilih box yang akan dicancel.']);
+            return;
+        }
+
+        // jika dia mau cancel box cabut maka cek dulu di tbl cetak_new, jika mau cancel box cetak maka cek dulu di sortir, jika mau cancel box sortir maka cek dulu di grade, jika mau cancel box grade maka cek dulu di grading_partai, jika mau cancel box grading maka cek dulu di grading
+        switch ($this->cancelKategori) {
+            case 'cabut':
+                $cekCetak = DB::table('formulir_sarang')->where('kategori', 'cetak')->whereIn('no_box', $this->selectedBoxes)->exists();
+                if ($cekCetak) {
+                    $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Box yang dipilih sudah masuk ke cetak, tidak bisa dicancel.']);
+                    return;
+                } else {
+                    DB::table('bk')->whereIn('no_box', $this->selectedBoxes)->update([
+                        'formulir' => 'T',
+                        'penerima' => 0
+                    ]);
+                }
+                break;
+            case 'cetak':
+                $cekBoxSortir = DB::table('formulir_sarang')->where('kategori', 'sortir')->whereIn('no_box', $this->selectedBoxes)->exists();
+
+                if ($cekBoxSortir) {
+                    $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Box yang dipilih sudah masuk ke sortir, tidak bisa dicancel.']);
+                    return;
+                } else {
+                    DB::table('cetak_new')->whereIn('no_box', $this->selectedBoxes)->delete();
+                }
+                break;
+            case 'sortir':
+                $cekBoxSortir = DB::table('formulir_sarang')->where('kategori', 'grade')->exists();
+                if ($cekBoxSortir) {
+                    $this->dispatch('showAlert', ['type' => 'error', 'message' => 'Box yang dipilih sudah masuk ke grade, tidak bisa dicancel.']);
+                    return;
+                } else {
+                    DB::table('bk')->where('kategori', 'sortir')->whereIn('no_box', $this->selectedBoxes)->delete();
+                    DB::table('sortir')->whereIn('no_box', $this->selectedBoxes)->delete();
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        DB::table('formulir_sarang')
+            ->where('kategori', $this->cancelKategori)
+            ->whereIn('no_box', $this->selectedBoxes)
+            ->delete();
+
+
+
+        $this->dispatch('showAlert', ['type' => 'sukses', 'message' => 'Cancel per box berhasil disimpan.']);
+        $this->selectedBoxes = [];
+        $this->dataCancelBox = [];
+        $this->cancelInvoice = '';
+        $this->cancelKategori = '';
     }
 
     public function updatedSelectedPengawas($value)

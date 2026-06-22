@@ -64,11 +64,15 @@
                                     <td>{{ $f->no_box }}</td>
                                     <td>{{ $f->grade }}</td>
                                     <td class="text-end">{{ $f->pcs }}</td>
-                                    <td class="text-end">{{ $f->gr_awal }}</td>
+                                    {{-- <td class="text-end">{{ $f->gr_awal }}</td> --}}
                                     <td class="text-end">{{ $f->gr_akhir }}</td>
-                                    <td class="text-end">{{ $f->gr_awal - $f->gr_akhir }}</td>
+                                    <td class="text-end">{{ $f->gr_akhir }}</td>
+                                    {{-- <td class="text-end">{{ $f->gr_awal - $f->gr_akhir }}</td> --}}
+                                    <td class="text-end">{{ $f->gr_akhir - $f->gr_akhir }}</td>
                                     <td></td>
-                                    <td class="text-end">{{ (1 - $f->gr_akhir / $f->gr_awal) * 100 }} %</td>
+                                    <td class="text-end">
+                                        {{-- {{ (1 - $f->gr_akhir / $f->gr_awal) * 100 }} % --}}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -80,11 +84,11 @@
                                 <th class="text-end">{{ number_format(sumBk($formulir, 'gr_awal'), 0) }}</th>
                                 <th class="text-end">{{ number_format(sumBk($formulir, 'gr_akhir'), 0) }}</th>
                                 <th class="text-end">
-                                    {{ number_format(sumBk($formulir, 'gr_awal') - sumBk($formulir, 'gr_akhir'), 0) }}
+                                    {{-- {{ number_format(sumBk($formulir, 'gr_awal') - sumBk($formulir, 'gr_akhir'), 0) }} --}}
                                 </th>
                                 <th></th>
                                 <th class="text-end">
-                                    {{ number_format((1 - sumBk($formulir, 'gr_akhir') / sumBk($formulir, 'gr_awal')) * 100, 1) }}
+                                    {{-- {{ number_format((1 - sumBk($formulir, 'gr_akhir') / sumBk($formulir, 'gr_awal')) * 100, 1) }} --}}
                                     %</th>
                             </tr>
                         </tfoot>

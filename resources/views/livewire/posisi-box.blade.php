@@ -7,7 +7,8 @@
     anak: false,
     grading: false,
     gantiTgl: false,
-    gantiLewat: false
+    gantiLewat: false,
+    poCancelPerbox: false,
 }">
     <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak / Edit Grading
         Kode / Ganti Tanggal</a>
@@ -26,11 +27,18 @@
             <button type="button" @click="gantiTgl = !gantiTgl; posisi = false; anak = false; grading=false"
                 class="btn btn-sm btn-primary">Ganti Tanggal</button>
 
+            {{-- disini button cancelpoperbox tapi yg belum di grading aja  --}}
             @if ($canUseGantiLewat)
+                <button type="button"
+                    @click="poCancelPerbox = !poCancelPerbox; posisi = false; anak = false; grading=false; gantiTgl=false"
+                    class="btn btn-sm btn-primary">Cancel Per Box</button>
+
+
                 <button type="button"
                     @click="gantiLewat = !gantiLewat; posisi = false; anak = false; grading=false; gantiTgl=false"
                     class="btn btn-sm btn-primary">Ganti Lewat</button>
             @else
+                <button type="button" class="btn btn-sm btn-secondary" disabled>Cancel Per Box (Aldi/Nanda)</button>
                 <button type="button" class="btn btn-sm btn-secondary" disabled>Ganti Lewat (Aldi/Nanda)</button>
             @endif
         </div>
@@ -196,6 +204,119 @@
                     <button wire:click='updateGantiTgl' class="btn btn-sm btn-success btn-block"
                         type="button">Simpan</button>
                 </div>
+            </div>
+        </div>
+
+        <div x-show="poCancelPerbox" class="mt-3">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="">Kategori</label>
+
+                    <select wire:model="cancelKategori" class="form-select">
+                        <option value="">Pilih Kategori</option>
+                        <option value="cabut">Cabut</option>
+                        <option value="cetak">Cetak</option>
+                        <option value="sortir">Sortir</option>
+                        <option value="grade">Grade</option>
+                        <option value="grading">Grading</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="">No Invoice</label>
+                    <input type="text" wire:model="cancelInvoice" placeholder="No Invoice"
+                        class="form-control" />
+                </div>
+                <div class="col-4">
+                    <label for="">Aksi</label> <br>
+                    <button type="button" wire:click="loadCancelBoxes" class="btn btn-sm btn-success">Cek
+                        Box</button>
+                </div>
+                @if ($dataCancelBox && count($dataCancelBox))
+                    <div class="col-12 mt-2" x-data="{
+                        cari: '',
+                        bulkNoBoxInput: '',
+                        boxData: {
+                            @foreach ($dataCancelBox as $box)
+                                    '{{ $box->no_box }}': { pcs: {{ $box->pcs_awal }}, gr: {{ $box->gr_awal }} }, @endforeach
+                        },
+                        ttlPcs: 0,
+                        ttlGr: 0,
+                        hitungTotal() {
+                            this.ttlPcs = 0;
+                            this.ttlGr = 0;
+                            (this.$wire.selectedBoxes ?? []).forEach(box => {
+                                if (this.boxData[box]) {
+                                    this.ttlPcs += this.boxData[box].pcs;
+                                    this.ttlGr += this.boxData[box].gr;
+                                }
+                            });
+                        },
+                        applyBulk() {
+                            const values = this.bulkNoBoxInput.split(',').map(v => v.trim()).filter(v => v.length);
+                            this.$wire.selectedBoxes = Array.from(new Set(values));
+                            this.hitungTotal();
+                        },
+                        clearBulk() {
+                            this.bulkNoBoxInput = '';
+                            this.$wire.selectedBoxes = [];
+                            this.hitungTotal();
+                        }
+                    }" x-init="$nextTick(() => hitungTotal())">
+                        <div class="row mb-2">
+                            <div class="col-8">
+                                <input type="text" x-model="bulkNoBoxInput" class="form-control form-control-sm"
+                                    placeholder="Masukkan no box, pisahkan dengan koma">
+                            </div>
+                            <div class="col-4 d-flex gap-2">
+                                <button type="button" @click="applyBulk()" class="btn btn-sm btn-primary">Apply
+                                    Bulk</button>
+                                <button type="button" @click="clearBulk()"
+                                    class="btn btn-sm btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                        <input type="text" x-model="cari" placeholder="Cari No Box" class="form-control mb-2" />
+                        <table class="table table-sm table-striped table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>No Box</th>
+                                    <th>Pcs Awal</th>
+                                    <th>Gr Awal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dataCancelBox as $box)
+                                    <tr x-show="!cari || '{{ $box->no_box }}'.includes(cari)"
+                                        @click="
+                                            $wire.selectedBoxes.includes('{{ $box->no_box }}')
+                                                ? $wire.selectedBoxes = $wire.selectedBoxes.filter(b => b !== '{{ $box->no_box }}')
+                                                : $wire.selectedBoxes.push('{{ $box->no_box }}');
+                                            hitungTotal();
+                                        "
+                                        :class="$wire.selectedBoxes.includes('{{ $box->no_box }}') && 'table-primary'"
+                                        style="cursor: pointer">
+                                        <td><input type="checkbox" wire:model="selectedBoxes"
+                                                value="{{ $box->no_box }}" @change="hitungTotal()"
+                                                @click.stop /></td>
+                                        <td>{{ $box->no_box }}</td>
+                                        <td>{{ $box->pcs_awal }}</td>
+                                        <td>{{ $box->gr_awal }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <button type="button" wire:click="cancelBoxes" class="btn btn-sm btn-danger">
+                            Cancel Selected
+                            <span class="" x-text="$wire.selectedBoxes.length"></span> Box |
+                            <span x-text="ttlPcs.toLocaleString('id-ID')"></span> Pcs |
+                            <span x-text="ttlGr.toLocaleString('id-ID')"></span> Gr
+                        </button>
+                    </div>
+                @elseif ($cancelInvoice && $cancelKategori)
+                    <div class="col-12 mt-2">
+                        <div class="alert alert-warning">Tidak ada box yang belum grading untuk invoice ini.</div>
+                    </div>
+                @endif
             </div>
         </div>
 

@@ -14,8 +14,15 @@ class HariandllController extends Controller
     public function anak()
     {
         $id_user = auth()->user()->id;
-        return DB::table('tb_anak as a')
-            ->where('a.id_pengawas', $id_user)->get();
+        if ($id_user == 467) {
+            return DB::table('tb_anak as a')
+                ->join('users as b', 'a.id_pengawas', 'b.id')
+                ->get();
+        } else {
+            return DB::table('tb_anak as a')
+                ->join('users as b', 'a.id_pengawas', 'b.id')
+                ->where('a.id_pengawas', $id_user)->get();
+        }
     }
     public function index(Request $r)
     {
