@@ -970,7 +970,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as d
         left join pengiriman as a on a.no_box = d.box_pengiriman
         left join pengiriman_packing_list as b on b.no_nota = a.no_nota
-        where a.grade = '$r->grade'  and b.tgl between '2025-11-01' and '2026-02-28'
+        where a.grade = '$r->grade'  and b.tgl between '2026-06-19' and now()
         group by b.tgl
 
         UNION ALL
@@ -979,7 +979,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as e
         left join pengiriman as b on b.no_box = e.box_pengiriman
         left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2025-11-01' and '2026-02-28'
+        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2026-06-19' and now()
         GROUP by c.tgl
 
         ORDER by tgl ASC, ket DESC;");
