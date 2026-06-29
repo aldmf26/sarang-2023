@@ -871,7 +871,7 @@ GROUP by c.tujuan;");
             group by b.box_pengiriman
         ) as d on d.box_pengiriman = a.no_box
 
-        where b.tujuan ='hk'
+        
         GROUP by a.no_nota 
         order by b.no_nota DESC");
 
