@@ -421,7 +421,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             FROM pengiriman_packing_list as c 
             group by c.no_nota
         ) as c on c.no_nota = b.no_nota
-        where c.tujuan = 'hk'
+       
         GROUP BY b.tgl_input
         Order by b.tgl_input DESC
         ");
@@ -465,7 +465,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
             FROM pengiriman_packing_list as c 
             group by c.no_nota
         ) as c on c.no_nota = b.no_nota
-    WHERE b.tgl_input = '$tgl' and c.tujuan ='hk'
+    WHERE b.tgl_input = '$tgl' 
     GROUP BY b.no_barcode, gp.grade
 
         ");
@@ -871,7 +871,7 @@ GROUP by c.tujuan;");
             group by b.box_pengiriman
         ) as d on d.box_pengiriman = a.no_box
 
-        where b.tujuan ='hk'
+        
         GROUP by a.no_nota 
         order by b.no_nota DESC");
 
@@ -970,7 +970,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as d
         left join pengiriman as a on a.no_box = d.box_pengiriman
         left join pengiriman_packing_list as b on b.no_nota = a.no_nota
-        where a.grade = '$r->grade'  and b.tgl between '2025-11-01' and '2026-02-28'
+        where a.grade = '$r->grade'  and b.tgl between '2026-06-19' and now()
         group by b.tgl
 
         UNION ALL
@@ -979,7 +979,7 @@ ON all_data.grade = done_data.grade;");
         FROM grading_partai as e
         left join pengiriman as b on b.no_box = e.box_pengiriman
         left join pengiriman_packing_list as c on c.no_nota = b.no_nota
-        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2025-11-01' and '2026-02-28'
+        where b.grade = '$r->grade' and b.selesai ='Y' and c.tgl between '2026-06-19' and now()
         GROUP by c.tgl
 
         ORDER by tgl ASC, ket DESC;");
