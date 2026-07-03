@@ -622,7 +622,6 @@ class CabutController extends Controller
                     $data->ttl_rp +
                     $data->eo_ttl_rp +
                     $data->sortir_ttl_rp +
-                    $data->ttl_rp_cetak +
                     $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;

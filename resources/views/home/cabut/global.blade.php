@@ -426,6 +426,7 @@
                             $ttlSortirRp += $data->sortir_ttl_rp;
 
                             $TtlRp += $data->ttl_rp;
+                            
                             $eoTtlRp += $data->eo_ttl_rp;
                             $sortirTtlRp += $data->sortir_ttl_rp;
                             $dllTtlRp += $data->ttl_rp_dll;
