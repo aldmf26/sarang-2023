@@ -622,7 +622,6 @@ class CabutController extends Controller
                     $data->ttl_rp +
                     $data->eo_ttl_rp +
                     $data->sortir_ttl_rp +
-                    $data->ttl_rp_cetak +
                     $uangMakan +
                     $data->ttl_rp_dll -
                     $data->ttl_rp_denda;
@@ -794,13 +793,12 @@ class CabutController extends Controller
                 'V2' => 'ttl rp',
 
                 'W2' => 'kerja dll',
-                'X2' => 'uang makan',
-                'Y2' => 'rp denda',
+                'X2' => 'rp denda',
 
-                'Z2' => 'ttl gaji',
-                'AA2' => 'rata2',
-                'AB2' => 'kasbon',
-                'AC2' => 'sisa gaji',
+                'Y2' => 'ttl gaji',
+                'Z2' => 'rata2',
+                'AA2' => 'kasbon',
+                'AB2' => 'sisa gaji',
             ];
 
             foreach ($koloms as $kolom => $isiKolom) {
@@ -829,7 +827,7 @@ class CabutController extends Controller
                 'P2' => 'FF0000',
                 'V2' => 'FF0000',
                 'W2' => 'FF0000',
-                'Y2' => 'FF0000',
+                'X2' => 'FF0000',
             ];
 
             foreach ($warnaBg as $b => $i) {
@@ -839,12 +837,12 @@ class CabutController extends Controller
             $sheet->mergeCells('A1:L1');
             $sheet->mergeCells('M1:P1');
             $sheet->mergeCells('Q1:V1');
-            $sheet->mergeCells('X1:AA1');
+            $sheet->mergeCells('X1:AB1');
 
             $style = $sheet->getStyle('A1:X1');
             $style->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $style->getFont()->setBold(true);
-            $sheet->getStyle('A2:AC2')->applyFromArray($styleBold);
+            $sheet->getStyle('A2:AB2')->applyFromArray($styleBold);
 
             $TtlRp = 0;
             $eoTtlRp = 0;
@@ -870,8 +868,6 @@ class CabutController extends Controller
             $ttlEoGrAwal  = 0;
             $ttlEoGrAkhir  = 0;
             $ttlEoRp  = 0;
-            $ttlUangMakan = 0;
-
             $ttlKasbon = 0;
             $ttlSisaGaji = 0;
 
@@ -928,14 +924,13 @@ class CabutController extends Controller
                 $sheet->setCellValue('U' . $row, $susutSortir)
                     ->setCellValue('V' . $row, $data->sortir_ttl_rp)
                     ->setCellValue('W' . $row, $data->ttl_rp_dll)
-                    ->setCellValue('X' . $row, $uang_makan)
-                    ->setCellValue('Y' . $row, $data->ttl_rp_denda);
+                    ->setCellValue('X' . $row, $data->ttl_rp_denda);
                 $ttl = $data->ttl_rp + $data->eo_ttl_rp + $data->sortir_ttl_rp + $data->ttl_rp_dll + $uang_makan - $data->ttl_rp_denda;
                 $rata = empty($data->hariMasuk) ? 0 : $ttl / $data->hariMasuk;
-                $sheet->setCellValue('Z' . $row, $ttl)
-                    ->setCellValue('AA' . $row, $rata)
-                    ->setCellValue('AB' . $row, $data->kasbon)
-                    ->setCellValue('AC' . $row, $ttl - $data->kasbon)
+                $sheet->setCellValue('Y' . $row, $ttl)
+                    ->setCellValue('Z' . $row, $rata)
+                    ->setCellValue('AA' . $row, $data->kasbon)
+                    ->setCellValue('AB' . $row, $ttl - $data->kasbon)
                 ;
 
                 $ttlCbtPcsAwal += $data->pcs_awal;
@@ -960,7 +955,6 @@ class CabutController extends Controller
                 $eoTtlRp += $data->eo_ttl_rp;
                 $sortirTtlRp += $data->sortir_ttl_rp;
                 $dllTtlRp += $data->ttl_rp_dll;
-                $ttlUangMakan += $uang_makan;
                 $dendaTtlRp += $data->ttl_rp_denda;
                 $ttlTtlRp += $ttl;
 
@@ -996,16 +990,15 @@ class CabutController extends Controller
             $sheet->setCellValue('V' . $rowTotal, $ttlSortirRp);
 
             $sheet->setCellValue('W' . $rowTotal, $dllTtlRp);
-            $sheet->setCellValue('X' . $rowTotal, $ttlUangMakan);
-            $sheet->setCellValue('Y' . $rowTotal, $dendaTtlRp);
-            $sheet->setCellValue('Z' . $rowTotal, $ttlTtlRp);
-            $sheet->setCellValue('AB' . $rowTotal, $ttlKasbon);
-            $sheet->setCellValue('AC' . $rowTotal, $ttlSisaGaji);
+            $sheet->setCellValue('X' . $rowTotal, $dendaTtlRp);
+            $sheet->setCellValue('Y' . $rowTotal, $ttlTtlRp);
+            $sheet->setCellValue('AA' . $rowTotal, $ttlKasbon);
+            $sheet->setCellValue('AB' . $rowTotal, $ttlSisaGaji);
 
-            $sheet->getStyle("A$rowTotal:AC$rowTotal")->applyFromArray($styleBold);
+            $sheet->getStyle("A$rowTotal:AB$rowTotal")->applyFromArray($styleBold);
 
             $baris = $rowTotal - 1;
-            $sheet->getStyle('A2:AC' . $baris)->applyFromArray($styleBaris);
+            $sheet->getStyle('A2:AB' . $baris)->applyFromArray($styleBaris);
         }
         $writer = new Xlsx($spreadsheet);
 
