@@ -12,17 +12,53 @@ class SummaryModel extends Model
 
     public static function summarybk()
     {
-        $result = DB::select("SELECT a.nm_partai, a.tgl, b.nm_partai_dulu, b.pcs, b.gr, b.grade, sum(a.pcs_awal) as pcs_bk, sum(a.gr_awal) as gr_bk, b.ttl_rp, sum(a.hrga_satuan * a.gr_awal) as cost_bk, b.bulan, b.tahun, b.pcs_susut, b.gr_susut
-        FROM bk as a 
-        left join bk_awal as b on b.nm_partai = a.nm_partai
-        left join (
-            SELECT a.no_box , a.pcs_awal
-            FROM cabut as a
-            group by a.no_box
-        ) as c on c.no_box = a.no_box
-        where a.baru = 'baru' and a.kategori ='cabut' and a.no_box != 9999 
-        group by a.nm_partai
-        order by b.tahun ASC, b.bulan ASC, a.nm_partai ASC
+        $result = DB::select("
+            SELECT
+                a.nm_partai,
+                MIN(a.tgl) AS tgl,
+                b.nm_partai_dulu,
+                b.pcs,
+                b.gr,
+                b.grade,
+                SUM(a.pcs_awal) AS pcs_bk,
+                SUM(a.gr_awal) AS gr_bk,
+                b.ttl_rp,
+                SUM(a.hrga_satuan * a.gr_awal) AS cost_bk,
+                b.bulan,
+                b.tahun,
+                b.pcs_susut,
+                b.gr_susut
+            FROM bk AS a
+            LEFT JOIN (
+                SELECT
+                    nm_partai,
+                    MAX(nm_partai_dulu) AS nm_partai_dulu,
+                    SUM(pcs) AS pcs,
+                    SUM(gr) AS gr,
+                    MAX(grade) AS grade,
+                    SUM(ttl_rp) AS ttl_rp,
+                    MIN(bulan) AS bulan,
+                    MIN(tahun) AS tahun,
+                    SUM(pcs_susut) AS pcs_susut,
+                    SUM(gr_susut) AS gr_susut
+                FROM bk_awal
+                GROUP BY nm_partai
+            ) AS b ON b.nm_partai = a.nm_partai
+            WHERE a.baru = 'baru'
+              AND a.kategori = 'cabut'
+              AND a.no_box != 9999
+            GROUP BY
+                a.nm_partai,
+                b.nm_partai_dulu,
+                b.pcs,
+                b.gr,
+                b.grade,
+                b.ttl_rp,
+                b.bulan,
+                b.tahun,
+                b.pcs_susut,
+                b.gr_susut
+            ORDER BY b.tahun ASC, b.bulan ASC, a.nm_partai ASC
         ");
 
         return $result;

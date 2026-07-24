@@ -81,14 +81,54 @@ class SummaryController extends Controller
 
     public function get_operasional(Request $r)
     {
-        $thn = date('Y');
+        $thn = (int) date('Y');
         if (empty($r->id_oprasional)) {
             $bulan = DB::selectOne("SELECT max(a.bulan_dibayar) as bulan , max(a.tahun_dibayar) as tahun
         FROM tb_gaji_penutup as a where a.tahun_dibayar = '$thn'");
+        } elseif (str_starts_with($r->id_oprasional, 'periode:')) {
+            [, $bulanDipilih, $tahunDipilih] = explode(':', $r->id_oprasional);
+            $bulan = (object) [
+                'bulan' => (int) $bulanDipilih,
+                'tahun' => (int) $tahunDipilih,
+            ];
         } else {
             $bulan = DB::table('oprasional')->where('id_oprasional', $r->id_oprasional)->first();
         }
-        $bulan_array = DB::table('oprasional')->get();
+
+        if (empty($bulan?->bulan) || empty($bulan?->tahun)) {
+            $bulan = (object) [
+                'bulan' => (int) date('n'),
+                'tahun' => $thn,
+            ];
+        }
+
+        // Tampilkan seluruh periode sampai bulan berjalan, termasuk bulan yang
+        // belum memiliki record oprasional/gaji agar dapat dibuat dari modal.
+        $periode = collect();
+        for ($nomorBulan = 1; $nomorBulan <= (int) date('n'); $nomorBulan++) {
+            $periode->push((object) [
+                'bulan' => $nomorBulan,
+                'tahun' => $thn,
+            ]);
+        }
+
+        $periodeGaji = DB::table('tb_gaji_penutup')
+            ->selectRaw('bulan_dibayar as bulan, tahun_dibayar as tahun')
+            ->distinct()
+            ->get();
+
+        $periodeOperasional = DB::table('oprasional')
+            ->select('bulan', 'tahun')
+            ->get();
+
+        $bulan_array = $periode
+            ->concat($periodeGaji)
+            ->concat($periodeOperasional)
+            ->unique(fn ($item) => (int) $item->tahun . '-' . (int) $item->bulan)
+            ->sortBy(fn ($item) => sprintf('%04d-%02d', $item->tahun, $item->bulan))
+            ->values();
+
+        $periodeTerpilih = 'periode:' . (int) $bulan->bulan . ':' . (int) $bulan->tahun;
         $data = [
             'total' => DB::selectOne("SELECT sum(a.cbt_gr_akhir) as gr_cabut, sum(a.eo_gr_akhir) as gr_eo, sum(a.ctk_gr_akhir) as gr_ctk, sum(a.srt_gr_akhir) as gr_sortir, sum(COALESCE(a.cbt_ttlrp,0) + COALESCE(a.eo_ttlrp,0) + COALESCE(a.ctk_ttl_rp,0) + COALESCE(a.srt_ttlrp,0)) as ttl_gaji
             FROM tb_gaji_penutup as a 
@@ -100,7 +140,7 @@ class SummaryController extends Controller
             'tahun' => $bulan->tahun,
             'cost_oprasional' => DB::selectOne("SELECT sum(a.rp_oprasional) as rp_oprasional, sum(a.total_operasional) as ttl_rp FROM oprasional as a where a.bulan = '$bulan->bulan' and a.tahun = '$bulan->tahun';"),
             'dataBulan' => $bulan_array,
-            'id_oprasional' => $r->id_oprasional
+            'periodeTerpilih' => $periodeTerpilih,
         ];
 
         return view('home.summary.operasional', $data);
@@ -1128,43 +1168,89 @@ class SummaryController extends Controller
 
     public function saveoprasional(Request $r)
     {
-        $bulan = $r->bulan;
-        $tahun = $r->tahun;
-        $grading_partai = DB::select("SELECT * FROM grading_partai as a where a.bulan ='$bulan' and a.tahun = '$tahun' ");
-        $ttl_gr = sumBk($grading_partai, 'gr');
+        $validated = $r->validate([
+            'bulan' => ['required', 'integer', 'between:1,12'],
+            'tahun' => ['required', 'integer', 'min:2020'],
+            'biaya_oprasional' => ['required'],
+        ]);
 
-        $formattedNumber = $r->biaya_oprasional;
-        // Hapus pemisah ribuan untuk mendapatkan angka mentah
-        $rawNumber = str_replace(',', '', $formattedNumber);
+        $bulan = (int) $validated['bulan'];
+        $tahun = (int) $validated['tahun'];
+        $totalOperasional = str_replace(',', '', $validated['biaya_oprasional']);
 
-
-
-        // Validasi angka mentah
-        if (!is_numeric($rawNumber)) {
-
-            return redirect()->back()->with('error', 'The number is not valid');
+        if (!is_numeric($totalOperasional) || (float) $totalOperasional < 0) {
+            return redirect()->back()->with('error', 'Total cost operasional tidak valid');
         }
-        DB::table('oprasional')->where('bulan', $r->bulan)->where('tahun', $r->tahun)->delete();
 
-        $rp_gr = ($rawNumber - $r->gaji) / $ttl_gr;
-        $rp_oprasional = $rawNumber - $r->gaji;
-        $data = [
-            'rp_oprasional' => $rp_oprasional,
-            'bulan' => $r->bulan,
-            'tahun' => $r->tahun,
-            'rp_gr' => $rp_gr,
-            'gr' => $ttl_gr,
-            'total_operasional' => $rawNumber
-        ];
-        DB::table('oprasional')->insert($data);
+        $totalOperasional = (float) $totalOperasional;
 
+        // Gaji dihitung ulang di server. Jangan mempercayai nilai hidden input.
+        $gajiCabutEo = (float) (BalanceModel::cost_cbt_eo($bulan, $tahun)->cost ?? 0);
+        $gajiCetak = (float) (BalanceModel::cost_ctk($bulan, $tahun)->cost ?? 0);
+        $gajiSortir = (float) (BalanceModel::cost_sortir($bulan, $tahun)->cost ?? 0);
+        $totalGaji = $gajiCabutEo + $gajiCetak + $gajiSortir;
+        $biayaOperasionalMurni = $totalOperasional - $totalGaji;
 
-        foreach ($grading_partai as $p) {
-            $data = [
-                'cost_op' => $p->gr * $rp_gr
-            ];
-            DB::table('grading_partai')->where('id_grading', $p->id_grading)->update($data);
+        if ($biayaOperasionalMurni < 0) {
+            return redirect()->back()->with(
+                'error',
+                'Total cost operasional tidak boleh lebih kecil dari total gaji'
+            );
         }
-        return redirect()->back()->with('sukses', 'Data Berhasil ditambahkan');
+
+        try {
+            DB::transaction(function () use (
+                $bulan,
+                $tahun,
+                $totalOperasional,
+                $biayaOperasionalMurni
+            ) {
+            // Susut tidak menerima cost_op. Seluruh biaya tetap melekat pada
+            // produk aktual sehingga modal tidak hilang ketika gram menyusut.
+            $totalGr = (float) DB::table('grading_partai')
+                ->where('bulan', $bulan)
+                ->where('tahun', $tahun)
+                ->where('grade', '!=', 'susut')
+                ->lockForUpdate()
+                ->sum('gr');
+
+            if ($totalGr <= 0) {
+                throw new \RuntimeException(
+                    "Belum ada gram hasil grading untuk bulan {$bulan}/{$tahun}"
+                );
+            }
+
+            $rpGr = $biayaOperasionalMurni / $totalGr;
+
+            DB::table('oprasional')->updateOrInsert(
+                ['bulan' => $bulan, 'tahun' => $tahun],
+                [
+                    'rp_oprasional' => $biayaOperasionalMurni,
+                    'rp_gr' => $rpGr,
+                    'gr' => $totalGr,
+                    'total_operasional' => $totalOperasional,
+                ]
+            );
+
+            // Bersihkan cost_op baris susut/hasil lama sebelum alokasi ulang.
+            DB::table('grading_partai')
+                ->where('bulan', $bulan)
+                ->where('tahun', $tahun)
+                ->where('grade', 'susut')
+                ->update(['cost_op' => 0]);
+
+            // Satu UPDATE untuk seluruh hasil grading; jauh lebih ringan daripada
+            // menjalankan satu query untuk setiap baris.
+            DB::table('grading_partai')
+                ->where('bulan', $bulan)
+                ->where('tahun', $tahun)
+                ->where('grade', '!=', 'susut')
+                ->update(['cost_op' => DB::raw('COALESCE(gr, 0) * ' . (float) $rpGr)]);
+            });
+        } catch (\RuntimeException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('sukses', 'Cost operasional berhasil dialokasikan');
     }
 }

@@ -7,8 +7,12 @@
         <select name="" id="" class="form-control bulan_op">
             <option value="">Pilih bulan</option>
             @foreach ($dataBulan as $b)
-                <option value="{{ $b->id_oprasional }}" @selected($id_oprasional == $b->id_oprasional)>{{ $b->bulan }} ~
-                    {{ $b->tahun }}</option>
+                @php
+                    $nilaiPeriode = 'periode:' . (int) $b->bulan . ':' . (int) $b->tahun;
+                @endphp
+                <option value="{{ $nilaiPeriode }}" @selected($periodeTerpilih === $nilaiPeriode)>
+                    {{ date('F', mktime(0, 0, 0, $b->bulan, 1)) }} {{ (int) $b->tahun }}
+                </option>
             @endforeach
 
         </select>
