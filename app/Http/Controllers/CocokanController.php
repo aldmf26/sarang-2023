@@ -403,52 +403,170 @@ class CocokanController extends Controller
         }
     }
 
+    private function calculateBalanceCost(array $data): array
+    {
+        $objectValue = static fn ($object, string $field): float =>
+            (float) ($object->{$field} ?? 0);
+        $arrayValue = static fn ($rows, string $field): float =>
+            (float) sumBk($rows ?? [], $field);
+
+        $totalBkRp =
+            $objectValue($data['bk_sisa'], 'ttl_rp') +
+            $objectValue($data['cbt_proses'], 'ttl_rp') +
+            $objectValue($data['cbt_sisa_pgws'], 'ttl_rp') +
+            $arrayValue($data['cabut_selesai_siap_cetak'], 'ttl_rp') +
+            $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_kerja') +
+            $objectValue($data['cetak_proses'], 'ttl_rp') +
+            $objectValue($data['cetak_proses'], 'cost_kerja') +
+            $objectValue($data['cetak_sisa'], 'ttl_rp') +
+            $arrayValue($data['cetak_selesai'], 'ttl_rp') +
+            $arrayValue($data['cetak_selesai'], 'cost_kerja') +
+            $objectValue($data['sedang_proses'], 'ttl_rp') +
+            $objectValue($data['sedang_proses'], 'cost_kerja') +
+            $objectValue($data['sortir_sisa'], 'ttl_rp') +
+            $objectValue($data['sortir_sisa'], 'cost_kerja') +
+            $arrayValue($data['sortir_selesai'], 'ttl_rp') +
+            $arrayValue($data['sortir_selesai'], 'cost_kerja') +
+            $objectValue($data['grading_sisa'], 'cost_bk') +
+            $objectValue($data['grading_proses'], 'cost_bk') +
+            $objectValue($data['grading_proses'], 'cost_kerja') +
+            $objectValue($data['grading_proses'], 'cost_op') +
+            $objectValue($data['grading_susut'], 'cost_bk') +
+            $objectValue($data['grading_susut'], 'cost_kerja') +
+            $objectValue($data['grading_susut'], 'cost_cu') +
+            $objectValue($data['grading_susut'], 'cost_op') +
+            $objectValue($data['sisa_belum_wip1'], 'ttl_rp') +
+            $objectValue($data['sisa_belum_qc'], 'ttl_rp') +
+            $objectValue($data['wip2proses'], 'ttl_rp') +
+            $objectValue($data['pengiriman_proses'], 'ttl_rp') +
+            $objectValue($data['pengiriman'], 'cost_bk') +
+            $objectValue($data['pengiriman'], 'cost_kerja') +
+            $objectValue($data['pengiriman'], 'cost_cu') +
+            $objectValue($data['pengiriman'], 'cost_op');
+
+        $modalBk = $arrayValue($data['bk'], 'cost_bk');
+        $totalOperasional = $arrayValue($data['uang_cost'], 'total_operasional');
+        $cumulativeCost = round($totalBkRp - $modalBk - $totalOperasional, 2);
+
+        $baseline = (float) (
+            DB::table('balance_sheet_closings')
+                ->orderByDesc('tahun')
+                ->orderByDesc('bulan')
+                ->value('cumulative_cost_baseline') ?? 0
+        );
+
+        return [
+            'total_bk_rp' => $totalBkRp,
+            'modal_bk' => $modalBk,
+            'total_operasional' => $totalOperasional,
+            'cumulative' => $cumulativeCost,
+            'baseline' => $baseline,
+            'current' => round($cumulativeCost - $baseline, 2),
+        ];
+    }
+
+    private function buildBalanceRows(array $data): array
+    {
+        $objectValue = static fn ($object, string $field): float =>
+            (float) ($object->{$field} ?? 0);
+        $arrayValue = static fn ($rows, string $field): float =>
+            (float) sumBk($rows ?? [], $field);
+
+        $rows = [
+            ['BK Sisa', $data['bk_sisa'], 0, 'stock',
+                $objectValue($data['bk_sisa'], 'ttl_rp')],
+            ['Cabut sedang proses', $data['cbt_proses'], 1, 'process',
+                $objectValue($data['cbt_proses'], 'ttl_rp')],
+            ['Cabut sisa pengawas', $data['cbt_sisa_pgws'], 2, 'process',
+                $objectValue($data['cbt_sisa_pgws'], 'ttl_rp')],
+            ['Cabut selesai siap cetak belum kirim', null, 3, 'stock',
+                $arrayValue($data['cabut_selesai_siap_cetak'], 'ttl_rp')
+                + $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_kerja')
+                + $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_op')],
+            ['Cetak sedang proses', $data['cetak_proses'], 4, 'process',
+                $objectValue($data['cetak_proses'], 'ttl_rp')
+                + $objectValue($data['cetak_proses'], 'cost_kerja')],
+            ['Cetak sisa pengawas', $data['cetak_sisa'], 5, 'process',
+                $objectValue($data['cetak_sisa'], 'ttl_rp')],
+            ['Cetak selesai siap sortir belum kirim', null, 6, 'stock',
+                $arrayValue($data['cetak_selesai'], 'ttl_rp')
+                + $arrayValue($data['cetak_selesai'], 'cost_kerja')
+                + $arrayValue($data['cetak_selesai'], 'cost_op')],
+            ['Sortir sedang proses', $data['sedang_proses'], 7, 'process',
+                $objectValue($data['sedang_proses'], 'ttl_rp')
+                + $objectValue($data['sedang_proses'], 'cost_kerja')],
+            ['Sortir sisa pengawas', $data['sortir_sisa'], 8, 'process',
+                $objectValue($data['sortir_sisa'], 'ttl_rp')
+                + $objectValue($data['sortir_sisa'], 'cost_kerja')],
+            ['Sortir selesai siap grading belum kirim', null, 9, 'stock',
+                $arrayValue($data['sortir_selesai'], 'ttl_rp')
+                + $arrayValue($data['sortir_selesai'], 'cost_kerja')
+                + $arrayValue($data['sortir_selesai'], 'cost_op')],
+            ['Sisa belum grading', $data['grading_sisa'], 10, 'process',
+                $objectValue($data['grading_sisa'], 'cost_bk')],
+            ['Grading sedang proses', $data['grading_proses'], 11, 'process',
+                $objectValue($data['grading_proses'], 'cost_bk')
+                + $objectValue($data['grading_proses'], 'cost_kerja')
+                + $objectValue($data['grading_proses'], 'cost_op')
+                + $objectValue($data['grading_susut'], 'cost_bk')
+                + $objectValue($data['grading_susut'], 'cost_kerja')
+                + $objectValue($data['grading_susut'], 'cost_cu')
+                + $objectValue($data['grading_susut'], 'cost_op')],
+            ['WIP1 sedang proses', $data['sisa_belum_wip1'], 12, 'process',
+                $objectValue($data['sisa_belum_wip1'], 'ttl_rp')],
+            ['QC sedang proses', $data['sisa_belum_qc'], 13, 'process',
+                $objectValue($data['sisa_belum_qc'], 'ttl_rp')],
+            ['WIP2 sedang proses', $data['wip2proses'], 14, 'process',
+                $objectValue($data['wip2proses'], 'ttl_rp')],
+            ['Pengiriman sedang proses', $data['pengiriman_proses'], 15, 'process',
+                $objectValue($data['pengiriman_proses'], 'ttl_rp')],
+            ['Pengiriman', $data['pengiriman'], 16, 'process',
+                $objectValue($data['pengiriman'], 'cost_bk')
+                + $objectValue($data['pengiriman'], 'cost_kerja')
+                + $objectValue($data['pengiriman'], 'cost_cu')
+                + $objectValue($data['pengiriman'], 'cost_op')],
+        ];
+
+        return collect($rows)->map(function (array $row) use ($data, $objectValue, $arrayValue) {
+            [$label, $source, $detailId, $type, $total] = $row;
+
+            $arraySources = [
+                3 => $data['cabut_selesai_siap_cetak'],
+                6 => $data['cetak_selesai'],
+                9 => $data['sortir_selesai'],
+            ];
+            $pcs = isset($arraySources[$detailId])
+                ? $arrayValue($arraySources[$detailId], 'pcs')
+                : $objectValue($source, 'pcs');
+            $gr = isset($arraySources[$detailId])
+                ? $arrayValue($arraySources[$detailId], 'gr')
+                : $objectValue($source, 'gr');
+
+            return [
+                'label' => $label,
+                'pcs' => $pcs,
+                'gr' => $gr,
+                'total' => $total,
+                'average' => $gr > 0 ? $total / $gr : 0,
+                'detail_id' => $detailId,
+                'type' => $type,
+            ];
+        })->all();
+    }
+
     public function balancesheet()
     {
-        $ca17 = CocokanModel::cetak_stok_balance();
+        $cetakStok = CocokanModel::cetak_stok_balance();
 
         $cetak_sisa = new stdClass();
-        $cetak_sisa->pcs = $ca17->pcs;
-        $cetak_sisa->gr = $ca17->gr;
-        $cetak_sisa->modal = $ca17->ttl_rp;
-        $cetak_sisa->ttl_rp = $ca17->ttl_rp + $ca17->cost_kerja;
+        $cetak_sisa->pcs = $cetakStok->pcs;
+        $cetak_sisa->gr = $cetakStok->gr;
+        $cetak_sisa->ttl_rp = $cetakStok->ttl_rp + $cetakStok->cost_kerja;
 
         $pengiriman = Grading::pengirimanSum();
-        $grading = Grading::belumKirimSum();
         $grading_susut = Grading::belumKirimSumsusut();
 
-        $a12 = CocokanModel::bkselesai_siap_ctk_diserahkan_sum();
-
-        $bk_akhir = new stdClass();
-        $bk_akhir->pcs = $a12->pcs;
-        $bk_akhir->gr = $a12->gr;
-        $bk_akhir->ttl_rp = $a12->ttl_rp;
-        $bk_akhir->cost_kerja = $a12->cost_kerja;
-
         $model = new CocokanModel();
-        $ttl_gr = $this->getBalanceCost($model, 'ttl_gr');
-        $cost_op = $this->getBalanceCost($model, 'cost_op');
-        $cost_dll = $this->getBalanceCost($model, 'dll');
-
-        $ca16 = $model::cetak_selesai();
-        $cetak_akhir = new stdClass();
-        $cetak_akhir->pcs = $ca16->pcs;
-        $cetak_akhir->gr = $ca16->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp;
-        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
-
-        $s3 = $model::sortir_akhir();
-        $sortir_akhir = new stdClass();
-        $sortir_akhir->pcs = $s3->pcs;
-        $sortir_akhir->gr = $s3->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp;
-        $sortir_akhir->cost_kerja = $s3->cost_kerja;
-
-        $grading_akhir = DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
-        sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
-        FROM grading_partai as a ");
-
-        $grading_proses = $model->gradingProsesOne();
 
         $data = [
             'title' => 'Balance Sheet ',
@@ -456,25 +574,14 @@ class CocokanController extends Controller
             'bk_sisa' => CocokanModel::summarybk_sisa(),
             'bk_suntik' => [],
             'uang_cost' => BalanceModel::uangCost(),
-            'bk_akhir' => $bk_akhir,
             'cbt_proses' => CocokanModel::bksedang_proses_sum(),
             'cbt_sisa_pgws' => CocokanModel::bksisapgws(),
             'cetak_proses' => CocokanModel::cetak_proses_balance(),
-            'cbt_blm_kirim' => CocokanModel::bksedang_selesai_sum(),
             'cetak_sisa' => $cetak_sisa,
             'sedang_proses' => CocokanModel::sortir_proses_balance(),
             'sortir_sisa' => CocokanModel::sortir_stock_balance(),
-            'opname' => $this->zeroSuntik(),
-            'sortir_akhir' => $sortir_akhir,
             'pengiriman' => $pengiriman,
-            'grading' => $grading,
-            'ttl_gr' => $ttl_gr,
-            'cost_op' => $cost_op,
-            'cost_dll' => $cost_dll,
-            'cetak_akhir' => $cetak_akhir,
             'grading_sisa' => CocokanModel::gradingSisaOne(),
-            'grading_sisa2' => OpnameNewModel::grading_sisa(),
-            'grading_akhir' => $grading_akhir,
             'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
             'cetak_selesai' => OpnameNewModel::cetak_selesai(),
             'sortir_selesai' => OpnameNewModel::sortir_selesai(),
@@ -483,8 +590,69 @@ class CocokanController extends Controller
             'sisa_belum_qc' => $model->sisa_belum_qc(),
             'wip2proses' => $model->wip2proses(),
             'pengiriman_proses' => $model->pengiriman_proses(),
-            'grading_proses' => $grading_proses,
+            'grading_proses' => $model->gradingProsesOne(),
         ];
+        $costSummary = $this->calculateBalanceCost($data);
+        $balanceRows = $this->buildBalanceRows($data);
+        $bkTotalGr = sumBk($data['bk'], 'gr_bk') + sumBk($data['bk_suntik'], 'gr');
+        $bkTotalRp = sumBk($data['bk'], 'cost_bk') + sumBk($data['bk_suntik'], 'ttl_rp');
+
+        $data['bk_totals'] = [
+            'pcs' => sumBk($data['bk'], 'pcs_bk') + sumBk($data['bk_suntik'], 'pcs'),
+            'gr' => $bkTotalGr,
+            'total' => $bkTotalRp,
+            'average' => $bkTotalGr > 0 ? $bkTotalRp / $bkTotalGr : 0,
+        ];
+        $data['balance_rows'] = $balanceRows;
+        $data['detail_routes'] = [
+            1 => route('cocokan.detailCabutProses'),
+            2 => route('cocokan.detailCabutSisa'),
+            3 => route('cocokan.detailCabutBelumKirim'),
+            4 => route('cocokan.detailCetakSedangProses'),
+            5 => route('cocokan.detailCetakSisa'),
+            6 => route('cocokan.detailCetakBelumKirim'),
+            7 => route('cocokan.detailSortirProses'),
+            8 => route('cocokan.detailSortirSisa'),
+            9 => route('cocokan.detailSortirBelumKirim'),
+            10 => route('cocokan.detailSisaBelumGrading'),
+            11 => route('cocokan.detailGradingSedangProses'),
+            12 => route('cocokan.detailWip1SedangProses'),
+            13 => route('cocokan.detailQcSedangProses'),
+            14 => route('cocokan.detailWip2SedangProses'),
+            15 => route('cocokan.detailPengirimanSedangProses'),
+            16 => route('cocokan.detailPengiriman'),
+        ];
+        $data['balance_totals'] = [
+            'pcs' => collect($balanceRows)->sum('pcs'),
+            'gr' => collect($balanceRows)->sum('gr'),
+            'total' => $costSummary['total_bk_rp'],
+        ];
+        $data['cost_berjalan'] = $costSummary['current'];
+        $closingAdjustments = DB::table('balance_sheet_closings')
+            ->get()
+            ->mapWithKeys(fn ($closing) => [
+                (int) $closing->tahun . '-' . (int) $closing->bulan =>
+                    (float) $closing->cost_berjalan_sebelum_tutup,
+            ])
+            ->all();
+        $data['cost_rows'] = collect($data['uang_cost'])->map(function ($cost) use ($closingAdjustments) {
+            $adjustment = $closingAdjustments[(int) $cost->tahun . '-' . (int) $cost->bulan] ?? 0;
+
+            return [
+                'bulan' => (int) $cost->bulan,
+                'tahun' => (int) $cost->tahun,
+                'periode' => date('F Y', strtotime($cost->tahun . '-' . $cost->bulan . '-01')),
+                'gaji' => (float) $cost->gaji + $adjustment,
+                'operasional' => (float) $cost->total_operasional - (float) $cost->gaji,
+                'total' => (float) $cost->total_operasional + $adjustment,
+            ];
+        })->all();
+        $data['cost_totals'] = [
+            'gaji' => collect($data['cost_rows'])->sum('gaji'),
+            'operasional' => collect($data['cost_rows'])->sum('operasional'),
+            'total' => collect($data['cost_rows'])->sum('total'),
+        ];
+
         return view('home.cocokan.balance', $data);
     }
 
@@ -513,6 +681,7 @@ class CocokanController extends Controller
             $cekBkRpTutup = DB::table('history_bk_rp')->where([['bulan_ditutup', $bulan_ditutup], ['tahun_ditutup', $tahun_ditutup]])->exists();
 
             if ($cekBkKerjaTutup && $cekCostTutup && $cekBkRpTutup) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Data sudah ditutup');
             }
 
@@ -549,9 +718,16 @@ class CocokanController extends Controller
             $cetak_selesai = OpnameNewModel::cetak_selesai();
             $sortir_selesai = OpnameNewModel::sortir_selesai();
             $grading_susut = Grading::belumKirimSumsusut();
+            $grading_proses = $model->gradingProsesOne();
+            $sisa_belum_wip1 = $model->sisa_belum_wip1();
+            $sisa_belum_qc = $model->sisa_belum_qc();
+            $wip2proses = $model->wip2proses();
+            $pengiriman_proses = $model->pengiriman_proses();
+            $bk_sisa = CocokanModel::summarybk_sisa();
 
             $bk = SummaryModel::summarybk();
             $bk_suntik = DB::select("SELECT * FROM opname_suntik WHERE opname = 'Y'");
+            $uangCost = BalanceModel::uangCost();
 
             $ttl_sisa_belum_kirim =
                 $grading->cost_bk + $grading->cost_kerja + $grading->cost_cu + $grading->cost_op;
@@ -564,30 +740,28 @@ class CocokanController extends Controller
 
             $ttl_sisa_blum_grading = $grading_sisa->cost_bk;
 
-            $ttl_cost_berjalan =
-                $cbt_proses->ttl_rp +
-                $cbt_sisa_pgws->ttl_rp +
-                $cetak_proses->ttl_rp +
-                $cetak_proses->cost_kerja +
-                $cbt_blm_kirim->cost_kerja +
-                $cetak_sisa->ttl_rp +
-                $sedang_proses->ttl_rp +
-                $sedang_proses->cost_kerja +
-                $sortir_sisa->ttl_rp +
-                $sortir_sisa->cost_kerja +
-                $ttl_sisa_blum_grading +
-                $ttl_pengiriman +
-                $ttl_sisa_belum_kirim +
-                sumBk($cabut_selesai_siap_cetak, 'ttl_rp') +
-                sumBk($sortir_selesai, 'ttl_rp') +
-                sumBk($cetak_selesai, 'ttl_rp') +
-                sumBk($cabut_selesai_siap_cetak, 'cost_kerja') +
-                sumBk($sortir_selesai, 'cost_kerja') +
-                sumBk($cetak_selesai, 'cost_kerja') +
-                $grading_susut->cost_bk +
-                $grading_susut->cost_kerja +
-                $grading_susut->cost_cu +
-                $grading_susut->cost_op;
+            $costSummary = $this->calculateBalanceCost([
+                'bk' => $bk,
+                'bk_sisa' => $bk_sisa,
+                'uang_cost' => $uangCost,
+                'cbt_proses' => $cbt_proses,
+                'cbt_sisa_pgws' => $cbt_sisa_pgws,
+                'cabut_selesai_siap_cetak' => $cabut_selesai_siap_cetak,
+                'cetak_proses' => $cetak_proses,
+                'cetak_sisa' => $cetak_sisa,
+                'cetak_selesai' => $cetak_selesai,
+                'sedang_proses' => $sedang_proses,
+                'sortir_sisa' => $sortir_sisa,
+                'sortir_selesai' => $sortir_selesai,
+                'grading_sisa' => $grading_sisa,
+                'grading_proses' => $grading_proses,
+                'grading_susut' => $grading_susut,
+                'sisa_belum_wip1' => $sisa_belum_wip1,
+                'sisa_belum_qc' => $sisa_belum_qc,
+                'wip2proses' => $wip2proses,
+                'pengiriman_proses' => $pengiriman_proses,
+                'pengiriman' => $pengiriman,
+            ]);
 
 
             if (!$cekBkKerjaTutup) {
@@ -631,13 +805,24 @@ class CocokanController extends Controller
             }
 
             if (!$cekCostTutup) {
-                $uangCost = BalanceModel::uangCost();
                 foreach ($uangCost as $u) {
+                    $closingAdjustment = DB::table('balance_sheet_closings')
+                        ->where('tahun', (int) $u->tahun)
+                        ->where('bulan', (int) $u->bulan)
+                        ->value('cost_berjalan_sebelum_tutup') ?? 0;
+
+                    if (
+                        (int) $u->tahun === (int) $tahun_ditutup
+                        && (int) $u->bulan === (int) $bulan_ditutup
+                    ) {
+                        $closingAdjustment = $costSummary['current'];
+                    }
+
                     $data2[] = [
                         'bulan_tahun' => date('F Y', strtotime($u->tahun . '-' . $u->bulan . '-' . '01')),
-                        'gaji' => $u->gaji,
+                        'gaji' => $u->gaji + $closingAdjustment,
                         'cost_op' => $u->total_operasional - $u->gaji,
-                        'ttl_rp' => $u->total_operasional,
+                        'ttl_rp' => $u->total_operasional + $closingAdjustment,
                         'tgl_ditutup' => $tgl_ditutup,
                         'bulan_ditutup' => $bulan_ditutup,
                         'tahun_ditutup' => $tahun_ditutup,
@@ -649,10 +834,7 @@ class CocokanController extends Controller
                     'bulan_tahun' => 'cost berjalan',
                     'gaji' => 0,
                     'cost_op' => 0,
-                    'ttl_rp' => $ttl_cost_berjalan -
-                        sumBk($uangCost, 'total_operasional') -
-                        sumBk($bk, 'cost_bk') -
-                        sumBk($bk_suntik, 'ttl_rp'),
+                    'ttl_rp' => 0,
                     'tgl_ditutup' => $tgl_ditutup,
                     'bulan_ditutup' => $bulan_ditutup,
                     'tahun_ditutup' => $tahun_ditutup,
@@ -660,6 +842,21 @@ class CocokanController extends Controller
                 ];
                 DB::table('history_cost_perbulan')->insert($data2);
             }
+
+            DB::table('balance_sheet_closings')->updateOrInsert(
+                [
+                    'bulan' => (int) $bulan_ditutup,
+                    'tahun' => (int) $tahun_ditutup,
+                ],
+                [
+                    'cost_berjalan_sebelum_tutup' => $costSummary['current'],
+                    'cumulative_cost_baseline' => $costSummary['cumulative'],
+                    'closed_at' => $tgl_ditutup,
+                    'admin' => $admin,
+                    'updated_at' => $tgl_ditutup,
+                    'created_at' => $tgl_ditutup,
+                ]
+            );
             if (!$cekBkRpTutup) {
                 $data3 = [
                     [
@@ -688,7 +885,7 @@ class CocokanController extends Controller
                         'ket' => 'Cabut selesai siap cetak belum kirim',
                         'pcs' => sumBk($cabut_selesai_siap_cetak, 'pcs'),
                         'gr' => sumBk($cabut_selesai_siap_cetak, 'gr'),
-                        'ttl_rp' => sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja'),
+                        'ttl_rp' => sumBk($cabut_selesai_siap_cetak, 'ttl_rp') + sumBk($cabut_selesai_siap_cetak, 'cost_kerja') + sumBk($cabut_selesai_siap_cetak, 'cost_op'),
                         'rata_rata' => 0,
                         'bulan_ditutup' => $bulan_ditutup,
                         'tahun_ditutup' => $tahun_ditutup,
@@ -721,7 +918,7 @@ class CocokanController extends Controller
                         'ket' => 'Cetak selesai siap sortir belum kirim',
                         'pcs' => sumBk($cetak_selesai, 'pcs'),
                         'gr' => sumBk($cetak_selesai, 'gr'),
-                        'ttl_rp' => sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja'),
+                        'ttl_rp' => sumBk($cetak_selesai, 'ttl_rp') + sumBk($cetak_selesai, 'cost_kerja') + sumBk($cetak_selesai, 'cost_op'),
                         'rata_rata' => 0,
                         'bulan_ditutup' => $bulan_ditutup,
                         'tahun_ditutup' => $tahun_ditutup,
@@ -754,7 +951,7 @@ class CocokanController extends Controller
                         'ket' => 'Sortir selesai siap grading belum kirim',
                         'pcs' => sumBk($sortir_selesai, 'pcs'),
                         'gr' => sumBk($sortir_selesai, 'gr'),
-                        'ttl_rp' => sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja'),
+                        'ttl_rp' => sumBk($sortir_selesai, 'ttl_rp') + sumBk($sortir_selesai, 'cost_kerja') + sumBk($sortir_selesai, 'cost_op'),
                         'rata_rata' => 0,
                         'bulan_ditutup' => $bulan_ditutup,
                         'tahun_ditutup' => $tahun_ditutup,

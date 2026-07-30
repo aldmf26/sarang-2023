@@ -676,19 +676,19 @@ class GradingBjController extends Controller
             $ttlPcsGrading = array_sum(array_column($data2, 'pcs'));
             $ttlGrGrading = array_sum(array_column($data2, 'gr'));
 
-            // if ($ttlPcsGrading != $ttlPcsSortir || $ttlGrGrading != $ttlGrSortir) {
-            //     DB::rollBack();
-            //     session()->flash('form_data', [
-            //         'baris' => count($r->grade ?? []),
-            //         'grade' => $r->grade ?? [],
-            //         'pcs' => $r->pcs ?? [],
-            //         'gr' => $r->gr ?? [],
-            //         'box_sp' => $r->box_sp ?? [],
-            //         'not_oke' => $r->not_oke ?? []
-            //     ]);
+            if ($ttlPcsGrading != $ttlPcsSortir || $ttlGrGrading != $ttlGrSortir) {
+                DB::rollBack();
+                session()->flash('form_data', [
+                    'baris' => count($r->grade ?? []),
+                    'grade' => $r->grade ?? [],
+                    'pcs' => $r->pcs ?? [],
+                    'gr' => $r->gr ?? [],
+                    'box_sp' => $r->box_sp ?? [],
+                    'not_oke' => $r->not_oke ?? []
+                ]);
 
-            //     return redirect()->back()->withInput()->with('error', 'Total pcs atau gr grading tidak sesuai sortir');
-            // }
+                return redirect()->back()->withInput()->with('error', 'Total pcs atau gr grading tidak sesuai sortir');
+            }
 
             DB::table('grading')->insert($dataGrading);
             // SUKSES - Hapus session

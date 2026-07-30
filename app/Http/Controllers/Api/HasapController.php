@@ -77,7 +77,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
         left join hasil_wawancara as d on d.id_anak = b.id_anak
         left join users as h on h.id = a.id_pengawas
-        where c.baru = 'baru'  and a.id_kelas not in('126','166','152')  and a.id_pengawas not in ('104','421','99','101','285') and c.nm_partai in ('bjm 1003' , 'bjm 1004')
+        where c.baru = 'baru'  and a.id_kelas not in('126','166','152')  and a.id_pengawas not in ('104','421','99','101','285') 
         group by a.no_box
 UNION ALL
 SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.nama, 0 as pcs, sum(d.gr_eo_awal) as gr_awal, h.name
@@ -86,7 +86,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         left join bk as f on f.no_box = d.no_box and f.kategori = 'cabut'
         left join hasil_wawancara as g on g.id_anak = e.id_anak
         left join users as h on h.id = d.id_pengawas
-        where f.baru = 'baru' and  d.id_kelas != '142' and d.id_pengawas not in ('104','421','99','101','285') and f.nm_partai in ('bjm 1003' , 'bjm 1004')
+        where f.baru = 'baru' and  d.id_kelas != '142' and d.id_pengawas not in ('104','421','99','101','285') 
         group by d.no_box
         
         ORDER BY no_box ASC;");
@@ -624,7 +624,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM formulir_sarang as a
         left join bk as b on b.no_box = a.no_box and b.kategori ='cabut'
         left join users as c on c.id = a.id_penerima
-        where a.kategori = 'cabut' and b.nm_partai in('bjm 1004', 'bjm 1003') and c.lokasi = 'bjm'
+        where a.kategori = 'cabut' and c.lokasi = 'bjm'
         group by a.id_penerima, a.tanggal
         ORDER by a.tanggal DESC;");
 
@@ -656,7 +656,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, sum(a.pcs) as pcs, sum(a.gr) as gr
         FROM grading_partai as a 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') 
         group by a.tgl
         order by a.tgl DESC;");
         return response()->json([
@@ -672,7 +672,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         GROUP_CONCAT(DISTINCT CONCAT(\"'\", a.nm_partai, \"'\") SEPARATOR ', ') AS nm_partai ,
         
          sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
+        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') 
         group by a.grade
         order by a.grade ASC;");
         return response()->json([
@@ -686,7 +686,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
 
         $data = DB::select("SELECT a.tgl, a.grade, a.nm_partai,
         sum(a.pcs) as pcs, sum(a.gr) as gr, count(a.box_pengiriman) as box FROM grading_partai as a 
-        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and a.nm_partai in('bjm 1004', 'bjm 1003')
+        where a.tgl = '$r->tgl' and a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') 
         group by a.grade , a.nm_partai
         order by a.nm_partai ASC, a.grade ASC;");
         return response()->json([
@@ -721,7 +721,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
-        where b.grade_id = '$r->id'  and a.nm_partai in ('Bjm 1003','Bjm 1004') 
+        where b.grade_id = '$r->id'  
         group by b.tgl, b.no_invoice
 
         UNION all
@@ -730,7 +730,7 @@ SELECT d.tgl_ambil as tgl, d.tgl_serah as tgl_selesai, d.no_box, f.nm_partai, g.
         FROM bk as a
         left join sbw_kotor as b on b.nm_partai = a.nm_partai
         left join users as c on c.id = a.penerima
-        where b.grade_id = '$r->id' and a.formulir = 'Y'   and a.nm_partai in ('Bjm 1003','Bjm 1004') 
+        where b.grade_id = '$r->id' and a.formulir = 'Y'   
         group by a.tgl, b.no_invoice, a.penerima
 
         order by  tgl ASC, no_invoice ASC,  ket DESC; ");
@@ -1055,7 +1055,7 @@ ON all_data.grade = done_data.grade;");
     
     
         ) AS hasil
-        where tgl_terima BETWEEN '2025-07-28' and NOW()
+        where tgl_terima BETWEEN '2026-06-19' and NOW()
         Group by id_pengawas
         ORDER BY tgl DESC;");
         return response()->json([
@@ -1126,7 +1126,7 @@ ON all_data.grade = done_data.grade;");
   where c.no_box != '9999' and c.id_kelas not in('126','166','152','142')  
 
 ) AS hasil
-WHERE tgl_terima BETWEEN '2025-07-28' and now() and id_pengawas = $r->id_pengawas
+WHERE tgl_terima BETWEEN '2026-06-19' and now() and id_pengawas = $r->id_pengawas
 group by tgl, no_box
 ORDER BY  tgl ASC;");
         return response()->json([
@@ -1375,7 +1375,7 @@ left join (
         ) as c on c.no_nota = b.no_nota
          
 
-        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') and c.tujuan = 'hk'
+        where a.box_pengiriman not in('30000','300000','400000','700000','800000','900000') 
          GROUP BY b.tgl_input
         Order by b.tgl_input DESC");
         return response()->json([
