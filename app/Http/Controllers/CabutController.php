@@ -746,6 +746,381 @@ class CabutController extends Controller
         return view('home.cabut.detail_laporan_perhari', $data);
     }
 
+    public function export_global_formula(Request $r)
+    {
+        $bulan = (int) $r->bulan;
+        $tahun = (int) $r->tahun;
+
+        abort_unless($bulan >= 1 && $bulan <= 12 && $tahun >= 2000, 422, 'Bulan atau tahun tidak valid.');
+
+        $pengawas = DB::select("SELECT b.id as id_pengawas, b.name, b.lokasi
+            FROM bk as a
+            JOIN users as b on a.penerima = b.id
+            WHERE a.kategori != 'cetak' AND b.posisi_id = 13
+            GROUP BY b.id, b.name, b.lokasi
+            ORDER BY b.lokasi, b.name");
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+
+        $detailSheets = [];
+        $usedSheetNames = ['GRAND TOTAL'];
+        $headers = [
+            'A1' => 'Cabut',
+            'M1' => 'Cabut Eo',
+            'Q1' => 'Sortir',
+            'W1' => 'Gaji',
+            'A2' => 'Pgws',
+            'B2' => 'Hari Masuk',
+            'C2' => 'Nama',
+            'D2' => 'Kelas',
+            'E2' => 'Pcs Awal',
+            'F2' => 'Gr Awal',
+            'G2' => 'Pcs Akhir',
+            'H2' => 'Gr Akhir',
+            'I2' => 'Eot Gr',
+            'J2' => 'Gr Flx',
+            'K2' => 'Susut %',
+            'L2' => 'Ttl Rp',
+            'M2' => 'Gr Eo Awal',
+            'N2' => 'Gr Eo Akhir',
+            'O2' => 'Susut %',
+            'P2' => 'Ttl Rp',
+            'Q2' => 'Pcs Awal',
+            'R2' => 'Gr Awal',
+            'S2' => 'Pcs Akhir',
+            'T2' => 'Gr Akhir',
+            'U2' => 'Susut %',
+            'V2' => 'Ttl Rp',
+            'W2' => 'Kerja Dll',
+            'X2' => 'Rp Denda',
+            'Y2' => 'Ttl Gaji',
+            'Z2' => 'Rata2',
+            'AA2' => 'Kasbon',
+            'AB2' => 'Sisa Gaji',
+        ];
+
+        foreach ($pengawas as $d) {
+            $baseName = mb_substr(preg_replace('/[\\\\\\/\\?\\*\\[\\]:]/', ' ', strtoupper(trim($d->name))), 0, 31);
+            $sheetName = $baseName ?: 'PENGAWAS';
+            $suffix = 2;
+            while (in_array($sheetName, $usedSheetNames, true)) {
+                $sheetName = mb_substr($baseName, 0, 27) . ' ' . $suffix++;
+            }
+            $usedSheetNames[] = $sheetName;
+
+            $sheet = $spreadsheet->createSheet();
+            $sheet->setTitle($sheetName);
+            $sheet->setShowGridlines(false);
+
+            foreach ($headers as $cell => $value) {
+                $sheet->setCellValue($cell, $value);
+            }
+
+            $sheet->mergeCells('A1:L1');
+            $sheet->mergeCells('M1:P1');
+            $sheet->mergeCells('Q1:V1');
+            $sheet->mergeCells('W1:AB1');
+
+            $tbl = collect(Cabut::getRekapGlobal($bulan, $tahun, $d->id_pengawas))
+                ->map(function ($data) {
+                    $uangMakan = (float) ($data->umk_nominal ?? 0) * (float) ($data->hariMasuk ?? 0);
+                    $data->total_gaji_calc =
+                        (float) ($data->ttl_rp ?? 0) +
+                        (float) ($data->eo_ttl_rp ?? 0) +
+                        (float) ($data->sortir_ttl_rp ?? 0) +
+                        (float) ($data->ttl_rp_dll ?? 0) +
+                        $uangMakan -
+                        (float) ($data->ttl_rp_denda ?? 0);
+                    $data->kelas_number = (int) preg_replace('/\\D/', '', (string) ($data->kelas ?? 0));
+
+                    return $data;
+                })
+                ->sortBy([
+                    ['kelas_number', 'desc'],
+                    ['total_gaji_calc', 'desc'],
+                ])
+                ->values();
+
+            if ($tbl->isEmpty()) {
+                $spreadsheet->removeSheetByIndex($spreadsheet->getIndex($sheet));
+                continue;
+            }
+
+            $row = 3;
+            foreach ($tbl as $data) {
+                $uangMakan = (float) ($data->umk_nominal ?? 0) * (float) ($data->hariMasuk ?? 0);
+                $sheet->fromArray([
+                    $data->pgws,
+                    (float) ($data->hariMasuk ?? 0),
+                    $data->nm_anak,
+                    $data->kelas,
+                    (float) ($data->pcs_awal ?? 0),
+                    (float) ($data->gr_awal ?? 0),
+                    (float) ($data->pcs_akhir ?? 0),
+                    (float) ($data->gr_akhir ?? 0),
+                    (float) ($data->eot ?? 0),
+                    (float) ($data->gr_flx ?? 0),
+                    null,
+                    (float) ($data->ttl_rp ?? 0),
+                    (float) ($data->eo_awal ?? 0),
+                    (float) ($data->eo_akhir ?? 0),
+                    null,
+                    (float) ($data->eo_ttl_rp ?? 0),
+                    (float) ($data->sortir_pcs_awal ?? 0),
+                    (float) ($data->sortir_gr_awal ?? 0),
+                    (float) ($data->sortir_pcs_akhir ?? 0),
+                    (float) ($data->sortir_gr_akhir ?? 0),
+                    null,
+                    (float) ($data->sortir_ttl_rp ?? 0),
+                    (float) ($data->ttl_rp_dll ?? 0) + $uangMakan,
+                    (float) ($data->ttl_rp_denda ?? 0),
+                    null,
+                    null,
+                    (float) ($data->kasbon ?? 0),
+                    null,
+                ], null, "A{$row}");
+
+                $sheet->setCellValue("K{$row}", "=IFERROR((1-((H{$row}+J{$row})/F{$row}))*100,0)");
+                $sheet->setCellValue("O{$row}", "=IFERROR((1-(N{$row}/M{$row}))*100,0)");
+                $sheet->setCellValue("U{$row}", "=IFERROR((1-(T{$row}/R{$row}))*100,0)");
+                $sheet->setCellValue("Y{$row}", "=L{$row}+P{$row}+V{$row}+W{$row}-X{$row}");
+                $sheet->setCellValue("Z{$row}", "=IFERROR(Y{$row}/B{$row},0)");
+                $sheet->setCellValue("AB{$row}", "=Y{$row}-AA{$row}");
+                $row++;
+            }
+
+            $rowTotal = $row;
+            $sheet->setCellValue("A{$rowTotal}", 'TOTAL');
+            foreach (['E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'AA', 'AB'] as $column) {
+                $sheet->setCellValue(
+                    "{$column}{$rowTotal}",
+                    $rowTotal > 3 ? "=SUM({$column}3:{$column}" . ($rowTotal - 1) . ')' : 0
+                );
+            }
+
+            $thinBorder = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => 'FF202020'],
+                    ],
+                ],
+            ];
+            $sheet->getStyle("A1:AB{$rowTotal}")->applyFromArray([
+                'font' => ['name' => 'Arial', 'size' => 10],
+                'alignment' => [
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+            ]);
+            $sheet->getStyle("A1:AB2")->applyFromArray([
+                'font' => ['bold' => true],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'wrapText' => true,
+                ],
+            ]);
+            $sheet->getStyle('A1:L1')->getFill()->setFillType('solid')->getStartColor()->setARGB('FFD9D9D9');
+            $sheet->getStyle('M1:P1')->getFill()->setFillType('solid')->getStartColor()->setARGB('FFF79646');
+            $sheet->getStyle('Q1:V1')->getFill()->setFillType('solid')->getStartColor()->setARGB('FF8DB4E2');
+            $sheet->getStyle('W1:AB1')->getFill()->setFillType('solid')->getStartColor()->setARGB('FFFFF2CC');
+            foreach (['L2', 'P2', 'V2', 'W2', 'X2'] as $cell) {
+                $sheet->getStyle($cell)->getFill()->setFillType('solid')->getStartColor()->setARGB('FFFF0000');
+            }
+            $sheet->getStyle("A2:AB{$rowTotal}")->applyFromArray($thinBorder);
+            $sheet->getStyle("A{$rowTotal}:AB{$rowTotal}")->getFont()->setBold(true);
+            $sheet->getStyle("A{$rowTotal}:AB{$rowTotal}")->getFill()->setFillType('solid')->getStartColor()->setARGB('FFE2F0D9');
+            $sheet->getStyle("E3:AB{$rowTotal}")->getNumberFormat()->setFormatCode('#,##0;[Red]-#,##0;-');
+            $sheet->getStyle("K3:K" . max(3, $rowTotal - 1))->getNumberFormat()->setFormatCode('0');
+            $sheet->getStyle("O3:O" . max(3, $rowTotal - 1))->getNumberFormat()->setFormatCode('0');
+            $sheet->getStyle("U3:U" . max(3, $rowTotal - 1))->getNumberFormat()->setFormatCode('0');
+
+            $widths = [
+                'A' => 14, 'B' => 9, 'C' => 17, 'D' => 7,
+                'E' => 9, 'F' => 10, 'G' => 9, 'H' => 10, 'I' => 8, 'J' => 8,
+                'K' => 8, 'L' => 13, 'M' => 10, 'N' => 10, 'O' => 8, 'P' => 13,
+                'Q' => 9, 'R' => 10, 'S' => 9, 'T' => 10, 'U' => 8, 'V' => 13,
+                'W' => 12, 'X' => 11, 'Y' => 13, 'Z' => 11, 'AA' => 12, 'AB' => 13,
+            ];
+            foreach ($widths as $column => $width) {
+                $sheet->getColumnDimension($column)->setWidth($width);
+            }
+            $sheet->getRowDimension(1)->setRowHeight(24);
+            $sheet->getRowDimension(2)->setRowHeight(40);
+            for ($dataRow = 3; $dataRow <= $rowTotal; $dataRow++) {
+                $sheet->getRowDimension($dataRow)->setRowHeight(30);
+            }
+
+            $sheet->freezePane('A3');
+            $sheet->getPageSetup()
+                ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4)
+                ->setFitToWidth(1)
+                ->setFitToHeight(0)
+                ->setHorizontalCentered(true)
+                ->setVerticalCentered(true);
+            $sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 2);
+            $sheet->getPageSetup()->setPrintArea("A1:AB{$rowTotal}");
+            $sheet->getPageMargins()->setTop(0.25)->setBottom(0.25)->setLeft(0.2)->setRight(0.2)->setHeader(0.1)->setFooter(0.1);
+            $sheet->getHeaderFooter()->setOddFooter('&L' . $sheetName . '&CPage &P / &N&R' . sprintf('%02d/%04d', $bulan, $tahun));
+            $sheet->getSheetView()->setView(\PhpOffice\PhpSpreadsheet\Worksheet\SheetView::SHEETVIEW_PAGE_BREAK_PREVIEW);
+            $sheet->getSheetView()->setZoomScale(60);
+
+            $detailSheets[] = [
+                'sheet' => $sheetName,
+                'name' => $d->name,
+                'location' => $d->lokasi ?: '-',
+                'total_row' => $rowTotal,
+            ];
+        }
+
+        $grand = $spreadsheet->createSheet(0);
+        $grand->setTitle('GRAND TOTAL');
+        $grand->setShowGridlines(false);
+        $grand->setCellValue('A1', 'GRAND TOTAL GAJI');
+        $grand->setCellValue('A2', 'Lokasi');
+        $grand->setCellValue('B2', 'Total Gaji');
+        $grand->setCellValue('D1', 'Lokasi');
+        $grand->setCellValue('E1', 'Pengawas');
+        $grand->setCellValue('F1', 'Total Gaji');
+        $grand->setCellValue('G1', 'Kasbon');
+        $grand->setCellValue('H1', 'Sisa Gaji');
+
+        $summaryRow = 2;
+        foreach ($detailSheets as $detail) {
+            $quotedSheet = str_replace("'", "''", $detail['sheet']);
+            $grand->setCellValue("D{$summaryRow}", $detail['location']);
+            $grand->setCellValue("E{$summaryRow}", $detail['name']);
+            $grand->setCellValue("F{$summaryRow}", "='{$quotedSheet}'!Y{$detail['total_row']}");
+            $grand->setCellValue("G{$summaryRow}", "='{$quotedSheet}'!AA{$detail['total_row']}");
+            $grand->setCellValue("H{$summaryRow}", "='{$quotedSheet}'!AB{$detail['total_row']}");
+            $summaryRow++;
+        }
+        $summaryTotalRow = $summaryRow;
+        $grand->setCellValue("D{$summaryTotalRow}", 'GRAND TOTAL');
+        foreach (['F', 'G', 'H'] as $column) {
+            $grand->setCellValue(
+                "{$column}{$summaryTotalRow}",
+                $summaryTotalRow > 2 ? "=SUM({$column}2:{$column}" . ($summaryTotalRow - 1) . ')' : 0
+            );
+        }
+
+        $locations = collect($detailSheets)->pluck('location')->unique()->sort()->values();
+        $locationRow = 3;
+        foreach ($locations as $location) {
+            $grand->setCellValue("A{$locationRow}", $location);
+            $grand->setCellValue(
+                "B{$locationRow}",
+                "=SUMIF(\$D\$2:\$D\$" . max(2, $summaryTotalRow - 1) . ",A{$locationRow},\$F\$2:\$F\$" . max(2, $summaryTotalRow - 1) . ')'
+            );
+            $locationRow++;
+        }
+        $locationTotalRow = $locationRow;
+        $grand->setCellValue("A{$locationTotalRow}", 'Grand Total');
+        $grand->setCellValue(
+            "B{$locationTotalRow}",
+            $locationTotalRow > 3 ? "=SUM(B3:B" . ($locationTotalRow - 1) . ')' : 0
+        );
+
+        $cabutStartRow = max($locationTotalRow + 3, $summaryTotalRow + 3);
+        $grand->setCellValue("A{$cabutStartRow}", 'CABUT');
+        $namaBulan = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+        $grand->setCellValue("B{$cabutStartRow}", "{$namaBulan[$bulan]} {$tahun}");
+        $cabutHeaderRow = $cabutStartRow + 1;
+        $grand->fromArray(
+            ['Pengawas', 'Pcs Awal', 'Gr Awal', 'Pcs Akhir', 'Gr Akhir', 'Gr Flx', 'Susut', 'Susut + Flx'],
+            null,
+            "A{$cabutHeaderRow}"
+        );
+        $cabutRow = $cabutHeaderRow + 1;
+        foreach ($detailSheets as $detail) {
+            $quotedSheet = str_replace("'", "''", $detail['sheet']);
+            $totalRow = $detail['total_row'];
+            $grand->setCellValue("A{$cabutRow}", $detail['name']);
+            foreach (['B' => 'E', 'C' => 'F', 'D' => 'G', 'E' => 'H', 'F' => 'J'] as $target => $source) {
+                $grand->setCellValue("{$target}{$cabutRow}", "='{$quotedSheet}'!{$source}{$totalRow}");
+            }
+            $grand->setCellValue("G{$cabutRow}", "=IFERROR(1-(E{$cabutRow}/C{$cabutRow}),0)");
+            $grand->setCellValue("H{$cabutRow}", "=IFERROR(1-((E{$cabutRow}+F{$cabutRow})/C{$cabutRow}),0)");
+            $cabutRow++;
+        }
+        $cabutTotalRow = $cabutRow;
+        $grand->setCellValue("A{$cabutTotalRow}", 'TOTAL');
+        foreach (['B', 'C', 'D', 'E', 'F'] as $column) {
+            $grand->setCellValue(
+                "{$column}{$cabutTotalRow}",
+                $cabutTotalRow > $cabutHeaderRow + 1
+                    ? "=SUM({$column}" . ($cabutHeaderRow + 1) . ":{$column}" . ($cabutTotalRow - 1) . ')'
+                    : 0
+            );
+        }
+        $grand->setCellValue("G{$cabutTotalRow}", "=IFERROR(1-(E{$cabutTotalRow}/C{$cabutTotalRow}),0)");
+        $grand->setCellValue("H{$cabutTotalRow}", "=IFERROR(1-((E{$cabutTotalRow}+F{$cabutTotalRow})/C{$cabutTotalRow}),0)");
+
+        $grand->mergeCells('A1:B1');
+        $grand->getStyle("A1:H{$cabutTotalRow}")->applyFromArray([
+            'font' => ['name' => 'Arial', 'size' => 10],
+            'alignment' => ['vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER],
+        ]);
+        $grand->getStyle('A1:B2')->getFont()->setBold(true);
+        $grand->getStyle('D1:H1')->applyFromArray([
+            'font' => ['bold' => true],
+            'fill' => ['fillType' => 'solid', 'startColor' => ['argb' => 'FFFFFF00']],
+        ]);
+        $grand->getStyle("A{$cabutStartRow}:H{$cabutHeaderRow}")->getFont()->setBold(true);
+        $grand->getStyle("A{$cabutHeaderRow}:H{$cabutHeaderRow}")->getFill()->setFillType('solid')->getStartColor()->setARGB('FFD9EAF7');
+        foreach (["A2:B{$locationTotalRow}", "D1:H{$summaryTotalRow}", "A{$cabutHeaderRow}:H{$cabutTotalRow}"] as $range) {
+            $grand->getStyle($range)->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => 'FF202020'],
+                    ],
+                ],
+            ]);
+        }
+        $grand->getStyle("A{$locationTotalRow}:B{$locationTotalRow}")->getFont()->setBold(true);
+        $grand->getStyle("D{$summaryTotalRow}:H{$summaryTotalRow}")->getFont()->setBold(true);
+        $grand->getStyle("A{$cabutTotalRow}:H{$cabutTotalRow}")->getFont()->setBold(true);
+        $grand->getStyle("B3:B{$locationTotalRow}")->getNumberFormat()->setFormatCode('#,##0');
+        $grand->getStyle("F2:H{$summaryTotalRow}")->getNumberFormat()->setFormatCode('#,##0');
+        $grand->getStyle("B" . ($cabutHeaderRow + 1) . ":F{$cabutTotalRow}")->getNumberFormat()->setFormatCode('#,##0;[Red]-#,##0;-');
+        $grand->getStyle("G" . ($cabutHeaderRow + 1) . ":H{$cabutTotalRow}")->getNumberFormat()->setFormatCode('0%');
+
+        foreach (['A' => 24, 'B' => 16, 'C' => 16, 'D' => 12, 'E' => 25, 'F' => 16, 'G' => 14, 'H' => 16] as $column => $width) {
+            $grand->getColumnDimension($column)->setWidth($width);
+        }
+        $grand->getPageSetup()
+            ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+            ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4)
+            ->setFitToWidth(1)
+            ->setFitToHeight(1);
+        $grand->getPageSetup()->setPrintArea("A1:H{$cabutTotalRow}");
+        $grand->getPageMargins()->setTop(0.3)->setBottom(0.3)->setLeft(0.3)->setRight(0.3)->setHeader(0.1)->setFooter(0.1);
+        $grand->getSheetView()->setView(\PhpOffice\PhpSpreadsheet\Worksheet\SheetView::SHEETVIEW_PAGE_BREAK_PREVIEW);
+        $grand->getSheetView()->setZoomScale(80);
+        $grand->setSelectedCell('A1');
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $bulanDibayar = date('M Y', strtotime("{$tahun}-{$bulan}-01"));
+        $fileName = "Gaji Export Global Formula {$bulanDibayar}.xlsx";
+        $writer = new Xlsx($spreadsheet);
+        $writer->setPreCalculateFormulas(true);
+
+        return response()->streamDownload(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            $fileName,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        );
+    }
+
     public function export_global(Request $r)
     {
         $bulan =  $r->bulan;

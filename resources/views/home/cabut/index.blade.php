@@ -19,6 +19,9 @@
                     class="btn btn-sm btn-primary ">
                     <i class="fas fa-file-excel"></i> Export
                 </a>
+                <a href="{{ route('cabut.summary') }}" class="btn btn-sm btn-primary ">
+                    <i class="fas fa-clipboard-list"></i> Summary
+                </a>
                 <a href="{{ route('cabut.gudang') }}" style="color: white;background-color: #D722A9;"
                     class="btn btn-sm ">
                     <i class="fas fa-clipboard-list"></i> Gudang
@@ -148,12 +151,12 @@
                 $(".select3").select2()
 
                 function plusCabut(count, classPlus, url) {
-                    $(document).on("click", "." + classPlus, function () {
+                    $(document).on("click", "." + classPlus, function() {
                         count = count + 1;
                         $.ajax({
                             url: `${url}?count=` + count,
                             type: "GET",
-                            success: function (data) {
+                            success: function(data) {
                                 $("#" + classPlus).append(data);
                                 $(".select2-tambah").select2({
                                     dropdownParent: $(`#tambah2 .modal-content`)
@@ -162,7 +165,7 @@
                         });
                     });
 
-                    $(document).on('click', '.remove_baris', function () {
+                    $(document).on('click', '.remove_baris', function() {
                         var delete_row = $(this).attr("count");
                         $(".baris" + delete_row).remove();
 
@@ -175,11 +178,11 @@
                         type: 'GET',
                         url: "{{ route('cabut.updateAnakBelum') }}", // Sesuaikan dengan URL rute yang telah Anda buat
                         dataType: 'json',
-                        success: function (response) {
+                        success: function(response) {
                             // Perbarui nilai di dalam <span> dengan ID "anakBelum"
                             $('#anakBelum').text(response.anakBelum);
                         },
-                        error: function (xhr, status, error) {
+                        error: function(xhr, status, error) {
                             console.error(error);
                         }
                     });
@@ -194,7 +197,7 @@
                             tgl1: "{{ $tgl1 }}",
                             tgl2: "{{ $tgl2 }}",
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#loadHalaman").html(r);
                             $('#tableHalaman').DataTable({
                                 "searching": true,
@@ -217,14 +220,14 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_tambah_cabut') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_tambah_cabut").html(r);
                             $(".select3").select2({
                                 dropdownParent: $('#tambah2 .modal-content')
                             })
                             // formatRibuan('rupiah')
 
-                            $(document).on('change', '.pilihBox', function () {
+                            $(document).on('change', '.pilihBox', function() {
                                 var no_box = $(this).val()
                                 var count = $(this).attr('count')
                                 $.ajax({
@@ -234,10 +237,10 @@
                                         no_box: no_box
                                     },
                                     dataType: "json",
-                                    beforeSend: function () {
+                                    beforeSend: function() {
 
                                     },
-                                    success: function (r) {
+                                    success: function(r) {
                                         console.log(r)
                                         $(".setGr" + count).val(r.gr_awal - r.gr_cabut)
                                         $(".setPcs" + count).val(r.pcs_awal - r.pcs_cabut)
@@ -245,7 +248,7 @@
                                 });
                             })
 
-                            $(document).on('change', '.pilihAnak', function () {
+                            $(document).on('change', '.pilihAnak', function() {
                                 var id_kelas = $(this).val()
                                 var count = $(this).attr('count')
                                 var nilaiGr = $(".setGr" + count).val()
@@ -260,7 +263,7 @@
                                         id_kelas: id_kelas,
                                     },
                                     dataType: "json",
-                                    success: function (r) {
+                                    success: function(r) {
                                         console.log(r)
                                         var hrga_satuan = (r.rupiah / r.gr)
                                         var hrga_satuan_pcs = (r.rupiah / r.pcs)
@@ -281,7 +284,7 @@
                                 });
                             })
 
-                            $(document).on('change', '.pilihHitung', function () {
+                            $(document).on('change', '.pilihHitung', function() {
                                 var selectedVal = $(this).val()
                                 $('.pilihHitung').val(selectedVal);
                                 var count = $(this).attr('count')
@@ -293,7 +296,7 @@
                                     data: {
                                         jenis: selectedVal
                                     },
-                                    success: function (r) {
+                                    success: function(r) {
                                         // Bersihkan elemen <select> saat ini
                                         selectElement.empty();
 
@@ -329,7 +332,7 @@
                             })
 
                             function keyupFormAwalCabut(jenis) {
-                                $(document).on('keyup', `.set${jenis}`, function () {
+                                $(document).on('keyup', `.set${jenis}`, function() {
                                     var isi = $(this).val()
                                     var count = $(this).attr('count')
                                     var hitung = $('.pilihHitung' + count).val()
@@ -352,7 +355,7 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_tambah_anak') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_tambah_anak").html(r);
                             pencarian('pencarian', 'tablealdi')
                             inputChecked('cekSemua', 'cek')
@@ -360,17 +363,17 @@
                     });
                 }
                 $('.btn_tutup').hide(); // Menampilkan tombol jika checkbox dicentang
-                $(document).on('change', '.cekTutup, #cekSemuaTutup', function () {
+                $(document).on('change', '.cekTutup, #cekSemuaTutup', function() {
                     $('.btn_tutup').removeClass('d-none');
 
                     $('.btn_tutup').toggle(this.checked);
                 })
 
-                $(document).on('click', '.btn_tutup', function () {
+                $(document).on('click', '.btn_tutup', function() {
                     var tipe = $(this).attr('tipe')
                     var selectedRows = [];
                     // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
-                    $('input[name="cekTutup[]"]:checked').each(function () {
+                    $('input[name="cekTutup[]"]:checked').each(function() {
                         // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
 
                         // Mengambil ID dari kolom pertama (kolom #)
@@ -388,7 +391,7 @@
                                 tipe: tipe
                             },
                             dataType: "json",
-                            success: function (r) {
+                            success: function(r) {
                                 alertToast(
                                     r.pesan.includes('box') ? 'error' : 'sukses',
                                     r.pesan
@@ -396,7 +399,7 @@
                                 loadHalaman()
                                 $('.btn_tutup').hide();
                             },
-                            error: function (jqXHR, textStatus, errorThrown) {
+                            error: function(jqXHR, textStatus, errorThrown) {
                                 console.log(textStatus, errorThrown);
                             }
                         });
@@ -408,7 +411,7 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_anak') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_anak").html(r);
                         }
                     });
@@ -418,7 +421,7 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_anak_nopengawas') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_anak_nopengawas").html(r)
                             $(".select3-load").select2()
 
@@ -448,7 +451,7 @@
                 }
 
                 function setRupiah(kelas) {
-                    $(document).on('keyup', '.' + kelas, function () {
+                    $(document).on('keyup', '.' + kelas, function() {
                         var count = $(this).attr('count')
                         var row = $(this).closest("tr");
                         var data = {
@@ -497,7 +500,7 @@
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_modal_anak_sisa') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_modal_anak_sisa").html(r);
                             $('#tableAnak').DataTable({
                                 "paging": true,
@@ -517,7 +520,7 @@
                         data: {
                             orderBy: orderBy
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_modal_akhir").html(r);
                             $(".select2-akhir").select2({
                                 dropdownParent: $('#inputAkhir .modal-content'),
@@ -526,7 +529,7 @@
                         }
                     });
                 }
-                $(document).on('change', '#orderBy', function () {
+                $(document).on('change', '#orderBy', function() {
                     var nilai = $(this).val()
                     load_input_akhir(nilai)
                 })
@@ -540,7 +543,7 @@
                 load_anak_nopengawas()
                 load_input_akhir()
 
-                $(document).on('submit', '#createCabut', function (e) {
+                $(document).on('submit', '#createCabut', function(e) {
                     e.preventDefault();
                     var datas = $(this).serialize()
                     $.ajax({
@@ -548,13 +551,13 @@
                         url: "{{ route('cabut.create') }}",
                         data: datas,
                         dataType: 'json',
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', r.pesan)
                             $('#tambah2').modal('hide')
                             loadHalaman()
                             loadTambahcabut()
                         },
-                        error: function (xhr, status, error) {
+                        error: function(xhr, status, error) {
                             alertToast('error', 'Pcs / Gr Ambil Lebih banyak dari BK Ambil !!')
                             console.log(xhr.responseText);
                             console.log(status);
@@ -563,11 +566,11 @@
                     });
                 })
 
-                $(document).on('submit', '#createTambahAnakCabut', function (e) {
+                $(document).on('submit', '#createTambahAnakCabut', function(e) {
                     e.preventDefault();
                     var selectedRows = [];
                     // Loop melalui semua checkbox yang memiliki atribut 'name="cek[]"'
-                    $('input[name="cek[]"]:checked').each(function () {
+                    $('input[name="cek[]"]:checked').each(function() {
                         // Ambil ID anak dari atribut 'data-id' atau atribut lain yang sesuai dengan data Anda
 
                         // Mengambil ID dari kolom pertama (kolom #)
@@ -584,7 +587,7 @@
                             rows: selectedRows,
                             tipe: tipe
                         },
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil tambah')
                             $('#tambahAnak').modal('hide')
                             loadTambahcabut()
@@ -596,21 +599,21 @@
                     });
                 })
 
-                $(document).on('click', '.btnKembaliTambahCabut', function () {
+                $(document).on('click', '.btnKembaliTambahCabut', function() {
                     $('#tambah2').modal('hide')
                     $('#tambahAnak').modal('show')
                     loadTambahAnak()
                 })
-                $(document).on('click', '.btnLanjutkanTambahCabut', function () {
+                $(document).on('click', '.btnLanjutkanTambahCabut', function() {
                     $('#tambah2').modal('show')
                     $('#tambahAnak').modal('hide')
                     loadTambahcabut()
                 })
 
-                $(document).on('click', '.hapusCabutRow', function () {
+                $(document).on('click', '.hapusCabutRow', function() {
                     var count = $(this).attr('count')
                     if (confirm(
-                        'Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')) {
+                            'Jika row dihapus, Maka data no box,pcs, dan gr tereset ulang. Apakah Yakin row dihapus ?')) {
                         var id_cabut = $(this).attr('id_cabut')
                         var id_anak = $(this).attr('id_anak')
                         $.ajax({
@@ -620,7 +623,7 @@
                                 id_cabut: id_cabut,
                                 id_anak: id_anak,
                             },
-                            success: function (r) {
+                            success: function(r) {
                                 alertToast('sukses', 'Berhasil hapus row')
                                 $(".baris" + count).remove();
                                 // loadTambahcabut()
@@ -630,7 +633,7 @@
                         });
                     }
                 })
-                $(document).on('click', '.hapusAnakSisa', function () {
+                $(document).on('click', '.hapusAnakSisa', function() {
 
                     var id_absen = $(this).attr('id_absen')
                     $.ajax({
@@ -639,7 +642,7 @@
                         data: {
                             id_absen: id_absen,
                         },
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil hapus row')
                             loadListAnakSisa()
                             loadTambahcabut()
@@ -650,19 +653,19 @@
                 })
                 // cabut add end -----------------
 
-                $(document).on('click', '#add_anak', function () {
+                $(document).on('click', '#add_anak', function() {
                     var id_anak = $(".anakNoPengawas").val()
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.add_delete_anak') }}?id_anak=" + id_anak,
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil tambah anak')
                             load_anak()
                             load_anak_nopengawas()
                         }
                     });
                 })
-                $(document).on('click', '#delete_anak', function (e) {
+                $(document).on('click', '#delete_anak', function(e) {
 
                     var id_anak = $(this).attr('id_anak')
                     $.ajax({
@@ -672,7 +675,7 @@
                             id_anak: id_anak,
                             delete: 1,
                         },
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil tambah anak')
                             load_anak()
                             load_anak_nopengawas()
@@ -681,7 +684,7 @@
                 })
 
                 // cabut akhur
-                $(document).on('click', '.inputAkhir', function () {
+                $(document).on('click', '.inputAkhir', function() {
                     load_input_akhir()
                 })
 
@@ -690,12 +693,12 @@
                 setRupiah('grAkhirKeyup')
                 setRupiah('eotKeyup')
                 setRupiah('pcsHcrKeyup')
-                $(document).on('click', '.history', function (e) {
+                $(document).on('click', '.history', function(e) {
                     e.preventDefault()
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.history') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_history_cabut").html(r);
 
                             $('#tableHistory').DataTable({
@@ -712,7 +715,7 @@
                     var parts = input.split("-"); // [YYYY, MM, DD]
                     return new Date(parts[0], parts[1] - 1, parts[2]); // bulan dimulai dari 0
                 }
-                $(document).on('click', '.saveCabutAkhir', function (e) {
+                $(document).on('click', '.saveCabutAkhir', function(e) {
                     e.preventDefault()
                     var count = $(this).attr('count')
                     var row = $(this).closest("tr");
@@ -757,7 +760,7 @@
                         url: "{{ route('cabut.input_akhir') }}",
                         data: data,
                         dataType: 'json',
-                        success: function (r) {
+                        success: function(r) {
                             alertToast(r.status, r.pesan)
                             // $('#inputAkhir').modal('hide')
                             // load_input_akhir()
@@ -769,7 +772,7 @@
 
                 })
                 // end save cabut akhir
-                $(document).on('click', '.detail', function () {
+                $(document).on('click', '.detail', function() {
                     var id_cabut = $(this).attr('id_cabut')
                     $.ajax({
                         type: "GET",
@@ -777,19 +780,19 @@
                         data: {
                             id_cabut: id_cabut,
                         },
-                        success: function (r) {
+                        success: function(r) {
                             $("#load_detail_cabut").html(r);
                         }
                     });
                 })
-                $(document).on('click', '.selesai', function () {
+                $(document).on('click', '.selesai', function() {
                     var id_cabut = $(this).attr('id_cabut');
                     $(this).closest('tr').hide();
 
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.selesai_cabut') }}?id_cabut=" + id_cabut,
-                        success: function (r) {
+                        success: function(r) {
                             alertToast('sukses', 'Berhasil menyelesaikan')
                             loadHalaman()
                             load_input_akhir()
@@ -799,12 +802,12 @@
 
                 });
 
-                $(document).on('click', '.cancelCabutAkhir', function () {
+                $(document).on('click', '.cancelCabutAkhir', function() {
                     var id_cabut = $(this).attr('id_cabut')
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.cancel') }}?id_cabut=" + id_cabut,
-                        success: function (r) {
+                        success: function(r) {
                             loadTambahcabut()
                             loadHalaman()
                             load_input_akhir()
@@ -821,14 +824,14 @@
                 ]
                 clickSelectInput(inputNya)
 
-                $(document).on('input', '.grAkhirKeyup', function () {
+                $(document).on('input', '.grAkhirKeyup', function() {
                     const val = $(this).val()
                     const count = $(this).attr('count')
                     $(".selesai" + count).toggleClass('d-none', !(val > 0));
 
                 })
 
-                $(document).on('click', '.edit_cabut', function () {
+                $(document).on('click', '.edit_cabut', function() {
                     var no_box = $(this).attr('no_box')
                     $.ajax({
                         type: "get",
@@ -836,7 +839,7 @@
                         data: {
                             no_box: no_box
                         },
-                        success: function (response) {
+                        success: function(response) {
                             $("#load_edit_cabut").html(response);
                             $(".select4").select2({
                                 dropdownParent: $(`#edit .modal-content`)
@@ -844,11 +847,11 @@
                         }
                     });
                 })
-                $(document).on('click', '.btn-box-lewat', function () {
+                $(document).on('click', '.btn-box-lewat', function() {
                     $.ajax({
                         type: "GET",
                         url: "{{ route('cabut.load_modal_lewat') }}",
-                        success: function (r) {
+                        success: function(r) {
                             $("#modalLewat").modal('show');
                             $("#load_modal_lewat").html(r);
                             $(".select2-lewat").select2({

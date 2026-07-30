@@ -26,8 +26,11 @@
             Export Rekap
         </a> --}}
 
+        <a href="{{ route('cabut.export_global_formula', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
+            Export Global Siap Print
+        </a>
         <a href="{{ route('cabut.export_global', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
-            Export Global
+            Export Global Lama
         </a>
         {{-- <a href="{{ route('cabut.export_ibu', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="dropdown-item ">
             Export Ibu
