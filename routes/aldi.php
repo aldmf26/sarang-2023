@@ -230,6 +230,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/load_modal_akhir', 'load_modal_akhir')->name('load_modal_akhir');
             Route::get('/load_detail_cabut', 'load_detail_cabut')->name('load_detail_cabut');
             Route::get('/export', 'export')->name('export');
+            Route::get('/export_global_formula', 'export_global_formula')->name('export_global_formula');
             Route::get('/export_global', 'export_global')->name('export_global');
             Route::get('/input_akhir', 'input_akhir')->name('input_akhir');
             Route::post('/create_anak', 'create_anak')->name('create_anak');
