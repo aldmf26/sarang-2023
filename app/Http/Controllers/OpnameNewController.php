@@ -240,35 +240,41 @@ class OpnameNewController extends Controller
 
         foreach ([0, 1, 2] as $sheetIndex) {
             $sheet = $spreadsheet->getSheet($sheetIndex);
-
-            // Setiap sheet memiliki tiga tabel horizontal. Penyisipan dilakukan
-            // dari kiri ke kanan agar posisi No Box berikutnya tetap terhitung.
-            $sheet->insertNewColumnBefore('E', 1);
-            $sheet->insertNewColumnBefore('S', 1);
-            $sheet->insertNewColumnBefore('AG', 1);
-
-            $gradeColumns = [
-                ['box' => 'D', 'grade' => 'E'],
-                ['box' => 'R', 'grade' => 'S'],
-                ['box' => 'AF', 'grade' => 'AG'],
+            $tables = [
+                ['start' => 'B', 'end' => 'M', 'box' => 'D', 'grade' => 'E', 'first' => 5, 'last' => 12],
+                ['start' => 'O', 'end' => 'Z', 'box' => 'Q', 'grade' => 'R', 'first' => 18, 'last' => 25],
+                ['start' => 'AB', 'end' => 'AM', 'box' => 'AD', 'grade' => 'AE', 'first' => 31, 'last' => 38],
             ];
             $lastRow = $sheet->getHighestDataRow();
 
-            foreach ($gradeColumns as $columns) {
-                $sheet->setCellValue($columns['grade'] . '1', 'grade');
-                $sheet->getStyle($columns['grade'] . '1')->applyFromArray($headerStyle);
+            foreach ($tables as $table) {
+                // Geser hanya sel tabel yang terpakai, bukan seluruh worksheet.
+                // Cara ini jauh lebih ringan daripada insertNewColumnBefore().
+                for ($row = 1; $row <= $lastRow; $row++) {
+                    for ($column = $table['last']; $column >= $table['first']; $column--) {
+                        $sheet->setCellValueByColumnAndRow(
+                            $column + 1,
+                            $row,
+                            $sheet->getCellByColumnAndRow($column, $row)->getValue()
+                        );
+                    }
+                }
+
+                $sheet->setCellValue($table['grade'] . '1', 'grade');
+                $sheet->getStyle($table['start'] . '1:' . $table['end'] . '1')
+                    ->applyFromArray($headerStyle);
 
                 if ($lastRow >= 2) {
-                    $sheet->getStyle($columns['grade'] . '2:' . $columns['grade'] . $lastRow)
+                    $sheet->getStyle($table['start'] . '2:' . $table['end'] . $lastRow)
                         ->applyFromArray($bodyStyle);
                 }
 
                 for ($row = 2; $row <= $lastRow; $row++) {
-                    $noBox = $sheet->getCell($columns['box'] . $row)->getValue();
+                    $noBox = $sheet->getCell($table['box'] . $row)->getValue();
 
                     if ($noBox !== null && $noBox !== '') {
                         $sheet->setCellValue(
-                            $columns['grade'] . $row,
+                            $table['grade'] . $row,
                             $gradesByBox->get($noBox, '')
                         );
                     }
@@ -284,13 +290,13 @@ class OpnameNewController extends Controller
         $pattern = "/('Gudang (?:Cabut|Cetak|Sortir)'!\\$?)([A-Z]{1,3})(\\$?\\d+)?(?:\:(\\$?)([A-Z]{1,3})(\\$?\\d+)?)?/";
         $shiftColumn = static function (string $column): string {
             $index = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($column);
+            $isShiftedColumn = ($index >= 5 && $index <= 12)
+                || ($index >= 18 && $index <= 25)
+                || ($index >= 31 && $index <= 38);
 
-            $index += match (true) {
-                $index >= 33 => 3,
-                $index >= 18 => 2,
-                $index >= 5 => 1,
-                default => 0,
-            };
+            if ($isShiftedColumn) {
+                $index++;
+            }
 
             return \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($index);
         };
