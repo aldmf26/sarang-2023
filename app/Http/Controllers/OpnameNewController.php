@@ -215,7 +215,6 @@ class OpnameNewController extends Controller
         $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
 
         $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
-        $this->addBkGradeColumns($spreadsheet, $style_atas, $style);
 
         $namafile = "Opname Gudang.xlsx";
 
@@ -228,105 +227,6 @@ class OpnameNewController extends Controller
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit();
-    }
-
-    private function addBkGradeColumns(Spreadsheet $spreadsheet, array $headerStyle, array $bodyStyle): void
-    {
-        $gradesByBox = DB::table('bk')
-            ->where('kategori', 'cabut')
-            ->select('no_box', DB::raw('MAX(ket) as grade'))
-            ->groupBy('no_box')
-            ->pluck('grade', 'no_box');
-
-        foreach ([0, 1, 2] as $sheetIndex) {
-            $sheet = $spreadsheet->getSheet($sheetIndex);
-
-            // Setiap sheet memiliki tiga tabel horizontal. Penyisipan dilakukan
-            // dari kiri ke kanan agar posisi No Box berikutnya tetap terhitung.
-            $sheet->insertNewColumnBefore('E', 1);
-            $sheet->insertNewColumnBefore('S', 1);
-            $sheet->insertNewColumnBefore('AG', 1);
-
-            $gradeColumns = [
-                ['box' => 'D', 'grade' => 'E'],
-                ['box' => 'R', 'grade' => 'S'],
-                ['box' => 'AF', 'grade' => 'AG'],
-            ];
-            $lastRow = $sheet->getHighestDataRow();
-
-            foreach ($gradeColumns as $columns) {
-                $sheet->setCellValue($columns['grade'] . '1', 'grade');
-                $sheet->getStyle($columns['grade'] . '1')->applyFromArray($headerStyle);
-
-                if ($lastRow >= 2) {
-                    $sheet->getStyle($columns['grade'] . '2:' . $columns['grade'] . $lastRow)
-                        ->applyFromArray($bodyStyle);
-                }
-
-                for ($row = 2; $row <= $lastRow; $row++) {
-                    $noBox = $sheet->getCell($columns['box'] . $row)->getValue();
-
-                    if ($noBox !== null && $noBox !== '') {
-                        $sheet->setCellValue(
-                            $columns['grade'] . $row,
-                            $gradesByBox->get($noBox, '')
-                        );
-                    }
-                }
-            }
-        }
-
-        $this->updateOpnameFormulaReferences($spreadsheet);
-    }
-
-    private function updateOpnameFormulaReferences(Spreadsheet $spreadsheet): void
-    {
-        $pattern = "/('Gudang (?:Cabut|Cetak|Sortir)'!\\$?)([A-Z]{1,3})(\\$?\\d+)?(?:\:(\\$?)([A-Z]{1,3})(\\$?\\d+)?)?/";
-        $shiftColumn = static function (string $column): string {
-            $index = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($column);
-
-            $index += match (true) {
-                $index >= 33 => 3,
-                $index >= 18 => 2,
-                $index >= 5 => 1,
-                default => 0,
-            };
-
-            return \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($index);
-        };
-
-        for ($sheetIndex = 3; $sheetIndex < $spreadsheet->getSheetCount(); $sheetIndex++) {
-            $sheet = $spreadsheet->getSheet($sheetIndex);
-
-            foreach ($sheet->getCellCollection()->getCoordinates() as $coordinate) {
-                $cell = $sheet->getCell($coordinate);
-
-                if (!$cell->isFormula()) {
-                    continue;
-                }
-
-                $formula = preg_replace_callback(
-                    $pattern,
-                    static function (array $matches) use ($shiftColumn): string {
-                        $reference = $matches[1]
-                            . $shiftColumn($matches[2])
-                            . ($matches[3] ?? '');
-
-                        if (!empty($matches[5])) {
-                            $reference .= ':'
-                                . ($matches[4] ?? '')
-                                . $shiftColumn($matches[5])
-                                . ($matches[6] ?? '');
-                        }
-
-                        return $reference;
-                    },
-                    $cell->getValue()
-                );
-
-                $cell->setValue($formula);
-            }
-        }
     }
 
 
