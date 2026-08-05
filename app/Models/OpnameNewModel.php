@@ -12,7 +12,7 @@ class OpnameNewModel extends Model
     use HasFactory;
     public static function bksisapgws()
     {
-        $result = DB::select("SELECT a.no_box, b.name, a.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 
+        $result = DB::select("SELECT a.no_box, b.name, a.nm_partai, a.ket as grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,
         sum(a.gr_awal * a.hrga_satuan) as ttl_rp
             FROM bk as a 
             left join users as b on b.id = a.penerima
@@ -28,7 +28,7 @@ class OpnameNewModel extends Model
 
     public static function bksedang_proses_sum()
     {
-        $result = DB::select("SELECT a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 0 as cost_kerja, c.name
+        $result = DB::select("SELECT a.no_box, b.nm_partai, b.ket as grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 0 as cost_kerja, c.name
     FROM cabut as a
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
     left join users as c on c.id = a.id_pengawas
@@ -37,7 +37,7 @@ class OpnameNewModel extends Model
     
     UNION ALL
     
-    SELECT d.no_box, e.nm_partai, 0 as pcs, sum(d.gr_eo_awal) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp, 0 as cost_kerja,c.name
+    SELECT d.no_box, e.nm_partai, e.ket as grade, 0 as pcs, sum(d.gr_eo_awal) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp, 0 as cost_kerja,c.name
     FROM eo as d
     LEFT JOIN bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'
     left join users as c on c.id = d.id_pengawas
@@ -77,7 +77,7 @@ class OpnameNewModel extends Model
 
     public static function bksedang_selesai_sum()
     {
-        $result = DB::select("SELECT  c.name, a.no_box, b.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp, 
+        $result = DB::select("SELECT  c.name, a.no_box, b.nm_partai, b.ket as grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp,
         sum(a.ttl_rp) as cost_kerja
     FROM cabut as a
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
@@ -88,7 +88,7 @@ class OpnameNewModel extends Model
     
     UNION ALL
     
-    SELECT c.name, d.no_box, e.nm_partai, 0 as pcs, sum(d.gr_eo_akhir) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp,
+    SELECT c.name, d.no_box, e.nm_partai, e.ket as grade, 0 as pcs, sum(d.gr_eo_akhir) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp,
 
     sum(d.ttl_rp) as cost_kerja
 
@@ -109,7 +109,7 @@ class OpnameNewModel extends Model
 
     public static function cetak_stok()
     {
-        $result = DB::select("SELECT e.name, a.no_box, c.nm_partai, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 
+        $result = DB::select("SELECT e.name, a.no_box, c.nm_partai, c.ket as grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,
         sum(c.hrga_satuan  * c.gr_awal) as ttl_rp, 
         sum(COALESCE(d.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja
         FROM formulir_sarang as a 
@@ -127,7 +127,7 @@ class OpnameNewModel extends Model
     }
     public static function cetak_proses()
     {
-        $result = DB::select("SELECT e.name, a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, 
+        $result = DB::select("SELECT e.name, a.no_box, d.nm_partai, d.ket as grade, sum(a.pcs_awal_ctk) as pcs,
         sum(a.gr_awal_ctk) as gr, 
         sum(d.gr_awal * d.hrga_satuan) as ttl_rp, 
 
@@ -151,7 +151,7 @@ class OpnameNewModel extends Model
 
     public static function cetak_selesai()
     {
-        $result = DB::select("SELECT a.no_box, d.nm_partai, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp,  e.name, 
+        $result = DB::select("SELECT a.no_box, d.nm_partai, d.ket as grade, sum(a.pcs_awal_ctk) as pcs, sum(a.gr_awal_ctk) as gr, sum(d.gr_awal * d.hrga_satuan) as ttl_rp,  e.name,
         sum(COALESCE(c.ttl_rp,0) + COALESCE(a.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja
             FROM cetak_new as a 
             left join bk as d on d.no_box = a.no_box and d.kategori = 'cabut'
@@ -169,7 +169,7 @@ class OpnameNewModel extends Model
     }
     public static function sortir_stock()
     {
-        $result = DB::select("SELECT a.no_box, f.name, b.nm_partai, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.gr_awal * b.hrga_satuan) as ttl_rp, 
+        $result = DB::select("SELECT a.no_box, f.name, b.nm_partai, b.ket as grade, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.gr_awal * b.hrga_satuan) as ttl_rp,
         sum(COALESCE(c.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0)) as cost_kerja
         FROM formulir_sarang as a 
         LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
@@ -196,7 +196,7 @@ class OpnameNewModel extends Model
 
     public static function sortir_proses()
     {
-        $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, 
+        $result = DB::select("SELECT a.no_box, b.nm_partai, b.ket as grade, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp,
         sum( COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja
             FROM sortir as a 
             LEFT JOIN bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
@@ -224,7 +224,7 @@ class OpnameNewModel extends Model
     }
     public static function sortir_selesai()
     {
-        $result = DB::select("SELECT a.no_box, b.nm_partai, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
+        $result = DB::select("SELECT a.no_box, b.nm_partai, b.ket as grade, g.name, SUM(a.pcs_awal) as pcs, SUM(a.gr_awal) as gr, SUM(b.hrga_satuan * b.gr_awal) as ttl_rp, sum(COALESCE(a.ttl_rp,0) + COALESCE(d.ttl_rp,0) + COALESCE(e.ttl_rp,0) + COALESCE(f.ttl_rp,0) ) as cost_kerja,
 
         sum(COALESCE(h.rp_gr * d.gr_akhir,0) + COALESCE(i.rp_gr * e.gr_eo_akhir,0) + COALESCE(f.cost_op_cetak,0) + COALESCE(j.rp_gr * a.gr_akhir,0)) as cost_op,
         sum(COALESCE(k.rp_gr * d.gr_akhir,0) + COALESCE(l.rp_gr * e.gr_eo_akhir,0) + COALESCE(m.rp_gr * a.gr_akhir,0) + COALESCE(f.cost_dll_cetak,0)) as cost_dll, sum(z.ttl_rp) as cu

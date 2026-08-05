@@ -101,19 +101,20 @@ class OpnameNewController extends Controller
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('Gudang Cabut');
 
-        $sheet1->getStyle("B1:L1")->applyFromArray($style_atas);
+        $sheet1->getStyle("B1:M1")->applyFromArray($style_atas);
         $sheet1->setCellValue('A1', 'Cabut sedang proses');
         $sheet1->setCellValue('B1', 'partai');
         $sheet1->setCellValue('C1', 'pengawas');
         $sheet1->setCellValue('D1', 'no box');
-        $sheet1->setCellValue('E1', 'pcs');
-        $sheet1->setCellValue('F1', 'gr');
-        $sheet1->setCellValue('G1', 'ttl rp bk');
-        $sheet1->setCellValue('H1', 'cost kerja');
-        $sheet1->setCellValue('I1', 'cost cu dll');
-        $sheet1->setCellValue('J1', 'cost operasional');
-        $sheet1->setCellValue('K1', 'ttl rp');
-        $sheet1->setCellValue('L1', 'rp/gr');
+        $sheet1->setCellValue('E1', 'grade');
+        $sheet1->setCellValue('F1', 'pcs');
+        $sheet1->setCellValue('G1', 'gr');
+        $sheet1->setCellValue('H1', 'ttl rp bk');
+        $sheet1->setCellValue('I1', 'cost kerja');
+        $sheet1->setCellValue('J1', 'cost cu dll');
+        $sheet1->setCellValue('K1', 'cost operasional');
+        $sheet1->setCellValue('L1', 'ttl rp');
+        $sheet1->setCellValue('M1', 'rp/gr');
 
         $gudangbk = $model::bksedang_proses_sum();
 
@@ -122,32 +123,34 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
             $sheet1->setCellValue('C' . $kolom, $d->name);
             $sheet1->setCellValue('D' . $kolom, $d->no_box);
-            $sheet1->setCellValue('E' . $kolom, $d->pcs);
-            $sheet1->setCellValue('F' . $kolom, $d->gr);
-            $sheet1->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('H' . $kolom, 0);
+            $sheet1->setCellValue('E' . $kolom, $d->grade);
+            $sheet1->setCellValue('F' . $kolom, $d->pcs);
+            $sheet1->setCellValue('G' . $kolom, $d->gr);
+            $sheet1->setCellValue('H' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('I' . $kolom, 0);
             $sheet1->setCellValue('J' . $kolom, 0);
-            $sheet1->setCellValue('K' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('L' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet1->setCellValue('K' . $kolom, 0);
+            $sheet1->setCellValue('L' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('M' . $kolom, $d->ttl_rp / $d->gr);
             $kolom++;
         }
 
-        $sheet1->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('B2:M' . $kolom - 1)->applyFromArray($style);
 
-        $sheet1->getStyle("O1:Y1")->applyFromArray($style_atas);
+        $sheet1->getStyle("O1:Z1")->applyFromArray($style_atas);
         $sheet1->setCellValue('N1', 'Cabut sisa pengawas');
         $sheet1->setCellValue('O1', 'partai');
         $sheet1->setCellValue('P1', 'pengawas');
         $sheet1->setCellValue('Q1', 'no box');
-        $sheet1->setCellValue('R1', 'pcs');
-        $sheet1->setCellValue('S1', 'gr');
-        $sheet1->setCellValue('T1', 'ttl rp bk');
-        $sheet1->setCellValue('U1', 'cost kerja');
-        $sheet1->setCellValue('V1', 'cost cu dll');
-        $sheet1->setCellValue('W1', 'cost operasional');
-        $sheet1->setCellValue('X1', 'ttl rp');
-        $sheet1->setCellValue('Y1', 'rp/gr');
+        $sheet1->setCellValue('R1', 'grade');
+        $sheet1->setCellValue('S1', 'pcs');
+        $sheet1->setCellValue('T1', 'gr');
+        $sheet1->setCellValue('U1', 'ttl rp bk');
+        $sheet1->setCellValue('V1', 'cost kerja');
+        $sheet1->setCellValue('W1', 'cost cu dll');
+        $sheet1->setCellValue('X1', 'cost operasional');
+        $sheet1->setCellValue('Y1', 'ttl rp');
+        $sheet1->setCellValue('Z1', 'rp/gr');
 
         $gudangbksisa = $model::bksisapgws();
 
@@ -156,33 +159,35 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('O' . $kolom, $d->nm_partai);
             $sheet1->setCellValue('P' . $kolom, $d->name ?? 'sinta');
             $sheet1->setCellValue('Q' . $kolom, $d->no_box);
-            $sheet1->setCellValue('R' . $kolom, $d->pcs);
-            $sheet1->setCellValue('S' . $kolom, $d->gr);
-            $sheet1->setCellValue('T' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('U' . $kolom, 0);
+            $sheet1->setCellValue('R' . $kolom, $d->grade);
+            $sheet1->setCellValue('S' . $kolom, $d->pcs);
+            $sheet1->setCellValue('T' . $kolom, $d->gr);
+            $sheet1->setCellValue('U' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('V' . $kolom, 0);
             $sheet1->setCellValue('W' . $kolom, 0);
-            $sheet1->setCellValue('X' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('Y' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet1->setCellValue('X' . $kolom, 0);
+            $sheet1->setCellValue('Y' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('Z' . $kolom, $d->ttl_rp / $d->gr);
             $kolom++;
         }
 
-        $sheet1->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('O2:Z' . $kolom - 1)->applyFromArray($style);
 
 
-        $sheet1->getStyle("AB1:AL1")->applyFromArray($style_atas);
+        $sheet1->getStyle("AB1:AM1")->applyFromArray($style_atas);
         $sheet1->setCellValue('AA1', 'Cabut selesai siap cetak');
         $sheet1->setCellValue('AB1', 'partai');
         $sheet1->setCellValue('AC1', 'pengawas');
         $sheet1->setCellValue('AD1', 'no box');
-        $sheet1->setCellValue('AE1', 'pcs');
-        $sheet1->setCellValue('AF1', 'gr');
-        $sheet1->setCellValue('AG1', 'ttl rp bk');
-        $sheet1->setCellValue('AH1', 'cost kerja');
-        $sheet1->setCellValue('AI1', 'cost cu dll');
-        $sheet1->setCellValue('AJ1', 'cost operasional');
-        $sheet1->setCellValue('AK1', 'ttl rp');
-        $sheet1->setCellValue('AL1', 'rp/gr');
+        $sheet1->setCellValue('AE1', 'grade');
+        $sheet1->setCellValue('AF1', 'pcs');
+        $sheet1->setCellValue('AG1', 'gr');
+        $sheet1->setCellValue('AH1', 'ttl rp bk');
+        $sheet1->setCellValue('AI1', 'cost kerja');
+        $sheet1->setCellValue('AJ1', 'cost cu dll');
+        $sheet1->setCellValue('AK1', 'cost operasional');
+        $sheet1->setCellValue('AL1', 'ttl rp');
+        $sheet1->setCellValue('AM1', 'rp/gr');
 
         $gudangbkselesai = $model::bksedang_selesai_sum();
 
@@ -191,17 +196,18 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('AB' . $kolom, $d->nm_partai);
             $sheet1->setCellValue('AC' . $kolom, $d->name);
             $sheet1->setCellValue('AD' . $kolom, $d->no_box);
-            $sheet1->setCellValue('AE' . $kolom, $d->pcs);
-            $sheet1->setCellValue('AF' . $kolom, $d->gr);
-            $sheet1->setCellValue('AG' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('AH' . $kolom, $d->cost_kerja);
-            $sheet1->setCellValue('AI' . $kolom, 0);
+            $sheet1->setCellValue('AE' . $kolom, $d->grade);
+            $sheet1->setCellValue('AF' . $kolom, $d->pcs);
+            $sheet1->setCellValue('AG' . $kolom, $d->gr);
+            $sheet1->setCellValue('AH' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet1->setCellValue('AJ' . $kolom, 0);
-            $sheet1->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet1->setCellValue('AL' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet1->setCellValue('AK' . $kolom, 0);
+            $sheet1->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet1->setCellValue('AM' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet1->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
 
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
@@ -237,19 +243,20 @@ class OpnameNewController extends Controller
         $sheet2 = $spreadsheet->getActiveSheet(1);
         $sheet2->setTitle('Gudang Cetak');
 
-        $sheet2->getStyle("B1:L1")->applyFromArray($style_atas);
+        $sheet2->getStyle("B1:M1")->applyFromArray($style_atas);
         $sheet2->setCellValue('A1', 'Cetak sedang proses');
         $sheet2->setCellValue('B1', 'partai');
         $sheet2->setCellValue('C1', 'pengawas');
         $sheet2->setCellValue('D1', 'no box');
-        $sheet2->setCellValue('E1', 'pcs');
-        $sheet2->setCellValue('F1', 'gr');
-        $sheet2->setCellValue('G1', 'ttl rp bk');
-        $sheet2->setCellValue('H1', 'cost kerja');
-        $sheet2->setCellValue('I1', 'cost cu dll');
-        $sheet2->setCellValue('J1', 'cost operasional');
-        $sheet2->setCellValue('K1', 'ttl rp');
-        $sheet2->setCellValue('L1', 'rp/gr');
+        $sheet2->setCellValue('E1', 'grade');
+        $sheet2->setCellValue('F1', 'pcs');
+        $sheet2->setCellValue('G1', 'gr');
+        $sheet2->setCellValue('H1', 'ttl rp bk');
+        $sheet2->setCellValue('I1', 'cost kerja');
+        $sheet2->setCellValue('J1', 'cost cu dll');
+        $sheet2->setCellValue('K1', 'cost operasional');
+        $sheet2->setCellValue('L1', 'ttl rp');
+        $sheet2->setCellValue('M1', 'rp/gr');
 
         $cetak_proses = $model::cetak_proses();
         // kena diatas dihapus 
@@ -258,31 +265,33 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('B' . $kolom, $d->nm_partai);
             $sheet2->setCellValue('C' . $kolom, $d->name);
             $sheet2->setCellValue('D' . $kolom, $d->no_box);
-            $sheet2->setCellValue('E' . $kolom, $d->pcs);
-            $sheet2->setCellValue('F' . $kolom, $d->gr);
-            $sheet2->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet2->setCellValue('H' . $kolom, $d->cost_kerja);
-            $sheet2->setCellValue('I' . $kolom, 0);
+            $sheet2->setCellValue('E' . $kolom, $d->grade);
+            $sheet2->setCellValue('F' . $kolom, $d->pcs);
+            $sheet2->setCellValue('G' . $kolom, $d->gr);
+            $sheet2->setCellValue('H' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('I' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('J' . $kolom, 0);
-            $sheet2->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('K' . $kolom, 0);
+            $sheet2->setCellValue('L' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('M' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet2->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet2->getStyle('B2:M' . $kolom - 1)->applyFromArray($style);
 
-        $sheet2->getStyle("O1:Y1")->applyFromArray($style_atas);
+        $sheet2->getStyle("O1:Z1")->applyFromArray($style_atas);
         $sheet2->setCellValue('N1', 'Cetak sisa pengawas');
         $sheet2->setCellValue('O1', 'partai');
         $sheet2->setCellValue('P1', 'pengawas');
         $sheet2->setCellValue('Q1', 'no box');
-        $sheet2->setCellValue('R1', 'pcs');
-        $sheet2->setCellValue('S1', 'gr');
-        $sheet2->setCellValue('T1', 'ttl rp bk');
-        $sheet2->setCellValue('U1', 'cost kerja');
-        $sheet2->setCellValue('V1', 'cost cu dll');
-        $sheet2->setCellValue('W1', 'cost operasional');
-        $sheet2->setCellValue('X1', 'ttl rp');
-        $sheet2->setCellValue('Y1', 'rp/gr');
+        $sheet2->setCellValue('R1', 'grade');
+        $sheet2->setCellValue('S1', 'pcs');
+        $sheet2->setCellValue('T1', 'gr');
+        $sheet2->setCellValue('U1', 'ttl rp bk');
+        $sheet2->setCellValue('V1', 'cost kerja');
+        $sheet2->setCellValue('W1', 'cost cu dll');
+        $sheet2->setCellValue('X1', 'cost operasional');
+        $sheet2->setCellValue('Y1', 'ttl rp');
+        $sheet2->setCellValue('Z1', 'rp/gr');
 
         $cetak_proses = $model::cetak_stok();
         $kolom = 2;
@@ -290,31 +299,33 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('O' . $kolom, $d->nm_partai);
             $sheet2->setCellValue('P' . $kolom, $d->name);
             $sheet2->setCellValue('Q' . $kolom, $d->no_box);
-            $sheet2->setCellValue('R' . $kolom, $d->pcs);
-            $sheet2->setCellValue('S' . $kolom, $d->gr);
-            $sheet2->setCellValue('T' . $kolom, $d->ttl_rp);
-            $sheet2->setCellValue('U' . $kolom, $d->cost_kerja);
-            $sheet2->setCellValue('V' . $kolom, 0);
+            $sheet2->setCellValue('R' . $kolom, $d->grade);
+            $sheet2->setCellValue('S' . $kolom, $d->pcs);
+            $sheet2->setCellValue('T' . $kolom, $d->gr);
+            $sheet2->setCellValue('U' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('V' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('W' . $kolom, 0);
-            $sheet2->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('Y' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('X' . $kolom, 0);
+            $sheet2->setCellValue('Y' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('Z' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet2->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet2->getStyle('O2:Z' . $kolom - 1)->applyFromArray($style);
 
-        $sheet2->getStyle("AB1:AL1")->applyFromArray($style_atas);
+        $sheet2->getStyle("AB1:AM1")->applyFromArray($style_atas);
         $sheet2->setCellValue('AA1', 'Cetak selesai siap sortir');
         $sheet2->setCellValue('AB1', 'partai');
         $sheet2->setCellValue('AC1', 'pengawas');
         $sheet2->setCellValue('AD1', 'no box');
-        $sheet2->setCellValue('AE1', 'pcs');
-        $sheet2->setCellValue('AF1', 'gr');
-        $sheet2->setCellValue('AG1', 'ttl rp bk');
-        $sheet2->setCellValue('AH1', 'cost kerja');
-        $sheet2->setCellValue('AI1', 'cost cu dll');
-        $sheet2->setCellValue('AJ1', 'cost operasional');
-        $sheet2->setCellValue('AK1', 'ttl rp');
-        $sheet2->setCellValue('AL1', 'rp/gr');
+        $sheet2->setCellValue('AE1', 'grade');
+        $sheet2->setCellValue('AF1', 'pcs');
+        $sheet2->setCellValue('AG1', 'gr');
+        $sheet2->setCellValue('AH1', 'ttl rp bk');
+        $sheet2->setCellValue('AI1', 'cost kerja');
+        $sheet2->setCellValue('AJ1', 'cost cu dll');
+        $sheet2->setCellValue('AK1', 'cost operasional');
+        $sheet2->setCellValue('AL1', 'ttl rp');
+        $sheet2->setCellValue('AM1', 'rp/gr');
 
         $cetak_selesai = $model::cetak_selesai();
         $kolom = 2;
@@ -322,17 +333,18 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('AB' . $kolom, $d->nm_partai);
             $sheet2->setCellValue('AC' . $kolom, $d->name);
             $sheet2->setCellValue('AD' . $kolom, $d->no_box);
-            $sheet2->setCellValue('AE' . $kolom, $d->pcs);
-            $sheet2->setCellValue('AF' . $kolom, $d->gr);
-            $sheet2->setCellValue('AG' . $kolom, $d->ttl_rp);
-            $sheet2->setCellValue('AH' . $kolom, $d->cost_kerja);
-            $sheet2->setCellValue('AI' . $kolom, 0);
+            $sheet2->setCellValue('AE' . $kolom, $d->grade);
+            $sheet2->setCellValue('AF' . $kolom, $d->pcs);
+            $sheet2->setCellValue('AG' . $kolom, $d->gr);
+            $sheet2->setCellValue('AH' . $kolom, $d->ttl_rp);
+            $sheet2->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('AJ' . $kolom, 0);
-            $sheet2->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('AK' . $kolom, 0);
+            $sheet2->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet2->setCellValue('AM' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet2->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
+        $sheet2->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
     }
     private function datasortir($spreadsheet, $style_atas, $style, $model)
     {
@@ -341,19 +353,20 @@ class OpnameNewController extends Controller
         $sheet3 = $spreadsheet->getActiveSheet(2);
         $sheet3->setTitle('Gudang Sortir');
 
-        $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
+        $sheet3->getStyle("B1:M1")->applyFromArray($style_atas);
         $sheet3->setCellValue('A1', 'Sortir sedang proses');
         $sheet3->setCellValue('B1', 'partai');
         $sheet3->setCellValue('C1', 'pengawas');
         $sheet3->setCellValue('D1', 'no box');
-        $sheet3->setCellValue('E1', 'pcs');
-        $sheet3->setCellValue('F1', 'gr');
-        $sheet3->setCellValue('G1', 'ttl rp bk');
-        $sheet3->setCellValue('H1', 'cost kerja');
-        $sheet3->setCellValue('I1', 'cost cu dll');
-        $sheet3->setCellValue('J1', 'cost operasional');
-        $sheet3->setCellValue('K1', 'ttl rp');
-        $sheet3->setCellValue('L1', 'rp/gr');
+        $sheet3->setCellValue('E1', 'grade');
+        $sheet3->setCellValue('F1', 'pcs');
+        $sheet3->setCellValue('G1', 'gr');
+        $sheet3->setCellValue('H1', 'ttl rp bk');
+        $sheet3->setCellValue('I1', 'cost kerja');
+        $sheet3->setCellValue('J1', 'cost cu dll');
+        $sheet3->setCellValue('K1', 'cost operasional');
+        $sheet3->setCellValue('L1', 'ttl rp');
+        $sheet3->setCellValue('M1', 'rp/gr');
 
         $cetak_proses = $model::sortir_proses();
         $kolom = 2;
@@ -361,31 +374,33 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('B' . $kolom, $d->nm_partai);
             $sheet3->setCellValue('C' . $kolom, $d->name);
             $sheet3->setCellValue('D' . $kolom, $d->no_box);
-            $sheet3->setCellValue('E' . $kolom, $d->pcs);
-            $sheet3->setCellValue('F' . $kolom, $d->gr);
-            $sheet3->setCellValue('G' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('H' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('I' . $kolom, 0);
+            $sheet3->setCellValue('E' . $kolom, $d->grade);
+            $sheet3->setCellValue('F' . $kolom, $d->pcs);
+            $sheet3->setCellValue('G' . $kolom, $d->gr);
+            $sheet3->setCellValue('H' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('I' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('J' . $kolom, 0);
-            $sheet3->setCellValue('K' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('L' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('K' . $kolom, 0);
+            $sheet3->setCellValue('L' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('M' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('B2:M' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
+        $sheet3->getStyle("O1:Z1")->applyFromArray($style_atas);
         $sheet3->setCellValue('N1', 'Sortir sisa pengawas');
         $sheet3->setCellValue('O1', 'partai');
         $sheet3->setCellValue('P1', 'pengawas');
         $sheet3->setCellValue('Q1', 'no box');
-        $sheet3->setCellValue('R1', 'pcs');
-        $sheet3->setCellValue('S1', 'gr');
-        $sheet3->setCellValue('T1', 'ttl rp bk');
-        $sheet3->setCellValue('U1', 'cost kerja');
-        $sheet3->setCellValue('V1', 'cost cu dll');
-        $sheet3->setCellValue('W1', 'cost operasional');
-        $sheet3->setCellValue('X1', 'ttl rp');
-        $sheet3->setCellValue('Y1', 'rp/gr');
+        $sheet3->setCellValue('R1', 'grade');
+        $sheet3->setCellValue('S1', 'pcs');
+        $sheet3->setCellValue('T1', 'gr');
+        $sheet3->setCellValue('U1', 'ttl rp bk');
+        $sheet3->setCellValue('V1', 'cost kerja');
+        $sheet3->setCellValue('W1', 'cost cu dll');
+        $sheet3->setCellValue('X1', 'cost operasional');
+        $sheet3->setCellValue('Y1', 'ttl rp');
+        $sheet3->setCellValue('Z1', 'rp/gr');
 
         $cetak_proses = $model::sortir_stock();
         $kolom = 2;
@@ -393,31 +408,33 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
             $sheet3->setCellValue('P' . $kolom, $d->name);
             $sheet3->setCellValue('Q' . $kolom, $d->no_box);
-            $sheet3->setCellValue('R' . $kolom, $d->pcs);
-            $sheet3->setCellValue('S' . $kolom, $d->gr);
-            $sheet3->setCellValue('T' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('V' . $kolom, 0);
+            $sheet3->setCellValue('R' . $kolom, $d->grade);
+            $sheet3->setCellValue('S' . $kolom, $d->pcs);
+            $sheet3->setCellValue('T' . $kolom, $d->gr);
+            $sheet3->setCellValue('U' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('V' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('W' . $kolom, 0);
-            $sheet3->setCellValue('X' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('X' . $kolom, 0);
+            $sheet3->setCellValue('Y' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('Z' . $kolom, empty($d->gr) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('O2:Z' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("AB1:AL1")->applyFromArray($style_atas);
+        $sheet3->getStyle("AB1:AM1")->applyFromArray($style_atas);
         $sheet3->setCellValue('AA1', 'Sortir selesai siap grading');
         $sheet3->setCellValue('AB1', 'partai');
         $sheet3->setCellValue('AC1', 'pengawas');
         $sheet3->setCellValue('AD1', 'no box');
-        $sheet3->setCellValue('AE1', 'pcs');
-        $sheet3->setCellValue('AF1', 'gr');
-        $sheet3->setCellValue('AG1', 'ttl rp bk');
-        $sheet3->setCellValue('AH1', 'cost kerja');
-        $sheet3->setCellValue('AI1', 'cost cu dll');
-        $sheet3->setCellValue('AJ1', 'cost operasional');
-        $sheet3->setCellValue('AK1', 'ttl rp');
-        $sheet3->setCellValue('AL1', 'rp/gr');
+        $sheet3->setCellValue('AE1', 'grade');
+        $sheet3->setCellValue('AF1', 'pcs');
+        $sheet3->setCellValue('AG1', 'gr');
+        $sheet3->setCellValue('AH1', 'ttl rp bk');
+        $sheet3->setCellValue('AI1', 'cost kerja');
+        $sheet3->setCellValue('AJ1', 'cost cu dll');
+        $sheet3->setCellValue('AK1', 'cost operasional');
+        $sheet3->setCellValue('AL1', 'ttl rp');
+        $sheet3->setCellValue('AM1', 'rp/gr');
 
         $cetak_selesai = $model::sortir_selesai();
         $kolom = 2;
@@ -425,17 +442,18 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('AB' . $kolom, $d->nm_partai);
             $sheet3->setCellValue('AC' . $kolom, $d->name);
             $sheet3->setCellValue('AD' . $kolom, $d->no_box);
-            $sheet3->setCellValue('AE' . $kolom, $d->pcs);
-            $sheet3->setCellValue('AF' . $kolom, $d->gr);
-            $sheet3->setCellValue('AG' . $kolom, $d->ttl_rp);
-            $sheet3->setCellValue('AH' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('AI' . $kolom, 0);
+            $sheet3->setCellValue('AE' . $kolom, $d->grade);
+            $sheet3->setCellValue('AF' . $kolom, $d->pcs);
+            $sheet3->setCellValue('AG' . $kolom, $d->gr);
+            $sheet3->setCellValue('AH' . $kolom, $d->ttl_rp);
+            $sheet3->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('AJ' . $kolom, 0);
-            $sheet3->setCellValue('AK' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('AL' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('AK' . $kolom, 0);
+            $sheet3->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
+            $sheet3->setCellValue('AM' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('AB2:AL' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
     }
 
     private function datapengiriman($spreadsheet, $style_atas, $style, $model)
@@ -708,57 +726,57 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('A13', 'Sisa belum kirim');
         $sheet4->setCellValue('A14', 'Selisih');
 
-        $sheet4->setCellValue('B2', "=SUM('Gudang Cabut'!E:E)");
-        $sheet4->setCellValue('B3', "=SUM('Gudang Cabut'!R:R)");
-        $sheet4->setCellValue('B4', "=SUM('Gudang Cabut'!AE:AE)");
-        $sheet4->setCellValue('B5', "=SUM('Gudang Cetak'!E:E)");
-        $sheet4->setCellValue('B6', "=SUM('Gudang Cetak'!R:R)");
-        $sheet4->setCellValue('B7', "=SUM('Gudang Cetak'!AE:AE)");
-        $sheet4->setCellValue('B8', "=SUM('Gudang Sortir'!E:E)");
-        $sheet4->setCellValue('B9', "=SUM('Gudang Sortir'!R:R)");
-        $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AE:AE)");
+        $sheet4->setCellValue('B2', "=SUM('Gudang Cabut'!F:F)");
+        $sheet4->setCellValue('B3', "=SUM('Gudang Cabut'!S:S)");
+        $sheet4->setCellValue('B4', "=SUM('Gudang Cabut'!AF:AF)");
+        $sheet4->setCellValue('B5', "=SUM('Gudang Cetak'!F:F)");
+        $sheet4->setCellValue('B6', "=SUM('Gudang Cetak'!S:S)");
+        $sheet4->setCellValue('B7', "=SUM('Gudang Cetak'!AF:AF)");
+        $sheet4->setCellValue('B8', "=SUM('Gudang Sortir'!F:F)");
+        $sheet4->setCellValue('B9', "=SUM('Gudang Sortir'!S:S)");
+        $sheet4->setCellValue('B10', "=SUM('Gudang Sortir'!AF:AF)");
         $sheet4->setCellValue('B11', "=SUM('Gudang grading'!F:F)");
         $sheet4->setCellValue('B12', "=SUM('Pengiriman'!E:E)");
         $sheet4->setCellValue('B13', "=SUM('Pengiriman'!R:R)");
         $sheet4->setCellValue('B14', "=SUM(Pengiriman!AB:AB)");
 
-        $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!F:F)");
-        $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!S:S)");
-        $sheet4->setCellValue('C4', "=SUM('Gudang Cabut'!AF:AF)");
-        $sheet4->setCellValue('C5', "=SUM('Gudang Cetak'!F:F)");
-        $sheet4->setCellValue('C6', "=SUM('Gudang Cetak'!S:S)");
-        $sheet4->setCellValue('C7', "=SUM('Gudang Cetak'!AF:AF)");
-        $sheet4->setCellValue('C8', "=SUM('Gudang Sortir'!F:F)");
-        $sheet4->setCellValue('C9', "=SUM('Gudang Sortir'!S:S)");
-        $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AF:AF)");
+        $sheet4->setCellValue('C2', "=SUM('Gudang Cabut'!G:G)");
+        $sheet4->setCellValue('C3', "=SUM('Gudang Cabut'!T:T)");
+        $sheet4->setCellValue('C4', "=SUM('Gudang Cabut'!AG:AG)");
+        $sheet4->setCellValue('C5', "=SUM('Gudang Cetak'!G:G)");
+        $sheet4->setCellValue('C6', "=SUM('Gudang Cetak'!T:T)");
+        $sheet4->setCellValue('C7', "=SUM('Gudang Cetak'!AG:AG)");
+        $sheet4->setCellValue('C8', "=SUM('Gudang Sortir'!G:G)");
+        $sheet4->setCellValue('C9', "=SUM('Gudang Sortir'!T:T)");
+        $sheet4->setCellValue('C10', "=SUM('Gudang Sortir'!AG:AG)");
         $sheet4->setCellValue('C11', "=SUM('Gudang grading'!G:G)");
         $sheet4->setCellValue('C12', "=SUM('Pengiriman'!F:F)");
         $sheet4->setCellValue('C13', "=SUM('Pengiriman'!S:S)");
         $sheet4->setCellValue('C14', "0");
 
-        $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!G:G)");
-        $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!T:T)");
-        $sheet4->setCellValue('D4', "=SUM('Gudang Cabut'!AG:AG)");
-        $sheet4->setCellValue('D5', "=SUM('Gudang Cetak'!G:G)");
-        $sheet4->setCellValue('D6', "=SUM('Gudang Cetak'!T:T)");
-        $sheet4->setCellValue('D7', "=SUM('Gudang Cetak'!AG:AG)");
-        $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!G:G)");
-        $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!T:T)");
-        $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AG:AG)");
+        $sheet4->setCellValue('D2', "=SUM('Gudang Cabut'!H:H)");
+        $sheet4->setCellValue('D3', "=SUM('Gudang Cabut'!U:U)");
+        $sheet4->setCellValue('D4', "=SUM('Gudang Cabut'!AH:AH)");
+        $sheet4->setCellValue('D5', "=SUM('Gudang Cetak'!H:H)");
+        $sheet4->setCellValue('D6', "=SUM('Gudang Cetak'!U:U)");
+        $sheet4->setCellValue('D7', "=SUM('Gudang Cetak'!AH:AH)");
+        $sheet4->setCellValue('D8', "=SUM('Gudang Sortir'!H:H)");
+        $sheet4->setCellValue('D9', "=SUM('Gudang Sortir'!U:U)");
+        $sheet4->setCellValue('D10', "=SUM('Gudang Sortir'!AH:AH)");
         $sheet4->setCellValue('D11', "=SUM('Gudang grading'!H:H)");
         $sheet4->setCellValue('D12', "=SUM('Pengiriman'!G:G)");
         $sheet4->setCellValue('D13', "=SUM('Pengiriman'!T:T)");
         $sheet4->setCellValue('D14', "0");
 
-        $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!H:H)");
-        $sheet4->setCellValue('E3', "=SUM('Gudang Cabut'!U:U)");
-        $sheet4->setCellValue('E4', "=SUM('Gudang Cabut'!AH:AH)");
-        $sheet4->setCellValue('E5', "=SUM('Gudang Cetak'!H:H) ");
-        $sheet4->setCellValue('E6', "=SUM('Gudang Cetak'!U:U)");
-        $sheet4->setCellValue('E7', "=SUM('Gudang Cetak'!AH:AH)");
-        $sheet4->setCellValue('E8', "=SUM('Gudang Sortir'!H:H)");
-        $sheet4->setCellValue('E9', "=SUM('Gudang Sortir'!U:U)");
-        $sheet4->setCellValue('E10', "=SUM('Gudang Sortir'!AG:AG)");
+        $sheet4->setCellValue('E2', "=SUM('Gudang Cabut'!I:I)");
+        $sheet4->setCellValue('E3', "=SUM('Gudang Cabut'!V:V)");
+        $sheet4->setCellValue('E4', "=SUM('Gudang Cabut'!AI:AI)");
+        $sheet4->setCellValue('E5', "=SUM('Gudang Cetak'!I:I) ");
+        $sheet4->setCellValue('E6', "=SUM('Gudang Cetak'!V:V)");
+        $sheet4->setCellValue('E7', "=SUM('Gudang Cetak'!AI:AI)");
+        $sheet4->setCellValue('E8', "=SUM('Gudang Sortir'!I:I)");
+        $sheet4->setCellValue('E9', "=SUM('Gudang Sortir'!V:V)");
+        $sheet4->setCellValue('E10', "=SUM('Gudang Sortir'!AI:AI)");
         $sheet4->setCellValue('E11', "=SUM('Gudang grading'!I:I)");
         $sheet4->setCellValue('E12', "=SUM('Pengiriman'!H:H)");
         $sheet4->setCellValue('E13', "=SUM('Pengiriman'!U:U)");
@@ -1003,12 +1021,12 @@ class OpnameNewController extends Controller
             if (!in_array($b->name, $nama_terisi)) {
                 // Jika belum, tambahkan nama ke sheet
                 $sheet4->setCellValue('B' . $kolom, $b->name);
-                $sheet4->setCellValue('C' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$E:$E)');
-                $sheet4->setCellValue('D' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$F:$F)');
-                $sheet4->setCellValue('E' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$R:$R)');
-                $sheet4->setCellValue('F' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$S:$S)');
-                $sheet4->setCellValue('G' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AE:$AE)');
-                $sheet4->setCellValue('H' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AF:$AF)');
+                $sheet4->setCellValue('C' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$F:$F)');
+                $sheet4->setCellValue('D' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$G:$G)');
+                $sheet4->setCellValue('E' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$S:$S)');
+                $sheet4->setCellValue('F' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$T:$T)');
+                $sheet4->setCellValue('G' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AF:$AF)');
+                $sheet4->setCellValue('H' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AG:$AG)');
 
                 // Simpan nama ke dalam array $nama_terisi untuk melacaknya
                 $nama_terisi[] = $b->name;
@@ -1039,12 +1057,12 @@ class OpnameNewController extends Controller
         $kolom_sinta = $kolom;
 
         $sheet4->setCellValue('B' . $kolom_sinta, 'sinta');
-        $sheet4->setCellValue('C' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$E:$E)');
-        $sheet4->setCellValue('D' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$F:$F)');
-        $sheet4->setCellValue('E' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$R:$R)');
-        $sheet4->setCellValue('F' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$S:$S)');
-        $sheet4->setCellValue('G' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AE:$AE)');
-        $sheet4->setCellValue('H' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AF:$AF)');
+        $sheet4->setCellValue('C' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$F:$F)');
+        $sheet4->setCellValue('D' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$G:$G)');
+        $sheet4->setCellValue('E' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$S:$S)');
+        $sheet4->setCellValue('F' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$T:$T)');
+        $sheet4->setCellValue('G' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AF:$AF)');
+        $sheet4->setCellValue('H' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AG:$AG)');
 
         $sheet4->setCellValue('I' . $kolom_sinta, "=C$kolom_sinta+E$kolom_sinta+G$kolom_sinta");
         $sheet4->setCellValue('J' . $kolom_sinta, "=D$kolom_sinta+F$kolom_sinta+H$kolom_sinta");
@@ -1101,12 +1119,12 @@ class OpnameNewController extends Controller
                 // Simpan nama ke dalam array $nama_terisi untuk melacaknya
                 $nama_terisi[] = $b->name;
             }
-            $sheet4->setCellValue('C' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$E:$E)');
-            $sheet4->setCellValue('D' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$F:$F)');
-            $sheet4->setCellValue('E' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$R:$R)');
-            $sheet4->setCellValue('F' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$S:$S)');
-            $sheet4->setCellValue('G' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AE:$AE)');
-            $sheet4->setCellValue('H' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AF:$AF)');
+            $sheet4->setCellValue('C' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$F:$F)');
+            $sheet4->setCellValue('D' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$G:$G)');
+            $sheet4->setCellValue('E' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$S:$S)');
+            $sheet4->setCellValue('F' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$T:$T)');
+            $sheet4->setCellValue('G' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AF:$AF)');
+            $sheet4->setCellValue('H' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AG:$AG)');
             $sheet4->setCellValue('I' . $kolom_ctk, "=C$kolom_ctk+E$kolom_ctk+G$kolom_ctk");
             $sheet4->setCellValue('J' . $kolom_ctk, "=D$kolom_ctk+F$kolom_ctk+H$kolom_ctk");
             $susut_ctk = round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0);
@@ -1175,12 +1193,12 @@ class OpnameNewController extends Controller
                 $nama_terisi[] = $b->name;
             }
 
-            $sheet4->setCellValue('C' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$E:$E)');
-            $sheet4->setCellValue('D' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$F:$F)');
-            $sheet4->setCellValue('E' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$R:$R)');
-            $sheet4->setCellValue('F' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$S:$S)');
-            $sheet4->setCellValue('G' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AE:$AE)');
-            $sheet4->setCellValue('H' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AF:$AF)');
+            $sheet4->setCellValue('C' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$F:$F)');
+            $sheet4->setCellValue('D' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$G:$G)');
+            $sheet4->setCellValue('E' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$S:$S)');
+            $sheet4->setCellValue('F' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$T:$T)');
+            $sheet4->setCellValue('G' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AF:$AF)');
+            $sheet4->setCellValue('H' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AG:$AG)');
             $sheet4->setCellValue('I' . $kolom_sortir, "=C$kolom_sortir+E$kolom_sortir+G$kolom_sortir");
             $sheet4->setCellValue('J' . $kolom_sortir, "=D$kolom_sortir+F$kolom_sortir+H$kolom_sortir");
             $sheet4->setCellValue('K' . $kolom_sortir, 'Sortir ' . $b->name);
