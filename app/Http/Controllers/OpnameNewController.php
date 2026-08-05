@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use stdClass;
-
 class OpnameNewController extends Controller
 {
     public function index(OpnameNewModel $model)
@@ -224,13 +222,12 @@ class OpnameNewController extends Controller
 
         $namafile = "Opname Gudang.xlsx";
 
-        $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename=' . $namafile);
         header('Cache-Control: max-age=0');
 
-
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer = new Xlsx($spreadsheet);
+        $writer->setPreCalculateFormulas(false);
         $writer->save('php://output');
         exit();
     }
@@ -541,20 +538,13 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('AE1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
-        $p2suntik = $this->getSuntikan(42);
-        $sortir_akhir = new stdClass();
-        $sortir_akhir->pcs = $sa->pcs + $p2suntik->pcs;
-        $sortir_akhir->gr = $sa->gr + $p2suntik->gr;
-        $sortir_akhir->ttl_rp = $sa->ttl_rp + $p2suntik->ttl_rp;
-
         $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
-        $opname = $this->getSuntikan(41);
         $belum_grading = CocokanModel::gradingSisaDetails();
 
         $kolom = 2;
 
-        $sheet3->setCellValue('AB' . $kolom, round($sortir_akhir->pcs + $opname->pcs - $grading->pcs - sumBk($belum_grading, 'pcs'), 0));
+        $sheet3->setCellValue('AB' . $kolom, round($sa->pcs - $grading->pcs - sumBk($belum_grading, 'pcs'), 0));
         $sheet3->setCellValue('AC' . $kolom, 0);
         $sheet3->setCellValue('AD' . $kolom, 0);
         $sheet3->setCellValue('AE' . $kolom, 0);
@@ -568,19 +558,6 @@ class OpnameNewController extends Controller
         $sheet4->setTitle('Sortir selesai');
 
         $cetak_selesai = $model::sortir_selesai_akhir();
-        $model_cost = new CocokanModel();
-        $cost_kerja = $this->getCost($model_cost, 1);
-        $cost_op = $this->getCost($model_cost, 'cost_op');
-        $ttl_gr =  sumBk($cetak_selesai, 'gr');
-        $cost_cu =  sumBk($cetak_selesai, 'cost_cu');
-        $s5suntik = $this->getSuntikan(35);
-        $p2suntik = $this->getSuntikan(41);
-        $tl_gr = $ttl_gr + $s5suntik->gr + $p2suntik->gr;
-        $ttl_rp_operasional = $cost_op -  $cost_kerja - $cost_cu;
-        $rp_gr_operasional = $ttl_rp_operasional / $tl_gr;
-
-
-
         $sheet4->getStyle("B1:O1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'Sortir Selesai');
         $sheet4->setCellValue('B1', 'partai');
@@ -615,42 +592,8 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('M' . $kolom, 0);
             $sheet4->setCellValue('N' . $kolom, 0);
             $sheet4->setCellValue('O' . $kolom, 0);
-            // $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $d->gr);
-            // $sheet4->setCellValue('M' . $kolom, $d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr));
-            // $sheet4->setCellValue('N' . $kolom, ($d->ttl_rp + $d->cost_kerja + $d->cost_cu + ($rp_gr_operasional * $d->gr)) / $d->gr);
             $kolom++;
         }
-
-        // $sheet4->setCellValue('B' . $kolom, 'partai suntik');
-        // $sheet4->setCellValue('C' . $kolom, 'suntik');
-        // $sheet4->setCellValue('D' . $kolom, '-');
-        // $sheet4->setCellValue('E' . $kolom, '-');
-        // $sheet4->setCellValue('F' . $kolom, '-');
-        // $sheet4->setCellValue('G' . $kolom,  $s5suntik->pcs);
-        // $sheet4->setCellValue('H' . $kolom,  $s5suntik->gr);
-        // $sheet4->setCellValue('I' . $kolom,  $s5suntik->ttl_rp);
-        // $sheet4->setCellValue('J' . $kolom, 0);
-        // $sheet4->setCellValue('K' . $kolom,  0);
-        // $sheet4->setCellValue('L' . $kolom, $rp_gr_operasional * $s5suntik->gr);
-        // $sheet4->setCellValue('M' . $kolom, $s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr));
-        // $sheet4->setCellValue('N' . $kolom, ($s5suntik->ttl_rp + ($rp_gr_operasional * $s5suntik->gr)) / $s5suntik->gr);
-
-
-
-
-        // $sheet4->setCellValue('B' . $kolom + 1, 'partai suntik pengiriman');
-        // $sheet4->setCellValue('C' . $kolom + 1, 'suntik');
-        // $sheet4->setCellValue('D' . $kolom + 1, '-');
-        // $sheet4->setCellValue('E' . $kolom + 1, '-');
-        // $sheet4->setCellValue('F' . $kolom + 1, '-');
-        // $sheet4->setCellValue('G' . $kolom + 1,  $p2suntik->pcs);
-        // $sheet4->setCellValue('H' . $kolom + 1,  $p2suntik->gr);
-        // $sheet4->setCellValue('I' . $kolom + 1,  $p2suntik->ttl_rp);
-        // $sheet4->setCellValue('J' . $kolom + 1, 0);
-        // $sheet4->setCellValue('K' . $kolom + 1,  0);
-        // $sheet4->setCellValue('L' . $kolom + 1, $rp_gr_operasional * $p2suntik->gr);
-        // $sheet4->setCellValue('M' . $kolom + 1, $p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr));
-        // $sheet4->setCellValue('N' . $kolom + 1, ($p2suntik->ttl_rp + ($rp_gr_operasional * $p2suntik->gr)) / $p2suntik->gr);
 
         $sheet4->getStyle('B2:O' . $kolom + 1)->applyFromArray($style);
     }
@@ -1368,96 +1311,4 @@ class OpnameNewController extends Controller
 
 
 
-    public function getSuntikan($index)
-    {
-        $datas = [
-            11 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_cbt_awal'"),
-            14  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_siap_cetak_diserahkan'"),
-            16  => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'stock_eo_diserahkan'"),
-            26 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_serah'"),
-            21 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' and opname = 'Y'"),
-            22 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' "),
-            23 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_awal_stock' and opname = 'T'"),
-            24 => DB::selectOne("SELECT sum(a.pcs) as pcs,sum(a.gr) as gr,sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a WHERE a.ket = 'cetak_selesai_siap_sortir_diserahkan' and opname = 'T'"),
-            27 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'cetak_sisa'"),
-            31 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'Y'"),
-            32 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_stok_awal' and opname = 'T'"),
-            35 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'sortir_selesai_diserahkan'"),
-            41 => DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.ttl_rp) as ttl_rp FROM opname_suntik as a where a.ket = 'grading' and opname = 'Y'"),
-            42 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='grading' and opname = 'T';"),
-            // 43 => DB::selectOne("SELECT sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp FROM `opname_suntik` WHERE ket ='cetak_selesai' and opname = 'T';"),
-        ];
-        if (array_key_exists($index, $datas)) {
-            return $datas[$index];
-        } else {
-            return false;
-        }
-    }
-
-    public function getCost(CocokanModel $model, $index)
-    {
-        $a14suntik = $this->getSuntikan(14);
-        $a16suntik = $this->getSuntikan(16);
-        $a12 = $model::bkselesai_siap_ctk_diserahkan_sum();
-
-        $bk_akhir = new stdClass();
-        $bk_akhir->pcs = $a12->pcs + $a14suntik->pcs + $a16suntik->pcs;
-        $bk_akhir->gr = $a12->gr + $a14suntik->gr + $a16suntik->gr;
-        $bk_akhir->ttl_rp = $a12->ttl_rp + $a14suntik->ttl_rp + $a16suntik->ttl_rp;
-        $bk_akhir->cost_kerja = $a12->cost_kerja;
-
-        $ca16suntik = $this->getSuntikan(26);
-        $ca16 = $model::cetak_selesai();
-        $cetak_akhir = new stdClass();
-        $cetak_akhir->pcs = $ca16->pcs + $ca16suntik->pcs;
-        $cetak_akhir->gr = $ca16->gr + $ca16suntik->gr;
-        $cetak_akhir->ttl_rp = $ca16->ttl_rp + $ca16suntik->ttl_rp;
-        $cetak_akhir->cost_kerja = $ca16->cost_kerja;
-
-
-        $s3 = $model::sortir_akhir();
-        $s5suntik = $this->getSuntikan(35);
-
-        $sortir_akhir = new stdClass();
-        $sortir_akhir->pcs = $s3->pcs + $s5suntik->pcs;
-        $sortir_akhir->gr = $s3->gr + $s5suntik->gr;
-        $sortir_akhir->ttl_rp = $s3->ttl_rp + $s5suntik->ttl_rp;
-
-        $gr_akhir_all = $a12->gr + $a14suntik->gr + $a16suntik->gr + $ca16->gr + $ca16suntik->gr + $s3->gr + $s5suntik->gr;
-        $ttl_cost_kerja = $a12->cost_kerja  +  $ca16->cost_kerja +  $s3->cost_kerja;
-
-
-
-        $uang_cost = DB::select("SELECT a.* FROM oprasional as a");
-        $ttl_cost_op = sumBk($uang_cost, 'total_operasional');
-
-
-
-
-
-        $cost_dll = DB::selectOne("SELECT sum(`dll`) as dll, max(bulan_dibayar) as bulan FROM `tb_gaji_penutup`");
-        $bulan = $cost_dll->bulan;
-        $cost_cu = DB::selectOne("SELECT sum(a.ttl_rp) as cost_cu
-            FROM cetak_new as a 
-            left join kelas_cetak as b on b.id_kelas_cetak = a.id_kelas_cetak
-            where b.kategori ='CU' and a.bulan_dibayar BETWEEN '6' and '$bulan';");
-        $denda = DB::selectOne("SELECT sum(`nominal`) as ttl_denda FROM `tb_denda` WHERE `bulan_dibayar` BETWEEN '6' and '$bulan';");
-
-        $ttl_semua = $ttl_cost_kerja + $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
-        $dll = $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda;
-        $cost_op = $ttl_cost_op - $ttl_semua;
-
-
-        $datas = [
-            1 => $ttl_cost_kerja,
-            'ttl_gr' => $gr_akhir_all,
-            'dll' => $cost_dll->dll + $cost_cu->cost_cu - $denda->ttl_denda,
-            'cost_op' => $ttl_cost_op
-        ];
-        if (array_key_exists($index, $datas)) {
-            return $datas[$index];
-        } else {
-            return false;
-        }
-    }
 }
