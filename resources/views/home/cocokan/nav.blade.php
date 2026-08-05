@@ -59,7 +59,7 @@
         </ul>
     </div>
     <div class="d-none">
-        <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm "><i
+        <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm js-export-opname"><i
                 class="fas fa-file-excel"></i>Export Opname</a>
         <a href="{{ route('cocokan.export') }}" class="btn btn-primary btn-sm "><i class="fas fa-file-excel"></i>Export
             Detail</a>
@@ -82,13 +82,14 @@
         </button>
         <div class="dropdown-menu" bis_skin_checked="1" style="">
             <h6 class="dropdown-header">Export</h6>
-            <a href="{{ route('opnamenew.export') }}" class="dropdown-item">Opname</a>
+            <a href="{{ route('opnamenew.export') }}" class="dropdown-item js-export-opname">Opname</a>
             {{-- <a href="{{ route('cocokan.export') }}" class="dropdown-item">Detail</a> --}}
             {{-- <a href="{{ route('exportcost.export') }}" class="dropdown-item">Rp + Cost Kerja</a> --}}
             <a href="{{ route('cocokan.exportCabut') }}" class="dropdown-item">Rp All</a>
         </div>
     </div>
 </div>
+<x-export-opname-loading />
 <div class="col-lg-12">
     <hr style="border: 1px solid black;">
 </div>

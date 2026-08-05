@@ -588,6 +588,54 @@ group by a.no_box;");
         group by a.box_pengiriman;
         ");
     }
+
+    public static function pengirimanBelumKirimDetails()
+    {
+        return DB::select("SELECT
+                classified.nm_partai,
+                classified.box_pengiriman,
+                MAX(classified.grade) AS grade,
+                SUM(classified.pcs) AS pcs,
+                SUM(classified.gr) AS gr,
+                SUM(classified.ttl_rp) AS ttl_rp,
+                SUM(classified.cost_bk) AS cost_bk,
+                SUM(classified.cost_kerja) AS cost_kerja,
+                SUM(classified.cost_cu) AS cost_cu,
+                SUM(classified.cost_op) AS cost_op,
+                classified.is_wip2
+            FROM (
+                SELECT
+                    a.*,
+                    CASE
+                        WHEN a.formulir = 'Y'
+                            AND a.cek_qc = 'Y'
+                            AND wip2_box.no_box IS NOT NULL
+                            AND sent_box.no_box IS NULL
+                        THEN 1
+                        ELSE 0
+                    END AS is_wip2
+                FROM grading_partai AS a
+                LEFT JOIN (
+                    SELECT fs.no_box
+                    FROM formulir_sarang AS fs
+                    WHERE fs.selesai = 'Y'
+                        AND fs.kategori = 'wip2'
+                    GROUP BY fs.no_box
+                ) AS wip2_box ON wip2_box.no_box = a.box_pengiriman
+                LEFT JOIN (
+                    SELECT p.no_box
+                    FROM pengiriman AS p
+                    GROUP BY p.no_box
+                ) AS sent_box ON sent_box.no_box = a.box_pengiriman
+                WHERE a.sudah_kirim = 'T'
+                    AND a.grade != 'susut'
+            ) AS classified
+            GROUP BY
+                classified.nm_partai,
+                classified.box_pengiriman,
+                classified.is_wip2");
+    }
+
     public static function PengirimanSedangProses()
     {
         return  DB::select("SELECT  a.box_pengiriman, GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS daftar_partai , a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_op) as cost_op 

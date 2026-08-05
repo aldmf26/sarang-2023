@@ -214,10 +214,7 @@ class OpnameNewController extends Controller
         $this->gudang_grading($spreadsheet, $style_atas, $style, $model);
         $this->datapengiriman($spreadsheet, $style_atas, $style, $model);
         $this->rekap($spreadsheet, $style_atas, $style, $model);
-        $this->bk_sinta($spreadsheet, $style_atas, $style, $model);
         $this->lis_pengiriman($spreadsheet, $style_atas, $style, $model);
-        $this->rekapPengawas($spreadsheet, $style_atas, $style, $model);
-
         $this->sortir_selesai($spreadsheet, $style_atas, $style, $model);
 
         $namafile = "Opname Gudang.xlsx";
@@ -229,6 +226,8 @@ class OpnameNewController extends Controller
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
         $writer->save('php://output');
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
         exit();
     }
 
@@ -510,11 +509,13 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('X1', 'total rp');
         $sheet3->setCellValue('Y1', 'rp/gr');
 
-        $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp, sum(cost_bk) as cost_bk, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` 
-                WHERE sudah_kirim = 'T' and grade != 'susut'  
-                group by nm_partai,box_pengiriman;");
+        $grading = OpnameNewModel::pengirimanBelumKirimDetails();
         $kolom = 2;
         foreach ($grading  as $d) {
+            if ($d->is_wip2) {
+                continue;
+            }
+
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
             $sheet3->setCellValue('P' . $kolom, $d->box_pengiriman);
             $sheet3->setCellValue('Q' . $kolom, $d->grade);
@@ -530,31 +531,66 @@ class OpnameNewController extends Controller
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("AB1:AE1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AA1', 'selisih');
-        $sheet3->setCellValue('AB1', 'pcs');
-        $sheet3->setCellValue('AC1', 'gr');
-        $sheet3->setCellValue('AD1', 'ttl rp');
-        $sheet3->setCellValue('AE1', 'rp/gr');
+        $sheet3->getStyle("AA1:AK1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('Z1', 'WIP2 sedang proses');
+        $sheet3->setCellValue('AA1', 'nama partai');
+        $sheet3->setCellValue('AB1', 'no box pengiriman');
+        $sheet3->setCellValue('AC1', 'grade');
+        $sheet3->setCellValue('AD1', 'pcs');
+        $sheet3->setCellValue('AE1', 'gr');
+        $sheet3->setCellValue('AF1', 'ttl rp');
+        $sheet3->setCellValue('AG1', 'cost kerja');
+        $sheet3->setCellValue('AH1', 'cost cu');
+        $sheet3->setCellValue('AI1', 'cost operasional');
+        $sheet3->setCellValue('AJ1', 'total rp');
+        $sheet3->setCellValue('AK1', 'rp/gr');
+
+        $kolom = 2;
+        foreach ($grading as $d) {
+            if (!$d->is_wip2) {
+                continue;
+            }
+
+            $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
+            $sheet3->setCellValue('AA' . $kolom, $d->nm_partai);
+            $sheet3->setCellValue('AB' . $kolom, $d->box_pengiriman);
+            $sheet3->setCellValue('AC' . $kolom, $d->grade);
+            $sheet3->setCellValue('AD' . $kolom, $d->pcs);
+            $sheet3->setCellValue('AE' . $kolom, $d->gr);
+            $sheet3->setCellValue('AF' . $kolom, $d->cost_bk);
+            $sheet3->setCellValue('AG' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('AH' . $kolom, $d->cost_cu);
+            $sheet3->setCellValue('AI' . $kolom, $d->cost_op);
+            $sheet3->setCellValue('AJ' . $kolom, $totalRp);
+            $sheet3->setCellValue('AK' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
+            $kolom++;
+        }
+        $sheet3->getStyle('AA2:AK' . $kolom - 1)->applyFromArray($style);
+
+        $sheet3->getStyle("AN1:AQ1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AM1', 'selisih');
+        $sheet3->setCellValue('AN1', 'pcs');
+        $sheet3->setCellValue('AO1', 'gr');
+        $sheet3->setCellValue('AP1', 'ttl rp');
+        $sheet3->setCellValue('AQ1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
-        $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
-        $belum_grading = CocokanModel::gradingSisaDetails();
+        $belumGradingPcs = $this->sumSheetColumn($spreadsheet, 'Gudang grading', 'F');
 
         $kolom = 2;
 
-        $sheet3->setCellValue('AB' . $kolom, round($sa->pcs - $grading->pcs - sumBk($belum_grading, 'pcs'), 0));
-        $sheet3->setCellValue('AC' . $kolom, 0);
-        $sheet3->setCellValue('AD' . $kolom, 0);
-        $sheet3->setCellValue('AE' . $kolom, 0);
-        $sheet3->getStyle('AB2:AE2')->applyFromArray($style);
+        $sheet3->setCellValue('AN' . $kolom, round($sa->pcs - $grading->pcs - $belumGradingPcs, 0));
+        $sheet3->setCellValue('AO' . $kolom, 0);
+        $sheet3->setCellValue('AP' . $kolom, 0);
+        $sheet3->setCellValue('AQ' . $kolom, 0);
+        $sheet3->getStyle('AN2:AQ2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
         $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(9);
-        $sheet4 = $spreadsheet->getActiveSheet(9);
+        $spreadsheet->setActiveSheetIndex(7);
+        $sheet4 = $spreadsheet->getActiveSheet(7);
         $sheet4->setTitle('Sortir selesai');
 
         $cetak_selesai = $model::sortir_selesai_akhir();
@@ -625,15 +661,174 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('E' . $kolom, $d->ket);
             $sheet4->setCellValue('F' . $kolom, $d->pcs);
             $sheet4->setCellValue('G' . $kolom, $d->gr);
-            $sheet4->setCellValue('H' . $kolom, $d->cost_bk);
+            $sheet4->setCellValue('H' . $kolom, $d->bk_rp);
             $sheet4->setCellValue('I' . $kolom, $d->cost_kerja);
-            $sheet4->setCellValue('J' . $kolom, ($d->cost_kerja + $d->cost_bk) / $d->gr);
+            $sheet4->setCellValue('J' . $kolom, empty($d->gr) ? 0 : ($d->bk_rp + $d->cost_kerja) / $d->gr);
             $kolom++;
         }
         $sheet4->getStyle('B2:J' . $kolom - 1)->applyFromArray($style);
+
+        $sheet4->setCellValue('K1', 'Hasil grading');
+        foreach (['L' => 'partai', 'M' => 'no box', 'N' => 'tipe', 'O' => 'ket',
+            'P' => 'pcs', 'Q' => 'gr', 'R' => 'ttl rp bk', 'S' => 'cost kerja',
+            'T' => 'total rp', 'U' => 'rp/gr'] as $column => $header) {
+            $sheet4->setCellValue($column . '1', $header);
+        }
+        $sheet4->getStyle('L1:U1')->applyFromArray($style_atas);
+
+        $hasilRow = 2;
+        foreach ($belum_grading as $d) {
+            $totalRp = $d->bk_rp + $d->cost_kerja;
+            $sheet4->setCellValue('L' . $hasilRow, $d->nm_partai ?? '-');
+            $sheet4->setCellValue('M' . $hasilRow, $d->no_box_sortir);
+            $sheet4->setCellValue('N' . $hasilRow, $d->tipe);
+            $sheet4->setCellValue('O' . $hasilRow, $d->ket);
+            $sheet4->setCellValue('P' . $hasilRow, $d->hasil_pcs);
+            $sheet4->setCellValue('Q' . $hasilRow, $d->hasil_gr);
+            $sheet4->setCellValue('R' . $hasilRow, $d->bk_rp);
+            $sheet4->setCellValue('S' . $hasilRow, $d->cost_kerja);
+            $sheet4->setCellValue('T' . $hasilRow, $totalRp);
+            $sheet4->setCellValue('U' . $hasilRow, empty($d->hasil_gr) ? 0 : $totalRp / $d->hasil_gr);
+            $hasilRow++;
+        }
+        $sheet4->getStyle('L2:U' . ($hasilRow - 1))->applyFromArray($style);
     }
 
     private function rekap($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(5);
+        $sheet = $spreadsheet->getActiveSheet(5);
+        $sheet->setTitle('Rekap');
+
+        $headers = ['Sheet', 'Kategori', 'Total Baris / Box', 'Total PCS', 'Total GR',
+            'Cost kerja', 'Cost CU', 'Cost operasional', 'Total Rp'];
+        foreach ($headers as $index => $header) {
+            $sheet->setCellValueByColumnAndRow($index + 1, 1, $header);
+        }
+        $sheet->getStyle('A1:I1')->applyFromArray($style_atas);
+
+        $rows = [
+            ['Gudang Cabut', 'Cabut sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
+            ['Gudang Cabut', 'Cabut sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
+            ['Gudang Cabut', 'Cabut selesai siap cetak', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang Cetak', 'Cetak sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
+            ['Gudang Cetak', 'Cetak sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
+            ['Gudang Cetak', 'Cetak selesai siap sortir', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang Sortir', 'Sortir sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
+            ['Gudang Sortir', 'Sortir sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
+            ['Gudang Sortir', 'Sortir selesai siap grading', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'I', null, null, null],
+            ['Gudang grading', 'Hasil grading (blok kanan)', 'M', 'P', 'Q', null, null, null, null],
+            ['Pengiriman', 'Sisa belum kirim', 'P', 'R', 'S', 'U', 'V', 'W', 'X'],
+            ['Pengiriman', 'WIP2 sedang proses', 'AB', 'AD', 'AE', 'AG', 'AH', 'AI', 'AJ'],
+        ];
+
+        foreach ($rows as $offset => [$sourceSheet, $category, $box, $pcs, $gr, $work, $cu, $operational, $total]) {
+            $row = $offset + 2;
+            $quotedSheet = "'" . str_replace("'", "''", $sourceSheet) . "'";
+            $sheet->setCellValue('A' . $row, $sourceSheet);
+            $sheet->setCellValue('B' . $row, $category);
+            $sheet->setCellValue('C' . $row, "=COUNTA({$quotedSheet}!\${$box}\$2:\${$box}\$20000)");
+            $sheet->setCellValue('D' . $row, "=SUM({$quotedSheet}!\${$pcs}\$2:\${$pcs}\$20000)");
+            $sheet->setCellValue('E' . $row, "=SUM({$quotedSheet}!\${$gr}\$2:\${$gr}\$20000)");
+
+            if ($category === 'Hasil grading (blok kanan)') {
+                $sheet->setCellValue('F' . $row, "=SUM('Pengiriman'!\$H\$2:\$H\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM('Pengiriman'!\$I\$2:\$I\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM('Pengiriman'!\$J\$2:\$J\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM('Pengiriman'!\$K\$2:\$K\$20000)");
+            } elseif ($category === 'Sisa belum grading') {
+                $sheet->setCellValue('F' . $row, "=SUM('Gudang grading'!\$I\$2:\$I\$20000)");
+                $sheet->setCellValue('G' . $row, 0);
+                $sheet->setCellValue('H' . $row, 0);
+                $sheet->setCellValue('I' . $row, "=SUM('Gudang grading'!\$H\$2:\$I\$20000)");
+            } else {
+                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM({$quotedSheet}!\${$cu}\$2:\${$cu}\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
+            }
+        }
+
+        $totalRow = count($rows) + 2;
+        $sheet->mergeCells('A' . $totalRow . ':B' . $totalRow);
+        $sheet->setCellValue('A' . $totalRow, 'TOTAL');
+        foreach (range('C', 'I') as $column) {
+            $sheet->setCellValue($column . $totalRow, "=SUM({$column}2:{$column}" . ($totalRow - 1) . ')');
+        }
+
+        $sheet->getStyle('A2:I' . ($totalRow - 1))->applyFromArray($style);
+        $sheet->getStyle('A' . $totalRow . ':I' . $totalRow)->applyFromArray($style_atas);
+    }
+
+    private function rekapComputed($spreadsheet, $style_atas, $style, $model)
+    {
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(5);
+        $sheet = $spreadsheet->getActiveSheet(5);
+        $sheet->setTitle('Rekap');
+
+        $sheet->getStyle('A1:I1')->applyFromArray($style_atas);
+        foreach (['A' => 'Keterangan', 'B' => 'Box', 'C' => 'Pcs', 'D' => 'Gr',
+            'E' => 'Rp', 'F' => 'Cost kerja', 'G' => 'Cost CU',
+            'H' => 'Cost operasional', 'I' => 'Total Rp'] as $column => $header) {
+            $sheet->setCellValue($column . '1', $header);
+        }
+
+        $sources = [
+            ['Cabut sedang proses', 'Gudang Cabut', 'D', 'F', 'G', 'H', 'I', 'J', 'K'],
+            ['Cabut sisa pengawas', 'Gudang Cabut', 'Q', 'S', 'T', 'U', 'V', 'W', 'X'],
+            ['Cabut selesai siap cetak', 'Gudang Cabut', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK'],
+            ['Cetak sedang proses', 'Gudang Cetak', 'D', 'F', 'G', 'H', 'I', 'J', 'K'],
+            ['Cetak sisa pengawas', 'Gudang Cetak', 'Q', 'S', 'T', 'U', 'V', 'W', 'X'],
+            ['Cetak selesai siap sortir', 'Gudang Cetak', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK'],
+            ['Sortir sedang proses', 'Gudang Sortir', 'D', 'F', 'G', 'H', 'I', 'J', 'K'],
+            ['Sortir sisa pengawas', 'Gudang Sortir', 'Q', 'S', 'T', 'U', 'V', 'W', 'X'],
+            ['Sortir selesai siap grading', 'Gudang Sortir', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK'],
+            ['Sisa belum grading', 'Gudang grading', 'C', 'F', 'G', 'H', 'I', null, null],
+            ['Pengiriman', 'Pengiriman', 'C', 'E', 'F', 'G', 'H', 'I', 'J'],
+            ['Sisa belum kirim', 'Pengiriman', 'P', 'R', 'S', 'T', 'U', 'V', 'W'],
+        ];
+
+        $row = 2;
+        $totals = array_fill(0, 8, 0.0);
+        foreach ($sources as [$label, $sheetName, $box, $pcs, $gr, $rp, $work, $cu, $operational]) {
+            $values = [
+                $this->countUniqueSheetValues($spreadsheet, $sheetName, $box),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $pcs),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $gr),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $rp),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $work),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $cu),
+                $this->sumSheetColumn($spreadsheet, $sheetName, $operational),
+            ];
+            $values[] = array_sum(array_slice($values, 3));
+
+            $sheet->setCellValue('A' . $row, $label);
+            foreach ($values as $index => $value) {
+                $sheet->setCellValueByColumnAndRow($index + 2, $row, $value);
+                $totals[$index] += $value;
+            }
+            $row++;
+        }
+
+        $sheet->setCellValue('A' . $row, 'Selisih');
+        for ($column = 2; $column <= 9; $column++) {
+            $sheet->setCellValueByColumnAndRow($column, $row, 0);
+        }
+        $row++;
+
+        $sheet->setCellValue('A' . $row, 'Total');
+        foreach ($totals as $index => $value) {
+            $sheet->setCellValueByColumnAndRow($index + 2, $row, $value);
+        }
+
+        $sheet->getStyle('A2:I' . ($row - 1))->applyFromArray($style);
+        $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($style_atas);
+    }
+
+    private function rekapLegacy($spreadsheet, $style_atas, $style, $model)
     {
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(5);
@@ -847,8 +1042,8 @@ class OpnameNewController extends Controller
     private function lis_pengiriman($spreadsheet, $style_atas, $style, $model)
     {
         $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(7);
-        $sheet4 = $spreadsheet->getActiveSheet(7);
+        $spreadsheet->setActiveSheetIndex(6);
+        $sheet4 = $spreadsheet->getActiveSheet(6);
         $sheet4->setTitle('List Pengiriman');
 
         $sheet4->getStyle("A1:K1")->applyFromArray($style_atas);
@@ -960,12 +1155,12 @@ class OpnameNewController extends Controller
             if (!in_array($b->name, $nama_terisi)) {
                 // Jika belum, tambahkan nama ke sheet
                 $sheet4->setCellValue('B' . $kolom, $b->name);
-                $sheet4->setCellValue('C' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$F:$F)');
-                $sheet4->setCellValue('D' . $kolom, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$G:$G)');
-                $sheet4->setCellValue('E' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$S:$S)');
-                $sheet4->setCellValue('F' . $kolom, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$T:$T)');
-                $sheet4->setCellValue('G' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AF:$AF)');
-                $sheet4->setCellValue('H' . $kolom, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom . ',\'Gudang Cabut\'!$AG:$AG)');
+                $sheet4->setCellValue('C' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'C', $b->name, 'F'));
+                $sheet4->setCellValue('D' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'C', $b->name, 'G'));
+                $sheet4->setCellValue('E' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'P', $b->name, 'S'));
+                $sheet4->setCellValue('F' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'P', $b->name, 'T'));
+                $sheet4->setCellValue('G' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'AC', $b->name, 'AF'));
+                $sheet4->setCellValue('H' . $kolom, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'AC', $b->name, 'AG'));
 
                 // Simpan nama ke dalam array $nama_terisi untuk melacaknya
                 $nama_terisi[] = $b->name;
@@ -996,12 +1191,12 @@ class OpnameNewController extends Controller
         $kolom_sinta = $kolom;
 
         $sheet4->setCellValue('B' . $kolom_sinta, 'sinta');
-        $sheet4->setCellValue('C' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$F:$F)');
-        $sheet4->setCellValue('D' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$G:$G)');
-        $sheet4->setCellValue('E' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$S:$S)');
-        $sheet4->setCellValue('F' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$T:$T)');
-        $sheet4->setCellValue('G' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AF:$AF)');
-        $sheet4->setCellValue('H' . $kolom_sinta, '=SUMIF(\'Gudang Cabut\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sinta . ',\'Gudang Cabut\'!$AG:$AG)');
+        $sheet4->setCellValue('C' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'C', 'sinta', 'F'));
+        $sheet4->setCellValue('D' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'C', 'sinta', 'G'));
+        $sheet4->setCellValue('E' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'P', 'sinta', 'S'));
+        $sheet4->setCellValue('F' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'P', 'sinta', 'T'));
+        $sheet4->setCellValue('G' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'AC', 'sinta', 'AF'));
+        $sheet4->setCellValue('H' . $kolom_sinta, $this->sumSheetWhere($spreadsheet, 'Gudang Cabut', 'AC', 'sinta', 'AG'));
 
         $sheet4->setCellValue('I' . $kolom_sinta, "=C$kolom_sinta+E$kolom_sinta+G$kolom_sinta");
         $sheet4->setCellValue('J' . $kolom_sinta, "=D$kolom_sinta+F$kolom_sinta+H$kolom_sinta");
@@ -1058,12 +1253,12 @@ class OpnameNewController extends Controller
                 // Simpan nama ke dalam array $nama_terisi untuk melacaknya
                 $nama_terisi[] = $b->name;
             }
-            $sheet4->setCellValue('C' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$F:$F)');
-            $sheet4->setCellValue('D' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$G:$G)');
-            $sheet4->setCellValue('E' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$S:$S)');
-            $sheet4->setCellValue('F' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$T:$T)');
-            $sheet4->setCellValue('G' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AF:$AF)');
-            $sheet4->setCellValue('H' . $kolom_ctk, '=SUMIF(\'Gudang Cetak\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_ctk . ',\'Gudang Cetak\'!$AG:$AG)');
+            $sheet4->setCellValue('C' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'C', $b->name, 'F'));
+            $sheet4->setCellValue('D' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'C', $b->name, 'G'));
+            $sheet4->setCellValue('E' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'P', $b->name, 'S'));
+            $sheet4->setCellValue('F' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'P', $b->name, 'T'));
+            $sheet4->setCellValue('G' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'AC', $b->name, 'AF'));
+            $sheet4->setCellValue('H' . $kolom_ctk, $this->sumSheetWhere($spreadsheet, 'Gudang Cetak', 'AC', $b->name, 'AG'));
             $sheet4->setCellValue('I' . $kolom_ctk, "=C$kolom_ctk+E$kolom_ctk+G$kolom_ctk");
             $sheet4->setCellValue('J' . $kolom_ctk, "=D$kolom_ctk+F$kolom_ctk+H$kolom_ctk");
             $susut_ctk = round((1 - ($b->gr_akhir / $b->gr_awal)) * 100, 0);
@@ -1132,12 +1327,12 @@ class OpnameNewController extends Controller
                 $nama_terisi[] = $b->name;
             }
 
-            $sheet4->setCellValue('C' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$F:$F)');
-            $sheet4->setCellValue('D' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$C:$C,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$G:$G)');
-            $sheet4->setCellValue('E' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$S:$S)');
-            $sheet4->setCellValue('F' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$P:$P,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$T:$T)');
-            $sheet4->setCellValue('G' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AF:$AF)');
-            $sheet4->setCellValue('H' . $kolom_sortir, '=SUMIF(\'Gudang Sortir\'!$AC:$AC,\'Rekap Opname Pgws\'!B' . $kolom_sortir . ',\'Gudang Sortir\'!$AG:$AG)');
+            $sheet4->setCellValue('C' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'C', $b->name, 'F'));
+            $sheet4->setCellValue('D' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'C', $b->name, 'G'));
+            $sheet4->setCellValue('E' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'P', $b->name, 'S'));
+            $sheet4->setCellValue('F' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'P', $b->name, 'T'));
+            $sheet4->setCellValue('G' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'AC', $b->name, 'AF'));
+            $sheet4->setCellValue('H' . $kolom_sortir, $this->sumSheetWhere($spreadsheet, 'Gudang Sortir', 'AC', $b->name, 'AG'));
             $sheet4->setCellValue('I' . $kolom_sortir, "=C$kolom_sortir+E$kolom_sortir+G$kolom_sortir");
             $sheet4->setCellValue('J' . $kolom_sortir, "=D$kolom_sortir+F$kolom_sortir+H$kolom_sortir");
             $sheet4->setCellValue('K' . $kolom_sortir, 'Sortir ' . $b->name);
@@ -1201,10 +1396,10 @@ class OpnameNewController extends Controller
         $gr_grading = DB::selectOne("SELECT sum(a.gr) as gr_susut FROM grading_partai as a where a.grade != 'susut'");
 
         $sheet4->setCellValue('B' . $kolom_grade, 'Siti Fatimah');
-        $sheet4->setCellValue('C' . $kolom_grade, "=SUM('Gudang grading'!F:F)");
-        $sheet4->setCellValue('D' . $kolom_grade, "=SUM('Gudang grading'!G:G)");
-        $sheet4->setCellValue('E' . $kolom_grade, "=SUM(Pengiriman!R:R)");
-        $sheet4->setCellValue('F' . $kolom_grade, "=SUM(Pengiriman!S:S)");
+        $sheet4->setCellValue('C' . $kolom_grade, $this->sumSheetColumn($spreadsheet, 'Gudang grading', 'F'));
+        $sheet4->setCellValue('D' . $kolom_grade, $this->sumSheetColumn($spreadsheet, 'Gudang grading', 'G'));
+        $sheet4->setCellValue('E' . $kolom_grade, $this->sumSheetColumn($spreadsheet, 'Pengiriman', 'R'));
+        $sheet4->setCellValue('F' . $kolom_grade, $this->sumSheetColumn($spreadsheet, 'Pengiriman', 'S'));
         $sheet4->setCellValue('G' . $kolom_grade, 0);
         $sheet4->setCellValue('H' . $kolom_grade, 0);
         $sheet4->setCellValue('I' . $kolom_grade, "=C$kolom_grade+E$kolom_grade+G$kolom_grade");
@@ -1282,8 +1477,8 @@ class OpnameNewController extends Controller
         $kolom_pengiriman = $kolom5 + 2;
 
         $sheet4->setCellValue('B' . $kolom_pengiriman, 'Ratna');
-        $sheet4->setCellValue('C' . $kolom_pengiriman, "=SUM(Pengiriman!E:E)");
-        $sheet4->setCellValue('D' . $kolom_pengiriman, "=SUM(Pengiriman!F:F)");
+        $sheet4->setCellValue('C' . $kolom_pengiriman, $this->sumSheetColumn($spreadsheet, 'Pengiriman', 'E'));
+        $sheet4->setCellValue('D' . $kolom_pengiriman, $this->sumSheetColumn($spreadsheet, 'Pengiriman', 'F'));
         $sheet4->setCellValue('E' . $kolom_pengiriman, 0);
         $sheet4->setCellValue('F' . $kolom_pengiriman, 0);
         $sheet4->setCellValue('G' . $kolom_pengiriman, 0);
@@ -1311,4 +1506,58 @@ class OpnameNewController extends Controller
 
 
 
+    private function sumSheetColumn(Spreadsheet $spreadsheet, string $sheetName, ?string $column): float
+    {
+        if ($column === null) {
+            return 0;
+        }
+
+        $sheet = $spreadsheet->getSheetByName($sheetName);
+        $total = 0.0;
+        for ($row = 2; $row <= $sheet->getHighestDataRow($column); $row++) {
+            $value = $sheet->getCell($column . $row)->getValue();
+            if (is_numeric($value)) {
+                $total += (float) $value;
+            }
+        }
+
+        return $total;
+    }
+
+    private function countUniqueSheetValues(Spreadsheet $spreadsheet, string $sheetName, string $column): int
+    {
+        $sheet = $spreadsheet->getSheetByName($sheetName);
+        $values = [];
+        for ($row = 2; $row <= $sheet->getHighestDataRow($column); $row++) {
+            $value = $sheet->getCell($column . $row)->getValue();
+            if ($value !== null && $value !== '') {
+                $values[(string) $value] = true;
+            }
+        }
+
+        return count($values);
+    }
+
+    private function sumSheetWhere(
+        Spreadsheet $spreadsheet,
+        string $sheetName,
+        string $criteriaColumn,
+        string $criteria,
+        string $sumColumn
+    ): float {
+        $sheet = $spreadsheet->getSheetByName($sheetName);
+        $total = 0.0;
+        for ($row = 2; $row <= $sheet->getHighestDataRow(); $row++) {
+            if ((string) $sheet->getCell($criteriaColumn . $row)->getValue() !== $criteria) {
+                continue;
+            }
+
+            $value = $sheet->getCell($sumColumn . $row)->getValue();
+            if (is_numeric($value)) {
+                $total += (float) $value;
+            }
+        }
+
+        return $total;
+    }
 }
