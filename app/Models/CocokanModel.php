@@ -623,8 +623,10 @@ class CocokanModel extends Model
                 bk.nm_partai,
                 bk.tipe,
                 bk.ket,
-                a.pcs,
-                a.gr,
+                GREATEST(a.pcs - grading.pcs, 0) AS pcs,
+                GREATEST(a.gr - grading.gr, 0) AS gr,
+                LEAST(grading.pcs, a.pcs) AS hasil_pcs,
+                LEAST(grading.gr, a.gr) AS hasil_gr,
                 cost.modal_bk AS bk_rp,
                 cost.total_modal AS cost_bk,
                 cost.cost_kerja
@@ -635,14 +637,16 @@ class CocokanModel extends Model
                     SUM(fs.gr_awal) AS gr
                 FROM formulir_sarang AS fs
                 WHERE fs.kategori = 'grade'
-                  AND NOT EXISTS (
-                      SELECT 1
-                      FROM grading AS g
-                      WHERE g.no_box_sortir = fs.no_box
-                        AND g.no_invoice IS NOT NULL
-                  )
                 GROUP BY fs.no_box
             ) AS a
+            INNER JOIN (
+                SELECT
+                    no_box_sortir,
+                    SUM(pcs) AS pcs,
+                    SUM(gr) AS gr
+                FROM grading
+                GROUP BY no_box_sortir
+            ) AS grading ON grading.no_box_sortir = a.no_box
             INNER JOIN ($boxCost) AS cost ON cost.no_box = a.no_box
             LEFT JOIN (
                 SELECT no_box, MAX(nm_partai) AS nm_partai,
@@ -652,6 +656,12 @@ class CocokanModel extends Model
                   AND baru = 'baru'
                 GROUP BY no_box
             ) AS bk ON bk.no_box = a.no_box
+            WHERE EXISTS (
+                SELECT 1
+                FROM grading AS active_grading
+                WHERE active_grading.no_box_sortir = a.no_box
+                  AND active_grading.selesai = 'T'
+            )
             ORDER BY bk.nm_partai, a.no_box
         ");
     }
