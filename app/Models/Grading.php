@@ -671,6 +671,37 @@ left join(
         ");
     }
 
+    public static function pengirimanBalanceDetails()
+    {
+        return DB::select("SELECT
+            a.no_nota,
+            a.no_box,
+            MAX(b.nm_partai) AS nm_partai,
+            a.grade,
+            SUM(a.pcs) AS pcs,
+            SUM(a.gr) AS gr,
+            SUM(b.cost_bk) AS cost_bk,
+            SUM(b.cost_kerja) AS cost_kerja,
+            SUM(a.cost_cu) AS cost_cu,
+            SUM(b.cost_op) AS cost_op,
+            SUM(a.ttl_rp) AS ttl_rp
+        FROM pengiriman AS a
+        LEFT JOIN (
+            SELECT
+                box_pengiriman,
+                GROUP_CONCAT(DISTINCT nm_partai ORDER BY nm_partai SEPARATOR ', ') AS nm_partai,
+                SUM(cost_bk) AS cost_bk,
+                SUM(cost_kerja) AS cost_kerja,
+                SUM(cost_op) AS cost_op
+            FROM grading_partai
+            WHERE sudah_kirim = 'Y'
+            GROUP BY box_pengiriman
+        ) AS b ON b.box_pengiriman = a.no_box
+        WHERE a.selesai = 'Y'
+        GROUP BY a.no_nota, a.no_box, a.grade
+        ORDER BY a.no_nota, a.no_box");
+    }
+
     public static function belumKirimSum()
     {
         return DB::selectOne("SELECT a.box_pengiriman as no_box,a.grade,a.nm_partai,sum(a.pcs) as pcs, sum(a.gr) as gr,sum(a.cost_bk) as cost_bk,sum(a.cost_kerja) as cost_kerja,sum(a.cost_cu) as cost_cu,sum(a.cost_op) as cost_op, sum(a.ttl_rp) as total_rp FROM grading_partai as a where a.sudah_kirim = 'T'  and a.grade != 'susut'");

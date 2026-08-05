@@ -477,29 +477,25 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('K1', 'total rp');
         $sheet3->setCellValue('L1', 'rp/gr');
 
-        $pengirimanNota = DB::table('pengiriman')->groupBy('no_nota')->pluck('no_nota');
-            $kolom = 2;
+        $pengiriman = Grading::pengirimanBalanceDetails();
+        $kolom = 2;
 
-        foreach ($pengirimanNota  as $d) {
-            $belumKirim = Grading::details($d);
+        foreach ($pengiriman as $b) {
+            $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
+            $sheet3->setCellValue('C' . $kolom, $b->no_box);
+            $sheet3->setCellValue('D' . $kolom, $b->grade);
+            $sheet3->setCellValue('E' . $kolom, $b->pcs);
+            $sheet3->setCellValue('F' . $kolom, $b->gr);
+            $sheet3->setCellValue('G' . $kolom, $b->cost_bk);
+            $sheet3->setCellValue('H' . $kolom, $b->cost_kerja);
+            $sheet3->setCellValue('I' . $kolom, $b->cost_cu);
+            $sheet3->setCellValue('J' . $kolom, $b->cost_op);
 
-            foreach ($belumKirim as $b) {
-                $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
-                $sheet3->setCellValue('C' . $kolom, $b->no_box);
-                $sheet3->setCellValue('D' . $kolom, $b->grade);
-                $sheet3->setCellValue('E' . $kolom, $b->pcs);
-                $sheet3->setCellValue('F' . $kolom, $b->gr);
-                $sheet3->setCellValue('G' . $kolom, $b->cost_bk);
-                $sheet3->setCellValue('H' . $kolom, $b->cost_kerja);
-                $sheet3->setCellValue('I' . $kolom, $b->cost_cu);
-                $sheet3->setCellValue('J' . $kolom, $b->cost_op);
+            $ttlRp = $b->cost_bk + $b->cost_kerja + $b->cost_cu + $b->cost_op;
 
-                $ttlRp = $b->cost_bk + $b->cost_kerja + $b->cost_cu + $b->cost_op;
-
-                $sheet3->setCellValue('K' . $kolom, $ttlRp);
-                $sheet3->setCellValue('L' . $kolom, $ttlRp  / $b->gr);
-                $kolom++;
-            }
+            $sheet3->setCellValue('K' . $kolom, $ttlRp);
+            $sheet3->setCellValue('L' . $kolom, empty($b->gr) ? 0 : $ttlRp / $b->gr);
+            $kolom++;
         }
         $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 
@@ -554,7 +550,7 @@ class OpnameNewController extends Controller
         $pengiriman = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM pengiriman as a ");
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
         $opname = $this->getSuntikan(41);
-        $belum_grading = OpnameNewModel::grading_sisa();
+        $belum_grading = CocokanModel::gradingSisaDetails();
 
         $kolom = 2;
 
@@ -677,7 +673,7 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('I1', 'cost kerja');
         $sheet4->setCellValue('J1', 'rp/gr');
 
-        $belum_grading = OpnameNewModel::grading_sisa();
+        $belum_grading = CocokanModel::gradingSisaDetails();
         $kolom = 2;
         foreach ($belum_grading  as $d) {
             $sheet4->setCellValue('B' . $kolom, $d->nm_partai ?? '-');

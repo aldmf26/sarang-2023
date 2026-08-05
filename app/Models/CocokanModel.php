@@ -613,6 +613,49 @@ class CocokanModel extends Model
         ");
     }
 
+    public static function gradingSisaDetails()
+    {
+        $boxCost = self::boxCostSql();
+
+        return DB::select("
+            SELECT
+                a.no_box AS no_box_sortir,
+                bk.nm_partai,
+                bk.tipe,
+                bk.ket,
+                a.pcs,
+                a.gr,
+                cost.modal_bk AS bk_rp,
+                cost.total_modal AS cost_bk,
+                cost.cost_kerja
+            FROM (
+                SELECT
+                    fs.no_box,
+                    SUM(fs.pcs_awal) AS pcs,
+                    SUM(fs.gr_awal) AS gr
+                FROM formulir_sarang AS fs
+                WHERE fs.kategori = 'grade'
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM grading AS g
+                      WHERE g.no_box_sortir = fs.no_box
+                        AND g.no_invoice IS NOT NULL
+                  )
+                GROUP BY fs.no_box
+            ) AS a
+            INNER JOIN ($boxCost) AS cost ON cost.no_box = a.no_box
+            LEFT JOIN (
+                SELECT no_box, MAX(nm_partai) AS nm_partai,
+                    MAX(tipe) AS tipe, MAX(ket) AS ket
+                FROM bk
+                WHERE kategori = 'cabut'
+                  AND baru = 'baru'
+                GROUP BY no_box
+            ) AS bk ON bk.no_box = a.no_box
+            ORDER BY bk.nm_partai, a.no_box
+        ");
+    }
+
     public static function sisa_belum_wip1()
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp , sum(a.cost_bk) as modal
