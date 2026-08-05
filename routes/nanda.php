@@ -31,6 +31,7 @@ use App\Http\Controllers\hrga8_1Program_peratawan;
 use App\Http\Controllers\hrga8_2Ceklistperawatanmesin;
 use App\Http\Controllers\hrga8_3Permintaan_perbaikan;
 use App\Http\Controllers\importPerbaikanController;
+use App\Http\Controllers\ImportLabelController;
 use App\Http\Controllers\Laporan_akhir;
 use App\Http\Controllers\Laporan_layerController;
 use App\Http\Controllers\NavbarController;
@@ -74,6 +75,15 @@ Route::get('/berhasil', [hrga2HasilWawancaraController::class, 'berhasil'])->nam
 
 
 Route::middleware('auth')->group(function () {
+
+    Route::controller(ImportLabelController::class)
+        ->prefix('home/import-label')
+        ->name('import-label.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/import', 'store')->name('store');
+            Route::get('/print', 'print')->name('print');
+        });
 
     // 
     Route::controller(NavbarController::class)->group(function () {
