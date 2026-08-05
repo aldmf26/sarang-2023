@@ -509,11 +509,13 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('X1', 'total rp');
         $sheet3->setCellValue('Y1', 'rp/gr');
 
-        $grading = DB::select("SELECT nm_partai, box_pengiriman, grade, sum(pcs) as pcs, sum(gr) as gr, sum(ttl_rp) as ttl_rp, sum(cost_bk) as cost_bk, sum(cost_kerja) as cost_kerja, sum(cost_cu) as cost_cu, sum(cost_op) as cost_op FROM `grading_partai` 
-                WHERE sudah_kirim = 'T' and grade != 'susut'  
-                group by nm_partai,box_pengiriman;");
+        $grading = OpnameNewModel::pengirimanBelumKirimDetails();
         $kolom = 2;
         foreach ($grading  as $d) {
+            if ($d->is_wip2) {
+                continue;
+            }
+
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
             $sheet3->setCellValue('P' . $kolom, $d->box_pengiriman);
             $sheet3->setCellValue('Q' . $kolom, $d->grade);
@@ -529,12 +531,48 @@ class OpnameNewController extends Controller
         }
         $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("AB1:AE1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AA1', 'selisih');
-        $sheet3->setCellValue('AB1', 'pcs');
-        $sheet3->setCellValue('AC1', 'gr');
-        $sheet3->setCellValue('AD1', 'ttl rp');
-        $sheet3->setCellValue('AE1', 'rp/gr');
+        $sheet3->getStyle("AA1:AK1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('Z1', 'WIP2 sedang proses');
+        $sheet3->setCellValue('AA1', 'nama partai');
+        $sheet3->setCellValue('AB1', 'no box pengiriman');
+        $sheet3->setCellValue('AC1', 'grade');
+        $sheet3->setCellValue('AD1', 'pcs');
+        $sheet3->setCellValue('AE1', 'gr');
+        $sheet3->setCellValue('AF1', 'ttl rp');
+        $sheet3->setCellValue('AG1', 'cost kerja');
+        $sheet3->setCellValue('AH1', 'cost cu');
+        $sheet3->setCellValue('AI1', 'cost operasional');
+        $sheet3->setCellValue('AJ1', 'total rp');
+        $sheet3->setCellValue('AK1', 'rp/gr');
+
+        $kolom = 2;
+        foreach ($grading as $d) {
+            if (!$d->is_wip2) {
+                continue;
+            }
+
+            $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
+            $sheet3->setCellValue('AA' . $kolom, $d->nm_partai);
+            $sheet3->setCellValue('AB' . $kolom, $d->box_pengiriman);
+            $sheet3->setCellValue('AC' . $kolom, $d->grade);
+            $sheet3->setCellValue('AD' . $kolom, $d->pcs);
+            $sheet3->setCellValue('AE' . $kolom, $d->gr);
+            $sheet3->setCellValue('AF' . $kolom, $d->cost_bk);
+            $sheet3->setCellValue('AG' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('AH' . $kolom, $d->cost_cu);
+            $sheet3->setCellValue('AI' . $kolom, $d->cost_op);
+            $sheet3->setCellValue('AJ' . $kolom, $totalRp);
+            $sheet3->setCellValue('AK' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
+            $kolom++;
+        }
+        $sheet3->getStyle('AA2:AK' . $kolom - 1)->applyFromArray($style);
+
+        $sheet3->getStyle("AN1:AQ1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AM1', 'selisih');
+        $sheet3->setCellValue('AN1', 'pcs');
+        $sheet3->setCellValue('AO1', 'gr');
+        $sheet3->setCellValue('AP1', 'ttl rp');
+        $sheet3->setCellValue('AQ1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
@@ -542,11 +580,11 @@ class OpnameNewController extends Controller
 
         $kolom = 2;
 
-        $sheet3->setCellValue('AB' . $kolom, round($sa->pcs - $grading->pcs - $belumGradingPcs, 0));
-        $sheet3->setCellValue('AC' . $kolom, 0);
-        $sheet3->setCellValue('AD' . $kolom, 0);
-        $sheet3->setCellValue('AE' . $kolom, 0);
-        $sheet3->getStyle('AB2:AE2')->applyFromArray($style);
+        $sheet3->setCellValue('AN' . $kolom, round($sa->pcs - $grading->pcs - $belumGradingPcs, 0));
+        $sheet3->setCellValue('AO' . $kolom, 0);
+        $sheet3->setCellValue('AP' . $kolom, 0);
+        $sheet3->setCellValue('AQ' . $kolom, 0);
+        $sheet3->getStyle('AN2:AQ2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
@@ -683,6 +721,7 @@ class OpnameNewController extends Controller
             ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'I', null, null, null],
             ['Gudang grading', 'Hasil grading (blok kanan)', 'M', 'P', 'Q', null, null, null, null],
             ['Pengiriman', 'Sisa belum kirim', 'P', 'R', 'S', 'U', 'V', 'W', 'X'],
+            ['Pengiriman', 'WIP2 sedang proses', 'AB', 'AD', 'AE', 'AG', 'AH', 'AI', 'AJ'],
         ];
 
         foreach ($rows as $offset => [$sourceSheet, $category, $box, $pcs, $gr, $work, $cu, $operational, $total]) {

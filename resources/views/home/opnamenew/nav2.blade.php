@@ -33,6 +33,7 @@
     </ul>
 </div>
 <div class="col-lg-4 mb-3">
-    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end"><i
+    <a href="{{ route('opnamenew.export') }}" class="btn btn-primary btn-sm float-end js-export-opname"><i
             class="fas fa-file-excel"></i>Export</a>
 </div>
+<x-export-opname-loading />
