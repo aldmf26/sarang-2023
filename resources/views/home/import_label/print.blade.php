@@ -65,12 +65,12 @@
         }
 
         .packing .identity {
-            font-size: 6px;
-            line-height: 1;
+            font-size: 7.5px;
+            line-height: 1.05;
         }
 
         .packing .identity td {
-            padding: .35mm 0;
+            padding: .4mm 0;
         }
 
         .packing .identity .field {
