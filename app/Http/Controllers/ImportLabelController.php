@@ -55,7 +55,9 @@ class ImportLabelController extends Controller
             ->all();
         $columnMap = $this->resolveColumns($headers);
 
-        if (in_array(null, $columnMap, true)) {
+        $requiredColumns = collect($columnMap)->only(['partai', 'box', 'grade', 'pcs', 'gr', 'bagian']);
+
+        if ($requiredColumns->containsStrict(null)) {
             return back()->with('error', 'Header wajib: partai, box/no_box, grade, pcs, gr/gram, bagian.');
         }
 
@@ -74,6 +76,9 @@ class ImportLabelController extends Controller
                 'pcs' => $row[$columnMap['pcs']] ?? null,
                 'gr' => $row[$columnMap['gr']] ?? null,
                 'bagian' => trim((string) ($row[$columnMap['bagian']] ?? '')),
+                'kelompok' => $columnMap['kelompok'] === null
+                    ? ''
+                    : trim((string) ($row[$columnMap['kelompok']] ?? '')),
             ];
             $validator = Validator::make($record, [
                 'partai' => ['required', 'string', 'max:100'],
@@ -82,6 +87,7 @@ class ImportLabelController extends Controller
                 'pcs' => ['required', 'numeric', 'min:0'],
                 'gr' => ['required', 'numeric', 'min:0'],
                 'bagian' => ['required', 'string', 'max:100'],
+                'kelompok' => ['nullable', 'string', 'max:50'],
             ]);
 
             if ($validator->fails()) {
@@ -154,6 +160,7 @@ class ImportLabelController extends Controller
             'pcs' => ['pcs', 'jumlah_pcs'],
             'gr' => ['gr', 'gram', 'berat_gr'],
             'bagian' => ['bagian', 'divisi', 'departemen'],
+            'kelompok' => ['kelompok', 'group', 'grup'],
         ];
 
         return collect($aliases)->map(function (array $names) use ($headers) {
