@@ -38,7 +38,10 @@
         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th class="text-center">
+                        <input type="checkbox" id="checkAllLewat" class="form-check-input"
+                            aria-label="Pilih semua box lewat">
+                    </th>
                     <th>No Box</th>
                     <th>Pcs Awal</th>
                     <th>Gr Awal</th>
@@ -72,6 +75,31 @@
 </form>
 
 <script>
+    function updateLewatTotals() {
+        var totalPcs = 0;
+        var totalGr = 0;
+        var checked = $('#tbl_lewat .row-checkbox:checked');
+        var all = $('#tbl_lewat .row-checkbox');
+
+        checked.each(function() {
+            var row = $(this).closest('tr');
+            totalPcs += parseInt(row.find('.row-pcs').text()) || 0;
+            totalGr += parseFloat(row.find('.row-gr').text()) || 0;
+        });
+
+        $('#totalChecked').text(checked.length);
+        $('#totalPcs').text(totalPcs);
+        $('#totalGr').text(totalGr);
+        $('#checkAllLewat').prop('checked', all.length > 0 && checked.length === all.length);
+    }
+
+    $('#checkAllLewat').on('change', function() {
+        $('#tbl_lewat .row-checkbox').prop('checked', this.checked);
+        updateLewatTotals();
+    });
+
+    $('#tbl_lewat').on('change', '.row-checkbox', updateLewatTotals);
+
     // Script pencarian bawaan Anda
     $('#pencarian').keyup(function() {
         var value = $(this).val().toLowerCase();
@@ -84,9 +112,6 @@
     $('#applyBulkBtn').click(function() {
 
         var bulkInput = $('#bulkNoBoxInput').val();
-        var totalPcs = 0;
-        var totalGr = 0;
-
         if (!bulkInput.trim()) {
             alert('Masukkan no box terlebih dahulu (pisahkan dengan koma)');
             return;
@@ -107,25 +132,17 @@
             $('#tbl_lewat .row-checkbox').each(function() {
                 if ($(this).val() === noBox) {
                     $(this).prop('checked', true);
-                    // Tambahkan pcs dan gr ke total jika checkbox dicentang
-                    var row = $(this).closest('tr');
-                    totalPcs += parseInt(row.find('.row-pcs').text()) || 0;
-                    totalGr += parseFloat(row.find('.row-gr').text()) || 0;
                 }
             });
         });
-        // total box ceklist        var totalChecked = $('#tbl_lewat .row-checkbox:checked').length;
-        // alert('Total box yang dicentang: ' + $('#tbl_lewat .row-checkbox:checked').length);
-        $('#totalChecked').text($('#tbl_lewat .row-checkbox:checked').length);
-        $('#totalPcs').text(totalPcs);
-        $('#totalGr').text(totalGr);
-
+        updateLewatTotals();
     });
 
     // Clear bulk input and uncheck all
     $('#clearBulkBtn').click(function() {
         $('#bulkNoBoxInput').val('');
         $('#tbl_lewat .row-checkbox').prop('checked', false);
+        updateLewatTotals();
     });
 
 
