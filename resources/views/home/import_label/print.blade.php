@@ -64,6 +64,12 @@
             line-height: 1.15;
         }
 
+        .packing .group-badge {
+            width: 7mm;
+            height: 7mm;
+            font-size: 9px;
+        }
+
         .packing .identity {
             font-size: 7.5px;
             line-height: 1.05;
@@ -144,6 +150,22 @@
 
         .company-title {
             text-decoration: underline;
+        }
+
+        .group-badge {
+            display: flex;
+            width: 9mm;
+            height: 9mm;
+            align-items: center;
+            justify-content: center;
+            justify-self: end;
+            overflow: hidden;
+            border: 1px solid #000;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
         }
 
         .identity {
@@ -241,7 +263,7 @@
                             <div>PT. AGRIKA GATYA ARUM</div>
                             <div class="company-title">Identitas Bahan Baku</div>
                         </div>
-                        <div></div>
+                        <div class="group-badge">{{ $label->kelompok ?: '-' }}</div>
                     </header>
 
                     <table class="identity">
