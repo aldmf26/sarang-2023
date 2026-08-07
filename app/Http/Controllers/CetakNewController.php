@@ -1004,40 +1004,95 @@ class CetakNewController extends Controller
 
     public function selesai_po_sortir(Request $r)
     {
+        $noInvoice = $r->no_invoice;
+
         try {
-            DB::beginTransaction();
-            $formulir =  DB::table('formulir_sarang')->where('no_invoice', $r->no_invoice)->where('kategori', 'sortir')->get();
+            $result = DB::transaction(function () use ($noInvoice) {
+                $formulir = DB::table('formulir_sarang')
+                    ->where('no_invoice', $noInvoice)
+                    ->where('kategori', 'sortir')
+                    ->lockForUpdate()
+                    ->get()
+                    ->unique(fn ($row) => (string) $row->no_box)
+                    ->values();
 
-            $nobox = [];
-            foreach ($formulir as $f) {
-                if (!in_array($f->no_box, $nobox)) {
-                    $nobox[] = $f->no_box;
-                    $databk[] = [
-                        'no_box' => $f->no_box,
-                        'pcs_awal' => $f->pcs_awal,
-                        'gr_awal' => $f->gr_awal,
-                        'kategori' => 'sortir',
-                        'tgl' => $f->tanggal,
-                        'penerima' => $f->id_penerima,
-                    ];
-
-                    $data[] = [
-                        'no_box' => $f->no_box,
-                        'pcs_awal' => $f->pcs_awal,
-                        'gr_awal' => $f->gr_awal,
-                        'tgl' => $f->tanggal,
-                        'id_pengawas' => $f->id_penerima,
-                    ];
+                if ($formulir->isEmpty()) {
+                    throw new \RuntimeException("PO {$noInvoice} tidak ditemukan.");
                 }
-            }
-            DB::table('bk')->insert($databk);
-            DB::table('sortir')->insert($data);
 
-            DB::commit();
-            return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('error', $e->getMessage());
+                $noBoxes = $formulir->pluck('no_box')->all();
+
+                // Kunci sumber box supaya invoice berbeda dengan box sama tidak diproses bersamaan.
+                DB::table('cetak_new')
+                    ->whereIn('no_box', $noBoxes)
+                    ->lockForUpdate()
+                    ->get(['no_box']);
+
+                $existingBk = DB::table('bk')
+                    ->where('kategori', 'sortir')
+                    ->whereIn('no_box', $noBoxes)
+                    ->pluck('no_box')
+                    ->mapWithKeys(fn ($noBox) => [(string) $noBox => true]);
+                $existingSortir = DB::table('sortir')
+                    ->whereIn('no_box', $noBoxes)
+                    ->pluck('no_box')
+                    ->mapWithKeys(fn ($noBox) => [(string) $noBox => true]);
+
+                $bkRows = [];
+                $sortirRows = [];
+
+                foreach ($formulir as $f) {
+                    $key = (string) $f->no_box;
+
+                    if (!$existingBk->has($key)) {
+                        $bkRows[] = [
+                            'no_box' => $f->no_box,
+                            'pcs_awal' => $f->pcs_awal,
+                            'gr_awal' => $f->gr_awal,
+                            'kategori' => 'sortir',
+                            'tgl' => $f->tanggal,
+                            'penerima' => $f->id_penerima,
+                        ];
+                    }
+
+                    if (!$existingSortir->has($key)) {
+                        $sortirRows[] = [
+                            'no_box' => $f->no_box,
+                            'pcs_awal' => $f->pcs_awal,
+                            'gr_awal' => $f->gr_awal,
+                            'tgl' => $f->tanggal,
+                            'id_pengawas' => $f->id_penerima,
+                        ];
+                    }
+                }
+
+                foreach (array_chunk($bkRows, 300) as $chunk) {
+                    DB::table('bk')->insert($chunk);
+                }
+                foreach (array_chunk($sortirRows, 300) as $chunk) {
+                    DB::table('sortir')->insert($chunk);
+                }
+
+                return [
+                    'already_completed' => empty($bkRows) && empty($sortirRows),
+                    'box_count' => $formulir->count(),
+                ];
+            }, 3);
+
+            $message = $result['already_completed']
+                ? "PO {$noInvoice} sudah pernah diselesaikan. Tidak ada data yang diduplikasi."
+                : "PO {$noInvoice} berhasil diselesaikan ({$result['box_count']} box).";
+
+            return redirect()->route('po.sortir')->with('sukses', $message);
+        } catch (\RuntimeException $e) {
+            return redirect()->route('po.sortir')->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('po.sortir')->with(
+                'error',
+                'PO gagal diselesaikan. Seluruh perubahan dibatalkan.'
+            );
         }
     }
 
@@ -1075,7 +1130,7 @@ class CetakNewController extends Controller
         }
 
         DB::table('formulir_sarang')->insert($data);
-        return redirect()->route('gudangsarang.invoice_sortir', ['kategori' => 'sortir'])->with('sukses', 'Data Berhasil');
+        return redirect()->route('po.sortir')->with('sukses', 'Data Berhasil');
     }
 
     public function save_formulir(Request $r)
@@ -1415,71 +1470,183 @@ class CetakNewController extends Controller
     public function load_modal_lewat(Request $r)
     {
         $id_user = auth()->user()->id;
+        $mode = in_array($r->mode, ['table', 'json'], true) ? $r->mode : null;
         $data = [
-            'box' => DB::table('cetak_new as a')
-
-                ->where('a.selesai', 'T')
-                ->whereNotIn('a.no_box', function ($query) {
-                    $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
-                })
-                ->get(),
+            'mode' => $mode,
+            'box' => $mode === 'table'
+                ? DB::table('cetak_new as a')
+                    ->where('a.selesai', 'T')
+                    ->whereNotIn('a.no_box', function ($query) {
+                        $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
+                    })
+                    ->get()
+                : collect(),
             'anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->first(),
             'paket' => DB::table('kelas_cetak')->where('kelas', 'LIKE', '%ctk lewat%')->first(),
         ];
         return view('home.cetak_new.load_modal_lewat', $data);
     }
 
+    public function export_lewat_json()
+    {
+        $rows = DB::table('cetak_new as a')
+            ->select('a.no_box', 'a.pcs_awal_ctk', 'a.gr_awal_ctk')
+            ->where('a.selesai', 'T')
+            ->whereNotIn('a.no_box', function ($query) {
+                $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
+            })
+            ->orderBy('a.no_box')
+            ->get()
+            ->unique(fn ($row) => (string) $row->no_box)
+            ->values();
+
+        $payload = [
+            'version' => 1,
+            'type' => 'cetak_lewat',
+            'exported_at' => now()->toIso8601String(),
+            'summary' => [
+                'box_count' => $rows->count(),
+                'pcs' => $rows->sum('pcs_awal_ctk'),
+                'gr' => $rows->sum('gr_awal_ctk'),
+            ],
+            'no_boxes' => $rows->pluck('no_box')->map(fn ($noBox) => (string) $noBox)->all(),
+        ];
+        $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+
+        return response()->streamDownload(
+            fn () => print($json),
+            'cetak-lewat-semua-' . date('Y-m-d') . '.json',
+            ['Content-Type' => 'application/json; charset=UTF-8']
+        );
+    }
+
     public function create_lewat(Request $r)
     {
-        $alert = '';
-        $no_box = $r->no_box;
-        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
-        if (empty($urutan_invoice->no_invoice)) {
-            $inv = 1001;
-        } else {
-            $inv = $urutan_invoice->no_invoice + 1;
-        }
-        foreach ($no_box as $key => $value) {
-            $cetak = DB::table('cetak_new')->where('no_box', $value)->first();
-            $data = [
-                'id_anak' => 157,
-                'id_kelas_cetak' => 14,
-                'pcs_akhir' => $cetak->pcs_awal_ctk,
-                'gr_akhir' => $cetak->gr_awal_ctk,
-                'bulan_dibayar' => date('m'),
-                'selesai' => 'Y',
-                'capai' => 'Y',
-                'tipe_bayar' => 2
-            ];
-            DB::table('cetak_new')->where('no_box', $value)->update($data);
+        try {
+            $r->validate([
+                'box_payload' => ['required', 'string', 'max:1048576'],
+            ]);
 
-
-            $cek = DB::table('formulir_sarang')
-                ->where('no_box', $value)
-                ->where('kategori', 'sortir')
-                ->exists();
-
-            if (!$cek) {
-
-                $pcs = $cetak->pcs_awal_ctk;
-                $gr = $cetak->gr_awal_ctk;
-
-                $data = [
-                    'no_invoice' => $inv,
-                    'no_box' => $value,
-                    'id_pemberi' => auth()->user()->id,
-                    'id_penerima' => 467,
-                    'pcs_awal' => $pcs,
-                    'gr_awal' => $gr,
-                    'tanggal' => date('Y-m-d'),
-                    'kategori' => 'sortir',
-                ];
-
-                DB::table('formulir_sarang')->insert($data);
-
+            $payload = json_decode($r->box_payload, true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($payload)) {
+                throw new \RuntimeException('Format JSON tidak valid.');
             }
+
+            $noBoxInput = array_is_list($payload) ? $payload : ($payload['no_boxes'] ?? null);
+
+            if (!is_array($noBoxInput)) {
+                throw new \RuntimeException('JSON wajib memiliki no_boxes berupa array.');
+            }
+            if (!array_is_list($payload) && isset($payload['type']) && $payload['type'] !== 'cetak_lewat') {
+                throw new \RuntimeException('Tipe JSON bukan cetak_lewat.');
+            }
+
+            foreach ($noBoxInput as $noBox) {
+                if ((!is_string($noBox) && !is_numeric($noBox)) || trim((string) $noBox) === '') {
+                    throw new \RuntimeException('Setiap no box wajib berupa teks atau angka dan tidak boleh kosong.');
+                }
+            }
+
+            $noBoxes = collect($noBoxInput)
+                ->map(fn ($noBox) => trim((string) $noBox))
+                ->unique()
+                ->values();
+
+            if ($noBoxes->isEmpty()) {
+                throw new \RuntimeException('Daftar no box kosong.');
+            }
+            if ($noBoxes->count() > 5000) {
+                throw new \RuntimeException('Maksimal 5.000 no box dalam satu proses.');
+            }
+
+            $result = DB::transaction(function () use ($noBoxes) {
+                $rows = DB::table('cetak_new as a')
+                    ->select('a.no_box', 'a.pcs_awal_ctk', 'a.gr_awal_ctk')
+                    ->whereIn('a.no_box', $noBoxes->all())
+                    ->where('a.selesai', 'T')
+                    ->whereNotIn('a.no_box', function ($query) {
+                        $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
+                    })
+                    ->lockForUpdate()
+                    ->get();
+
+                $rowsByNoBox = $rows->groupBy(fn ($row) => (string) $row->no_box);
+                $missing = $noBoxes->reject(fn ($noBox) => $rowsByNoBox->has($noBox))->values();
+
+                if ($missing->isNotEmpty()) {
+                    $sample = $missing->take(10)->implode(', ');
+                    $suffix = $missing->count() > 10 ? ' dan lainnya' : '';
+                    throw new \RuntimeException(
+                        "Ada {$missing->count()} box tidak tersedia atau sudah dilewatkan: {$sample}{$suffix}. Tidak ada data yang disimpan."
+                    );
+                }
+
+                $lastInvoice = DB::table('formulir_sarang')
+                    ->where('kategori', 'sortir')
+                    ->orderByDesc('no_invoice')
+                    ->lockForUpdate()
+                    ->value('no_invoice');
+                $invoice = empty($lastInvoice) ? 1001 : ((int) $lastInvoice + 1);
+
+                DB::table('cetak_new')
+                    ->whereIn('no_box', $noBoxes->all())
+                    ->where('selesai', 'T')
+                    ->update([
+                        'id_anak' => 157,
+                        'id_kelas_cetak' => 14,
+                        'pcs_akhir' => DB::raw('pcs_awal_ctk'),
+                        'gr_akhir' => DB::raw('gr_awal_ctk'),
+                        'bulan_dibayar' => date('m'),
+                        'selesai' => 'Y',
+                        'capai' => 'Y',
+                        'tipe_bayar' => 2,
+                    ]);
+
+                $formulir = $noBoxes->map(function ($noBox) use ($rowsByNoBox, $invoice) {
+                    $cetak = $rowsByNoBox->get($noBox)->first();
+
+                    return [
+                        'no_invoice' => $invoice,
+                        'no_box' => $noBox,
+                        'id_pemberi' => auth()->user()->id,
+                        'id_penerima' => 467,
+                        'pcs_awal' => $cetak->pcs_awal_ctk,
+                        'gr_awal' => $cetak->gr_awal_ctk,
+                        'tanggal' => date('Y-m-d'),
+                        'kategori' => 'sortir',
+                    ];
+                });
+
+                $formulir->chunk(300)->each(function ($chunk) {
+                    DB::table('formulir_sarang')->insert($chunk->all());
+                });
+
+                return [
+                    'invoice' => $invoice,
+                    'box_count' => $noBoxes->count(),
+                    'pcs' => $formulir->sum('pcs_awal'),
+                    'gr' => $formulir->sum('gr_awal'),
+                ];
+            }, 3);
+
+            return redirect()->route('cetaknew.index')->with(
+                'sukses',
+                "Data berhasil. Invoice {$result['invoice']}: {$result['box_count']} box, {$result['pcs']} pcs, {$result['gr']} gr."
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\JsonException | \RuntimeException $e) {
+            return redirect()->route('cetaknew.index')->with(
+                'error',
+                'Box lewat gagal: ' . $e->getMessage()
+            );
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('cetaknew.index')->with(
+                'error',
+                'Box lewat gagal karena gangguan sistem. Seluruh perubahan dibatalkan.'
+            );
         }
-        
-        return redirect()->route('cetaknew.index')->with('sukses', 'Data Berhasil');
     }
 }

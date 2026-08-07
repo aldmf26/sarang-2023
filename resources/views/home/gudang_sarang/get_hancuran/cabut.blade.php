@@ -80,11 +80,7 @@
                                     $ttlPcs_cbt += $f->pcs_cbt;
                                     $ttlGr_cbt += $grCabut;
 
-                                    $pcs_hcr = DB::table('tb_hancuran')
-                                        ->where('no_box', $f->no_box)
-                                        ->where('kategori', 'cabut')
-                                        ->first();
-                                    $ttlPcs_pth += $pcs_hcr->pcs ?? 0;
+                                    $ttlPcs_pth += $f->pcs_pth_cabut;
                                 @endphp
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
@@ -99,7 +95,7 @@
                                     <td>
                                         <input type="text" class="form-control form-control-sm text-end"
                                             name="pcs_pth[]"
-                                            value="{{ empty($pcs_hcr->pcs) ? $f->ket_hcr ?? 0 : $pcs_hcr->pcs }}">
+                                            value="{{ empty($f->pcs_pth_cabut) ? $f->ket_hcr ?? 0 : $f->pcs_pth_cabut }}">
                                         <input type="hidden" name="no_box[]" value="{{ $f->no_box }}">
                                     </td>
 

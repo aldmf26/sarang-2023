@@ -1,36 +1,35 @@
 <ul class="nav nav-pills float-start">
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'bkbaru.invoice' && $kategori == 'cabut' ? 'active' : '' }}" aria-current="page"
-            href="{{ route('bkbaru.invoice') }}">Cabut</a>
+        <a class="nav-link {{ $kategori == 'cabut' ? 'active' : '' }}" aria-current="page"
+            href="{{ route('po.cabut') }}">Cabut</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice' && $kategori == 'cetak' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice') }}">Cetak</a>
+        <a class="nav-link {{ $kategori == 'cetak' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.cetak') }}">Cetak</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_sortir' && $kategori == 'sortir' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_sortir', ['kategori' => 'sortir']) }}">Sortir</a>
+        <a class="nav-link {{ $kategori == 'sortir' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.sortir') }}">Sortir</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_grade' && $kategori == 'grade' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_grade', ['kategori' => 'grade']) }}">Grade</a>
+        <a class="nav-link {{ $kategori == 'grade' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.grade') }}">Grade</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_grading' && $kategori == 'grading' ? 'active' : '' }}"
-            aria-current="page"
-            href="{{ route('gudangsarang.invoice_grading', ['kategori' => 'grading']) }}">Grading</a>
+        <a class="nav-link {{ $kategori == 'grading' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.grading') }}">Grading</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_wip' && $kategori == 'wip' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_wip', ['kategori' => 'wip']) }}">Wip1</a>
+        <a class="nav-link {{ $kategori == 'wip' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.wip') }}">Wip1</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_qc' && $kategori == 'qc' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_qc', ['kategori' => 'qc']) }}">Qc</a>
+        <a class="nav-link {{ $kategori == 'qc' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.qc') }}">Qc</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ $route == 'gudangsarang.invoice_wip2' && $kategori == 'wip2' ? 'active' : '' }}"
-            aria-current="page" href="{{ route('gudangsarang.invoice_wip2', ['kategori' => 'wip2']) }}">Wip2</a>
+        <a class="nav-link {{ $kategori == 'wip2' ? 'active' : '' }}"
+            aria-current="page" href="{{ route('po.wip2') }}">Wip2</a>
     </li>
 
 

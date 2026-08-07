@@ -43,14 +43,8 @@
                             <td>
                                 @php
                                     $param = ['kategori' => 'cetak', 'no_invoice' => $d->no_invoice];
-                                    $getCtk = DB::table('formulir_sarang as a')
-                                        ->select('a.no_box')
-                                        ->join('cetak_new as b', 'a.no_box', 'b.no_box')
-                                        ->where('a.no_invoice', $d->no_invoice)
-                                        ->where('a.kategori', 'cetak')
-                                        ->first();
                                 @endphp
-                                @if (!$getCtk)
+                                @if (!$d->has_process)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal', $param) }}">
                                         <span class="badge bg-danger">Cancel</span>
@@ -60,14 +54,7 @@
                                         data-kategori="cetak">
                                         <span class="badge bg-primary">Edit</span>
                                     </a>
-                                    @php
-                                        $hcr = DB::table('tb_hancuran')
-                                            ->where('no_invoice', $d->no_invoice)
-                                            ->where('kategori', 'cetak')
-                                            ->groupBy('no_invoice')
-                                            ->first();
-                                    @endphp
-                                    @if (empty($hcr))
+                                    @if (!$d->has_hancuran)
                                         <a
                                             href="{{ route('gudangsarang.gethancuran.cabut', ['no_invoice' => $d->no_invoice]) }}">
                                             <span class="badge bg-warning">Patah</span>

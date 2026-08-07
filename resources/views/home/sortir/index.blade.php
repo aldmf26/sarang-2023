@@ -59,7 +59,14 @@
             <input type="hidden" class="tgl1" value="{{ $tgl1 }}">
             <input type="hidden" class="tgl2" value="{{ $tgl2 }}">
             <input type="hidden" class="id_anak" value="{{ $id_anak }}">
-            <div id="loadHalaman"></div>
+            <div class="col-lg-4 mb-2">
+                <input type="text" id="searchNoBoxSortir" class="form-control"
+                    placeholder="Cari No Box untuk mulai..." autocomplete="off">
+                <small class="text-muted">Minimal 1 karakter, maksimal 50 hasil.</small>
+            </div>
+            <div id="loadHalaman">
+                <div class="alert alert-info text-center">Cari No Box untuk mulai.</div>
+            </div>
         </section>
 
         <form id="createTambahAnakSortir">
@@ -133,13 +140,7 @@
         <form action="{{ route('sortir.ambil_box_bk') }}" method="post">
             @csrf
             <x-theme.modal idModal="ambil_box" title="Ambil Box BK" btnSave="Y">
-                @php
-
-                    $bk = DB::table('bk')
-                        ->where([['kategori', 'sortir'], ['penerima', '0']])
-                        ->get();
-
-                @endphp
+                @php($bk = collect())
                 <div class="row" x-data="{
                     bk: {{ $bk }},
                     selectedBk: [],
@@ -376,10 +377,6 @@
                     $(".select2-add").select2({
                         dropdownParent: $('#tambah2 .modal-content')
                     })
-                    load_anak()
-                    load_anak_nopengawas()
-                    loadTambahsortir()
-
                     function loadTambahsortir() {
                         updateAnakBelum()
                         $.ajax({
@@ -393,8 +390,6 @@
                             }
                         });
                     }
-                    loadTambahAnak()
-
                     function loadTambahAnak() {
                         updateAnakBelum()
 
@@ -443,13 +438,22 @@
                             }
                         });
                     }
-                    loadInputAkhir()
                     let tableHalaman = null;
+                    let searchNoBoxTimer = null;
 
                     function loadHalaman() {
+                        const searchNoBox = $('#searchNoBoxSortir').val().trim();
+
                         if (tableHalaman !== null) {
                             tableHalaman.destroy();
                             tableHalaman = null;
+                        }
+
+                        if (!searchNoBox.length) {
+                            $('#loadHalaman').html(
+                                '<div class="alert alert-info text-center">Cari No Box untuk mulai.</div>'
+                            );
+                            return;
                         }
 
                         $.ajax({
@@ -459,6 +463,7 @@
                                 tgl1: $('.tgl1').val(),
                                 tgl2: $('.tgl2').val(),
                                 id_anak: $('.id_anak').val(),
+                                search_no_box: searchNoBox,
                             },
                             beforeSend: function() {
                                 $("#loadHalaman").html(
@@ -471,7 +476,7 @@
                                 $("#loadHalaman").html(r);
 
                                 tableHalaman = $('#tablestr').DataTable({
-                                    searching: false, // pakai pencarian manual (#tblinput1)
+                                    searching: false,
                                     scrollY: '400px',
                                     scrollX: true,
                                     scrollCollapse: true,
@@ -488,12 +493,14 @@
                                 });
 
                                 inputChecked('cekSemuaTutup', 'cekTutup');
-                                pencarian('tblinput1', 'tablestr');
                             }
                         });
                     }
 
-                    loadHalaman(); // ← pastikan dipanggil!
+                    $('#searchNoBoxSortir').on('input', function() {
+                        clearTimeout(searchNoBoxTimer);
+                        searchNoBoxTimer = setTimeout(loadHalaman, 300);
+                    });
                     $(document).on('click', '.detail', function() {
                         var id_sortir = $(this).attr('id_sortir')
                         $.ajax({

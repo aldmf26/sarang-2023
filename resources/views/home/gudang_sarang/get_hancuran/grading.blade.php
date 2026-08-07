@@ -85,17 +85,8 @@
                             @endphp
                             @foreach ($formulir as $i => $d)
                                 @php
-                                    $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
-                                FROM tb_hancuran as a
-                                where a.kategori in('cetak','sortir','grade') and a.no_box = '$d->no_box'
-                                ");
-                                    $pcs_pth_grade = DB::table('tb_hancuran')
-                                        ->where('no_box', $d->no_box)
-                                        ->where('kategori', 'grading')
-                                        ->first();
-
-                                    $ttlPcsPth += $pcsPth->pcs ?? 0;
-                                    $ttlGrPth += $pcs_pth_grade->pcs ?? 0;
+                                    $ttlPcsPth += $d->pcs_pth_sebelumnya;
+                                    $ttlGrPth += $d->pcs_pth_grading;
                                 @endphp
                                 <tr>
                                     <td>{{ $d->pgws }}</td>
@@ -103,12 +94,12 @@
                                     <td class="text-end">{{ $d->pcs }}</td>
                                     <td class="text-end">{{ $d->gr }}</td>
                                     <td class="text-end">
-                                        {{ $d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0) }}
+                                        {{ $d->pcs - $d->pcs_pth_sebelumnya - $d->pcs_pth_grading }}
                                     </td>
-                                    <td class="text-end">{{ $pcsPth->pcs ?? 0 }}</td>
+                                    <td class="text-end">{{ $d->pcs_pth_sebelumnya }}</td>
                                     <td class="text-end">
                                         <input type="text" class="form-control form-control-sm text-end"
-                                            name="pcs_pth[]" value="{{ $pcs_pth_grade->pcs ?? 0 }}">
+                                            name="pcs_pth[]" value="{{ $d->pcs_pth_grading }}">
                                         <input type="hidden" name="no_box[]" value="{{ $d->no_box }}">
                                     </td>
                                 </tr>
