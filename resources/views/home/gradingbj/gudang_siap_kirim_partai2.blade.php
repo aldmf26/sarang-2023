@@ -8,7 +8,26 @@
             cek: [],
             cekPrint: [],
             ttlPcs: 0,
-            ttlGr: 0
+            ttlGr: 0,
+            toggleAll() {
+                if (this.cek.length === {{ collect($gudang)->filter(fn($d) => $d->gr - $d->gr_pengiriman > 0)->count() }}) {
+                    this.cek = []
+                    this.ttlPcs = 0
+                    this.ttlGr = 0
+                } else {
+                    this.cek = []
+                    this.ttlPcs = 0
+                    this.ttlGr = 0
+
+                    @foreach ($gudang as $d)
+                        @if ($d->gr - $d->gr_pengiriman > 0)
+                            this.cek.push('{{ $d->no_box }}')
+                            this.ttlPcs += {{ $d->pcs - $d->pcs_pengiriman }}
+                            this.ttlGr += {{ $d->gr - $d->gr_pengiriman }}
+                        @endif
+                    @endforeach
+                }
+            }
         }">
             <div class="row">
                 <div class="col-lg-4">
@@ -84,7 +103,10 @@
                             <td class="text-end dheadstock h6 ">{{ number_format($ttlPcs, 0) }}</td>
                             <td class="text-end dheadstock h6 ">{{ number_format($ttlGr, 0) }}</td>
 
-                            <td class="dheadstock"></td>
+                            <td class="dheadstock">
+                                <input type="checkbox" class="form-check-input" @click="toggleAll()"
+                                    :checked="cek.length === {{ collect($gudang)->filter(fn($d) => $d->gr - $d->gr_pengiriman > 0)->count() }}">
+                            </td>
                         </tr>
                         <tbody>
                             @foreach ($gudang as $d)
