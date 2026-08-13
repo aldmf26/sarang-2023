@@ -92,22 +92,18 @@
                                     $ttlGr = array_sum(array_column($getFormulir, 'gr_awal'));
                                     $ttlRp =
                                         sumBk($getFormulir, 'cost_bk') +
-                                        sumBk($getFormulir, 'cost_cbt') +
-                                        sumBk($getFormulir, 'cost_str') +
-                                        sumBk($getFormulir, 'cost_eo') +
-                                        sumBk($getFormulir, 'cost_ctk') +
-                                        sumBk($getFormulir, 'cost_cu');
+                                        sumBk($getFormulir, 'cost_kerja') +
+                                        sumBk($getFormulir, 'cost_cu') +
+                                        sumBk($getFormulir, 'cost_op');
                                     $cost_bk = sumBk($getFormulir, 'cost_bk');
-                                    $cost_kerja =
-                                        sumBk($getFormulir, 'cost_cbt') +
-                                        sumBk($getFormulir, 'cost_str') +
-                                        sumBk($getFormulir, 'cost_eo') +
-                                        sumBk($getFormulir, 'cost_ctk');
+                                    $cost_kerja = sumBk($getFormulir, 'cost_kerja');
                                     $cost_cu = sumBk($getFormulir, 'cost_cu');
-                                    $rp_gr = $ttlRp / $ttlGr;
-                                    $rp_gr_bk = $cost_bk / $ttlGr;
-                                    $rp_gr_kerja = $cost_kerja / $ttlGr;
-                                    $rp_gr_cu = $cost_cu / $ttlGr;
+                                    $cost_op = sumBk($getFormulir, 'cost_op');
+                                    $rp_gr = $ttlGr > 0 ? $ttlRp / $ttlGr : 0;
+                                    $rp_gr_bk = $ttlGr > 0 ? $cost_bk / $ttlGr : 0;
+                                    $rp_gr_kerja = $ttlGr > 0 ? $cost_kerja / $ttlGr : 0;
+                                    $rp_gr_cu = $ttlGr > 0 ? $cost_cu / $ttlGr : 0;
+                                    $rp_gr_op = $ttlGr > 0 ? $cost_op / $ttlGr : 0;
                                 @endphp
                                 <th class="text-end">
                                     <h6>
@@ -117,6 +113,7 @@
                                         <input type="hidden" name="rpGrBk" value="{{ $rp_gr_bk }}">
                                         <input type="hidden" name="rpGrKerja" value="{{ $rp_gr_kerja }}">
                                         <input type="hidden" name="rpGrCu" value="{{ $rp_gr_cu }}">
+                                        <input type="hidden" name="rpGrOp" value="{{ $rp_gr_op }}">
                                         {{ $ttlPcs }}
                                     </h6>
                                 </th>

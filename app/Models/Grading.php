@@ -154,28 +154,61 @@ class Grading extends Model
 
     public static function dapatkanStokBoxtesting($jenis, $noBox = null)
     {
-        return  DB::select("SELECT a.no_box, b.tipe, b.ket, a.pcs_awal, a.gr_awal , (b.hrga_satuan * b.gr_awal) as cost_bk, (c.ttl_rp) as cost_cbt, (d.ttl_rp) as cost_eo, (e.ttl_rp) as cost_str, (f.ttl_rp) as cost_ctk, (g.ttl_rp) as cost_cu
-FROM formulir_sarang as a 
-left join bk as b on b.no_box = a.no_box and b.kategori = 'cabut'
-left join cabut as c on c.no_box = a.no_box
-left join eo as d on d.no_box = a.no_box
-left join sortir as e on e.no_box = a.no_box
-left join (
-	SELECT f.no_box , sum(f.ttl_rp) as ttl_rp
-    FROM cetak_new as f 
-    left join kelas_cetak as g on g.id_kelas_cetak = f.id_kelas_cetak
-    WHERE g.kategori = 'CTK'
-    group by f.no_box
-) as f on f.no_box = a.no_box
-left join (
-	SELECT f.no_box , sum(f.ttl_rp) as ttl_rp
-    FROM cetak_new as f 
-    left join kelas_cetak as g on g.id_kelas_cetak = f.id_kelas_cetak
-    WHERE g.kategori = 'CU'
-    group by f.no_box
-) as g on g.no_box = a.no_box
+        $boxes = collect(explode(',', (string) $noBox))
+            ->map(fn ($box) => trim($box))
+            ->filter(fn ($box) => $box !== '' && ctype_digit($box))
+            ->unique()
+            ->values()
+            ->all();
 
-where a.kategori = 'grade' and a.no_box in ($noBox);");
+        if (!$boxes) {
+            return [];
+        }
+
+        $transactionCosts = DB::query()
+            ->fromSub(function ($query) {
+                $query->from('cabut')->selectRaw(
+                    "CAST(no_box AS CHAR) AS no_box, COALESCE(ttl_rp, 0) AS cost_kerja,
+                    COALESCE(cost_op, 0) AS cost_op, 0 AS cost_cu"
+                )->unionAll(
+                    DB::table('eo')->selectRaw(
+                        "CAST(no_box AS CHAR), COALESCE(ttl_rp, 0), COALESCE(cost_op, 0), 0"
+                    )
+                )->unionAll(
+                    DB::table('sortir')->selectRaw(
+                        "CAST(no_box AS CHAR), COALESCE(ttl_rp, 0), 0, 0"
+                    )
+                )->unionAll(
+                    DB::table('cetak_new AS cn')
+                        ->join('kelas_cetak AS kc', 'kc.id_kelas_cetak', '=', 'cn.id_kelas_cetak')
+                        ->selectRaw(
+                            "CAST(cn.no_box AS CHAR),
+                            CASE WHEN kc.kategori = 'CTK' THEN COALESCE(cn.ttl_rp, 0) ELSE 0 END,
+                            0,
+                            CASE WHEN kc.kategori = 'CU' THEN COALESCE(cn.ttl_rp, 0) ELSE 0 END"
+                        )
+                );
+            }, 'transaksi')
+            ->selectRaw('no_box, SUM(cost_kerja) AS cost_kerja, SUM(cost_op) AS cost_op, SUM(cost_cu) AS cost_cu')
+            ->groupBy('no_box');
+
+        return DB::table('formulir_sarang AS fs')
+            ->join('bk AS bk', function ($join) {
+                $join->on('bk.no_box', '=', 'fs.no_box')->where('bk.kategori', 'cabut');
+            })
+            ->leftJoinSub($transactionCosts, 'biaya', 'biaya.no_box', '=', 'fs.no_box')
+            ->where('fs.kategori', 'grade')
+            ->whereIn('fs.no_box', $boxes)
+            ->selectRaw("fs.no_box, MAX(bk.tipe) AS tipe, MAX(bk.ket) AS ket,
+                SUM(fs.pcs_awal) AS pcs_awal, SUM(fs.gr_awal) AS gr_awal,
+                SUM(bk.gr_awal * bk.hrga_satuan) AS cost_bk,
+                COALESCE(MAX(biaya.cost_kerja), 0) AS cost_kerja,
+                COALESCE(MAX(biaya.cost_op), 0) AS cost_op,
+                COALESCE(MAX(biaya.cost_cu), 0) AS cost_cu,
+                0 AS cost_cbt, 0 AS cost_eo, 0 AS cost_str, 0 AS cost_ctk")
+            ->groupBy('fs.no_box')
+            ->get()
+            ->all();
     }
 
     public static function dapatkanStokBoxYANGLAMA($jenis, $noBox = null)

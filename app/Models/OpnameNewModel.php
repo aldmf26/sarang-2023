@@ -9,6 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class OpnameNewModel extends Model
 {
+    public static function bkSisaDetails()
+    {
+        return DB::select("SELECT
+                a.nm_partai,
+                '-' AS name,
+                a.no_box,
+                a.ket AS grade,
+                a.pcs_awal AS pcs,
+                a.gr_awal AS gr,
+                (a.gr_awal * a.hrga_satuan) AS ttl_rp,
+                0 AS cost_kerja
+            FROM bk AS a
+            WHERE a.penerima = 0
+              AND a.kategori = 'cabut'
+              AND a.formulir = 'T'
+            ORDER BY a.nm_partai, a.no_box");
+    }
     use HasFactory;
     public static function bksisapgws()
     {
@@ -109,21 +126,7 @@ class OpnameNewModel extends Model
 
     public static function cetak_stok()
     {
-        $result = DB::select("SELECT e.name, a.no_box, c.nm_partai, c.ket as grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr,
-        sum(c.hrga_satuan  * c.gr_awal) as ttl_rp, 
-        sum(COALESCE(d.ttl_rp,0) + COALESCE(f.ttl_rp,0)) as cost_kerja
-        FROM formulir_sarang as a 
-        left join bk as c on c.no_box = a.no_box and c.kategori ='cabut'
-        left join cabut as d on d.no_box = a.no_box
-        left join users as e on e.id = a.id_penerima
-        left join eo as f on f.no_box = a.no_box
-        WHERE a.kategori = 'cetak'   
-        and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0) and a.no_box != 0
-        group by a.no_box
-        order by e.name ASC
-        ");
-
-        return $result;
+        return CocokanModel::cetakStokBalanceDetails();
     }
     public static function cetak_proses()
     {
@@ -574,7 +577,9 @@ group by a.no_box;");
     }
     public static function wip2SedangProses()
     {
-        return  DB::select("SELECT a.box_pengiriman, GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS daftar_partai , a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_op) as cost_op 
+        return  DB::select("SELECT a.box_pengiriman, a.nm_partai AS daftar_partai,
+        a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.cost_bk) as cost_bk,
+        sum(a.cost_kerja) as cost_kerja, sum(a.cost_op) as cost_op
         FROM grading_partai as a 
         
         join (
@@ -585,7 +590,7 @@ group by a.no_box;");
         ) as c on c.no_box = a.box_pengiriman
 
         where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T'
-        group by a.box_pengiriman;
+        group by a.box_pengiriman, a.nm_partai, a.grade;
         ");
     }
 
@@ -647,7 +652,10 @@ group by a.no_box;");
     }
     public static function Pengiriman()
     {
-        return  DB::select("SELECT a.no_box as box_pengiriman, b.daftar_partai, b.grade,   sum(a.pcs) as pcs, sum(a.gr) as gr,sum(b.cost_bk) as cost_bk, sum(b.cost_kerja) as cost_kerja, sum(b.cost_op) as cost_op
+        return  DB::select("SELECT a.no_box as box_pengiriman,
+        GROUP_CONCAT(DISTINCT a.no_nota ORDER BY a.no_nota SEPARATOR ', ') as no_nota,
+        b.daftar_partai, b.grade, sum(a.pcs) as pcs, sum(a.gr) as gr,
+        sum(b.cost_bk) as cost_bk, sum(b.cost_kerja) as cost_kerja, sum(b.cost_op) as cost_op
         FROM pengiriman as a
         left join (
             SELECT b.box_pengiriman , GROUP_CONCAT(DISTINCT b.nm_partai SEPARATOR ', ') AS daftar_partai , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, b.grade

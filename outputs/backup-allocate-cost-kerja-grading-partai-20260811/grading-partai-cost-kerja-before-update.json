@@ -1,0 +1,3135 @@
+{
+    "created_at": "2026-08-11T10:41:19+08:00",
+    "formula": "source_cost_kerja * row_gr / invoice_total_gr",
+    "records": [
+        {
+            "id_grading": 3604,
+            "no_invoice": "11122",
+            "gr": 202,
+            "old_cost_kerja": 46014.726184998,
+            "new_cost_kerja": 41599.17165209388
+        },
+        {
+            "id_grading": 3605,
+            "no_invoice": "11122",
+            "gr": 22,
+            "old_cost_kerja": 5011.5048320295,
+            "new_cost_kerja": 4530.602853198343
+        },
+        {
+            "id_grading": 3606,
+            "no_invoice": "11122",
+            "gr": 71,
+            "old_cost_kerja": 16173.492867004,
+            "new_cost_kerja": 14621.491026231017
+        },
+        {
+            "id_grading": 3607,
+            "no_invoice": "11122",
+            "gr": 174,
+            "old_cost_kerja": 39636.44730787,
+            "new_cost_kerja": 35832.94983893235
+        },
+        {
+            "id_grading": 3608,
+            "no_invoice": "11122",
+            "gr": 19,
+            "old_cost_kerja": 4328.11780948,
+            "new_cost_kerja": 3912.793373216751
+        },
+        {
+            "id_grading": 3609,
+            "no_invoice": "11122",
+            "gr": 134,
+            "old_cost_kerja": 30524.620340543,
+            "new_cost_kerja": 27595.490105844456
+        },
+        {
+            "id_grading": 3610,
+            "no_invoice": "11122",
+            "gr": 49,
+            "old_cost_kerja": 11161.988034975,
+            "new_cost_kerja": 10090.888173032674
+        },
+        {
+            "id_grading": 3611,
+            "no_invoice": "11122",
+            "gr": 200,
+            "old_cost_kerja": 45559.134836632,
+            "new_cost_kerja": 41187.298665439484
+        },
+        {
+            "id_grading": 3612,
+            "no_invoice": "11122",
+            "gr": 227,
+            "old_cost_kerja": 51709.618039577,
+            "new_cost_kerja": 46747.58398527381
+        },
+        {
+            "id_grading": 3613,
+            "no_invoice": "11122",
+            "gr": 55,
+            "old_cost_kerja": 12528.762080074,
+            "new_cost_kerja": 11326.507132995857
+        },
+        {
+            "id_grading": 3614,
+            "no_invoice": "11122",
+            "gr": 41,
+            "old_cost_kerja": 9339.6226415096,
+            "new_cost_kerja": 8443.396226415094
+        },
+        {
+            "id_grading": 3615,
+            "no_invoice": "11122",
+            "gr": 112,
+            "old_cost_kerja": 25513.115508514,
+            "new_cost_kerja": 23064.887252646113
+        },
+        {
+            "id_grading": 3616,
+            "no_invoice": "11122",
+            "gr": 60,
+            "old_cost_kerja": 13667.74045099,
+            "new_cost_kerja": 12356.189599631845
+        },
+        {
+            "id_grading": 3617,
+            "no_invoice": "11122",
+            "gr": 153,
+            "old_cost_kerja": 34852.738150023,
+            "new_cost_kerja": 31508.283479061203
+        },
+        {
+            "id_grading": 3618,
+            "no_invoice": "11122",
+            "gr": 47,
+            "old_cost_kerja": 10706.396686609,
+            "new_cost_kerja": 9679.015186378278
+        },
+        {
+            "id_grading": 3619,
+            "no_invoice": "11122",
+            "gr": 61,
+            "old_cost_kerja": 13895.536125173,
+            "new_cost_kerja": 12562.126092959043
+        },
+        {
+            "id_grading": 3620,
+            "no_invoice": "11122",
+            "gr": 45,
+            "old_cost_kerja": 10250.805338242,
+            "new_cost_kerja": 9267.142199723883
+        },
+        {
+            "id_grading": 3621,
+            "no_invoice": "11122",
+            "gr": 23,
+            "old_cost_kerja": 5239.3005062127,
+            "new_cost_kerja": 4736.539346525541
+        },
+        {
+            "id_grading": 3622,
+            "no_invoice": "11122",
+            "gr": 5,
+            "old_cost_kerja": 1138.9783709158,
+            "new_cost_kerja": 1029.682466635987
+        },
+        {
+            "id_grading": 3623,
+            "no_invoice": "11122",
+            "gr": 52,
+            "old_cost_kerja": 11845.375057524,
+            "new_cost_kerja": 10708.697653014266
+        },
+        {
+            "id_grading": 3624,
+            "no_invoice": "11122",
+            "gr": 93,
+            "old_cost_kerja": 21184.997699034,
+            "new_cost_kerja": 19152.09387942936
+        },
+        {
+            "id_grading": 3625,
+            "no_invoice": "11122",
+            "gr": 49,
+            "old_cost_kerja": 11161.988034975,
+            "new_cost_kerja": 10090.888173032674
+        },
+        {
+            "id_grading": 3626,
+            "no_invoice": "11122",
+            "gr": 183,
+            "old_cost_kerja": 41686.608375518,
+            "new_cost_kerja": 37686.37827887713
+        },
+        {
+            "id_grading": 3627,
+            "no_invoice": "11122",
+            "gr": 57,
+            "old_cost_kerja": 12984.35342844,
+            "new_cost_kerja": 11738.380119650254
+        },
+        {
+            "id_grading": 3628,
+            "no_invoice": "11122",
+            "gr": 39,
+            "old_cost_kerja": 8884.0312931432,
+            "new_cost_kerja": 8031.523239760776
+        },
+        {
+            "id_grading": 3669,
+            "no_invoice": "11123",
+            "gr": 70,
+            "old_cost_kerja": 1734.8224513173,
+            "new_cost_kerja": 8674.112256586483
+        },
+        {
+            "id_grading": 4026,
+            "no_invoice": "11134",
+            "gr": 91,
+            "old_cost_kerja": 8174.5071684588,
+            "new_cost_kerja": 8173.042465507972
+        },
+        {
+            "id_grading": 4027,
+            "no_invoice": "11134",
+            "gr": 97,
+            "old_cost_kerja": 8713.4856630825,
+            "new_cost_kerja": 8711.924386310697
+        },
+        {
+            "id_grading": 4028,
+            "no_invoice": "11134",
+            "gr": 32,
+            "old_cost_kerja": 2874.5519713262,
+            "new_cost_kerja": 2874.036910947859
+        },
+        {
+            "id_grading": 4029,
+            "no_invoice": "11134",
+            "gr": 83,
+            "old_cost_kerja": 7455.8691756273,
+            "new_cost_kerja": 7454.533237771009
+        },
+        {
+            "id_grading": 4030,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_kerja": 718.63799283154,
+            "new_cost_kerja": 718.5092277369647
+        },
+        {
+            "id_grading": 4031,
+            "no_invoice": "11134",
+            "gr": 59,
+            "old_cost_kerja": 5299.9551971326,
+            "new_cost_kerja": 5299.005554560114
+        },
+        {
+            "id_grading": 4032,
+            "no_invoice": "11134",
+            "gr": 11,
+            "old_cost_kerja": 988.12724014337,
+            "new_cost_kerja": 987.9501881383263
+        },
+        {
+            "id_grading": 4033,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_kerja": 718.63799283154,
+            "new_cost_kerja": 718.5092277369647
+        },
+        {
+            "id_grading": 4034,
+            "no_invoice": "11134",
+            "gr": 18,
+            "old_cost_kerja": 1616.935483871,
+            "new_cost_kerja": 1616.6457624081706
+        },
+        {
+            "id_grading": 4035,
+            "no_invoice": "11134",
+            "gr": 318,
+            "old_cost_kerja": 28565.860215054,
+            "new_cost_kerja": 28560.741802544348
+        },
+        {
+            "id_grading": 4036,
+            "no_invoice": "11134",
+            "gr": 124,
+            "old_cost_kerja": 11138.888888889,
+            "new_cost_kerja": 11136.893029922954
+        },
+        {
+            "id_grading": 4037,
+            "no_invoice": "11134",
+            "gr": 61,
+            "old_cost_kerja": 5479.6146953405,
+            "new_cost_kerja": 5478.632861494356
+        },
+        {
+            "id_grading": 4038,
+            "no_invoice": "11134",
+            "gr": 20,
+            "old_cost_kerja": 1796.5949820789,
+            "new_cost_kerja": 1796.2730693424116
+        },
+        {
+            "id_grading": 4039,
+            "no_invoice": "11134",
+            "gr": 52,
+            "old_cost_kerja": 4671.146953405,
+            "new_cost_kerja": 4670.30998029027
+        },
+        {
+            "id_grading": 4040,
+            "no_invoice": "11134",
+            "gr": 32,
+            "old_cost_kerja": 2874.5519713262,
+            "new_cost_kerja": 2874.036910947859
+        },
+        {
+            "id_grading": 4041,
+            "no_invoice": "11134",
+            "gr": 71,
+            "old_cost_kerja": 6377.91218638,
+            "new_cost_kerja": 6376.769396165561
+        },
+        {
+            "id_grading": 4042,
+            "no_invoice": "11134",
+            "gr": 137,
+            "old_cost_kerja": 12306.67562724,
+            "new_cost_kerja": 12304.47052499552
+        },
+        {
+            "id_grading": 4043,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_kerja": 20211.693548387,
+            "new_cost_kerja": 20208.072030102132
+        },
+        {
+            "id_grading": 4044,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_kerja": 20211.693548387,
+            "new_cost_kerja": 20208.072030102132
+        },
+        {
+            "id_grading": 4045,
+            "no_invoice": "11134",
+            "gr": 25,
+            "old_cost_kerja": 2245.7437275986,
+            "new_cost_kerja": 2245.3413366780146
+        },
+        {
+            "id_grading": 4046,
+            "no_invoice": "11134",
+            "gr": 12,
+            "old_cost_kerja": 1077.9569892473,
+            "new_cost_kerja": 1077.763841605447
+        },
+        {
+            "id_grading": 4047,
+            "no_invoice": "11134",
+            "gr": 178,
+            "old_cost_kerja": 15989.695340502,
+            "new_cost_kerja": 15986.830317147465
+        },
+        {
+            "id_grading": 4048,
+            "no_invoice": "11134",
+            "gr": 113,
+            "old_cost_kerja": 10150.761648746,
+            "new_cost_kerja": 10148.942841784627
+        },
+        {
+            "id_grading": 4049,
+            "no_invoice": "11134",
+            "gr": 75,
+            "old_cost_kerja": 6737.2311827957,
+            "new_cost_kerja": 6736.024010034044
+        },
+        {
+            "id_grading": 4050,
+            "no_invoice": "11134",
+            "gr": 172,
+            "old_cost_kerja": 15450.716845878,
+            "new_cost_kerja": 15447.948396344742
+        },
+        {
+            "id_grading": 4051,
+            "no_invoice": "11134",
+            "gr": 5,
+            "old_cost_kerja": 449.14874551971,
+            "new_cost_kerja": 449.0682673356029
+        },
+        {
+            "id_grading": 4052,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4053,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4054,
+            "no_invoice": "11134",
+            "gr": 30,
+            "old_cost_kerja": 2694.8924731183,
+            "new_cost_kerja": 2694.4096040136174
+        },
+        {
+            "id_grading": 4055,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4056,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4057,
+            "no_invoice": "11134",
+            "gr": 24,
+            "old_cost_kerja": 2155.9139784946,
+            "new_cost_kerja": 2155.527683210894
+        },
+        {
+            "id_grading": 4058,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4059,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_kerja": 359.31899641577,
+            "new_cost_kerja": 359.25461386848235
+        },
+        {
+            "id_grading": 4060,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4061,
+            "no_invoice": "11134",
+            "gr": 21,
+            "old_cost_kerja": 1886.4247311828,
+            "new_cost_kerja": 1886.0867228095321
+        },
+        {
+            "id_grading": 4062,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4063,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4064,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_kerja": 8982.9749103943,
+            "new_cost_kerja": 8981.365346712058
+        },
+        {
+            "id_grading": 4065,
+            "no_invoice": "11134",
+            "gr": 51,
+            "old_cost_kerja": 4581.3172043011,
+            "new_cost_kerja": 4580.49632682315
+        },
+        {
+            "id_grading": 4066,
+            "no_invoice": "11134",
+            "gr": 79,
+            "old_cost_kerja": 7096.5501792115,
+            "new_cost_kerja": 7095.278623902526
+        },
+        {
+            "id_grading": 4067,
+            "no_invoice": "11134",
+            "gr": 127,
+            "old_cost_kerja": 11408.378136201,
+            "new_cost_kerja": 11406.333990324316
+        },
+        {
+            "id_grading": 4068,
+            "no_invoice": "11134",
+            "gr": 66,
+            "old_cost_kerja": 5928.7634408602,
+            "new_cost_kerja": 5927.701128829958
+        },
+        {
+            "id_grading": 4069,
+            "no_invoice": "11134",
+            "gr": 110,
+            "old_cost_kerja": 9881.2724014337,
+            "new_cost_kerja": 9879.501881383265
+        },
+        {
+            "id_grading": 4070,
+            "no_invoice": "11134",
+            "gr": 19,
+            "old_cost_kerja": 1706.7652329749,
+            "new_cost_kerja": 1706.4594158752911
+        },
+        {
+            "id_grading": 4071,
+            "no_invoice": "11134",
+            "gr": 53,
+            "old_cost_kerja": 4760.976702509,
+            "new_cost_kerja": 4760.123633757391
+        },
+        {
+            "id_grading": 4072,
+            "no_invoice": "11134",
+            "gr": 71,
+            "old_cost_kerja": 6377.91218638,
+            "new_cost_kerja": 6376.769396165561
+        },
+        {
+            "id_grading": 4073,
+            "no_invoice": "11134",
+            "gr": 61,
+            "old_cost_kerja": 5479.6146953405,
+            "new_cost_kerja": 5478.632861494356
+        },
+        {
+            "id_grading": 4074,
+            "no_invoice": "11134",
+            "gr": 11,
+            "old_cost_kerja": 988.12724014337,
+            "new_cost_kerja": 987.9501881383263
+        },
+        {
+            "id_grading": 4075,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_kerja": 718.63799283154,
+            "new_cost_kerja": 718.5092277369647
+        },
+        {
+            "id_grading": 4076,
+            "no_invoice": "11134",
+            "gr": 10,
+            "old_cost_kerja": 898.29749103943,
+            "new_cost_kerja": 898.1365346712058
+        },
+        {
+            "id_grading": 4077,
+            "no_invoice": "11134",
+            "gr": 83,
+            "old_cost_kerja": 7455.8691756273,
+            "new_cost_kerja": 7454.533237771009
+        },
+        {
+            "id_grading": 4078,
+            "no_invoice": "11134",
+            "gr": 55,
+            "old_cost_kerja": 4940.6362007169,
+            "new_cost_kerja": 4939.750940691632
+        },
+        {
+            "id_grading": 4079,
+            "no_invoice": "11134",
+            "gr": 221,
+            "old_cost_kerja": 19852.374551971,
+            "new_cost_kerja": 19848.81741623365
+        },
+        {
+            "id_grading": 4080,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_kerja": 359.31899641577,
+            "new_cost_kerja": 359.25461386848235
+        },
+        {
+            "id_grading": 4081,
+            "no_invoice": "11134",
+            "gr": 23,
+            "old_cost_kerja": 2066.0842293907,
+            "new_cost_kerja": 2065.7140297437736
+        },
+        {
+            "id_grading": 4082,
+            "no_invoice": "11134",
+            "gr": 5,
+            "old_cost_kerja": 449.14874551971,
+            "new_cost_kerja": 449.0682673356029
+        },
+        {
+            "id_grading": 4083,
+            "no_invoice": "11134",
+            "gr": 44,
+            "old_cost_kerja": 3952.5089605735,
+            "new_cost_kerja": 3951.8007525533053
+        },
+        {
+            "id_grading": 4084,
+            "no_invoice": "11134",
+            "gr": 19,
+            "old_cost_kerja": 1706.7652329749,
+            "new_cost_kerja": 1706.4594158752911
+        },
+        {
+            "id_grading": 4085,
+            "no_invoice": "11134",
+            "gr": 104,
+            "old_cost_kerja": 9342.2939068101,
+            "new_cost_kerja": 9340.61996058054
+        },
+        {
+            "id_grading": 4086,
+            "no_invoice": "11134",
+            "gr": 222,
+            "old_cost_kerja": 19942.204301075,
+            "new_cost_kerja": 19938.631069700772
+        },
+        {
+            "id_grading": 4087,
+            "no_invoice": "11134",
+            "gr": 9,
+            "old_cost_kerja": 808.46774193549,
+            "new_cost_kerja": 808.3228812040853
+        },
+        {
+            "id_grading": 4088,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_kerja": 359.31899641577,
+            "new_cost_kerja": 359.25461386848235
+        },
+        {
+            "id_grading": 4089,
+            "no_invoice": "11134",
+            "gr": 24,
+            "old_cost_kerja": 2155.9139784946,
+            "new_cost_kerja": 2155.527683210894
+        },
+        {
+            "id_grading": 4090,
+            "no_invoice": "11134",
+            "gr": 22,
+            "old_cost_kerja": 1976.2544802867,
+            "new_cost_kerja": 1975.9003762766527
+        },
+        {
+            "id_grading": 4091,
+            "no_invoice": "11134",
+            "gr": 60,
+            "old_cost_kerja": 5389.7849462366,
+            "new_cost_kerja": 5388.819208027235
+        },
+        {
+            "id_grading": 4092,
+            "no_invoice": "11134",
+            "gr": 109,
+            "old_cost_kerja": 9791.4426523298,
+            "new_cost_kerja": 9789.688227916144
+        },
+        {
+            "id_grading": 4093,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_kerja": 20211.693548387,
+            "new_cost_kerja": 20208.072030102132
+        },
+        {
+            "id_grading": 4094,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_kerja": 20211.693548387,
+            "new_cost_kerja": 20208.072030102132
+        },
+        {
+            "id_grading": 4095,
+            "no_invoice": "11134",
+            "gr": 59,
+            "old_cost_kerja": 5299.9551971326,
+            "new_cost_kerja": 5299.005554560114
+        },
+        {
+            "id_grading": 4096,
+            "no_invoice": "11134",
+            "gr": 14,
+            "old_cost_kerja": 1167.7867383513,
+            "new_cost_kerja": 1257.3911485396882
+        },
+        {
+            "id_grading": 4097,
+            "no_invoice": "11134",
+            "gr": 153,
+            "old_cost_kerja": 13743.951612903,
+            "new_cost_kerja": 13741.488980469469
+        },
+        {
+            "id_grading": 4216,
+            "no_invoice": "11137",
+            "gr": 75,
+            "old_cost_kerja": 14051.759410802,
+            "new_cost_kerja": 14015.058765915768
+        },
+        {
+            "id_grading": 4217,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4218,
+            "no_invoice": "11137",
+            "gr": 63,
+            "old_cost_kerja": 11803.477905074,
+            "new_cost_kerja": 11772.649363369244
+        },
+        {
+            "id_grading": 4219,
+            "no_invoice": "11137",
+            "gr": 9,
+            "old_cost_kerja": 1686.2111292963,
+            "new_cost_kerja": 1681.8070519098922
+        },
+        {
+            "id_grading": 4220,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4221,
+            "no_invoice": "11137",
+            "gr": 99,
+            "old_cost_kerja": 18548.322422259,
+            "new_cost_kerja": 18499.877571008812
+        },
+        {
+            "id_grading": 4222,
+            "no_invoice": "11137",
+            "gr": 111,
+            "old_cost_kerja": 20796.603927987,
+            "new_cost_kerja": 20742.286973555336
+        },
+        {
+            "id_grading": 4223,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4224,
+            "no_invoice": "11137",
+            "gr": 199,
+            "old_cost_kerja": 37284.001636662,
+            "new_cost_kerja": 37186.62259222984
+        },
+        {
+            "id_grading": 4225,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4226,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4227,
+            "no_invoice": "11137",
+            "gr": 28,
+            "old_cost_kerja": 5245.9901800328,
+            "new_cost_kerja": 5232.288605941887
+        },
+        {
+            "id_grading": 4228,
+            "no_invoice": "11137",
+            "gr": 11,
+            "old_cost_kerja": 2060.9247135843,
+            "new_cost_kerja": 2055.541952334313
+        },
+        {
+            "id_grading": 4229,
+            "no_invoice": "11137",
+            "gr": 30,
+            "old_cost_kerja": 5620.7037643209,
+            "new_cost_kerja": 5606.023506366308
+        },
+        {
+            "id_grading": 4230,
+            "no_invoice": "11137",
+            "gr": 71,
+            "old_cost_kerja": 13302.332242226,
+            "new_cost_kerja": 13267.588965066929
+        },
+        {
+            "id_grading": 4231,
+            "no_invoice": "11137",
+            "gr": 110,
+            "old_cost_kerja": 20609.247135843,
+            "new_cost_kerja": 20555.419523343127
+        },
+        {
+            "id_grading": 4232,
+            "no_invoice": "11137",
+            "gr": 144,
+            "old_cost_kerja": 26979.37806874,
+            "new_cost_kerja": 26908.912830558274
+        },
+        {
+            "id_grading": 4233,
+            "no_invoice": "11137",
+            "gr": 164,
+            "old_cost_kerja": 30726.513911621,
+            "new_cost_kerja": 30646.26183480248
+        },
+        {
+            "id_grading": 4234,
+            "no_invoice": "11137",
+            "gr": 53,
+            "old_cost_kerja": 9929.9099836336,
+            "new_cost_kerja": 9903.974861247143
+        },
+        {
+            "id_grading": 4235,
+            "no_invoice": "11137",
+            "gr": 53,
+            "old_cost_kerja": 9929.9099836336,
+            "new_cost_kerja": 9903.974861247143
+        },
+        {
+            "id_grading": 4236,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4237,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4238,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4239,
+            "no_invoice": "11137",
+            "gr": 27,
+            "old_cost_kerja": 5058.6333878888,
+            "new_cost_kerja": 5045.421155729677
+        },
+        {
+            "id_grading": 4240,
+            "no_invoice": "11137",
+            "gr": 34,
+            "old_cost_kerja": 6370.130932897,
+            "new_cost_kerja": 6353.493307215149
+        },
+        {
+            "id_grading": 4241,
+            "no_invoice": "11137",
+            "gr": 132,
+            "old_cost_kerja": 24731.096563012,
+            "new_cost_kerja": 24666.50342801175
+        },
+        {
+            "id_grading": 4242,
+            "no_invoice": "11137",
+            "gr": 80,
+            "old_cost_kerja": 14988.543371522,
+            "new_cost_kerja": 14949.39601697682
+        },
+        {
+            "id_grading": 4243,
+            "no_invoice": "11137",
+            "gr": 91,
+            "old_cost_kerja": 17049.468085107,
+            "new_cost_kerja": 17004.937969311133
+        },
+        {
+            "id_grading": 4244,
+            "no_invoice": "11137",
+            "gr": 176,
+            "old_cost_kerja": 32974.795417349,
+            "new_cost_kerja": 32888.67123734901
+        },
+        {
+            "id_grading": 4245,
+            "no_invoice": "11137",
+            "gr": 68,
+            "old_cost_kerja": 12740.261865794,
+            "new_cost_kerja": 12706.986614430298
+        },
+        {
+            "id_grading": 4246,
+            "no_invoice": "11137",
+            "gr": 213,
+            "old_cost_kerja": 39906.996726678,
+            "new_cost_kerja": 39802.76689520078
+        },
+        {
+            "id_grading": 4247,
+            "no_invoice": "11137",
+            "gr": 87,
+            "old_cost_kerja": 16300.040916531,
+            "new_cost_kerja": 16257.468168462292
+        },
+        {
+            "id_grading": 4248,
+            "no_invoice": "11137",
+            "gr": 184,
+            "old_cost_kerja": 34473.649754502,
+            "new_cost_kerja": 34383.61083904668
+        },
+        {
+            "id_grading": 4249,
+            "no_invoice": "11137",
+            "gr": 20,
+            "old_cost_kerja": 3747.1358428806,
+            "new_cost_kerja": 3737.349004244205
+        },
+        {
+            "id_grading": 4250,
+            "no_invoice": "11137",
+            "gr": 72,
+            "old_cost_kerja": 13489.68903437,
+            "new_cost_kerja": 13454.456415279137
+        },
+        {
+            "id_grading": 4251,
+            "no_invoice": "11137",
+            "gr": 117,
+            "old_cost_kerja": 18923.036006547,
+            "new_cost_kerja": 21863.491674828598
+        },
+        {
+            "id_grading": 4252,
+            "no_invoice": "11137",
+            "gr": 222,
+            "old_cost_kerja": 41593.207855975,
+            "new_cost_kerja": 41484.57394711067
+        },
+        {
+            "id_grading": 4253,
+            "no_invoice": "11137",
+            "gr": 103,
+            "old_cost_kerja": 19297.749590835,
+            "new_cost_kerja": 19247.347371857657
+        },
+        {
+            "id_grading": 4254,
+            "no_invoice": "11137",
+            "gr": 102,
+            "old_cost_kerja": 19110.392798691,
+            "new_cost_kerja": 19060.479921645445
+        },
+        {
+            "id_grading": 4255,
+            "no_invoice": "11137",
+            "gr": 64,
+            "old_cost_kerja": 11990.834697218,
+            "new_cost_kerja": 11959.516813581457
+        },
+        {
+            "id_grading": 4256,
+            "no_invoice": "11137",
+            "gr": 10,
+            "old_cost_kerja": 1873.5679214403,
+            "new_cost_kerja": 1868.6745021221025
+        },
+        {
+            "id_grading": 4257,
+            "no_invoice": "11137",
+            "gr": 138,
+            "old_cost_kerja": 25855.237315876,
+            "new_cost_kerja": 25787.708129285013
+        },
+        {
+            "id_grading": 4258,
+            "no_invoice": "11137",
+            "gr": 37,
+            "old_cost_kerja": 6932.2013093291,
+            "new_cost_kerja": 6914.09565785178
+        },
+        {
+            "id_grading": 4259,
+            "no_invoice": "11137",
+            "gr": 100,
+            "old_cost_kerja": 18735.679214403,
+            "new_cost_kerja": 18686.745021221024
+        },
+        {
+            "id_grading": 4260,
+            "no_invoice": "11137",
+            "gr": 297,
+            "old_cost_kerja": 55644.967266777,
+            "new_cost_kerja": 55499.63271302645
+        },
+        {
+            "id_grading": 4261,
+            "no_invoice": "11137",
+            "gr": 166,
+            "old_cost_kerja": 31101.227495909,
+            "new_cost_kerja": 31019.9967352269
+        },
+        {
+            "id_grading": 4262,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4263,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_kerja": 42155.278232407,
+            "new_cost_kerja": 42045.176297747304
+        },
+        {
+            "id_grading": 4264,
+            "no_invoice": "11137",
+            "gr": 30,
+            "old_cost_kerja": 5620.7037643209,
+            "new_cost_kerja": 5606.023506366308
+        },
+        {
+            "id_grading": 4265,
+            "no_invoice": "11137",
+            "gr": 86,
+            "old_cost_kerja": 16112.684124387,
+            "new_cost_kerja": 16070.6007182498
+        },
+        {
+            "id_grading": 4547,
+            "no_invoice": "11148",
+            "gr": 179,
+            "old_cost_kerja": 23707.919351487,
+            "new_cost_kerja": 23787.028154327425
+        },
+        {
+            "id_grading": 4548,
+            "no_invoice": "11148",
+            "gr": 200,
+            "old_cost_kerja": 26489.29536479,
+            "new_cost_kerja": 26577.685088633993
+        },
+        {
+            "id_grading": 4549,
+            "no_invoice": "11148",
+            "gr": 98,
+            "old_cost_kerja": 12979.754728747,
+            "new_cost_kerja": 13023.065693430657
+        },
+        {
+            "id_grading": 4550,
+            "no_invoice": "11148",
+            "gr": 15,
+            "old_cost_kerja": 1986.6971523593,
+            "new_cost_kerja": 1993.3263816475496
+        },
+        {
+            "id_grading": 4551,
+            "no_invoice": "11148",
+            "gr": 122,
+            "old_cost_kerja": 16158.470172522,
+            "new_cost_kerja": 16212.387904066736
+        },
+        {
+            "id_grading": 4552,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_kerja": 3443.6083974227,
+            "new_cost_kerja": 3455.099061522419
+        },
+        {
+            "id_grading": 4553,
+            "no_invoice": "11148",
+            "gr": 93,
+            "old_cost_kerja": 12317.522344627,
+            "new_cost_kerja": 12358.623566214808
+        },
+        {
+            "id_grading": 4554,
+            "no_invoice": "11148",
+            "gr": 93,
+            "old_cost_kerja": 12317.522344627,
+            "new_cost_kerja": 12358.623566214808
+        },
+        {
+            "id_grading": 4555,
+            "no_invoice": "11148",
+            "gr": 156,
+            "old_cost_kerja": 20661.650384536,
+            "new_cost_kerja": 20730.594369134516
+        },
+        {
+            "id_grading": 4556,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_kerja": 29800.457285389,
+            "new_cost_kerja": 29899.895724713242
+        },
+        {
+            "id_grading": 4557,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_kerja": 3443.6083974227,
+            "new_cost_kerja": 3455.099061522419
+        },
+        {
+            "id_grading": 4558,
+            "no_invoice": "11148",
+            "gr": 142,
+            "old_cost_kerja": 18807.399709001,
+            "new_cost_kerja": 18870.156412930137
+        },
+        {
+            "id_grading": 4559,
+            "no_invoice": "11148",
+            "gr": 74,
+            "old_cost_kerja": 9801.0392849723,
+            "new_cost_kerja": 9833.743482794578
+        },
+        {
+            "id_grading": 4560,
+            "no_invoice": "11148",
+            "gr": 134,
+            "old_cost_kerja": 17747.827894409,
+            "new_cost_kerja": 17807.049009384777
+        },
+        {
+            "id_grading": 4561,
+            "no_invoice": "11148",
+            "gr": 48,
+            "old_cost_kerja": 6357.4308875496,
+            "new_cost_kerja": 6378.644421272159
+        },
+        {
+            "id_grading": 4562,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_kerja": 29800.457285389,
+            "new_cost_kerja": 29899.895724713242
+        },
+        {
+            "id_grading": 4563,
+            "no_invoice": "11148",
+            "gr": 98,
+            "old_cost_kerja": 12979.754728747,
+            "new_cost_kerja": 13023.065693430657
+        },
+        {
+            "id_grading": 4564,
+            "no_invoice": "11148",
+            "gr": 25,
+            "old_cost_kerja": 3311.1619205988,
+            "new_cost_kerja": 3322.210636079249
+        },
+        {
+            "id_grading": 4565,
+            "no_invoice": "11148",
+            "gr": 45,
+            "old_cost_kerja": 5960.0914570778,
+            "new_cost_kerja": 5979.979144942649
+        },
+        {
+            "id_grading": 4566,
+            "no_invoice": "11148",
+            "gr": 31,
+            "old_cost_kerja": 4105.8407815425,
+            "new_cost_kerja": 4119.54118873827
+        },
+        {
+            "id_grading": 4567,
+            "no_invoice": "11148",
+            "gr": 91,
+            "old_cost_kerja": 12052.629390979,
+            "new_cost_kerja": 12092.846715328467
+        },
+        {
+            "id_grading": 4568,
+            "no_invoice": "11148",
+            "gr": 111,
+            "old_cost_kerja": 14701.558927458,
+            "new_cost_kerja": 14750.615224191866
+        },
+        {
+            "id_grading": 4569,
+            "no_invoice": "11148",
+            "gr": 132,
+            "old_cost_kerja": 17482.934940761,
+            "new_cost_kerja": 17541.272158498436
+        },
+        {
+            "id_grading": 4570,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_kerja": 29800.457285389,
+            "new_cost_kerja": 29899.895724713242
+        },
+        {
+            "id_grading": 4571,
+            "no_invoice": "11148",
+            "gr": 33,
+            "old_cost_kerja": 4370.7337351904,
+            "new_cost_kerja": 4385.318039624609
+        },
+        {
+            "id_grading": 4572,
+            "no_invoice": "11148",
+            "gr": 76,
+            "old_cost_kerja": 10065.93223862,
+            "new_cost_kerja": 10099.520333680917
+        },
+        {
+            "id_grading": 4573,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_kerja": 3443.6083974227,
+            "new_cost_kerja": 3455.099061522419
+        },
+        {
+            "id_grading": 4574,
+            "no_invoice": "11148",
+            "gr": 221,
+            "old_cost_kerja": 29270.671378093,
+            "new_cost_kerja": 29368.342022940564
+        },
+        {
+            "id_grading": 4575,
+            "no_invoice": "11148",
+            "gr": 22,
+            "old_cost_kerja": 2913.8224901269,
+            "new_cost_kerja": 2923.545359749739
+        },
+        {
+            "id_grading": 4576,
+            "no_invoice": "11148",
+            "gr": 70,
+            "old_cost_kerja": 9271.2533776765,
+            "new_cost_kerja": 9302.189781021898
+        },
+        {
+            "id_grading": 4577,
+            "no_invoice": "11148",
+            "gr": 22,
+            "old_cost_kerja": 2913.8224901269,
+            "new_cost_kerja": 2923.545359749739
+        },
+        {
+            "id_grading": 4578,
+            "no_invoice": "11148",
+            "gr": 194,
+            "old_cost_kerja": 25694.616503846,
+            "new_cost_kerja": 25780.354535974973
+        },
+        {
+            "id_grading": 4579,
+            "no_invoice": "11148",
+            "gr": 28,
+            "old_cost_kerja": 3708.5013510706,
+            "new_cost_kerja": 3720.8759124087587
+        },
+        {
+            "id_grading": 4580,
+            "no_invoice": "11148",
+            "gr": 31,
+            "old_cost_kerja": 4105.8407815425,
+            "new_cost_kerja": 4119.54118873827
+        },
+        {
+            "id_grading": 4581,
+            "no_invoice": "11148",
+            "gr": 372,
+            "old_cost_kerja": 49270.089378509,
+            "new_cost_kerja": 49434.49426485923
+        },
+        {
+            "id_grading": 4582,
+            "no_invoice": "11148",
+            "gr": 25,
+            "old_cost_kerja": 3311.1619205988,
+            "new_cost_kerja": 3322.210636079249
+        },
+        {
+            "id_grading": 4583,
+            "no_invoice": "11148",
+            "gr": 59,
+            "old_cost_kerja": 7814.3421326131,
+            "new_cost_kerja": 7840.417101147028
+        },
+        {
+            "id_grading": 4584,
+            "no_invoice": "11148",
+            "gr": 43,
+            "old_cost_kerja": 5695.1985034299,
+            "new_cost_kerja": 5714.202294056308
+        },
+        {
+            "id_grading": 4585,
+            "no_invoice": "11148",
+            "gr": 108,
+            "old_cost_kerja": 14304.219496987,
+            "new_cost_kerja": 14351.949947862357
+        },
+        {
+            "id_grading": 4586,
+            "no_invoice": "11148",
+            "gr": 76,
+            "old_cost_kerja": 10065.93223862,
+            "new_cost_kerja": 10099.520333680917
+        },
+        {
+            "id_grading": 4587,
+            "no_invoice": "11148",
+            "gr": 5,
+            "old_cost_kerja": 662.23238411975,
+            "new_cost_kerja": 664.4421272158498
+        },
+        {
+            "id_grading": 4588,
+            "no_invoice": "11148",
+            "gr": 41,
+            "old_cost_kerja": 5430.305549782,
+            "new_cost_kerja": 5448.425443169968
+        },
+        {
+            "id_grading": 4589,
+            "no_invoice": "11148",
+            "gr": 7,
+            "old_cost_kerja": 927.12533776765,
+            "new_cost_kerja": 930.2189781021897
+        },
+        {
+            "id_grading": 4590,
+            "no_invoice": "11148",
+            "gr": 142,
+            "old_cost_kerja": 18807.399709001,
+            "new_cost_kerja": 18870.156412930137
+        },
+        {
+            "id_grading": 4591,
+            "no_invoice": "11148",
+            "gr": 162,
+            "old_cost_kerja": 21456.32924548,
+            "new_cost_kerja": 21527.924921793536
+        },
+        {
+            "id_grading": 4592,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_kerja": 29800.457285389,
+            "new_cost_kerja": 29899.895724713242
+        },
+        {
+            "id_grading": 4593,
+            "no_invoice": "11148",
+            "gr": 38,
+            "old_cost_kerja": 5032.9661193101,
+            "new_cost_kerja": 5049.760166840459
+        },
+        {
+            "id_grading": 4594,
+            "no_invoice": "11148",
+            "gr": 50,
+            "old_cost_kerja": 6622.3238411975,
+            "new_cost_kerja": 6644.421272158498
+        },
+        {
+            "id_grading": 4595,
+            "no_invoice": "11148",
+            "gr": 68,
+            "old_cost_kerja": 9006.3604240286,
+            "new_cost_kerja": 9036.412930135559
+        },
+        {
+            "id_grading": 4596,
+            "no_invoice": "11148",
+            "gr": 37,
+            "old_cost_kerja": 7019.6632716694,
+            "new_cost_kerja": 4916.871741397306
+        },
+        {
+            "id_grading": 4266,
+            "no_invoice": "11149",
+            "gr": 255,
+            "old_cost_kerja": 329939.17637765,
+            "new_cost_kerja": 330191.0033576931
+        },
+        {
+            "id_grading": 4267,
+            "no_invoice": "11149",
+            "gr": 357,
+            "old_cost_kerja": 461914.84692871,
+            "new_cost_kerja": 462267.4047007703
+        },
+        {
+            "id_grading": 4268,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4269,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4270,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4271,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4272,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4273,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4274,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4275,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4276,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4277,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4278,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4279,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4280,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4281,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4282,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4283,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4284,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4285,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4286,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4287,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_kerja": 582245.60537232,
+            "new_cost_kerja": 582690.0059253407
+        },
+        {
+            "id_grading": 4288,
+            "no_invoice": "11149",
+            "gr": 283,
+            "old_cost_kerja": 366167.79182304,
+            "new_cost_kerja": 366447.2703930476
+        },
+        {
+            "id_grading": 4289,
+            "no_invoice": "11149",
+            "gr": 231,
+            "old_cost_kerja": 298886.07742446,
+            "new_cost_kerja": 299114.20304167643
+        },
+        {
+            "id_grading": 4347,
+            "no_invoice": "11157",
+            "gr": 167,
+            "old_cost_kerja": 261986.53233365,
+            "new_cost_kerja": 261925.16280159284
+        },
+        {
+            "id_grading": 4348,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4349,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4350,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4351,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4352,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4353,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4354,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4355,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_kerja": 705951.73383318,
+            "new_cost_kerja": 705786.3668306395
+        },
+        {
+            "id_grading": 4356,
+            "no_invoice": "11157",
+            "gr": 206,
+            "old_cost_kerja": 323169.01593252,
+            "new_cost_kerja": 323093.31459358166
+        },
+        {
+            "id_grading": 4357,
+            "no_invoice": "11157",
+            "gr": 296,
+            "old_cost_kerja": 462790.58106842,
+            "new_cost_kerja": 464250.5879597096
+        },
+        {
+            "id_grading": 5296,
+            "no_invoice": "11171",
+            "gr": 170,
+            "old_cost_kerja": 31835.356825585,
+            "new_cost_kerja": 30664.939295232456
+        },
+        {
+            "id_grading": 5297,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5298,
+            "no_invoice": "11171",
+            "gr": 123,
+            "old_cost_kerja": 23033.816997335,
+            "new_cost_kerja": 22186.985490079955
+        },
+        {
+            "id_grading": 5299,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5300,
+            "no_invoice": "11171",
+            "gr": 146,
+            "old_cost_kerja": 27340.953509031,
+            "new_cost_kerja": 26335.77139472905
+        },
+        {
+            "id_grading": 5301,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5302,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5303,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5304,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5305,
+            "no_invoice": "11171",
+            "gr": 190,
+            "old_cost_kerja": 35580.692922712,
+            "new_cost_kerja": 34272.579212318626
+        },
+        {
+            "id_grading": 5306,
+            "no_invoice": "11171",
+            "gr": 169,
+            "old_cost_kerja": 31648.090020728,
+            "new_cost_kerja": 30484.557299378146
+        },
+        {
+            "id_grading": 5307,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5308,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5309,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5310,
+            "no_invoice": "11171",
+            "gr": 85,
+            "old_cost_kerja": 15917.678412792,
+            "new_cost_kerja": 15332.469647616228
+        },
+        {
+            "id_grading": 5311,
+            "no_invoice": "11171",
+            "gr": 111,
+            "old_cost_kerja": 20786.615339058,
+            "new_cost_kerja": 20022.401539828246
+        },
+        {
+            "id_grading": 5312,
+            "no_invoice": "11171",
+            "gr": 118,
+            "old_cost_kerja": 22097.482973053,
+            "new_cost_kerja": 21285.07551080841
+        },
+        {
+            "id_grading": 5313,
+            "no_invoice": "11171",
+            "gr": 74,
+            "old_cost_kerja": 13857.743559372,
+            "new_cost_kerja": 13348.267693218833
+        },
+        {
+            "id_grading": 5314,
+            "no_invoice": "11171",
+            "gr": 126,
+            "old_cost_kerja": 23595.617411904,
+            "new_cost_kerja": 22728.131477642877
+        },
+        {
+            "id_grading": 5315,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5316,
+            "no_invoice": "11171",
+            "gr": 109,
+            "old_cost_kerja": 20412.081729345,
+            "new_cost_kerja": 19661.63754811963
+        },
+        {
+            "id_grading": 5317,
+            "no_invoice": "11171",
+            "gr": 25,
+            "old_cost_kerja": 4681.6701214095,
+            "new_cost_kerja": 4509.549896357714
+        },
+        {
+            "id_grading": 5318,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5319,
+            "no_invoice": "11171",
+            "gr": 21,
+            "old_cost_kerja": 3932.602901984,
+            "new_cost_kerja": 3788.0219129404795
+        },
+        {
+            "id_grading": 5320,
+            "no_invoice": "11171",
+            "gr": 17,
+            "old_cost_kerja": 3183.5356825585,
+            "new_cost_kerja": 3066.4939295232457
+        },
+        {
+            "id_grading": 5321,
+            "no_invoice": "11171",
+            "gr": 95,
+            "old_cost_kerja": 17790.346461356,
+            "new_cost_kerja": 17136.289606159313
+        },
+        {
+            "id_grading": 5322,
+            "no_invoice": "11171",
+            "gr": 77,
+            "old_cost_kerja": 14419.543973941,
+            "new_cost_kerja": 13889.41368078176
+        },
+        {
+            "id_grading": 5323,
+            "no_invoice": "11171",
+            "gr": 90,
+            "old_cost_kerja": 16854.012437074,
+            "new_cost_kerja": 16234.37962688777
+        },
+        {
+            "id_grading": 5324,
+            "no_invoice": "11171",
+            "gr": 33,
+            "old_cost_kerja": 6179.8045602605,
+            "new_cost_kerja": 5952.6058631921815
+        },
+        {
+            "id_grading": 5325,
+            "no_invoice": "11171",
+            "gr": 87,
+            "old_cost_kerja": 16292.212022505,
+            "new_cost_kerja": 15693.233639324846
+        },
+        {
+            "id_grading": 5326,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5327,
+            "no_invoice": "11171",
+            "gr": 121,
+            "old_cost_kerja": 22659.283387622,
+            "new_cost_kerja": 21826.22149837134
+        },
+        {
+            "id_grading": 5328,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5329,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5330,
+            "no_invoice": "11171",
+            "gr": 225,
+            "old_cost_kerja": 42135.031092685,
+            "new_cost_kerja": 40585.94906721942
+        },
+        {
+            "id_grading": 5331,
+            "no_invoice": "11171",
+            "gr": 76,
+            "old_cost_kerja": 14232.277169085,
+            "new_cost_kerja": 13709.03168492745
+        },
+        {
+            "id_grading": 5332,
+            "no_invoice": "11171",
+            "gr": 40,
+            "old_cost_kerja": 7490.6721942552,
+            "new_cost_kerja": 7215.279834172342
+        },
+        {
+            "id_grading": 5333,
+            "no_invoice": "11171",
+            "gr": 44,
+            "old_cost_kerja": 8239.7394136807,
+            "new_cost_kerja": 7936.807817589577
+        },
+        {
+            "id_grading": 5334,
+            "no_invoice": "11171",
+            "gr": 24,
+            "old_cost_kerja": 4494.4033165531,
+            "new_cost_kerja": 4329.167900503406
+        },
+        {
+            "id_grading": 5335,
+            "no_invoice": "11171",
+            "gr": 67,
+            "old_cost_kerja": 12546.875925377,
+            "new_cost_kerja": 12085.593722238675
+        },
+        {
+            "id_grading": 5336,
+            "no_invoice": "11171",
+            "gr": 71,
+            "old_cost_kerja": 13295.943144803,
+            "new_cost_kerja": 12807.121705655909
+        },
+        {
+            "id_grading": 5337,
+            "no_invoice": "11171",
+            "gr": 68,
+            "old_cost_kerja": 12734.142730234,
+            "new_cost_kerja": 12265.975718092983
+        },
+        {
+            "id_grading": 5338,
+            "no_invoice": "11171",
+            "gr": 43,
+            "old_cost_kerja": 8052.4726088243,
+            "new_cost_kerja": 7756.425821735268
+        },
+        {
+            "id_grading": 5339,
+            "no_invoice": "11171",
+            "gr": 102,
+            "old_cost_kerja": 19101.214095351,
+            "new_cost_kerja": 18398.96357713947
+        },
+        {
+            "id_grading": 5340,
+            "no_invoice": "11171",
+            "gr": 17,
+            "old_cost_kerja": 3183.5356825585,
+            "new_cost_kerja": 3066.4939295232457
+        },
+        {
+            "id_grading": 5341,
+            "no_invoice": "11171",
+            "gr": 33,
+            "old_cost_kerja": 6179.8045602605,
+            "new_cost_kerja": 5952.6058631921815
+        },
+        {
+            "id_grading": 5342,
+            "no_invoice": "11171",
+            "gr": 23,
+            "old_cost_kerja": 4307.1365116967,
+            "new_cost_kerja": 4148.785904649097
+        },
+        {
+            "id_grading": 5343,
+            "no_invoice": "11171",
+            "gr": 24,
+            "old_cost_kerja": 4494.4033165531,
+            "new_cost_kerja": 4329.167900503406
+        },
+        {
+            "id_grading": 5344,
+            "no_invoice": "11171",
+            "gr": 174,
+            "old_cost_kerja": 32584.42404501,
+            "new_cost_kerja": 31386.467278649692
+        },
+        {
+            "id_grading": 5345,
+            "no_invoice": "11171",
+            "gr": 13,
+            "old_cost_kerja": 2434.4684631329,
+            "new_cost_kerja": 2344.9659461060114
+        },
+        {
+            "id_grading": 5346,
+            "no_invoice": "11171",
+            "gr": 55,
+            "old_cost_kerja": 10299.674267101,
+            "new_cost_kerja": 9921.00977198697
+        },
+        {
+            "id_grading": 5347,
+            "no_invoice": "11171",
+            "gr": 22,
+            "old_cost_kerja": 4119.8697068404,
+            "new_cost_kerja": 3968.4039087947885
+        },
+        {
+            "id_grading": 5348,
+            "no_invoice": "11171",
+            "gr": 15,
+            "old_cost_kerja": 2809.0020728457,
+            "new_cost_kerja": 2705.729937814628
+        },
+        {
+            "id_grading": 5349,
+            "no_invoice": "11171",
+            "gr": 197,
+            "old_cost_kerja": 36891.560556707,
+            "new_cost_kerja": 35535.25318329879
+        },
+        {
+            "id_grading": 5350,
+            "no_invoice": "11171",
+            "gr": 28,
+            "old_cost_kerja": 5243.4705359786,
+            "new_cost_kerja": 5050.69588392064
+        },
+        {
+            "id_grading": 5351,
+            "no_invoice": "11171",
+            "gr": 54,
+            "old_cost_kerja": 10112.407462245,
+            "new_cost_kerja": 9740.627776132662
+        },
+        {
+            "id_grading": 5352,
+            "no_invoice": "11171",
+            "gr": 139,
+            "old_cost_kerja": 26030.085875037,
+            "new_cost_kerja": 25073.097423748888
+        },
+        {
+            "id_grading": 5353,
+            "no_invoice": "11171",
+            "gr": 63,
+            "old_cost_kerja": 11797.808705952,
+            "new_cost_kerja": 11364.065738821635
+        },
+        {
+            "id_grading": 5254,
+            "no_invoice": "11172",
+            "gr": 75,
+            "old_cost_kerja": 9082.726697262,
+            "new_cost_kerja": 8563.459408134198
+        },
+        {
+            "id_grading": 5255,
+            "no_invoice": "11172",
+            "gr": 58,
+            "old_cost_kerja": 7023.9753125493,
+            "new_cost_kerja": 6622.408608957113
+        },
+        {
+            "id_grading": 5256,
+            "no_invoice": "11172",
+            "gr": 8,
+            "old_cost_kerja": 968.82418104128,
+            "new_cost_kerja": 913.4356702009812
+        },
+        {
+            "id_grading": 5257,
+            "no_invoice": "11172",
+            "gr": 16,
+            "old_cost_kerja": 1937.6483620826,
+            "new_cost_kerja": 1826.8713404019625
+        },
+        {
+            "id_grading": 5258,
+            "no_invoice": "11172",
+            "gr": 40,
+            "old_cost_kerja": 4844.1209052064,
+            "new_cost_kerja": 4567.178351004905
+        },
+        {
+            "id_grading": 5259,
+            "no_invoice": "11172",
+            "gr": 348,
+            "old_cost_kerja": 42143.851875296,
+            "new_cost_kerja": 39734.45165374268
+        },
+        {
+            "id_grading": 5260,
+            "no_invoice": "11172",
+            "gr": 188,
+            "old_cost_kerja": 22767.36825447,
+            "new_cost_kerja": 21465.738249723057
+        },
+        {
+            "id_grading": 5261,
+            "no_invoice": "11172",
+            "gr": 221,
+            "old_cost_kerja": 26763.768001265,
+            "new_cost_kerja": 25233.660389302106
+        },
+        {
+            "id_grading": 5262,
+            "no_invoice": "11172",
+            "gr": 395,
+            "old_cost_kerja": 47835.693938913,
+            "new_cost_kerja": 45100.88621617344
+        },
+        {
+            "id_grading": 5263,
+            "no_invoice": "11172",
+            "gr": 84,
+            "old_cost_kerja": 10172.653900933,
+            "new_cost_kerja": 9591.074537110302
+        },
+        {
+            "id_grading": 5264,
+            "no_invoice": "11172",
+            "gr": 98,
+            "old_cost_kerja": 11868.096217756,
+            "new_cost_kerja": 11189.58695996202
+        },
+        {
+            "id_grading": 5265,
+            "no_invoice": "11172",
+            "gr": 148,
+            "old_cost_kerja": 17923.247349264,
+            "new_cost_kerja": 16898.55989871815
+        },
+        {
+            "id_grading": 5266,
+            "no_invoice": "11172",
+            "gr": 69,
+            "old_cost_kerja": 8356.108561481,
+            "new_cost_kerja": 7878.382655483462
+        },
+        {
+            "id_grading": 5267,
+            "no_invoice": "11172",
+            "gr": 31,
+            "old_cost_kerja": 3754.193701535,
+            "new_cost_kerja": 3539.563222028802
+        },
+        {
+            "id_grading": 5268,
+            "no_invoice": "11172",
+            "gr": 330,
+            "old_cost_kerja": 39963.997467953,
+            "new_cost_kerja": 37679.22139579047
+        },
+        {
+            "id_grading": 5269,
+            "no_invoice": "11172",
+            "gr": 326,
+            "old_cost_kerja": 39479.585377432,
+            "new_cost_kerja": 37222.503560689984
+        },
+        {
+            "id_grading": 5270,
+            "no_invoice": "11172",
+            "gr": 332,
+            "old_cost_kerja": 40206.203513213,
+            "new_cost_kerja": 37907.58031334072
+        },
+        {
+            "id_grading": 5271,
+            "no_invoice": "11172",
+            "gr": 316,
+            "old_cost_kerja": 38268.555151131,
+            "new_cost_kerja": 36080.70897293876
+        },
+        {
+            "id_grading": 5272,
+            "no_invoice": "11172",
+            "gr": 166,
+            "old_cost_kerja": 20103.101756607,
+            "new_cost_kerja": 18953.79015667036
+        },
+        {
+            "id_grading": 5273,
+            "no_invoice": "11172",
+            "gr": 42,
+            "old_cost_kerja": 5086.3269504667,
+            "new_cost_kerja": 4795.537268555151
+        },
+        {
+            "id_grading": 5274,
+            "no_invoice": "11172",
+            "gr": 276,
+            "old_cost_kerja": 33424.434245924,
+            "new_cost_kerja": 31513.53062193385
+        },
+        {
+            "id_grading": 5275,
+            "no_invoice": "11172",
+            "gr": 26,
+            "old_cost_kerja": 3148.6785883842,
+            "new_cost_kerja": 2968.665928153189
+        },
+        {
+            "id_grading": 5276,
+            "no_invoice": "11172",
+            "gr": 66,
+            "old_cost_kerja": 7992.7994935906,
+            "new_cost_kerja": 7535.844279158095
+        },
+        {
+            "id_grading": 5277,
+            "no_invoice": "11172",
+            "gr": 68,
+            "old_cost_kerja": 8235.0055388509,
+            "new_cost_kerja": 7764.203196708339
+        },
+        {
+            "id_grading": 5278,
+            "no_invoice": "11172",
+            "gr": 13,
+            "old_cost_kerja": 1574.3392941921,
+            "new_cost_kerja": 1484.3329640765944
+        },
+        {
+            "id_grading": 5279,
+            "no_invoice": "11172",
+            "gr": 127,
+            "old_cost_kerja": 15380.08387403,
+            "new_cost_kerja": 14500.791264440575
+        },
+        {
+            "id_grading": 5280,
+            "no_invoice": "11172",
+            "gr": 44,
+            "old_cost_kerja": 5328.532995727,
+            "new_cost_kerja": 5023.896186105396
+        },
+        {
+            "id_grading": 5281,
+            "no_invoice": "11172",
+            "gr": 450,
+            "old_cost_kerja": 54496.360183572,
+            "new_cost_kerja": 51380.75644880519
+        },
+        {
+            "id_grading": 5282,
+            "no_invoice": "11172",
+            "gr": 35,
+            "old_cost_kerja": 4238.6057920556,
+            "new_cost_kerja": 3996.2810571292925
+        },
+        {
+            "id_grading": 5283,
+            "no_invoice": "11172",
+            "gr": 194,
+            "old_cost_kerja": 23493.986390251,
+            "new_cost_kerja": 22150.815002373794
+        },
+        {
+            "id_grading": 5284,
+            "no_invoice": "11172",
+            "gr": 225,
+            "old_cost_kerja": 27248.180091786,
+            "new_cost_kerja": 25690.378224402593
+        },
+        {
+            "id_grading": 5285,
+            "no_invoice": "11172",
+            "gr": 225,
+            "old_cost_kerja": 27248.180091786,
+            "new_cost_kerja": 25690.378224402593
+        },
+        {
+            "id_grading": 5286,
+            "no_invoice": "11172",
+            "gr": 197,
+            "old_cost_kerja": 23857.295458142,
+            "new_cost_kerja": 22493.35337869916
+        },
+        {
+            "id_grading": 5287,
+            "no_invoice": "11172",
+            "gr": 225,
+            "old_cost_kerja": 27248.180091786,
+            "new_cost_kerja": 25690.378224402593
+        },
+        {
+            "id_grading": 5288,
+            "no_invoice": "11172",
+            "gr": 28,
+            "old_cost_kerja": 3390.8846336445,
+            "new_cost_kerja": 3197.0248457034345
+        },
+        {
+            "id_grading": 5289,
+            "no_invoice": "11172",
+            "gr": 68,
+            "old_cost_kerja": 8235.0055388509,
+            "new_cost_kerja": 7764.203196708339
+        },
+        {
+            "id_grading": 5290,
+            "no_invoice": "11172",
+            "gr": 36,
+            "old_cost_kerja": 4359.7088146858,
+            "new_cost_kerja": 4110.460515904416
+        },
+        {
+            "id_grading": 5291,
+            "no_invoice": "11172",
+            "gr": 50,
+            "old_cost_kerja": 6055.151131508,
+            "new_cost_kerja": 5708.972938756132
+        },
+        {
+            "id_grading": 5292,
+            "no_invoice": "11172",
+            "gr": 225,
+            "old_cost_kerja": 27248.180091786,
+            "new_cost_kerja": 25690.378224402593
+        },
+        {
+            "id_grading": 5293,
+            "no_invoice": "11172",
+            "gr": 40,
+            "old_cost_kerja": 4844.1209052064,
+            "new_cost_kerja": 4567.178351004905
+        },
+        {
+            "id_grading": 5294,
+            "no_invoice": "11172",
+            "gr": 90,
+            "old_cost_kerja": 10899.272036714,
+            "new_cost_kerja": 10276.151289761037
+        },
+        {
+            "id_grading": 5295,
+            "no_invoice": "11172",
+            "gr": 320,
+            "old_cost_kerja": 38752.967241651,
+            "new_cost_kerja": 36537.426808039425
+        },
+        {
+            "id_grading": 5653,
+            "no_invoice": "11182",
+            "gr": 175,
+            "old_cost_kerja": 29896.364408838,
+            "new_cost_kerja": 26460.305899490166
+        },
+        {
+            "id_grading": 5654,
+            "no_invoice": "11182",
+            "gr": 65,
+            "old_cost_kerja": 11104.363923283,
+            "new_cost_kerja": 9828.113619810634
+        },
+        {
+            "id_grading": 5655,
+            "no_invoice": "11182",
+            "gr": 206,
+            "old_cost_kerja": 35192.291818403,
+            "new_cost_kerja": 31147.560087399856
+        },
+        {
+            "id_grading": 5656,
+            "no_invoice": "11182",
+            "gr": 229,
+            "old_cost_kerja": 39121.528283565,
+            "new_cost_kerja": 34625.20029133285
+        },
+        {
+            "id_grading": 5657,
+            "no_invoice": "11182",
+            "gr": 209,
+            "old_cost_kerja": 35704.800922555,
+            "new_cost_kerja": 31601.165331391112
+        },
+        {
+            "id_grading": 5658,
+            "no_invoice": "11182",
+            "gr": 54,
+            "old_cost_kerja": 9225.163874727,
+            "new_cost_kerja": 8164.89439184268
+        },
+        {
+            "id_grading": 5659,
+            "no_invoice": "11182",
+            "gr": 450,
+            "old_cost_kerja": 76876.365622725,
+            "new_cost_kerja": 68040.786598689
+        },
+        {
+            "id_grading": 5660,
+            "no_invoice": "11182",
+            "gr": 306,
+            "old_cost_kerja": 52275.928623453,
+            "new_cost_kerja": 46267.73488710852
+        },
+        {
+            "id_grading": 5661,
+            "no_invoice": "11182",
+            "gr": 10,
+            "old_cost_kerja": 1708.363680505,
+            "new_cost_kerja": 1512.0174799708668
+        },
+        {
+            "id_grading": 5662,
+            "no_invoice": "11182",
+            "gr": 33,
+            "old_cost_kerja": 5637.6001456665,
+            "new_cost_kerja": 4989.657683903861
+        },
+        {
+            "id_grading": 5663,
+            "no_invoice": "11182",
+            "gr": 86,
+            "old_cost_kerja": 14691.927652343,
+            "new_cost_kerja": 13003.350327749455
+        },
+        {
+            "id_grading": 5664,
+            "no_invoice": "11182",
+            "gr": 29,
+            "old_cost_kerja": 4954.2546734645,
+            "new_cost_kerja": 4384.850691915513
+        },
+        {
+            "id_grading": 5665,
+            "no_invoice": "11182",
+            "gr": 248,
+            "old_cost_kerja": 42367.419276524,
+            "new_cost_kerja": 37498.03350327749
+        },
+        {
+            "id_grading": 5666,
+            "no_invoice": "11182",
+            "gr": 34,
+            "old_cost_kerja": 5808.436513717,
+            "new_cost_kerja": 5140.859431900947
+        },
+        {
+            "id_grading": 5667,
+            "no_invoice": "11182",
+            "gr": 261,
+            "old_cost_kerja": 44588.292061181,
+            "new_cost_kerja": 39463.65622723962
+        },
+        {
+            "id_grading": 5668,
+            "no_invoice": "11182",
+            "gr": 450,
+            "old_cost_kerja": 76876.365622725,
+            "new_cost_kerja": 68040.786598689
+        },
+        {
+            "id_grading": 5669,
+            "no_invoice": "11182",
+            "gr": 51,
+            "old_cost_kerja": 8712.6547705755,
+            "new_cost_kerja": 7711.28914785142
+        },
+        {
+            "id_grading": 5670,
+            "no_invoice": "11182",
+            "gr": 48,
+            "old_cost_kerja": 8200.145666424,
+            "new_cost_kerja": 7257.68390386016
+        },
+        {
+            "id_grading": 5671,
+            "no_invoice": "11182",
+            "gr": 55,
+            "old_cost_kerja": 9396.0002427775,
+            "new_cost_kerja": 8316.096139839767
+        },
+        {
+            "id_grading": 5672,
+            "no_invoice": "11182",
+            "gr": 107,
+            "old_cost_kerja": 18279.491381403,
+            "new_cost_kerja": 16178.587035688273
+        },
+        {
+            "id_grading": 5673,
+            "no_invoice": "11182",
+            "gr": 101,
+            "old_cost_kerja": 17254.473173101,
+            "new_cost_kerja": 15271.376547705755
+        },
+        {
+            "id_grading": 5674,
+            "no_invoice": "11182",
+            "gr": 52,
+            "old_cost_kerja": 8883.491138626,
+            "new_cost_kerja": 7862.490895848507
+        },
+        {
+            "id_grading": 5675,
+            "no_invoice": "11182",
+            "gr": 107,
+            "old_cost_kerja": 18279.491381403,
+            "new_cost_kerja": 16178.587035688273
+        },
+        {
+            "id_grading": 5676,
+            "no_invoice": "11182",
+            "gr": 140,
+            "old_cost_kerja": 23917.09152707,
+            "new_cost_kerja": 21168.244719592134
+        },
+        {
+            "id_grading": 5677,
+            "no_invoice": "11182",
+            "gr": 91,
+            "old_cost_kerja": 15546.109492596,
+            "new_cost_kerja": 13759.359067734888
+        },
+        {
+            "id_grading": 5678,
+            "no_invoice": "11182",
+            "gr": 62,
+            "old_cost_kerja": 10591.854819131,
+            "new_cost_kerja": 9374.508375819372
+        },
+        {
+            "id_grading": 5679,
+            "no_invoice": "11182",
+            "gr": 114,
+            "old_cost_kerja": 19475.345957757,
+            "new_cost_kerja": 17236.99927166788
+        },
+        {
+            "id_grading": 5680,
+            "no_invoice": "11182",
+            "gr": 225,
+            "old_cost_kerja": 38438.182811363,
+            "new_cost_kerja": 34020.3932993445
+        },
+        {
+            "id_grading": 5681,
+            "no_invoice": "11182",
+            "gr": 151,
+            "old_cost_kerja": 25796.291575626,
+            "new_cost_kerja": 22831.46394756009
+        },
+        {
+            "id_grading": 5682,
+            "no_invoice": "11182",
+            "gr": 42,
+            "old_cost_kerja": 7175.127458121,
+            "new_cost_kerja": 6350.47341587764
+        },
+        {
+            "id_grading": 5683,
+            "no_invoice": "11182",
+            "gr": 33,
+            "old_cost_kerja": 5637.6001456665,
+            "new_cost_kerja": 4989.657683903861
+        },
+        {
+            "id_grading": 5684,
+            "no_invoice": "11182",
+            "gr": 140,
+            "old_cost_kerja": 23917.09152707,
+            "new_cost_kerja": 21168.244719592134
+        },
+        {
+            "id_grading": 5685,
+            "no_invoice": "11182",
+            "gr": 225,
+            "old_cost_kerja": 38438.182811363,
+            "new_cost_kerja": 34020.3932993445
+        },
+        {
+            "id_grading": 5686,
+            "no_invoice": "11182",
+            "gr": 225,
+            "old_cost_kerja": 38438.182811363,
+            "new_cost_kerja": 34020.3932993445
+        },
+        {
+            "id_grading": 5687,
+            "no_invoice": "11182",
+            "gr": 200,
+            "old_cost_kerja": 34167.2736101,
+            "new_cost_kerja": 30240.349599417335
+        },
+        {
+            "id_grading": 5688,
+            "no_invoice": "11182",
+            "gr": 60,
+            "old_cost_kerja": 10250.18208303,
+            "new_cost_kerja": 9072.1048798252
+        },
+        {
+            "id_grading": 5689,
+            "no_invoice": "11182",
+            "gr": 46,
+            "old_cost_kerja": 7858.472930323,
+            "new_cost_kerja": 6955.2804078659865
+        },
+        {
+            "id_grading": 5690,
+            "no_invoice": "11182",
+            "gr": 93,
+            "old_cost_kerja": 15887.782228697,
+            "new_cost_kerja": 14061.76256372906
+        },
+        {
+            "id_grading": 5691,
+            "no_invoice": "11182",
+            "gr": 95,
+            "old_cost_kerja": 16229.454964798,
+            "new_cost_kerja": 14364.166059723233
+        },
+        {
+            "id_grading": 5692,
+            "no_invoice": "11182",
+            "gr": 79,
+            "old_cost_kerja": 13496.073075989,
+            "new_cost_kerja": 11944.938091769845
+        },
+        {
+            "id_grading": 5693,
+            "no_invoice": "11182",
+            "gr": 104,
+            "old_cost_kerja": 17766.982277252,
+            "new_cost_kerja": 15724.981791697013
+        },
+        {
+            "id_grading": 5694,
+            "no_invoice": "11182",
+            "gr": 135,
+            "old_cost_kerja": 23062.909686818,
+            "new_cost_kerja": 20412.2359796067
+        },
+        {
+            "id_grading": 5695,
+            "no_invoice": "11182",
+            "gr": 149,
+            "old_cost_kerja": 25454.618839525,
+            "new_cost_kerja": 22529.060451565914
+        },
+        {
+            "id_grading": 5696,
+            "no_invoice": "11182",
+            "gr": 71,
+            "old_cost_kerja": 12129.382131586,
+            "new_cost_kerja": 10735.324107793154
+        },
+        {
+            "id_grading": 5697,
+            "no_invoice": "11182",
+            "gr": 39,
+            "old_cost_kerja": 6662.6183539695,
+            "new_cost_kerja": 5896.86817188638
+        },
+        {
+            "id_grading": 5698,
+            "no_invoice": "11182",
+            "gr": 69,
+            "old_cost_kerja": 11787.709395485,
+            "new_cost_kerja": 10432.92061179898
+        },
+        {
+            "id_grading": 5699,
+            "no_invoice": "11182",
+            "gr": 61,
+            "old_cost_kerja": 10421.018451081,
+            "new_cost_kerja": 9223.306627822287
+        },
+        {
+            "id_grading": 5700,
+            "no_invoice": "11182",
+            "gr": 81,
+            "old_cost_kerja": 13837.745812091,
+            "new_cost_kerja": 12247.341587764022
+        },
+        {
+            "id_grading": 5701,
+            "no_invoice": "11182",
+            "gr": 86,
+            "old_cost_kerja": 14691.927652343,
+            "new_cost_kerja": 13003.350327749455
+        },
+        {
+            "id_grading": 5702,
+            "no_invoice": "11182",
+            "gr": 225,
+            "old_cost_kerja": 38438.182811363,
+            "new_cost_kerja": 34020.3932993445
+        },
+        {
+            "id_grading": 5703,
+            "no_invoice": "11182",
+            "gr": 124,
+            "old_cost_kerja": 21183.709638262,
+            "new_cost_kerja": 18749.016751638745
+        },
+        {
+            "id_grading": 5704,
+            "no_invoice": "11182",
+            "gr": 133,
+            "old_cost_kerja": 22721.236950716,
+            "new_cost_kerja": 20109.832483612525
+        },
+        {
+            "id_grading": 5705,
+            "no_invoice": "11182",
+            "gr": 123,
+            "old_cost_kerja": 21012.873270212,
+            "new_cost_kerja": 18597.81500364166
+        },
+        {
+            "id_grading": 5706,
+            "no_invoice": "11182",
+            "gr": 225,
+            "old_cost_kerja": 38438.182811363,
+            "new_cost_kerja": 34020.3932993445
+        },
+        {
+            "id_grading": 5707,
+            "no_invoice": "11182",
+            "gr": 202,
+            "old_cost_kerja": 34508.946346201,
+            "new_cost_kerja": 30542.75309541151
+        },
+        {
+            "id_grading": 5708,
+            "no_invoice": "11182",
+            "gr": 410,
+            "old_cost_kerja": 70042.910900705,
+            "new_cost_kerja": 61992.71667880553
+        },
+        {
+            "id_grading": 5709,
+            "no_invoice": "11182",
+            "gr": 450,
+            "old_cost_kerja": 76876.365622725,
+            "new_cost_kerja": 68040.786598689
+        },
+        {
+            "id_grading": 5710,
+            "no_invoice": "11182",
+            "gr": 61,
+            "old_cost_kerja": 10421.018451081,
+            "new_cost_kerja": 9223.306627822287
+        },
+        {
+            "id_grading": 5711,
+            "no_invoice": "11182",
+            "gr": 86,
+            "old_cost_kerja": 14691.927652343,
+            "new_cost_kerja": 13003.350327749455
+        },
+        {
+            "id_grading": 5712,
+            "no_invoice": "11182",
+            "gr": 17,
+            "old_cost_kerja": 2904.2182568585,
+            "new_cost_kerja": 2570.4297159505077
+        },
+        {
+            "id_grading": 5521,
+            "no_invoice": "11184",
+            "gr": 116,
+            "old_cost_kerja": 7866.2636947488,
+            "new_cost_kerja": 5620.324896108802
+        },
+        {
+            "id_grading": 5522,
+            "no_invoice": "11184",
+            "gr": 81,
+            "old_cost_kerja": 5492.8220627125,
+            "new_cost_kerja": 3924.537211938043
+        },
+        {
+            "id_grading": 5523,
+            "no_invoice": "11184",
+            "gr": 36,
+            "old_cost_kerja": 2441.2542500944,
+            "new_cost_kerja": 1744.2387608613524
+        },
+        {
+            "id_grading": 5524,
+            "no_invoice": "11184",
+            "gr": 122,
+            "old_cost_kerja": 8273.1394030978,
+            "new_cost_kerja": 5911.031356252361
+        },
+        {
+            "id_grading": 5525,
+            "no_invoice": "11184",
+            "gr": 67,
+            "old_cost_kerja": 4543.445409898,
+            "new_cost_kerja": 3246.2221382697394
+        },
+        {
+            "id_grading": 5526,
+            "no_invoice": "11184",
+            "gr": 52,
+            "old_cost_kerja": 3526.2561390253,
+            "new_cost_kerja": 2519.4559879108424
+        },
+        {
+            "id_grading": 5527,
+            "no_invoice": "11184",
+            "gr": 17,
+            "old_cost_kerja": 1152.814506989,
+            "new_cost_kerja": 823.668303740083
+        },
+        {
+            "id_grading": 5528,
+            "no_invoice": "11184",
+            "gr": 10,
+            "old_cost_kerja": 678.12618058179,
+            "new_cost_kerja": 484.5107669059313
+        },
+        {
+            "id_grading": 5529,
+            "no_invoice": "11184",
+            "gr": 12,
+            "old_cost_kerja": 813.75141669815,
+            "new_cost_kerja": 581.4129202871175
+        },
+        {
+            "id_grading": 5530,
+            "no_invoice": "11184",
+            "gr": 189,
+            "old_cost_kerja": 12816.584812996,
+            "new_cost_kerja": 9157.253494522101
+        },
+        {
+            "id_grading": 5531,
+            "no_invoice": "11184",
+            "gr": 12,
+            "old_cost_kerja": 813.75141669815,
+            "new_cost_kerja": 581.4129202871175
+        },
+        {
+            "id_grading": 5532,
+            "no_invoice": "11184",
+            "gr": 15,
+            "old_cost_kerja": 1017.1892708727,
+            "new_cost_kerja": 726.7661503588969
+        },
+        {
+            "id_grading": 5533,
+            "no_invoice": "11184",
+            "gr": 329,
+            "old_cost_kerja": 22310.351341141,
+            "new_cost_kerja": 15940.404231205137
+        },
+        {
+            "id_grading": 5534,
+            "no_invoice": "11184",
+            "gr": 361,
+            "old_cost_kerja": 24480.355119003,
+            "new_cost_kerja": 17490.838685304116
+        },
+        {
+            "id_grading": 5535,
+            "no_invoice": "11184",
+            "gr": 257,
+            "old_cost_kerja": 17427.842840952,
+            "new_cost_kerja": 12451.926709482434
+        },
+        {
+            "id_grading": 5536,
+            "no_invoice": "11184",
+            "gr": 90,
+            "old_cost_kerja": 6103.1356252361,
+            "new_cost_kerja": 4360.596902153381
+        },
+        {
+            "id_grading": 5537,
+            "no_invoice": "11184",
+            "gr": 106,
+            "old_cost_kerja": 7188.137514167,
+            "new_cost_kerja": 5135.814129202871
+        },
+        {
+            "id_grading": 5538,
+            "no_invoice": "11184",
+            "gr": 19,
+            "old_cost_kerja": 1288.4397431054,
+            "new_cost_kerja": 920.5704571212693
+        },
+        {
+            "id_grading": 5539,
+            "no_invoice": "11184",
+            "gr": 25,
+            "old_cost_kerja": 1695.3154514545,
+            "new_cost_kerja": 1211.2769172648282
+        },
+        {
+            "id_grading": 5540,
+            "no_invoice": "11184",
+            "gr": 225,
+            "old_cost_kerja": 15257.83906309,
+            "new_cost_kerja": 10901.492255383453
+        },
+        {
+            "id_grading": 5541,
+            "no_invoice": "11184",
+            "gr": 212,
+            "old_cost_kerja": 14376.275028334,
+            "new_cost_kerja": 10271.628258405743
+        },
+        {
+            "id_grading": 5542,
+            "no_invoice": "11184",
+            "gr": 294,
+            "old_cost_kerja": 19936.909709105,
+            "new_cost_kerja": 14244.616547034384
+        },
+        {
+            "id_grading": 5765,
+            "no_invoice": "11191",
+            "gr": 239,
+            "old_cost_kerja": 15279.455106237,
+            "new_cost_kerja": 12822.292666209732
+        },
+        {
+            "id_grading": 5766,
+            "no_invoice": "11191",
+            "gr": 85,
+            "old_cost_kerja": 5434.1158327621,
+            "new_cost_kerja": 4560.229609321453
+        },
+        {
+            "id_grading": 5767,
+            "no_invoice": "11191",
+            "gr": 168,
+            "old_cost_kerja": 10740.370116518,
+            "new_cost_kerja": 9013.159698423577
+        },
+        {
+            "id_grading": 5768,
+            "no_invoice": "11191",
+            "gr": 28,
+            "old_cost_kerja": 1790.0616860864,
+            "new_cost_kerja": 1502.1932830705964
+        },
+        {
+            "id_grading": 5769,
+            "no_invoice": "11191",
+            "gr": 16,
+            "old_cost_kerja": 1022.8923920493,
+            "new_cost_kerja": 858.3961617546265
+        },
+        {
+            "id_grading": 5770,
+            "no_invoice": "11191",
+            "gr": 64,
+            "old_cost_kerja": 4091.5695681974,
+            "new_cost_kerja": 3433.584647018506
+        },
+        {
+            "id_grading": 5771,
+            "no_invoice": "11191",
+            "gr": 57,
+            "old_cost_kerja": 3644.0541466758,
+            "new_cost_kerja": 3058.0363262508567
+        },
+        {
+            "id_grading": 5772,
+            "no_invoice": "11191",
+            "gr": 36,
+            "old_cost_kerja": 2301.507882111,
+            "new_cost_kerja": 1931.3913639479094
+        },
+        {
+            "id_grading": 5773,
+            "no_invoice": "11191",
+            "gr": 221,
+            "old_cost_kerja": 14128.701165182,
+            "new_cost_kerja": 11856.596984235779
+        },
+        {
+            "id_grading": 5774,
+            "no_invoice": "11191",
+            "gr": 28,
+            "old_cost_kerja": 1790.0616860864,
+            "new_cost_kerja": 1502.1932830705964
+        },
+        {
+            "id_grading": 5775,
+            "no_invoice": "11191",
+            "gr": 12,
+            "old_cost_kerja": 767.16929403701,
+            "new_cost_kerja": 643.7971213159698
+        },
+        {
+            "id_grading": 5776,
+            "no_invoice": "11191",
+            "gr": 72,
+            "old_cost_kerja": 4603.015764222,
+            "new_cost_kerja": 3862.782727895819
+        },
+        {
+            "id_grading": 5777,
+            "no_invoice": "11191",
+            "gr": 131,
+            "old_cost_kerja": 8374.931459904,
+            "new_cost_kerja": 7028.1185743660035
+        },
+        {
+            "id_grading": 5778,
+            "no_invoice": "11191",
+            "gr": 35,
+            "old_cost_kerja": 2237.5771076079,
+            "new_cost_kerja": 1877.7416038382453
+        },
+        {
+            "id_grading": 5779,
+            "no_invoice": "11191",
+            "gr": 139,
+            "old_cost_kerja": 8886.3776559287,
+            "new_cost_kerja": 7457.316655243318
+        },
+        {
+            "id_grading": 5780,
+            "no_invoice": "11191",
+            "gr": 88,
+            "old_cost_kerja": 5625.9081562714,
+            "new_cost_kerja": 4721.178889650446
+        },
+        {
+            "id_grading": 5781,
+            "no_invoice": "11191",
+            "gr": 51,
+            "old_cost_kerja": 3260.4694996573,
+            "new_cost_kerja": 2736.137765592872
+        },
+        {
+            "id_grading": 5782,
+            "no_invoice": "11191",
+            "gr": 16,
+            "old_cost_kerja": 1022.8923920493,
+            "new_cost_kerja": 858.3961617546265
+        },
+        {
+            "id_grading": 5783,
+            "no_invoice": "11191",
+            "gr": 51,
+            "old_cost_kerja": 3260.4694996573,
+            "new_cost_kerja": 2736.137765592872
+        },
+        {
+            "id_grading": 5784,
+            "no_invoice": "11191",
+            "gr": 57,
+            "old_cost_kerja": 3644.0541466758,
+            "new_cost_kerja": 3058.0363262508567
+        },
+        {
+            "id_grading": 5785,
+            "no_invoice": "11191",
+            "gr": 19,
+            "old_cost_kerja": 1214.6847155586,
+            "new_cost_kerja": 1019.345442083619
+        },
+        {
+            "id_grading": 5786,
+            "no_invoice": "11191",
+            "gr": 28,
+            "old_cost_kerja": 1790.0616860864,
+            "new_cost_kerja": 1502.1932830705964
+        },
+        {
+            "id_grading": 5787,
+            "no_invoice": "11191",
+            "gr": 25,
+            "old_cost_kerja": 1598.2693625771,
+            "new_cost_kerja": 1341.2440027416037
+        },
+        {
+            "id_grading": 5788,
+            "no_invoice": "11191",
+            "gr": 11,
+            "old_cost_kerja": 703.23851953392,
+            "new_cost_kerja": 590.1473612063057
+        },
+        {
+            "id_grading": 5789,
+            "no_invoice": "11191",
+            "gr": 23,
+            "old_cost_kerja": 1470.4078135709,
+            "new_cost_kerja": 1233.9444825222756
+        },
+        {
+            "id_grading": 5790,
+            "no_invoice": "11191",
+            "gr": 225,
+            "old_cost_kerja": 14384.424263194,
+            "new_cost_kerja": 12071.196024674435
+        },
+        {
+            "id_grading": 5791,
+            "no_invoice": "11191",
+            "gr": 225,
+            "old_cost_kerja": 14384.424263194,
+            "new_cost_kerja": 12071.196024674435
+        },
+        {
+            "id_grading": 5792,
+            "no_invoice": "11191",
+            "gr": 225,
+            "old_cost_kerja": 14384.424263194,
+            "new_cost_kerja": 12071.196024674435
+        },
+        {
+            "id_grading": 5793,
+            "no_invoice": "11191",
+            "gr": 21,
+            "old_cost_kerja": 1342.5462645648,
+            "new_cost_kerja": 1126.644962302947
+        },
+        {
+            "id_grading": 5794,
+            "no_invoice": "11191",
+            "gr": 92,
+            "old_cost_kerja": 5881.6312542837,
+            "new_cost_kerja": 4935.7779300891025
+        },
+        {
+            "id_grading": 5795,
+            "no_invoice": "11191",
+            "gr": 55,
+            "old_cost_kerja": 3516.1925976696,
+            "new_cost_kerja": 2950.7368060315284
+        },
+        {
+            "id_grading": 5796,
+            "no_invoice": "11191",
+            "gr": 375,
+            "old_cost_kerja": 23974.040438657,
+            "new_cost_kerja": 20118.660041124065
+        }
+    ]
+}

@@ -28,6 +28,8 @@ class CocokanModel extends Model
                 bk.modal_bk,
                 COALESCE(cabut.gaji_cabut, 0) AS gaji_cabut,
                 COALESCE(eo.gaji_eo, 0) AS gaji_eo,
+                COALESCE(cabut.cost_op_cabut, 0)
+                    + COALESCE(eo.cost_op_eo, 0) AS cost_op,
                 COALESCE(cetak.gaji_cetak, 0) AS gaji_cetak,
                 COALESCE(sortir.gaji_sortir, 0) AS gaji_sortir,
                 COALESCE(cabut.gaji_cabut, 0)
@@ -38,7 +40,9 @@ class CocokanModel extends Model
                     + COALESCE(cabut.gaji_cabut, 0)
                     + COALESCE(eo.gaji_eo, 0)
                     + COALESCE(cetak.gaji_cetak, 0)
-                    + COALESCE(sortir.gaji_sortir, 0) AS total_modal
+                    + COALESCE(sortir.gaji_sortir, 0)
+                    + COALESCE(cabut.cost_op_cabut, 0)
+                    + COALESCE(eo.cost_op_eo, 0) AS total_modal
             FROM (
                 SELECT
                     no_box,
@@ -52,12 +56,16 @@ class CocokanModel extends Model
                 GROUP BY no_box
             ) AS bk
             LEFT JOIN (
-                SELECT no_box, SUM(GREATEST(COALESCE(ttl_rp, 0), 0)) AS gaji_cabut
+                SELECT no_box,
+                    SUM(GREATEST(COALESCE(ttl_rp, 0), 0)) AS gaji_cabut,
+                    SUM(COALESCE(cost_op, 0)) AS cost_op_cabut
                 FROM cabut
                 GROUP BY no_box
             ) AS cabut ON cabut.no_box = bk.no_box
             LEFT JOIN (
-                SELECT no_box, SUM(GREATEST(COALESCE(ttl_rp, 0), 0)) AS gaji_eo
+                SELECT no_box,
+                    SUM(GREATEST(COALESCE(ttl_rp, 0), 0)) AS gaji_eo,
+                    SUM(COALESCE(cost_op, 0)) AS cost_op_eo
                 FROM eo
                 GROUP BY no_box
             ) AS eo ON eo.no_box = bk.no_box
@@ -95,10 +103,12 @@ class CocokanModel extends Model
     SUM(sub.pcs) as pcs, 
     SUM(sub.gr) as gr, 
     SUM(sub.ttl_rp) as ttl_rp,
-    sum(sub.cost_kerja) as cost_kerja
+    sum(sub.cost_kerja) as cost_kerja,
+    sum(sub.cost_op) as cost_op
     FROM (
     SELECT sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr ,sum(b.gr_awal * b.hrga_satuan) as ttl_rp,
-           sum(if(a.ttl_rp < 0, 0, a.ttl_rp)) as cost_kerja
+           sum(if(a.ttl_rp < 0, 0, a.ttl_rp)) as cost_kerja,
+           sum(COALESCE(a.cost_op, 0)) as cost_op
     FROM cabut as a
     LEFT JOIN bk as b on  b.no_box = a.no_box and b.kategori = 'cabut'
     WHERE a.selesai = 'T' AND a.no_box != 9999 and b.baru = 'baru'
@@ -106,7 +116,8 @@ class CocokanModel extends Model
     UNION ALL
     
     SELECT 0 as pcs, sum(d.gr_eo_awal) as gr, sum(e.gr_awal * e.hrga_satuan) as ttl_rp,
-           sum(if(d.ttl_rp < 0, 0, d.ttl_rp)) as cost_kerja
+           sum(if(d.ttl_rp < 0, 0, d.ttl_rp)) as cost_kerja,
+           sum(COALESCE(d.cost_op, 0)) as cost_op
     FROM eo as d
     LEFT JOIN bk as e on  e.no_box = d.no_box and e.kategori = 'cabut'
     WHERE d.selesai = 'T' AND d.no_box != 9999 and e.baru = 'baru'
@@ -123,6 +134,7 @@ class CocokanModel extends Model
             SUM(fs.gr_awal * bk.hrga_satuan) as ttl_rp
         FROM formulir_sarang fs
         INNER JOIN bk ON bk.no_box = fs.no_box
+            AND bk.kategori = 'cabut'
         WHERE fs.kategori = 'cabut'
           AND bk.baru = 'baru'
           AND NOT EXISTS (SELECT 1 FROM cabut WHERE cabut.no_box = fs.no_box)
@@ -398,7 +410,8 @@ class CocokanModel extends Model
                 SUM(a.pcs) AS pcs,
                 SUM(a.gr) AS gr,
                 SUM(cost.modal_bk) AS ttl_rp,
-                SUM(cost.gaji_cabut + cost.gaji_eo + cost.gaji_cetak) AS cost_kerja
+                SUM(cost.gaji_cabut + cost.gaji_eo + cost.gaji_cetak) AS cost_kerja,
+                SUM(cost.cost_op) AS cost_op
             FROM (
                 SELECT
                     cn.no_box,
@@ -449,7 +462,8 @@ class CocokanModel extends Model
                 SUM(a.pcs) AS pcs,
                 SUM(a.gr) AS gr,
                 SUM(cost.modal_bk) AS ttl_rp,
-                SUM(cost.gaji_cabut + cost.gaji_eo) AS cost_kerja
+                SUM(cost.gaji_cabut + cost.gaji_eo) AS cost_kerja,
+                SUM(cost.cost_op) AS cost_op
             FROM (
                 SELECT
                     fs.no_box,
@@ -472,6 +486,58 @@ class CocokanModel extends Model
         return $result;
     }
 
+    /**
+     * Detail Cetak sisa pengawas dengan satu baris per no_box.
+     * Kondisi stok dan sumber biayanya sengaja sama dengan cetak_stok_balance().
+     */
+    public static function cetakStokBalanceDetails()
+    {
+        $boxCost = self::boxCostSql();
+
+        return DB::select("
+            SELECT
+                users.name,
+                stock.no_box,
+                metadata.nm_partai,
+                metadata.grade,
+                stock.pcs,
+                stock.gr,
+                cost.modal_bk AS ttl_rp,
+                cost.gaji_cabut + cost.gaji_eo AS cost_kerja,
+                cost.cost_op
+            FROM (
+                SELECT
+                    fs.no_box,
+                    MAX(fs.id_penerima) AS id_penerima,
+                    SUM(fs.pcs_awal) AS pcs,
+                    SUM(fs.gr_awal) AS gr
+                FROM formulir_sarang AS fs
+                WHERE fs.kategori = 'cetak'
+                  AND fs.no_box != 0
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM cetak_new AS cn
+                      WHERE cn.no_box = fs.no_box
+                        AND cn.id_anak != 0
+                  )
+                GROUP BY fs.no_box
+            ) AS stock
+            INNER JOIN ($boxCost) AS cost ON cost.no_box = stock.no_box
+            LEFT JOIN (
+                SELECT
+                    no_box,
+                    MAX(nm_partai) AS nm_partai,
+                    MAX(ket) AS grade
+                FROM bk
+                WHERE kategori = 'cabut'
+                  AND baru = 'baru'
+                GROUP BY no_box
+            ) AS metadata ON metadata.no_box = stock.no_box
+            LEFT JOIN users ON users.id = stock.id_penerima
+            ORDER BY users.name, metadata.nm_partai, stock.no_box
+        ");
+    }
+
     public static function sortir_proses_balance()
     {
         $boxCost = self::boxCostSql();
@@ -481,6 +547,7 @@ class CocokanModel extends Model
                 SUM(a.gr) AS gr,
                 SUM(cost.modal_bk) AS ttl_rp,
                 SUM(cost.cost_kerja) AS cost_kerja,
+                SUM(cost.cost_op) AS cost_op,
                 0 AS cu
             FROM (
                 SELECT
@@ -507,7 +574,8 @@ class CocokanModel extends Model
                 SUM(a.pcs) AS pcs,
                 SUM(a.gr) AS gr,
                 SUM(cost.modal_bk) AS ttl_rp,
-                SUM(cost.gaji_cabut + cost.gaji_eo + cost.gaji_cetak) AS cost_kerja
+                SUM(cost.gaji_cabut + cost.gaji_eo + cost.gaji_cetak) AS cost_kerja,
+                SUM(cost.cost_op) AS cost_op
             FROM (
                 SELECT
                     fs.no_box,
@@ -623,13 +691,14 @@ class CocokanModel extends Model
                 bk.nm_partai,
                 bk.tipe,
                 bk.ket,
-                GREATEST(a.pcs - grading.pcs, 0) AS pcs,
-                GREATEST(a.gr - grading.gr, 0) AS gr,
-                LEAST(grading.pcs, a.pcs) AS hasil_pcs,
-                LEAST(grading.gr, a.gr) AS hasil_gr,
+                a.pcs,
+                a.gr,
+                0 AS hasil_pcs,
+                0 AS hasil_gr,
                 cost.modal_bk AS bk_rp,
                 cost.total_modal AS cost_bk,
-                cost.cost_kerja
+                cost.cost_kerja,
+                cost.cost_op
             FROM (
                 SELECT
                     fs.no_box,
@@ -637,16 +706,14 @@ class CocokanModel extends Model
                     SUM(fs.gr_awal) AS gr
                 FROM formulir_sarang AS fs
                 WHERE fs.kategori = 'grade'
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM grading AS g
+                      WHERE g.no_box_sortir = fs.no_box
+                        AND g.no_invoice IS NOT NULL
+                  )
                 GROUP BY fs.no_box
             ) AS a
-            INNER JOIN (
-                SELECT
-                    no_box_sortir,
-                    SUM(pcs) AS pcs,
-                    SUM(gr) AS gr
-                FROM grading
-                GROUP BY no_box_sortir
-            ) AS grading ON grading.no_box_sortir = a.no_box
             INNER JOIN ($boxCost) AS cost ON cost.no_box = a.no_box
             LEFT JOIN (
                 SELECT no_box, MAX(nm_partai) AS nm_partai,
@@ -656,12 +723,6 @@ class CocokanModel extends Model
                   AND baru = 'baru'
                 GROUP BY no_box
             ) AS bk ON bk.no_box = a.no_box
-            WHERE EXISTS (
-                SELECT 1
-                FROM grading AS active_grading
-                WHERE active_grading.no_box_sortir = a.no_box
-                  AND active_grading.selesai = 'T'
-            )
             ORDER BY bk.nm_partai, a.no_box
         ");
     }

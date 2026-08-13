@@ -1,0 +1,96 @@
+{
+    "created_at": "2026-08-11T09:28:10+08:00",
+    "source_file": "C:/Users/User/Downloads/perbaikan ya.xlsx",
+    "records": [
+        {
+            "id_bk": 16837,
+            "no_box": "7477",
+            "kategori": "cabut",
+            "hrga_satuan": 13000
+        },
+        {
+            "id_bk": 16839,
+            "no_box": "7479",
+            "kategori": "cabut",
+            "hrga_satuan": 13000
+        },
+        {
+            "id_bk": 16840,
+            "no_box": "7480",
+            "kategori": "cabut",
+            "hrga_satuan": 13000
+        },
+        {
+            "id_bk": 16841,
+            "no_box": "7481",
+            "kategori": "cabut",
+            "hrga_satuan": 13000
+        },
+        {
+            "id_bk": 16842,
+            "no_box": "7482",
+            "kategori": "cabut",
+            "hrga_satuan": 13000
+        },
+        {
+            "id_bk": 16843,
+            "no_box": "7483",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16844,
+            "no_box": "7484",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16845,
+            "no_box": "7485",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16846,
+            "no_box": "7486",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16847,
+            "no_box": "7487",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16848,
+            "no_box": "7488",
+            "kategori": "cabut",
+            "hrga_satuan": 11500
+        },
+        {
+            "id_bk": 16849,
+            "no_box": "7489",
+            "kategori": "cabut",
+            "hrga_satuan": 10000
+        },
+        {
+            "id_bk": 16850,
+            "no_box": "7490",
+            "kategori": "cabut",
+            "hrga_satuan": 10000
+        },
+        {
+            "id_bk": 16851,
+            "no_box": "7491",
+            "kategori": "cabut",
+            "hrga_satuan": 7500
+        },
+        {
+            "id_bk": 16852,
+            "no_box": "7492",
+            "kategori": "cabut",
+            "hrga_satuan": 7500
+        }
+    ]
+}

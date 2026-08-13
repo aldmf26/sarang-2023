@@ -1,0 +1,129 @@
+{
+  "source": "C:/Users/User/Downloads/perbaikan ya.xlsx",
+  "sheet": "Sheet2",
+  "header": [
+    "no box baru",
+    "rp/gr"
+  ],
+  "invalid": [],
+  "conflicts": [],
+  "duplicate_rows": 0,
+  "rows": [
+    {
+      "no_box": "7472",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7473",
+      "hrga_satuan": 13000
+    },
+    {
+      "no_box": "7474",
+      "hrga_satuan": 13000
+    },
+    {
+      "no_box": "7475",
+      "hrga_satuan": 13000
+    },
+    {
+      "no_box": "7476",
+      "hrga_satuan": 13000
+    },
+    {
+      "no_box": "7477",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7478",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7479",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7480",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7481",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7482",
+      "hrga_satuan": 11500
+    },
+    {
+      "no_box": "7483",
+      "hrga_satuan": 10000
+    },
+    {
+      "no_box": "7484",
+      "hrga_satuan": 10000
+    },
+    {
+      "no_box": "7485",
+      "hrga_satuan": 7500
+    },
+    {
+      "no_box": "7486",
+      "hrga_satuan": 7500
+    },
+    {
+      "no_box": "7487",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7488",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7489",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7490",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7491",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7492",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7493",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7494",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7495",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7496",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7497",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7498",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7499",
+      "hrga_satuan": 4000
+    },
+    {
+      "no_box": "7500",
+      "hrga_satuan": 4000
+    }
+  ]
+}

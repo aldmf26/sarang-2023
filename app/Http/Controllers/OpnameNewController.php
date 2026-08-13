@@ -8,11 +8,54 @@ use App\Models\OpnameNewModel;
 use App\Models\SummaryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OpnameNewController extends Controller
 {
+    /**
+     * Cost operasional melekat pada box dari Cabut/EO dan hanya ditulis sekali
+     * agar tidak berlipat ketika query menghasilkan beberapa baris untuk box sama.
+     */
+    private function attachOperationalCostByBox(array $rows): array
+    {
+        $boxes = collect($rows)
+            ->pluck('no_box')
+            ->filter(fn ($box) => $box !== null && $box !== '')
+            ->map(fn ($box) => (string) $box)
+            ->unique()
+            ->values();
+
+        if ($boxes->isEmpty()) {
+            return $rows;
+        }
+
+        $costs = DB::query()
+            ->fromSub(function ($query) {
+                $query->from('cabut')
+                    ->selectRaw('CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op')
+                    ->unionAll(
+                        DB::table('eo')->selectRaw(
+                            'CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op'
+                        )
+                    );
+            }, 'biaya')
+            ->whereIn('no_box', $boxes->all())
+            ->groupBy('no_box')
+            ->selectRaw('no_box, SUM(cost_op) AS cost_op')
+            ->pluck('cost_op', 'no_box');
+
+        $attached = [];
+        foreach ($rows as $row) {
+            $box = (string) ($row->no_box ?? '');
+            $row->cost_op = isset($attached[$box]) ? 0 : (float) ($costs[$box] ?? 0);
+            $attached[$box] = true;
+        }
+
+        return $rows;
+    }
+
     public function index(OpnameNewModel $model)
     {
         $data = [
@@ -114,7 +157,7 @@ class OpnameNewController extends Controller
         $sheet1->setCellValue('L1', 'ttl rp');
         $sheet1->setCellValue('M1', 'rp/gr');
 
-        $gudangbk = $model::bksedang_proses_sum();
+        $gudangbk = $this->attachOperationalCostByBox($model::bksedang_proses_sum());
 
         $kolom = 2;
         foreach ($gudangbk as $d) {
@@ -127,9 +170,10 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('H' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('I' . $kolom, 0);
             $sheet1->setCellValue('J' . $kolom, 0);
-            $sheet1->setCellValue('K' . $kolom, 0);
-            $sheet1->setCellValue('L' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('M' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet1->setCellValue('K' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet1->setCellValue('L' . $kolom, $totalRp);
+            $sheet1->setCellValue('M' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
 
@@ -150,7 +194,7 @@ class OpnameNewController extends Controller
         $sheet1->setCellValue('Y1', 'ttl rp');
         $sheet1->setCellValue('Z1', 'rp/gr');
 
-        $gudangbksisa = $model::bksisapgws();
+        $gudangbksisa = $this->attachOperationalCostByBox($model::bksisapgws());
 
         $kolom = 2;
         foreach ($gudangbksisa as $d) {
@@ -163,9 +207,10 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('U' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('V' . $kolom, 0);
             $sheet1->setCellValue('W' . $kolom, 0);
-            $sheet1->setCellValue('X' . $kolom, 0);
-            $sheet1->setCellValue('Y' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('Z' . $kolom, $d->ttl_rp / $d->gr);
+            $sheet1->setCellValue('X' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_op;
+            $sheet1->setCellValue('Y' . $kolom, $totalRp);
+            $sheet1->setCellValue('Z' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
 
@@ -173,7 +218,7 @@ class OpnameNewController extends Controller
 
 
         $sheet1->getStyle("AB1:AM1")->applyFromArray($style_atas);
-        $sheet1->setCellValue('AA1', 'Cabut selesai siap cetak');
+        $sheet1->setCellValue('AA1', 'Cabut selesai siap cetak belum kirim');
         $sheet1->setCellValue('AB1', 'partai');
         $sheet1->setCellValue('AC1', 'pengawas');
         $sheet1->setCellValue('AD1', 'no box');
@@ -187,7 +232,7 @@ class OpnameNewController extends Controller
         $sheet1->setCellValue('AL1', 'ttl rp');
         $sheet1->setCellValue('AM1', 'rp/gr');
 
-        $gudangbkselesai = $model::bksedang_selesai_sum();
+        $gudangbkselesai = $this->attachOperationalCostByBox($model::bksedang_selesai_sum());
 
         $kolom = 2;
         foreach ($gudangbkselesai as $d) {
@@ -200,12 +245,41 @@ class OpnameNewController extends Controller
             $sheet1->setCellValue('AH' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet1->setCellValue('AJ' . $kolom, 0);
-            $sheet1->setCellValue('AK' . $kolom, 0);
-            $sheet1->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet1->setCellValue('AM' . $kolom, empty($d->no_box) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet1->setCellValue('AK' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet1->setCellValue('AL' . $kolom, $totalRp);
+            $sheet1->setCellValue('AM' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet1->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
+
+        $sheet1->getStyle("AP1:BA1")->applyFromArray($style_atas);
+        $sheet1->setCellValue('AO1', 'BK Sisa');
+        foreach (['AP' => 'partai', 'AQ' => 'pengawas', 'AR' => 'no box', 'AS' => 'grade',
+            'AT' => 'pcs', 'AU' => 'gr', 'AV' => 'ttl rp bk', 'AW' => 'cost kerja',
+            'AX' => 'cost cu dll', 'AY' => 'cost operasional', 'AZ' => 'ttl rp', 'BA' => 'rp/gr'] as $column => $header) {
+            $sheet1->setCellValue($column . '1', $header);
+        }
+
+        $kolom = 2;
+        foreach ($model::bkSisaDetails() as $d) {
+            $sheet1->setCellValue('AP' . $kolom, $d->nm_partai);
+            $sheet1->setCellValue('AQ' . $kolom, $d->name);
+            $sheet1->setCellValue('AR' . $kolom, $d->no_box);
+            $sheet1->setCellValue('AS' . $kolom, $d->grade);
+            $sheet1->setCellValue('AT' . $kolom, $d->pcs);
+            $sheet1->setCellValue('AU' . $kolom, $d->gr);
+            $sheet1->setCellValue('AV' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('AW' . $kolom, 0);
+            $sheet1->setCellValue('AX' . $kolom, 0);
+            $sheet1->setCellValue('AY' . $kolom, 0);
+            $sheet1->setCellValue('AZ' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('BA' . $kolom, empty($d->gr) ? 0 : $d->ttl_rp / $d->gr);
+            $kolom++;
+        }
+        if ($kolom > 2) {
+            $sheet1->getStyle('AP2:BA' . ($kolom - 1))->applyFromArray($style);
+        }
 
 
         $this->datacetak($spreadsheet, $style_atas, $style, $model);
@@ -254,7 +328,7 @@ class OpnameNewController extends Controller
         $sheet2->setCellValue('L1', 'ttl rp');
         $sheet2->setCellValue('M1', 'rp/gr');
 
-        $cetak_proses = $model::cetak_proses();
+        $cetak_proses = $this->attachOperationalCostByBox($model::cetak_proses());
         // kena diatas dihapus 
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
@@ -267,9 +341,10 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('H' . $kolom, $d->ttl_rp);
             $sheet2->setCellValue('I' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('J' . $kolom, 0);
-            $sheet2->setCellValue('K' . $kolom, 0);
-            $sheet2->setCellValue('L' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('M' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('K' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet2->setCellValue('L' . $kolom, $totalRp);
+            $sheet2->setCellValue('M' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('B2:M' . $kolom - 1)->applyFromArray($style);
@@ -289,7 +364,7 @@ class OpnameNewController extends Controller
         $sheet2->setCellValue('Y1', 'ttl rp');
         $sheet2->setCellValue('Z1', 'rp/gr');
 
-        $cetak_proses = $model::cetak_stok();
+        $cetak_proses = $this->attachOperationalCostByBox($model::cetak_stok());
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
             $sheet2->setCellValue('O' . $kolom, $d->nm_partai);
@@ -301,15 +376,16 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('U' . $kolom, $d->ttl_rp);
             $sheet2->setCellValue('V' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('W' . $kolom, 0);
-            $sheet2->setCellValue('X' . $kolom, 0);
-            $sheet2->setCellValue('Y' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('Z' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('X' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet2->setCellValue('Y' . $kolom, $totalRp);
+            $sheet2->setCellValue('Z' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('O2:Z' . $kolom - 1)->applyFromArray($style);
 
         $sheet2->getStyle("AB1:AM1")->applyFromArray($style_atas);
-        $sheet2->setCellValue('AA1', 'Cetak selesai siap sortir');
+        $sheet2->setCellValue('AA1', 'Cetak selesai siap sortir belum kirim');
         $sheet2->setCellValue('AB1', 'partai');
         $sheet2->setCellValue('AC1', 'pengawas');
         $sheet2->setCellValue('AD1', 'no box');
@@ -323,7 +399,7 @@ class OpnameNewController extends Controller
         $sheet2->setCellValue('AL1', 'ttl rp');
         $sheet2->setCellValue('AM1', 'rp/gr');
 
-        $cetak_selesai = $model::cetak_selesai();
+        $cetak_selesai = $this->attachOperationalCostByBox($model::cetak_selesai());
         $kolom = 2;
         foreach ($cetak_selesai  as $d) {
             $sheet2->setCellValue('AB' . $kolom, $d->nm_partai);
@@ -335,9 +411,10 @@ class OpnameNewController extends Controller
             $sheet2->setCellValue('AH' . $kolom, $d->ttl_rp);
             $sheet2->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet2->setCellValue('AJ' . $kolom, 0);
-            $sheet2->setCellValue('AK' . $kolom, 0);
-            $sheet2->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet2->setCellValue('AM' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet2->setCellValue('AK' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet2->setCellValue('AL' . $kolom, $totalRp);
+            $sheet2->setCellValue('AM' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet2->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
@@ -364,7 +441,7 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('L1', 'ttl rp');
         $sheet3->setCellValue('M1', 'rp/gr');
 
-        $cetak_proses = $model::sortir_proses();
+        $cetak_proses = $this->attachOperationalCostByBox($model::sortir_proses());
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
             $sheet3->setCellValue('B' . $kolom, $d->nm_partai);
@@ -376,9 +453,10 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('H' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('I' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('J' . $kolom, 0);
-            $sheet3->setCellValue('K' . $kolom, 0);
-            $sheet3->setCellValue('L' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('M' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('K' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet3->setCellValue('L' . $kolom, $totalRp);
+            $sheet3->setCellValue('M' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('B2:M' . $kolom - 1)->applyFromArray($style);
@@ -398,7 +476,7 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('Y1', 'ttl rp');
         $sheet3->setCellValue('Z1', 'rp/gr');
 
-        $cetak_proses = $model::sortir_stock();
+        $cetak_proses = $this->attachOperationalCostByBox($model::sortir_stock());
         $kolom = 2;
         foreach ($cetak_proses  as $d) {
             $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
@@ -410,15 +488,16 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('U' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('V' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('W' . $kolom, 0);
-            $sheet3->setCellValue('X' . $kolom, 0);
-            $sheet3->setCellValue('Y' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('Z' . $kolom, empty($d->gr) ? 0 : ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('X' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet3->setCellValue('Y' . $kolom, $totalRp);
+            $sheet3->setCellValue('Z' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('O2:Z' . $kolom - 1)->applyFromArray($style);
 
         $sheet3->getStyle("AB1:AM1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AA1', 'Sortir selesai siap grading');
+        $sheet3->setCellValue('AA1', 'Sortir selesai siap grading belum kirim');
         $sheet3->setCellValue('AB1', 'partai');
         $sheet3->setCellValue('AC1', 'pengawas');
         $sheet3->setCellValue('AD1', 'no box');
@@ -432,7 +511,7 @@ class OpnameNewController extends Controller
         $sheet3->setCellValue('AL1', 'ttl rp');
         $sheet3->setCellValue('AM1', 'rp/gr');
 
-        $cetak_selesai = $model::sortir_selesai();
+        $cetak_selesai = $this->attachOperationalCostByBox($model::sortir_selesai());
         $kolom = 2;
         foreach ($cetak_selesai  as $d) {
             $sheet3->setCellValue('AB' . $kolom, $d->nm_partai);
@@ -444,9 +523,10 @@ class OpnameNewController extends Controller
             $sheet3->setCellValue('AH' . $kolom, $d->ttl_rp);
             $sheet3->setCellValue('AI' . $kolom, $d->cost_kerja);
             $sheet3->setCellValue('AJ' . $kolom, 0);
-            $sheet3->setCellValue('AK' . $kolom, 0);
-            $sheet3->setCellValue('AL' . $kolom, $d->ttl_rp + $d->cost_kerja);
-            $sheet3->setCellValue('AM' . $kolom, ($d->ttl_rp + $d->cost_kerja) / $d->gr);
+            $sheet3->setCellValue('AK' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_op;
+            $sheet3->setCellValue('AL' . $kolom, $totalRp);
+            $sheet3->setCellValue('AM' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
         $sheet3->getStyle('AB2:AM' . $kolom - 1)->applyFromArray($style);
@@ -459,120 +539,86 @@ class OpnameNewController extends Controller
         $sheet3 = $spreadsheet->getActiveSheet(4);
         $sheet3->setTitle('Pengiriman');
 
-        $sheet3->getStyle("B1:L1")->applyFromArray($style_atas);
+        $sheet3->getStyle("B1:O1")->applyFromArray($style_atas);
         $sheet3->setCellValue('A1', 'Pengiriman');
-        $sheet3->setCellValue('B1', 'nama partai');
-        $sheet3->setCellValue('C1', 'box pengiriman');
-        $sheet3->setCellValue('D1', 'grade');
-        $sheet3->setCellValue('E1', 'pcs');
-        $sheet3->setCellValue('F1', 'gr');
-        $sheet3->setCellValue('G1', 'ttl rp');
-        $sheet3->setCellValue('H1', 'cost kerja');
-        $sheet3->setCellValue('I1', 'cost cu');
-        $sheet3->setCellValue('J1', 'cost operasional');
-        $sheet3->setCellValue('K1', 'total rp');
-        $sheet3->setCellValue('L1', 'rp/gr');
+        $sheet3->setCellValue('B1', 'no nota');
+        $sheet3->setCellValue('C1', 'tgl kirim');
+        $sheet3->setCellValue('D1', 'nama packing list');
+        $sheet3->setCellValue('E1', 'tujuan');
+        $sheet3->setCellValue('F1', 'box');
+        $sheet3->setCellValue('G1', 'pcs');
+        $sheet3->setCellValue('H1', 'gr');
+        $sheet3->setCellValue('I1', 'gr + kadar');
+        $sheet3->setCellValue('J1', 'cost bk');
+        $sheet3->setCellValue('K1', 'cost kerja');
+        $sheet3->setCellValue('L1', 'cost cu');
+        $sheet3->setCellValue('M1', 'cost operasional');
+        $sheet3->setCellValue('N1', 'total rp');
+        $sheet3->setCellValue('O1', 'rp/gr');
 
-        $pengiriman = Grading::pengirimanBalanceDetails();
+        $pengiriman = Grading::list_pengiriman_sum();
         $kolom = 2;
 
         foreach ($pengiriman as $b) {
-            $sheet3->setCellValue('B' . $kolom, $b->nm_partai);
-            $sheet3->setCellValue('C' . $kolom, $b->no_box);
-            $sheet3->setCellValue('D' . $kolom, $b->grade);
-            $sheet3->setCellValue('E' . $kolom, $b->pcs);
-            $sheet3->setCellValue('F' . $kolom, $b->gr);
-            $sheet3->setCellValue('G' . $kolom, $b->cost_bk);
-            $sheet3->setCellValue('H' . $kolom, $b->cost_kerja);
-            $sheet3->setCellValue('I' . $kolom, $b->cost_cu);
-            $sheet3->setCellValue('J' . $kolom, $b->cost_op);
-
-            $ttlRp = $b->cost_bk + $b->cost_kerja + $b->cost_cu + $b->cost_op;
-
-            $sheet3->setCellValue('K' . $kolom, $ttlRp);
-            $sheet3->setCellValue('L' . $kolom, empty($b->gr) ? 0 : $ttlRp / $b->gr);
+            $totalRp = $b->cost_bk + $b->cost_kerja + $b->cost_cu + $b->cost_op;
+            $sheet3->setCellValue('B' . $kolom, $b->no_nota);
+            $sheet3->setCellValue('C' . $kolom, $b->tgl);
+            $sheet3->setCellValue('D' . $kolom, $b->nm_packing);
+            $sheet3->setCellValue('E' . $kolom, $b->tujuan);
+            $sheet3->setCellValue('F' . $kolom, $b->ttl_box);
+            $sheet3->setCellValue('G' . $kolom, $b->pcs);
+            $sheet3->setCellValue('H' . $kolom, $b->gr);
+            $sheet3->setCellValue('I' . $kolom, $b->gr_naik);
+            $sheet3->setCellValue('J' . $kolom, $b->cost_bk);
+            $sheet3->setCellValue('K' . $kolom, $b->cost_kerja);
+            $sheet3->setCellValue('L' . $kolom, $b->cost_cu);
+            $sheet3->setCellValue('M' . $kolom, $b->cost_op);
+            $sheet3->setCellValue('N' . $kolom, $totalRp);
+            $sheet3->setCellValue('O' . $kolom, empty($b->gr) ? 0 : $totalRp / $b->gr);
             $kolom++;
         }
-        $sheet3->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('B2:O' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("O1:Y1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('N1', 'Sisa belum kirim');
-        $sheet3->setCellValue('O1', 'nama partai');
-        $sheet3->setCellValue('P1', 'no box pengiriman');
-        $sheet3->setCellValue('Q1', 'grade');
-        $sheet3->setCellValue('R1', 'pcs');
-        $sheet3->setCellValue('S1', 'gr');
-        $sheet3->setCellValue('T1', 'ttl rp');
-        $sheet3->setCellValue('U1', 'cost kerja');
-        $sheet3->setCellValue('V1', 'cost cu');
-        $sheet3->setCellValue('W1', 'cost operasional');
-        $sheet3->setCellValue('X1', 'total rp');
-        $sheet3->setCellValue('Y1', 'rp/gr');
+        $sheet3->getStyle("R1:AB1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('Q1', 'Pengiriman sedang proses');
+        $sheet3->setCellValue('R1', 'nama partai');
+        $sheet3->setCellValue('S1', 'no box pengiriman');
+        $sheet3->setCellValue('T1', 'grade');
+        $sheet3->setCellValue('U1', 'pcs');
+        $sheet3->setCellValue('V1', 'gr');
+        $sheet3->setCellValue('W1', 'ttl rp');
+        $sheet3->setCellValue('X1', 'cost kerja');
+        $sheet3->setCellValue('Y1', 'cost cu');
+        $sheet3->setCellValue('Z1', 'cost operasional');
+        $sheet3->setCellValue('AA1', 'total rp');
+        $sheet3->setCellValue('AB1', 'rp/gr');
 
-        $grading = OpnameNewModel::pengirimanBelumKirimDetails();
+        // Jangan campurkan WIP2 ke pengiriman sedang proses.
+        $grading = $model::PengirimanSedangProses();
         $kolom = 2;
         foreach ($grading  as $d) {
-            if ($d->is_wip2) {
-                continue;
-            }
-
-            $sheet3->setCellValue('O' . $kolom, $d->nm_partai);
-            $sheet3->setCellValue('P' . $kolom, $d->box_pengiriman);
-            $sheet3->setCellValue('Q' . $kolom, $d->grade);
-            $sheet3->setCellValue('R' . $kolom, $d->pcs);
-            $sheet3->setCellValue('S' . $kolom, $d->gr);
-            $sheet3->setCellValue('T' . $kolom, $d->cost_bk);
-            $sheet3->setCellValue('U' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('V' . $kolom, $d->cost_cu);
-            $sheet3->setCellValue('W' . $kolom, $d->cost_op);
-            $sheet3->setCellValue('X' . $kolom, $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op);
-            $sheet3->setCellValue('Y' . $kolom, empty($d->gr) ? 0 : ($d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op) / $d->gr);
+            $sheet3->setCellValue('R' . $kolom, $d->daftar_partai);
+            $sheet3->setCellValue('S' . $kolom, $d->box_pengiriman);
+            $sheet3->setCellValue('T' . $kolom, $d->grade);
+            $sheet3->setCellValue('U' . $kolom, $d->pcs);
+            $sheet3->setCellValue('V' . $kolom, $d->gr);
+            $sheet3->setCellValue('W' . $kolom, $d->cost_bk);
+            $sheet3->setCellValue('X' . $kolom, $d->cost_kerja);
+            $sheet3->setCellValue('Y' . $kolom, $d->cost_cu ?? 0);
+            $sheet3->setCellValue('Z' . $kolom, $d->cost_op);
+            $totalRp = $d->cost_bk + $d->cost_kerja + ($d->cost_cu ?? 0) + $d->cost_op;
+            $sheet3->setCellValue('AA' . $kolom, $totalRp);
+            $sheet3->setCellValue('AB' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
-        $sheet3->getStyle('O2:Y' . $kolom - 1)->applyFromArray($style);
+        $sheet3->getStyle('R2:AB' . $kolom - 1)->applyFromArray($style);
 
-        $sheet3->getStyle("AA1:AK1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('Z1', 'WIP2 sedang proses');
-        $sheet3->setCellValue('AA1', 'nama partai');
-        $sheet3->setCellValue('AB1', 'no box pengiriman');
-        $sheet3->setCellValue('AC1', 'grade');
-        $sheet3->setCellValue('AD1', 'pcs');
-        $sheet3->setCellValue('AE1', 'gr');
-        $sheet3->setCellValue('AF1', 'ttl rp');
-        $sheet3->setCellValue('AG1', 'cost kerja');
-        $sheet3->setCellValue('AH1', 'cost cu');
-        $sheet3->setCellValue('AI1', 'cost operasional');
-        $sheet3->setCellValue('AJ1', 'total rp');
-        $sheet3->setCellValue('AK1', 'rp/gr');
-
-        $kolom = 2;
-        foreach ($grading as $d) {
-            if (!$d->is_wip2) {
-                continue;
-            }
-
-            $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_cu + $d->cost_op;
-            $sheet3->setCellValue('AA' . $kolom, $d->nm_partai);
-            $sheet3->setCellValue('AB' . $kolom, $d->box_pengiriman);
-            $sheet3->setCellValue('AC' . $kolom, $d->grade);
-            $sheet3->setCellValue('AD' . $kolom, $d->pcs);
-            $sheet3->setCellValue('AE' . $kolom, $d->gr);
-            $sheet3->setCellValue('AF' . $kolom, $d->cost_bk);
-            $sheet3->setCellValue('AG' . $kolom, $d->cost_kerja);
-            $sheet3->setCellValue('AH' . $kolom, $d->cost_cu);
-            $sheet3->setCellValue('AI' . $kolom, $d->cost_op);
-            $sheet3->setCellValue('AJ' . $kolom, $totalRp);
-            $sheet3->setCellValue('AK' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
-            $kolom++;
-        }
-        $sheet3->getStyle('AA2:AK' . $kolom - 1)->applyFromArray($style);
-
-        $sheet3->getStyle("AN1:AQ1")->applyFromArray($style_atas);
-        $sheet3->setCellValue('AM1', 'selisih');
-        $sheet3->setCellValue('AN1', 'pcs');
-        $sheet3->setCellValue('AO1', 'gr');
-        $sheet3->setCellValue('AP1', 'ttl rp');
-        $sheet3->setCellValue('AQ1', 'rp/gr');
+        $sheet3->getStyle("AE1:AH1")->applyFromArray($style_atas);
+        $sheet3->setCellValue('AD1', 'selisih');
+        $sheet3->setCellValue('AE1', 'pcs');
+        $sheet3->setCellValue('AF1', 'gr');
+        $sheet3->setCellValue('AG1', 'ttl rp');
+        $sheet3->setCellValue('AH1', 'rp/gr');
 
         $sa = CocokanModel::akhir_sortir();
         $grading = DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr FROM grading_partai as a ");
@@ -580,11 +626,11 @@ class OpnameNewController extends Controller
 
         $kolom = 2;
 
-        $sheet3->setCellValue('AN' . $kolom, round($sa->pcs - $grading->pcs - $belumGradingPcs, 0));
-        $sheet3->setCellValue('AO' . $kolom, 0);
-        $sheet3->setCellValue('AP' . $kolom, 0);
-        $sheet3->setCellValue('AQ' . $kolom, 0);
-        $sheet3->getStyle('AN2:AQ2')->applyFromArray($style);
+        $sheet3->setCellValue('AE' . $kolom, round($sa->pcs - $grading->pcs - $belumGradingPcs, 0));
+        $sheet3->setCellValue('AF' . $kolom, 0);
+        $sheet3->setCellValue('AG' . $kolom, 0);
+        $sheet3->setCellValue('AH' . $kolom, 0);
+        $sheet3->getStyle('AE2:AH2')->applyFromArray($style);
     }
     private function sortir_selesai($spreadsheet, $style_atas, $style, $model)
     {
@@ -593,7 +639,7 @@ class OpnameNewController extends Controller
         $sheet4 = $spreadsheet->getActiveSheet(7);
         $sheet4->setTitle('Sortir selesai');
 
-        $cetak_selesai = $model::sortir_selesai_akhir();
+        $cetak_selesai = $this->attachOperationalCostByBox($model::sortir_selesai_akhir());
         $sheet4->getStyle("B1:O1")->applyFromArray($style_atas);
         $sheet4->setCellValue('A1', 'Sortir Selesai');
         $sheet4->setCellValue('B1', 'partai');
@@ -625,9 +671,10 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('J' . $kolom, $d->ttl_rp);
             $sheet4->setCellValue('K' . $kolom, $d->cost_kerja);
             $sheet4->setCellValue('L' . $kolom,  $d->cost_cu);
-            $sheet4->setCellValue('M' . $kolom, 0);
-            $sheet4->setCellValue('N' . $kolom, 0);
-            $sheet4->setCellValue('O' . $kolom, 0);
+            $sheet4->setCellValue('M' . $kolom, $d->cost_op);
+            $totalRp = $d->ttl_rp + $d->cost_kerja + $d->cost_cu + $d->cost_op;
+            $sheet4->setCellValue('N' . $kolom, $totalRp);
+            $sheet4->setCellValue('O' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
 
@@ -650,7 +697,9 @@ class OpnameNewController extends Controller
         $sheet4->setCellValue('G1', 'gr');
         $sheet4->setCellValue('H1', 'ttl rp bk');
         $sheet4->setCellValue('I1', 'cost kerja');
-        $sheet4->setCellValue('J1', 'rp/gr');
+        $sheet4->setCellValue('J1', 'cost operasional');
+        $sheet4->setCellValue('K1', 'total rp');
+        $sheet4->setCellValue('L1', 'rp/gr');
 
         $belum_grading = CocokanModel::gradingSisaDetails();
         $kolom = 2;
@@ -663,35 +712,85 @@ class OpnameNewController extends Controller
             $sheet4->setCellValue('G' . $kolom, $d->gr);
             $sheet4->setCellValue('H' . $kolom, $d->bk_rp);
             $sheet4->setCellValue('I' . $kolom, $d->cost_kerja);
-            $sheet4->setCellValue('J' . $kolom, empty($d->gr) ? 0 : ($d->bk_rp + $d->cost_kerja) / $d->gr);
+            $sheet4->setCellValue('J' . $kolom, $d->cost_op);
+            $totalRp = $d->bk_rp + $d->cost_kerja + $d->cost_op;
+            $sheet4->setCellValue('K' . $kolom, $totalRp);
+            $sheet4->setCellValue('L' . $kolom, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $kolom++;
         }
-        $sheet4->getStyle('B2:J' . $kolom - 1)->applyFromArray($style);
+        $sheet4->getStyle('B2:L' . $kolom - 1)->applyFromArray($style);
 
-        $sheet4->setCellValue('K1', 'Hasil grading');
-        foreach (['L' => 'partai', 'M' => 'no box', 'N' => 'tipe', 'O' => 'ket',
-            'P' => 'pcs', 'Q' => 'gr', 'R' => 'ttl rp bk', 'S' => 'cost kerja',
-            'T' => 'total rp', 'U' => 'rp/gr'] as $column => $header) {
+        $sheet4->setCellValue('N1', 'Grading sedang proses');
+        foreach (['O' => 'partai', 'P' => 'no box', 'Q' => 'grade', 'R' => 'pcs',
+            'S' => 'gr', 'T' => 'ttl rp bk', 'U' => 'cost kerja', 'V' => 'cost operasional',
+            'W' => 'total rp', 'X' => 'rp/gr'] as $column => $header) {
             $sheet4->setCellValue($column . '1', $header);
         }
-        $sheet4->getStyle('L1:U1')->applyFromArray($style_atas);
+        $sheet4->getStyle('O1:X1')->applyFromArray($style_atas);
 
         $hasilRow = 2;
-        foreach ($belum_grading as $d) {
-            $totalRp = $d->bk_rp + $d->cost_kerja;
-            $sheet4->setCellValue('L' . $hasilRow, $d->nm_partai ?? '-');
-            $sheet4->setCellValue('M' . $hasilRow, $d->no_box_sortir);
-            $sheet4->setCellValue('N' . $hasilRow, $d->tipe);
-            $sheet4->setCellValue('O' . $hasilRow, $d->ket);
-            $sheet4->setCellValue('P' . $hasilRow, $d->hasil_pcs);
-            $sheet4->setCellValue('Q' . $hasilRow, $d->hasil_gr);
-            $sheet4->setCellValue('R' . $hasilRow, $d->bk_rp);
-            $sheet4->setCellValue('S' . $hasilRow, $d->cost_kerja);
-            $sheet4->setCellValue('T' . $hasilRow, $totalRp);
-            $sheet4->setCellValue('U' . $hasilRow, empty($d->hasil_gr) ? 0 : $totalRp / $d->hasil_gr);
+        foreach ($model::gradingSednagProses() as $d) {
+            $totalRp = $d->cost_bk + $d->cost_kerja + $d->cost_op;
+            $sheet4->setCellValue('O' . $hasilRow, $d->daftar_partai ?? '-');
+            $sheet4->setCellValue('P' . $hasilRow, $d->box_pengiriman);
+            $sheet4->setCellValue('Q' . $hasilRow, $d->grade);
+            $sheet4->setCellValue('R' . $hasilRow, $d->pcs);
+            $sheet4->setCellValue('S' . $hasilRow, $d->gr);
+            $sheet4->setCellValue('T' . $hasilRow, $d->cost_bk);
+            $sheet4->setCellValue('U' . $hasilRow, $d->cost_kerja);
+            $sheet4->setCellValue('V' . $hasilRow, $d->cost_op);
+            $sheet4->setCellValue('W' . $hasilRow, $totalRp);
+            $sheet4->setCellValue('X' . $hasilRow, empty($d->gr) ? 0 : $totalRp / $d->gr);
             $hasilRow++;
         }
-        $sheet4->getStyle('L2:U' . ($hasilRow - 1))->applyFromArray($style);
+        $sheet4->getStyle('O2:X' . ($hasilRow - 1))->applyFromArray($style);
+
+        $this->writeGradingProcessSection($sheet4, 'Z', 'WIP1 sedang proses', $model::wip1SedangProses(), $style_atas, $style);
+        $this->writeGradingProcessSection($sheet4, 'AL', 'QC sedang proses', $model::qcSedangProses(), $style_atas, $style);
+        $this->writeGradingProcessSection($sheet4, 'AX', 'WIP2 sedang proses', $model::wip2SedangProses(), $style_atas, $style);
+    }
+
+    private function writeGradingProcessSection($sheet, $titleColumn, $title, $rows, $style_atas, $style)
+    {
+        $titleIndex = Coordinate::columnIndexFromString($titleColumn);
+        $headers = ['partai', 'no box', 'grade', 'pcs', 'gr', 'ttl rp bk', 'cost kerja', 'cost operasional', 'total rp', 'rp/gr'];
+
+        $sheet->setCellValue($titleColumn . '1', $title);
+        foreach ($headers as $offset => $header) {
+            $column = Coordinate::stringFromColumnIndex($titleIndex + $offset + 1);
+            $sheet->setCellValue($column . '1', $header);
+        }
+
+        $firstDataColumn = Coordinate::stringFromColumnIndex($titleIndex + 1);
+        $lastDataColumn = Coordinate::stringFromColumnIndex($titleIndex + count($headers));
+        $sheet->getStyle($firstDataColumn . '1:' . $lastDataColumn . '1')->applyFromArray($style_atas);
+
+        $rowNumber = 2;
+        foreach ($rows as $row) {
+            $totalRp = ($row->cost_bk ?? 0) + ($row->cost_kerja ?? 0) + ($row->cost_op ?? 0);
+            $values = [
+                $row->daftar_partai ?? '-',
+                $row->box_pengiriman ?? '-',
+                $row->grade ?? '-',
+                $row->pcs ?? 0,
+                $row->gr ?? 0,
+                $row->cost_bk ?? 0,
+                $row->cost_kerja ?? 0,
+                $row->cost_op ?? 0,
+                $totalRp,
+                empty($row->gr) ? 0 : $totalRp / $row->gr,
+            ];
+
+            foreach ($values as $offset => $value) {
+                $column = Coordinate::stringFromColumnIndex($titleIndex + $offset + 1);
+                $sheet->setCellValue($column . $rowNumber, $value);
+            }
+            $rowNumber++;
+        }
+
+        if ($rowNumber > 2) {
+            $sheet->getStyle($firstDataColumn . '2:' . $lastDataColumn . ($rowNumber - 1))->applyFromArray($style);
+        }
     }
 
     private function rekap($spreadsheet, $style_atas, $style, $model)
@@ -718,10 +817,13 @@ class OpnameNewController extends Controller
             ['Gudang Sortir', 'Sortir sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
             ['Gudang Sortir', 'Sortir sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
             ['Gudang Sortir', 'Sortir selesai siap grading', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
-            ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'I', null, null, null],
-            ['Gudang grading', 'Hasil grading (blok kanan)', 'M', 'P', 'Q', null, null, null, null],
-            ['Pengiriman', 'Sisa belum kirim', 'P', 'R', 'S', 'U', 'V', 'W', 'X'],
-            ['Pengiriman', 'WIP2 sedang proses', 'AB', 'AD', 'AE', 'AG', 'AH', 'AI', 'AJ'],
+            ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'I', null, 'J', 'K'],
+            ['Gudang grading', 'Grading sedang proses', 'P', 'R', 'S', 'U', null, 'V', 'W'],
+            ['Gudang grading', 'WIP1 sedang proses', 'AB', 'AD', 'AE', 'AG', null, 'AH', 'AI'],
+            ['Gudang grading', 'QC sedang proses', 'AN', 'AP', 'AQ', 'AS', null, 'AT', 'AU'],
+            ['Gudang grading', 'WIP2 sedang proses', 'AZ', 'BB', 'BC', 'BE', null, 'BF', 'BG'],
+            ['Pengiriman', 'Pengiriman', 'B', 'G', 'H', null, null, null, null],
+            ['Pengiriman', 'Pengiriman sedang proses', 'S', 'U', 'V', 'X', 'Y', 'Z', 'AA'],
         ];
 
         foreach ($rows as $offset => [$sourceSheet, $category, $box, $pcs, $gr, $work, $cu, $operational, $total]) {
@@ -733,16 +835,21 @@ class OpnameNewController extends Controller
             $sheet->setCellValue('D' . $row, "=SUM({$quotedSheet}!\${$pcs}\$2:\${$pcs}\$20000)");
             $sheet->setCellValue('E' . $row, "=SUM({$quotedSheet}!\${$gr}\$2:\${$gr}\$20000)");
 
-            if ($category === 'Hasil grading (blok kanan)') {
-                $sheet->setCellValue('F' . $row, "=SUM('Pengiriman'!\$H\$2:\$H\$20000)");
-                $sheet->setCellValue('G' . $row, "=SUM('Pengiriman'!\$I\$2:\$I\$20000)");
-                $sheet->setCellValue('H' . $row, "=SUM('Pengiriman'!\$J\$2:\$J\$20000)");
-                $sheet->setCellValue('I' . $row, "=SUM('Pengiriman'!\$K\$2:\$K\$20000)");
+            if ($category === 'Pengiriman' && $sourceSheet === 'Pengiriman') {
+                $sheet->setCellValue('F' . $row, "=SUM('Pengiriman'!\$K\$2:\$K\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM('Pengiriman'!\$L\$2:\$L\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM('Pengiriman'!\$M\$2:\$M\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM('Pengiriman'!\$N\$2:\$N\$20000)");
             } elseif ($category === 'Sisa belum grading') {
                 $sheet->setCellValue('F' . $row, "=SUM('Gudang grading'!\$I\$2:\$I\$20000)");
                 $sheet->setCellValue('G' . $row, 0);
-                $sheet->setCellValue('H' . $row, 0);
-                $sheet->setCellValue('I' . $row, "=SUM('Gudang grading'!\$H\$2:\$I\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM('Gudang grading'!\$J\$2:\$J\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM('Gudang grading'!\$K\$2:\$K\$20000)");
+            } elseif ($sourceSheet === 'Gudang grading') {
+                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
+                $sheet->setCellValue('G' . $row, 0);
+                $sheet->setCellValue('H' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
             } else {
                 $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
                 $sheet->setCellValue('G' . $row, "=SUM({$quotedSheet}!\${$cu}\$2:\${$cu}\$20000)");
@@ -787,8 +894,8 @@ class OpnameNewController extends Controller
             ['Sortir sisa pengawas', 'Gudang Sortir', 'Q', 'S', 'T', 'U', 'V', 'W', 'X'],
             ['Sortir selesai siap grading', 'Gudang Sortir', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK'],
             ['Sisa belum grading', 'Gudang grading', 'C', 'F', 'G', 'H', 'I', null, null],
-            ['Pengiriman', 'Pengiriman', 'C', 'E', 'F', 'G', 'H', 'I', 'J'],
-            ['Sisa belum kirim', 'Pengiriman', 'P', 'R', 'S', 'T', 'U', 'V', 'W'],
+            ['Pengiriman', 'Pengiriman', 'B', 'G', 'H', 'J', 'K', 'L', 'M'],
+            ['Pengiriman sedang proses', 'Pengiriman', 'S', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         ];
 
         $row = 2;

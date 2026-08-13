@@ -525,41 +525,44 @@ class GradingBjController extends Controller
                 ];
             }
 
-            // Hitung total gr
-            $total_gr = array_sum($r->gr);
-            $total_cost_kerja = $r->rpGrKerja * $total_gr;
-            $total_cost_bk = $r->rpGrBk * $total_gr;
-            $total_cost_cu = $r->rpGrCu * $total_gr;
+            // Seluruh sumber biaya dihitung ulang dari database. Nilai hidden
+            // dari browser tidak dipakai karena dapat basi atau berubah.
+            $sourceCosts = collect(Grading::dapatkanStokBoxtesting(
+                'formulir',
+                implode(',', $r->no_box)
+            ));
+            $requestedBoxCount = collect($r->no_box)
+                ->map(fn ($box) => (string) $box)
+                ->unique()
+                ->count();
+            if ($sourceCosts->count() !== $requestedBoxCount) {
+                throw new \RuntimeException(
+                    'Ada box sumber grading yang tidak ditemukan. Silakan muat ulang halaman.'
+                );
+            }
+            $costTotals = [
+                'cost_bk' => (float) $sourceCosts->sum('cost_bk'),
+                'cost_kerja' => (float) $sourceCosts->sum('cost_kerja'),
+                'cost_cu' => (float) $sourceCosts->sum('cost_cu'),
+                'cost_op' => (float) $sourceCosts->sum('cost_op'),
+            ];
 
-            $total_gr_non_hrga = 0;
-            $cost_kerja_hrga = 0;
-
-            // Hitung gr non-hrga dan cost_kerja hrga
+            $eligibleIndexes = [];
+            $totalGrEligible = 0.0;
             for ($i = 0; $i < count($r->grade); $i++) {
-                if (!$r->box_sp[$i]) continue;
-
-                $grade = $r->grade[$i];
-                $gr = $r->gr[$i];
-
-                $gradeData = $gradeMaster[$grade] ?? null;
-                if (!$gradeData) {
-                    DB::rollBack();
-                    return redirect()->back()->withInput()->with('error', 'Grade tidak ditemukan di table_grade: ' . $grade);
+                if (empty($r->box_sp[$i]) || strtolower(trim($r->grade[$i])) === 'susut') {
+                    continue;
                 }
-
-                $tipe = $gradeData->tipe;
-                $harga_satuan = $gradeData->hrga_satuan ?? 0;
-
-                if ($tipe == 'hrga') {
-                    $cost_kerja_hrga += $harga_satuan * $gr;
-                } else {
-                    $total_gr_non_hrga += $gr;
-                }
+                $eligibleIndexes[] = $i;
+                $totalGrEligible += (float) $r->gr[$i];
             }
 
-            $cost_kerja_sisa = $total_cost_kerja - $cost_kerja_hrga;
-            $cost_bk_sisa = $total_cost_bk;
-            $cost_cu_sisa = $total_cost_cu;
+            if ($totalGrEligible <= 0) {
+                throw new \RuntimeException('Hasil grading selain susut harus mempunyai gram lebih dari 0');
+            }
+
+            $allocatedCosts = array_fill_keys(array_keys($costTotals), 0.0);
+            $lastEligibleIndex = end($eligibleIndexes);
 
             $data2 = [];
             $not_oke_arr = $r->not_oke ?? [];
@@ -589,18 +592,19 @@ class GradingBjController extends Controller
                     return redirect()->back()->withInput()->with('error', 'Grade tidak ditemukan di table_grade: ' . $grade);
                 }
                 $tipe = $gradeData->tipe;
-                $harga_satuan = $gradeData->hrga_satuan ?? 0;
-
-                if ($tipe == 'hrga') {
-
-                    $cost_kerja = $harga_satuan * $gr;
-
-                    $cost_bk = 0;
-                    $cost_cu = 0;
-                } else {
-                    $cost_kerja = ($total_gr_non_hrga > 0) ? ($gr / $total_gr_non_hrga) * $cost_kerja_sisa : 0;
-                    $cost_bk = ($total_gr_non_hrga > 0) ? ($gr / $total_gr_non_hrga) * $cost_bk_sisa : 0;
-                    $cost_cu = ($total_gr_non_hrga > 0) ? ($gr / $total_gr_non_hrga) * $cost_cu_sisa : 0;
+                $isSusut = strtolower(trim($grade)) === 'susut';
+                $rowCosts = [];
+                foreach ($costTotals as $column => $totalCost) {
+                    if ($isSusut) {
+                        $rowCosts[$column] = 0.0;
+                    } elseif ($i === $lastEligibleIndex) {
+                        // Baris terakhir menerima sisa pecahan agar total invoice
+                        // selalu persis sama dengan total sumber.
+                        $rowCosts[$column] = $totalCost - $allocatedCosts[$column];
+                    } else {
+                        $rowCosts[$column] = $totalCost * ((float) $gr / $totalGrEligible);
+                    }
+                    $allocatedCosts[$column] += $rowCosts[$column];
                 }
 
                 $data = [
@@ -616,10 +620,11 @@ class GradingBjController extends Controller
                     'tgl' => $tgl,
                     'admin' => auth()->user()->name,
                     'box_pengiriman' => $boxsp,
-                    'ttl_rp' => $r->rpGr * $gr,
-                    'cost_bk' => $cost_bk,
-                    'cost_kerja' => $cost_kerja,
-                    'cost_cu' => $cost_cu,
+                    'ttl_rp' => array_sum($rowCosts),
+                    'cost_bk' => $rowCosts['cost_bk'],
+                    'cost_kerja' => $rowCosts['cost_kerja'],
+                    'cost_cu' => $rowCosts['cost_cu'],
+                    'cost_op' => $rowCosts['cost_op'],
                     'not_oke' => $not_oke,
                 ];
 
@@ -688,6 +693,15 @@ class GradingBjController extends Controller
                 ]);
 
                 return redirect()->back()->withInput()->with('error', 'Total pcs atau gr grading tidak sesuai sortir');
+            }
+
+            foreach ($costTotals as $column => $sourceTotal) {
+                $resultTotal = array_sum(array_column($data2, $column));
+                if (abs($sourceTotal - $resultTotal) >= 0.01) {
+                    throw new \RuntimeException(
+                        "Pembagian {$column} tidak seimbang. Data grading dibatalkan."
+                    );
+                }
             }
 
             DB::table('grading')->insert($dataGrading);

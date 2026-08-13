@@ -1,0 +1,1224 @@
+{
+    "created_at": "2026-08-11T08:43:38+08:00",
+    "source_file": "C:/Users/User/Downloads/perbaikan ya.xlsx",
+    "records": [
+        {
+            "id_bk": 2314,
+            "no_box": "2414",
+            "kategori": "cabut",
+            "hrga_satuan": 2000
+        },
+        {
+            "id_bk": 3419,
+            "no_box": "2774",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3420,
+            "no_box": "2775",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3425,
+            "no_box": "2780",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3461,
+            "no_box": "2816",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 4642,
+            "no_box": "2954",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 4644,
+            "no_box": "2956",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 4645,
+            "no_box": "2957",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 4768,
+            "no_box": "3065",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5025,
+            "no_box": "3138",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12079,
+            "no_box": "5970",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12088,
+            "no_box": "5979",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12089,
+            "no_box": "5980",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12091,
+            "no_box": "5982",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12092,
+            "no_box": "5983",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12094,
+            "no_box": "5985",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12115,
+            "no_box": "6006",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12117,
+            "no_box": "6008",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12147,
+            "no_box": "6015",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12151,
+            "no_box": "6019",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12153,
+            "no_box": "6021",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12154,
+            "no_box": "6022",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 12168,
+            "no_box": "6036",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13145,
+            "no_box": "6659",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13146,
+            "no_box": "6660",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13147,
+            "no_box": "6661",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13148,
+            "no_box": "6662",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13149,
+            "no_box": "6663",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13150,
+            "no_box": "6664",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13151,
+            "no_box": "6665",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13152,
+            "no_box": "6666",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13153,
+            "no_box": "6667",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13154,
+            "no_box": "6668",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13155,
+            "no_box": "6669",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13182,
+            "no_box": "6696",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13183,
+            "no_box": "6697",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13184,
+            "no_box": "6698",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13185,
+            "no_box": "6699",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13186,
+            "no_box": "6700",
+            "kategori": "cabut",
+            "hrga_satuan": 1000
+        },
+        {
+            "id_bk": 13545,
+            "no_box": "6933",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13546,
+            "no_box": "6934",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13572,
+            "no_box": "6960",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13573,
+            "no_box": "6961",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13574,
+            "no_box": "6962",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 13575,
+            "no_box": "6963",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3202,
+            "no_box": "2557",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5252,
+            "no_box": "3308",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5255,
+            "no_box": "3311",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5256,
+            "no_box": "3312",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5257,
+            "no_box": "3313",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5261,
+            "no_box": "3317",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5266,
+            "no_box": "3322",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5272,
+            "no_box": "3328",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5273,
+            "no_box": "3329",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5387,
+            "no_box": "3443",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5388,
+            "no_box": "3444",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5389,
+            "no_box": "3445",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5391,
+            "no_box": "3447",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5396,
+            "no_box": "3452",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5397,
+            "no_box": "3453",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5398,
+            "no_box": "3454",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5426,
+            "no_box": "3482",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5427,
+            "no_box": "3483",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5428,
+            "no_box": "3484",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5429,
+            "no_box": "3485",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5430,
+            "no_box": "3486",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5431,
+            "no_box": "3487",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5432,
+            "no_box": "3488",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5433,
+            "no_box": "3489",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5434,
+            "no_box": "3490",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5435,
+            "no_box": "3491",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5436,
+            "no_box": "3492",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5437,
+            "no_box": "3493",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5438,
+            "no_box": "3494",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5439,
+            "no_box": "3495",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5440,
+            "no_box": "3496",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5441,
+            "no_box": "3497",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5442,
+            "no_box": "3498",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5443,
+            "no_box": "3499",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5444,
+            "no_box": "3500",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5445,
+            "no_box": "3501",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5446,
+            "no_box": "3502",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5447,
+            "no_box": "3503",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5448,
+            "no_box": "3504",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5449,
+            "no_box": "3505",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5450,
+            "no_box": "3506",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5451,
+            "no_box": "3507",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5452,
+            "no_box": "3508",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5453,
+            "no_box": "3509",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5454,
+            "no_box": "3510",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5455,
+            "no_box": "3511",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5456,
+            "no_box": "3512",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5457,
+            "no_box": "3513",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5458,
+            "no_box": "3514",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5459,
+            "no_box": "3515",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5460,
+            "no_box": "3516",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5461,
+            "no_box": "3517",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5462,
+            "no_box": "3518",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5463,
+            "no_box": "3519",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5464,
+            "no_box": "3520",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5465,
+            "no_box": "3521",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5466,
+            "no_box": "3522",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5467,
+            "no_box": "3523",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5468,
+            "no_box": "3524",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5469,
+            "no_box": "3525",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5470,
+            "no_box": "3526",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5471,
+            "no_box": "3527",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5472,
+            "no_box": "3528",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5473,
+            "no_box": "3529",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5474,
+            "no_box": "3530",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5475,
+            "no_box": "3531",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5476,
+            "no_box": "3532",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5477,
+            "no_box": "3533",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5478,
+            "no_box": "3534",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5479,
+            "no_box": "3535",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5480,
+            "no_box": "3536",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5481,
+            "no_box": "3537",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5482,
+            "no_box": "3538",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5483,
+            "no_box": "3539",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5484,
+            "no_box": "3540",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5485,
+            "no_box": "3541",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5486,
+            "no_box": "3542",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5487,
+            "no_box": "3543",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5488,
+            "no_box": "3544",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5489,
+            "no_box": "3545",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5490,
+            "no_box": "3546",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5491,
+            "no_box": "3547",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5492,
+            "no_box": "3548",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5493,
+            "no_box": "3549",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5494,
+            "no_box": "3550",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5496,
+            "no_box": "3552",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5497,
+            "no_box": "3553",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5498,
+            "no_box": "3554",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5500,
+            "no_box": "3556",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5501,
+            "no_box": "3557",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5502,
+            "no_box": "3558",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5504,
+            "no_box": "3560",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5505,
+            "no_box": "3561",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5506,
+            "no_box": "3562",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5507,
+            "no_box": "3563",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5508,
+            "no_box": "3564",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5509,
+            "no_box": "3565",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5510,
+            "no_box": "3566",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5511,
+            "no_box": "3567",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5513,
+            "no_box": "3569",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5515,
+            "no_box": "3571",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5516,
+            "no_box": "3572",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5518,
+            "no_box": "3574",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5519,
+            "no_box": "3575",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5520,
+            "no_box": "3576",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5529,
+            "no_box": "3585",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3196,
+            "no_box": "2551",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3197,
+            "no_box": "2552",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3198,
+            "no_box": "2553",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3199,
+            "no_box": "2554",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3200,
+            "no_box": "2555",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 3201,
+            "no_box": "2556",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5253,
+            "no_box": "3309",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5254,
+            "no_box": "3310",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5258,
+            "no_box": "3314",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5259,
+            "no_box": "3315",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5262,
+            "no_box": "3318",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5263,
+            "no_box": "3319",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5264,
+            "no_box": "3320",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5265,
+            "no_box": "3321",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5267,
+            "no_box": "3323",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5268,
+            "no_box": "3324",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5269,
+            "no_box": "3325",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5270,
+            "no_box": "3326",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5271,
+            "no_box": "3327",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5274,
+            "no_box": "3330",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5275,
+            "no_box": "3331",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5276,
+            "no_box": "3332",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5277,
+            "no_box": "3333",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5278,
+            "no_box": "3334",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5279,
+            "no_box": "3335",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5280,
+            "no_box": "3336",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5281,
+            "no_box": "3337",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5282,
+            "no_box": "3338",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5283,
+            "no_box": "3339",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5284,
+            "no_box": "3340",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5285,
+            "no_box": "3341",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5286,
+            "no_box": "3342",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5287,
+            "no_box": "3343",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5288,
+            "no_box": "3344",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5289,
+            "no_box": "3345",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5292,
+            "no_box": "3348",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5293,
+            "no_box": "3349",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5296,
+            "no_box": "3352",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5369,
+            "no_box": "3425",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5370,
+            "no_box": "3426",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5371,
+            "no_box": "3427",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5372,
+            "no_box": "3428",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5373,
+            "no_box": "3429",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5374,
+            "no_box": "3430",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5375,
+            "no_box": "3431",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5376,
+            "no_box": "3432",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5377,
+            "no_box": "3433",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5390,
+            "no_box": "3446",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5392,
+            "no_box": "3448",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5393,
+            "no_box": "3449",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5394,
+            "no_box": "3450",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        },
+        {
+            "id_bk": 5395,
+            "no_box": "3451",
+            "kategori": "cabut",
+            "hrga_satuan": 7272.38292480301
+        }
+    ]
+}

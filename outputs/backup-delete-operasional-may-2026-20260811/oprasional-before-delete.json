@@ -1,0 +1,14 @@
+{
+    "created_at": "2026-08-11T09:41:57+08:00",
+    "records": [
+        {
+            "id_oprasional": 1,
+            "bulan": 5,
+            "tahun": 2026,
+            "rp_oprasional": 1,
+            "rp_gr": 1,
+            "gr": 1,
+            "total_operasional": 2909758377.95345
+        }
+    ]
+}

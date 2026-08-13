@@ -1,0 +1,5704 @@
+{
+    "created_at": "2026-08-11T10:36:30+08:00",
+    "formula": "modal_sumber * row_gr / invoice_total_gr",
+    "records": [
+        {
+            "id_grading": 4106,
+            "no_invoice": "11138",
+            "gr": 62,
+            "old_cost_bk": 578999.75640424,
+            "new_cost_bk": 608055.1069577553
+        },
+        {
+            "id_grading": 4107,
+            "no_invoice": "11138",
+            "gr": 15,
+            "old_cost_bk": 140080.58622683,
+            "new_cost_bk": 147110.10652203756
+        },
+        {
+            "id_grading": 4108,
+            "no_invoice": "11138",
+            "gr": 18,
+            "old_cost_bk": 168096.7034722,
+            "new_cost_bk": 176532.1278264451
+        },
+        {
+            "id_grading": 4109,
+            "no_invoice": "11138",
+            "gr": 450,
+            "old_cost_bk": 4202417.586805,
+            "new_cost_bk": 4413303.195661128
+        },
+        {
+            "id_grading": 4110,
+            "no_invoice": "11138",
+            "gr": 450,
+            "old_cost_bk": 4202417.586805,
+            "new_cost_bk": 4413303.195661128
+        },
+        {
+            "id_grading": 4111,
+            "no_invoice": "11138",
+            "gr": 122,
+            "old_cost_bk": 1139322.1013116,
+            "new_cost_bk": 1196495.5330459056
+        },
+        {
+            "id_grading": 4112,
+            "no_invoice": "11138",
+            "gr": 91,
+            "old_cost_bk": 849822.22310945,
+            "new_cost_bk": 892467.979567028
+        },
+        {
+            "id_grading": 4113,
+            "no_invoice": "11138",
+            "gr": 151,
+            "old_cost_bk": 1410144.5680168,
+            "new_cost_bk": 1480908.4056551782
+        },
+        {
+            "id_grading": 4114,
+            "no_invoice": "11138",
+            "gr": 66,
+            "old_cost_bk": 616354.57939806,
+            "new_cost_bk": 647284.4686969654
+        },
+        {
+            "id_grading": 4115,
+            "no_invoice": "11138",
+            "gr": 137,
+            "old_cost_bk": 1279402.6875384,
+            "new_cost_bk": 1343605.6395679433
+        },
+        {
+            "id_grading": 4116,
+            "no_invoice": "11138",
+            "gr": 36,
+            "old_cost_bk": 336193.4069444,
+            "new_cost_bk": 353064.2556528902
+        },
+        {
+            "id_grading": 4117,
+            "no_invoice": "11138",
+            "gr": 109,
+            "old_cost_bk": 1017918.9265816,
+            "new_cost_bk": 1069000.1073934732
+        },
+        {
+            "id_grading": 4118,
+            "no_invoice": "11138",
+            "gr": 77,
+            "old_cost_bk": 719080.34263107,
+            "new_cost_bk": 755165.2134797929
+        },
+        {
+            "id_grading": 4119,
+            "no_invoice": "11138",
+            "gr": 35,
+            "old_cost_bk": 326854.70119594,
+            "new_cost_bk": 343256.91521808767
+        },
+        {
+            "id_grading": 4120,
+            "no_invoice": "11138",
+            "gr": 225,
+            "old_cost_bk": 2101208.7934025,
+            "new_cost_bk": 2206651.597830564
+        },
+        {
+            "id_grading": 4121,
+            "no_invoice": "11138",
+            "gr": 85,
+            "old_cost_bk": 793789.98861872,
+            "new_cost_bk": 833623.9369582129
+        },
+        {
+            "id_grading": 4122,
+            "no_invoice": "11138",
+            "gr": 53,
+            "old_cost_bk": 494951.40466814,
+            "new_cost_bk": 519789.0430445327
+        },
+        {
+            "id_grading": 4123,
+            "no_invoice": "11138",
+            "gr": 179,
+            "old_cost_bk": 1671628.3289735,
+            "new_cost_bk": 1755513.9378296481
+        },
+        {
+            "id_grading": 4124,
+            "no_invoice": "11138",
+            "gr": 69,
+            "old_cost_bk": 644370.69664343,
+            "new_cost_bk": 676706.4900013728
+        },
+        {
+            "id_grading": 4125,
+            "no_invoice": "11138",
+            "gr": 96,
+            "old_cost_bk": 896515.75185173,
+            "new_cost_bk": 941504.6817410404
+        },
+        {
+            "id_grading": 4126,
+            "no_invoice": "11138",
+            "gr": 69,
+            "old_cost_bk": 644370.69664343,
+            "new_cost_bk": 676706.4900013728
+        },
+        {
+            "id_grading": 4127,
+            "no_invoice": "11138",
+            "gr": 54,
+            "old_cost_bk": 504290.1104166,
+            "new_cost_bk": 529596.3834793353
+        },
+        {
+            "id_grading": 4128,
+            "no_invoice": "11138",
+            "gr": 41,
+            "old_cost_bk": 382886.93568668,
+            "new_cost_bk": 402100.9578269027
+        },
+        {
+            "id_grading": 4129,
+            "no_invoice": "11138",
+            "gr": 20,
+            "old_cost_bk": 186774.11496911,
+            "new_cost_bk": 196146.8086960502
+        },
+        {
+            "id_grading": 4786,
+            "no_invoice": "11154",
+            "gr": 225,
+            "old_cost_bk": 2077823.6928009,
+            "new_cost_bk": 2116586.7590029594
+        },
+        {
+            "id_grading": 4787,
+            "no_invoice": "11154",
+            "gr": 225,
+            "old_cost_bk": 2077823.6928009,
+            "new_cost_bk": 2116586.7590029594
+        },
+        {
+            "id_grading": 4788,
+            "no_invoice": "11154",
+            "gr": 59,
+            "old_cost_bk": 544851.54611222,
+            "new_cost_bk": 555016.0834718872
+        },
+        {
+            "id_grading": 4789,
+            "no_invoice": "11154",
+            "gr": 152,
+            "old_cost_bk": 1403685.3391366,
+            "new_cost_bk": 1429871.943859777
+        },
+        {
+            "id_grading": 4790,
+            "no_invoice": "11154",
+            "gr": 6,
+            "old_cost_bk": 55408.631808023,
+            "new_cost_bk": 56442.31357341225
+        },
+        {
+            "id_grading": 4791,
+            "no_invoice": "11154",
+            "gr": 62,
+            "old_cost_bk": 572555.86201624,
+            "new_cost_bk": 583237.2402585933
+        },
+        {
+            "id_grading": 4792,
+            "no_invoice": "11154",
+            "gr": 66,
+            "old_cost_bk": 609494.94988825,
+            "new_cost_bk": 620865.4493075348
+        },
+        {
+            "id_grading": 4793,
+            "no_invoice": "11154",
+            "gr": 145,
+            "old_cost_bk": 1339041.9353606,
+            "new_cost_bk": 1364022.5780241294
+        },
+        {
+            "id_grading": 4794,
+            "no_invoice": "11154",
+            "gr": 87,
+            "old_cost_bk": 803425.16121633,
+            "new_cost_bk": 818413.5468144777
+        },
+        {
+            "id_grading": 4795,
+            "no_invoice": "11154",
+            "gr": 15,
+            "old_cost_bk": 138521.57952006,
+            "new_cost_bk": 141105.78393353062
+        },
+        {
+            "id_grading": 4796,
+            "no_invoice": "11154",
+            "gr": 110,
+            "old_cost_bk": 1015824.9164804,
+            "new_cost_bk": 1034775.7488458913
+        },
+        {
+            "id_grading": 4797,
+            "no_invoice": "11154",
+            "gr": 109,
+            "old_cost_bk": 1006590.1445124,
+            "new_cost_bk": 1025368.696583656
+        },
+        {
+            "id_grading": 4798,
+            "no_invoice": "11154",
+            "gr": 86,
+            "old_cost_bk": 794190.38924833,
+            "new_cost_bk": 809006.4945522423
+        },
+        {
+            "id_grading": 4799,
+            "no_invoice": "11154",
+            "gr": 32,
+            "old_cost_bk": 295512.70297612,
+            "new_cost_bk": 301025.672391532
+        },
+        {
+            "id_grading": 4800,
+            "no_invoice": "11154",
+            "gr": 139,
+            "old_cost_bk": 1283633.3035525,
+            "new_cost_bk": 1307580.264450717
+        },
+        {
+            "id_grading": 4801,
+            "no_invoice": "11154",
+            "gr": 12,
+            "old_cost_bk": 110817.26361605,
+            "new_cost_bk": 112884.6271468245
+        },
+        {
+            "id_grading": 4802,
+            "no_invoice": "11154",
+            "gr": 16,
+            "old_cost_bk": 147756.35148806,
+            "new_cost_bk": 150512.836195766
+        },
+        {
+            "id_grading": 4803,
+            "no_invoice": "11154",
+            "gr": 14,
+            "old_cost_bk": 129286.80755205,
+            "new_cost_bk": 131698.73167129525
+        },
+        {
+            "id_grading": 4804,
+            "no_invoice": "11154",
+            "gr": 20,
+            "old_cost_bk": 184695.43936008,
+            "new_cost_bk": 188141.0452447075
+        },
+        {
+            "id_grading": 4805,
+            "no_invoice": "11154",
+            "gr": 30,
+            "old_cost_bk": 277043.15904011,
+            "new_cost_bk": 282211.56786706124
+        },
+        {
+            "id_grading": 4806,
+            "no_invoice": "11154",
+            "gr": 202,
+            "old_cost_bk": 1865423.9375368,
+            "new_cost_bk": 1900224.5569715458
+        },
+        {
+            "id_grading": 4807,
+            "no_invoice": "11154",
+            "gr": 45,
+            "old_cost_bk": 415564.73856017,
+            "new_cost_bk": 423317.35180059186
+        },
+        {
+            "id_grading": 4808,
+            "no_invoice": "11154",
+            "gr": 23,
+            "old_cost_bk": 212399.75526409,
+            "new_cost_bk": 216362.20203141365
+        },
+        {
+            "id_grading": 4809,
+            "no_invoice": "11154",
+            "gr": 34,
+            "old_cost_bk": 313982.24691213,
+            "new_cost_bk": 319839.77691600274
+        },
+        {
+            "id_grading": 4810,
+            "no_invoice": "11154",
+            "gr": 25,
+            "old_cost_bk": 230869.2992001,
+            "new_cost_bk": 235176.3065558844
+        },
+        {
+            "id_grading": 4811,
+            "no_invoice": "11154",
+            "gr": 11,
+            "old_cost_bk": 101582.49164804,
+            "new_cost_bk": 103477.57488458912
+        },
+        {
+            "id_grading": 4812,
+            "no_invoice": "11154",
+            "gr": 111,
+            "old_cost_bk": 1025059.6884484,
+            "new_cost_bk": 1044182.8011081266
+        },
+        {
+            "id_grading": 4813,
+            "no_invoice": "11154",
+            "gr": 31,
+            "old_cost_bk": 286277.93100812,
+            "new_cost_bk": 291618.6201292967
+        },
+        {
+            "id_grading": 4814,
+            "no_invoice": "11154",
+            "gr": 12,
+            "old_cost_bk": 110817.26361605,
+            "new_cost_bk": 112884.6271468245
+        },
+        {
+            "id_grading": 4815,
+            "no_invoice": "11154",
+            "gr": 17,
+            "old_cost_bk": 156991.12345606,
+            "new_cost_bk": 159919.88845800137
+        },
+        {
+            "id_grading": 4816,
+            "no_invoice": "11154",
+            "gr": 45,
+            "old_cost_bk": 415564.73856017,
+            "new_cost_bk": 423317.35180059186
+        },
+        {
+            "id_grading": 4817,
+            "no_invoice": "11154",
+            "gr": 10,
+            "old_cost_bk": 92347.719680038,
+            "new_cost_bk": 94070.52262235375
+        },
+        {
+            "id_grading": 4818,
+            "no_invoice": "11154",
+            "gr": 6,
+            "old_cost_bk": 55408.631808023,
+            "new_cost_bk": 56442.31357341225
+        },
+        {
+            "id_grading": 4819,
+            "no_invoice": "11154",
+            "gr": 54,
+            "old_cost_bk": 498677.68627221,
+            "new_cost_bk": 507980.8221607103
+        },
+        {
+            "id_grading": 4820,
+            "no_invoice": "11154",
+            "gr": 89,
+            "old_cost_bk": 821894.70515234,
+            "new_cost_bk": 837227.6513389484
+        },
+        {
+            "id_grading": 4821,
+            "no_invoice": "11154",
+            "gr": 95,
+            "old_cost_bk": 877303.33696036,
+            "new_cost_bk": 893669.9649123607
+        },
+        {
+            "id_grading": 4822,
+            "no_invoice": "11154",
+            "gr": 129,
+            "old_cost_bk": 1191285.5838725,
+            "new_cost_bk": 1213509.7418283634
+        },
+        {
+            "id_grading": 4823,
+            "no_invoice": "11154",
+            "gr": 34,
+            "old_cost_bk": 313982.24691213,
+            "new_cost_bk": 319839.77691599727
+        },
+        {
+            "id_grading": 4416,
+            "no_invoice": "11147",
+            "gr": 187,
+            "old_cost_bk": 1746154.8534236,
+            "new_cost_bk": 1833678.652154305
+        },
+        {
+            "id_grading": 4417,
+            "no_invoice": "11147",
+            "gr": 194,
+            "old_cost_bk": 1811518.9388458,
+            "new_cost_bk": 1902319.029507675
+        },
+        {
+            "id_grading": 4418,
+            "no_invoice": "11147",
+            "gr": 102,
+            "old_cost_bk": 952448.10186739,
+            "new_cost_bk": 1000188.3557205303
+        },
+        {
+            "id_grading": 4419,
+            "no_invoice": "11147",
+            "gr": 450,
+            "old_cost_bk": 4201976.9200032,
+            "new_cost_bk": 4412595.6870023385
+        },
+        {
+            "id_grading": 4420,
+            "no_invoice": "11147",
+            "gr": 225,
+            "old_cost_bk": 2100988.4600016,
+            "new_cost_bk": 2206297.8435011692
+        },
+        {
+            "id_grading": 4421,
+            "no_invoice": "11147",
+            "gr": 68,
+            "old_cost_bk": 634965.40124493,
+            "new_cost_bk": 666792.2371470201
+        },
+        {
+            "id_grading": 4422,
+            "no_invoice": "11147",
+            "gr": 65,
+            "old_cost_bk": 606952.22177824,
+            "new_cost_bk": 637374.9325670046
+        },
+        {
+            "id_grading": 4423,
+            "no_invoice": "11147",
+            "gr": 36,
+            "old_cost_bk": 336158.15360026,
+            "new_cost_bk": 353007.6549601871
+        },
+        {
+            "id_grading": 4424,
+            "no_invoice": "11147",
+            "gr": 43,
+            "old_cost_bk": 401522.23902253,
+            "new_cost_bk": 421648.0323135569
+        },
+        {
+            "id_grading": 4425,
+            "no_invoice": "11147",
+            "gr": 26,
+            "old_cost_bk": 242780.8887113,
+            "new_cost_bk": 254949.9730268018
+        },
+        {
+            "id_grading": 4426,
+            "no_invoice": "11147",
+            "gr": 17,
+            "old_cost_bk": 158741.35031123,
+            "new_cost_bk": 166698.05928675501
+        },
+        {
+            "id_grading": 4427,
+            "no_invoice": "11147",
+            "gr": 143,
+            "old_cost_bk": 1335294.8879121,
+            "new_cost_bk": 1402224.8516474098
+        },
+        {
+            "id_grading": 4428,
+            "no_invoice": "11147",
+            "gr": 221,
+            "old_cost_bk": 2063637.554046,
+            "new_cost_bk": 2167074.7707278156
+        },
+        {
+            "id_grading": 4429,
+            "no_invoice": "11147",
+            "gr": 151,
+            "old_cost_bk": 1409996.6998233,
+            "new_cost_bk": 1480670.997194118
+        },
+        {
+            "id_grading": 4430,
+            "no_invoice": "11147",
+            "gr": 62,
+            "old_cost_bk": 578939.04231155,
+            "new_cost_bk": 607957.6279869889
+        },
+        {
+            "id_grading": 4431,
+            "no_invoice": "11147",
+            "gr": 51,
+            "old_cost_bk": 476224.0509337,
+            "new_cost_bk": 500094.17786026513
+        },
+        {
+            "id_grading": 4432,
+            "no_invoice": "11147",
+            "gr": 225,
+            "old_cost_bk": 2100988.4600016,
+            "new_cost_bk": 2206297.8435011692
+        },
+        {
+            "id_grading": 4433,
+            "no_invoice": "11147",
+            "gr": 17,
+            "old_cost_bk": 158741.35031123,
+            "new_cost_bk": 166698.05928675501
+        },
+        {
+            "id_grading": 4434,
+            "no_invoice": "11147",
+            "gr": 116,
+            "old_cost_bk": 1083176.2727119,
+            "new_cost_bk": 1137469.1104272695
+        },
+        {
+            "id_grading": 4435,
+            "no_invoice": "11147",
+            "gr": 79,
+            "old_cost_bk": 737680.39262278,
+            "new_cost_bk": 774655.6872737439
+        },
+        {
+            "id_grading": 4436,
+            "no_invoice": "11147",
+            "gr": 109,
+            "old_cost_bk": 1017812.1872897,
+            "new_cost_bk": 1068828.7330738998
+        },
+        {
+            "id_grading": 4437,
+            "no_invoice": "11147",
+            "gr": 42,
+            "old_cost_bk": 392184.51253363,
+            "new_cost_bk": 411842.2641202183
+        },
+        {
+            "id_grading": 4438,
+            "no_invoice": "11147",
+            "gr": 31,
+            "old_cost_bk": 289469.52115578,
+            "new_cost_bk": 303978.81399349443
+        },
+        {
+            "id_grading": 4439,
+            "no_invoice": "11147",
+            "gr": 27,
+            "old_cost_bk": 252118.61520019,
+            "new_cost_bk": 264755.7412201403
+        },
+        {
+            "id_grading": 4440,
+            "no_invoice": "11147",
+            "gr": 21,
+            "old_cost_bk": 196092.25626682,
+            "new_cost_bk": 205921.13206010914
+        },
+        {
+            "id_grading": 4441,
+            "no_invoice": "11147",
+            "gr": 23,
+            "old_cost_bk": 214767.70924461,
+            "new_cost_bk": 225532.6684467862
+        },
+        {
+            "id_grading": 4442,
+            "no_invoice": "11147",
+            "gr": 45,
+            "old_cost_bk": 420197.69200032,
+            "new_cost_bk": 441259.56870023394
+        },
+        {
+            "id_grading": 4443,
+            "no_invoice": "11147",
+            "gr": 41,
+            "old_cost_bk": 382846.78604474,
+            "new_cost_bk": 402036.4959268798
+        },
+        {
+            "id_grading": 4444,
+            "no_invoice": "11147",
+            "gr": 56,
+            "old_cost_bk": 522912.68337818,
+            "new_cost_bk": 549123.0188269577
+        },
+        {
+            "id_grading": 4445,
+            "no_invoice": "11147",
+            "gr": 178,
+            "old_cost_bk": 1662115.3150235,
+            "new_cost_bk": 1745426.7384142585
+        },
+        {
+            "id_grading": 4446,
+            "no_invoice": "11147",
+            "gr": 87,
+            "old_cost_bk": 812382.20453395,
+            "new_cost_bk": 853101.8328204522
+        },
+        {
+            "id_grading": 4447,
+            "no_invoice": "11147",
+            "gr": 62,
+            "old_cost_bk": 578939.04231155,
+            "new_cost_bk": 607957.6279869889
+        },
+        {
+            "id_grading": 4448,
+            "no_invoice": "11147",
+            "gr": 33,
+            "old_cost_bk": 308144.97413357,
+            "new_cost_bk": 323590.3503801715
+        },
+        {
+            "id_grading": 4449,
+            "no_invoice": "11147",
+            "gr": 73,
+            "old_cost_bk": 681654.03368941,
+            "new_cost_bk": 715821.0781137127
+        },
+        {
+            "id_grading": 4450,
+            "no_invoice": "11147",
+            "gr": 75,
+            "old_cost_bk": 700329.4866672,
+            "new_cost_bk": 735432.6145003898
+        },
+        {
+            "id_grading": 4451,
+            "no_invoice": "11147",
+            "gr": 60,
+            "old_cost_bk": 560263.58933376,
+            "new_cost_bk": 588346.0916003118
+        },
+        {
+            "id_grading": 4452,
+            "no_invoice": "11147",
+            "gr": 43,
+            "old_cost_bk": 401522.23902253,
+            "new_cost_bk": 421648.0323135569
+        },
+        {
+            "id_grading": 4453,
+            "no_invoice": "11147",
+            "gr": 21,
+            "old_cost_bk": 196092.25626682,
+            "new_cost_bk": 205921.13206010914
+        },
+        {
+            "id_grading": 4454,
+            "no_invoice": "11147",
+            "gr": 45,
+            "old_cost_bk": 420197.69200032,
+            "new_cost_bk": 441259.56870023394
+        },
+        {
+            "id_grading": 4455,
+            "no_invoice": "11147",
+            "gr": 103,
+            "old_cost_bk": 961785.82835629,
+            "new_cost_bk": 1009994.1239138687
+        },
+        {
+            "id_grading": 4456,
+            "no_invoice": "11147",
+            "gr": 131,
+            "old_cost_bk": 1223242.1700454,
+            "new_cost_bk": 1284555.6333273475
+        },
+        {
+            "id_grading": 4457,
+            "no_invoice": "11147",
+            "gr": 127,
+            "old_cost_bk": 1185891.2640898,
+            "new_cost_bk": 1245332.5605539933
+        },
+        {
+            "id_grading": 4458,
+            "no_invoice": "11147",
+            "gr": 136,
+            "old_cost_bk": 1269930.8024899,
+            "new_cost_bk": 1333584.4742940401
+        },
+        {
+            "id_grading": 4459,
+            "no_invoice": "11147",
+            "gr": 291,
+            "old_cost_bk": 2717278.4082687,
+            "new_cost_bk": 2853478.5442615123
+        },
+        {
+            "id_grading": 4460,
+            "no_invoice": "11147",
+            "gr": 74,
+            "old_cost_bk": 690991.7601783,
+            "new_cost_bk": 725626.8463070542
+        },
+        {
+            "id_grading": 4188,
+            "no_invoice": "11140",
+            "gr": 156,
+            "old_cost_bk": 1406394.7143834,
+            "new_cost_bk": 1575072.4003338472
+        },
+        {
+            "id_grading": 4189,
+            "no_invoice": "11140",
+            "gr": 129,
+            "old_cost_bk": 1162980.2445863,
+            "new_cost_bk": 1302463.7156606812
+        },
+        {
+            "id_grading": 4190,
+            "no_invoice": "11140",
+            "gr": 54,
+            "old_cost_bk": 486828.93959425,
+            "new_cost_bk": 545217.3693463317
+        },
+        {
+            "id_grading": 4191,
+            "no_invoice": "11140",
+            "gr": 31,
+            "old_cost_bk": 279475.87273003,
+            "new_cost_bk": 312995.1564765978
+        },
+        {
+            "id_grading": 4192,
+            "no_invoice": "11140",
+            "gr": 38,
+            "old_cost_bk": 342583.32786262,
+            "new_cost_bk": 383671.48213260376
+        },
+        {
+            "id_grading": 4193,
+            "no_invoice": "11140",
+            "gr": 46,
+            "old_cost_bk": 414706.13372844,
+            "new_cost_bk": 464444.4257394677
+        },
+        {
+            "id_grading": 4194,
+            "no_invoice": "11140",
+            "gr": 62,
+            "old_cost_bk": 558951.74546007,
+            "new_cost_bk": 625990.3129531957
+        },
+        {
+            "id_grading": 4195,
+            "no_invoice": "11140",
+            "gr": 5,
+            "old_cost_bk": 45076.753666135,
+            "new_cost_bk": 50483.08975428997
+        },
+        {
+            "id_grading": 4196,
+            "no_invoice": "11140",
+            "gr": 95,
+            "old_cost_bk": 856458.31965656,
+            "new_cost_bk": 959178.7053315094
+        },
+        {
+            "id_grading": 4197,
+            "no_invoice": "11140",
+            "gr": 163,
+            "old_cost_bk": 1469502.169516,
+            "new_cost_bk": 1645748.725989853
+        },
+        {
+            "id_grading": 4198,
+            "no_invoice": "11140",
+            "gr": 54,
+            "old_cost_bk": 486828.93959425,
+            "new_cost_bk": 545217.3693463317
+        },
+        {
+            "id_grading": 4199,
+            "no_invoice": "11140",
+            "gr": 46,
+            "old_cost_bk": 414706.13372844,
+            "new_cost_bk": 464444.4257394677
+        },
+        {
+            "id_grading": 4200,
+            "no_invoice": "11140",
+            "gr": 31,
+            "old_cost_bk": 279475.87273003,
+            "new_cost_bk": 312995.1564765978
+        },
+        {
+            "id_grading": 4201,
+            "no_invoice": "11140",
+            "gr": 63,
+            "old_cost_bk": 567967.09619329,
+            "new_cost_bk": 636086.9309040536
+        },
+        {
+            "id_grading": 4202,
+            "no_invoice": "11140",
+            "gr": 80,
+            "old_cost_bk": 721228.05865815,
+            "new_cost_bk": 807729.4360686395
+        },
+        {
+            "id_grading": 4203,
+            "no_invoice": "11140",
+            "gr": 18,
+            "old_cost_bk": 162276.31319808,
+            "new_cost_bk": 181739.1231154439
+        },
+        {
+            "id_grading": 4204,
+            "no_invoice": "11140",
+            "gr": 15,
+            "old_cost_bk": 135230.2609984,
+            "new_cost_bk": 151449.26926286993
+        },
+        {
+            "id_grading": 4205,
+            "no_invoice": "11140",
+            "gr": 31,
+            "old_cost_bk": 279475.87273003,
+            "new_cost_bk": 312995.1564765978
+        },
+        {
+            "id_grading": 4206,
+            "no_invoice": "11140",
+            "gr": 38,
+            "old_cost_bk": 342583.32786262,
+            "new_cost_bk": 383671.48213260376
+        },
+        {
+            "id_grading": 4207,
+            "no_invoice": "11140",
+            "gr": 77,
+            "old_cost_bk": 694182.00645847,
+            "new_cost_bk": 777439.5822160656
+        },
+        {
+            "id_grading": 4208,
+            "no_invoice": "11140",
+            "gr": 64,
+            "old_cost_bk": 576982.44692652,
+            "new_cost_bk": 646183.5488549116
+        },
+        {
+            "id_grading": 4209,
+            "no_invoice": "11140",
+            "gr": 22,
+            "old_cost_bk": 198337.71613099,
+            "new_cost_bk": 222125.59491887587
+        },
+        {
+            "id_grading": 4210,
+            "no_invoice": "11140",
+            "gr": 22,
+            "old_cost_bk": 198337.71613099,
+            "new_cost_bk": 222125.59491887587
+        },
+        {
+            "id_grading": 4211,
+            "no_invoice": "11140",
+            "gr": 19,
+            "old_cost_bk": 171291.66393131,
+            "new_cost_bk": 191835.74106630188
+        },
+        {
+            "id_grading": 4212,
+            "no_invoice": "11140",
+            "gr": 30,
+            "old_cost_bk": 270460.52199681,
+            "new_cost_bk": 302898.53852573986
+        },
+        {
+            "id_grading": 4213,
+            "no_invoice": "11140",
+            "gr": 22,
+            "old_cost_bk": 198337.71613099,
+            "new_cost_bk": 222125.59491887587
+        },
+        {
+            "id_grading": 4214,
+            "no_invoice": "11140",
+            "gr": 13,
+            "old_cost_bk": 117199.55953195,
+            "new_cost_bk": 131256.03336115394
+        },
+        {
+            "id_grading": 4215,
+            "no_invoice": "11140",
+            "gr": 28,
+            "old_cost_bk": 252429.82053035,
+            "new_cost_bk": 282705.3026240263
+        },
+        {
+            "id_grading": 5073,
+            "no_invoice": "11162",
+            "gr": 189,
+            "old_cost_bk": 1805498.309594,
+            "new_cost_bk": 1927962.0240490339
+        },
+        {
+            "id_grading": 5074,
+            "no_invoice": "11162",
+            "gr": 102,
+            "old_cost_bk": 974395.91311425,
+            "new_cost_bk": 1040487.4415502723
+        },
+        {
+            "id_grading": 5075,
+            "no_invoice": "11162",
+            "gr": 387,
+            "old_cost_bk": 3696972.7291688,
+            "new_cost_bk": 3947731.7635289743
+        },
+        {
+            "id_grading": 5076,
+            "no_invoice": "11162",
+            "gr": 78,
+            "old_cost_bk": 745126.28649913,
+            "new_cost_bk": 795666.8670678552
+        },
+        {
+            "id_grading": 5077,
+            "no_invoice": "11162",
+            "gr": 102,
+            "old_cost_bk": 974395.91311425,
+            "new_cost_bk": 1040487.4415502723
+        },
+        {
+            "id_grading": 5078,
+            "no_invoice": "11162",
+            "gr": 66,
+            "old_cost_bk": 630491.47319157,
+            "new_cost_bk": 673256.5798266467
+        },
+        {
+            "id_grading": 5079,
+            "no_invoice": "11162",
+            "gr": 79,
+            "old_cost_bk": 754679.18760809,
+            "new_cost_bk": 805867.7243379559
+        },
+        {
+            "id_grading": 5080,
+            "no_invoice": "11162",
+            "gr": 67,
+            "old_cost_bk": 640044.37430053,
+            "new_cost_bk": 683457.4370967476
+        },
+        {
+            "id_grading": 5081,
+            "no_invoice": "11162",
+            "gr": 248,
+            "old_cost_bk": 2369119.4750229,
+            "new_cost_bk": 2529812.602984976
+        },
+        {
+            "id_grading": 5082,
+            "no_invoice": "11162",
+            "gr": 102,
+            "old_cost_bk": 974395.91311425,
+            "new_cost_bk": 1040487.4415502723
+        },
+        {
+            "id_grading": 5083,
+            "no_invoice": "11162",
+            "gr": 378,
+            "old_cost_bk": 3610996.6191881,
+            "new_cost_bk": 3855924.0480980678
+        },
+        {
+            "id_grading": 5084,
+            "no_invoice": "11162",
+            "gr": 127,
+            "old_cost_bk": 1213218.4408383,
+            "new_cost_bk": 1295508.87330279
+        },
+        {
+            "id_grading": 5085,
+            "no_invoice": "11162",
+            "gr": 194,
+            "old_cost_bk": 1853262.8151389,
+            "new_cost_bk": 1978966.3103995377
+        },
+        {
+            "id_grading": 5086,
+            "no_invoice": "11162",
+            "gr": 169,
+            "old_cost_bk": 1614440.2874148,
+            "new_cost_bk": 1723944.8786470199
+        },
+        {
+            "id_grading": 5087,
+            "no_invoice": "11162",
+            "gr": 42,
+            "old_cost_bk": 401221.84657645,
+            "new_cost_bk": 428436.0053442298
+        },
+        {
+            "id_grading": 5088,
+            "no_invoice": "11162",
+            "gr": 71,
+            "old_cost_bk": 678255.97873639,
+            "new_cost_bk": 724260.8661771503
+        },
+        {
+            "id_grading": 5089,
+            "no_invoice": "11162",
+            "gr": 133,
+            "old_cost_bk": 1270535.8474921,
+            "new_cost_bk": 1356714.0169233943
+        },
+        {
+            "id_grading": 5090,
+            "no_invoice": "11162",
+            "gr": 450,
+            "old_cost_bk": 4298805.4990334,
+            "new_cost_bk": 4590385.771545319
+        },
+        {
+            "id_grading": 5091,
+            "no_invoice": "11162",
+            "gr": 344,
+            "old_cost_bk": 3286197.9814833,
+            "new_cost_bk": 3509094.900914644
+        },
+        {
+            "id_grading": 5092,
+            "no_invoice": "11162",
+            "gr": 76,
+            "old_cost_bk": 726020.4842812,
+            "new_cost_bk": 775265.1525276538
+        },
+        {
+            "id_grading": 5093,
+            "no_invoice": "11162",
+            "gr": 70,
+            "old_cost_bk": 668703.07762742,
+            "new_cost_bk": 714060.0089070495
+        },
+        {
+            "id_grading": 5094,
+            "no_invoice": "11162",
+            "gr": 239,
+            "old_cost_bk": 2283143.3650422,
+            "new_cost_bk": 2438004.887554069
+        },
+        {
+            "id_grading": 5095,
+            "no_invoice": "11162",
+            "gr": 33,
+            "old_cost_bk": 315245.73659579,
+            "new_cost_bk": 336628.28991332336
+        },
+        {
+            "id_grading": 5096,
+            "no_invoice": "11162",
+            "gr": 47,
+            "old_cost_bk": 448986.35212127,
+            "new_cost_bk": 479440.29169473326
+        },
+        {
+            "id_grading": 5097,
+            "no_invoice": "11162",
+            "gr": 5,
+            "old_cost_bk": 47764.505544816,
+            "new_cost_bk": 51004.28635050354
+        },
+        {
+            "id_grading": 5098,
+            "no_invoice": "11162",
+            "gr": 139,
+            "old_cost_bk": 1327853.2541459,
+            "new_cost_bk": 1417919.1605439985
+        },
+        {
+            "id_grading": 5099,
+            "no_invoice": "11162",
+            "gr": 225,
+            "old_cost_bk": 2149402.7495167,
+            "new_cost_bk": 2295192.8857726594
+        },
+        {
+            "id_grading": 5100,
+            "no_invoice": "11162",
+            "gr": 225,
+            "old_cost_bk": 2149402.7495167,
+            "new_cost_bk": 2295192.8857726594
+        },
+        {
+            "id_grading": 5101,
+            "no_invoice": "11162",
+            "gr": 225,
+            "old_cost_bk": 2149402.7495167,
+            "new_cost_bk": 2295192.8857726594
+        },
+        {
+            "id_grading": 5102,
+            "no_invoice": "11162",
+            "gr": 93,
+            "old_cost_bk": 888419.80313358,
+            "new_cost_bk": 948679.7261193659
+        },
+        {
+            "id_grading": 5103,
+            "no_invoice": "11162",
+            "gr": 359,
+            "old_cost_bk": 3429491.4981178,
+            "new_cost_bk": 3662107.7599661425
+        },
+        {
+            "id_grading": 5603,
+            "no_invoice": "11183",
+            "gr": 52,
+            "old_cost_bk": 473836.99413815,
+            "new_cost_bk": 498467.0834044331
+        },
+        {
+            "id_grading": 5604,
+            "no_invoice": "11183",
+            "gr": 135,
+            "old_cost_bk": 1230153.7347817,
+            "new_cost_bk": 1294097.235761509
+        },
+        {
+            "id_grading": 5605,
+            "no_invoice": "11183",
+            "gr": 199,
+            "old_cost_bk": 1813337.7275672,
+            "new_cost_bk": 1907595.1845669653
+        },
+        {
+            "id_grading": 5606,
+            "no_invoice": "11183",
+            "gr": 16,
+            "old_cost_bk": 145795.99819636,
+            "new_cost_bk": 153374.48720136404
+        },
+        {
+            "id_grading": 5607,
+            "no_invoice": "11183",
+            "gr": 12,
+            "old_cost_bk": 109346.99864727,
+            "new_cost_bk": 115030.86540102302
+        },
+        {
+            "id_grading": 5608,
+            "no_invoice": "11183",
+            "gr": 70,
+            "old_cost_bk": 637857.49210905,
+            "new_cost_bk": 671013.3815059677
+        },
+        {
+            "id_grading": 5609,
+            "no_invoice": "11183",
+            "gr": 39,
+            "old_cost_bk": 355377.74560362,
+            "new_cost_bk": 373850.31255332485
+        },
+        {
+            "id_grading": 5610,
+            "no_invoice": "11183",
+            "gr": 16,
+            "old_cost_bk": 145795.99819636,
+            "new_cost_bk": 153374.48720136404
+        },
+        {
+            "id_grading": 5611,
+            "no_invoice": "11183",
+            "gr": 12,
+            "old_cost_bk": 109346.99864727,
+            "new_cost_bk": 115030.86540102302
+        },
+        {
+            "id_grading": 5612,
+            "no_invoice": "11183",
+            "gr": 95,
+            "old_cost_bk": 865663.73929086,
+            "new_cost_bk": 910661.017758099
+        },
+        {
+            "id_grading": 5613,
+            "no_invoice": "11183",
+            "gr": 10,
+            "old_cost_bk": 91122.498872722,
+            "new_cost_bk": 95859.05450085252
+        },
+        {
+            "id_grading": 5614,
+            "no_invoice": "11183",
+            "gr": 130,
+            "old_cost_bk": 1184592.4853454,
+            "new_cost_bk": 1246167.708511083
+        },
+        {
+            "id_grading": 5615,
+            "no_invoice": "11183",
+            "gr": 62,
+            "old_cost_bk": 564959.49301088,
+            "new_cost_bk": 594326.1379052857
+        },
+        {
+            "id_grading": 5616,
+            "no_invoice": "11183",
+            "gr": 22,
+            "old_cost_bk": 200469.49751999,
+            "new_cost_bk": 210889.91990187552
+        },
+        {
+            "id_grading": 5617,
+            "no_invoice": "11183",
+            "gr": 20,
+            "old_cost_bk": 182244.99774544,
+            "new_cost_bk": 191718.10900170504
+        },
+        {
+            "id_grading": 5618,
+            "no_invoice": "11183",
+            "gr": 69,
+            "old_cost_bk": 628745.24222178,
+            "new_cost_bk": 661427.4760558824
+        },
+        {
+            "id_grading": 5619,
+            "no_invoice": "11183",
+            "gr": 45,
+            "old_cost_bk": 410051.24492725,
+            "new_cost_bk": 431365.7452538363
+        },
+        {
+            "id_grading": 5620,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5621,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5622,
+            "no_invoice": "11183",
+            "gr": 133,
+            "old_cost_bk": 1211929.2350072,
+            "new_cost_bk": 1274925.4248613387
+        },
+        {
+            "id_grading": 5623,
+            "no_invoice": "11183",
+            "gr": 52,
+            "old_cost_bk": 473836.99413815,
+            "new_cost_bk": 498467.0834044331
+        },
+        {
+            "id_grading": 5624,
+            "no_invoice": "11183",
+            "gr": 115,
+            "old_cost_bk": 1047908.7370363,
+            "new_cost_bk": 1102379.1267598039
+        },
+        {
+            "id_grading": 5625,
+            "no_invoice": "11183",
+            "gr": 50,
+            "old_cost_bk": 455612.49436361,
+            "new_cost_bk": 479295.2725042626
+        },
+        {
+            "id_grading": 5626,
+            "no_invoice": "11183",
+            "gr": 136,
+            "old_cost_bk": 1239265.984669,
+            "new_cost_bk": 1303683.1412115942
+        },
+        {
+            "id_grading": 5627,
+            "no_invoice": "11183",
+            "gr": 105,
+            "old_cost_bk": 956786.23816358,
+            "new_cost_bk": 1006520.0722589514
+        },
+        {
+            "id_grading": 5628,
+            "no_invoice": "11183",
+            "gr": 131,
+            "old_cost_bk": 1193704.7352327,
+            "new_cost_bk": 1255753.613961168
+        },
+        {
+            "id_grading": 5629,
+            "no_invoice": "11183",
+            "gr": 35,
+            "old_cost_bk": 318928.74605453,
+            "new_cost_bk": 335506.69075298385
+        },
+        {
+            "id_grading": 5630,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5631,
+            "no_invoice": "11183",
+            "gr": 63,
+            "old_cost_bk": 574071.74289815,
+            "new_cost_bk": 603912.0433553709
+        },
+        {
+            "id_grading": 5632,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5633,
+            "no_invoice": "11183",
+            "gr": 102,
+            "old_cost_bk": 929449.48850176,
+            "new_cost_bk": 977762.3559086958
+        },
+        {
+            "id_grading": 5634,
+            "no_invoice": "11183",
+            "gr": 136,
+            "old_cost_bk": 1239265.984669,
+            "new_cost_bk": 1303683.1412115942
+        },
+        {
+            "id_grading": 5635,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5636,
+            "no_invoice": "11183",
+            "gr": 68,
+            "old_cost_bk": 619632.99233451,
+            "new_cost_bk": 651841.5706057971
+        },
+        {
+            "id_grading": 5637,
+            "no_invoice": "11183",
+            "gr": 81,
+            "old_cost_bk": 738092.24086905,
+            "new_cost_bk": 776458.3414569054
+        },
+        {
+            "id_grading": 5638,
+            "no_invoice": "11183",
+            "gr": 35,
+            "old_cost_bk": 318928.74605453,
+            "new_cost_bk": 335506.69075298385
+        },
+        {
+            "id_grading": 5639,
+            "no_invoice": "11183",
+            "gr": 29,
+            "old_cost_bk": 264255.24673089,
+            "new_cost_bk": 277991.2580524723
+        },
+        {
+            "id_grading": 5640,
+            "no_invoice": "11183",
+            "gr": 29,
+            "old_cost_bk": 264255.24673089,
+            "new_cost_bk": 277991.2580524723
+        },
+        {
+            "id_grading": 5641,
+            "no_invoice": "11183",
+            "gr": 75,
+            "old_cost_bk": 683418.74154542,
+            "new_cost_bk": 718942.9087563939
+        },
+        {
+            "id_grading": 5642,
+            "no_invoice": "11183",
+            "gr": 180,
+            "old_cost_bk": 1640204.979709,
+            "new_cost_bk": 1725462.9810153453
+        },
+        {
+            "id_grading": 5643,
+            "no_invoice": "11183",
+            "gr": 63,
+            "old_cost_bk": 574071.74289815,
+            "new_cost_bk": 603912.0433553709
+        },
+        {
+            "id_grading": 5644,
+            "no_invoice": "11183",
+            "gr": 94,
+            "old_cost_bk": 856551.48940359,
+            "new_cost_bk": 901075.1123080137
+        },
+        {
+            "id_grading": 5645,
+            "no_invoice": "11183",
+            "gr": 163,
+            "old_cost_bk": 1485296.7316254,
+            "new_cost_bk": 1562502.5883638961
+        },
+        {
+            "id_grading": 5646,
+            "no_invoice": "11183",
+            "gr": 225,
+            "old_cost_bk": 2050256.2246362,
+            "new_cost_bk": 2156828.726269182
+        },
+        {
+            "id_grading": 5647,
+            "no_invoice": "11183",
+            "gr": 33,
+            "old_cost_bk": 300704.24627998,
+            "new_cost_bk": 316334.8798528133
+        },
+        {
+            "id_grading": 5648,
+            "no_invoice": "11183",
+            "gr": 63,
+            "old_cost_bk": 574071.74289815,
+            "new_cost_bk": 603912.0433553709
+        },
+        {
+            "id_grading": 5649,
+            "no_invoice": "11183",
+            "gr": 105,
+            "old_cost_bk": 956786.23816358,
+            "new_cost_bk": 1006520.0722589514
+        },
+        {
+            "id_grading": 5650,
+            "no_invoice": "11183",
+            "gr": 20,
+            "old_cost_bk": 182244.99774544,
+            "new_cost_bk": 191718.10900170504
+        },
+        {
+            "id_grading": 5651,
+            "no_invoice": "11183",
+            "gr": 114,
+            "old_cost_bk": 1038796.487149,
+            "new_cost_bk": 1092793.2213097187
+        },
+        {
+            "id_grading": 5652,
+            "no_invoice": "11183",
+            "gr": 29,
+            "old_cost_bk": 264255.24673089,
+            "new_cost_bk": 277991.25805247575
+        },
+        {
+            "id_grading": 5040,
+            "no_invoice": "11169",
+            "gr": 99,
+            "old_cost_bk": 888546.26200425,
+            "new_cost_bk": 901099.0937878535
+        },
+        {
+            "id_grading": 5041,
+            "no_invoice": "11169",
+            "gr": 35,
+            "old_cost_bk": 314132.51687019,
+            "new_cost_bk": 318570.38669267547
+        },
+        {
+            "id_grading": 5042,
+            "no_invoice": "11169",
+            "gr": 7,
+            "old_cost_bk": 62826.503374038,
+            "new_cost_bk": 63714.07733853509
+        },
+        {
+            "id_grading": 5043,
+            "no_invoice": "11169",
+            "gr": 11,
+            "old_cost_bk": 98727.362444917,
+            "new_cost_bk": 100122.12153198372
+        },
+        {
+            "id_grading": 5044,
+            "no_invoice": "11169",
+            "gr": 20,
+            "old_cost_bk": 179504.29535439,
+            "new_cost_bk": 182040.22096724313
+        },
+        {
+            "id_grading": 5045,
+            "no_invoice": "11169",
+            "gr": 14,
+            "old_cost_bk": 125653.00674808,
+            "new_cost_bk": 127428.15467707018
+        },
+        {
+            "id_grading": 5046,
+            "no_invoice": "11169",
+            "gr": 57,
+            "old_cost_bk": 511587.24176002,
+            "new_cost_bk": 518814.6297566429
+        },
+        {
+            "id_grading": 5047,
+            "no_invoice": "11169",
+            "gr": 54,
+            "old_cost_bk": 484661.59745686,
+            "new_cost_bk": 491508.5966115565
+        },
+        {
+            "id_grading": 5048,
+            "no_invoice": "11169",
+            "gr": 65,
+            "old_cost_bk": 583388.95990178,
+            "new_cost_bk": 591630.7181435402
+        },
+        {
+            "id_grading": 5049,
+            "no_invoice": "11169",
+            "gr": 36,
+            "old_cost_bk": 323107.73163791,
+            "new_cost_bk": 327672.39774103765
+        },
+        {
+            "id_grading": 5050,
+            "no_invoice": "11169",
+            "gr": 84,
+            "old_cost_bk": 753918.04048845,
+            "new_cost_bk": 764568.9280624212
+        },
+        {
+            "id_grading": 5051,
+            "no_invoice": "11169",
+            "gr": 15,
+            "old_cost_bk": 134628.2215158,
+            "new_cost_bk": 136530.16572543237
+        },
+        {
+            "id_grading": 5052,
+            "no_invoice": "11169",
+            "gr": 17,
+            "old_cost_bk": 152578.65105123,
+            "new_cost_bk": 154734.18782215667
+        },
+        {
+            "id_grading": 5053,
+            "no_invoice": "11169",
+            "gr": 10,
+            "old_cost_bk": 89752.147677197,
+            "new_cost_bk": 91020.11048362157
+        },
+        {
+            "id_grading": 5054,
+            "no_invoice": "11169",
+            "gr": 10,
+            "old_cost_bk": 89752.147677197,
+            "new_cost_bk": 91020.11048362157
+        },
+        {
+            "id_grading": 5055,
+            "no_invoice": "11169",
+            "gr": 20,
+            "old_cost_bk": 179504.29535439,
+            "new_cost_bk": 182040.22096724313
+        },
+        {
+            "id_grading": 5056,
+            "no_invoice": "11169",
+            "gr": 9,
+            "old_cost_bk": 80776.932909477,
+            "new_cost_bk": 81918.09943525941
+        },
+        {
+            "id_grading": 5057,
+            "no_invoice": "11169",
+            "gr": 15,
+            "old_cost_bk": 134628.2215158,
+            "new_cost_bk": 136530.16572543237
+        },
+        {
+            "id_grading": 5058,
+            "no_invoice": "11169",
+            "gr": 48,
+            "old_cost_bk": 430810.30885055,
+            "new_cost_bk": 436896.5303213835
+        },
+        {
+            "id_grading": 5059,
+            "no_invoice": "11169",
+            "gr": 41,
+            "old_cost_bk": 367983.80547651,
+            "new_cost_bk": 373182.4529828484
+        },
+        {
+            "id_grading": 5060,
+            "no_invoice": "11169",
+            "gr": 12,
+            "old_cost_bk": 107702.57721264,
+            "new_cost_bk": 109224.13258034587
+        },
+        {
+            "id_grading": 5061,
+            "no_invoice": "11169",
+            "gr": 21,
+            "old_cost_bk": 188479.51012211,
+            "new_cost_bk": 191142.2320156053
+        },
+        {
+            "id_grading": 5062,
+            "no_invoice": "11169",
+            "gr": 9,
+            "old_cost_bk": 80776.932909477,
+            "new_cost_bk": 81918.09943525941
+        },
+        {
+            "id_grading": 5063,
+            "no_invoice": "11169",
+            "gr": 55,
+            "old_cost_bk": 493636.81222458,
+            "new_cost_bk": 500610.60765991855
+        },
+        {
+            "id_grading": 5064,
+            "no_invoice": "11169",
+            "gr": 5,
+            "old_cost_bk": 44876.073838599,
+            "new_cost_bk": 45510.05524181078
+        },
+        {
+            "id_grading": 5065,
+            "no_invoice": "11169",
+            "gr": 14,
+            "old_cost_bk": 125653.00674808,
+            "new_cost_bk": 127428.15467707018
+        },
+        {
+            "id_grading": 5066,
+            "no_invoice": "11169",
+            "gr": 37,
+            "old_cost_bk": 332082.94640563,
+            "new_cost_bk": 336774.40878939984
+        },
+        {
+            "id_grading": 5067,
+            "no_invoice": "11169",
+            "gr": 20,
+            "old_cost_bk": 179504.29535439,
+            "new_cost_bk": 182040.22096724313
+        },
+        {
+            "id_grading": 5068,
+            "no_invoice": "11169",
+            "gr": 50,
+            "old_cost_bk": 448760.73838598,
+            "new_cost_bk": 455100.5524181078
+        },
+        {
+            "id_grading": 5069,
+            "no_invoice": "11169",
+            "gr": 32,
+            "old_cost_bk": 287206.87256703,
+            "new_cost_bk": 291264.353547589
+        },
+        {
+            "id_grading": 5070,
+            "no_invoice": "11169",
+            "gr": 4,
+            "old_cost_bk": 35900.859070879,
+            "new_cost_bk": 36408.04419344862
+        },
+        {
+            "id_grading": 5071,
+            "no_invoice": "11169",
+            "gr": 86,
+            "old_cost_bk": 771868.47002389,
+            "new_cost_bk": 782772.9501591455
+        },
+        {
+            "id_grading": 5072,
+            "no_invoice": "11169",
+            "gr": 171,
+            "old_cost_bk": 1534761.7252801,
+            "new_cost_bk": 1556443.8892699294
+        },
+        {
+            "id_grading": 5960,
+            "no_invoice": "11201",
+            "gr": 14,
+            "old_cost_bk": 130211.17499037,
+            "new_cost_bk": 135902.04902635812
+        },
+        {
+            "id_grading": 5961,
+            "no_invoice": "11201",
+            "gr": 14,
+            "old_cost_bk": 130211.17499037,
+            "new_cost_bk": 135902.04902635812
+        },
+        {
+            "id_grading": 5962,
+            "no_invoice": "11201",
+            "gr": 16,
+            "old_cost_bk": 148812.77141756,
+            "new_cost_bk": 155316.62745869497
+        },
+        {
+            "id_grading": 5963,
+            "no_invoice": "11201",
+            "gr": 14,
+            "old_cost_bk": 130211.17499037,
+            "new_cost_bk": 135902.04902635812
+        },
+        {
+            "id_grading": 5964,
+            "no_invoice": "11201",
+            "gr": 12,
+            "old_cost_bk": 111609.57856317,
+            "new_cost_bk": 116487.47059402124
+        },
+        {
+            "id_grading": 5965,
+            "no_invoice": "11201",
+            "gr": 11,
+            "old_cost_bk": 102308.78034957,
+            "new_cost_bk": 106780.1813778528
+        },
+        {
+            "id_grading": 5966,
+            "no_invoice": "11201",
+            "gr": 63,
+            "old_cost_bk": 585950.28745666,
+            "new_cost_bk": 611559.2206186114
+        },
+        {
+            "id_grading": 5967,
+            "no_invoice": "11201",
+            "gr": 5,
+            "old_cost_bk": 46503.991067988,
+            "new_cost_bk": 48536.446080842186
+        },
+        {
+            "id_grading": 5968,
+            "no_invoice": "11201",
+            "gr": 110,
+            "old_cost_bk": 1023087.8034957,
+            "new_cost_bk": 1067801.813778528
+        },
+        {
+            "id_grading": 5969,
+            "no_invoice": "11201",
+            "gr": 70,
+            "old_cost_bk": 651055.87495184,
+            "new_cost_bk": 679510.2451317905
+        },
+        {
+            "id_grading": 5970,
+            "no_invoice": "11201",
+            "gr": 49,
+            "old_cost_bk": 455739.11246629,
+            "new_cost_bk": 475657.1715922534
+        },
+        {
+            "id_grading": 5971,
+            "no_invoice": "11201",
+            "gr": 56,
+            "old_cost_bk": 520844.69996147,
+            "new_cost_bk": 543608.1961054325
+        },
+        {
+            "id_grading": 5972,
+            "no_invoice": "11201",
+            "gr": 25,
+            "old_cost_bk": 232519.95533994,
+            "new_cost_bk": 242682.23040421092
+        },
+        {
+            "id_grading": 5973,
+            "no_invoice": "11201",
+            "gr": 81,
+            "old_cost_bk": 753364.65530141,
+            "new_cost_bk": 786290.4265096434
+        },
+        {
+            "id_grading": 5974,
+            "no_invoice": "11201",
+            "gr": 74,
+            "old_cost_bk": 688259.06780623,
+            "new_cost_bk": 718339.4019964642
+        },
+        {
+            "id_grading": 5975,
+            "no_invoice": "11201",
+            "gr": 88,
+            "old_cost_bk": 818470.2427966,
+            "new_cost_bk": 854241.4510228224
+        },
+        {
+            "id_grading": 5976,
+            "no_invoice": "11201",
+            "gr": 44,
+            "old_cost_bk": 409235.1213983,
+            "new_cost_bk": 427120.7255114112
+        },
+        {
+            "id_grading": 5977,
+            "no_invoice": "11201",
+            "gr": 44,
+            "old_cost_bk": 409235.1213983,
+            "new_cost_bk": 427120.7255114112
+        },
+        {
+            "id_grading": 5978,
+            "no_invoice": "11201",
+            "gr": 18,
+            "old_cost_bk": 167414.36784476,
+            "new_cost_bk": 174731.20589103186
+        },
+        {
+            "id_grading": 5979,
+            "no_invoice": "11201",
+            "gr": 19,
+            "old_cost_bk": 176715.16605836,
+            "new_cost_bk": 184438.4951072003
+        },
+        {
+            "id_grading": 5980,
+            "no_invoice": "11201",
+            "gr": 40,
+            "old_cost_bk": 372031.92854391,
+            "new_cost_bk": 388291.5686467375
+        },
+        {
+            "id_grading": 5981,
+            "no_invoice": "11201",
+            "gr": 34,
+            "old_cost_bk": 316227.13926232,
+            "new_cost_bk": 330047.83334972686
+        },
+        {
+            "id_grading": 5982,
+            "no_invoice": "11201",
+            "gr": 25,
+            "old_cost_bk": 232519.95533994,
+            "new_cost_bk": 242682.23040421092
+        },
+        {
+            "id_grading": 5983,
+            "no_invoice": "11201",
+            "gr": 25,
+            "old_cost_bk": 232519.95533994,
+            "new_cost_bk": 242682.23040421092
+        },
+        {
+            "id_grading": 5984,
+            "no_invoice": "11201",
+            "gr": 18,
+            "old_cost_bk": 167414.36784476,
+            "new_cost_bk": 174731.20589103186
+        },
+        {
+            "id_grading": 5985,
+            "no_invoice": "11201",
+            "gr": 40,
+            "old_cost_bk": 372031.92854391,
+            "new_cost_bk": 388291.5686467375
+        },
+        {
+            "id_grading": 5986,
+            "no_invoice": "11201",
+            "gr": 18,
+            "old_cost_bk": 167414.36784476,
+            "new_cost_bk": 174731.20589103186
+        },
+        {
+            "id_grading": 5987,
+            "no_invoice": "11201",
+            "gr": 10,
+            "old_cost_bk": 93007.982135977,
+            "new_cost_bk": 97072.89216168437
+        },
+        {
+            "id_grading": 5988,
+            "no_invoice": "11201",
+            "gr": 86,
+            "old_cost_bk": 799868.6463694,
+            "new_cost_bk": 834826.8725904855
+        },
+        {
+            "id_grading": 5989,
+            "no_invoice": "11201",
+            "gr": 18,
+            "old_cost_bk": 167414.36784476,
+            "new_cost_bk": 174731.20589103186
+        },
+        {
+            "id_grading": 5990,
+            "no_invoice": "11201",
+            "gr": 19,
+            "old_cost_bk": 176715.16605836,
+            "new_cost_bk": 184438.4951072003
+        },
+        {
+            "id_grading": 5991,
+            "no_invoice": "11201",
+            "gr": 17,
+            "old_cost_bk": 158113.56963116,
+            "new_cost_bk": 165023.91667486343
+        },
+        {
+            "id_grading": 5992,
+            "no_invoice": "11201",
+            "gr": 39,
+            "old_cost_bk": 362731.13033031,
+            "new_cost_bk": 378584.27943056903
+        },
+        {
+            "id_grading": 5993,
+            "no_invoice": "11201",
+            "gr": 197,
+            "old_cost_bk": 1832257.2480787,
+            "new_cost_bk": 1912335.975585182
+        },
+        {
+            "id_grading": 5994,
+            "no_invoice": "11201",
+            "gr": 14,
+            "old_cost_bk": 130211.17499037,
+            "new_cost_bk": 135902.04902635812
+        },
+        {
+            "id_grading": 5995,
+            "no_invoice": "11201",
+            "gr": 129,
+            "old_cost_bk": 1199802.9695541,
+            "new_cost_bk": 1252240.308885727
+        },
+        {
+            "id_grading": 4924,
+            "no_invoice": "11158",
+            "gr": 76,
+            "old_cost_bk": 697200.38733384,
+            "new_cost_bk": 715704.0445961234
+        },
+        {
+            "id_grading": 4925,
+            "no_invoice": "11158",
+            "gr": 122,
+            "old_cost_bk": 1119190.095457,
+            "new_cost_bk": 1148893.3347464087
+        },
+        {
+            "id_grading": 4926,
+            "no_invoice": "11158",
+            "gr": 39,
+            "old_cost_bk": 357773.88297394,
+            "new_cost_bk": 367269.18077958963
+        },
+        {
+            "id_grading": 4927,
+            "no_invoice": "11158",
+            "gr": 65,
+            "old_cost_bk": 596289.80495657,
+            "new_cost_bk": 612115.301299316
+        },
+        {
+            "id_grading": 4928,
+            "no_invoice": "11158",
+            "gr": 99,
+            "old_cost_bk": 908195.2413954,
+            "new_cost_bk": 932298.689671266
+        },
+        {
+            "id_grading": 4929,
+            "no_invoice": "11158",
+            "gr": 99,
+            "old_cost_bk": 908195.2413954,
+            "new_cost_bk": 932298.689671266
+        },
+        {
+            "id_grading": 4930,
+            "no_invoice": "11158",
+            "gr": 38,
+            "old_cost_bk": 348600.19366692,
+            "new_cost_bk": 357852.0222980617
+        },
+        {
+            "id_grading": 4931,
+            "no_invoice": "11158",
+            "gr": 191,
+            "old_cost_bk": 1752174.6576416,
+            "new_cost_bk": 1798677.2699718366
+        },
+        {
+            "id_grading": 4932,
+            "no_invoice": "11158",
+            "gr": 34,
+            "old_cost_bk": 311905.43643882,
+            "new_cost_bk": 320183.38837194996
+        },
+        {
+            "id_grading": 4933,
+            "no_invoice": "11158",
+            "gr": 51,
+            "old_cost_bk": 467858.15465823,
+            "new_cost_bk": 480275.08255792496
+        },
+        {
+            "id_grading": 4934,
+            "no_invoice": "11158",
+            "gr": 27,
+            "old_cost_bk": 247689.61128965,
+            "new_cost_bk": 254263.27900125436
+        },
+        {
+            "id_grading": 4935,
+            "no_invoice": "11158",
+            "gr": 59,
+            "old_cost_bk": 541247.66911443,
+            "new_cost_bk": 555612.3504101485
+        },
+        {
+            "id_grading": 4936,
+            "no_invoice": "11158",
+            "gr": 24,
+            "old_cost_bk": 220168.54336858,
+            "new_cost_bk": 226011.80355667058
+        },
+        {
+            "id_grading": 4937,
+            "no_invoice": "11158",
+            "gr": 59,
+            "old_cost_bk": 541247.66911443,
+            "new_cost_bk": 555612.3504101485
+        },
+        {
+            "id_grading": 4938,
+            "no_invoice": "11158",
+            "gr": 71,
+            "old_cost_bk": 651331.94079872,
+            "new_cost_bk": 668618.2521884837
+        },
+        {
+            "id_grading": 4939,
+            "no_invoice": "11158",
+            "gr": 25,
+            "old_cost_bk": 229342.2326756,
+            "new_cost_bk": 235428.9620381985
+        },
+        {
+            "id_grading": 4940,
+            "no_invoice": "11158",
+            "gr": 53,
+            "old_cost_bk": 486205.53327228,
+            "new_cost_bk": 499109.39952098083
+        },
+        {
+            "id_grading": 4941,
+            "no_invoice": "11158",
+            "gr": 17,
+            "old_cost_bk": 155952.71821941,
+            "new_cost_bk": 160091.69418597498
+        },
+        {
+            "id_grading": 4942,
+            "no_invoice": "11158",
+            "gr": 73,
+            "old_cost_bk": 669679.31941277,
+            "new_cost_bk": 687452.5691515396
+        },
+        {
+            "id_grading": 4943,
+            "no_invoice": "11158",
+            "gr": 97,
+            "old_cost_bk": 889847.86278135,
+            "new_cost_bk": 913464.37270821
+        },
+        {
+            "id_grading": 4944,
+            "no_invoice": "11158",
+            "gr": 80,
+            "old_cost_bk": 733895.14456194,
+            "new_cost_bk": 753372.6785222352
+        },
+        {
+            "id_grading": 4945,
+            "no_invoice": "11158",
+            "gr": 21,
+            "old_cost_bk": 192647.47544751,
+            "new_cost_bk": 197760.32811208675
+        },
+        {
+            "id_grading": 4946,
+            "no_invoice": "11158",
+            "gr": 64,
+            "old_cost_bk": 587116.11564955,
+            "new_cost_bk": 602698.1428177882
+        },
+        {
+            "id_grading": 4947,
+            "no_invoice": "11158",
+            "gr": 30,
+            "old_cost_bk": 275210.67921073,
+            "new_cost_bk": 282514.75444583816
+        },
+        {
+            "id_grading": 4948,
+            "no_invoice": "11158",
+            "gr": 18,
+            "old_cost_bk": 165126.40752644,
+            "new_cost_bk": 169508.8526675029
+        },
+        {
+            "id_grading": 4949,
+            "no_invoice": "11158",
+            "gr": 27,
+            "old_cost_bk": 247689.61128965,
+            "new_cost_bk": 254263.27900125436
+        },
+        {
+            "id_grading": 4950,
+            "no_invoice": "11158",
+            "gr": 55,
+            "old_cost_bk": 504552.91188633,
+            "new_cost_bk": 517943.71648403665
+        },
+        {
+            "id_grading": 4951,
+            "no_invoice": "11158",
+            "gr": 72,
+            "old_cost_bk": 660505.63010574,
+            "new_cost_bk": 678035.4106700117
+        },
+        {
+            "id_grading": 4952,
+            "no_invoice": "11158",
+            "gr": 36,
+            "old_cost_bk": 330252.81505287,
+            "new_cost_bk": 339017.7053350058
+        },
+        {
+            "id_grading": 4953,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4954,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4955,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4956,
+            "no_invoice": "11158",
+            "gr": 126,
+            "old_cost_bk": 1155884.852685,
+            "new_cost_bk": 1186561.9686725205
+        },
+        {
+            "id_grading": 4957,
+            "no_invoice": "11158",
+            "gr": 73,
+            "old_cost_bk": 669679.31941277,
+            "new_cost_bk": 687452.5691515396
+        },
+        {
+            "id_grading": 4958,
+            "no_invoice": "11158",
+            "gr": 60,
+            "old_cost_bk": 550421.35842145,
+            "new_cost_bk": 565029.5088916763
+        },
+        {
+            "id_grading": 4959,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4960,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4961,
+            "no_invoice": "11158",
+            "gr": 225,
+            "old_cost_bk": 2064080.0940804,
+            "new_cost_bk": 2118860.6583437864
+        },
+        {
+            "id_grading": 4962,
+            "no_invoice": "11158",
+            "gr": 74,
+            "old_cost_bk": 678853.00871979,
+            "new_cost_bk": 696869.7276330675
+        },
+        {
+            "id_grading": 4963,
+            "no_invoice": "11158",
+            "gr": 45,
+            "old_cost_bk": 412816.01881609,
+            "new_cost_bk": 423772.1316687573
+        },
+        {
+            "id_grading": 4964,
+            "no_invoice": "11158",
+            "gr": 45,
+            "old_cost_bk": 412816.01881609,
+            "new_cost_bk": 423772.1316687573
+        },
+        {
+            "id_grading": 4965,
+            "no_invoice": "11158",
+            "gr": 123,
+            "old_cost_bk": 1128363.784764,
+            "new_cost_bk": 1158310.4932279366
+        },
+        {
+            "id_grading": 4966,
+            "no_invoice": "11158",
+            "gr": 79,
+            "old_cost_bk": 724721.45525491,
+            "new_cost_bk": 743955.5200407073
+        },
+        {
+            "id_grading": 4967,
+            "no_invoice": "11158",
+            "gr": 37,
+            "old_cost_bk": 339426.5043599,
+            "new_cost_bk": 348434.86381653376
+        },
+        {
+            "id_grading": 4968,
+            "no_invoice": "11158",
+            "gr": 157,
+            "old_cost_bk": 1440269.2212028,
+            "new_cost_bk": 1478493.8815998866
+        },
+        {
+            "id_grading": 4969,
+            "no_invoice": "11158",
+            "gr": 160,
+            "old_cost_bk": 1467790.2891239,
+            "new_cost_bk": 1506745.3570444705
+        },
+        {
+            "id_grading": 4970,
+            "no_invoice": "11158",
+            "gr": 81,
+            "old_cost_bk": 743068.83386896,
+            "new_cost_bk": 762789.8370037631
+        },
+        {
+            "id_grading": 4971,
+            "no_invoice": "11158",
+            "gr": 73,
+            "old_cost_bk": 669679.31941277,
+            "new_cost_bk": 687452.5691515396
+        },
+        {
+            "id_grading": 4972,
+            "no_invoice": "11158",
+            "gr": 31,
+            "old_cost_bk": 284384.36851775,
+            "new_cost_bk": 291931.91292736615
+        },
+        {
+            "id_grading": 4973,
+            "no_invoice": "11158",
+            "gr": 178,
+            "old_cost_bk": 1632916.6966503,
+            "new_cost_bk": 1676254.2097119733
+        },
+        {
+            "id_grading": 4974,
+            "no_invoice": "11158",
+            "gr": 105,
+            "old_cost_bk": 963237.37723754,
+            "new_cost_bk": 988801.6405604336
+        },
+        {
+            "id_grading": 4975,
+            "no_invoice": "11158",
+            "gr": 116,
+            "old_cost_bk": 1064147.9596148,
+            "new_cost_bk": 1092390.383857241
+        },
+        {
+            "id_grading": 4976,
+            "no_invoice": "11158",
+            "gr": 150,
+            "old_cost_bk": 1376053.3960536,
+            "new_cost_bk": 1412573.7722291872
+        },
+        {
+            "id_grading": 5454,
+            "no_invoice": "11173",
+            "gr": 19,
+            "old_cost_bk": 172417.36407694,
+            "new_cost_bk": 175902.51506271245
+        },
+        {
+            "id_grading": 5455,
+            "no_invoice": "11173",
+            "gr": 210,
+            "old_cost_bk": 1905665.6029556,
+            "new_cost_bk": 1944185.6927984008
+        },
+        {
+            "id_grading": 5456,
+            "no_invoice": "11173",
+            "gr": 215,
+            "old_cost_bk": 1951038.5935022,
+            "new_cost_bk": 1990475.8283412198
+        },
+        {
+            "id_grading": 5457,
+            "no_invoice": "11173",
+            "gr": 65,
+            "old_cost_bk": 589848.87710531,
+            "new_cost_bk": 601771.7620566478
+        },
+        {
+            "id_grading": 5458,
+            "no_invoice": "11173",
+            "gr": 61,
+            "old_cost_bk": 553550.48466806,
+            "new_cost_bk": 564739.6536223926
+        },
+        {
+            "id_grading": 5459,
+            "no_invoice": "11173",
+            "gr": 147,
+            "old_cost_bk": 1333965.9220689,
+            "new_cost_bk": 1360929.9849588803
+        },
+        {
+            "id_grading": 5460,
+            "no_invoice": "11173",
+            "gr": 13,
+            "old_cost_bk": 117969.77542106,
+            "new_cost_bk": 120354.35241132957
+        },
+        {
+            "id_grading": 5461,
+            "no_invoice": "11173",
+            "gr": 94,
+            "old_cost_bk": 853012.22227537,
+            "new_cost_bk": 870254.5482049984
+        },
+        {
+            "id_grading": 5462,
+            "no_invoice": "11173",
+            "gr": 156,
+            "old_cost_bk": 1415637.3050527,
+            "new_cost_bk": 1444252.2289359549
+        },
+        {
+            "id_grading": 5463,
+            "no_invoice": "11173",
+            "gr": 225,
+            "old_cost_bk": 2041784.5745953,
+            "new_cost_bk": 2083056.099426858
+        },
+        {
+            "id_grading": 5464,
+            "no_invoice": "11173",
+            "gr": 63,
+            "old_cost_bk": 571699.68088669,
+            "new_cost_bk": 583255.7078395202
+        },
+        {
+            "id_grading": 5465,
+            "no_invoice": "11173",
+            "gr": 124,
+            "old_cost_bk": 1125250.1655547,
+            "new_cost_bk": 1147995.3614619127
+        },
+        {
+            "id_grading": 5466,
+            "no_invoice": "11173",
+            "gr": 94,
+            "old_cost_bk": 853012.22227537,
+            "new_cost_bk": 870254.5482049984
+        },
+        {
+            "id_grading": 5467,
+            "no_invoice": "11173",
+            "gr": 67,
+            "old_cost_bk": 607998.07332394,
+            "new_cost_bk": 620287.8162737754
+        },
+        {
+            "id_grading": 5468,
+            "no_invoice": "11173",
+            "gr": 39,
+            "old_cost_bk": 353909.32626319,
+            "new_cost_bk": 361063.0572339887
+        },
+        {
+            "id_grading": 5469,
+            "no_invoice": "11173",
+            "gr": 42,
+            "old_cost_bk": 381133.12059112,
+            "new_cost_bk": 388837.13855968014
+        },
+        {
+            "id_grading": 5470,
+            "no_invoice": "11173",
+            "gr": 31,
+            "old_cost_bk": 281312.54138869,
+            "new_cost_bk": 286998.8403654782
+        },
+        {
+            "id_grading": 5471,
+            "no_invoice": "11173",
+            "gr": 24,
+            "old_cost_bk": 217790.3546235,
+            "new_cost_bk": 222192.6506055315
+        },
+        {
+            "id_grading": 5472,
+            "no_invoice": "11173",
+            "gr": 11,
+            "old_cost_bk": 99820.579202437,
+            "new_cost_bk": 101838.29819420194
+        },
+        {
+            "id_grading": 5473,
+            "no_invoice": "11173",
+            "gr": 90,
+            "old_cost_bk": 816713.82983812,
+            "new_cost_bk": 833222.4397707431
+        },
+        {
+            "id_grading": 5474,
+            "no_invoice": "11173",
+            "gr": 225,
+            "old_cost_bk": 2041784.5745953,
+            "new_cost_bk": 2083056.099426858
+        },
+        {
+            "id_grading": 5475,
+            "no_invoice": "11173",
+            "gr": 89,
+            "old_cost_bk": 807639.23172881,
+            "new_cost_bk": 823964.4126621793
+        },
+        {
+            "id_grading": 5476,
+            "no_invoice": "11173",
+            "gr": 108,
+            "old_cost_bk": 980056.59580575,
+            "new_cost_bk": 999866.9277248918
+        },
+        {
+            "id_grading": 5477,
+            "no_invoice": "11173",
+            "gr": 78,
+            "old_cost_bk": 707818.65252637,
+            "new_cost_bk": 722126.1144679774
+        },
+        {
+            "id_grading": 5478,
+            "no_invoice": "11173",
+            "gr": 59,
+            "old_cost_bk": 535401.28844944,
+            "new_cost_bk": 546223.599405265
+        },
+        {
+            "id_grading": 5479,
+            "no_invoice": "11173",
+            "gr": 123,
+            "old_cost_bk": 1116175.5674454,
+            "new_cost_bk": 1138737.334353349
+        },
+        {
+            "id_grading": 5480,
+            "no_invoice": "11173",
+            "gr": 18,
+            "old_cost_bk": 163342.76596762,
+            "new_cost_bk": 166644.48795414864
+        },
+        {
+            "id_grading": 5481,
+            "no_invoice": "11173",
+            "gr": 24,
+            "old_cost_bk": 217790.3546235,
+            "new_cost_bk": 222192.6506055315
+        },
+        {
+            "id_grading": 5482,
+            "no_invoice": "11173",
+            "gr": 11,
+            "old_cost_bk": 99820.579202437,
+            "new_cost_bk": 101838.29819420194
+        },
+        {
+            "id_grading": 5483,
+            "no_invoice": "11173",
+            "gr": 54,
+            "old_cost_bk": 490028.29790287,
+            "new_cost_bk": 499933.4638624459
+        },
+        {
+            "id_grading": 5484,
+            "no_invoice": "11173",
+            "gr": 8,
+            "old_cost_bk": 72596.7848745,
+            "new_cost_bk": 74064.21686851051
+        },
+        {
+            "id_grading": 5485,
+            "no_invoice": "11173",
+            "gr": 23,
+            "old_cost_bk": 208715.75651419,
+            "new_cost_bk": 212934.6234969677
+        },
+        {
+            "id_grading": 5486,
+            "no_invoice": "11173",
+            "gr": 13,
+            "old_cost_bk": 117969.77542106,
+            "new_cost_bk": 120354.35241132957
+        },
+        {
+            "id_grading": 5487,
+            "no_invoice": "11173",
+            "gr": 31,
+            "old_cost_bk": 281312.54138869,
+            "new_cost_bk": 286998.8403654782
+        },
+        {
+            "id_grading": 5488,
+            "no_invoice": "11173",
+            "gr": 21,
+            "old_cost_bk": 190566.56029556,
+            "new_cost_bk": 194418.56927984007
+        },
+        {
+            "id_grading": 5489,
+            "no_invoice": "11173",
+            "gr": 11,
+            "old_cost_bk": 99820.579202437,
+            "new_cost_bk": 101838.29819420194
+        },
+        {
+            "id_grading": 5490,
+            "no_invoice": "11173",
+            "gr": 8,
+            "old_cost_bk": 72596.7848745,
+            "new_cost_bk": 74064.21686851051
+        },
+        {
+            "id_grading": 5491,
+            "no_invoice": "11173",
+            "gr": 34,
+            "old_cost_bk": 308536.33571662,
+            "new_cost_bk": 314772.9216911697
+        },
+        {
+            "id_grading": 5492,
+            "no_invoice": "11173",
+            "gr": 18,
+            "old_cost_bk": 163342.76596762,
+            "new_cost_bk": 166644.48795414864
+        },
+        {
+            "id_grading": 5493,
+            "no_invoice": "11173",
+            "gr": 167,
+            "old_cost_bk": 1515457.8842552,
+            "new_cost_bk": 1546090.5271301568
+        },
+        {
+            "id_grading": 5494,
+            "no_invoice": "11173",
+            "gr": 225,
+            "old_cost_bk": 2041784.5745953,
+            "new_cost_bk": 2083056.099426858
+        },
+        {
+            "id_grading": 5495,
+            "no_invoice": "11173",
+            "gr": 225,
+            "old_cost_bk": 2041784.5745953,
+            "new_cost_bk": 2083056.099426858
+        },
+        {
+            "id_grading": 5496,
+            "no_invoice": "11173",
+            "gr": 23,
+            "old_cost_bk": 208715.75651419,
+            "new_cost_bk": 212934.6234969677
+        },
+        {
+            "id_grading": 5497,
+            "no_invoice": "11173",
+            "gr": 51,
+            "old_cost_bk": 462804.50357494,
+            "new_cost_bk": 472159.3825367544
+        },
+        {
+            "id_grading": 5498,
+            "no_invoice": "11173",
+            "gr": 91,
+            "old_cost_bk": 825788.42794744,
+            "new_cost_bk": 842480.466879307
+        },
+        {
+            "id_grading": 5499,
+            "no_invoice": "11173",
+            "gr": 225,
+            "old_cost_bk": 2041784.5745953,
+            "new_cost_bk": 2083056.099426858
+        },
+        {
+            "id_grading": 5500,
+            "no_invoice": "11173",
+            "gr": 45,
+            "old_cost_bk": 408356.91491906,
+            "new_cost_bk": 416611.21988537157
+        },
+        {
+            "id_grading": 5501,
+            "no_invoice": "11173",
+            "gr": 81,
+            "old_cost_bk": 735042.44685431,
+            "new_cost_bk": 749900.1957936687
+        },
+        {
+            "id_grading": 5502,
+            "no_invoice": "11173",
+            "gr": 62,
+            "old_cost_bk": 562625.08277737,
+            "new_cost_bk": 573997.6807309564
+        },
+        {
+            "id_grading": 5503,
+            "no_invoice": "11173",
+            "gr": 66,
+            "old_cost_bk": 598923.47521462,
+            "new_cost_bk": 611029.7891652137
+        },
+        {
+            "id_grading": 5713,
+            "no_invoice": "11187",
+            "gr": 190,
+            "old_cost_bk": 1718693.5346457,
+            "new_cost_bk": 1771705.5667312637
+        },
+        {
+            "id_grading": 5714,
+            "no_invoice": "11187",
+            "gr": 129,
+            "old_cost_bk": 1166902.45247,
+            "new_cost_bk": 1202894.8321491212
+        },
+        {
+            "id_grading": 5715,
+            "no_invoice": "11187",
+            "gr": 112,
+            "old_cost_bk": 1013124.6098964,
+            "new_cost_bk": 1044373.8077573766
+        },
+        {
+            "id_grading": 5716,
+            "no_invoice": "11187",
+            "gr": 94,
+            "old_cost_bk": 850301.01187734,
+            "new_cost_bk": 876528.0172249409
+        },
+        {
+            "id_grading": 5717,
+            "no_invoice": "11187",
+            "gr": 22,
+            "old_cost_bk": 199006.61980108,
+            "new_cost_bk": 205144.85509519896
+        },
+        {
+            "id_grading": 5718,
+            "no_invoice": "11187",
+            "gr": 114,
+            "old_cost_bk": 1031216.1207874,
+            "new_cost_bk": 1063023.3400387582
+        },
+        {
+            "id_grading": 5719,
+            "no_invoice": "11187",
+            "gr": 48,
+            "old_cost_bk": 434196.26138417,
+            "new_cost_bk": 447588.77475316136
+        },
+        {
+            "id_grading": 5720,
+            "no_invoice": "11187",
+            "gr": 79,
+            "old_cost_bk": 714614.68019478,
+            "new_cost_bk": 736656.5251145781
+        },
+        {
+            "id_grading": 5721,
+            "no_invoice": "11187",
+            "gr": 66,
+            "old_cost_bk": 597019.85940324,
+            "new_cost_bk": 615434.5652855969
+        },
+        {
+            "id_grading": 5722,
+            "no_invoice": "11187",
+            "gr": 112,
+            "old_cost_bk": 1013124.6098964,
+            "new_cost_bk": 1044373.8077573766
+        },
+        {
+            "id_grading": 5723,
+            "no_invoice": "11187",
+            "gr": 80,
+            "old_cost_bk": 723660.43564029,
+            "new_cost_bk": 745981.2912552689
+        },
+        {
+            "id_grading": 5724,
+            "no_invoice": "11187",
+            "gr": 54,
+            "old_cost_bk": 488470.79405719,
+            "new_cost_bk": 503537.37159730657
+        },
+        {
+            "id_grading": 5725,
+            "no_invoice": "11187",
+            "gr": 105,
+            "old_cost_bk": 949804.32177788,
+            "new_cost_bk": 979100.4447725404
+        },
+        {
+            "id_grading": 5726,
+            "no_invoice": "11187",
+            "gr": 42,
+            "old_cost_bk": 379921.72871115,
+            "new_cost_bk": 391640.1779090162
+        },
+        {
+            "id_grading": 5727,
+            "no_invoice": "11187",
+            "gr": 145,
+            "old_cost_bk": 1311634.539598,
+            "new_cost_bk": 1352091.090400175
+        },
+        {
+            "id_grading": 5728,
+            "no_invoice": "11187",
+            "gr": 144,
+            "old_cost_bk": 1302588.7841525,
+            "new_cost_bk": 1342766.3242594842
+        },
+        {
+            "id_grading": 5729,
+            "no_invoice": "11187",
+            "gr": 134,
+            "old_cost_bk": 1212131.2296975,
+            "new_cost_bk": 1249518.6628525755
+        },
+        {
+            "id_grading": 5730,
+            "no_invoice": "11187",
+            "gr": 53,
+            "old_cost_bk": 479425.03861169,
+            "new_cost_bk": 494212.6054566156
+        },
+        {
+            "id_grading": 5731,
+            "no_invoice": "11187",
+            "gr": 93,
+            "old_cost_bk": 841255.25643183,
+            "new_cost_bk": 867203.2510842502
+        },
+        {
+            "id_grading": 5732,
+            "no_invoice": "11187",
+            "gr": 157,
+            "old_cost_bk": 1420183.6049441,
+            "new_cost_bk": 1463988.2840884652
+        },
+        {
+            "id_grading": 5733,
+            "no_invoice": "11187",
+            "gr": 31,
+            "old_cost_bk": 280418.41881061,
+            "new_cost_bk": 289067.7503614167
+        },
+        {
+            "id_grading": 5734,
+            "no_invoice": "11187",
+            "gr": 149,
+            "old_cost_bk": 1347817.56138,
+            "new_cost_bk": 1389390.1549629383
+        },
+        {
+            "id_grading": 5735,
+            "no_invoice": "11187",
+            "gr": 192,
+            "old_cost_bk": 1736785.0455367,
+            "new_cost_bk": 1790355.0990126454
+        },
+        {
+            "id_grading": 5736,
+            "no_invoice": "11187",
+            "gr": 130,
+            "old_cost_bk": 1175948.2079155,
+            "new_cost_bk": 1212219.598289812
+        },
+        {
+            "id_grading": 5737,
+            "no_invoice": "11187",
+            "gr": 159,
+            "old_cost_bk": 1438275.1158351,
+            "new_cost_bk": 1482637.816369847
+        },
+        {
+            "id_grading": 5738,
+            "no_invoice": "11187",
+            "gr": 24,
+            "old_cost_bk": 217098.13069209,
+            "new_cost_bk": 223794.38737658068
+        },
+        {
+            "id_grading": 5739,
+            "no_invoice": "11187",
+            "gr": 16,
+            "old_cost_bk": 144732.08712806,
+            "new_cost_bk": 149196.25825105378
+        },
+        {
+            "id_grading": 5740,
+            "no_invoice": "11187",
+            "gr": 33,
+            "old_cost_bk": 298509.92970162,
+            "new_cost_bk": 307717.28264279844
+        },
+        {
+            "id_grading": 5741,
+            "no_invoice": "11187",
+            "gr": 4,
+            "old_cost_bk": 36183.021782014,
+            "new_cost_bk": 37299.064562763444
+        },
+        {
+            "id_grading": 5742,
+            "no_invoice": "11187",
+            "gr": 9,
+            "old_cost_bk": 81411.799009532,
+            "new_cost_bk": 83922.89526621776
+        },
+        {
+            "id_grading": 5743,
+            "no_invoice": "11187",
+            "gr": 29,
+            "old_cost_bk": 262326.9079196,
+            "new_cost_bk": 270418.21808003495
+        },
+        {
+            "id_grading": 5744,
+            "no_invoice": "11187",
+            "gr": 45,
+            "old_cost_bk": 407058.99504766,
+            "new_cost_bk": 419614.4763310888
+        },
+        {
+            "id_grading": 5745,
+            "no_invoice": "11187",
+            "gr": 11,
+            "old_cost_bk": 99503.30990054,
+            "new_cost_bk": 102572.42754760385
+        },
+        {
+            "id_grading": 4846,
+            "no_invoice": "11164",
+            "gr": 35,
+            "old_cost_bk": 314330.61746591,
+            "new_cost_bk": 335941.8706628463
+        },
+        {
+            "id_grading": 4847,
+            "no_invoice": "11164",
+            "gr": 20,
+            "old_cost_bk": 179617.49569481,
+            "new_cost_bk": 191966.78323591215
+        },
+        {
+            "id_grading": 4848,
+            "no_invoice": "11164",
+            "gr": 18,
+            "old_cost_bk": 161655.74612533,
+            "new_cost_bk": 172770.10491232097
+        },
+        {
+            "id_grading": 4849,
+            "no_invoice": "11164",
+            "gr": 36,
+            "old_cost_bk": 323311.49225065,
+            "new_cost_bk": 345540.20982464193
+        },
+        {
+            "id_grading": 4850,
+            "no_invoice": "11164",
+            "gr": 32,
+            "old_cost_bk": 287387.99311169,
+            "new_cost_bk": 307146.85317745944
+        },
+        {
+            "id_grading": 4851,
+            "no_invoice": "11164",
+            "gr": 145,
+            "old_cost_bk": 1302226.8437873,
+            "new_cost_bk": 1391759.178460363
+        },
+        {
+            "id_grading": 4852,
+            "no_invoice": "11164",
+            "gr": 128,
+            "old_cost_bk": 1149551.9724468,
+            "new_cost_bk": 1228587.4127098378
+        },
+        {
+            "id_grading": 4853,
+            "no_invoice": "11164",
+            "gr": 65,
+            "old_cost_bk": 583756.86100812,
+            "new_cost_bk": 623892.0455167146
+        },
+        {
+            "id_grading": 4854,
+            "no_invoice": "11164",
+            "gr": 96,
+            "old_cost_bk": 862163.97933507,
+            "new_cost_bk": 921440.5595323785
+        },
+        {
+            "id_grading": 4855,
+            "no_invoice": "11164",
+            "gr": 43,
+            "old_cost_bk": 386177.61574383,
+            "new_cost_bk": 412728.5839572112
+        },
+        {
+            "id_grading": 4856,
+            "no_invoice": "11164",
+            "gr": 117,
+            "old_cost_bk": 1050762.3498146,
+            "new_cost_bk": 1123005.6819300863
+        },
+        {
+            "id_grading": 4857,
+            "no_invoice": "11164",
+            "gr": 225,
+            "old_cost_bk": 2020696.8265666,
+            "new_cost_bk": 2159626.3114040117
+        },
+        {
+            "id_grading": 4858,
+            "no_invoice": "11164",
+            "gr": 5,
+            "old_cost_bk": 44904.373923701,
+            "new_cost_bk": 47991.69580897804
+        },
+        {
+            "id_grading": 4859,
+            "no_invoice": "11164",
+            "gr": 168,
+            "old_cost_bk": 1508786.9638364,
+            "new_cost_bk": 1612520.9791816622
+        },
+        {
+            "id_grading": 4860,
+            "no_invoice": "11164",
+            "gr": 152,
+            "old_cost_bk": 1365092.9672805,
+            "new_cost_bk": 1458947.5525929325
+        },
+        {
+            "id_grading": 4861,
+            "no_invoice": "11164",
+            "gr": 225,
+            "old_cost_bk": 2020696.8265666,
+            "new_cost_bk": 2159626.3114040117
+        },
+        {
+            "id_grading": 4862,
+            "no_invoice": "11164",
+            "gr": 135,
+            "old_cost_bk": 1212418.0959399,
+            "new_cost_bk": 1295775.7868424072
+        },
+        {
+            "id_grading": 4863,
+            "no_invoice": "11164",
+            "gr": 166,
+            "old_cost_bk": 1490825.2142669,
+            "new_cost_bk": 1593324.3008580708
+        },
+        {
+            "id_grading": 4864,
+            "no_invoice": "11164",
+            "gr": 24,
+            "old_cost_bk": 215540.99483377,
+            "new_cost_bk": 230360.1398830946
+        },
+        {
+            "id_grading": 4865,
+            "no_invoice": "11164",
+            "gr": 75,
+            "old_cost_bk": 673565.60885552,
+            "new_cost_bk": 719875.4371346707
+        },
+        {
+            "id_grading": 4866,
+            "no_invoice": "11164",
+            "gr": 24,
+            "old_cost_bk": 215540.99483377,
+            "new_cost_bk": 230360.1398830946
+        },
+        {
+            "id_grading": 4867,
+            "no_invoice": "11164",
+            "gr": 82,
+            "old_cost_bk": 736431.7323487,
+            "new_cost_bk": 787063.8112672399
+        },
+        {
+            "id_grading": 4868,
+            "no_invoice": "11164",
+            "gr": 66,
+            "old_cost_bk": 592737.73579286,
+            "new_cost_bk": 633490.3846785101
+        },
+        {
+            "id_grading": 4869,
+            "no_invoice": "11164",
+            "gr": 101,
+            "old_cost_bk": 907068.35325877,
+            "new_cost_bk": 969432.2553413564
+        },
+        {
+            "id_grading": 4870,
+            "no_invoice": "11164",
+            "gr": 65,
+            "old_cost_bk": 583756.86100812,
+            "new_cost_bk": 623892.0455167146
+        },
+        {
+            "id_grading": 4871,
+            "no_invoice": "11164",
+            "gr": 146,
+            "old_cost_bk": 1311207.7185721,
+            "new_cost_bk": 1401357.5176221589
+        },
+        {
+            "id_grading": 4872,
+            "no_invoice": "11164",
+            "gr": 52,
+            "old_cost_bk": 467005.4888065,
+            "new_cost_bk": 499113.63641337166
+        },
+        {
+            "id_grading": 4873,
+            "no_invoice": "11164",
+            "gr": 48,
+            "old_cost_bk": 431081.98966753,
+            "new_cost_bk": 460720.2797661892
+        },
+        {
+            "id_grading": 4874,
+            "no_invoice": "11164",
+            "gr": 26,
+            "old_cost_bk": 233502.74440325,
+            "new_cost_bk": 249556.81820668583
+        },
+        {
+            "id_grading": 4875,
+            "no_invoice": "11164",
+            "gr": 51,
+            "old_cost_bk": 458024.61402176,
+            "new_cost_bk": 489515.29725157603
+        },
+        {
+            "id_grading": 4876,
+            "no_invoice": "11164",
+            "gr": 41,
+            "old_cost_bk": 368215.86617435,
+            "new_cost_bk": 393531.9056336199
+        },
+        {
+            "id_grading": 4877,
+            "no_invoice": "11164",
+            "gr": 30,
+            "old_cost_bk": 269426.24354221,
+            "new_cost_bk": 287950.17485386826
+        },
+        {
+            "id_grading": 4878,
+            "no_invoice": "11164",
+            "gr": 24,
+            "old_cost_bk": 215540.99483377,
+            "new_cost_bk": 230360.1398830946
+        },
+        {
+            "id_grading": 4879,
+            "no_invoice": "11164",
+            "gr": 36,
+            "old_cost_bk": 323311.49225065,
+            "new_cost_bk": 345540.20982464193
+        },
+        {
+            "id_grading": 4880,
+            "no_invoice": "11164",
+            "gr": 10,
+            "old_cost_bk": 89808.747847403,
+            "new_cost_bk": 95983.39161795608
+        },
+        {
+            "id_grading": 4881,
+            "no_invoice": "11164",
+            "gr": 21,
+            "old_cost_bk": 188598.37047955,
+            "new_cost_bk": 201565.12239770778
+        },
+        {
+            "id_grading": 4882,
+            "no_invoice": "11164",
+            "gr": 4,
+            "old_cost_bk": 35923.499138961,
+            "new_cost_bk": 38393.35664718598
+        },
+        {
+            "id_grading": 5746,
+            "no_invoice": "11192",
+            "gr": 66,
+            "old_cost_bk": 613462.07678102,
+            "new_cost_bk": 625178.0531123796
+        },
+        {
+            "id_grading": 5747,
+            "no_invoice": "11192",
+            "gr": 8,
+            "old_cost_bk": 74359.03960982,
+            "new_cost_bk": 75779.15795301572
+        },
+        {
+            "id_grading": 5748,
+            "no_invoice": "11192",
+            "gr": 40,
+            "old_cost_bk": 371795.1980491,
+            "new_cost_bk": 378895.7897650786
+        },
+        {
+            "id_grading": 5749,
+            "no_invoice": "11192",
+            "gr": 22,
+            "old_cost_bk": 204487.358927,
+            "new_cost_bk": 208392.68437079323
+        },
+        {
+            "id_grading": 5750,
+            "no_invoice": "11192",
+            "gr": 31,
+            "old_cost_bk": 288141.27848805,
+            "new_cost_bk": 293644.2370679359
+        },
+        {
+            "id_grading": 5751,
+            "no_invoice": "11192",
+            "gr": 31,
+            "old_cost_bk": 288141.27848805,
+            "new_cost_bk": 293644.2370679359
+        },
+        {
+            "id_grading": 5752,
+            "no_invoice": "11192",
+            "gr": 96,
+            "old_cost_bk": 892308.47531784,
+            "new_cost_bk": 909349.8954361886
+        },
+        {
+            "id_grading": 5753,
+            "no_invoice": "11192",
+            "gr": 12,
+            "old_cost_bk": 111538.55941473,
+            "new_cost_bk": 113668.73692952357
+        },
+        {
+            "id_grading": 5754,
+            "no_invoice": "11192",
+            "gr": 44,
+            "old_cost_bk": 408974.71785401,
+            "new_cost_bk": 416785.36874158646
+        },
+        {
+            "id_grading": 5755,
+            "no_invoice": "11192",
+            "gr": 35,
+            "old_cost_bk": 325320.79829296,
+            "new_cost_bk": 331533.8160444438
+        },
+        {
+            "id_grading": 5756,
+            "no_invoice": "11192",
+            "gr": 45,
+            "old_cost_bk": 418269.59780524,
+            "new_cost_bk": 426257.76348571345
+        },
+        {
+            "id_grading": 5757,
+            "no_invoice": "11192",
+            "gr": 6,
+            "old_cost_bk": 55769.279707365,
+            "new_cost_bk": 56834.368464761785
+        },
+        {
+            "id_grading": 5758,
+            "no_invoice": "11192",
+            "gr": 30,
+            "old_cost_bk": 278846.39853683,
+            "new_cost_bk": 284171.84232380893
+        },
+        {
+            "id_grading": 5759,
+            "no_invoice": "11192",
+            "gr": 23,
+            "old_cost_bk": 213782.23887823,
+            "new_cost_bk": 217865.0791149202
+        },
+        {
+            "id_grading": 5760,
+            "no_invoice": "11192",
+            "gr": 13,
+            "old_cost_bk": 120833.43936596,
+            "new_cost_bk": 123141.13167365055
+        },
+        {
+            "id_grading": 5761,
+            "no_invoice": "11192",
+            "gr": 138,
+            "old_cost_bk": 1282693.4332694,
+            "new_cost_bk": 1307190.4746895211
+        },
+        {
+            "id_grading": 5762,
+            "no_invoice": "11192",
+            "gr": 43,
+            "old_cost_bk": 399679.83790278,
+            "new_cost_bk": 407312.9739974595
+        },
+        {
+            "id_grading": 5763,
+            "no_invoice": "11192",
+            "gr": 69,
+            "old_cost_bk": 641346.7166347,
+            "new_cost_bk": 653595.2373447606
+        },
+        {
+            "id_grading": 5764,
+            "no_invoice": "11192",
+            "gr": 93,
+            "old_cost_bk": 864423.83546416,
+            "new_cost_bk": 880932.711203807
+        },
+        {
+            "id_grading": 5839,
+            "no_invoice": "11193",
+            "gr": 32,
+            "old_cost_bk": 290727.65398521,
+            "new_cost_bk": 297298.25917253
+        },
+        {
+            "id_grading": 5840,
+            "no_invoice": "11193",
+            "gr": 8,
+            "old_cost_bk": 72681.913496302,
+            "new_cost_bk": 74324.5647931325
+        },
+        {
+            "id_grading": 5841,
+            "no_invoice": "11193",
+            "gr": 52,
+            "old_cost_bk": 472432.43772597,
+            "new_cost_bk": 483109.6711553612
+        },
+        {
+            "id_grading": 5842,
+            "no_invoice": "11193",
+            "gr": 53,
+            "old_cost_bk": 481517.676913,
+            "new_cost_bk": 492400.2417545028
+        },
+        {
+            "id_grading": 5843,
+            "no_invoice": "11193",
+            "gr": 36,
+            "old_cost_bk": 327068.61073336,
+            "new_cost_bk": 334460.54156909627
+        },
+        {
+            "id_grading": 5844,
+            "no_invoice": "11193",
+            "gr": 160,
+            "old_cost_bk": 1453638.269926,
+            "new_cost_bk": 1486491.29586265
+        },
+        {
+            "id_grading": 5845,
+            "no_invoice": "11193",
+            "gr": 68,
+            "old_cost_bk": 617796.26471857,
+            "new_cost_bk": 631758.8007416263
+        },
+        {
+            "id_grading": 5846,
+            "no_invoice": "11193",
+            "gr": 50,
+            "old_cost_bk": 454261.95935189,
+            "new_cost_bk": 464528.52995707816
+        },
+        {
+            "id_grading": 5847,
+            "no_invoice": "11193",
+            "gr": 35,
+            "old_cost_bk": 317983.37154632,
+            "new_cost_bk": 325169.97096995474
+        },
+        {
+            "id_grading": 5848,
+            "no_invoice": "11193",
+            "gr": 49,
+            "old_cost_bk": 445176.72016485,
+            "new_cost_bk": 455237.9593579366
+        },
+        {
+            "id_grading": 5849,
+            "no_invoice": "11193",
+            "gr": 13,
+            "old_cost_bk": 118108.10943149,
+            "new_cost_bk": 120777.4177888403
+        },
+        {
+            "id_grading": 5850,
+            "no_invoice": "11193",
+            "gr": 16,
+            "old_cost_bk": 145363.8269926,
+            "new_cost_bk": 148649.129586265
+        },
+        {
+            "id_grading": 5851,
+            "no_invoice": "11193",
+            "gr": 51,
+            "old_cost_bk": 463347.19853893,
+            "new_cost_bk": 473819.1005562197
+        },
+        {
+            "id_grading": 5852,
+            "no_invoice": "11193",
+            "gr": 65,
+            "old_cost_bk": 590540.54715746,
+            "new_cost_bk": 603887.0889442016
+        },
+        {
+            "id_grading": 5853,
+            "no_invoice": "11193",
+            "gr": 55,
+            "old_cost_bk": 499688.15528708,
+            "new_cost_bk": 510981.382952786
+        },
+        {
+            "id_grading": 5854,
+            "no_invoice": "11193",
+            "gr": 56,
+            "old_cost_bk": 508773.39447412,
+            "new_cost_bk": 520271.9535519275
+        },
+        {
+            "id_grading": 5855,
+            "no_invoice": "11193",
+            "gr": 66,
+            "old_cost_bk": 599625.78634449,
+            "new_cost_bk": 613177.6595433431
+        },
+        {
+            "id_grading": 5856,
+            "no_invoice": "11193",
+            "gr": 91,
+            "old_cost_bk": 826756.76602044,
+            "new_cost_bk": 845441.9245218822
+        },
+        {
+            "id_grading": 5857,
+            "no_invoice": "11193",
+            "gr": 56,
+            "old_cost_bk": 508773.39447412,
+            "new_cost_bk": 520271.9535519275
+        },
+        {
+            "id_grading": 5858,
+            "no_invoice": "11193",
+            "gr": 78,
+            "old_cost_bk": 708648.65658895,
+            "new_cost_bk": 724664.506733042
+        },
+        {
+            "id_grading": 5859,
+            "no_invoice": "11193",
+            "gr": 132,
+            "old_cost_bk": 1199251.572689,
+            "new_cost_bk": 1226355.3190866862
+        },
+        {
+            "id_grading": 5860,
+            "no_invoice": "11193",
+            "gr": 34,
+            "old_cost_bk": 308898.13235929,
+            "new_cost_bk": 315879.40037081315
+        },
+        {
+            "id_grading": 5861,
+            "no_invoice": "11193",
+            "gr": 20,
+            "old_cost_bk": 181704.78374076,
+            "new_cost_bk": 185811.41198283125
+        },
+        {
+            "id_grading": 5862,
+            "no_invoice": "11193",
+            "gr": 61,
+            "old_cost_bk": 554199.59040931,
+            "new_cost_bk": 566724.8065476354
+        },
+        {
+            "id_grading": 5863,
+            "no_invoice": "11193",
+            "gr": 28,
+            "old_cost_bk": 254386.69723706,
+            "new_cost_bk": 260135.97677596376
+        },
+        {
+            "id_grading": 5864,
+            "no_invoice": "11193",
+            "gr": 23,
+            "old_cost_bk": 208960.50130187,
+            "new_cost_bk": 213683.12378025614
+        },
+        {
+            "id_grading": 5246,
+            "no_invoice": "11179",
+            "gr": 406,
+            "old_cost_bk": 6273202.8345679,
+            "new_cost_bk": 6388332.013038289
+        },
+        {
+            "id_grading": 5247,
+            "no_invoice": "11179",
+            "gr": 300,
+            "old_cost_bk": 4635371.5526364,
+            "new_cost_bk": 4720442.374166222
+        },
+        {
+            "id_grading": 4290,
+            "no_invoice": "11150",
+            "gr": 450,
+            "old_cost_bk": 6626411.9486744,
+            "new_cost_bk": 6693202.779619963
+        },
+        {
+            "id_grading": 4291,
+            "no_invoice": "11150",
+            "gr": 450,
+            "old_cost_bk": 6626411.9486744,
+            "new_cost_bk": 6693202.779619963
+        },
+        {
+            "id_grading": 4292,
+            "no_invoice": "11150",
+            "gr": 44,
+            "old_cost_bk": 647915.83498149,
+            "new_cost_bk": 654446.4940072852
+        },
+        {
+            "id_grading": 4293,
+            "no_invoice": "11150",
+            "gr": 31,
+            "old_cost_bk": 456486.15646423,
+            "new_cost_bk": 461087.3025960419
+        },
+        {
+            "id_grading": 4294,
+            "no_invoice": "11150",
+            "gr": 72,
+            "old_cost_bk": 1060225.9117879,
+            "new_cost_bk": 1070912.4447391946
+        },
+        {
+            "id_grading": 4824,
+            "no_invoice": "11165",
+            "gr": 244,
+            "old_cost_bk": 435092.72467904,
+            "new_cost_bk": 444038.2310984313
+        },
+        {
+            "id_grading": 4825,
+            "no_invoice": "11165",
+            "gr": 450,
+            "old_cost_bk": 802425.10699003,
+            "new_cost_bk": 818922.9671897299
+        },
+        {
+            "id_grading": 4826,
+            "no_invoice": "11165",
+            "gr": 450,
+            "old_cost_bk": 802425.10699003,
+            "new_cost_bk": 818922.9671897299
+        },
+        {
+            "id_grading": 4827,
+            "no_invoice": "11165",
+            "gr": 450,
+            "old_cost_bk": 802425.10699003,
+            "new_cost_bk": 818922.9671897299
+        },
+        {
+            "id_grading": 4828,
+            "no_invoice": "11165",
+            "gr": 450,
+            "old_cost_bk": 802425.10699003,
+            "new_cost_bk": 818922.9671897299
+        },
+        {
+            "id_grading": 4829,
+            "no_invoice": "11165",
+            "gr": 450,
+            "old_cost_bk": 802425.10699003,
+            "new_cost_bk": 818922.9671897299
+        },
+        {
+            "id_grading": 4830,
+            "no_invoice": "11165",
+            "gr": 132,
+            "old_cost_bk": 235378.03138374,
+            "new_cost_bk": 240217.40370898743
+        },
+        {
+            "id_grading": 4831,
+            "no_invoice": "11165",
+            "gr": 178,
+            "old_cost_bk": 317403.70898717,
+            "new_cost_bk": 323929.52924393676
+        },
+        {
+            "id_grading": 4266,
+            "no_invoice": "11149",
+            "gr": 255,
+            "old_cost_bk": 418284.6138653,
+            "new_cost_bk": 464177.5627098556
+        },
+        {
+            "id_grading": 4267,
+            "no_invoice": "11149",
+            "gr": 357,
+            "old_cost_bk": 585598.45941142,
+            "new_cost_bk": 649848.5877937978
+        },
+        {
+            "id_grading": 4268,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4269,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4270,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4271,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4272,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4273,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4274,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4275,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4276,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4277,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4278,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4279,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4280,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4281,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4282,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4283,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4284,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4285,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4286,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4287,
+            "no_invoice": "11149",
+            "gr": 450,
+            "old_cost_bk": 738149.31858582,
+            "new_cost_bk": 819136.8753703334
+        },
+        {
+            "id_grading": 4288,
+            "no_invoice": "11149",
+            "gr": 283,
+            "old_cost_bk": 464213.90479953,
+            "new_cost_bk": 515146.07939956523
+        },
+        {
+            "id_grading": 4289,
+            "no_invoice": "11149",
+            "gr": 231,
+            "old_cost_bk": 378916.65020739,
+            "new_cost_bk": 420490.262690112
+        },
+        {
+            "id_grading": 4347,
+            "no_invoice": "11157",
+            "gr": 167,
+            "old_cost_bk": 298980.08434864,
+            "new_cost_bk": 307391.09861794283
+        },
+        {
+            "id_grading": 4348,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4349,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4350,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4351,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4352,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4353,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4354,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4355,
+            "no_invoice": "11157",
+            "gr": 450,
+            "old_cost_bk": 805634.95782569,
+            "new_cost_bk": 828299.367533379
+        },
+        {
+            "id_grading": 4356,
+            "no_invoice": "11157",
+            "gr": 206,
+            "old_cost_bk": 368801.78069354,
+            "new_cost_bk": 379177.04380416905
+        },
+        {
+            "id_grading": 4357,
+            "no_invoice": "11157",
+            "gr": 296,
+            "old_cost_bk": 528138.47235239,
+            "new_cost_bk": 544836.9173108442
+        },
+        {
+            "id_grading": 5240,
+            "no_invoice": "11178",
+            "gr": 450,
+            "old_cost_bk": 808141.71750354,
+            "new_cost_bk": 854514.3125293305
+        },
+        {
+            "id_grading": 5241,
+            "no_invoice": "11178",
+            "gr": 450,
+            "old_cost_bk": 808141.71750354,
+            "new_cost_bk": 854514.3125293305
+        },
+        {
+            "id_grading": 5242,
+            "no_invoice": "11178",
+            "gr": 450,
+            "old_cost_bk": 808141.71750354,
+            "new_cost_bk": 854514.3125293305
+        },
+        {
+            "id_grading": 5243,
+            "no_invoice": "11178",
+            "gr": 450,
+            "old_cost_bk": 808141.71750354,
+            "new_cost_bk": 854514.3125293305
+        },
+        {
+            "id_grading": 5244,
+            "no_invoice": "11178",
+            "gr": 92,
+            "old_cost_bk": 165220.08446739,
+            "new_cost_bk": 174700.70389488534
+        },
+        {
+            "id_grading": 5245,
+            "no_invoice": "11178",
+            "gr": 239,
+            "old_cost_bk": 429213.04551855,
+            "new_cost_bk": 453842.04598780023
+        },
+        {
+            "id_grading": 4026,
+            "no_invoice": "11134",
+            "gr": 91,
+            "old_cost_bk": 1033592.0250896,
+            "new_cost_bk": 1033406.8267335602
+        },
+        {
+            "id_grading": 4027,
+            "no_invoice": "11134",
+            "gr": 97,
+            "old_cost_bk": 1101740.9498208,
+            "new_cost_bk": 1101543.5405841246
+        },
+        {
+            "id_grading": 4028,
+            "no_invoice": "11134",
+            "gr": 32,
+            "old_cost_bk": 363460.93189965,
+            "new_cost_bk": 363395.8072030102
+        },
+        {
+            "id_grading": 4029,
+            "no_invoice": "11134",
+            "gr": 83,
+            "old_cost_bk": 942726.79211471,
+            "new_cost_bk": 942557.8749328078
+        },
+        {
+            "id_grading": 4030,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_bk": 90865.232974912,
+            "new_cost_bk": 90848.95180075255
+        },
+        {
+            "id_grading": 4031,
+            "no_invoice": "11134",
+            "gr": 59,
+            "old_cost_bk": 670131.09318998,
+            "new_cost_bk": 670011.0195305501
+        },
+        {
+            "id_grading": 4032,
+            "no_invoice": "11134",
+            "gr": 11,
+            "old_cost_bk": 124939.6953405,
+            "new_cost_bk": 124917.30872603475
+        },
+        {
+            "id_grading": 4033,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_bk": 90865.232974912,
+            "new_cost_bk": 90848.95180075255
+        },
+        {
+            "id_grading": 4034,
+            "no_invoice": "11134",
+            "gr": 18,
+            "old_cost_bk": 204446.77419355,
+            "new_cost_bk": 204410.14155169323
+        },
+        {
+            "id_grading": 4035,
+            "no_invoice": "11134",
+            "gr": 318,
+            "old_cost_bk": 3611893.0107528,
+            "new_cost_bk": 3611245.8340799143
+        },
+        {
+            "id_grading": 4036,
+            "no_invoice": "11134",
+            "gr": 124,
+            "old_cost_bk": 1408411.1111111,
+            "new_cost_bk": 1408158.7529116645
+        },
+        {
+            "id_grading": 4037,
+            "no_invoice": "11134",
+            "gr": 61,
+            "old_cost_bk": 692847.4014337,
+            "new_cost_bk": 692723.2574807382
+        },
+        {
+            "id_grading": 4038,
+            "no_invoice": "11134",
+            "gr": 20,
+            "old_cost_bk": 227163.08243728,
+            "new_cost_bk": 227122.37950188137
+        },
+        {
+            "id_grading": 4039,
+            "no_invoice": "11134",
+            "gr": 52,
+            "old_cost_bk": 590624.01433693,
+            "new_cost_bk": 590518.1867048915
+        },
+        {
+            "id_grading": 4040,
+            "no_invoice": "11134",
+            "gr": 32,
+            "old_cost_bk": 363460.93189965,
+            "new_cost_bk": 363395.8072030102
+        },
+        {
+            "id_grading": 4041,
+            "no_invoice": "11134",
+            "gr": 71,
+            "old_cost_bk": 806428.94265234,
+            "new_cost_bk": 806284.4472316789
+        },
+        {
+            "id_grading": 4042,
+            "no_invoice": "11134",
+            "gr": 137,
+            "old_cost_bk": 1556067.1146954,
+            "new_cost_bk": 1555788.2995878875
+        },
+        {
+            "id_grading": 4043,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_bk": 2555584.6774194,
+            "new_cost_bk": 2555126.7693961654
+        },
+        {
+            "id_grading": 4044,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_bk": 2555584.6774194,
+            "new_cost_bk": 2555126.7693961654
+        },
+        {
+            "id_grading": 4045,
+            "no_invoice": "11134",
+            "gr": 25,
+            "old_cost_bk": 283953.8530466,
+            "new_cost_bk": 283902.9743773517
+        },
+        {
+            "id_grading": 4046,
+            "no_invoice": "11134",
+            "gr": 12,
+            "old_cost_bk": 136297.84946237,
+            "new_cost_bk": 136273.42770112882
+        },
+        {
+            "id_grading": 4047,
+            "no_invoice": "11134",
+            "gr": 178,
+            "old_cost_bk": 2021751.4336918,
+            "new_cost_bk": 2021389.1775667444
+        },
+        {
+            "id_grading": 4048,
+            "no_invoice": "11134",
+            "gr": 113,
+            "old_cost_bk": 1283471.4157706,
+            "new_cost_bk": 1283241.4441856297
+        },
+        {
+            "id_grading": 4049,
+            "no_invoice": "11134",
+            "gr": 75,
+            "old_cost_bk": 851861.5591398,
+            "new_cost_bk": 851708.9231320552
+        },
+        {
+            "id_grading": 4050,
+            "no_invoice": "11134",
+            "gr": 172,
+            "old_cost_bk": 1953602.5089606,
+            "new_cost_bk": 1953252.46371618
+        },
+        {
+            "id_grading": 4051,
+            "no_invoice": "11134",
+            "gr": 5,
+            "old_cost_bk": 56790.77060932,
+            "new_cost_bk": 56780.59487547034
+        },
+        {
+            "id_grading": 4052,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4053,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4054,
+            "no_invoice": "11134",
+            "gr": 30,
+            "old_cost_bk": 340744.62365592,
+            "new_cost_bk": 340683.569252822
+        },
+        {
+            "id_grading": 4055,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4056,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4057,
+            "no_invoice": "11134",
+            "gr": 24,
+            "old_cost_bk": 272595.69892474,
+            "new_cost_bk": 272546.85540225764
+        },
+        {
+            "id_grading": 4058,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4059,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_bk": 45432.616487456,
+            "new_cost_bk": 45424.475900376274
+        },
+        {
+            "id_grading": 4060,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4061,
+            "no_invoice": "11134",
+            "gr": 21,
+            "old_cost_bk": 238521.23655914,
+            "new_cost_bk": 238478.49847697545
+        },
+        {
+            "id_grading": 4062,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4063,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4064,
+            "no_invoice": "11134",
+            "gr": 100,
+            "old_cost_bk": 1135815.4121864,
+            "new_cost_bk": 1135611.8975094068
+        },
+        {
+            "id_grading": 4065,
+            "no_invoice": "11134",
+            "gr": 51,
+            "old_cost_bk": 579265.86021506,
+            "new_cost_bk": 579162.0677297976
+        },
+        {
+            "id_grading": 4066,
+            "no_invoice": "11134",
+            "gr": 79,
+            "old_cost_bk": 897294.17562726,
+            "new_cost_bk": 897133.3990324314
+        },
+        {
+            "id_grading": 4067,
+            "no_invoice": "11134",
+            "gr": 127,
+            "old_cost_bk": 1442485.5734767,
+            "new_cost_bk": 1442227.109836947
+        },
+        {
+            "id_grading": 4068,
+            "no_invoice": "11134",
+            "gr": 66,
+            "old_cost_bk": 749638.17204302,
+            "new_cost_bk": 749503.8523562085
+        },
+        {
+            "id_grading": 4069,
+            "no_invoice": "11134",
+            "gr": 110,
+            "old_cost_bk": 1249396.953405,
+            "new_cost_bk": 1249173.0872603476
+        },
+        {
+            "id_grading": 4070,
+            "no_invoice": "11134",
+            "gr": 19,
+            "old_cost_bk": 215804.92831542,
+            "new_cost_bk": 215766.2605267873
+        },
+        {
+            "id_grading": 4071,
+            "no_invoice": "11134",
+            "gr": 53,
+            "old_cost_bk": 601982.16845879,
+            "new_cost_bk": 601874.3056799857
+        },
+        {
+            "id_grading": 4072,
+            "no_invoice": "11134",
+            "gr": 71,
+            "old_cost_bk": 806428.94265234,
+            "new_cost_bk": 806284.4472316789
+        },
+        {
+            "id_grading": 4073,
+            "no_invoice": "11134",
+            "gr": 61,
+            "old_cost_bk": 692847.4014337,
+            "new_cost_bk": 692723.2574807382
+        },
+        {
+            "id_grading": 4074,
+            "no_invoice": "11134",
+            "gr": 11,
+            "old_cost_bk": 124939.6953405,
+            "new_cost_bk": 124917.30872603475
+        },
+        {
+            "id_grading": 4075,
+            "no_invoice": "11134",
+            "gr": 8,
+            "old_cost_bk": 90865.232974912,
+            "new_cost_bk": 90848.95180075255
+        },
+        {
+            "id_grading": 4076,
+            "no_invoice": "11134",
+            "gr": 10,
+            "old_cost_bk": 113581.54121864,
+            "new_cost_bk": 113561.18975094068
+        },
+        {
+            "id_grading": 4077,
+            "no_invoice": "11134",
+            "gr": 83,
+            "old_cost_bk": 942726.79211471,
+            "new_cost_bk": 942557.8749328078
+        },
+        {
+            "id_grading": 4078,
+            "no_invoice": "11134",
+            "gr": 55,
+            "old_cost_bk": 624698.47670252,
+            "new_cost_bk": 624586.5436301738
+        },
+        {
+            "id_grading": 4079,
+            "no_invoice": "11134",
+            "gr": 221,
+            "old_cost_bk": 2510152.0609319,
+            "new_cost_bk": 2509702.2934957896
+        },
+        {
+            "id_grading": 4080,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_bk": 45432.616487456,
+            "new_cost_bk": 45424.475900376274
+        },
+        {
+            "id_grading": 4081,
+            "no_invoice": "11134",
+            "gr": 23,
+            "old_cost_bk": 261237.54480287,
+            "new_cost_bk": 261190.73642716362
+        },
+        {
+            "id_grading": 4082,
+            "no_invoice": "11134",
+            "gr": 5,
+            "old_cost_bk": 56790.77060932,
+            "new_cost_bk": 56780.59487547034
+        },
+        {
+            "id_grading": 4083,
+            "no_invoice": "11134",
+            "gr": 44,
+            "old_cost_bk": 499758.78136202,
+            "new_cost_bk": 499669.234904139
+        },
+        {
+            "id_grading": 4084,
+            "no_invoice": "11134",
+            "gr": 19,
+            "old_cost_bk": 215804.92831542,
+            "new_cost_bk": 215766.2605267873
+        },
+        {
+            "id_grading": 4085,
+            "no_invoice": "11134",
+            "gr": 104,
+            "old_cost_bk": 1181248.0286739,
+            "new_cost_bk": 1181036.373409783
+        },
+        {
+            "id_grading": 4086,
+            "no_invoice": "11134",
+            "gr": 222,
+            "old_cost_bk": 2521510.2150538,
+            "new_cost_bk": 2521058.4124708837
+        },
+        {
+            "id_grading": 4087,
+            "no_invoice": "11134",
+            "gr": 9,
+            "old_cost_bk": 102223.38709678,
+            "new_cost_bk": 102205.07077584662
+        },
+        {
+            "id_grading": 4088,
+            "no_invoice": "11134",
+            "gr": 4,
+            "old_cost_bk": 45432.616487456,
+            "new_cost_bk": 45424.475900376274
+        },
+        {
+            "id_grading": 4089,
+            "no_invoice": "11134",
+            "gr": 24,
+            "old_cost_bk": 272595.69892474,
+            "new_cost_bk": 272546.85540225764
+        },
+        {
+            "id_grading": 4090,
+            "no_invoice": "11134",
+            "gr": 22,
+            "old_cost_bk": 249879.39068101,
+            "new_cost_bk": 249834.6174520695
+        },
+        {
+            "id_grading": 4091,
+            "no_invoice": "11134",
+            "gr": 60,
+            "old_cost_bk": 681489.24731184,
+            "new_cost_bk": 681367.138505644
+        },
+        {
+            "id_grading": 4092,
+            "no_invoice": "11134",
+            "gr": 109,
+            "old_cost_bk": 1238038.7992832,
+            "new_cost_bk": 1237816.9682852535
+        },
+        {
+            "id_grading": 4093,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_bk": 2555584.6774194,
+            "new_cost_bk": 2555126.7693961654
+        },
+        {
+            "id_grading": 4094,
+            "no_invoice": "11134",
+            "gr": 225,
+            "old_cost_bk": 2555584.6774194,
+            "new_cost_bk": 2555126.7693961654
+        },
+        {
+            "id_grading": 4095,
+            "no_invoice": "11134",
+            "gr": 59,
+            "old_cost_bk": 670131.09318998,
+            "new_cost_bk": 670011.0195305501
+        },
+        {
+            "id_grading": 4096,
+            "no_invoice": "11134",
+            "gr": 14,
+            "old_cost_bk": 147656.00358423,
+            "new_cost_bk": 158985.66565131696
+        },
+        {
+            "id_grading": 4097,
+            "no_invoice": "11134",
+            "gr": 153,
+            "old_cost_bk": 1737797.5806452,
+            "new_cost_bk": 1737486.2031893954
+        },
+        {
+            "id_grading": 4216,
+            "no_invoice": "11137",
+            "gr": 75,
+            "old_cost_bk": 791974.22258595,
+            "new_cost_bk": 766154.5053868756
+        },
+        {
+            "id_grading": 4217,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4218,
+            "no_invoice": "11137",
+            "gr": 63,
+            "old_cost_bk": 665258.3469722,
+            "new_cost_bk": 643569.7845249755
+        },
+        {
+            "id_grading": 4219,
+            "no_invoice": "11137",
+            "gr": 9,
+            "old_cost_bk": 95036.906710314,
+            "new_cost_bk": 91938.54064642507
+        },
+        {
+            "id_grading": 4220,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4221,
+            "no_invoice": "11137",
+            "gr": 99,
+            "old_cost_bk": 1045405.9738135,
+            "new_cost_bk": 1011323.9471106757
+        },
+        {
+            "id_grading": 4222,
+            "no_invoice": "11137",
+            "gr": 111,
+            "old_cost_bk": 1172121.8494272,
+            "new_cost_bk": 1133908.6679725759
+        },
+        {
+            "id_grading": 4223,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4224,
+            "no_invoice": "11137",
+            "gr": 199,
+            "old_cost_bk": 2101371.6039281,
+            "new_cost_bk": 2032863.28762651
+        },
+        {
+            "id_grading": 4225,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4226,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4227,
+            "no_invoice": "11137",
+            "gr": 28,
+            "old_cost_bk": 295670.37643209,
+            "new_cost_bk": 286031.01534443354
+        },
+        {
+            "id_grading": 4228,
+            "no_invoice": "11137",
+            "gr": 11,
+            "old_cost_bk": 116156.21931261,
+            "new_cost_bk": 112369.32745674177
+        },
+        {
+            "id_grading": 4229,
+            "no_invoice": "11137",
+            "gr": 30,
+            "old_cost_bk": 316789.68903438,
+            "new_cost_bk": 306461.8021547503
+        },
+        {
+            "id_grading": 4230,
+            "no_invoice": "11137",
+            "gr": 71,
+            "old_cost_bk": 749735.59738137,
+            "new_cost_bk": 725292.9317662423
+        },
+        {
+            "id_grading": 4231,
+            "no_invoice": "11137",
+            "gr": 110,
+            "old_cost_bk": 1161562.1931261,
+            "new_cost_bk": 1123693.2745674176
+        },
+        {
+            "id_grading": 4232,
+            "no_invoice": "11137",
+            "gr": 144,
+            "old_cost_bk": 1520590.507365,
+            "new_cost_bk": 1471016.6503428011
+        },
+        {
+            "id_grading": 4233,
+            "no_invoice": "11137",
+            "gr": 164,
+            "old_cost_bk": 1731783.6333879,
+            "new_cost_bk": 1675324.5184459682
+        },
+        {
+            "id_grading": 4234,
+            "no_invoice": "11137",
+            "gr": 53,
+            "old_cost_bk": 559661.78396074,
+            "new_cost_bk": 541415.850473392
+        },
+        {
+            "id_grading": 4235,
+            "no_invoice": "11137",
+            "gr": 53,
+            "old_cost_bk": 559661.78396074,
+            "new_cost_bk": 541415.850473392
+        },
+        {
+            "id_grading": 4236,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4237,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4238,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4239,
+            "no_invoice": "11137",
+            "gr": 27,
+            "old_cost_bk": 285110.72013094,
+            "new_cost_bk": 275815.62193927524
+        },
+        {
+            "id_grading": 4240,
+            "no_invoice": "11137",
+            "gr": 34,
+            "old_cost_bk": 359028.31423896,
+            "new_cost_bk": 347323.3757753836
+        },
+        {
+            "id_grading": 4241,
+            "no_invoice": "11137",
+            "gr": 132,
+            "old_cost_bk": 1393874.6317513,
+            "new_cost_bk": 1348431.929480901
+        },
+        {
+            "id_grading": 4242,
+            "no_invoice": "11137",
+            "gr": 80,
+            "old_cost_bk": 844772.50409168,
+            "new_cost_bk": 817231.4724126672
+        },
+        {
+            "id_grading": 4243,
+            "no_invoice": "11137",
+            "gr": 91,
+            "old_cost_bk": 960928.72340429,
+            "new_cost_bk": 929600.7998694091
+        },
+        {
+            "id_grading": 4244,
+            "no_invoice": "11137",
+            "gr": 176,
+            "old_cost_bk": 1858499.5090017,
+            "new_cost_bk": 1797909.2393078683
+        },
+        {
+            "id_grading": 4245,
+            "no_invoice": "11137",
+            "gr": 68,
+            "old_cost_bk": 718056.62847793,
+            "new_cost_bk": 694646.7515507672
+        },
+        {
+            "id_grading": 4246,
+            "no_invoice": "11137",
+            "gr": 213,
+            "old_cost_bk": 2249206.7921441,
+            "new_cost_bk": 2175878.7952987263
+        },
+        {
+            "id_grading": 4247,
+            "no_invoice": "11137",
+            "gr": 87,
+            "old_cost_bk": 918690.0981997,
+            "new_cost_bk": 888739.2262487757
+        },
+        {
+            "id_grading": 4248,
+            "no_invoice": "11137",
+            "gr": 184,
+            "old_cost_bk": 1942976.7594109,
+            "new_cost_bk": 1879632.3865491347
+        },
+        {
+            "id_grading": 4249,
+            "no_invoice": "11137",
+            "gr": 20,
+            "old_cost_bk": 211193.12602292,
+            "new_cost_bk": 204307.8681031668
+        },
+        {
+            "id_grading": 4250,
+            "no_invoice": "11137",
+            "gr": 72,
+            "old_cost_bk": 760295.25368251,
+            "new_cost_bk": 735508.3251714006
+        },
+        {
+            "id_grading": 4251,
+            "no_invoice": "11137",
+            "gr": 117,
+            "old_cost_bk": 1066525.2864157,
+            "new_cost_bk": 1195201.028403526
+        },
+        {
+            "id_grading": 4252,
+            "no_invoice": "11137",
+            "gr": 222,
+            "old_cost_bk": 2344243.6988544,
+            "new_cost_bk": 2267817.3359451517
+        },
+        {
+            "id_grading": 4253,
+            "no_invoice": "11137",
+            "gr": 103,
+            "old_cost_bk": 1087644.599018,
+            "new_cost_bk": 1052185.5207313092
+        },
+        {
+            "id_grading": 4254,
+            "no_invoice": "11137",
+            "gr": 102,
+            "old_cost_bk": 1077084.9427169,
+            "new_cost_bk": 1041970.1273261509
+        },
+        {
+            "id_grading": 4255,
+            "no_invoice": "11137",
+            "gr": 64,
+            "old_cost_bk": 675818.00327334,
+            "new_cost_bk": 653785.1779301339
+        },
+        {
+            "id_grading": 4256,
+            "no_invoice": "11137",
+            "gr": 10,
+            "old_cost_bk": 105596.56301146,
+            "new_cost_bk": 102153.9340515834
+        },
+        {
+            "id_grading": 4257,
+            "no_invoice": "11137",
+            "gr": 138,
+            "old_cost_bk": 1457232.5695581,
+            "new_cost_bk": 1409724.289911851
+        },
+        {
+            "id_grading": 4258,
+            "no_invoice": "11137",
+            "gr": 37,
+            "old_cost_bk": 390707.2831424,
+            "new_cost_bk": 377969.55599085864
+        },
+        {
+            "id_grading": 4259,
+            "no_invoice": "11137",
+            "gr": 100,
+            "old_cost_bk": 1055965.6301146,
+            "new_cost_bk": 1021539.3405158342
+        },
+        {
+            "id_grading": 4260,
+            "no_invoice": "11137",
+            "gr": 297,
+            "old_cost_bk": 3136217.9214404,
+            "new_cost_bk": 3033971.841332027
+        },
+        {
+            "id_grading": 4261,
+            "no_invoice": "11137",
+            "gr": 166,
+            "old_cost_bk": 1752902.9459902,
+            "new_cost_bk": 1695755.3052562845
+        },
+        {
+            "id_grading": 4262,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4263,
+            "no_invoice": "11137",
+            "gr": 225,
+            "old_cost_bk": 2375922.6677579,
+            "new_cost_bk": 2298463.5161606264
+        },
+        {
+            "id_grading": 4264,
+            "no_invoice": "11137",
+            "gr": 30,
+            "old_cost_bk": 316789.68903438,
+            "new_cost_bk": 306461.8021547503
+        },
+        {
+            "id_grading": 4265,
+            "no_invoice": "11137",
+            "gr": 86,
+            "old_cost_bk": 908130.44189856,
+            "new_cost_bk": 878523.8328436092
+        },
+        {
+            "id_grading": 4547,
+            "no_invoice": "11148",
+            "gr": 179,
+            "old_cost_bk": 2102850.0311785,
+            "new_cost_bk": 2109866.8404588113
+        },
+        {
+            "id_grading": 4548,
+            "no_invoice": "11148",
+            "gr": 200,
+            "old_cost_bk": 2349553.107462,
+            "new_cost_bk": 2357393.1178310737
+        },
+        {
+            "id_grading": 4549,
+            "no_invoice": "11148",
+            "gr": 98,
+            "old_cost_bk": 1151281.0226564,
+            "new_cost_bk": 1155122.6277372262
+        },
+        {
+            "id_grading": 4550,
+            "no_invoice": "11148",
+            "gr": 15,
+            "old_cost_bk": 176216.48305965,
+            "new_cost_bk": 176804.48383733057
+        },
+        {
+            "id_grading": 4551,
+            "no_invoice": "11148",
+            "gr": 122,
+            "old_cost_bk": 1433227.3955518,
+            "new_cost_bk": 1438009.8018769552
+        },
+        {
+            "id_grading": 4552,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_bk": 305441.90397006,
+            "new_cost_bk": 306461.1053180396
+        },
+        {
+            "id_grading": 4553,
+            "no_invoice": "11148",
+            "gr": 93,
+            "old_cost_bk": 1092542.1949698,
+            "new_cost_bk": 1096187.7997914494
+        },
+        {
+            "id_grading": 4554,
+            "no_invoice": "11148",
+            "gr": 93,
+            "old_cost_bk": 1092542.1949698,
+            "new_cost_bk": 1096187.7997914494
+        },
+        {
+            "id_grading": 4555,
+            "no_invoice": "11148",
+            "gr": 156,
+            "old_cost_bk": 1832651.4238204,
+            "new_cost_bk": 1838766.631908238
+        },
+        {
+            "id_grading": 4556,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_bk": 2643247.2458948,
+            "new_cost_bk": 2652067.2575599584
+        },
+        {
+            "id_grading": 4557,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_bk": 305441.90397006,
+            "new_cost_bk": 306461.1053180396
+        },
+        {
+            "id_grading": 4558,
+            "no_invoice": "11148",
+            "gr": 142,
+            "old_cost_bk": 1668182.706298,
+            "new_cost_bk": 1673749.1136600627
+        },
+        {
+            "id_grading": 4559,
+            "no_invoice": "11148",
+            "gr": 74,
+            "old_cost_bk": 869334.64976094,
+            "new_cost_bk": 872235.4535974974
+        },
+        {
+            "id_grading": 4560,
+            "no_invoice": "11148",
+            "gr": 134,
+            "old_cost_bk": 1574200.5819995,
+            "new_cost_bk": 1579453.3889468196
+        },
+        {
+            "id_grading": 4561,
+            "no_invoice": "11148",
+            "gr": 48,
+            "old_cost_bk": 563892.74579088,
+            "new_cost_bk": 565774.3482794578
+        },
+        {
+            "id_grading": 4562,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_bk": 2643247.2458948,
+            "new_cost_bk": 2652067.2575599584
+        },
+        {
+            "id_grading": 4563,
+            "no_invoice": "11148",
+            "gr": 98,
+            "old_cost_bk": 1151281.0226564,
+            "new_cost_bk": 1155122.6277372262
+        },
+        {
+            "id_grading": 4564,
+            "no_invoice": "11148",
+            "gr": 25,
+            "old_cost_bk": 293694.13843275,
+            "new_cost_bk": 294674.1397288842
+        },
+        {
+            "id_grading": 4565,
+            "no_invoice": "11148",
+            "gr": 45,
+            "old_cost_bk": 528649.44917895,
+            "new_cost_bk": 530413.4515119917
+        },
+        {
+            "id_grading": 4566,
+            "no_invoice": "11148",
+            "gr": 31,
+            "old_cost_bk": 364180.73165661,
+            "new_cost_bk": 365395.9332638165
+        },
+        {
+            "id_grading": 4567,
+            "no_invoice": "11148",
+            "gr": 91,
+            "old_cost_bk": 1069046.6638952,
+            "new_cost_bk": 1072613.8686131386
+        },
+        {
+            "id_grading": 4568,
+            "no_invoice": "11148",
+            "gr": 111,
+            "old_cost_bk": 1304001.9746414,
+            "new_cost_bk": 1308353.180396246
+        },
+        {
+            "id_grading": 4569,
+            "no_invoice": "11148",
+            "gr": 132,
+            "old_cost_bk": 1550705.0509249,
+            "new_cost_bk": 1555879.457768509
+        },
+        {
+            "id_grading": 4570,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_bk": 2643247.2458948,
+            "new_cost_bk": 2652067.2575599584
+        },
+        {
+            "id_grading": 4571,
+            "no_invoice": "11148",
+            "gr": 33,
+            "old_cost_bk": 387676.26273123,
+            "new_cost_bk": 388969.86444212723
+        },
+        {
+            "id_grading": 4572,
+            "no_invoice": "11148",
+            "gr": 76,
+            "old_cost_bk": 892830.18083556,
+            "new_cost_bk": 895809.3847758081
+        },
+        {
+            "id_grading": 4573,
+            "no_invoice": "11148",
+            "gr": 26,
+            "old_cost_bk": 305441.90397006,
+            "new_cost_bk": 306461.1053180396
+        },
+        {
+            "id_grading": 4574,
+            "no_invoice": "11148",
+            "gr": 221,
+            "old_cost_bk": 2596256.1837455,
+            "new_cost_bk": 2604919.395203337
+        },
+        {
+            "id_grading": 4575,
+            "no_invoice": "11148",
+            "gr": 22,
+            "old_cost_bk": 258450.84182082,
+            "new_cost_bk": 259313.24296141815
+        },
+        {
+            "id_grading": 4576,
+            "no_invoice": "11148",
+            "gr": 70,
+            "old_cost_bk": 822343.5876117,
+            "new_cost_bk": 825087.5912408759
+        },
+        {
+            "id_grading": 4577,
+            "no_invoice": "11148",
+            "gr": 22,
+            "old_cost_bk": 258450.84182082,
+            "new_cost_bk": 259313.24296141815
+        },
+        {
+            "id_grading": 4578,
+            "no_invoice": "11148",
+            "gr": 194,
+            "old_cost_bk": 2279066.5142381,
+            "new_cost_bk": 2286671.3242961415
+        },
+        {
+            "id_grading": 4579,
+            "no_invoice": "11148",
+            "gr": 28,
+            "old_cost_bk": 328937.43504468,
+            "new_cost_bk": 330035.03649635037
+        },
+        {
+            "id_grading": 4580,
+            "no_invoice": "11148",
+            "gr": 31,
+            "old_cost_bk": 364180.73165661,
+            "new_cost_bk": 365395.9332638165
+        },
+        {
+            "id_grading": 4581,
+            "no_invoice": "11148",
+            "gr": 372,
+            "old_cost_bk": 4370168.7798793,
+            "new_cost_bk": 4384751.199165798
+        },
+        {
+            "id_grading": 4582,
+            "no_invoice": "11148",
+            "gr": 25,
+            "old_cost_bk": 293694.13843275,
+            "new_cost_bk": 294674.1397288842
+        },
+        {
+            "id_grading": 4583,
+            "no_invoice": "11148",
+            "gr": 59,
+            "old_cost_bk": 693118.16670129,
+            "new_cost_bk": 695430.9697601668
+        },
+        {
+            "id_grading": 4584,
+            "no_invoice": "11148",
+            "gr": 43,
+            "old_cost_bk": 505153.91810433,
+            "new_cost_bk": 506839.5203336809
+        },
+        {
+            "id_grading": 4585,
+            "no_invoice": "11148",
+            "gr": 108,
+            "old_cost_bk": 1268758.6780295,
+            "new_cost_bk": 1272992.28362878
+        },
+        {
+            "id_grading": 4586,
+            "no_invoice": "11148",
+            "gr": 76,
+            "old_cost_bk": 892830.18083556,
+            "new_cost_bk": 895809.3847758081
+        },
+        {
+            "id_grading": 4587,
+            "no_invoice": "11148",
+            "gr": 5,
+            "old_cost_bk": 58738.82768655,
+            "new_cost_bk": 58934.82794577685
+        },
+        {
+            "id_grading": 4588,
+            "no_invoice": "11148",
+            "gr": 41,
+            "old_cost_bk": 481658.38702971,
+            "new_cost_bk": 483265.58915537014
+        },
+        {
+            "id_grading": 4589,
+            "no_invoice": "11148",
+            "gr": 7,
+            "old_cost_bk": 82234.35876117,
+            "new_cost_bk": 82508.75912408759
+        },
+        {
+            "id_grading": 4590,
+            "no_invoice": "11148",
+            "gr": 142,
+            "old_cost_bk": 1668182.706298,
+            "new_cost_bk": 1673749.1136600627
+        },
+        {
+            "id_grading": 4591,
+            "no_invoice": "11148",
+            "gr": 162,
+            "old_cost_bk": 1903138.0170442,
+            "new_cost_bk": 1909488.4254431701
+        },
+        {
+            "id_grading": 4592,
+            "no_invoice": "11148",
+            "gr": 225,
+            "old_cost_bk": 2643247.2458948,
+            "new_cost_bk": 2652067.2575599584
+        },
+        {
+            "id_grading": 4593,
+            "no_invoice": "11148",
+            "gr": 38,
+            "old_cost_bk": 446415.09041778,
+            "new_cost_bk": 447904.69238790404
+        },
+        {
+            "id_grading": 4594,
+            "no_invoice": "11148",
+            "gr": 50,
+            "old_cost_bk": 587388.2768655,
+            "new_cost_bk": 589348.2794577684
+        },
+        {
+            "id_grading": 4595,
+            "no_invoice": "11148",
+            "gr": 68,
+            "old_cost_bk": 798848.05653708,
+            "new_cost_bk": 801513.6600625652
+        },
+        {
+            "id_grading": 4596,
+            "no_invoice": "11148",
+            "gr": 37,
+            "old_cost_bk": 629651.2367491,
+            "new_cost_bk": 436117.7267987579
+        },
+        {
+            "id_grading": 3669,
+            "no_invoice": "11123",
+            "gr": 70,
+            "old_cost_bk": 152737.84650629,
+            "new_cost_bk": 763689.2325315005
+        },
+        {
+            "id_grading": 3445,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3446,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3447,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3448,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3449,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3450,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3451,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3452,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3453,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3454,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3455,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3456,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3457,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3458,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3459,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3460,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3461,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3462,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3463,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3464,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3465,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3466,
+            "no_invoice": "11120",
+            "gr": 146,
+            "old_cost_bk": 1795935.7838795,
+            "new_cost_bk": 1823391.6366906473
+        },
+        {
+            "id_grading": 3467,
+            "no_invoice": "11120",
+            "gr": 84,
+            "old_cost_bk": 1033278.122232,
+            "new_cost_bk": 1049074.6402877697
+        },
+        {
+            "id_grading": 3468,
+            "no_invoice": "11120",
+            "gr": 98,
+            "old_cost_bk": 1205491.1426041,
+            "new_cost_bk": 1223920.4136690649
+        },
+        {
+            "id_grading": 3469,
+            "no_invoice": "11120",
+            "gr": 45,
+            "old_cost_bk": 553541.85119574,
+            "new_cost_bk": 562004.2715827338
+        },
+        {
+            "id_grading": 3470,
+            "no_invoice": "11120",
+            "gr": 28,
+            "old_cost_bk": 344426.04074402,
+            "new_cost_bk": 349691.54676258995
+        },
+        {
+            "id_grading": 3471,
+            "no_invoice": "11120",
+            "gr": 111,
+            "old_cost_bk": 1365403.2329495,
+            "new_cost_bk": 1386277.2032374102
+        },
+        {
+            "id_grading": 3472,
+            "no_invoice": "11120",
+            "gr": 49,
+            "old_cost_bk": 602745.57130203,
+            "new_cost_bk": 611960.2068345324
+        },
+        {
+            "id_grading": 3473,
+            "no_invoice": "11120",
+            "gr": 78,
+            "old_cost_bk": 959472.54207262,
+            "new_cost_bk": 974140.737410072
+        },
+        {
+            "id_grading": 3474,
+            "no_invoice": "11120",
+            "gr": 42,
+            "old_cost_bk": 516639.06111602,
+            "new_cost_bk": 524537.3201438849
+        },
+        {
+            "id_grading": 3475,
+            "no_invoice": "11120",
+            "gr": 62,
+            "old_cost_bk": 762657.66164746,
+            "new_cost_bk": 774316.9964028776
+        },
+        {
+            "id_grading": 3476,
+            "no_invoice": "11120",
+            "gr": 131,
+            "old_cost_bk": 1611421.8334809,
+            "new_cost_bk": 1636056.8794964028
+        },
+        {
+            "id_grading": 3477,
+            "no_invoice": "11120",
+            "gr": 62,
+            "old_cost_bk": 762657.66164746,
+            "new_cost_bk": 774316.9964028776
+        },
+        {
+            "id_grading": 3478,
+            "no_invoice": "11120",
+            "gr": 157,
+            "old_cost_bk": 1931246.0141718,
+            "new_cost_bk": 1960770.4586330934
+        },
+        {
+            "id_grading": 3479,
+            "no_invoice": "11120",
+            "gr": 17,
+            "old_cost_bk": 209115.81045172,
+            "new_cost_bk": 212312.7248201439
+        },
+        {
+            "id_grading": 3480,
+            "no_invoice": "11120",
+            "gr": 76,
+            "old_cost_bk": 934870.68201947,
+            "new_cost_bk": 949162.7697841726
+        },
+        {
+            "id_grading": 3481,
+            "no_invoice": "11120",
+            "gr": 95,
+            "old_cost_bk": 1168588.3525243,
+            "new_cost_bk": 1186453.4622302158
+        },
+        {
+            "id_grading": 3482,
+            "no_invoice": "11120",
+            "gr": 46,
+            "old_cost_bk": 565842.78122231,
+            "new_cost_bk": 574493.2553956835
+        },
+        {
+            "id_grading": 3483,
+            "no_invoice": "11120",
+            "gr": 19,
+            "old_cost_bk": 233717.67050487,
+            "new_cost_bk": 237290.69244604316
+        },
+        {
+            "id_grading": 3484,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3485,
+            "no_invoice": "11120",
+            "gr": 225,
+            "old_cost_bk": 2767709.2559787,
+            "new_cost_bk": 2810021.3579136687
+        },
+        {
+            "id_grading": 3486,
+            "no_invoice": "11120",
+            "gr": 58,
+            "old_cost_bk": 713453.94154118,
+            "new_cost_bk": 724361.0611510791
+        },
+        {
+            "id_grading": 3487,
+            "no_invoice": "11120",
+            "gr": 93,
+            "old_cost_bk": 1143986.4924712,
+            "new_cost_bk": 1161475.494604379
+        },
+        {
+            "id_grading": 3964,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3965,
+            "no_invoice": "11132",
+            "gr": 450,
+            "old_cost_bk": 2983781.5587267,
+            "new_cost_bk": 2753914.1267817905
+        },
+        {
+            "id_grading": 3966,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3967,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3968,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3969,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3970,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3971,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3972,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3973,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3974,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3975,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3976,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3977,
+            "no_invoice": "11132",
+            "gr": 225,
+            "old_cost_bk": 1491890.7793633,
+            "new_cost_bk": 1376957.0633908953
+        },
+        {
+            "id_grading": 3978,
+            "no_invoice": "11132",
+            "gr": 175,
+            "old_cost_bk": 1160359.4950604,
+            "new_cost_bk": 1070966.6048595852
+        },
+        {
+            "id_grading": 3979,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3980,
+            "no_invoice": "11132",
+            "gr": 100,
+            "old_cost_bk": 663062.56860593,
+            "new_cost_bk": 611980.91706262
+        },
+        {
+            "id_grading": 3981,
+            "no_invoice": "11132",
+            "gr": 34,
+            "old_cost_bk": 225441.27332602,
+            "new_cost_bk": 208073.51180129082
+        },
+        {
+            "id_grading": 3982,
+            "no_invoice": "11132",
+            "gr": 66,
+            "old_cost_bk": 437621.29527991,
+            "new_cost_bk": 403907.40526132926
+        },
+        {
+            "id_grading": 3983,
+            "no_invoice": "11132",
+            "gr": 450,
+            "old_cost_bk": 2983781.5587267,
+            "new_cost_bk": 2753914.1267817905
+        },
+        {
+            "id_grading": 3984,
+            "no_invoice": "11132",
+            "gr": 450,
+            "old_cost_bk": 2983781.5587267,
+            "new_cost_bk": 2753914.1267817905
+        },
+        {
+            "id_grading": 3985,
+            "no_invoice": "11132",
+            "gr": 43,
+            "old_cost_bk": 285116.90450055,
+            "new_cost_bk": 263151.79433692666
+        },
+        {
+            "id_grading": 3986,
+            "no_invoice": "11132",
+            "gr": 112,
+            "old_cost_bk": 742630.07683864,
+            "new_cost_bk": 685418.6271101345
+        },
+        {
+            "id_grading": 3987,
+            "no_invoice": "11132",
+            "gr": 225,
+            "old_cost_bk": 1491890.7793633,
+            "new_cost_bk": 1376957.0633908953
+        },
+        {
+            "id_grading": 3988,
+            "no_invoice": "11132",
+            "gr": 158,
+            "old_cost_bk": 1047638.8583974,
+            "new_cost_bk": 966929.8489589398
+        },
+        {
+            "id_grading": 3989,
+            "no_invoice": "11132",
+            "gr": 205,
+            "old_cost_bk": 1359278.2656422,
+            "new_cost_bk": 1254560.8799783713
+        },
+        {
+            "id_grading": 3990,
+            "no_invoice": "11132",
+            "gr": 72,
+            "old_cost_bk": 477405.04939627,
+            "new_cost_bk": 440626.2602850864
+        },
+        {
+            "id_grading": 3991,
+            "no_invoice": "11132",
+            "gr": 81,
+            "old_cost_bk": 537080.6805708,
+            "new_cost_bk": 495704.5428207222
+        },
+        {
+            "id_grading": 3992,
+            "no_invoice": "11132",
+            "gr": 99,
+            "old_cost_bk": 656431.94291987,
+            "new_cost_bk": 605861.1078919938
+        },
+        {
+            "id_grading": 3993,
+            "no_invoice": "11132",
+            "gr": 16,
+            "old_cost_bk": 106090.01097695,
+            "new_cost_bk": 97916.9467300192
+        },
+        {
+            "id_grading": 3994,
+            "no_invoice": "11132",
+            "gr": 225,
+            "old_cost_bk": 1491890.7793633,
+            "new_cost_bk": 1376957.0633908953
+        },
+        {
+            "id_grading": 3995,
+            "no_invoice": "11132",
+            "gr": 225,
+            "old_cost_bk": 1491890.7793633,
+            "new_cost_bk": 1376957.0633908953
+        },
+        {
+            "id_grading": 3996,
+            "no_invoice": "11132",
+            "gr": 225,
+            "old_cost_bk": 1491890.7793633,
+            "new_cost_bk": 1376957.0633908953
+        },
+        {
+            "id_grading": 3997,
+            "no_invoice": "11132",
+            "gr": 51,
+            "old_cost_bk": 338161.90998902,
+            "new_cost_bk": 312110.2677019362
+        },
+        {
+            "id_grading": 3998,
+            "no_invoice": "11132",
+            "gr": 119,
+            "old_cost_bk": 789044.45664106,
+            "new_cost_bk": 728257.2913045179
+        },
+        {
+            "id_grading": 3999,
+            "no_invoice": "11132",
+            "gr": 73,
+            "old_cost_bk": 484035.67508233,
+            "new_cost_bk": 446746.0694557126
+        },
+        {
+            "id_grading": 4000,
+            "no_invoice": "11132",
+            "gr": 95,
+            "old_cost_bk": 629909.44017563,
+            "new_cost_bk": 581381.8712094891
+        },
+        {
+            "id_grading": 4001,
+            "no_invoice": "11132",
+            "gr": 95,
+            "old_cost_bk": 629909.44017563,
+            "new_cost_bk": 581381.8712094891
+        },
+        {
+            "id_grading": 4002,
+            "no_invoice": "11132",
+            "gr": 97,
+            "old_cost_bk": 643170.69154775,
+            "new_cost_bk": 593621.489550747
+        }
+    ]
+}

@@ -1,0 +1,294 @@
+{
+    "created_at": "2026-08-11T08:52:13+08:00",
+    "source_file": "C:/Users/User/Downloads/perbaikan ya.xlsx",
+    "records": [
+        {
+            "id_bk": 2314,
+            "no_box": "2414",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 200,
+            "hrga_satuan": 5755.3191489362
+        },
+        {
+            "id_bk": 3419,
+            "no_box": "2774",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 100,
+            "hrga_satuan": 14258.566534742
+        },
+        {
+            "id_bk": 3420,
+            "no_box": "2775",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 100,
+            "hrga_satuan": 19237.519328788
+        },
+        {
+            "id_bk": 3425,
+            "no_box": "2780",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 80,
+            "hrga_satuan": 16810.279841691
+        },
+        {
+            "id_bk": 3461,
+            "no_box": "2816",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 200,
+            "hrga_satuan": 19023.814276634
+        },
+        {
+            "id_bk": 4642,
+            "no_box": "2954",
+            "kategori": "cabut",
+            "pcs_awal": 18,
+            "gr_awal": 120,
+            "hrga_satuan": 11891.697104377
+        },
+        {
+            "id_bk": 12079,
+            "no_box": "5970",
+            "kategori": "cabut",
+            "pcs_awal": 27,
+            "gr_awal": 240,
+            "hrga_satuan": 10765.115273435
+        },
+        {
+            "id_bk": 12088,
+            "no_box": "5979",
+            "kategori": "cabut",
+            "pcs_awal": 28,
+            "gr_awal": 240,
+            "hrga_satuan": 11238.307153586
+        },
+        {
+            "id_bk": 12089,
+            "no_box": "5980",
+            "kategori": "cabut",
+            "pcs_awal": 28,
+            "gr_awal": 240,
+            "hrga_satuan": 11238.307153586
+        },
+        {
+            "id_bk": 12091,
+            "no_box": "5982",
+            "kategori": "cabut",
+            "pcs_awal": 28,
+            "gr_awal": 240,
+            "hrga_satuan": 11238.307153586
+        },
+        {
+            "id_bk": 12092,
+            "no_box": "5983",
+            "kategori": "cabut",
+            "pcs_awal": 27,
+            "gr_awal": 240,
+            "hrga_satuan": 11176.895639086
+        },
+        {
+            "id_bk": 12094,
+            "no_box": "5985",
+            "kategori": "cabut",
+            "pcs_awal": 26,
+            "gr_awal": 240,
+            "hrga_satuan": 11116.151641047
+        },
+        {
+            "id_bk": 12115,
+            "no_box": "6006",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 250,
+            "hrga_satuan": 14113.956162243
+        },
+        {
+            "id_bk": 12117,
+            "no_box": "6008",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 250,
+            "hrga_satuan": 17779.240821629
+        },
+        {
+            "id_bk": 13145,
+            "no_box": "6659",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1532.0754716981
+        },
+        {
+            "id_bk": 13146,
+            "no_box": "6660",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1567.3151750973
+        },
+        {
+            "id_bk": 13147,
+            "no_box": "6661",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1585.7707509881
+        },
+        {
+            "id_bk": 13148,
+            "no_box": "6662",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1553.8461538462
+        },
+        {
+            "id_bk": 13149,
+            "no_box": "6663",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1567.3151750973
+        },
+        {
+            "id_bk": 13150,
+            "no_box": "6664",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 406,
+            "hrga_satuan": 1583.6734693878
+        },
+        {
+            "id_bk": 13151,
+            "no_box": "6665",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 340,
+            "hrga_satuan": 2738.4615384615
+        },
+        {
+            "id_bk": 13152,
+            "no_box": "6666",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 340,
+            "hrga_satuan": 2998.9417989418
+        },
+        {
+            "id_bk": 13153,
+            "no_box": "6667",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 340,
+            "hrga_satuan": 3078.453038674
+        },
+        {
+            "id_bk": 13154,
+            "no_box": "6668",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 340,
+            "hrga_satuan": 3057.9234972678
+        },
+        {
+            "id_bk": 13155,
+            "no_box": "6669",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 340,
+            "hrga_satuan": 2826.7942583732
+        },
+        {
+            "id_bk": 13182,
+            "no_box": "6696",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 300,
+            "hrga_satuan": 1483.0324909747
+        },
+        {
+            "id_bk": 13183,
+            "no_box": "6697",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 320,
+            "hrga_satuan": 1555.2346570397
+        },
+        {
+            "id_bk": 13184,
+            "no_box": "6698",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 320,
+            "hrga_satuan": 1650
+        },
+        {
+            "id_bk": 13185,
+            "no_box": "6699",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 320,
+            "hrga_satuan": 1626.0536398467
+        },
+        {
+            "id_bk": 13186,
+            "no_box": "6700",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 320,
+            "hrga_satuan": 1685.140562249
+        },
+        {
+            "id_bk": 13545,
+            "no_box": "6933",
+            "kategori": "cabut",
+            "pcs_awal": 20,
+            "gr_awal": 120,
+            "hrga_satuan": 10543.154133777
+        },
+        {
+            "id_bk": 13546,
+            "no_box": "6934",
+            "kategori": "cabut",
+            "pcs_awal": 19,
+            "gr_awal": 120,
+            "hrga_satuan": 10543.154133777
+        },
+        {
+            "id_bk": 13572,
+            "no_box": "6960",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 200,
+            "hrga_satuan": 11113.177233071
+        },
+        {
+            "id_bk": 13573,
+            "no_box": "6961",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 120,
+            "hrga_satuan": 10652.978656004
+        },
+        {
+            "id_bk": 13574,
+            "no_box": "6962",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 120,
+            "hrga_satuan": 10652.978656004
+        },
+        {
+            "id_bk": 13575,
+            "no_box": "6963",
+            "kategori": "cabut",
+            "pcs_awal": 0,
+            "gr_awal": 120,
+            "hrga_satuan": 10652.978656004
+        }
+    ]
+}

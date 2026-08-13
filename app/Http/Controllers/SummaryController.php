@@ -1205,18 +1205,26 @@ class SummaryController extends Controller
                 $totalOperasional,
                 $biayaOperasionalMurni
             ) {
-            // Susut tidak menerima cost_op. Seluruh biaya tetap melekat pada
-            // produk aktual sehingga modal tidak hilang ketika gram menyusut.
-            $totalGr = (float) DB::table('grading_partai')
-                ->where('bulan', $bulan)
-                ->where('tahun', $tahun)
-                ->where('grade', '!=', 'susut')
-                ->lockForUpdate()
-                ->sum('gr');
+            $cabutQuery = DB::table('cabut')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
+                ->where('no_box', '!=', 9999)
+                ->where('ttl_rp', '>', 0)
+                ->where('gr_akhir', '>', 0);
+            $eoQuery = DB::table('eo')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
+                ->where('no_box', '!=', 9999)
+                ->where('ttl_rp', '>', 0)
+                ->where('gr_eo_akhir', '>', 0);
+
+            $totalGrCabut = (float) (clone $cabutQuery)->sum('gr_akhir');
+            $totalGrEo = (float) (clone $eoQuery)->sum('gr_eo_akhir');
+            $totalGr = $totalGrCabut + $totalGrEo;
 
             if ($totalGr <= 0) {
                 throw new \RuntimeException(
-                    "Belum ada gram hasil grading untuk bulan {$bulan}/{$tahun}"
+                    "Belum ada Cabut/EO dengan ttl_rp dan gram hasil untuk bulan {$bulan}/{$tahun}"
                 );
             }
 
@@ -1232,25 +1240,156 @@ class SummaryController extends Controller
                 ]
             );
 
-            // Bersihkan cost_op baris susut/hasil lama sebelum alokasi ulang.
-            DB::table('grading_partai')
-                ->where('bulan', $bulan)
-                ->where('tahun', $tahun)
-                ->where('grade', 'susut')
+            // Pengisian ulang bulan yang sama harus bersih dan idempoten.
+            DB::table('cabut')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
+                ->update(['cost_op' => 0]);
+            DB::table('eo')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
                 ->update(['cost_op' => 0]);
 
-            // Satu UPDATE untuk seluruh hasil grading; jauh lebih ringan daripada
-            // menjalankan satu query untuk setiap baris.
-            DB::table('grading_partai')
-                ->where('bulan', $bulan)
-                ->where('tahun', $tahun)
-                ->where('grade', '!=', 'susut')
-                ->update(['cost_op' => DB::raw('COALESCE(gr, 0) * ' . (float) $rpGr)]);
+            (clone $cabutQuery)->update([
+                'cost_op' => DB::raw('COALESCE(gr_akhir, 0) * ' . (float) $rpGr),
+            ]);
+            (clone $eoQuery)->update([
+                'cost_op' => DB::raw('COALESCE(gr_eo_akhir, 0) * ' . (float) $rpGr),
+            ]);
+
+            $totalTerbagi = (float) DB::table('cabut')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
+                ->sum('cost_op')
+                + (float) DB::table('eo')
+                    ->where('bulan_dibayar', $bulan)
+                    ->where('tahun_dibayar', $tahun)
+                    ->sum('cost_op');
+            $selisihPembulatan = $biayaOperasionalMurni - $totalTerbagi;
+
+            if (abs($selisihPembulatan) > 0) {
+                $barisTerakhir = (clone $eoQuery)->orderByDesc('id_eo')->first();
+                $table = 'eo';
+                $idColumn = 'id_eo';
+
+                if (!$barisTerakhir) {
+                    $barisTerakhir = (clone $cabutQuery)->orderByDesc('id_cabut')->first();
+                    $table = 'cabut';
+                    $idColumn = 'id_cabut';
+                }
+
+                DB::table($table)->where($idColumn, $barisTerakhir->{$idColumn})->update([
+                    'cost_op' => DB::raw('COALESCE(cost_op, 0) + ' . (float) $selisihPembulatan),
+                ]);
+            }
+
+            $totalFinal = (float) DB::table('cabut')
+                ->where('bulan_dibayar', $bulan)
+                ->where('tahun_dibayar', $tahun)
+                ->sum('cost_op')
+                + (float) DB::table('eo')
+                    ->where('bulan_dibayar', $bulan)
+                    ->where('tahun_dibayar', $tahun)
+                    ->sum('cost_op');
+
+            if (abs($totalFinal - $biayaOperasionalMurni) >= 0.01) {
+                throw new \RuntimeException('Alokasi cost operasional Cabut/EO tidak seimbang');
+            }
+
+            $this->syncCostOperasionalToGradingPartai();
             });
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
 
         return redirect()->back()->with('sukses', 'Cost operasional berhasil dialokasikan');
+    }
+
+    /**
+     * Membawa cost operasional Cabut/EO ke hasil grading berdasarkan invoice.
+     * Cost invoice dibagi proporsional terhadap gram hasil non-susut.
+     */
+    private function syncCostOperasionalToGradingPartai(): void
+    {
+        $costPerInvoice = DB::select("
+            SELECT sumber.no_invoice, SUM(box_cost.cost_op) AS cost_op
+            FROM (
+                SELECT DISTINCT no_invoice, no_box_sortir
+                FROM grading
+                WHERE no_invoice IS NOT NULL
+                  AND no_invoice != ''
+            ) AS sumber
+            INNER JOIN (
+                SELECT no_box, SUM(cost_op) AS cost_op
+                FROM (
+                    SELECT CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op
+                    FROM cabut
+                    WHERE ttl_rp > 0
+                    UNION ALL
+                    SELECT CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op
+                    FROM eo
+                    WHERE ttl_rp > 0
+                ) AS biaya
+                GROUP BY no_box
+            ) AS box_cost ON box_cost.no_box = CAST(sumber.no_box_sortir AS CHAR)
+            GROUP BY sumber.no_invoice
+            HAVING SUM(box_cost.cost_op) != 0
+        ");
+
+        DB::table('grading_partai')->update(['cost_op' => 0]);
+
+        if (!$costPerInvoice) {
+            return;
+        }
+
+        $invoiceCosts = collect($costPerInvoice)->keyBy(
+            fn ($row) => (string) $row->no_invoice
+        );
+        $rows = DB::table('grading_partai')
+            ->whereIn('no_invoice', $invoiceCosts->keys()->all())
+            ->whereRaw("LOWER(TRIM(COALESCE(grade, ''))) <> 'susut'")
+            ->select('id_grading', 'no_invoice', 'gr')
+            ->orderBy('id_grading')
+            ->get()
+            ->groupBy(fn ($row) => (string) $row->no_invoice);
+
+        $updates = [];
+        foreach ($rows as $invoice => $invoiceRows) {
+            $totalGr = (float) $invoiceRows->sum(fn ($row) => (float) $row->gr);
+            if ($totalGr <= 0 || !$invoiceCosts->has($invoice)) {
+                continue;
+            }
+
+            $invoiceCost = (float) $invoiceCosts->get($invoice)->cost_op;
+            $allocated = 0.0;
+            $lastIndex = $invoiceRows->count() - 1;
+
+            foreach ($invoiceRows->values() as $index => $row) {
+                $cost = $index === $lastIndex
+                    ? $invoiceCost - $allocated
+                    : $invoiceCost * ((float) $row->gr / $totalGr);
+                $allocated += $cost;
+                $updates[(int) $row->id_grading] = $cost;
+            }
+        }
+
+        foreach (array_chunk($updates, 500, true) as $chunk) {
+            $caseSql = [];
+            $caseBindings = [];
+            foreach ($chunk as $id => $cost) {
+                $caseSql[] = 'WHEN ? THEN ?';
+                $caseBindings[] = $id;
+                $caseBindings[] = $cost;
+            }
+
+            $ids = array_keys($chunk);
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            DB::update(
+                'UPDATE grading_partai SET cost_op = CASE id_grading '
+                    . implode(' ', $caseSql)
+                    . ' ELSE cost_op END WHERE id_grading IN (' . $placeholders . ')',
+                array_merge($caseBindings, $ids)
+            );
+        }
     }
 }

@@ -413,20 +413,28 @@ class CocokanController extends Controller
         $totalBkRp =
             $objectValue($data['bk_sisa'], 'ttl_rp') +
             $objectValue($data['cbt_proses'], 'ttl_rp') +
+            $objectValue($data['cbt_proses'], 'cost_kerja') +
+            $objectValue($data['cbt_proses'], 'cost_op') +
             $objectValue($data['cbt_sisa_pgws'], 'ttl_rp') +
             $arrayValue($data['cabut_selesai_siap_cetak'], 'ttl_rp') +
             $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_kerja') +
+            $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_op') +
             $objectValue($data['cetak_proses'], 'ttl_rp') +
             $objectValue($data['cetak_proses'], 'cost_kerja') +
+            $objectValue($data['cetak_proses'], 'cost_op') +
             $objectValue($data['cetak_sisa'], 'ttl_rp') +
             $arrayValue($data['cetak_selesai'], 'ttl_rp') +
             $arrayValue($data['cetak_selesai'], 'cost_kerja') +
+            $arrayValue($data['cetak_selesai'], 'cost_op') +
             $objectValue($data['sedang_proses'], 'ttl_rp') +
             $objectValue($data['sedang_proses'], 'cost_kerja') +
+            $objectValue($data['sedang_proses'], 'cost_op') +
             $objectValue($data['sortir_sisa'], 'ttl_rp') +
             $objectValue($data['sortir_sisa'], 'cost_kerja') +
+            $objectValue($data['sortir_sisa'], 'cost_op') +
             $arrayValue($data['sortir_selesai'], 'ttl_rp') +
             $arrayValue($data['sortir_selesai'], 'cost_kerja') +
+            $arrayValue($data['sortir_selesai'], 'cost_op') +
             $objectValue($data['grading_sisa'], 'cost_bk') +
             $objectValue($data['grading_proses'], 'cost_bk') +
             $objectValue($data['grading_proses'], 'cost_kerja') +
@@ -476,7 +484,9 @@ class CocokanController extends Controller
             ['BK Sisa', $data['bk_sisa'], 0, 'stock',
                 $objectValue($data['bk_sisa'], 'ttl_rp')],
             ['Cabut sedang proses', $data['cbt_proses'], 1, 'process',
-                $objectValue($data['cbt_proses'], 'ttl_rp')],
+                $objectValue($data['cbt_proses'], 'ttl_rp')
+                + $objectValue($data['cbt_proses'], 'cost_kerja')
+                + $objectValue($data['cbt_proses'], 'cost_op')],
             ['Cabut sisa pengawas', $data['cbt_sisa_pgws'], 2, 'process',
                 $objectValue($data['cbt_sisa_pgws'], 'ttl_rp')],
             ['Cabut selesai siap cetak belum kirim', null, 3, 'stock',
@@ -485,7 +495,8 @@ class CocokanController extends Controller
                 + $arrayValue($data['cabut_selesai_siap_cetak'], 'cost_op')],
             ['Cetak sedang proses', $data['cetak_proses'], 4, 'process',
                 $objectValue($data['cetak_proses'], 'ttl_rp')
-                + $objectValue($data['cetak_proses'], 'cost_kerja')],
+                + $objectValue($data['cetak_proses'], 'cost_kerja')
+                + $objectValue($data['cetak_proses'], 'cost_op')],
             ['Cetak sisa pengawas', $data['cetak_sisa'], 5, 'process',
                 $objectValue($data['cetak_sisa'], 'ttl_rp')],
             ['Cetak selesai siap sortir belum kirim', null, 6, 'stock',
@@ -494,10 +505,12 @@ class CocokanController extends Controller
                 + $arrayValue($data['cetak_selesai'], 'cost_op')],
             ['Sortir sedang proses', $data['sedang_proses'], 7, 'process',
                 $objectValue($data['sedang_proses'], 'ttl_rp')
-                + $objectValue($data['sedang_proses'], 'cost_kerja')],
+                + $objectValue($data['sedang_proses'], 'cost_kerja')
+                + $objectValue($data['sedang_proses'], 'cost_op')],
             ['Sortir sisa pengawas', $data['sortir_sisa'], 8, 'process',
                 $objectValue($data['sortir_sisa'], 'ttl_rp')
-                + $objectValue($data['sortir_sisa'], 'cost_kerja')],
+                + $objectValue($data['sortir_sisa'], 'cost_kerja')
+                + $objectValue($data['sortir_sisa'], 'cost_op')],
             ['Sortir selesai siap grading belum kirim', null, 9, 'stock',
                 $arrayValue($data['sortir_selesai'], 'ttl_rp')
                 + $arrayValue($data['sortir_selesai'], 'cost_kerja')
@@ -554,6 +567,49 @@ class CocokanController extends Controller
         })->all();
     }
 
+    /**
+     * Menempelkan cost operasional Cabut/EO tepat satu kali per no_box.
+     * Beberapa query detail dapat menghasilkan lebih dari satu baris untuk box
+     * yang sama, sehingga baris berikutnya sengaja diberi nol agar tidak dobel.
+     */
+    private function attachOperationalCostByBox(array $rows): array
+    {
+        if (!$rows) {
+            return $rows;
+        }
+
+        $boxNumbers = collect($rows)
+            ->pluck('no_box')
+            ->filter(fn ($box) => $box !== null && $box !== '')
+            ->map(fn ($box) => (string) $box)
+            ->unique()
+            ->values();
+
+        $costs = DB::query()
+            ->fromSub(function ($query) use ($boxNumbers) {
+                $query->from('cabut')
+                    ->selectRaw('CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op')
+                    ->whereIn(DB::raw('CAST(no_box AS CHAR)'), $boxNumbers->all())
+                    ->unionAll(
+                        DB::table('eo')
+                            ->selectRaw('CAST(no_box AS CHAR) AS no_box, COALESCE(cost_op, 0) AS cost_op')
+                            ->whereIn(DB::raw('CAST(no_box AS CHAR)'), $boxNumbers->all())
+                    );
+            }, 'operational_cost')
+            ->selectRaw('no_box, SUM(cost_op) AS cost_op')
+            ->groupBy('no_box')
+            ->pluck('cost_op', 'no_box');
+
+        $attached = [];
+        foreach ($rows as $row) {
+            $box = (string) ($row->no_box ?? '');
+            $row->cost_op = isset($attached[$box]) ? 0 : (float) ($costs[$box] ?? 0);
+            $attached[$box] = true;
+        }
+
+        return $rows;
+    }
+
     public function balancesheet()
     {
         $cetakStok = CocokanModel::cetak_stok_balance();
@@ -561,7 +617,8 @@ class CocokanController extends Controller
         $cetak_sisa = new stdClass();
         $cetak_sisa->pcs = $cetakStok->pcs;
         $cetak_sisa->gr = $cetakStok->gr;
-        $cetak_sisa->ttl_rp = $cetakStok->ttl_rp + $cetakStok->cost_kerja;
+        $cetak_sisa->cost_op = $cetakStok->cost_op ?? 0;
+        $cetak_sisa->ttl_rp = $cetakStok->ttl_rp + $cetakStok->cost_kerja + $cetak_sisa->cost_op;
 
         $pengiriman = Grading::pengirimanSum();
         $grading_susut = Grading::belumKirimSumsusut();
@@ -582,9 +639,9 @@ class CocokanController extends Controller
             'sortir_sisa' => CocokanModel::sortir_stock_balance(),
             'pengiriman' => $pengiriman,
             'grading_sisa' => CocokanModel::gradingSisaOne(),
-            'cabut_selesai_siap_cetak' => OpnameNewModel::bksedang_selesai_sum(),
-            'cetak_selesai' => OpnameNewModel::cetak_selesai(),
-            'sortir_selesai' => OpnameNewModel::sortir_selesai(),
+            'cabut_selesai_siap_cetak' => $this->attachOperationalCostByBox(OpnameNewModel::bksedang_selesai_sum()),
+            'cetak_selesai' => $this->attachOperationalCostByBox(OpnameNewModel::cetak_selesai()),
+            'sortir_selesai' => $this->attachOperationalCostByBox(OpnameNewModel::sortir_selesai()),
             'grading_susut' => $grading_susut,
             'sisa_belum_wip1' => $model->sisa_belum_wip1(),
             'sisa_belum_qc' => $model->sisa_belum_qc(),
@@ -1039,7 +1096,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::bksedang_proses_sum(),
+            'box' => $this->attachOperationalCostByBox($model::bksedang_proses_sum()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1047,7 +1104,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::bksisapgws(),
+            'box' => $this->attachOperationalCostByBox($model::bksisapgws()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1055,7 +1112,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::bksedang_selesai_sum(),
+            'box' => $this->attachOperationalCostByBox($model::bksedang_selesai_sum()),
 
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
@@ -1064,7 +1121,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::cetak_proses(),
+            'box' => $this->attachOperationalCostByBox($model::cetak_proses()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1072,7 +1129,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::cetak_stok(),
+            'box' => $this->attachOperationalCostByBox($model::cetak_stok()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1080,7 +1137,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::cetak_selesai(),
+            'box' => $this->attachOperationalCostByBox($model::cetak_selesai()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1088,7 +1145,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::sortir_proses(),
+            'box' => $this->attachOperationalCostByBox($model::sortir_proses()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1096,7 +1153,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::sortir_stock(),
+            'box' => $this->attachOperationalCostByBox($model::sortir_stock()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }
@@ -1104,7 +1161,7 @@ class CocokanController extends Controller
     {
         $data = [
             'title' => 'Data Opname',
-            'box' => $model::sortir_selesai(),
+            'box' => $this->attachOperationalCostByBox($model::sortir_selesai()),
         ];
         return view('home.cocokan.balance.detailcabutproses', $data);
     }

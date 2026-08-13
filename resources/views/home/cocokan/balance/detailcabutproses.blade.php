@@ -9,6 +9,7 @@
             <th class="dhead text-end">gr</th>
             <th class="dhead text-end">modal bk</th>
             <th class="dhead text-end">cost kerja</th>
+            <th class="dhead text-end">cost operasional</th>
             <th class="dhead text-end">ttl rp</th>
             <th class="dhead text-end">rata-rata</th>
         </tr>
@@ -21,10 +22,11 @@
             <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'gr'), 0) }}</th>
             <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'ttl_rp'), 0) }}</th>
             <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'cost_kerja'), 0) }}</th>
-            <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'ttl_rp') + sumBk($box, 'cost_kerja'), 0) }}
+            <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'cost_op'), 0) }}</th>
+            <th class="dheadstock  text-end">{{ number_format(sumBk($box, 'ttl_rp') + sumBk($box, 'cost_kerja') + sumBk($box, 'cost_op'), 0) }}
             </th>
             <th class="dheadstock  text-end">
-                {{ empty(sumBk($box, 'gr')) ? 0 : number_format((sumBk($box, 'ttl_rp') + sumBk($box, 'cost_kerja')) / sumBk($box, 'gr'), 0) }}
+                {{ empty(sumBk($box, 'gr')) ? 0 : number_format((sumBk($box, 'ttl_rp') + sumBk($box, 'cost_kerja') + sumBk($box, 'cost_op')) / sumBk($box, 'gr'), 0) }}
             </th>
         </tr>
     </thead>
@@ -39,9 +41,10 @@
                 <td class="text-end">{{ number_format($b->gr, 0) }}</td>
                 <td class="text-end">{{ number_format($b->ttl_rp, 0) }}</td>
                 <td class="text-end">{{ number_format($b->cost_kerja ?? 0, 0) }}</td>
-                <td class="text-end">{{ number_format($b->ttl_rp + ($b->cost_kerja ?? 0), 0) }}</td>
+                <td class="text-end">{{ number_format($b->cost_op ?? 0, 0) }}</td>
+                <td class="text-end">{{ number_format($b->ttl_rp + ($b->cost_kerja ?? 0) + ($b->cost_op ?? 0), 0) }}</td>
                 <td class="text-end">
-                    {{ empty($b->gr) ? 0 : number_format(($b->ttl_rp + ($b->cost_kerja ?? 0)) / $b->gr, 0) }}</td>
+                    {{ empty($b->gr) ? 0 : number_format(($b->ttl_rp + ($b->cost_kerja ?? 0) + ($b->cost_op ?? 0)) / $b->gr, 0) }}</td>
             </tr>
         @endforeach
     </tbody>
