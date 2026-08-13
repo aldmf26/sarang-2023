@@ -29,9 +29,7 @@
                 </thead>
                 <tbody>
                     @foreach ($formulir as $no => $d)
-                        <tr x-data="{
-                            isDisabled: false,
-                        }">
+                        <tr>
                             <td>{{ $no + 1 }}</td>
                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
                             <td>
@@ -45,14 +43,9 @@
                             <td class="nowrap">
                                 @php
                                     $param = ['kategori' => 'sortir', 'no_invoice' => $d->no_invoice];
-                                    $getCtk = DB::selectOne("SELECT a.no_box 
-                                    FROM formulir_sarang as a 
-                                    join sortir as b on b.no_box = a.no_box
-                                    where a.no_invoice = '$d->no_invoice' and a.kategori = 'sortir'
-                                    ");
                                 @endphp
 
-                                @if (!$getCtk)
+                                @if (!$d->has_sortir)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.batal', $param) }}">
                                         <span class="badge bg-danger">Cancel</span>
@@ -63,14 +56,7 @@
                                         <span class="badge bg-primary">Edit</span>
                                     </a>
 
-                                    @php
-                                        $hcr = DB::table('tb_hancuran')
-                                            ->where('no_invoice', $d->no_invoice)
-                                            ->where('kategori', 'sortir')
-                                            ->groupBy('no_invoice')
-                                            ->first();
-                                    @endphp
-                                    @if (empty($hcr))
+                                    @if (!$d->has_hancuran)
                                         <a
                                             href="{{ route('gudangsarang.gethancuran.cetak', ['no_invoice' => $d->no_invoice]) }}">
                                             <span class="badge bg-warning">Patah</span>
@@ -80,11 +66,15 @@
                                             href="{{ route('gudangsarang.gethancuran.cetak', ['no_invoice' => $d->no_invoice]) }}">
                                             <span class="badge bg-warning">Edit Patah</span>
                                         </a>
-                                        <a onclick="return confirm('Yakin diselesaikan ?')"
-                                            href="{{ route('cetaknew.selesai_po_sortir', $param) }}"
-                                            x-show="!isDisabled" @click="isDisabled = true">
-                                            <span class="badge bg-success">Selesai</span>
-                                        </a>
+                                        <form method="POST"
+                                            action="{{ route('po.sortir.selesai', ['no_invoice' => $d->no_invoice]) }}"
+                                            class="d-inline"
+                                            onsubmit="if (!confirm('Yakin diselesaikan ?')) return false; this.querySelector('button').disabled = true;">
+                                            @csrf
+                                            <button type="submit" class="border-0 bg-transparent p-0">
+                                                <span class="badge bg-success">Selesai</span>
+                                            </button>
+                                        </form>
                                     @endif
                                 @else
                                     <a href="{{ $kategori == 'cetak' ? route('gudangsarang.print_formulir', ['no_invoice' => $d->no_invoice]) : "/home/cetaknew/formulir/$d->no_invoice" }}"

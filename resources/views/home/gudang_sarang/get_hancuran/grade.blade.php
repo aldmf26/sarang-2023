@@ -46,8 +46,8 @@
                     {{ $no_invoice }}
                 </h5>
 
-                <h6 class="fw-bold">Pengawas : {{ auth()->user()->find($formulir[0]->id_pemberi)->name }} ~
-                    {{ auth()->user()->find($formulir[0]->id_penerima)->name }} | Tanggal :
+                <h6 class="fw-bold">Pengawas : {{ $ket_formulir->name }} ~
+                    {{ $ket_formulir->penerima }} | Tanggal :
                     {{ tanggal($formulir[0]->tanggal) }}</h6>
                 <div class="row">
                     <input type="hidden" name="no_invoice" value="{{ $no_invoice }}">
@@ -87,18 +87,8 @@
                                     $ttlPcsSrt += $d->pcs_srt;
                                     $ttlGrSrt += $d->gr_srt;
 
-                                    $pcsPth = DB::selectOne("SELECT sum(a.pcs) as pcs 
-                                FROM tb_hancuran as a
-                                where a.kategori in('cetak','sortir') and a.no_box = '$d->no_box'
-                                ");
-
-                                    $pcs_pth_grade = DB::table('tb_hancuran')
-                                        ->where('no_box', $d->no_box)
-                                        ->where('kategori', 'grade')
-                                        ->first();
-
-                                    $ttlPcsPth += $pcsPth->pcs ?? 0;
-                                    $ttlGrPth += $pcs_pth_grade->pcs ?? 0;
+                                    $ttlPcsPth += $d->pcs_pth_sebelumnya;
+                                    $ttlGrPth += $d->pcs_pth_grade;
                                 @endphp
                                 <tbody>
                                     <tr>
@@ -110,16 +100,16 @@
                                         <td class="text-end">{{ $d->pcs }}</td>
                                         <td class="text-end">{{ $d->gr }}</td>
                                         <td class="text-end">
-                                            {{ number_format($d->pcs - ($pcsPth->pcs ?? 0) - ($pcs_pth_grade->pcs ?? 0), 0) }}
+                                            {{ number_format($d->pcs - $d->pcs_pth_sebelumnya - $d->pcs_pth_grade, 0) }}
                                         </td>
-                                        <td class="text-end">{{ number_format($pcsPth->pcs ?? 0, 0) }}</td>
+                                        <td class="text-end">{{ number_format($d->pcs_pth_sebelumnya, 0) }}</td>
                                         <td width="10%" class="text-end">
                                             <input type="text" class="form-control form-control-sm text-end"
-                                                name="pcs_pth[]" value="{{ $pcs_pth_grade->pcs ?? 0 }}">
+                                                name="pcs_pth[]" value="{{ $d->pcs_pth_grade }}">
                                             <input type="hidden" name="no_box[]" value="{{ $d->no_box }}">
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format(($pcsPth->pcs ?? 0) + ($pcs_pth_grade->pcs ?? 0), 0) }}
+                                            {{ number_format($d->pcs_pth_sebelumnya + $d->pcs_pth_grade, 0) }}
                                         </td>
 
                                     </tr>

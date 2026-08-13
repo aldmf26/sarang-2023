@@ -292,16 +292,57 @@ class GradingBjController extends Controller
 
     public function gradingPartaiResult(Request $r)
     {
+        $noBoxes = collect(explode(',', (string) $r->no_box))
+            ->map(fn ($value) => trim($value))
+            ->filter(fn ($value) => $value !== '' && ctype_digit($value))
+            ->unique()
+            ->take(5000)
+            ->values();
 
-        $no_box = $r->no_box;
+        if ($noBoxes->isEmpty()) {
+            return redirect()->route('gradingbj.index')->with('error', 'No Box tidak valid.');
+        }
+
+        $no_box = $noBoxes->implode(',');
         // Ambil data yang sama seperti pada POST
         $partaiData = DB::table('bk')
-            ->whereIn('no_box', explode(',', $no_box))
+            ->whereIn('no_box', $noBoxes)
             ->where('kategori', 'cabut')
             ->select('nm_partai', 'tipe', 'ket')
             ->get();
-        $getFormulir = Grading::dapatkanStokBoxtesting('formulir', $r->no_box);
+
+        if ($partaiData->isEmpty() || $partaiData->pluck('nm_partai')->map(fn ($value) => strtolower((string) $value))->unique()->count() !== 1) {
+            return redirect()->route('gradingbj.index')->with('error', 'Semua box wajib berasal dari satu partai.');
+        }
+
+        $getFormulir = collect(Grading::dapatkanStokBoxtesting('formulir', $no_box))
+            ->map(function ($row) {
+                $row->total_rp = (float) ($row->cost_bk ?? 0)
+                    + (float) ($row->cost_cbt ?? 0)
+                    + (float) ($row->cost_ctk ?? 0)
+                    + (float) ($row->cost_eo ?? 0)
+                    + (float) ($row->cost_str ?? 0)
+                    + (float) ($row->cost_cu ?? 0);
+
+                return $row;
+            })
+            ->values()
+            ->all();
+
+        if (empty($getFormulir)) {
+            return redirect()
+                ->route('gudangsarang.invoice_grading', ['kategori' => 'grading'])
+                ->with('error', 'Data box PO Grading tidak ditemukan.');
+        }
         $tb_grade = DB::table('tb_grade')->whereIn('status', ['bentuk', 'turun'])->orderBy('status', 'ASC')->get();
+
+        $hancuranPcsByBox = DB::table('tb_hancuran')
+            ->select('no_box')
+            ->selectRaw('SUM(pcs) as pcs')
+            ->whereIn('kategori', ['cetak', 'sortir', 'grade', 'grading'])
+            ->whereIn('no_box', $noBoxes)
+            ->groupBy('no_box')
+            ->pluck('pcs', 'no_box');
 
         $usedGrades = DB::table('grading_partai')
             ->selectRaw('grade, count(*) as total')
@@ -318,7 +359,9 @@ class GradingBjController extends Controller
             'tbGradeAll' => DB::table('tb_grade')->orderBy('status', 'ASC')->orderBy('nm_grade', 'ASC')->get(),
             'gradeUsed' => $usedGrades,
             'no_box' => $no_box,
-            'no_invoice' => $r->no_invoice
+            'no_invoice' => $r->no_invoice,
+            'hancuranPcsByBox' => $hancuranPcsByBox,
+            'turunGradeTotal' => $hancuranPcsByBox->sum(),
         ];
 
         return view('home.gradingbj.grading_partai', $data);
@@ -726,6 +769,254 @@ class GradingBjController extends Controller
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
+
+    public function create_lewat_partai(Request $r)
+    {
+        $r->validate([
+            'box_payload' => ['required', 'string', 'max:1048576'],
+            'nm_partai' => ['required', 'string', 'max:255'],
+        ]);
+
+        try {
+            $payload = json_decode($r->box_payload, true, 512, JSON_THROW_ON_ERROR);
+            $values = is_array($payload) ? ($payload['no_boxes'] ?? null) : null;
+
+            if (!is_array($values)) {
+                throw new \RuntimeException('JSON wajib memiliki no_boxes berupa array.');
+            }
+            if (($payload['type'] ?? null) !== 'gradingbj_lewat_partai') {
+                throw new \RuntimeException('Tipe JSON bukan gradingbj_lewat_partai.');
+            }
+
+            $noBoxes = collect($values)
+                ->filter(fn ($value) => is_scalar($value) && ctype_digit(trim((string) $value)))
+                ->map(fn ($value) => trim((string) $value))
+                ->unique()
+                ->values();
+
+            if ($noBoxes->isEmpty()) {
+                throw new \RuntimeException('Pilih minimal satu No Box.');
+            }
+            if ($noBoxes->count() > 5000) {
+                throw new \RuntimeException('Maksimal 5.000 No Box per proses.');
+            }
+
+            $result = DB::transaction(function () use ($r, $payload, $noBoxes) {
+                $sourceRows = DB::table('formulir_sarang as formulir')
+                    ->join('bk', function ($join) {
+                        $join->on('bk.no_box', '=', 'formulir.no_box')
+                            ->where('bk.kategori', '=', 'cabut');
+                    })
+                    ->select(
+                        'formulir.no_box',
+                        'formulir.pcs_awal',
+                        'formulir.gr_awal',
+                        'bk.nm_partai'
+                    )
+                    ->where('formulir.kategori', 'grade')
+                    ->whereIn('formulir.no_box', $noBoxes)
+                    ->lockForUpdate()
+                    ->get()
+                    ->unique(fn ($row) => (string) $row->no_box)
+                    ->values();
+
+                $foundBoxes = $sourceRows->pluck('no_box')->map(fn ($value) => (string) $value);
+                $missingBoxes = $noBoxes->diff($foundBoxes);
+                if ($missingBoxes->isNotEmpty()) {
+                    throw new \RuntimeException(
+                        'Data box tidak ditemukan: ' . $missingBoxes->take(10)->implode(', ')
+                    );
+                }
+
+                $requestedParty = strtolower(trim((string) $r->nm_partai));
+                $parties = $sourceRows->pluck('nm_partai')
+                    ->map(fn ($value) => strtolower(trim((string) $value)))
+                    ->unique();
+
+                if ($parties->count() !== 1 || $parties->first() !== $requestedParty) {
+                    throw new \RuntimeException('Semua box wajib berasal dari satu partai yang sama.');
+                }
+                if (
+                    isset($payload['nm_partai'])
+                    && strtolower(trim((string) $payload['nm_partai'])) !== $requestedParty
+                ) {
+                    throw new \RuntimeException('Partai dalam JSON tidak sesuai form.');
+                }
+
+                // Kunci master LEWAT sebagai mutex nomor invoice dan Box Grade.
+                $gradeLewat = DB::table('tb_grade')
+                    ->whereRaw('UPPER(nm_grade) = ?', ['LEWAT'])
+                    ->lockForUpdate()
+                    ->first();
+                if (!$gradeLewat) {
+                    throw new \RuntimeException('Grade LEWAT belum tersedia di master grade.');
+                }
+
+                $alreadyInPo = DB::table('formulir_sarang')
+                    ->where('kategori', 'grading')
+                    ->whereIn('no_box', $noBoxes)
+                    ->lockForUpdate()
+                    ->pluck('no_box')
+                    ->map(fn ($value) => (string) $value)
+                    ->unique();
+
+                if ($alreadyInPo->isNotEmpty()) {
+                    throw new \RuntimeException(
+                        'Box sudah masuk PO Grading: ' . $alreadyInPo->take(10)->implode(', ')
+                    );
+                }
+
+                $lastInvoice = DB::table('formulir_sarang')
+                    ->where('kategori', 'grading')
+                    ->orderByDesc('no_invoice')
+                    ->lockForUpdate()
+                    ->value('no_invoice');
+                $noInvoice = empty($lastInvoice) ? 11055 : ((int) $lastInvoice + 1);
+                $today = date('Y-m-d');
+
+                $insertRows = $sourceRows->map(fn ($source) => [
+                    'no_box' => $source->no_box,
+                    'pcs_awal' => $source->pcs_awal,
+                    'gr_awal' => $source->gr_awal,
+                    'tanggal' => $today,
+                    'kategori' => 'grading',
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => auth()->user()->id,
+                    'no_invoice' => $noInvoice,
+                ]);
+
+                $insertRows->chunk(300)->each(
+                    fn ($chunk) => DB::table('formulir_sarang')->insert($chunk->all())
+                );
+
+                $costBk = (float) DB::table('bk')
+                    ->where('kategori', 'cabut')
+                    ->whereIn('no_box', $noBoxes)
+                    ->sum(DB::raw('gr_awal * hrga_satuan'));
+                $costCabut = (float) DB::table('cabut')->whereIn('no_box', $noBoxes)->sum('ttl_rp');
+                $costEo = (float) DB::table('eo')->whereIn('no_box', $noBoxes)->sum('ttl_rp');
+                $costSortir = (float) DB::table('sortir')->whereIn('no_box', $noBoxes)->sum('ttl_rp');
+                $costCetak = (float) DB::table('cetak_new as cetak')
+                    ->join('kelas_cetak as kelas', 'kelas.id_kelas_cetak', '=', 'cetak.id_kelas_cetak')
+                    ->where('kelas.kategori', 'CTK')
+                    ->whereIn('cetak.no_box', $noBoxes)
+                    ->sum('cetak.ttl_rp');
+                $costCu = (float) DB::table('cetak_new as cetak')
+                    ->join('kelas_cetak as kelas', 'kelas.id_kelas_cetak', '=', 'cetak.id_kelas_cetak')
+                    ->where('kelas.kategori', 'CU')
+                    ->whereIn('cetak.no_box', $noBoxes)
+                    ->sum('cetak.ttl_rp');
+                $costKerja = $costCabut + $costEo + $costSortir + $costCetak;
+
+                $lastBoxRow = DB::table('grading_partai')
+                    ->selectRaw('MAX(CAST(box_pengiriman AS UNSIGNED)) as max_box')
+                    ->whereRaw("box_pengiriman REGEXP '^[0-9]+$'")
+                    ->first();
+                $boxGrade = max(13026, ((int) ($lastBoxRow->max_box ?? 13025)) + 1);
+
+                while (
+                    DB::table('grading_partai')->where('box_pengiriman', $boxGrade)->exists()
+                    || DB::table('pengiriman')->where('no_box', $boxGrade)->exists()
+                ) {
+                    $boxGrade++;
+                }
+
+                $totalPcs = (float) $sourceRows->sum('pcs_awal');
+                $totalGr = (float) $sourceRows->sum('gr_awal');
+                if ($totalPcs < 0 || $totalGr <= 0) {
+                    throw new \RuntimeException('Total pcs/gr sumber tidak valid.');
+                }
+
+                $gradingRows = $sourceRows->map(fn ($source) => [
+                    'no_box_sortir' => $source->no_box,
+                    'pcs' => $source->pcs_awal,
+                    'gr' => $source->gr_awal,
+                    'no_invoice' => $noInvoice,
+                    'admin' => auth()->user()->name,
+                    'tgl' => $today,
+                ]);
+                $gradingRows->chunk(300)->each(
+                    fn ($chunk) => DB::table('grading')->insert($chunk->all())
+                );
+
+                DB::table('grading_partai')->insert([
+                    'bulan' => date('m'),
+                    'tahun' => date('Y'),
+                    'no_invoice' => $noInvoice,
+                    'nm_partai' => $sourceRows->first()->nm_partai,
+                    'urutan' => $noInvoice,
+                    'grade' => 'LEWAT',
+                    'tipe' => $gradeLewat->tipe,
+                    'pcs' => $totalPcs,
+                    'gr' => $totalGr,
+                    'tgl' => $today,
+                    'admin' => auth()->user()->name,
+                    'box_pengiriman' => $boxGrade,
+                    'ttl_rp' => $costBk + $costKerja + $costCu,
+                    'cost_bk' => $costBk,
+                    'cost_kerja' => $costKerja,
+                    'cost_cu' => $costCu,
+                    // Jalur LEWAT langsung diserahterimakan dan diselesaikan ke Wip1.
+                    'formulir' => 'Y',
+                    'not_oke' => 'T',
+                ]);
+
+                $ratna = DB::table('users')
+                    ->select('id', 'name')
+                    ->where('posisi_id', 16)
+                    ->whereRaw('LOWER(TRIM(name)) = ?', ['ratna'])
+                    ->orderBy('id')
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$ratna) {
+                    throw new \RuntimeException('Pengawas Wip1 RATNA tidak ditemukan.');
+                }
+
+                $lastWipInvoice = DB::table('formulir_sarang')
+                    ->where('kategori', 'wip')
+                    ->orderByDesc('no_invoice')
+                    ->lockForUpdate()
+                    ->value('no_invoice');
+                $wipInvoice = empty($lastWipInvoice) ? 1001 : ((int) $lastWipInvoice + 1);
+
+                DB::table('formulir_sarang')->insert([
+                    'no_invoice' => $wipInvoice,
+                    'no_box' => $boxGrade,
+                    'id_pemberi' => auth()->user()->id,
+                    'id_penerima' => $ratna->id,
+                    'pcs_awal' => $totalPcs,
+                    'gr_awal' => $totalGr,
+                    'tanggal' => $today,
+                    'kategori' => 'wip',
+                    'selesai' => 'Y',
+                ]);
+
+                return [
+                    'invoice' => $noInvoice,
+                    'wip_invoice' => $wipInvoice,
+                    'box_count' => $insertRows->count(),
+                    'box_grade' => $boxGrade,
+                ];
+            }, 3);
+
+            return redirect()->route('gradingbj.gudang_siap_kirim')->with(
+                'sukses',
+                "PO Grading {$result['invoice']} selesai dilewatkan: {$result['box_count']} box ke Box Grade {$result['box_grade']}. PO Wip {$result['wip_invoice']} otomatis diserah ke RATNA dan selesai masuk Wip1."
+            );
+        } catch (\JsonException | \RuntimeException $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->back()->withInput()->with(
+                'error',
+                'Proses Lewat Grading gagal. Semua perubahan dibatalkan.'
+            );
+        }
+    }
+
+
 
 
 

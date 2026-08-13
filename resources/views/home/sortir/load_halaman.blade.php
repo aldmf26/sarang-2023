@@ -1,9 +1,3 @@
-<div class="mb-2">
-    <input type="text" id="tblinput1" class="form-control form-control-sm float-end" style="width: 200px"
-        placeholder="🔍 Cari...">
-    <div class="clearfix"></div>
-</div>
-
 <table class="table table-bordered" id="tablestr">
     <thead>
         <tr>

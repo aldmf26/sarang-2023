@@ -41,23 +41,8 @@
                             <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
-                                @php
-
-                                    $no_invoice = $d->no_invoice;
-                                    $getBox = DB::table('formulir_sarang')
-                                        ->where([['no_invoice', $no_invoice], ['kategori', 'grading']])
-                                        ->pluck('no_box')
-                                        ->toArray();
-                                    $hasil = implode(',', $getBox);
-
-                                    $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
-                                    $getPatah = DB::table('tb_hancuran')
-                                        ->where('no_invoice', $no_invoice)
-                                        ->where('kategori', 'grading')
-                                        ->first();
-                                @endphp
                                 @role('grading', 'presiden')
-                                    @if ($getSudahGrading)
+                                    @if ($d->has_process)
                                         <a
                                             href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}">
                                             <span class="badge bg-primary">Detail</span>
@@ -68,7 +53,7 @@
                                             <span class="badge bg-danger">Cancel</span>
                                         </a>
 
-                                        @if (empty($getPatah))
+                                        @if (!$d->has_hancuran)
                                             <a href="{{ route('gudangsarang.print_formulir_grading', ['no_invoice' => $d->no_invoice]) }}"
                                                 target="_blank">
                                                 <span class="badge bg-primary">Print</span>
@@ -87,7 +72,7 @@
                                                 <span class="badge bg-warning">Edit Patahan</span>
                                             </a>
                                             <a
-                                                href="{{ route('gradingbj.grading_partai_result', ['no_box' => $hasil, 'no_invoice' => $d->no_invoice]) }}">
+                                                href="{{ route('gradingbj.grading_partai_result', ['no_box' => $d->no_boxes, 'no_invoice' => $d->no_invoice]) }}">
                                                 <span class="badge bg-primary">Grading</span>
                                             </a>
                                         @endif

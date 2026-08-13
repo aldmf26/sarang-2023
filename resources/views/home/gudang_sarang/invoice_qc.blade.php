@@ -41,19 +41,7 @@
                             <td class="text-end">{{ number_format($d->pcs, 0) }}</td>
                             <td class="text-end">{{ number_format($d->gr, 0) }}</td>
                             <td>
-                                @php
-
-                                    $no_invoice = $d->no_invoice;
-                                    $getBox = DB::table('formulir_sarang')
-                                        ->where([['no_invoice', $no_invoice], ['kategori', 'qc'], ['selesai', 'Y']])
-                                        ->pluck('no_box')
-                                        ->toArray();
-                                    $hasil = implode(',', $getBox);
-
-                                    $getSudahGrading = DB::table('grading')->where('no_invoice', $no_invoice)->first();
-                                @endphp
-
-                                @if (!$getBox)
+                                @if (!$d->is_completed)
                                     <a onclick="return confirm('Yakin dihapus ?')"
                                         href="{{ route('gudangsarang.cancel_po_qc', ['no_invoice' => $d->no_invoice]) }}">
                                         <span class="badge bg-danger">Cancel</span>

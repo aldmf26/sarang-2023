@@ -262,7 +262,10 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice";
 
-        $formulir = $this->getFormulirKategori($kategori, $tgl1, $tgl2);
+        $formulir = $this->withPoStatus(
+            $this->getFormulirKategori($kategori, $tgl1, $tgl2),
+            $kategori
+        );
 
 
         $data = [
@@ -531,6 +534,117 @@ class GudangSarangController extends Controller
         ");
     }
 
+    private function withPoStatus(array $formulir, string $kategori): array
+    {
+        if (empty($formulir)) {
+            return $formulir;
+        }
+
+        $invoices = collect($formulir)
+            ->pluck('no_invoice')
+            ->filter()
+            ->unique()
+            ->values();
+        $hasProcess = collect();
+        $hasHancuran = collect();
+        $completed = collect();
+        $noBoxes = collect();
+
+        if (in_array($kategori, ['cetak', 'grade', 'grading'], true)) {
+            $hasHancuran = DB::table('tb_hancuran')
+                ->where('kategori', $kategori)
+                ->whereIn('no_invoice', $invoices->all())
+                ->distinct()
+                ->pluck('no_invoice')
+                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+        }
+
+        if ($kategori === 'cetak') {
+            $hasProcess = DB::table('formulir_sarang as fs')
+                ->join('cetak_new as proses', 'proses.no_box', '=', 'fs.no_box')
+                ->where('fs.kategori', 'cetak')
+                ->whereIn('fs.no_invoice', $invoices->all())
+                ->distinct()
+                ->pluck('fs.no_invoice')
+                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+        } elseif ($kategori === 'grade') {
+            $hasProcess = DB::table('formulir_sarang as fs')
+                ->join('grading as proses', 'proses.no_box_sortir', '=', 'fs.no_box')
+                ->where('fs.kategori', 'grade')
+                ->whereIn('fs.no_invoice', $invoices->all())
+                ->distinct()
+                ->pluck('fs.no_invoice')
+                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+        } elseif ($kategori === 'grading') {
+            $hasProcess = DB::table('grading')
+                ->whereIn('no_invoice', $invoices->all())
+                ->distinct()
+                ->pluck('no_invoice')
+                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+
+            $noBoxes = DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->whereIn('no_invoice', $invoices->all())
+                ->orderBy('id_formulir')
+                ->get(['no_invoice', 'no_box'])
+                ->groupBy(fn ($row) => (string) $row->no_invoice)
+                ->map(fn ($rows) => $rows->pluck('no_box')->implode(','));
+        } elseif (in_array($kategori, ['qc', 'wip2'], true)) {
+            $completed = DB::table('formulir_sarang')
+                ->where('kategori', $kategori)
+                ->where('selesai', 'Y')
+                ->whereIn('no_invoice', $invoices->all())
+                ->distinct()
+                ->pluck('no_invoice')
+                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+        }
+
+        foreach ($formulir as $po) {
+            $invoice = (string) $po->no_invoice;
+            $po->has_process = $hasProcess->has($invoice);
+            $po->has_hancuran = $hasHancuran->has($invoice);
+            $po->is_completed = $completed->has($invoice);
+            $po->no_boxes = $noBoxes->get($invoice, '');
+        }
+
+        return $formulir;
+    }
+
+    private function getFormulirSortir($tgl1, $tgl2)
+    {
+        return DB::select("SELECT
+            a.selesai,
+            a.print,
+            COUNT(a.no_box) AS ttl_box,
+            a.id_formulir,
+            a.no_invoice,
+            a.tanggal,
+            b.name AS pemberi,
+            c.name AS penerima,
+            SUM(a.pcs_awal) AS pcs,
+            SUM(a.gr_awal) AS gr,
+            EXISTS (
+                SELECT 1
+                FROM formulir_sarang AS fs_sortir
+                INNER JOIN sortir AS s ON s.no_box = fs_sortir.no_box
+                WHERE fs_sortir.no_invoice = a.no_invoice
+                    AND fs_sortir.kategori = 'sortir'
+            ) AS has_sortir,
+            EXISTS (
+                SELECT 1
+                FROM tb_hancuran AS h
+                WHERE h.no_invoice = a.no_invoice
+                    AND h.kategori = 'sortir'
+            ) AS has_hancuran
+        FROM formulir_sarang AS a
+        LEFT JOIN users AS b ON b.id = a.id_pemberi
+        LEFT JOIN users AS c ON c.id = a.id_penerima
+        WHERE a.kategori = 'sortir'
+            AND a.tanggal BETWEEN ? AND ?
+        GROUP BY a.no_invoice
+        ORDER BY a.id_formulir DESC", [$tgl1, $tgl2]);
+    }
+
     public function invoice_sortir(Request $r)
     {
         $tgl = tanggalFilter($r);
@@ -540,7 +654,7 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_sortir";
 
-        $formulir = $this->getFormulirKategori('sortir', $tgl1, $tgl2);
+        $formulir = $this->getFormulirSortir($tgl1, $tgl2);
 
         $data = [
             'title' => 'Po Sortir',
@@ -560,7 +674,10 @@ class GudangSarangController extends Controller
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grade";
 
-        $formulir = $this->getFormulirKategori('grade', $tgl1, $tgl2);
+        $formulir = $this->withPoStatus(
+            $this->getFormulirKategori('grade', $tgl1, $tgl2),
+            'grade'
+        );
 
 
         $data = [
@@ -604,7 +721,10 @@ class GudangSarangController extends Controller
 
 
 
-        $formulir = $this->getFormulirKategori('grading', $tgl1, $tgl2);
+        $formulir = $this->withPoStatus(
+            $this->getFormulirKategori('grading', $tgl1, $tgl2),
+            'grading'
+        );
 
 
         $data = [
@@ -705,7 +825,10 @@ class GudangSarangController extends Controller
         $kategori = $r->kategori ?? 'cetak';
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
-        $formulir = $this->getFormulirKategori('qc', $tgl1, $tgl2);
+        $formulir = $this->withPoStatus(
+            $this->getFormulirKategori('qc', $tgl1, $tgl2),
+            'qc'
+        );
         $data = [
             'title' => 'Po QC',
             'formulir' => $formulir,
@@ -771,7 +894,10 @@ class GudangSarangController extends Controller
         $kategori = $r->kategori ?? 'cetak';
         $route = request()->route()->getName();
         $routeSekarang = "gudangsarang.invoice_grading";
-        $formulir = $this->getFormulirKategori('wip2', $tgl1, $tgl2);
+        $formulir = $this->withPoStatus(
+            $this->getFormulirKategori('wip2', $tgl1, $tgl2),
+            'wip2'
+        );
         $data = [
             'title' => 'Po Wip2',
             'formulir' => $formulir,

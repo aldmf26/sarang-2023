@@ -549,7 +549,7 @@
                     var checkbox = $(this).find('.row-checkbox');
 
                     // 3. Balikkan status checked-nya (jika true jadi false, jika false jadi true)
-                    checkbox.prop('checked', !checkbox.prop('checked'));
+                    checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
                 });
             </script>
 

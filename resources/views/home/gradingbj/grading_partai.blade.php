@@ -124,28 +124,10 @@
                                     </h6>
                                 </th>
                                 <th class="text-end">
-                                    @php $turunGrade = 0; @endphp
-                                    @foreach ($getFormulir as $d)
-                                        @php
-                                            $pcsPth = DB::selectOne(
-                                                "SELECT sum(a.pcs) as pcs FROM tb_hancuran as a where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'",
-                                            );
-                                            $turunGrade += $pcsPth->pcs ?? 0;
-                                        @endphp
-                                    @endforeach
-                                    {{ number_format($ttlPcs - $turunGrade, 0) }}
+                                    {{ number_format($ttlPcs - $turunGradeTotal, 0) }}
                                 </th>
                                 <th class="text-end">
-                                    @php $turunGrade = 0; @endphp
-                                    @foreach ($getFormulir as $d)
-                                        @php
-                                            $pcsPth = DB::selectOne(
-                                                "SELECT sum(a.pcs) as pcs FROM tb_hancuran as a where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'",
-                                            );
-                                            $turunGrade += $pcsPth->pcs ?? 0;
-                                        @endphp
-                                    @endforeach
-                                    {{ number_format($turunGrade, 0) }}
+                                    {{ number_format($turunGradeTotal, 0) }}
                                 </th>
                                 @role('presiden')
                                     <th class="text-end">
@@ -161,9 +143,7 @@
                         <tbody>
                             @foreach ($getFormulir as $d)
                                 @php
-                                    $pcsPth = DB::selectOne(
-                                        "SELECT sum(a.pcs) as pcs FROM tb_hancuran as a where a.kategori in('cetak','sortir','grade','grading') and a.no_box = '$d->no_box'",
-                                    );
+                                    $pcsPth = $hancuranPcsByBox[$d->no_box] ?? 0;
                                 @endphp
                                 <tr class="pointer">
                                     <td>{{ $d->no_box }} <input type="hidden" name="no_box[]"
@@ -171,20 +151,12 @@
                                     <td align="center">{{ $d->tipe }}-{{ $d->ket }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
-                                    <td align="right">{{ $d->pcs_awal - ($pcsPth->pcs ?? 0) }}</td>
-                                    <td align="right">{{ $pcsPth->pcs }}</td>
-                                    @php
-                                        $ttl_rp =
-                                            $d->cost_bk +
-                                            $d->cost_cbt +
-                                            $d->cost_ctk +
-                                            $d->cost_eo +
-                                            $d->cost_str +
-                                            $d->cost_cu;
-                                    @endphp
+                                    <td align="right">{{ $d->pcs_awal - $pcsPth }}</td>
+                                    <td align="right">{{ $pcsPth }}</td>
                                     @role('presiden')
-                                        <td align="right">{{ number_format($ttl_rp / $d->gr_awal, 0) }}</td>
-                                        <td align="right">{{ number_format($ttl_rp, 0) }}</td>
+                                        <td align="right">
+                                            {{ number_format($d->gr_awal == 0 ? 0 : $d->total_rp / $d->gr_awal, 0) }}</td>
+                                        <td align="right">{{ number_format($d->total_rp, 0) }}</td>
                                     @endrole
                                 </tr>
                             @endforeach
@@ -619,6 +591,166 @@
                     @endif
                 });
             </script>
+
+            {{-- Jalur LEWAT dipindahkan ke modal halaman utama Grading BJ.
+            <script>
+                $(document).ready(function() {
+                    const partaiLewat = @json($nm_partai);
+                    const tipePayloadLewat = 'gradingbj_lewat_partai';
+
+                    function uniqueNoBoxes(values) {
+                        const seen = new Set();
+                        return values.map(value => String(value).trim()).filter(value => {
+                            if (!value || seen.has(value)) return false;
+                            seen.add(value);
+                            return true;
+                        });
+                    }
+
+                    function selectedLewatBoxes() {
+                        return uniqueNoBoxes($('.lewat-box-checkbox:checked').map(function() {
+                            return this.value;
+                        }).get());
+                    }
+
+                    function buildLewatPayload(noBoxes) {
+                        return {
+                            version: 1,
+                            type: tipePayloadLewat,
+                            nm_partai: partaiLewat,
+                            exported_at: new Date().toISOString(),
+                            no_boxes: uniqueNoBoxes(noBoxes)
+                        };
+                    }
+
+                    function updateLewatTotals() {
+                        let pcs = 0;
+                        let gr = 0;
+                        const counted = new Set();
+
+                        $('.lewat-box-checkbox:checked').each(function() {
+                            if (counted.has(this.value)) return;
+                            counted.add(this.value);
+                            pcs += parseFloat(this.dataset.pcs) || 0;
+                            gr += parseFloat(this.dataset.gr) || 0;
+                        });
+
+                        const selected = selectedLewatBoxes();
+                        const all = uniqueNoBoxes($('.lewat-box-checkbox').map(function() {
+                            return this.value;
+                        }).get());
+
+                        $('#lewatSelectedCount').text(selected.length);
+                        $('#lewatSelectedPcs').text(pcs.toLocaleString('id-ID'));
+                        $('#lewatSelectedGr').text(gr.toLocaleString('id-ID'));
+                        $('#checkAllLewatPartai').prop('checked', all.length > 0 && selected.length === all.length);
+                        $('#lewatBoxPayload').val(selected.length ? JSON.stringify(buildLewatPayload(selected)) : '');
+                    }
+
+                    function setLewatMode(active) {
+                        $('#panelLewatGrading, #submitLewatPartai').toggleClass('d-none', !active);
+                        $('#hasilGradingNormal, #submitGradingNormal').toggleClass('d-none', active);
+                        $('.lewat-control').toggleClass('d-none', !active);
+                        $('#hasilGradingNormal').find(':input').prop('disabled', active);
+                        $('#modeLewatGrading').toggleClass('btn-success active', active)
+                            .toggleClass('btn-outline-success', !active);
+                        $('#modeNormalGrading').toggleClass('btn-primary active', !active)
+                            .toggleClass('btn-outline-primary', active);
+                        updateLewatTotals();
+                    }
+
+                    $('#modeNormalGrading').on('click', function() {
+                        setLewatMode(false);
+                    });
+                    $('#modeLewatGrading').on('click', function() {
+                        setLewatMode(true);
+                    });
+                    $('#checkAllLewatPartai').on('change', function() {
+                        $('.lewat-box-checkbox').prop('checked', this.checked);
+                        updateLewatTotals();
+                    });
+                    $('.lewat-box-checkbox').on('change', updateLewatTotals);
+
+                    $('#exportLewatPartaiJson').on('click', function() {
+                        const selected = selectedLewatBoxes();
+                        if (!selected.length) {
+                            alert('Pilih minimal satu box.');
+                            return;
+                        }
+
+                        const blob = new Blob([JSON.stringify(buildLewatPayload(selected), null, 2)], {
+                            type: 'application/json'
+                        });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'grading-lewat-' + String(partaiLewat).replace(/[^a-z0-9_-]+/gi, '-') + '.json';
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        URL.revokeObjectURL(url);
+                    });
+
+                    function applyLewatJson(raw) {
+                        try {
+                            const payload = JSON.parse(raw);
+                            if (!payload || payload.type !== tipePayloadLewat || !Array.isArray(payload.no_boxes)) {
+                                throw new Error('Format JSON Grading Lewat tidak valid.');
+                            }
+                            if (String(payload.nm_partai || '').toLowerCase() !== String(partaiLewat).toLowerCase()) {
+                                throw new Error('Partai JSON tidak sama dengan partai form.');
+                            }
+
+                            const requested = new Set(uniqueNoBoxes(payload.no_boxes));
+                            const available = new Set($('.lewat-box-checkbox').map(function() {
+                                return this.value;
+                            }).get());
+                            const missing = Array.from(requested).filter(noBox => !available.has(noBox));
+                            if (missing.length) {
+                                throw new Error('Box tidak tersedia: ' + missing.slice(0, 10).join(', '));
+                            }
+
+                            $('.lewat-box-checkbox').each(function() {
+                                this.checked = requested.has(this.value);
+                            });
+                            updateLewatTotals();
+                            $('#infoLewatPartaiJson').removeClass('text-muted text-danger').addClass('text-success')
+                                .text(requested.size + ' box berhasil dibaca dari JSON.');
+                        } catch (error) {
+                            $('#infoLewatPartaiJson').removeClass('text-muted text-success').addClass('text-danger')
+                                .text(error.message);
+                        }
+                    }
+
+                    $('#inputLewatPartaiJson').on('change', function() {
+                        if (this.value.trim()) applyLewatJson(this.value.trim());
+                    });
+                    $('#fileLewatPartaiJson').on('change', function() {
+                        const file = this.files && this.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = event => {
+                            $('#inputLewatPartaiJson').val(event.target.result);
+                            applyLewatJson(event.target.result);
+                        };
+                        reader.readAsText(file);
+                    });
+
+                    $('#submitLewatPartai').on('click', function(event) {
+                        const selected = selectedLewatBoxes();
+                        if (!selected.length) {
+                            event.preventDefault();
+                            alert('Pilih minimal satu box.');
+                            return;
+                        }
+                        $('#lewatBoxPayload').val(JSON.stringify(buildLewatPayload(selected)));
+                        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
+                    });
+
+                    updateLewatTotals();
+                });
+            </script>
+            --}}
         @endsection
     </x-slot>
 </x-theme.app>

@@ -47,16 +47,7 @@ class SortirController extends Controller
             'title' => 'Sortir Divisi',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            'boxBk' => $this->getStokBk(),
-            'anak' => $this->getAnak(),
             'tb_anak' => $this->getAnak(),
-            'cabut' => DB::table('sortir as a')
-                ->join('tb_anak as b', 'a.id_anak', 'b.id_anak')
-                ->join('tb_kelas_sortir as c', 'a.id_kelas', 'c.id_kelas')
-                ->where('a.id_pengawas', auth()->user()->id)
-                ->whereBetween('a.tgl', [$tgl1, $tgl2])
-                ->orderBy('id_sortir', 'DESC')
-                ->get(),
             'id_anak' => $id_anak
         ];
 
@@ -252,14 +243,14 @@ class SortirController extends Controller
         $tgl1    = $r->tgl1 ?? date('Y-m-d');
         $tgl2    = $r->tgl2 ?? date('Y-m-t');
         $id_anak = $r->id_anak;
+        $search  = trim((string) $r->search_no_box);
+
+        if ($search === '') {
+            return '<div class="alert alert-info text-center">Cari No Box untuk mulai.</div>';
+        }
 
         $query = DB::table('sortir as a')
             ->leftJoin('tb_anak as b', 'a.id_anak', '=', 'b.id_anak')
-            ->leftJoin('tb_kelas_sortir as c', 'a.id_kelas', '=', 'c.id_kelas')
-            ->leftJoin('formulir_sarang as d', function ($join) {
-                $join->on('a.no_box', '=', 'd.no_box')
-                    ->where('d.kategori', '=', 'grade');
-            })
             ->select(
                 'b.nama',
                 'a.id_sortir',
@@ -276,14 +267,22 @@ class SortirController extends Controller
                 'a.ttl_rp',
                 'a.bulan',
                 'a.selesai',
-                'd.no_box as no_box_formulir',
                 'a.pcs_tdk_sortir',
                 'a.gr_tdk_sortir'
             )
+            ->selectRaw('NULL as no_box_formulir')
             ->where('a.no_box', '!=', '9999')
             ->where('a.penutup', 'T')
-            ->where('d.no_box', null)
-            ->orderBy('a.selesai', 'ASC');
+            ->where('a.no_box', 'like', "%{$search}%")
+            ->whereNotExists(function ($subquery) {
+                $subquery->selectRaw('1')
+                    ->from('formulir_sarang as formulir_grade')
+                    ->whereColumn('formulir_grade.no_box', 'a.no_box')
+                    ->where('formulir_grade.kategori', 'grade');
+            })
+            ->orderBy('a.selesai', 'ASC')
+            ->orderByDesc('a.id_sortir')
+            ->limit(50);
 
         if ($id_anak && $id_anak !== 'All') {
             $query->where('a.id_anak', $id_anak);
@@ -1026,65 +1025,183 @@ class SortirController extends Controller
 
     public function load_modal_lewat(Request $r)
     {
+        $mode = in_array($r->mode, ['table', 'json'], true) ? $r->mode : null;
+        $searchNoBox = trim((string) $r->search_no_box);
+        $bulkNoBox = trim((string) $r->bulk_no_box);
+        $box = collect();
+
+        if ($mode === 'table' && ($searchNoBox !== '' || $bulkNoBox !== '')) {
+            $query = DB::table('sortir as a')
+                ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+                ->where('a.selesai', 'T')
+                ->where('a.no_box', '!=', 9999)
+                ->whereNotExists(function ($subquery) {
+                    $subquery->selectRaw('1')
+                        ->from('formulir_sarang as formulir_grade')
+                        ->whereColumn('formulir_grade.no_box', 'a.no_box')
+                        ->where('formulir_grade.kategori', 'grade');
+                });
+
+            if ($bulkNoBox !== '') {
+                $noBoxes = collect(preg_split('/[\s,;]+/', $bulkNoBox))
+                    ->map(fn ($value) => trim((string) $value))
+                    ->filter()
+                    ->unique()
+                    ->take(500)
+                    ->values();
+                $query->whereIn('a.no_box', $noBoxes);
+            } else {
+                $query->where('a.no_box', 'like', "%{$searchNoBox}%")->limit(50);
+            }
+
+            $box = $query->orderBy('a.no_box')->get()
+                ->unique(fn ($item) => (string) $item->no_box)
+                ->values();
+        }
 
         $data = [
-            'box' => DB::table('sortir as a')
-                ->where('a.selesai', 'T')
-                ->whereNotIn('a.no_box', function ($query) {
-                    $query->select('no_box')->from('formulir_sarang')->where('kategori', 'grade');
-                })
-                ->get(),
-
+            'mode' => $mode,
+            'box' => $box,
+            'searchNoBox' => $searchNoBox,
+            'bulkNoBox' => $bulkNoBox,
         ];
         return view('home.sortir.load_modal_lewat', $data);
     }
 
+    public function export_lewat_json()
+    {
+        $box = DB::table('sortir as a')
+            ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+            ->where('a.selesai', 'T')
+            ->where('a.no_box', '!=', 9999)
+            ->whereNotExists(function ($subquery) {
+                $subquery->selectRaw('1')
+                    ->from('formulir_sarang as formulir_grade')
+                    ->whereColumn('formulir_grade.no_box', 'a.no_box')
+                    ->where('formulir_grade.kategori', 'grade');
+            })
+            ->orderBy('a.no_box')
+            ->get()
+            ->unique(fn ($item) => (string) $item->no_box)
+            ->values();
+
+        $payload = [
+            'version' => 1,
+            'type' => 'sortir_lewat',
+            'exported_at' => now()->toIso8601String(),
+            'summary' => [
+                'box_count' => $box->count(),
+                'pcs' => $box->sum('pcs_awal'),
+                'gr' => $box->sum('gr_awal'),
+            ],
+            'no_boxes' => $box->pluck('no_box')->values()->all(),
+        ];
+
+        return response()->streamDownload(function () use ($payload) {
+            echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        }, 'sortir-lewat-semua-' . date('Y-m-d') . '.json', [
+            'Content-Type' => 'application/json',
+        ]);
+    }
+
     public function create_lewat(Request $r)
     {
-        $no_box = $r->no_box;
-        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
-        if (empty($urutan_invoice->no_invoice)) {
-            $inv = 1001;
-        } else {
-            $inv = $urutan_invoice->no_invoice + 1;
-        }
-        foreach ($no_box as $key => $value) {
-            $sortir = DB::table('sortir')->where('no_box', $value)->first();
-            $data = [
-                'id_anak' => 2,
-                'id_kelas' => 11,
-                'pcs_akhir' => $sortir->pcs_awal,
-                'gr_akhir' => $sortir->gr_awal,
-                'bulan' => date('m'),
-                'selesai' => 'Y',
-            ];
-            DB::table('sortir')->where('no_box', $value)->update($data);
+        $r->validate([
+            'box_payload' => ['required', 'string', 'max:1048576'],
+        ]);
 
+        try {
+            $decoded = json_decode($r->box_payload, true, 512, JSON_THROW_ON_ERROR);
+            $values = array_is_list($decoded) ? $decoded : ($decoded['no_boxes'] ?? null);
 
-            $cek = DB::table('formulir_sarang')
-                ->where('no_box', $value)
-                ->where('kategori', 'grade')
-                ->exists();
-
-            if (!$cek) {
-
-                $pcs = $sortir->pcs_awal;
-                $gr = $sortir->gr_awal;
-
-                $data = [
-                    'no_invoice' => $inv,
-                    'no_box' => $value,
-                    'id_pemberi' => auth()->user()->id,
-                    'id_penerima' => 459,
-                    'pcs_awal' => $pcs,
-                    'gr_awal' => $gr,
-                    'tanggal' => date('Y-m-d'),
-                    'kategori' => 'grade',
-                ];
-
-                DB::table('formulir_sarang')->insert($data);
+            if (!is_array($values)) {
+                throw new \RuntimeException('JSON wajib memiliki no_boxes berupa array.');
             }
+            if (!array_is_list($decoded) && isset($decoded['type']) && $decoded['type'] !== 'sortir_lewat') {
+                throw new \RuntimeException('Tipe JSON bukan sortir_lewat.');
+            }
+
+            $noBoxes = collect($values)
+                ->filter(fn ($value) => is_scalar($value) && trim((string) $value) !== '')
+                ->map(fn ($value) => trim((string) $value))
+                ->unique()
+                ->values();
+
+            if ($noBoxes->isEmpty()) {
+                throw new \RuntimeException('Pilih minimal satu no box.');
+            }
+            if ($noBoxes->count() > 5000) {
+                throw new \RuntimeException('Maksimal 5.000 no box per proses.');
+            }
+
+            $result = DB::transaction(function () use ($noBoxes) {
+                $rows = DB::table('sortir as a')
+                    ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+                    ->whereIn('a.no_box', $noBoxes)
+                    ->where('a.selesai', 'T')
+                    ->whereNotExists(function ($subquery) {
+                        $subquery->selectRaw('1')
+                            ->from('formulir_sarang as formulir_grade')
+                            ->whereColumn('formulir_grade.no_box', 'a.no_box')
+                            ->where('formulir_grade.kategori', 'grade');
+                    })
+                    ->lockForUpdate()
+                    ->get()
+                    ->groupBy(fn ($item) => (string) $item->no_box);
+
+                $missing = $noBoxes->reject(fn ($noBox) => $rows->has((string) $noBox));
+                if ($missing->isNotEmpty()) {
+                    throw new \RuntimeException('Box tidak tersedia/sudah diproses: ' . $missing->take(10)->implode(', '));
+                }
+
+                $lastInvoice = DB::table('formulir_sarang')
+                    ->where('kategori', 'grade')
+                    ->orderByDesc('no_invoice')
+                    ->lockForUpdate()
+                    ->value('no_invoice');
+                $invoice = empty($lastInvoice) ? 1001 : ((int) $lastInvoice + 1);
+
+                DB::table('sortir')
+                    ->whereIn('no_box', $noBoxes)
+                    ->where('selesai', 'T')
+                    ->update([
+                        'id_anak' => 2,
+                        'id_kelas' => 11,
+                        'pcs_akhir' => DB::raw('pcs_awal'),
+                        'gr_akhir' => DB::raw('gr_awal'),
+                        'bulan' => date('m'),
+                        'selesai' => 'Y',
+                    ]);
+
+                $insert = $noBoxes->map(function ($noBox) use ($rows, $invoice) {
+                    $sortir = $rows->get((string) $noBox)->first();
+
+                    return [
+                        'no_invoice' => $invoice,
+                        'no_box' => $noBox,
+                        'id_pemberi' => auth()->user()->id,
+                        'id_penerima' => 459,
+                        'pcs_awal' => $sortir->pcs_awal,
+                        'gr_awal' => $sortir->gr_awal,
+                        'tanggal' => date('Y-m-d'),
+                        'kategori' => 'grade',
+                    ];
+                });
+
+                $insert->chunk(300)->each(fn ($chunk) => DB::table('formulir_sarang')->insert($chunk->all()));
+
+                return ['count' => $insert->count(), 'invoice' => $invoice];
+            }, 3);
+
+            return redirect()->route('sortir.index')->with(
+                'sukses',
+                "{$result['count']} box berhasil dilewatkan. Invoice {$result['invoice']}."
+            );
+        } catch (\JsonException | \RuntimeException $e) {
+            return redirect()->route('sortir.index')->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+            return redirect()->route('sortir.index')->with('error', 'Proses gagal. Semua perubahan dibatalkan.');
         }
-        return redirect()->route('sortir.index')->with('sukses', 'Data Berhasil');
     }
 }

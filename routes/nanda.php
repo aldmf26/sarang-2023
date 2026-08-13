@@ -76,6 +76,18 @@ Route::get('/berhasil', [hrga2HasilWawancaraController::class, 'berhasil'])->nam
 
 Route::middleware('auth')->group(function () {
 
+    // Canonical PO URLs. Route lama tetap tersedia untuk kompatibilitas.
+    Route::get('/home/po/cabut', [Bk_baruController::class, 'invoice'])->defaults('kategori', 'cabut')->name('po.cabut');
+    Route::get('/home/po/cetak', [GudangSarangController::class, 'invoice'])->defaults('kategori', 'cetak')->name('po.cetak');
+    Route::get('/home/po/sortir', [GudangSarangController::class, 'invoice_sortir'])->defaults('kategori', 'sortir')->name('po.sortir');
+    Route::get('/home/po/grade', [GudangSarangController::class, 'invoice_grade'])->defaults('kategori', 'grade')->name('po.grade');
+    Route::get('/home/po/grading', [GudangSarangController::class, 'invoice_grading'])->defaults('kategori', 'grading')->name('po.grading');
+    Route::get('/home/po/wip', [GudangSarangController::class, 'invoice_wip'])->defaults('kategori', 'wip')->name('po.wip');
+    Route::get('/home/po/qc', [GudangSarangController::class, 'invoice_qc'])->defaults('kategori', 'qc')->name('po.qc');
+    Route::get('/home/po/wip2', [GudangSarangController::class, 'invoice_wip2'])->defaults('kategori', 'wip2')->name('po.wip2');
+    Route::post('/home/po/sortir/{no_invoice}/selesai', [CetakNewController::class, 'selesai_po_sortir'])
+        ->name('po.sortir.selesai');
+
     Route::controller(ImportLabelController::class)
         ->prefix('home/import-label')
         ->name('import-label.')
@@ -237,12 +249,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/gudangcetak', 'gudangcetak')->name('gudangcetak');
             Route::get('/load_edit_invoice', 'load_edit_invoice')->name('load_edit_invoice');
             Route::get('/export_gudang', 'export_gudang')->name('export_gudang');
-            Route::get('/selesai_po_sortir', 'selesai_po_sortir')->name('selesai_po_sortir');
+            Route::post('/selesai_po_sortir', 'selesai_po_sortir')->name('selesai_po_sortir');
             Route::post('/update_invoice', 'update_invoice')->name('update_invoice');
             Route::get('/template', 'template')->name('template');
             Route::post('/import', 'import')->name('import');
             Route::get('/export_gaji_global', 'export_gaji_global')->name('export_gaji_global');
             Route::get('/load_modal_lewat', 'load_modal_lewat')->name('load_modal_lewat');
+            Route::get('/export_lewat_json', 'export_lewat_json')->name('export_lewat_json');
             Route::post('/create_lewat', 'create_lewat')->name('create_lewat');
         });
     Route::controller(Laporan_akhir::class)

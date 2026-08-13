@@ -315,6 +315,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/cancel_sortir', 'cancel_sortir')->name('cancel_sortir');
             Route::get('/load_halamanrow', 'load_halamanrow')->name('load_halamanrow');
             Route::get('/load_modal_lewat', 'load_modal_lewat')->name('load_modal_lewat');
+            Route::get('/export_lewat_json', 'export_lewat_json')->name('export_lewat_json');
             Route::post('/import', 'import')->name('import');
             Route::post('/create_lewat', 'create_lewat')->name('create_lewat');
         });
@@ -536,6 +537,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/create', 'create')->name('create');
             Route::get('/print', 'print')->name('print');
             Route::post('/create_partai', 'create_partai')->name('create_partai');
+            Route::post('/create_lewat_partai', 'create_lewat_partai')->name('create_lewat_partai');
             Route::post('/tb-grade', 'storeGrade')->name('storeGrade');
             Route::patch('/tb-grade/{id_grade}', 'updateGrade')->name('updateGrade');
             Route::delete('/tb-grade/{id_grade}', 'deleteGrade')->name('deleteGrade');
