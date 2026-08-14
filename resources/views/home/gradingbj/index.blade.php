@@ -176,7 +176,7 @@
                                     @endrole
                                     <td align="center">
                                         <input type="checkbox" class="form-check" x-model="cek"
-                                            @change="updateTotals()" name="id[]" value="{{ $d->no_box }}">
+                                            @click.stop @change="updateTotals()" name="id[]" value="{{ $d->no_box }}">
                                     </td>
                                 </tr>
                             @endforeach

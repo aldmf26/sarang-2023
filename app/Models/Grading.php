@@ -118,6 +118,19 @@ class Grading extends Model
         // tidak berbeda dengan halaman Cocokan.
         $formulir = collect(CocokanModel::gradingSisaDetails());
 
+        // Setelah box diserah ke PO grading, box sudah berstatus grading sedang
+        // proses dan tidak boleh tetap tampil sebagai sisa belum grading.
+        $boxSudahDiserah = DB::table('formulir_sarang')
+            ->where('kategori', 'grading')
+            ->whereIn('no_box', $formulir->pluck('no_box_sortir')->filter()->unique())
+            ->pluck('no_box')
+            ->map(fn ($box) => (string) $box)
+            ->unique();
+
+        $formulir = $formulir->reject(function ($row) use ($boxSudahDiserah) {
+            return $boxSudahDiserah->contains((string) $row->no_box_sortir);
+        });
+
         if ($noBox !== null) {
             $boxes = collect(explode(',', (string) $noBox))
                 ->map(fn ($box) => trim($box))

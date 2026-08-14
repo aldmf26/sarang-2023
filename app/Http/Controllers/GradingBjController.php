@@ -263,12 +263,36 @@ class GradingBjController extends Controller
         }
 
         if ($r->submit == 'serah') {
-            $getFormulir = DB::table('formulir_sarang')->where('kategori', 'grade')->whereIn('no_box', $no_boxPecah)->get();
-            $urutanInvoice = DB::table('formulir_sarang')
-                ->where('kategori', 'grading')
-                ->max('no_invoice');
+            $getFormulir = DB::table('formulir_sarang as fs')
+                ->where('fs.kategori', 'grade')
+                ->whereIn('fs.no_box', $no_boxPecah)
+                ->whereNotExists(function ($query) {
+                    $query->selectRaw('1')
+                        ->from('formulir_sarang as proses')
+                        ->whereColumn('proses.no_box', 'fs.no_box')
+                        ->where('proses.kategori', 'grading');
+                })
+                ->get();
 
-            $no_invoice = $urutanInvoice ? $urutanInvoice + 1 : 11055;
+            if ($getFormulir->isEmpty()) {
+                return redirect()->back()->with('error', 'Box yang dipilih sudah pernah diserah ke PO grading.');
+            }
+
+            $maxFormulir = DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')
+                ->value('max_invoice');
+
+            $maxHasilGrading = DB::table('grading')
+                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')
+                ->value('max_invoice');
+
+            // Nomor PO harus unik terhadap formulir dan hasil grading lama.
+            // Jika hanya melihat formulir, nomor dapat bentrok dan PO baru
+            // keliru dianggap sudah mempunyai hasil grading.
+            $no_invoice = max((int) $maxFormulir, (int) $maxHasilGrading, 11054) + 1;
             foreach ($getFormulir as $d) {
                 $data[] = [
                     'no_box' => $d->no_box,
@@ -365,6 +389,63 @@ class GradingBjController extends Controller
         ];
 
         return view('home.gradingbj.grading_partai', $data);
+    }
+
+    public function hapusFormulirGradingBox(Request $r)
+    {
+        $validated = $r->validate([
+            'no_invoice' => ['required', 'string', 'max:100'],
+            'no_box' => ['required', 'string', 'max:100'],
+        ]);
+
+        $formulir = DB::table('formulir_sarang')
+            ->where('kategori', 'grading')
+            ->where('no_invoice', $validated['no_invoice'])
+            ->where('no_box', $validated['no_box'])
+            ->first();
+
+        if (!$formulir) {
+            return redirect()->back()->with('error', 'Box tidak ditemukan pada formulir grading ini.');
+        }
+
+        $sudahDiproses = DB::table('grading')
+            ->where('no_box_sortir', $validated['no_box'])
+            ->exists();
+        $sudahAdaHasilPartai = DB::table('grading_partai')
+            ->where('no_invoice', $validated['no_invoice'])
+            ->exists();
+
+        if ($sudahDiproses || $sudahAdaHasilPartai) {
+            return redirect()->back()->with('error', 'Box tidak dapat dihapus karena hasil grading sudah tersimpan.');
+        }
+
+        DB::transaction(function () use ($validated) {
+            DB::table('tb_hancuran')
+                ->where('kategori', 'grading')
+                ->where('no_box', $validated['no_box'])
+                ->delete();
+
+            DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->where('no_invoice', $validated['no_invoice'])
+                ->where('no_box', $validated['no_box'])
+                ->delete();
+        });
+
+        $sisaBoxes = DB::table('formulir_sarang')
+            ->where('kategori', 'grading')
+            ->where('no_invoice', $validated['no_invoice'])
+            ->orderBy('id_formulir')
+            ->pluck('no_box');
+
+        if ($sisaBoxes->isEmpty()) {
+            return redirect()->route('gradingbj.index')->with('sukses', 'Box dihapus dan dikembalikan menjadi stok.');
+        }
+
+        return redirect()->route('gradingbj.grading_partai_result', [
+            'no_box' => $sisaBoxes->implode(','),
+            'no_invoice' => $validated['no_invoice'],
+        ])->with('sukses', 'Box dihapus dan dikembalikan menjadi stok.');
     }
 
     public function storeGrade(Request $r)
@@ -1887,13 +1968,46 @@ class GradingBjController extends Controller
     public function save_formulir(Request $r)
     {
         try {
+            $r->validate([
+                'no_box' => ['required', 'array'],
+                'no_box.0' => ['required', 'string'],
+                'id_penerima' => ['required'],
+            ]);
+
             DB::beginTransaction();
-            $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'wip' ORDER by no_invoice DESC limit 1;");
-            $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
-            $no_box = explode(',', $r->no_box[0]);
+
+            $maxInvoice = DB::table('formulir_sarang')
+                ->where('kategori', 'wip')
+                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')
+                ->value('max_invoice');
+            $no_invoice = max((int) $maxInvoice, 1000) + 1;
+
+            $no_box = collect(explode(',', $r->no_box[0]))
+                ->map(fn ($box) => trim($box))
+                ->filter()
+                ->unique()
+                ->values();
+
+            if ($no_box->isEmpty()) {
+                throw new \RuntimeException('Pilih minimal satu box pengiriman.');
+            }
 
             foreach ($no_box as $d) {
                 $cekBox = Grading::selesai($d);
+
+                if (!$cekBox) {
+                    throw new \RuntimeException("Box pengiriman {$d} tidak ditemukan atau sudah tidak tersedia.");
+                }
+
+                $sudahWip = DB::table('formulir_sarang')
+                    ->where('kategori', 'wip')
+                    ->where('no_box', $d)
+                    ->exists();
+                if ($sudahWip) {
+                    throw new \RuntimeException("Box pengiriman {$d} sudah pernah diserah ke WIP.");
+                }
+
                 $data[] = [
                     'no_invoice' => $no_invoice,
                     'no_box' => $d,
@@ -1917,7 +2031,7 @@ class GradingBjController extends Controller
             return redirect()->back()->with('sukses', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('sukses', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }

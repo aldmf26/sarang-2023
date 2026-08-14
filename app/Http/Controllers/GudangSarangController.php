@@ -583,10 +583,16 @@ class GudangSarangController extends Controller
                 ->pluck('fs.no_invoice')
                 ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
         } elseif ($kategori === 'grading') {
-            $hasProcess = DB::table('grading')
-                ->whereIn('no_invoice', $invoices->all())
+            // Nomor invoice pada data lama dapat berulang. Tentukan status
+            // proses dari box milik PO tersebut agar hasil grading dari PO
+            // lain yang kebetulan bernomor sama tidak membuat tombol Patahan
+            // berubah menjadi Detail.
+            $hasProcess = DB::table('formulir_sarang as fs')
+                ->join('grading as proses', 'proses.no_box_sortir', '=', 'fs.no_box')
+                ->where('fs.kategori', 'grading')
+                ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
-                ->pluck('no_invoice')
+                ->pluck('fs.no_invoice')
                 ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
 
             $noBoxes = DB::table('formulir_sarang')

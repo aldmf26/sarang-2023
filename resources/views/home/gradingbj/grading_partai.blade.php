@@ -79,6 +79,7 @@
                                     <th class="dhead text-end">Rp/gr</th>
                                     <th class="dhead text-end">Total Rp</th>
                                 @endrole
+                                <th class="dhead text-center">Aksi</th>
                             </tr>
                         </thead>
                         <thead class="bg-white">
@@ -138,6 +139,7 @@
                                         </h6>
                                     </th>
                                 @endrole
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,6 +160,13 @@
                                             {{ number_format($d->gr_awal == 0 ? 0 : $d->total_rp / $d->gr_awal, 0) }}</td>
                                         <td align="right">{{ number_format($d->total_rp, 0) }}</td>
                                     @endrole
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            onclick="hapusBoxFormulirGrading('{{ $d->no_box }}')"
+                                            title="Hapus dan kembalikan ke stok">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -265,6 +274,25 @@
                 Save
             </button>
         </form>
+
+        <form id="hapusBoxFormulirGrading" method="POST"
+            action="{{ route('gradingbj.hapus_formulir_grading_box') }}" class="d-none">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="no_invoice" value="{{ $no_invoice }}">
+            <input type="hidden" name="no_box" id="hapusNoBoxGrading">
+        </form>
+
+        <script>
+            function hapusBoxFormulirGrading(noBox) {
+                if (!confirm('Hapus box ' + noBox + ' dari formulir grading dan kembalikan menjadi stok?')) {
+                    return;
+                }
+
+                document.getElementById('hapusNoBoxGrading').value = noBox;
+                document.getElementById('hapusBoxFormulirGrading').submit();
+            }
+        </script>
 
         <div class="modal fade" id="gradeModal" tabindex="-1" aria-labelledby="gradeModalLabel"
             aria-hidden="true">

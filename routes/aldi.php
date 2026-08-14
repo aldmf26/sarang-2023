@@ -533,6 +533,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/cek_opname_store', 'cek_opname_store')->name('cek_opname_store');
             Route::post('/save_formulir', 'save_formulir')->name('save_formulir');
             Route::post('/grading_partai', 'grading_partai')->name('grading_partai');
+            Route::delete('/formulir-grading/box', 'hapusFormulirGradingBox')->name('hapus_formulir_grading_box');
             Route::get('/grading_partai_result', 'gradingPartaiResult')->name('grading_partai_result');
             Route::post('/create', 'create')->name('create');
             Route::get('/print', 'print')->name('print');
