@@ -227,29 +227,59 @@ class CetakModel extends Model
 
     public static function cabut_selesai($id_pengawas)
     {
-        if ($id_pengawas == 0) {
-            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal, (c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws,
-            d.ttl_rp as cost_cbt, c.nm_partai
-        FROM formulir_sarang as a 
-        left join users as b on b.id = a.id_pemberi
-        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        left join cabut as d on d.no_box = a.no_box
-        left join users as e on e.id = a.id_pemberi
-        WHERE a.kategori = 'cetak'  
-        and a.id_pemberi is not null 
-        and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
-        } else {
-            $result = DB::select("SELECT a.no_box, b.name, a.pcs_awal, a.gr_awal,(c.hrga_satuan  * c.gr_awal) as ttl_rp, e.name as pgws
-        FROM formulir_sarang as a 
-        left join users as b on b.id = a.id_pemberi
-        left join bk as c on c.no_box = a.no_box and c.kategori = 'cabut'
-        left join cabut as d on d.no_box = a.no_box
-        left join users as e on e.id = a.id_pemberi
-        WHERE a.kategori = 'cetak' 
-        and a.id_pemberi is not null
-        and a.id_penerima = '$id_pengawas' and a.no_box not in(SELECT b.no_box FROM cetak_new as b where b.id_anak != 0);");
-        }
-        return $result;
+        $filterPengawas = $id_pengawas == 0 ? '' : 'AND fs.id_penerima = ?';
+        $bindings = $id_pengawas == 0 ? [] : [$id_pengawas];
+
+        // Kondisi stok harus sama dengan Balance Sheet. Satu box hanya tampil
+        // sekali dan langsung hilang setelah benar-benar masuk proses cetak.
+        return DB::select("SELECT
+                fs.no_box,
+                MAX(pemberi.name) AS name,
+                MAX(penerima.name) AS pgws,
+                SUM(fs.pcs_awal) AS pcs_awal,
+                SUM(fs.gr_awal) AS gr_awal,
+                MAX(bk.ttl_rp) AS ttl_rp,
+                MAX(COALESCE(cabut.cost_cbt, 0)) AS cost_cbt,
+                MAX(bk.nm_partai) AS nm_partai
+            FROM formulir_sarang AS fs
+            INNER JOIN (
+                SELECT
+                    b.no_box,
+                    MAX(b.nm_partai) AS nm_partai,
+                    SUM(b.gr_awal * b.hrga_satuan) AS ttl_rp
+                FROM bk AS b
+                WHERE b.kategori = 'cabut'
+                  AND b.baru = 'baru'
+                  AND b.no_box != 9999
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM grading AS sent_grading
+                      INNER JOIN grading_partai AS sent_result
+                          ON sent_result.no_invoice = sent_grading.no_invoice
+                      WHERE sent_grading.no_box_sortir = b.no_box
+                        AND sent_result.sudah_kirim = 'Y'
+                  )
+                GROUP BY b.no_box
+            ) AS bk ON bk.no_box = fs.no_box
+            LEFT JOIN (
+                SELECT no_box, SUM(GREATEST(COALESCE(ttl_rp, 0), 0)) AS cost_cbt
+                FROM cabut
+                GROUP BY no_box
+            ) AS cabut ON cabut.no_box = fs.no_box
+            LEFT JOIN users AS pemberi ON pemberi.id = fs.id_pemberi
+            LEFT JOIN users AS penerima ON penerima.id = fs.id_penerima
+            WHERE fs.kategori = 'cetak'
+              AND fs.no_box != 0
+              AND fs.id_pemberi IS NOT NULL
+              $filterPengawas
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM cetak_new AS cn
+                  WHERE cn.no_box = fs.no_box
+                    AND cn.id_anak != 0
+              )
+            GROUP BY fs.no_box
+            ORDER BY fs.no_box ASC", $bindings);
     }
     public static function cetak_proses($id_pengawas)
     {

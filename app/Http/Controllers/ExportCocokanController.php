@@ -1796,6 +1796,12 @@ class ExportCocokanController extends Controller
             $sheet->setCellValue($k, $v);
         }
 
+        // Gunakan data yang sama persis dengan halaman Balance Sheet agar export
+        // tidak memiliki rumus/query stok sendiri yang mudah berbeda.
+        $balanceData = app(CocokanController::class)->balancesheet()->getData();
+        $this->writeBalanceSheetData($sheet, $balanceData, $style_atas, $style);
+        return;
+
         $bk = SummaryModel::summarybk();
 
         foreach ($bk as $i => $b) {
@@ -2055,6 +2061,80 @@ class ExportCocokanController extends Controller
         $sheet->getStyle('Q2:U' . $rowTbhCost)->applyFromArray($style);
     }
 
+    private function writeBalanceSheetData($sheet, array $data, array $styleAtas, array $style): void
+    {
+        $bk = collect($data['bk'] ?? []);
+        foreach ($bk->values() as $index => $item) {
+            $row = $index + 2;
+            $sheet->setCellValue("B{$row}", $index + 1);
+            $sheet->setCellValue("C{$row}", empty($item->bulan)
+                ? '-'
+                : date('F Y', strtotime("01-{$item->bulan}-{$item->tahun}")));
+            $sheet->setCellValue("D{$row}", $item->nm_partai);
+            $sheet->setCellValue("E{$row}", $item->nm_partai_dulu);
+            $sheet->setCellValue("F{$row}", $item->grade);
+            $sheet->setCellValue("G{$row}", $item->pcs_bk);
+            $sheet->setCellValue("H{$row}", $item->gr_bk);
+            $sheet->setCellValue("I{$row}", $item->cost_bk);
+            $sheet->setCellValue("J{$row}", ($item->gr_bk ?? 0) > 0 ? $item->cost_bk / $item->gr_bk : 0);
+        }
+
+        $bkLastRow = max(1, $bk->count() + 1);
+        $bkTotalRow = $bkLastRow + 1;
+        $bkTotals = $data['bk_totals'] ?? [];
+        $sheet->setCellValue("B{$bkTotalRow}", 'Total');
+        $sheet->setCellValue("G{$bkTotalRow}", $bkTotals['pcs'] ?? 0);
+        $sheet->setCellValue("H{$bkTotalRow}", $bkTotals['gr'] ?? 0);
+        $sheet->setCellValue("I{$bkTotalRow}", $bkTotals['total'] ?? 0);
+        $sheet->setCellValue("J{$bkTotalRow}", $bkTotals['average'] ?? 0);
+        $sheet->getStyle("B{$bkTotalRow}:J{$bkTotalRow}")->applyFromArray($styleAtas);
+        $sheet->getStyle("B1:J{$bkTotalRow}")->applyFromArray($style);
+
+        $costRows = collect($data['cost_rows'] ?? []);
+        foreach ($costRows->values() as $index => $cost) {
+            $row = $index + 2;
+            $sheet->setCellValue("L{$row}", $cost['periode']);
+            $sheet->setCellValue("M{$row}", $cost['gaji']);
+            $sheet->setCellValue("N{$row}", $cost['operasional']);
+            $sheet->setCellValue("O{$row}", $cost['total']);
+        }
+        $costTotalRow = max(1, $costRows->count() + 1) + 1;
+        $costTotals = $data['cost_totals'] ?? [];
+        $sheet->setCellValue("L{$costTotalRow}", 'Total');
+        $sheet->setCellValue("M{$costTotalRow}", $costTotals['gaji'] ?? 0);
+        $sheet->setCellValue("N{$costTotalRow}", $costTotals['operasional'] ?? 0);
+        $sheet->setCellValue("O{$costTotalRow}", $costTotals['total'] ?? 0);
+        $currentRow = $costTotalRow + 1;
+        $sheet->setCellValue("L{$currentRow}", 'Cost berjalan');
+        $sheet->setCellValue("O{$currentRow}", $data['cost_berjalan'] ?? 0);
+        $grandRow = $currentRow + 1;
+        $sheet->setCellValue("L{$grandRow}", 'Total Bk + Operasional + cost berjalan');
+        $sheet->setCellValue("O{$grandRow}", ($bkTotals['total'] ?? 0) + ($costTotals['total'] ?? 0) + ($data['cost_berjalan'] ?? 0));
+        $sheet->getStyle("L{$costTotalRow}:O{$grandRow}")->applyFromArray($styleAtas);
+        $sheet->getStyle("L1:O{$grandRow}")->applyFromArray($style);
+
+        $balanceRows = collect($data['balance_rows'] ?? []);
+        foreach ($balanceRows->values() as $index => $balance) {
+            $row = $index + 2;
+            $sheet->setCellValue("Q{$row}", $balance['label']);
+            $sheet->setCellValue("R{$row}", $balance['pcs']);
+            $sheet->setCellValue("S{$row}", $balance['gr']);
+            $sheet->setCellValue("T{$row}", $balance['total']);
+            $sheet->setCellValue("U{$row}", $balance['average']);
+        }
+        $balanceTotalRow = max(1, $balanceRows->count() + 1) + 1;
+        $balanceTotals = $data['balance_totals'] ?? [];
+        $sheet->setCellValue("Q{$balanceTotalRow}", 'Total');
+        $sheet->setCellValue("R{$balanceTotalRow}", $balanceTotals['pcs'] ?? 0);
+        $sheet->setCellValue("S{$balanceTotalRow}", $balanceTotals['gr'] ?? 0);
+        $sheet->setCellValue("T{$balanceTotalRow}", $balanceTotals['total'] ?? 0);
+        $sheet->setCellValue("U{$balanceTotalRow}", ($balanceTotals['gr'] ?? 0) > 0
+            ? ($balanceTotals['total'] ?? 0) / $balanceTotals['gr']
+            : 0);
+        $sheet->getStyle("Q{$balanceTotalRow}:U{$balanceTotalRow}")->applyFromArray($styleAtas);
+        $sheet->getStyle("Q1:U{$balanceTotalRow}")->applyFromArray($style);
+    }
+
     public function exportCabut(Request $r)
     {
 
@@ -2088,9 +2168,19 @@ class ExportCocokanController extends Controller
         // Hapus worksheet default
         $spreadsheet->removeSheetByIndex(0);
 
-        $divisi = $r->divisi;
+        $divisi = trim((string) $r->divisi, " \t\n\r\0\x0B'\"");
+        $aliases = [
+            'balancesheet' => 'balance',
+            'balance_sheet' => 'balance',
+        ];
+        $divisi = $aliases[strtolower($divisi)] ?? strtolower($divisi);
 
-        if (!$divisi) {
+        $allowedDivisions = ['cabut', 'cetak', 'sortir', 'grading', 'pengiriman', 'balance'];
+        if ($divisi !== '' && !in_array($divisi, $allowedDivisions, true)) {
+            abort(422, 'Divisi export tidak valid.');
+        }
+
+        if ($divisi === '') {
             $this->cabutSum($spreadsheet, $style_atas, $style);
             $this->cetakSum($spreadsheet, $style_atas, $style);
             $this->sortirSum($spreadsheet, $style_atas, $style);

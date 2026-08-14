@@ -703,17 +703,52 @@ class Cabut extends Model
     public static function gudang($bulan = null, $tahun = null, $id_user = null)
     {
         $posisi = auth()->user()->posisi_id;
-        $penerima = $id_user == null || $posisi == 1 ? '' : "AND a.penerima = $id_user";
-        $bk = DB::select("SELECT a.no_box, b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
-                (a.hrga_satuan * a.gr_awal) as ttl_rp, a.nm_partai
-                FROM bk as a
-                left join users as b on b.id = a.penerima
-                WHERE a.kategori = 'cabut' $penerima
-                AND a.selesai = 'T' 
-                AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
-                and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
-                and a.baru = 'baru'
-                ;");
+        $filterPenerima = $id_user == null || $posisi == 1 ? '' : 'AND fs.id_penerima = ?';
+        $bkBindings = $filterPenerima === '' ? [] : [$id_user];
+
+        // Box Stock memakai kondisi yang sama dengan "Cabut sisa pengawas"
+        // pada Balance Sheet. Formulir adalah sumber jumlah stok dan setiap
+        // no_box diringkas agar tidak berlipat karena join transaksi.
+        $bk = DB::select("SELECT
+                fs.no_box,
+                MAX(users.name) AS penerima,
+                SUM(fs.pcs_awal) AS pcs,
+                SUM(fs.gr_awal) AS gr,
+                MAX(bk.hrga_satuan) AS hrga_satuan,
+                SUM(fs.gr_awal * bk.hrga_satuan) AS ttl_rp,
+                MAX(bk.nm_partai) AS nm_partai
+            FROM formulir_sarang AS fs
+            INNER JOIN (
+                SELECT
+                    no_box,
+                    MAX(penerima) AS penerima,
+                    MAX(hrga_satuan) AS hrga_satuan,
+                    MAX(nm_partai) AS nm_partai
+                FROM bk
+                WHERE kategori = 'cabut'
+                  AND baru = 'baru'
+                  AND no_box != 9999
+                GROUP BY no_box
+            ) AS bk ON bk.no_box = fs.no_box
+            LEFT JOIN users ON users.id = fs.id_penerima
+            WHERE fs.kategori = 'cabut'
+              $filterPenerima
+              AND NOT EXISTS (
+                  SELECT 1 FROM cabut WHERE cabut.no_box = fs.no_box
+              )
+              AND NOT EXISTS (
+                  SELECT 1 FROM eo WHERE eo.no_box = fs.no_box
+              )
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM grading AS sent_grading
+                  INNER JOIN grading_partai AS sent_result
+                      ON sent_result.no_invoice = sent_grading.no_invoice
+                  WHERE sent_grading.no_box_sortir = fs.no_box
+                    AND sent_result.sudah_kirim = 'Y'
+              )
+            GROUP BY fs.no_box
+            ORDER BY fs.no_box ASC", $bkBindings);
 
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         $penerima3 = $id_user == null || $posisi == 1 ? '' : "AND d.id_pengawas = $id_user";
