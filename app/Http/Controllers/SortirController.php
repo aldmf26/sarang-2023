@@ -806,12 +806,17 @@ class SortirController extends Controller
             DB::beginTransaction();
             $no_box = explode(',', $r->no_box[0]);
 
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+            $urutan_invoice = DB::selectOne("
+                SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
+                FROM formulir_sarang
+                WHERE kategori = 'grade'
+                  AND no_invoice REGEXP '^[0-9]+$'
+            ");
 
             if (empty($urutan_invoice->no_invoice)) {
                 $inv = 1001;
             } else {
-                $inv = $urutan_invoice->no_invoice + 1;
+                $inv = (int) $urutan_invoice->no_invoice + 1;
             }
 
             foreach ($no_box as $d) {
