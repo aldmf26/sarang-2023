@@ -42,7 +42,9 @@ class EoController extends Controller
                 $query->selectRaw('1')
                     ->from('formulir_sarang as proses')
                     ->whereColumn('proses.no_box', 'a.no_box')
-                    ->whereIn('proses.kategori', ['cetak', 'sortir', 'grade', 'grading', 'wip', 'qc', 'wip2', 'pengiriman']);
+                    // Batas identitas no box sumber hanya sampai grading.
+                    // Sesudah grading partai, barang memakai box_pengiriman.
+                    ->whereIn('proses.kategori', ['cetak', 'sortir', 'grade', 'grading']);
             });
 
         if (!empty($no_box)) {

@@ -682,22 +682,46 @@ class Cabut extends Model
     public static function getStokBk($no_box = null)
     {
         $id_user = auth()->user()->id;
-        $query = !empty($no_box) ? "selectOne" : 'select';
-        $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
+        $cabutTerpakai = DB::table('cabut')
+            ->select('no_box')
+            ->selectRaw('SUM(pcs_awal) as pcs_awal, SUM(gr_awal) as gr_awal')
+            ->where('id_pengawas', $id_user)
+            ->groupBy('no_box');
 
-        return DB::$query("SELECT a.no_box, a.pcs_awal,COALESCE(b.pcs_awal, 0) as pcs_cabut,a.gr_awal,COALESCE(b.gr_awal, 0) as gr_cabut FROM `bk` as a
-        LEFT JOIN (
-            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' and a.selesai = 'T' and a.baru = 'baru' 
-        AND a.no_box NOT IN (
-                SELECT no_box 
-                FROM `cetak_new`
-            )
-        AND a.no_box NOT IN (
-                SELECT no_box 
-                FROM `eo`   
-            )
-        ");
+        $stok = DB::table('bk as a')
+            ->leftJoinSub($cabutTerpakai, 'b', 'b.no_box', '=', 'a.no_box')
+            ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+            ->selectRaw('COALESCE(b.pcs_awal, 0) as pcs_cabut, COALESCE(b.gr_awal, 0) as gr_cabut')
+            ->where('a.penerima', $id_user)
+            ->where('a.kategori', 'like', '%cabut%')
+            ->where('a.selesai', 'T')
+            ->where('a.baru', 'baru')
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('eo as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('cetak_new as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('sortir as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('grading as proses')->whereColumn('proses.no_box_sortir', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('formulir_sarang as proses')
+                    ->whereColumn('proses.no_box', 'a.no_box')
+                    // Sesudah grading partai nomor berubah menjadi
+                    // box_pengiriman, jadi pencocokan berhenti di grading.
+                    ->whereIn('proses.kategori', ['cetak', 'sortir', 'grade', 'grading']);
+            });
+
+        if (!empty($no_box)) {
+            return $stok->where('a.no_box', $no_box)->first();
+        }
+
+        return $stok->orderByRaw('CAST(a.no_box AS UNSIGNED)')->get()->all();
     }
 
     public static function gudang($bulan = null, $tahun = null, $id_user = null)
