@@ -53,6 +53,14 @@ class CocokanModel extends Model
                 WHERE kategori = 'cabut'
                   AND baru = 'baru'
                   AND no_box != 9999
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM grading AS sent_grading
+                      INNER JOIN grading_partai AS sent_result
+                          ON sent_result.no_invoice = sent_grading.no_invoice
+                      WHERE sent_grading.no_box_sortir = bk.no_box
+                        AND sent_result.sudah_kirim = 'Y'
+                  )
                 GROUP BY no_box
             ) AS bk
             LEFT JOIN (
@@ -139,6 +147,13 @@ class CocokanModel extends Model
           AND bk.baru = 'baru'
           AND NOT EXISTS (SELECT 1 FROM cabut WHERE cabut.no_box = fs.no_box)
           AND NOT EXISTS (SELECT 1 FROM eo WHERE eo.no_box = fs.no_box)
+          AND NOT EXISTS (
+              SELECT 1 FROM grading AS sent_grading
+              INNER JOIN grading_partai AS sent_result
+                  ON sent_result.no_invoice = sent_grading.no_invoice
+              WHERE sent_grading.no_box_sortir = fs.no_box
+                AND sent_result.sudah_kirim = 'Y'
+          )
     ");
 
         return $result;
@@ -639,7 +654,7 @@ class CocokanModel extends Model
         return  DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
         sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
         FROM grading_partai as a 
-        where a.grade != 'susut' and a.formulir = 'Y'
+        where a.grade != 'susut' and a.formulir = 'Y' and a.sudah_kirim = 'T'
         ");
     }
     public static function gradingProsesOne()
@@ -647,7 +662,7 @@ class CocokanModel extends Model
         return  DB::selectOne("SELECT sum(a.ttl_rp) as ttl_rp,sum(a.pcs) as pcs, sum(a.gr) as gr ,
         sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu, sum(a.cost_op) as cost_op
         FROM grading_partai as a 
-        where a.grade != 'susut' and a.formulir = 'T'
+        where a.grade != 'susut' and a.formulir = 'T' and a.sudah_kirim = 'T'
         ");
     }
 
@@ -731,7 +746,7 @@ class CocokanModel extends Model
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp , sum(a.cost_bk) as modal
 FROM grading_partai as a 
-where a.formulir ='Y' and a.cek_qc = 'T';");
+where a.formulir ='Y' and a.cek_qc = 'T' and a.sudah_kirim = 'T';");
     }
     public static function wip1_akhir()
     {

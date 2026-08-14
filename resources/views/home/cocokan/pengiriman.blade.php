@@ -32,11 +32,6 @@
                         </td>
                     </tr>
 
-                    @php
-                        $rp_gr = ($sortir_akhir->ttl_rp + $opname->ttl_rp) / $grading->gr;
-                    @endphp
-
-
                 </table>
             </div>
             <div class="col-lg-4">
@@ -68,7 +63,7 @@
                             {{ number_format($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op, 0) }}
                         </td>
                         <td class="text-end">
-                            {{ number_format(($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr, 0) }}
+                            {{ number_format($pengiriman->gr > 0 ? ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op) / $pengiriman->gr : 0, 0) }}
                         </td>
                     </tr>
                     <tr>
@@ -106,7 +101,7 @@
                             {{ number_format($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op), 0) }}
                         </td>
                         <td class="text-end fw-bold">
-                            {{ number_format(($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op)) / ($pengiriman->gr + $pengiriman_proses->gr), 0) }}
+                            {{ number_format(($pengiriman->gr + $pengiriman_proses->gr) > 0 ? ($pengiriman_proses->ttl_rp + ($pengiriman->cost_bk + $pengiriman->cost_kerja + $pengiriman->cost_cu + $pengiriman->cost_op)) / ($pengiriman->gr + $pengiriman_proses->gr) : 0, 0) }}
                         </td>
                     </tr>
 
@@ -157,7 +152,7 @@
                                     {{ number_format($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu, 0) }}
                                 </td>
                                 <td align="right">
-                                    {{ number_format(($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr, 0) }}
+                                    {{ number_format($d->gr > 0 ? ($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr : 0, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -222,7 +217,7 @@
                                     {{ number_format($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu, 0) }}
                                 </td>
                                 <td align="right">
-                                    {{ number_format(($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr, 0) }}
+                                    {{ number_format($d->gr > 0 ? ($d->cost_bk + $d->cost_op + $d->cost_kerja + $d->cost_cu) / $d->gr : 0, 0) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -241,7 +236,7 @@
                                 {{ number_format(sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu'), 0) }}
                             </th>
                             <th class="text-end fw-bold">
-                                {{ number_format(empty(sumBK($list_pengiriman, 'gr')) ? 0 : (sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu')) / sumBK($list_pengiriman, 'gr'), 0) }}
+                                {{ number_format(sumBK($list_pengiriman_belum, 'gr') > 0 ? (sumBK($list_pengiriman_belum, 'cost_bk') + sumBk($list_pengiriman_belum, 'cost_op') + sumBK($list_pengiriman_belum, 'cost_kerja') + sumBK($list_pengiriman_belum, 'cost_cu')) / sumBK($list_pengiriman_belum, 'gr') : 0, 0) }}
                             </th>
                         </tr>
                     </tfoot>

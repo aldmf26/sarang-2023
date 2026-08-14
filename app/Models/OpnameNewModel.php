@@ -36,6 +36,13 @@ class OpnameNewModel extends Model
             where a.kategori ='cabut' and a.baru ='baru' 
             AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
             AND NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
+            AND NOT EXISTS (
+                SELECT 1 FROM grading AS sent_grading
+                INNER JOIN grading_partai AS sent_result
+                    ON sent_result.no_invoice = sent_grading.no_invoice
+                WHERE sent_grading.no_box_sortir = a.no_box
+                  AND sent_result.sudah_kirim = 'Y'
+            )
             AND a.baru = 'baru'
             group by a.no_box
             order by b.name ASC
@@ -101,6 +108,7 @@ class OpnameNewModel extends Model
     left join users as c on c.id = a.id_pengawas
     left join cost_dll_cu_denda as e on e.bulan_dibayar = a.bulan_dibayar
     WHERE a.selesai = 'Y' and a.formulir = 'T' and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box) AND a.no_box != 9999 and b.baru = 'baru'
+    AND NOT EXISTS (SELECT 1 FROM grading sg JOIN grading_partai sr ON sr.no_invoice = sg.no_invoice WHERE sg.no_box_sortir = a.no_box AND sr.sudah_kirim = 'Y')
     group by a.id_cabut
     
     UNION ALL
@@ -114,6 +122,7 @@ class OpnameNewModel extends Model
     left join users as c on c.id = d.id_pengawas
     left join cost_dll_cu_denda as g on g.bulan_dibayar = d.bulan_dibayar
     WHERE d.selesai = 'Y' and d.no_box not in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'cetak' group by a.no_box) AND d.no_box != 9999 and e.baru = 'baru'
+    AND NOT EXISTS (SELECT 1 FROM grading sg JOIN grading_partai sr ON sr.no_invoice = sg.no_invoice WHERE sg.no_box_sortir = d.no_box AND sr.sudah_kirim = 'Y')
     group by d.no_box
 
    
@@ -164,6 +173,7 @@ class OpnameNewModel extends Model
             left join eo as f on f.no_box = a.no_box
             where a.selesai = 'Y' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
             and a.no_box not in(SELECT a.no_box FROM formulir_sarang as a where a.kategori = 'sortir')
+            and NOT EXISTS (SELECT 1 FROM grading sg JOIN grading_partai sr ON sr.no_invoice = sg.no_invoice WHERE sg.no_box_sortir = a.no_box AND sr.sudah_kirim = 'Y')
             group by a.id_cetak
             order by e.name ASC;
         ");
@@ -264,6 +274,7 @@ left join (
 left join users as g on g.id = a.id_pengawas
             
             WHERE a.no_box not in (SELECT b.no_box FROM formulir_sarang as b where b.kategori = 'grade') and a.selesai = 'Y' and b.baru = 'baru'
+            AND NOT EXISTS (SELECT 1 FROM grading sg JOIN grading_partai sr ON sr.no_invoice = sg.no_invoice WHERE sg.no_box_sortir = a.no_box AND sr.sudah_kirim = 'Y')
             group by a.id_sortir
             order by g.name ASC;
         ");
@@ -551,7 +562,7 @@ group by a.no_box;");
     {
         return  DB::select("SELECT a.box_pengiriman, GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS daftar_partai , a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_op) as cost_op 
         FROM grading_partai as a 
-        where a.grade != 'susut' and a.formulir = 'T' group by a.box_pengiriman;");
+        where a.grade != 'susut' and a.formulir = 'T' and a.sudah_kirim = 'T' group by a.box_pengiriman;");
     }
     public static function wip1SedangProses()
     {
