@@ -311,40 +311,56 @@ class CetakModel extends Model
     }
 
 
-    public static function getCetakQuery($id_anak = 'All', $tgl1, $tgl2, $id_pengawas, $hal)
+    public static function getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal, $paginate = true, $search = null)
     {
-        $user = auth()->user()->posisi_id;
-        if ($user == '1') {
-            $pgws = 'and a.id_pengawas = ' . $id_pengawas;;
-        } else {
-            $pgws = 'and a.id_pengawas = ' . $id_pengawas;
-        }
+        $query = DB::table('cetak_new as a')
+            ->leftJoin('tb_anak as b', 'b.id_anak', '=', 'a.id_anak')
+            ->leftJoin('kelas_cetak as e', 'e.id_kelas_cetak', '=', 'a.id_kelas_cetak')
+            ->select([
+                'a.id_anak', 'a.capai', 'a.id_cetak', 'a.selesai', 'b.nama as nm_anak',
+                'a.no_box', 'a.tgl', 'a.pcs_awal', 'a.gr_awal', 'a.pcs_tdk_cetak',
+                'a.gr_tdk_cetak', 'a.pcs_awal_ctk', 'a.gr_awal_ctk', 'a.pcs_akhir',
+                'a.gr_akhir', 'a.rp_satuan', 'e.kelas', 'e.batas_susut', 'e.denda_susut',
+                'e.id_paket', 'a.rp_tambahan', 'a.id_kelas_cetak', 'a.pcs_hcr',
+                'e.denda_hcr', 'a.tipe_bayar', 'a.bulan_dibayar', 'a.ttl_rp',
+                'e.kategori as kat_kelas',
+            ])
+            ->selectRaw('NULL as form')
+            ->whereBetween('a.tgl', [$tgl1, $tgl2])
+            ->where('a.penutup', 'T')
+            ->where('a.id_pengawas', $id_pengawas)
+            ->whereNotExists(function ($subquery) {
+                $subquery->selectRaw('1')
+                    ->from('formulir_sarang as f')
+                    ->whereColumn('f.no_box', 'a.no_box')
+                    ->where('f.kategori', 'sortir');
+            });
+
         if ($hal == 'cetak') {
-            $halaman = "and (e.kategori IS NULL OR e.kategori = 'CTK') ";
+            $query->where(function ($filter) {
+                $filter->whereNull('e.kategori')->orWhere('e.kategori', 'CTK');
+            });
         } else {
-            $halaman = "and e.kategori = 'CU'";
+            $query->where('e.kategori', 'CU');
         }
 
-        if ($id_anak == 'All') {
-            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai,   b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar, a.ttl_rp, f.no_box as form, e.kategori as kat_kelas
-            From cetak_new as a  
-            LEFT join tb_anak as b on b.id_anak = a.id_anak
-            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' and a.penutup = 'T' and f.no_box is null  $halaman 
-            order by a.tgl DESC, b.nama ASC
-            ;");
-        } else {
-            $cetak = DB::select("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak , a.pcs_hcr, e.denda_hcr,a.tipe_bayar,a.bulan_dibayar,a.ttl_rp,f.no_box as form, e.kategori as kat_kelas
-            From cetak_new as a  
-            LEFT join tb_anak as b on b.id_anak = a.id_anak
-            left join kelas_cetak as e on e.id_kelas_cetak = a.id_kelas_cetak
-            left join formulir_sarang as f on f.no_box = a.no_box and f.kategori = 'sortir'
-            where a.tgl between '$tgl1' and '$tgl2' and a.penutup = 'T' and f.no_box is null and a.id_anak = '$id_anak'  $halaman  
-            order by a.tgl DESC, b.nama ASC
-            ;");
+        if ($id_anak != 'All') {
+            $query->where('a.id_anak', $id_anak);
         }
-        return $cetak;
+
+        if (!empty($search)) {
+            $query->where(function ($filter) use ($search) {
+                $filter->where('a.no_box', 'like', '%' . $search . '%')
+                    ->orWhere('b.nama', 'like', '%' . $search . '%')
+                    ->orWhere('e.kelas', 'like', '%' . $search . '%');
+            });
+        }
+
+        $query->orderByDesc('a.tgl')->orderBy('b.nama');
+
+        return $paginate
+            ? $query->paginate(100, ['*'], 'page')->withQueryString()
+            : $query->get();
     }
 
 

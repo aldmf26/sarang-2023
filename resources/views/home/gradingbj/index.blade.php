@@ -116,6 +116,18 @@
                 <div style="overflow-y: scroll; height: 500px">
                     <table id="tbl1" class="table table-hover table-striped table-bordered">
                         <thead>
+                            @php
+                                $totalBoxGrading = count($formulir);
+                                $totalPcsGrading = collect($formulir)->sum('pcs_awal');
+                                $totalGrGrading = collect($formulir)->sum('gr_awal');
+                            @endphp
+                            <tr>
+                                <th class="dhead text-center" colspan="9">
+                                    Sisa belum grading: {{ number_format($totalBoxGrading, 0) }} Box |
+                                    {{ number_format($totalPcsGrading, 0) }} Pcs |
+                                    {{ number_format($totalGrGrading, 0) }} Gr
+                                </th>
+                            </tr>
                             <tr>
                                 <th class="dhead">#</th>
                                 {{-- <th class="dhead">Tanggal</th> --}}
@@ -129,6 +141,16 @@
                                     <th class="dhead text-end">Ttl Rp</th>
                                 @endrole
                                 <th class="dhead text-center">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th class="dheadstock text-center" colspan="4">Total</th>
+                                <th class="dheadstock text-end">{{ number_format($totalPcsGrading, 0) }}</th>
+                                <th class="dheadstock text-end">{{ number_format($totalGrGrading, 0) }}</th>
+                                @role('presiden')
+                                    <th class="dheadstock"></th>
+                                    <th class="dheadstock"></th>
+                                @endrole
+                                <th class="dheadstock"></th>
                             </tr>
                         </thead>
                         <tbody>

@@ -106,6 +106,25 @@
             .kolom_select {
                 width: 120px !important;
             }
+
+            .cetak-table-wrapper {
+                position: relative;
+                min-height: 140px;
+            }
+
+            .cetak-loading {
+                position: absolute;
+                inset: 0;
+                z-index: 20;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.78);
+            }
+
+            .cetak-loading.show {
+                display: flex;
+            }
         </style>
         <section class="row">
             <input type="hidden" class="tgl1" value="{{ $tgl1 }}">
@@ -114,7 +133,21 @@
             <input type="hidden" class="hal" value="{{ $hal }}">
 
 
-            <div id="load-cetak"></div>
+            <div class="d-flex justify-content-end mb-2">
+                <div style="width: 260px">
+                    <label for="cetak-search" class="form-label mb-1">Pencarian</label>
+                    <input type="search" id="cetak-search" class="form-control" placeholder="Cari no box, karyawan, atau paket">
+                </div>
+            </div>
+            <div class="cetak-table-wrapper">
+                <div id="cetak-loading" class="cetak-loading" role="status" aria-live="polite">
+                    <div class="text-center text-primary">
+                        <div class="spinner-border" aria-hidden="true"></div>
+                        <div class="mt-2 fw-bold">Memuat data...</div>
+                    </div>
+                </div>
+                <div id="load-cetak"></div>
+            </div>
 
             <form method="post" action="{{ route('cetaknew.save_target') }}">
                 @csrf
@@ -165,11 +198,12 @@
 
                     load_cetak();
 
-                    function load_cetak() {
+                    function load_cetak(pageUrl) {
                         var tgl1 = $('.tgl1').val();
                         var tgl2 = $('.tgl2').val();
                         var id_anak = $('.id_anak').val();
                         var hal = $('.hal').val();
+                        var search = $('#cetak-search').val();
 
                         $.ajax({
                             type: "get",
@@ -177,9 +211,14 @@
                                 tgl1: tgl1,
                                 tgl2: tgl2,
                                 id_anak: id_anak,
-                                hal: hal
+                                hal: hal,
+                                search: search
                             },
-                            url: "{{ route('cetaknew.get_cetak') }}",
+                            url: pageUrl || "{{ route('cetaknew.get_cetak') }}",
+                            beforeSend: function() {
+                                $('#cetak-loading').addClass('show');
+                                $('#load-cetak').css('opacity', '0.45');
+                            },
                             success: function(r) {
                                 $("#load-cetak").html(r);
                                 // Initialize DataTable with pagination
@@ -187,22 +226,37 @@
                                     $('#tableHalaman').DataTable().destroy();
                                 }
                                 $('#tableHalaman').DataTable({
-                                    "searching": true,
-                                    "paging": true,
-                                    "pageLength": 10,
-                                    "lengthMenu": [
-                                        [10, 25, 50, -1],
-                                        [10, 25, 50, "All"]
-                                    ],
+                                    "searching": false,
+                                    "paging": false,
                                     scrollY: '400px',
                                     scrollX: true,
                                     scrollCollapse: true,
                                     "autoWidth": false,
                                     "ordering": false
                                 });
+                            },
+                            error: function() {
+                                alertToast('error', 'Data gagal dimuat. Silakan coba lagi.');
+                            },
+                            complete: function() {
+                                $('#cetak-loading').removeClass('show');
+                                $('#load-cetak').css('opacity', '1');
                             }
                         });
                     }
+
+                    $(document).on('click', '.cetak-pagination a', function(e) {
+                        e.preventDefault();
+                        load_cetak($(this).attr('href'));
+                    });
+
+                    var searchTimer;
+                    $(document).on('input', '#cetak-search', function() {
+                        clearTimeout(searchTimer);
+                        searchTimer = setTimeout(function() {
+                            load_cetak();
+                        }, 350);
+                    });
 
                     // Handle modal view filter change
                     $(document).on('hide.bs.modal', '#view', function() {
@@ -276,9 +330,11 @@
                     });
 
                     function loadRowData(id_cetak, no) {
+                        var hal = $('.hal').val();
                         $.get("{{ route('cetaknew.getRowData') }}", {
                             id_cetak: id_cetak,
-                            no: no
+                            no: no,
+                            hal: hal
                         }, function(data) {
                             var tr = $('tr[data-id="' + id_cetak + '"]');
                             tr.replaceWith(data);
@@ -433,12 +489,14 @@
                 $(document).on('change', '.tipe_bayar', function() {
                     var id_cetak = $(this).attr('id_cetak');
                     var tipe_bayar = $(this).val();
+                    var hal = $('.hal').val();
 
                     $.ajax({
                         type: "get",
                         url: "{{ route('cetaknew.get_paket_cetak') }}",
                         data: {
                             tipe_bayar: tipe_bayar,
+                            hal: hal,
                         },
                         success: function(response) {
                             $('.id_paket' + id_cetak).html(response);
