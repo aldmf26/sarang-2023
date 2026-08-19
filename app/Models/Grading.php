@@ -113,37 +113,43 @@ class Grading extends Model
 
     public static function dapatkanStokBoxGradingbj($jenis, $noBox = null)
     {
-        $whereBox = $noBox ? "AND b.no_box in ($noBox) " : '';
+        // "Sisa belum grading" adalah formulir grade yang belum mempunyai
+        // hasil grading. Gunakan detail Balance Sheet agar daftar dan totalnya
+        // tidak berbeda dengan halaman Cocokan.
+        $formulir = collect(CocokanModel::gradingSisaDetails());
 
-        $formulir = DB::select("SELECT 
-        b.no_box, 
-        b.tanggal, 
-        e.tipe,
-        e.ket,
-        e.nm_partai, 
-        c.name as pemberi, 
-        b.no_invoice, 
-        (b.pcs_awal - d.pcs) as pcs_awal, 
-        (b.gr_awal - d.gr) as gr_awal
-        FROM grading as a 
-        JOIN formulir_sarang as b on b.no_box = a.no_box_sortir AND b.kategori = 'grade'
-        JOIN bk as e on e.no_box = b.no_box AND e.kategori = 'cabut'
-        $whereBox
-        LEFT JOIN(
-            select no_box_sortir as no_box,sum(pcs) as pcs,sum(gr) as gr
-            from grading 
-            group by no_box_sortir
-        ) as d on d.no_box = b.no_box
-        JOIN users as c on c.id = b.id_pemberi
-        WHERE a.selesai  = 'T' AND NOT EXISTS (
-          SELECT 1 
-          FROM formulir_sarang fs 
-          WHERE fs.no_box = b.no_box 
-            AND fs.kategori = 'grading'
-      )
-        GROUP BY b.no_box
-        HAVING sum(b.pcs_awal - d.pcs) > 0 OR sum(b.gr_awal - d.gr) > 0
-        ORDER BY e.nm_partai DESC");
+        // Setelah box diserah ke PO grading, box sudah berstatus grading sedang
+        // proses dan tidak boleh tetap tampil sebagai sisa belum grading.
+        $boxSudahDiserah = DB::table('formulir_sarang')
+            ->where('kategori', 'grading')
+            ->whereIn('no_box', $formulir->pluck('no_box_sortir')->filter()->unique())
+            ->pluck('no_box')
+            ->map(fn ($box) => (string) $box)
+            ->unique();
+
+        $formulir = $formulir->reject(function ($row) use ($boxSudahDiserah) {
+            return $boxSudahDiserah->contains((string) $row->no_box_sortir);
+        });
+
+        if ($noBox !== null) {
+            $boxes = collect(explode(',', (string) $noBox))
+                ->map(fn ($box) => trim($box))
+                ->filter()
+                ->unique();
+
+            $formulir = $formulir->whereIn('no_box_sortir', $boxes);
+        }
+
+        $formulir = $formulir->map(function ($row) {
+            $row->no_box = $row->no_box_sortir;
+            $row->tanggal = null;
+            $row->pemberi = '-';
+            $row->no_invoice = null;
+            $row->pcs_awal = $row->pcs;
+            $row->gr_awal = $row->gr;
+
+            return $row;
+        })->values()->all();
 
         $arr = [
             'formulir' => $formulir,
@@ -401,38 +407,33 @@ left join(
     public static function stock_wip2()
     {
         return DB::select("SELECT 
-            a.box_pengiriman as no_box,
-            a.grade,
-            sum(a.pcs) as pcs, 
-            (sum(a.gr) + COALESCE(d.gr,0)) as gr,
-            a.no_invoice,
-            a.urutan,
-            b.pcs as pcs_pengiriman, 
-            b.gr as gr_pengiriman,
-            a.sudah_print
-            FROM grading_partai as a
-            LEFT JOIN (
-                SELECT 
-                no_box as no_box_pengiriman,
-                sum(pcs) as pcs, 
-                sum(gr) as gr 
-                FROM pengiriman
-                GROUP BY no_box
-            )  as b on b.no_box_pengiriman = a.box_pengiriman
-            
-            join (
-                SELECT c.no_box
-                FROM formulir_sarang as c 
-                where c.selesai = 'Y' and c.kategori = 'wip2'
-            ) as c on c.no_box = a.box_pengiriman
-            left join (
-                SELECT d.box_pengiriman, sum(d.pcs) as pcs, sum(d.gr) as gr
-                FROM grading_partai as d
-                where d.formulir = 'Y' and d.cek_qc = 'T'
-                group by d.box_pengiriman
-            ) as d on d.box_pengiriman = a.box_pengiriman
-            where a.formulir = 'Y' and a.cek_qc = 'Y'
-            GROUP BY a.box_pengiriman ORDER BY a.grade Desc");
+                a.box_pengiriman AS no_box,
+                MAX(a.grade) AS grade,
+                SUM(a.pcs) AS pcs,
+                SUM(a.gr) AS gr,
+                MAX(a.no_invoice) AS no_invoice,
+                MAX(a.urutan) AS urutan,
+                0 AS pcs_pengiriman,
+                0 AS gr_pengiriman,
+                MAX(a.sudah_print) AS sudah_print
+            FROM grading_partai AS a
+            WHERE a.formulir = 'Y'
+              AND a.cek_qc = 'Y'
+              AND a.sudah_kirim = 'T'
+              AND EXISTS (
+                  SELECT 1
+                  FROM formulir_sarang AS fs
+                  WHERE fs.no_box = a.box_pengiriman
+                    AND fs.kategori = 'wip2'
+                    AND fs.selesai = 'Y'
+              )
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM pengiriman AS p
+                  WHERE p.no_box = a.box_pengiriman
+              )
+            GROUP BY a.box_pengiriman
+            ORDER BY MAX(a.grade) DESC");
     }
 
     public static function detailPengiriman($no_nota)

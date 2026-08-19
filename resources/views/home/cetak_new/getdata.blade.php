@@ -25,7 +25,7 @@
     <tbody>
         @foreach ($cetak as $no => $c)
             <tr data-id="{{ $c->id_cetak }}">
-                <td>{{ $no + 1 }}</td>
+                <td>{{ $cetak->firstItem() + $no }}</td>
                 <td>
                     <input type="date" class="form-control tgl{{ $c->id_cetak }}" value="{{ $c->tgl }}">
                     {{-- {{ date('d M y', strtotime($c->tgl)) }} --}}
@@ -195,3 +195,7 @@
 
     </tbody>
 </table>
+<div class="d-flex justify-content-between align-items-center mt-2 cetak-pagination">
+    <small>Menampilkan {{ $cetak->firstItem() ?? 0 }}–{{ $cetak->lastItem() ?? 0 }} dari {{ $cetak->total() }} data</small>
+    {{ $cetak->links() }}
+</div>

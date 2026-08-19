@@ -13,19 +13,45 @@ class EoController extends Controller
     public function getStokBk($no_box = null)
     {
         $id_user = auth()->user()->id;
-        $query = !empty($no_box) ? "selectOne" : 'select';
-        $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
+        $eoTerpakai = DB::table('eo')
+            ->select('no_box')
+            ->selectRaw('SUM(gr_eo_awal) as gr_eo_awal')
+            ->where('id_pengawas', $id_user)
+            ->groupBy('no_box');
 
-        // return DB::$query("SELECT a.no_box, a.pcs_awal,a.gr_awal FROM `bk` as a
-        //     WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.penerima = '$id_user'");
-        return DB::$query("SELECT 
-        a.no_box, a.gr_awal,b.gr_eo_awal as gr_cabut 
-        FROM `bk` as a
-        LEFT JOIN (
-            SELECT 
-            max(no_box) as no_box,sum(gr_eo_awal) as gr_eo_awal  FROM `eo` 
-             GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE $noBoxAda a.no_box NOT IN (select no_box FROM cabut) AND a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' AND a.selesai = 'T';");
+        $stok = DB::table('bk as a')
+            ->leftJoinSub($eoTerpakai, 'b', 'b.no_box', '=', 'a.no_box')
+            ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+            ->selectRaw('COALESCE(b.gr_eo_awal, 0) as gr_cabut')
+            ->where('a.penerima', $id_user)
+            ->where('a.kategori', 'like', '%cabut%')
+            ->where('a.selesai', 'T')
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('cabut as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('cetak_new as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('sortir as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('grading as proses')->whereColumn('proses.no_box_sortir', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('formulir_sarang as proses')
+                    ->whereColumn('proses.no_box', 'a.no_box')
+                    // Batas identitas no box sumber hanya sampai grading.
+                    // Sesudah grading partai, barang memakai box_pengiriman.
+                    ->whereIn('proses.kategori', ['cetak', 'sortir', 'grade', 'grading']);
+            });
+
+        if (!empty($no_box)) {
+            return $stok->where('a.no_box', $no_box)->first();
+        }
+
+        return $stok->orderByRaw('CAST(a.no_box AS UNSIGNED)')->get()->all();
     }
 
     public function getAnak($id = null)

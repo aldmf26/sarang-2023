@@ -102,7 +102,6 @@ class CetakNewController extends Controller
 
         $data = [
             'title' => 'Cetak',
-            'users' => $this->getData('users'),
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'id_anak' => $id_anak,
@@ -136,14 +135,25 @@ class CetakNewController extends Controller
         $id_pengawas = auth()->user()->id;
         $id_anak = $r->id_anak;
         $hal = $r->hal;
+        $search = trim((string) $r->search);
 
-        $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal);
+        $cetak = CetakModel::getCetakQuery($id_anak, $tgl1, $tgl2, $id_pengawas, $hal, true, $search);
+
+        $paket = DB::table('kelas_cetak')
+            ->when($hal == 'cetak', function ($query) {
+                $query->where(function ($filter) {
+                    $filter->whereNull('kategori')->orWhere('kategori', 'CTK');
+                });
+            }, function ($query) {
+                $query->where('kategori', 'CU');
+            })
+            ->get();
 
         $data = [
             'cetak' => $cetak,
             'tgl1' => $tgl1,
             'tb_anak' => $this->getData('tb_anak'),
-            'paket' => $this->getData('paket'),
+            'paket' => $paket,
             'bulan' => $this->getData('bulan'),
             'hal' => $hal,
             'bulan_list' => DB::table('bulan')->where('bulan', date('m'))->get(),
@@ -280,6 +290,17 @@ class CetakNewController extends Controller
 
     public function getRowData(Request $r)
     {
+        $hal = $r->hal ?? 'cetak';
+        $paket = DB::table('kelas_cetak')
+            ->when($hal == 'cetak', function ($query) {
+                $query->where(function ($filter) {
+                    $filter->whereNull('kategori')->orWhere('kategori', 'CTK');
+                });
+            }, function ($query) {
+                $query->where('kategori', 'CU');
+            })
+            ->get();
+
         $data = [
             'c' => DB::selectOne("SELECT a.id_anak, a.capai,a.id_cetak, a.selesai, c.name, d.name as pgws, b.nama as nm_anak , a.no_box, a.tgl, a.pcs_awal, a.gr_awal, a.pcs_tdk_cetak, a.gr_tdk_cetak, a.pcs_awal_ctk as pcs_awal_ctk, a.gr_awal_ctk, a.pcs_akhir, a.gr_akhir, a.rp_satuan, e.kelas, e.batas_susut , e.denda_susut, e.id_paket, a.rp_tambahan , a.id_kelas_cetak, a.pcs_hcr, e.denda_hcr,a.tipe_bayar, a.bulan_dibayar,ttl_rp,f.no_box as form, e.kategori as kat_kelas
             From cetak_new as a  
@@ -293,8 +314,8 @@ class CetakNewController extends Controller
             'no' => $r->no,
             'tb_anak' => $this->getData('tb_anak'),
             'bulan' => $this->getData('bulan'),
-            'paket' => $this->getData('paket'),
-            'hal' => $r->hal,
+            'paket' => $paket,
+            'hal' => $hal,
             'bulan_list' => DB::table('bulan')->where('bulan', date('m'))->get(),
         ];
 
@@ -303,7 +324,17 @@ class CetakNewController extends Controller
 
     public function get_paket_cetak(Request $r)
     {
-        $kelas = DB::table('kelas_cetak')->where('kategori_hitung', $r->tipe_bayar)->get();
+        $hal = $r->hal ?? 'cetak';
+        $kelas = DB::table('kelas_cetak')
+            ->where('kategori_hitung', $r->tipe_bayar)
+            ->when($hal == 'cetak', function ($query) {
+                $query->where(function ($filter) {
+                    $filter->whereNull('kategori')->orWhere('kategori', 'CTK');
+                });
+            }, function ($query) {
+                $query->where('kategori', 'CU');
+            })
+            ->get();
 
         echo "<option>Pilih Paket</option>";
         foreach ($kelas as $k) {
@@ -685,7 +716,7 @@ class CetakNewController extends Controller
         $tgl2 = $r->tgl2;
         $id_pengawas = auth()->user()->id;
 
-        $cetak = CetakModel::getCetakQuery('All', $tgl1, $tgl2, $id_pengawas, $r->hal);
+        $cetak = CetakModel::getCetakQuery('All', $tgl1, $tgl2, $id_pengawas, $r->hal, false);
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $sheet = $spreadsheet->getActiveSheet();
@@ -1136,11 +1167,16 @@ class CetakNewController extends Controller
     public function save_formulir(Request $r)
     {
         $no_box = explode(',', $r->id_cetak[0]);
-        $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'sortir'");
+        $urutan_invoice = DB::selectOne("
+            SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
+            FROM formulir_sarang
+            WHERE kategori = 'sortir'
+              AND no_invoice REGEXP '^[0-9]+$'
+        ");
         if (empty($urutan_invoice->no_invoice)) {
             $inv = 1001;
         } else {
-            $inv = $urutan_invoice->no_invoice + 1;
+            $inv = (int) $urutan_invoice->no_invoice + 1;
         }
 
         foreach ($no_box as $d) {

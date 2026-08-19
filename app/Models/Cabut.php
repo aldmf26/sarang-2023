@@ -682,38 +682,97 @@ class Cabut extends Model
     public static function getStokBk($no_box = null)
     {
         $id_user = auth()->user()->id;
-        $query = !empty($no_box) ? "selectOne" : 'select';
-        $noBoxAda = !empty($no_box) ? "a.no_box = '$no_box' AND" : '';
+        $cabutTerpakai = DB::table('cabut')
+            ->select('no_box')
+            ->selectRaw('SUM(pcs_awal) as pcs_awal, SUM(gr_awal) as gr_awal')
+            ->where('id_pengawas', $id_user)
+            ->groupBy('no_box');
 
-        return DB::$query("SELECT a.no_box, a.pcs_awal,COALESCE(b.pcs_awal, 0) as pcs_cabut,a.gr_awal,COALESCE(b.gr_awal, 0) as gr_cabut FROM `bk` as a
-        LEFT JOIN (
-            SELECT max(no_box) as no_box,sum(pcs_awal) as pcs_awal,sum(gr_awal) as gr_awal  FROM `cabut` GROUP BY no_box,id_pengawas
-        ) as b ON a.no_box = b.no_box WHERE  $noBoxAda a.penerima = '$id_user' AND a.kategori LIKE '%cabut%' and a.selesai = 'T' and a.baru = 'baru' 
-        AND a.no_box NOT IN (
-                SELECT no_box 
-                FROM `cetak_new`
-            )
-        AND a.no_box NOT IN (
-                SELECT no_box 
-                FROM `eo`   
-            )
-        ");
+        $stok = DB::table('bk as a')
+            ->leftJoinSub($cabutTerpakai, 'b', 'b.no_box', '=', 'a.no_box')
+            ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
+            ->selectRaw('COALESCE(b.pcs_awal, 0) as pcs_cabut, COALESCE(b.gr_awal, 0) as gr_cabut')
+            ->where('a.penerima', $id_user)
+            ->where('a.kategori', 'like', '%cabut%')
+            ->where('a.selesai', 'T')
+            ->where('a.baru', 'baru')
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('eo as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('cetak_new as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('sortir as proses')->whereColumn('proses.no_box', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')->from('grading as proses')->whereColumn('proses.no_box_sortir', 'a.no_box');
+            })
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('formulir_sarang as proses')
+                    ->whereColumn('proses.no_box', 'a.no_box')
+                    // Sesudah grading partai nomor berubah menjadi
+                    // box_pengiriman, jadi pencocokan berhenti di grading.
+                    ->whereIn('proses.kategori', ['cetak', 'sortir', 'grade', 'grading']);
+            });
+
+        if (!empty($no_box)) {
+            return $stok->where('a.no_box', $no_box)->first();
+        }
+
+        return $stok->orderByRaw('CAST(a.no_box AS UNSIGNED)')->get()->all();
     }
 
     public static function gudang($bulan = null, $tahun = null, $id_user = null)
     {
         $posisi = auth()->user()->posisi_id;
-        $penerima = $id_user == null || $posisi == 1 ? '' : "AND a.penerima = $id_user";
-        $bk = DB::select("SELECT a.no_box, b.name as penerima,a.pcs_awal as pcs,a.gr_awal as gr,a.hrga_satuan, 
-                (a.hrga_satuan * a.gr_awal) as ttl_rp, a.nm_partai
-                FROM bk as a
-                left join users as b on b.id = a.penerima
-                WHERE a.kategori = 'cabut' $penerima
-                AND a.selesai = 'T' 
-                AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
-                and NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
-                and a.baru = 'baru'
-                ;");
+        $filterPenerima = $id_user == null || $posisi == 1 ? '' : 'AND fs.id_penerima = ?';
+        $bkBindings = $filterPenerima === '' ? [] : [$id_user];
+
+        // Box Stock memakai kondisi yang sama dengan "Cabut sisa pengawas"
+        // pada Balance Sheet. Formulir adalah sumber jumlah stok dan setiap
+        // no_box diringkas agar tidak berlipat karena join transaksi.
+        $bk = DB::select("SELECT
+                fs.no_box,
+                MAX(users.name) AS penerima,
+                SUM(fs.pcs_awal) AS pcs,
+                SUM(fs.gr_awal) AS gr,
+                MAX(bk.hrga_satuan) AS hrga_satuan,
+                SUM(fs.gr_awal * bk.hrga_satuan) AS ttl_rp,
+                MAX(bk.nm_partai) AS nm_partai
+            FROM formulir_sarang AS fs
+            INNER JOIN (
+                SELECT
+                    no_box,
+                    MAX(penerima) AS penerima,
+                    MAX(hrga_satuan) AS hrga_satuan,
+                    MAX(nm_partai) AS nm_partai
+                FROM bk
+                WHERE kategori = 'cabut'
+                  AND baru = 'baru'
+                  AND no_box != 9999
+                GROUP BY no_box
+            ) AS bk ON bk.no_box = fs.no_box
+            LEFT JOIN users ON users.id = fs.id_penerima
+            WHERE fs.kategori = 'cabut'
+              $filterPenerima
+              AND NOT EXISTS (
+                  SELECT 1 FROM cabut WHERE cabut.no_box = fs.no_box
+              )
+              AND NOT EXISTS (
+                  SELECT 1 FROM eo WHERE eo.no_box = fs.no_box
+              )
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM grading AS sent_grading
+                  INNER JOIN grading_partai AS sent_result
+                      ON sent_result.no_invoice = sent_grading.no_invoice
+                  WHERE sent_grading.no_box_sortir = fs.no_box
+                    AND sent_result.sudah_kirim = 'Y'
+              )
+            GROUP BY fs.no_box
+            ORDER BY fs.no_box ASC", $bkBindings);
 
         $penerima2 = $id_user == null || $posisi == 1 ? '' : "AND a.id_pengawas = $id_user";
         $penerima3 = $id_user == null || $posisi == 1 ? '' : "AND d.id_pengawas = $id_user";

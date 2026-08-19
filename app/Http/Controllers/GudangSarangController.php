@@ -551,11 +551,18 @@ class GudangSarangController extends Controller
         $noBoxes = collect();
 
         if (in_array($kategori, ['cetak', 'grade', 'grading'], true)) {
-            $hasHancuran = DB::table('tb_hancuran')
-                ->where('kategori', $kategori)
-                ->whereIn('no_invoice', $invoices->all())
+            // Patahan melekat pada no_box. Kolom no_invoice pada data lama
+            // tidak selalu dapat menyimpan nomor PO berbentuk teks, sehingga
+            // status PO ditentukan lewat box yang berada di dalam invoice.
+            $hasHancuran = DB::table('formulir_sarang as fs')
+                ->join('tb_hancuran as h', function ($join) use ($kategori) {
+                    $join->on('h.no_box', '=', 'fs.no_box')
+                        ->where('h.kategori', '=', $kategori);
+                })
+                ->where('fs.kategori', $kategori)
+                ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
-                ->pluck('no_invoice')
+                ->pluck('fs.no_invoice')
                 ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
         }
 
@@ -576,10 +583,16 @@ class GudangSarangController extends Controller
                 ->pluck('fs.no_invoice')
                 ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
         } elseif ($kategori === 'grading') {
-            $hasProcess = DB::table('grading')
-                ->whereIn('no_invoice', $invoices->all())
+            // Nomor invoice pada data lama dapat berulang. Tentukan status
+            // proses dari box milik PO tersebut agar hasil grading dari PO
+            // lain yang kebetulan bernomor sama tidak membuat tombol Patahan
+            // berubah menjadi Detail.
+            $hasProcess = DB::table('formulir_sarang as fs')
+                ->join('grading as proses', 'proses.no_box_sortir', '=', 'fs.no_box')
+                ->where('fs.kategori', 'grading')
+                ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
-                ->pluck('no_invoice')
+                ->pluck('fs.no_invoice')
                 ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
 
             $noBoxes = DB::table('formulir_sarang')

@@ -2455,8 +2455,13 @@ class CabutController extends Controller
     public function save_formulir(Request $r)
     {
 
-        $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cetak' ORDER by no_invoice DESC limit 1;");
-        $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
+        $cekBox = DB::selectOne("
+            SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
+            FROM formulir_sarang
+            WHERE kategori = 'cetak'
+              AND no_invoice REGEXP '^[0-9]+$'
+        ");
+        $no_invoice = isset($cekBox->no_invoice) ? ((int) $cekBox->no_invoice + 1) : 1001;
         if (!$r->no_box[0] || !$r->id_penerima) {
             return redirect()->route('cabut.gudang')->with('error', 'No Box / Penerima Kosong !');
         }
@@ -2488,12 +2493,17 @@ class CabutController extends Controller
                 $gr = $ambil->gr_akhir;
 
                 if ($r->grading) {
-                    $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+                    $urutan_invoice = DB::selectOne("
+                        SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
+                        FROM formulir_sarang
+                        WHERE kategori = 'grade'
+                          AND no_invoice REGEXP '^[0-9]+$'
+                    ");
 
                     if (empty($urutan_invoice->no_invoice)) {
                         $inv = 1001;
                     } else {
-                        $inv = $urutan_invoice->no_invoice + 1;
+                        $inv = (int) $urutan_invoice->no_invoice + 1;
                     }
 
                     $data[] = [

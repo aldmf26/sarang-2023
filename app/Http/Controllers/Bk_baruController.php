@@ -121,9 +121,16 @@ class Bk_baruController extends Controller
 
     public function save_formulir(Request $r)
     {
-        $cekBox = DB::selectOne("SELECT no_invoice FROM `formulir_sarang` WHERE kategori = 'cabut' ORDER by no_invoice DESC limit 1;");
-        $no_invoice = isset($cekBox->no_invoice) ? $cekBox->no_invoice + 1 : 1001;
-
+        $cekBox = DB::selectOne("
+            SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
+            FROM formulir_sarang
+            WHERE kategori = 'cabut'
+              AND no_invoice REGEXP '^[0-9]+$'
+        ");
+        $no_invoice = isset($cekBox->no_invoice) ? ((int) $cekBox->no_invoice + 1) : 1001;
+        if (!$r->no_box[0] || !$r->id_penerima) {
+            return redirect()->route('cabut.gudang')->with('error', 'No Box / Penerima Kosong !');
+        }
         $no_box = explode(',', $r->no_box[0]);
 
         foreach ($no_box as $d) {
