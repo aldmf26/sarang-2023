@@ -806,13 +806,14 @@ class SortirController extends Controller
             DB::beginTransaction();
             $no_box = explode(',', $r->no_box[0]);
 
-            $urutan_invoice = DB::selectOne("SELECT max(a.no_invoice) as no_invoice FROM formulir_sarang as a where a.kategori = 'grade'");
+            $urutan_invoice = DB::selectOne("
+                SELECT MAX(CAST(a.no_invoice AS UNSIGNED)) as max_inv 
+                FROM formulir_sarang as a 
+                WHERE a.kategori = 'grade' AND a.no_invoice REGEXP '^[0-9]+$'
+            ");
 
-            if (empty($urutan_invoice->no_invoice)) {
-                $inv = 1001;
-            } else {
-                $inv = $urutan_invoice->no_invoice + 1;
-            }
+            $maxInv = (int) ($urutan_invoice->max_inv ?? 0);
+            $inv = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
 
             foreach ($no_box as $d) {
                 $ambil = DB::selectOne("SELECT 
@@ -1156,10 +1157,13 @@ class SortirController extends Controller
 
                 $lastInvoice = DB::table('formulir_sarang')
                     ->where('kategori', 'grade')
-                    ->orderByDesc('no_invoice')
+                    ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
                     ->lockForUpdate()
-                    ->value('no_invoice');
-                $invoice = empty($lastInvoice) ? 1001 : ((int) $lastInvoice + 1);
+                    ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_inv')
+                    ->value('max_inv');
+
+                $maxInv = (int) ($lastInvoice ?? 0);
+                $invoice = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
 
                 DB::table('sortir')
                     ->whereIn('no_box', $noBoxes)
