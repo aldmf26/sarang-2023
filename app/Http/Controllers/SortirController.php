@@ -1045,7 +1045,7 @@ class SortirController extends Controller
 
             if ($bulkNoBox !== '') {
                 $noBoxes = collect(preg_split('/[\s,;]+/', $bulkNoBox))
-                    ->map(fn ($value) => trim((string) $value))
+                    ->map(fn($value) => trim((string) $value))
                     ->filter()
                     ->unique()
                     ->take(500)
@@ -1056,7 +1056,7 @@ class SortirController extends Controller
             }
 
             $box = $query->orderBy('a.no_box')->get()
-                ->unique(fn ($item) => (string) $item->no_box)
+                ->unique(fn($item) => (string) $item->no_box)
                 ->values();
         }
 
@@ -1083,7 +1083,7 @@ class SortirController extends Controller
             })
             ->orderBy('a.no_box')
             ->get()
-            ->unique(fn ($item) => (string) $item->no_box)
+            ->unique(fn($item) => (string) $item->no_box)
             ->values();
 
         $payload = [
@@ -1123,8 +1123,8 @@ class SortirController extends Controller
             }
 
             $noBoxes = collect($values)
-                ->filter(fn ($value) => is_scalar($value) && trim((string) $value) !== '')
-                ->map(fn ($value) => trim((string) $value))
+                ->filter(fn($value) => is_scalar($value) && trim((string) $value) !== '')
+                ->map(fn($value) => trim((string) $value))
                 ->unique()
                 ->values();
 
@@ -1139,6 +1139,7 @@ class SortirController extends Controller
                 $rows = DB::table('sortir as a')
                     ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
                     ->whereIn('a.no_box', $noBoxes)
+                    ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
                     ->where('a.selesai', 'T')
                     ->whereNotExists(function ($subquery) {
                         $subquery->selectRaw('1')
@@ -1148,9 +1149,9 @@ class SortirController extends Controller
                     })
                     ->lockForUpdate()
                     ->get()
-                    ->groupBy(fn ($item) => (string) $item->no_box);
+                    ->groupBy(fn($item) => (string) $item->no_box);
 
-                $missing = $noBoxes->reject(fn ($noBox) => $rows->has((string) $noBox));
+                $missing = $noBoxes->reject(fn($noBox) => $rows->has((string) $noBox));
                 if ($missing->isNotEmpty()) {
                     throw new \RuntimeException('Box tidak tersedia/sudah diproses: ' . $missing->take(10)->implode(', '));
                 }
@@ -1192,7 +1193,7 @@ class SortirController extends Controller
                     ];
                 });
 
-                $insert->chunk(300)->each(fn ($chunk) => DB::table('formulir_sarang')->insert($chunk->all()));
+                $insert->chunk(300)->each(fn($chunk) => DB::table('formulir_sarang')->insert($chunk->all()));
 
                 return ['count' => $insert->count(), 'invoice' => $invoice];
             }, 3);
