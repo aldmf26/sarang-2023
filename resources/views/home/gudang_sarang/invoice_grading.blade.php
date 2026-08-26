@@ -47,6 +47,7 @@
                                             href="{{ route('gradingbj.detail_pengiriman', ['no_invoice' => $d->no_invoice]) }}">
                                             <span class="badge bg-primary">Detail</span>
                                         </a>
+                                        dsadas
                                     @else
                                         <a onclick="return confirm('Yakin dihapus ?')"
                                             href="{{ route('gudangsarang.batal_grading', ['no_invoice' => $d->no_invoice, 'kategori' => 'grading']) }}">
