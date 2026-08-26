@@ -1044,7 +1044,7 @@ class CetakNewController extends Controller
                     ->where('kategori', 'sortir')
                     ->lockForUpdate()
                     ->get()
-                    ->unique(fn ($row) => (string) $row->no_box)
+                    ->unique(fn($row) => (string) $row->no_box)
                     ->values();
 
                 if ($formulir->isEmpty()) {
@@ -1063,11 +1063,11 @@ class CetakNewController extends Controller
                     ->where('kategori', 'sortir')
                     ->whereIn('no_box', $noBoxes)
                     ->pluck('no_box')
-                    ->mapWithKeys(fn ($noBox) => [(string) $noBox => true]);
+                    ->mapWithKeys(fn($noBox) => [(string) $noBox => true]);
                 $existingSortir = DB::table('sortir')
                     ->whereIn('no_box', $noBoxes)
                     ->pluck('no_box')
-                    ->mapWithKeys(fn ($noBox) => [(string) $noBox => true]);
+                    ->mapWithKeys(fn($noBox) => [(string) $noBox => true]);
 
                 $bkRows = [];
                 $sortirRows = [];
@@ -1170,7 +1170,7 @@ class CetakNewController extends Controller
         $urutan_invoice = DB::selectOne("
             SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
             FROM formulir_sarang
-            WHERE kategori = 'sortir'
+            WHERE kategori = 'sortir' AND no_invoice = '0'
               AND no_invoice REGEXP '^[0-9]+$'
         ");
         if (empty($urutan_invoice->no_invoice)) {
@@ -1511,11 +1511,11 @@ class CetakNewController extends Controller
             'mode' => $mode,
             'box' => $mode === 'table'
                 ? DB::table('cetak_new as a')
-                    ->where('a.selesai', 'T')
-                    ->whereNotIn('a.no_box', function ($query) {
-                        $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
-                    })
-                    ->get()
+                ->where('a.selesai', 'T')
+                ->whereNotIn('a.no_box', function ($query) {
+                    $query->select('no_box')->from('formulir_sarang')->where('kategori', 'sortir');
+                })
+                ->get()
                 : collect(),
             'anak' => DB::table('tb_anak')->where('id_pengawas', $id_user)->first(),
             'paket' => DB::table('kelas_cetak')->where('kelas', 'LIKE', '%ctk lewat%')->first(),
@@ -1533,7 +1533,7 @@ class CetakNewController extends Controller
             })
             ->orderBy('a.no_box')
             ->get()
-            ->unique(fn ($row) => (string) $row->no_box)
+            ->unique(fn($row) => (string) $row->no_box)
             ->values();
 
         $payload = [
@@ -1545,12 +1545,12 @@ class CetakNewController extends Controller
                 'pcs' => $rows->sum('pcs_awal_ctk'),
                 'gr' => $rows->sum('gr_awal_ctk'),
             ],
-            'no_boxes' => $rows->pluck('no_box')->map(fn ($noBox) => (string) $noBox)->all(),
+            'no_boxes' => $rows->pluck('no_box')->map(fn($noBox) => (string) $noBox)->all(),
         ];
         $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         return response()->streamDownload(
-            fn () => print($json),
+            fn() => print($json),
             'cetak-lewat-semua-' . date('Y-m-d') . '.json',
             ['Content-Type' => 'application/json; charset=UTF-8']
         );
@@ -1584,7 +1584,7 @@ class CetakNewController extends Controller
             }
 
             $noBoxes = collect($noBoxInput)
-                ->map(fn ($noBox) => trim((string) $noBox))
+                ->map(fn($noBox) => trim((string) $noBox))
                 ->unique()
                 ->values();
 
@@ -1606,8 +1606,8 @@ class CetakNewController extends Controller
                     ->lockForUpdate()
                     ->get();
 
-                $rowsByNoBox = $rows->groupBy(fn ($row) => (string) $row->no_box);
-                $missing = $noBoxes->reject(fn ($noBox) => $rowsByNoBox->has($noBox))->values();
+                $rowsByNoBox = $rows->groupBy(fn($row) => (string) $row->no_box);
+                $missing = $noBoxes->reject(fn($noBox) => $rowsByNoBox->has($noBox))->values();
 
                 if ($missing->isNotEmpty()) {
                     $sample = $missing->take(10)->implode(', ');
@@ -1617,11 +1617,16 @@ class CetakNewController extends Controller
                     );
                 }
 
+
+
+
                 $lastInvoice = DB::table('formulir_sarang')
                     ->where('kategori', 'sortir')
-                    ->orderByDesc('no_invoice')
+                    ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
                     ->lockForUpdate()
+                    ->orderByRaw('CAST(no_invoice AS UNSIGNED) DESC')
                     ->value('no_invoice');
+
                 $invoice = empty($lastInvoice) ? 1001 : ((int) $lastInvoice + 1);
 
                 DB::table('cetak_new')
