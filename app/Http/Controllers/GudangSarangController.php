@@ -563,7 +563,7 @@ class GudangSarangController extends Controller
                 ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
                 ->pluck('fs.no_invoice')
-                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+                ->mapWithKeys(fn($invoice) => [(string) $invoice => true]);
         }
 
         if ($kategori === 'cetak') {
@@ -573,7 +573,7 @@ class GudangSarangController extends Controller
                 ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
                 ->pluck('fs.no_invoice')
-                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+                ->mapWithKeys(fn($invoice) => [(string) $invoice => true]);
         } elseif ($kategori === 'grade') {
             $hasProcess = DB::table('formulir_sarang as fs')
                 ->join('grading as proses', 'proses.no_box_sortir', '=', 'fs.no_box')
@@ -581,7 +581,7 @@ class GudangSarangController extends Controller
                 ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
                 ->pluck('fs.no_invoice')
-                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+                ->mapWithKeys(fn($invoice) => [(string) $invoice => true]);
         } elseif ($kategori === 'grading') {
             // Nomor invoice pada data lama dapat berulang. Tentukan status
             // proses dari box milik PO tersebut agar hasil grading dari PO
@@ -590,18 +590,21 @@ class GudangSarangController extends Controller
             $hasProcess = DB::table('formulir_sarang as fs')
                 ->join('grading as proses', 'proses.no_box_sortir', '=', 'fs.no_box')
                 ->where('fs.kategori', 'grading')
+                // Baris grading kosong/placeholder belum merupakan hasil
+                // grading dan tidak boleh mengunci tombol Patahan/Grading.
+                ->whereNotNull('proses.no_invoice')
                 ->whereIn('fs.no_invoice', $invoices->all())
                 ->distinct()
                 ->pluck('fs.no_invoice')
-                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+                ->mapWithKeys(fn($invoice) => [(string) $invoice => true]);
 
             $noBoxes = DB::table('formulir_sarang')
                 ->where('kategori', 'grading')
                 ->whereIn('no_invoice', $invoices->all())
                 ->orderBy('id_formulir')
                 ->get(['no_invoice', 'no_box'])
-                ->groupBy(fn ($row) => (string) $row->no_invoice)
-                ->map(fn ($rows) => $rows->pluck('no_box')->implode(','));
+                ->groupBy(fn($row) => (string) $row->no_invoice)
+                ->map(fn($rows) => $rows->pluck('no_box')->implode(','));
         } elseif (in_array($kategori, ['qc', 'wip2'], true)) {
             $completed = DB::table('formulir_sarang')
                 ->where('kategori', $kategori)
@@ -609,7 +612,7 @@ class GudangSarangController extends Controller
                 ->whereIn('no_invoice', $invoices->all())
                 ->distinct()
                 ->pluck('no_invoice')
-                ->mapWithKeys(fn ($invoice) => [(string) $invoice => true]);
+                ->mapWithKeys(fn($invoice) => [(string) $invoice => true]);
         }
 
         foreach ($formulir as $po) {

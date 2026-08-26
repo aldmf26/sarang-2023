@@ -274,6 +274,23 @@ class GradingBjController extends Controller
                 })
                 ->get();
 
+            $requestedBoxes = collect($no_boxPecah)
+                ->map(fn ($box) => trim((string) $box))
+                ->filter()
+                ->unique()
+                ->values();
+            $readyBoxes = $getFormulir->pluck('no_box')
+                ->map(fn ($box) => (string) $box)
+                ->unique();
+            $notReadyBoxes = $requestedBoxes->diff($readyBoxes)->values();
+
+            if ($notReadyBoxes->isNotEmpty()) {
+                return redirect()->back()->with(
+                    'error',
+                    'Box belum siap grading: ' . $notReadyBoxes->implode(', ')
+                );
+            }
+
             if ($getFormulir->isEmpty()) {
                 return redirect()->back()->with('error', 'Box yang dipilih sudah pernah diserah ke PO grading.');
             }
@@ -410,6 +427,7 @@ class GradingBjController extends Controller
 
         $sudahDiproses = DB::table('grading')
             ->where('no_box_sortir', $validated['no_box'])
+            ->whereNotNull('no_invoice')
             ->exists();
         $sudahAdaHasilPartai = DB::table('grading_partai')
             ->where('no_invoice', $validated['no_invoice'])
