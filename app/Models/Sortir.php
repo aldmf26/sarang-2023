@@ -100,6 +100,12 @@ class Sortir extends Model
                       WHERE s.no_box = fs.no_box
                         AND s.id_anak != 0
                   )
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM formulir_sarang AS next_process
+                      WHERE next_process.no_box = fs.no_box
+                        AND next_process.kategori = 'grade'
+                  )
                 GROUP BY fs.no_box
             ) AS stock
             INNER JOIN (

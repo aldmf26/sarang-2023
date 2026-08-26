@@ -635,7 +635,13 @@ class SortirController extends Controller
         $siap_sortir = DB::select("SELECT b.name, a.no_box, a.pcs_awal, a.gr_awal
         FROM formulir_sarang as a 
         left join users as b on b.id = a.id_penerima
-        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b) and a.kategori = 'sortir' ");
+        WHERE a.no_box not in(SELECT b.no_box FROM sortir as b)
+          and a.kategori = 'sortir'
+          and not exists (
+              SELECT 1 FROM formulir_sarang as next_process
+              WHERE next_process.no_box = a.no_box
+                and next_process.kategori = 'grade'
+          )");
 
         $sortir_proses = DB::select("SELECT b.name, a.no_box, a.pcs_awal, a.gr_awal
         FROM sortir as a 
