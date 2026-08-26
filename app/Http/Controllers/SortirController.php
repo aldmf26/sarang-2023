@@ -1139,7 +1139,7 @@ class SortirController extends Controller
                 $rows = DB::table('sortir as a')
                     ->select('a.no_box', 'a.pcs_awal', 'a.gr_awal')
                     ->whereIn('a.no_box', $noBoxes)
-                    ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+
                     ->where('a.selesai', 'T')
                     ->whereNotExists(function ($subquery) {
                         $subquery->selectRaw('1')
