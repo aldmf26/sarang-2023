@@ -222,7 +222,7 @@ class BkController extends Controller
                     } else {
 
                         $nobox = $this->getNoBoxTambah();
-                        $nobox = $row[9];
+                        // $nobox = $row[9];
 
                         DB::table('bk')->insert([
                             'no_lot' => '0',
