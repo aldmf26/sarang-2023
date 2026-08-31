@@ -174,21 +174,21 @@ class Grading extends Model
         $transactionCosts = DB::query()
             ->fromSub(function ($query) {
                 $query->from('cabut')->selectRaw(
-                    "CAST(no_box AS CHAR) AS no_box, COALESCE(ttl_rp, 0) AS cost_kerja,
+                    "CAST(no_box AS UNSIGNED) AS no_box, COALESCE(ttl_rp, 0) AS cost_kerja,
                     COALESCE(cost_op, 0) AS cost_op, 0 AS cost_cu"
                 )->unionAll(
                     DB::table('eo')->selectRaw(
-                        "CAST(no_box AS CHAR), COALESCE(ttl_rp, 0), COALESCE(cost_op, 0), 0"
+                        "CAST(no_box AS UNSIGNED), COALESCE(ttl_rp, 0), COALESCE(cost_op, 0), 0"
                     )
                 )->unionAll(
                     DB::table('sortir')->selectRaw(
-                        "CAST(no_box AS CHAR), COALESCE(ttl_rp, 0), 0, 0"
+                        "CAST(no_box AS UNSIGNED), COALESCE(ttl_rp, 0), 0, 0"
                     )
                 )->unionAll(
                     DB::table('cetak_new AS cn')
                         ->join('kelas_cetak AS kc', 'kc.id_kelas_cetak', '=', 'cn.id_kelas_cetak')
                         ->selectRaw(
-                            "CAST(cn.no_box AS CHAR),
+                            "CAST(cn.no_box AS UNSIGNED),
                             CASE WHEN kc.kategori = 'CTK' THEN COALESCE(cn.ttl_rp, 0) ELSE 0 END,
                             0,
                             CASE WHEN kc.kategori = 'CU' THEN COALESCE(cn.ttl_rp, 0) ELSE 0 END"
@@ -202,7 +202,9 @@ class Grading extends Model
             ->join('bk AS bk', function ($join) {
                 $join->on('bk.no_box', '=', 'fs.no_box')->where('bk.kategori', 'cabut');
             })
-            ->leftJoinSub($transactionCosts, 'biaya', 'biaya.no_box', '=', 'fs.no_box')
+            ->leftJoinSub($transactionCosts, 'biaya', function ($join) {
+                $join->on('biaya.no_box', '=', DB::raw('CAST(fs.no_box AS UNSIGNED)'));
+            })
             ->where('fs.kategori', 'grade')
             ->whereIn('fs.no_box', $boxes)
             ->selectRaw("fs.no_box, MAX(bk.tipe) AS tipe, MAX(bk.ket) AS ket,
