@@ -1170,7 +1170,7 @@ class CetakNewController extends Controller
         $urutan_invoice = DB::selectOne("
             SELECT MAX(CAST(no_invoice AS UNSIGNED)) AS no_invoice
             FROM formulir_sarang
-            WHERE kategori = 'sortir' AND no_invoice = '0'
+            WHERE kategori = 'sortir'
               AND no_invoice REGEXP '^[0-9]+$'
         ");
         if (empty($urutan_invoice->no_invoice)) {

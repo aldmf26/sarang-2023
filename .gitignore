@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/.codex-tmp
 # /resources/views/components/theme/header2.blade.php
 .env
 .env.backup
