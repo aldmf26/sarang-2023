@@ -226,8 +226,15 @@ class BoxKirimController extends Controller
         } else {
             $admin = auth()->user()->name;
             $tgl_input = date('Y-m-d');
-            $no_invoice = DB::table('formulir_sarang')->where('kategori', 'qc')->orderBy('no_invoice', 'DESC')->value('no_invoice');
-            $no_invoice = empty($no_invoice) ? 1001 : $no_invoice + 1;
+            $lastInvoice = DB::table('formulir_sarang')
+                ->where('kategori', 'qc')
+                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                ->lockForUpdate()
+                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_inv')
+                ->value('max_inv');
+
+            $maxInv = (int) ($lastInvoice ?? 0);
+            $invoice = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
 
 
             foreach (explode(',', $r->no_box) as $d) {
@@ -242,7 +249,7 @@ class BoxKirimController extends Controller
                 DB::table('grading_partai')->where('box_pengiriman', $d)->update($data1);
 
                 $dataToInsert[] = [
-                    'no_invoice' => $no_invoice,
+                    'no_invoice' => $invoice,
                     'no_box' => $d,
                     'id_pemberi' => 459,
                     'id_penerima' => 459,
