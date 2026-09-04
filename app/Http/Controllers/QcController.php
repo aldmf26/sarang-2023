@@ -115,13 +115,20 @@ class QcController extends Controller
     {
         foreach (explode(',', $r->no_box) as $d) {
             $qc = DB::table('qc')->where('invoice_qc', $d)->get();
-            $no_invoice = DB::table('formulir_sarang')->where('kategori', 'wip2')->orderBy('no_invoice', 'DESC')->value('no_invoice');
-            $no_invoice = empty($no_invoice) ? 1001 : $no_invoice + 1;
+           $lastInvoice = DB::table('formulir_sarang')
+                ->where('kategori', 'wip2')
+                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                ->lockForUpdate()
+                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_inv')
+                ->value('max_inv');
+
+            $maxInv = (int) ($lastInvoice ?? 0);
+            $invoice = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
 
             DB::table('qc')->where('invoice_qc', $d)->update(['wip2' => 'Y']);
             foreach ($qc as $q) {
                 $dataToInsert[] = [
-                    'no_invoice' => $no_invoice,
+                    'no_invoice' => $invoice,
                     'no_box' => $q->box_pengiriman,
                     'id_pemberi' => 459,
                     'id_penerima' => 459,
