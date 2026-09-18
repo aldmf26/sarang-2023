@@ -817,13 +817,11 @@ class GradingBjController extends Controller
                 DB::table('grading_partai')->insert($data);
             }
 
-            // Validasi total gr dan pcs
-            $ttlPcsSortir = $r->ttlPcs;
+            // Validasi total gr (hanya GR yang harus klop)
             $ttlGrSortir = $r->ttlGr;
-            $ttlPcsGrading = array_sum(array_column($data2, 'pcs'));
             $ttlGrGrading = array_sum(array_column($data2, 'gr'));
 
-            if ($ttlPcsGrading != $ttlPcsSortir || $ttlGrGrading != $ttlGrSortir) {
+            if ($ttlGrGrading != $ttlGrSortir) {
                 DB::rollBack();
                 session()->flash('form_data', [
                     'baris' => count($r->grade ?? []),
@@ -834,7 +832,7 @@ class GradingBjController extends Controller
                     'not_oke' => $r->not_oke ?? []
                 ]);
 
-                return redirect()->back()->withInput()->with('error', 'Total pcs atau gr grading tidak sesuai sortir');
+                return redirect()->back()->withInput()->with('error', 'Total gr grading tidak sesuai sortir');
             }
 
             foreach ($costTotals as $column => $sourceTotal) {
