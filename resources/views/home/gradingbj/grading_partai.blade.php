@@ -14,9 +14,10 @@
     </x-slot>
 
     <x-slot name="cardBody">
-        <form x-data="gradingData()" x-init="init()" action="{{ route('gradingbj.create_partai') }}"
+        <form id="gradingPartaiForm" x-data="gradingData()" x-init="init()" @submit="isDisabled = true" action="{{ route('gradingbj.create_partai') }}"
             method="post">
             @csrf
+            <input type="hidden" name="grading_payload" id="gradingPayload">
 
             {{-- Header Form --}}
             <div class="row">
@@ -148,8 +149,7 @@
                                     $pcsPth = $hancuranPcsByBox[$d->no_box] ?? 0;
                                 @endphp
                                 <tr class="pointer">
-                                    <td>{{ $d->no_box }} <input type="hidden" name="no_box[]"
-                                            value="{{ $d->no_box }}"></td>
+                                    <td>{{ $d->no_box }}</td>
                                     <td align="center">{{ $d->tipe }}-{{ $d->ket }}</td>
                                     <td align="right">{{ $d->pcs_awal }}</td>
                                     <td align="right">{{ $d->gr_awal }}</td>
@@ -269,8 +269,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-md btn-primary float-end" x-show="!isDisabled"
-                @click="isDisabled = true">
+            <button type="submit" class="btn btn-md btn-primary float-end" x-show="!isDisabled">
                 Save
             </button>
         </form>
@@ -404,6 +403,28 @@
 
         @section('scripts')
             <script>
+                document.getElementById('gradingPartaiForm').addEventListener('submit', function() {
+                    const payload = {};
+                    for (const [name, value] of new FormData(this)) {
+                        if (name === '_token' || name === 'grading_payload') continue;
+                        if (name.endsWith('[]')) {
+                            const key = name.slice(0, -2);
+                            (payload[key] ??= []).push(value);
+                        } else if (/^not_oke\[\d+\]$/.test(name)) {
+                            (payload.not_oke ??= {})[name.match(/\d+/)[0]] = value;
+                        } else {
+                            payload[name] = value;
+                        }
+                    }
+                    document.getElementById('gradingPayload').value = JSON.stringify(payload);
+                    // Hanya dua input POST, agar hasil grading besar tidak terpotong oleh PHP.
+                    for (const control of this.elements) {
+                        if (control.name && !['_token', 'grading_payload'].includes(control.name)) {
+                            control.disabled = true;
+                        }
+                    }
+                });
+
                 function gradingData() {
                     return {
                         baris: {{ session('form_data') ? session('form_data.baris') : 1 }},

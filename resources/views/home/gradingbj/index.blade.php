@@ -95,6 +95,15 @@
                                 <span class="badge bg-info" x-text="cek.length" x-transition></span>
                             </button> --}}
                         </form>
+                        @role('presiden')
+                            <form action="{{ route('gradingbj.serah_semua_partai') }}" method="post" class="mt-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-warning"
+                                    @disabled(count($formulir) === 0)>
+                                    <i class="fas fa-paper-plane"></i> Serah Semua per Partai
+                                </button>
+                            </form>
+                        @endrole
                     </div>
                 </div>
                 <button class="btn btn-xs btn-primary" @click="bulkBoxChecklist = !bulkBoxChecklist">Bulk No box

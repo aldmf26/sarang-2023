@@ -4,28 +4,24 @@
             <div x-data="{
                 cek: [],
                 selectedItem: [],
-                tambah(no_box, nm_partai, pcs, gr) {
-                    const selectedItem = this.selectedItem
-                    const cetak = this.cetak
-            
-                    const index = selectedItem.findIndex(item => item.no_box === no_box);
-                    if (index === -1) {
-                        selectedItem.push({
-                            no_box: no_box,
-                            nm_partai: nm_partai,
-                            pcs: parseFloat(pcs),
-                            gr: parseFloat(gr),
-                        });
-                    } else {
-                        selectedItem.splice(index, 1);
-                    }
-            
+                allItems: {{ Js::from(collect($bk)->unique('no_box')->map(fn ($box) => [
+                    'no_box' => (string) $box->no_box,
+                    'nm_partai' => $box->nm_partai,
+                    'pcs' => (float) $box->pcs_awal,
+                    'gr' => (float) $box->gr_awal,
+                ])->values()) }},
+                syncSelection() {
+                    this.selectedItem = this.allItems.filter(item => this.cek.includes(item.no_box));
+                },
+                toggleAll(checked) {
+                    this.cek = checked ? this.allItems.map(item => item.no_box) : [];
+                    this.syncSelection();
                 },
                 formatNumber(value) {
                     // Format number with '.' as thousands separator and ',' as decimal separator
                     return new Intl.NumberFormat('id-ID', { style: 'decimal', maximumFractionDigits: 0 }).format(value);
                 }
-            }">
+            }" x-init="$watch('cek', () => syncSelection())">
                 <div class="d-flex justify-content-between">
                     <h6 class="mt-1">{{ $title }} : {{ $bk_terakhir }}</h6>
                     <div class="d-flex gap-1">
@@ -58,10 +54,12 @@
                                 class="btn btn-sm btn-primary">
                                 <i class="fas fa-file-excel"></i> Export
                             </a>
-                            <x-theme.button href="" addClass="serah" icon="fa-plus" variant="info" modal="Y"
-                                idModal="tambah" teks="Serah" />
-                            <button class="btn btn-sm btn-warning edit_bk"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-sm btn-danger delete"><i class="fas fa-trash-alt"></i> Hapus</button>
+                            <a href="#" class="btn btn-sm btn-info serah" x-show="cek.length" x-cloak
+                                data-bs-toggle="modal" data-bs-target="#tambah">
+                                <i class="fas fa-plus"></i> Serah
+                            </a>
+                            <button class="btn btn-sm btn-warning edit_bk" x-show="cek.length" x-cloak><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-danger delete" x-show="cek.length" x-cloak><i class="fas fa-trash-alt"></i> Hapus</button>
                         @endif
                         <x-theme.button href="{{ route('bkbaru.invoice') }}" icon="fa-clipboard-list" teks="Po Cabut" />
 
@@ -96,6 +94,11 @@
                                 @if (auth()->user()->posisi_id == 13)
                                 @else
                                     <th class="text-center">Cek <br>
+                                        <input type="checkbox" id="cekSemuaTutup" title="Pilih semua box"
+                                            aria-label="Pilih semua box"
+                                            :checked="allItems.length > 0 && allItems.every(item => cek.includes(item.no_box))"
+                                            x-effect="$el.indeterminate = cek.length > 0 && cek.length < allItems.length"
+                                            @change="toggleAll($event.target.checked)">
                                         <span class="badge bg-primary" x-show="cek.length" x-text="cek.length"></span>
                                     </th>
                                 @endif
@@ -120,7 +123,6 @@
                                     @else
                                         <td class="text-center">
                                             <input type="checkbox" class="cek_bayar" no_nota="{{ $a->id_bk }}"
-                                                @change="tambah({{ $a->no_box }}, '{{ $a->nm_partai }}', {{ $a->pcs_awal }}, {{ $a->gr_awal }})"
                                                 value="{{ $a->no_box }}" x-model="cek">
                                         </td>
                                     @endif
@@ -167,7 +169,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <input class="d-none" name="no_box[]" type="text" :value="cek">
+                                        <input type="hidden" name="no_box[]" :value="cek.join(',')">
                                         <tr>
                                             <td style="background-color: #f3a36e; color:white">Total</td>
                                             <td style="background-color: #f3a36e; color:white"
@@ -177,7 +179,7 @@
                                             <th style="background-color: #f3a36e; color:white" class="text-end"
                                                 x-text="selectedItem.reduce((acc, cur) => acc + cur.gr, 0)"></th>
                                         </tr>
-                                        <template x-for="item in selectedItem">
+                                        <template x-for="item in selectedItem" :key="item.no_box">
                                             <tr>
 
                                                 <td x-text="item.nm_partai"></td>
@@ -204,25 +206,6 @@
     </x-slot>
     @section('scripts')
         <script>
-            $(".edit_bk").hide();
-            $(".delete").hide();
-            $(".serah").hide();
-
-            $(document).on('change', '.cek_bayar, #cekSemuaTutup', function() {
-                var totalPiutang = 0
-                $('.cek_bayar:checked').each(function() {
-                    var piutang = $(this).attr('piutang');
-                    totalPiutang += parseInt(piutang);
-                });
-                var anyChecked = $('.cek_bayar:checked').length > 0;
-                $('.btn_bayar').toggle(anyChecked);
-                $(".piutang_cek").toggle(anyChecked);
-                $('.delete').toggle(anyChecked);
-                $(".edit_bk").toggle(anyChecked);
-                $(".serah").toggle(anyChecked);
-                $('.piutangBayar').text(totalPiutang.toLocaleString('en-US'));
-            });
-
             function clickCekKirim(kelas, link, formDelete = null) {
                 $(document).on('click', `${kelas}`, function(e) {
                     e.preventDefault();

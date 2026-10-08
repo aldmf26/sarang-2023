@@ -439,10 +439,6 @@ class CocokanController extends Controller
             $objectValue($data['grading_proses'], 'cost_bk') +
             $objectValue($data['grading_proses'], 'cost_kerja') +
             $objectValue($data['grading_proses'], 'cost_op') +
-            $objectValue($data['grading_susut'], 'cost_bk') +
-            $objectValue($data['grading_susut'], 'cost_kerja') +
-            $objectValue($data['grading_susut'], 'cost_cu') +
-            $objectValue($data['grading_susut'], 'cost_op') +
             $objectValue($data['sisa_belum_wip1'], 'ttl_rp') +
             $objectValue($data['sisa_belum_qc'], 'ttl_rp') +
             $objectValue($data['wip2proses'], 'ttl_rp') +
@@ -520,11 +516,7 @@ class CocokanController extends Controller
             ['Grading sedang proses', $data['grading_proses'], 11, 'process',
                 $objectValue($data['grading_proses'], 'cost_bk')
                 + $objectValue($data['grading_proses'], 'cost_kerja')
-                + $objectValue($data['grading_proses'], 'cost_op')
-                + $objectValue($data['grading_susut'], 'cost_bk')
-                + $objectValue($data['grading_susut'], 'cost_kerja')
-                + $objectValue($data['grading_susut'], 'cost_cu')
-                + $objectValue($data['grading_susut'], 'cost_op')],
+                + $objectValue($data['grading_proses'], 'cost_op')],
             ['WIP1 sedang proses', $data['sisa_belum_wip1'], 12, 'process',
                 $objectValue($data['sisa_belum_wip1'], 'ttl_rp')],
             ['QC sedang proses', $data['sisa_belum_qc'], 13, 'process',

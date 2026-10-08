@@ -122,7 +122,7 @@ class Grading extends Model
         // proses dan tidak boleh tetap tampil sebagai sisa belum grading.
         $boxSudahDiserah = DB::table('formulir_sarang')
             ->where('kategori', 'grading')
-            ->whereIn('no_box', $formulir->pluck('no_box_sortir')->filter()->unique())
+            ->whereIn('no_box', $formulir->pluck('no_box_sortir')->filter(fn ($box) => $box !== null && (string) $box !== '')->unique())
             ->pluck('no_box')
             ->map(fn ($box) => (string) $box)
             ->unique();
@@ -408,6 +408,7 @@ left join(
     }
     public static function stock_wip2()
     {
+        $ready = CocokanModel::wip2ReadySql();
         return DB::select("SELECT 
                 a.box_pengiriman AS no_box,
                 MAX(a.grade) AS grade,
@@ -422,13 +423,8 @@ left join(
             WHERE a.formulir = 'Y'
               AND a.cek_qc = 'Y'
               AND a.sudah_kirim = 'T'
-              AND EXISTS (
-                  SELECT 1
-                  FROM formulir_sarang AS fs
-                  WHERE fs.no_box = a.box_pengiriman
-                    AND fs.kategori = 'wip2'
-                    AND fs.selesai = 'Y'
-              )
+              AND LOWER(TRIM(a.grade)) != 'susut'
+              AND $ready
               AND NOT EXISTS (
                   SELECT 1
                   FROM pengiriman AS p
@@ -629,7 +625,7 @@ left join(
 
     public static function selesai($no_box = null)
     {
-        $whereBox = $no_box ? "AND a.box_pengiriman = $no_box " : '';
+        $whereBox = $no_box ? 'AND a.box_pengiriman = ?' : '';
         $select = $no_box ? 'selectOne' : 'select';
         return DB::$select("SELECT 
                 a.nm_partai,
@@ -647,7 +643,7 @@ left join(
                 FROM grading_partai as a
                 WHERE a.formulir = 'T' 
                 $whereBox 
-                GROUP BY a.box_pengiriman ORDER BY a.grade ASC");
+                GROUP BY a.box_pengiriman ORDER BY a.grade ASC", $no_box ? [$no_box] : []);
     }
 
     public static  function gradingAkhir()
@@ -700,10 +696,10 @@ left join(
         left join (
             SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja
             FROM grading_partai as b 
-            where b.sudah_kirim = 'Y'
+            where b.sudah_kirim = 'Y' and LOWER(TRIM(b.grade)) != 'susut'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
-        where a.selesai ='Y';
+        where a.selesai ='Y' and LOWER(TRIM(a.grade)) != 'susut';
         ");
     }
 
@@ -730,10 +726,10 @@ left join(
                 SUM(cost_kerja) AS cost_kerja,
                 SUM(cost_op) AS cost_op
             FROM grading_partai
-            WHERE sudah_kirim = 'Y'
+            WHERE sudah_kirim = 'Y' AND LOWER(TRIM(grade)) != 'susut'
             GROUP BY box_pengiriman
         ) AS b ON b.box_pengiriman = a.no_box
-        WHERE a.selesai = 'Y'
+        WHERE a.selesai = 'Y' AND LOWER(TRIM(a.grade)) != 'susut'
         GROUP BY a.no_nota, a.no_box, a.grade
         ORDER BY a.no_nota, a.no_box");
     }

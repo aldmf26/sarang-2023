@@ -153,7 +153,9 @@ class OpnameNewModel extends Model
             left join eo as f on f.no_box = a.no_box
             left join users as e on e.id = a.id_pengawas
             
-            where a.selesai = 'T' and a.id_anak != 0  and g.kategori = 'CTK' and d.baru = 'baru'
+            where a.selesai = 'T' and a.id_anak != 0
+              and (g.kategori = 'CTK' or (a.id_kelas_cetak = 0 and a.gr_awal_ctk > 0))
+              and d.baru = 'baru'
             group by a.id_cetak
             order by e.name ASC
         ");
@@ -570,7 +572,8 @@ group by a.no_box;");
     {
         return  DB::select("SELECT a.box_pengiriman, GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS daftar_partai , a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_op) as cost_op 
         FROM grading_partai as a 
-        where a.formulir ='Y' and a.cek_qc = 'T' GROUP by a.box_pengiriman
+        where a.formulir ='Y' and a.cek_qc = 'T' and a.sudah_kirim = 'T'
+        and LOWER(TRIM(a.grade)) != 'susut' GROUP by a.box_pengiriman
         ");
     }
     public static function qcSedangProses()
@@ -578,10 +581,11 @@ group by a.no_box;");
         return  DB::select("SELECT a.box_pengiriman, b.daftar_partai  , b.grade, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, 
         b.cost_bk, b.cost_kerja, b.cost_op
         FROM qc as a 
-        left join (
+        inner join (
             SELECT b.box_pengiriman, GROUP_CONCAT(DISTINCT b.nm_partai SEPARATOR ', ') AS daftar_partai, sum(b.cost_bk) as cost_bk, sum(b.cost_kerja) as cost_kerja, sum(b.cost_op) as cost_op,
             b.grade
             FROM grading_partai as b 
+            where LOWER(TRIM(b.grade)) != 'susut'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.box_pengiriman
         where a.wip2 ='T'
@@ -590,25 +594,22 @@ group by a.no_box;");
     }
     public static function wip2SedangProses()
     {
+        $ready = CocokanModel::wip2ReadySql();
         return  DB::select("SELECT a.box_pengiriman, a.nm_partai AS daftar_partai,
         a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.cost_bk) as cost_bk,
         sum(a.cost_kerja) as cost_kerja, sum(a.cost_op) as cost_op
         FROM grading_partai as a 
-        
-        join (
-            SELECT c.no_box
-                FROM formulir_sarang as c 
-                where c.selesai = 'Y' and c.kategori = 'wip2'
-                group by c.no_box
-        ) as c on c.no_box = a.box_pengiriman
-
         where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T'
+        and $ready
+        and NOT EXISTS (SELECT 1 FROM pengiriman p WHERE p.no_box = a.box_pengiriman)
+        and LOWER(TRIM(a.grade)) != 'susut'
         group by a.box_pengiriman, a.nm_partai, a.grade;
         ");
     }
 
     public static function pengirimanBelumKirimDetails()
     {
+        $ready = CocokanModel::wip2ReadySql();
         return DB::select("SELECT
                 classified.nm_partai,
                 classified.box_pengiriman,
@@ -627,26 +628,19 @@ group by a.no_box;");
                     CASE
                         WHEN a.formulir = 'Y'
                             AND a.cek_qc = 'Y'
-                            AND wip2_box.no_box IS NOT NULL
+                            AND $ready
                             AND sent_box.no_box IS NULL
                         THEN 1
                         ELSE 0
                     END AS is_wip2
                 FROM grading_partai AS a
                 LEFT JOIN (
-                    SELECT fs.no_box
-                    FROM formulir_sarang AS fs
-                    WHERE fs.selesai = 'Y'
-                        AND fs.kategori = 'wip2'
-                    GROUP BY fs.no_box
-                ) AS wip2_box ON wip2_box.no_box = a.box_pengiriman
-                LEFT JOIN (
                     SELECT p.no_box
                     FROM pengiriman AS p
                     GROUP BY p.no_box
                 ) AS sent_box ON sent_box.no_box = a.box_pengiriman
                 WHERE a.sudah_kirim = 'T'
-                    AND a.grade != 'susut'
+                    AND LOWER(TRIM(a.grade)) != 'susut'
             ) AS classified
             GROUP BY
                 classified.nm_partai,
@@ -658,7 +652,7 @@ group by a.no_box;");
     {
         return  DB::select("SELECT  a.box_pengiriman, GROUP_CONCAT(DISTINCT a.nm_partai SEPARATOR ', ') AS daftar_partai , a.grade, sum(a.pcs) as pcs, sum(a.gr) as gr , sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja,sum(a.cost_op) as cost_op 
             FROM grading_partai as a 
-            where a.sudah_kirim = 'Y' and 
+            where a.sudah_kirim = 'Y' and LOWER(TRIM(a.grade)) != 'susut' and
             a.box_pengiriman not in (SELECT a.id_pengiriman FROM pengiriman_packing_list as a)
             group by a.box_pengiriman;
         ");
@@ -673,10 +667,10 @@ group by a.no_box;");
         left join (
             SELECT b.box_pengiriman , GROUP_CONCAT(DISTINCT b.nm_partai SEPARATOR ', ') AS daftar_partai , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja, b.grade
             FROM grading_partai as b 
-            where b.sudah_kirim = 'Y'
+            where b.sudah_kirim = 'Y' and LOWER(TRIM(b.grade)) != 'susut'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
-        where a.selesai ='Y'
+        where a.selesai ='Y' and LOWER(TRIM(a.grade)) != 'susut'
         group by a.no_box;
         ");
     }

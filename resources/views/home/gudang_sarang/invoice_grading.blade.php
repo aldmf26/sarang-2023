@@ -72,7 +72,7 @@
                                                 <span class="badge bg-warning">Edit Patahan</span>
                                             </a>
                                             <a
-                                                href="{{ route('gradingbj.grading_partai_result', ['no_box' => $d->no_boxes, 'no_invoice' => $d->no_invoice]) }}">
+                                                href="{{ route('gradingbj.grading_partai_result', ['no_invoice' => $d->no_invoice]) }}">
                                                 <span class="badge bg-primary">Grading</span>
                                             </a>
                                         @endif

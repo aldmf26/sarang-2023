@@ -214,7 +214,7 @@
                                         <td class="text-end">{{ number_format(floor($d->gr), 0) }}</td>
                                         <td align="center">
                                             <input type="checkbox"
-                                                @change="tambah({{ $d->box_pengiriman }},'{{ $d->grade }}', {{ $d->pcs }}, {{ $d->gr }})"
+                                                @change="tambah({{ Js::from((string) $d->box_pengiriman) }}, {{ Js::from($d->grade) }}, {{ $d->pcs }}, {{ $d->gr }})"
                                                 value="{{ $d->box_pengiriman }}" class="pointer" x-model="cek">
                                         </td>
                                         <td align="center" class="d-none">

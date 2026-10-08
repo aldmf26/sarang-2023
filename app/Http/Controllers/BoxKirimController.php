@@ -186,37 +186,56 @@ class BoxKirimController extends Controller
         if ($r->submit == 'print') {
             return redirect()->route('gradingbj.print', ['no_box' => $r->no_box]);
         } else {
-            $admin = auth()->user()->name;
-            $tgl_input = date('Y-m-d');
-            $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
-            $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
-            $no_nota = $r->no_nota ?? $no_nota;
-            foreach (explode(',', $r->no_box) as $d) {
-
-                DB::table('grading_partai')->where('box_pengiriman', $d)->update(['cek_qc' => 'Y']);
-
-                $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp , 
-            sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
-            FROM `grading_partai` as a
-                    where a.box_pengiriman = $d
-                    group by a.box_pengiriman");
-                $dataToInsert[] = [
-                    'no_box' => $d,
-                    'pcs' => $ambilBox->pcs,
-                    'gr' => $ambilBox->gr,
-                    'admin' => $admin,
-                    'grade' => $ambilBox->grade,
-                    'tgl_input' => $tgl_input,
-                    'no_nota' => $no_nota,
-                    'rp_gram' => 1,
-                    'ttl_rp' => $ambilBox->ttl_rp,
-                    'cost_bk' => $ambilBox->cost_bk,
-                    'cost_kerja' => $ambilBox->cost_kerja,
-                    'cost_cu' => $ambilBox->cost_cu,
-                ];
+            $r->validate(['no_box' => ['required', 'string']]);
+            $boxes = collect(explode(',', $r->no_box))
+                ->map(fn ($box) => trim($box))
+                ->filter(fn ($box) => $box !== '')
+                ->unique()
+                ->values();
+            if ($boxes->isEmpty()) {
+                return redirect()->back()->with('error', 'Pilih minimal satu box untuk dikirim.');
             }
-            DB::table('pengiriman')->insert($dataToInsert);
-            return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
+
+            try {
+                DB::beginTransaction();
+                $admin = auth()->user()->name;
+                $tgl_input = date('Y-m-d');
+                $no_nota = DB::table('pengiriman')->orderBy('no_nota', 'DESC')->value('no_nota');
+                $no_nota = empty($no_nota) ? 1001 : $no_nota + 1;
+                $no_nota = $r->no_nota ?? $no_nota;
+                foreach ($boxes as $d) {
+                    $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr, sum(a.ttl_rp) as ttl_rp,
+                sum(a.cost_bk) as cost_bk, sum(a.cost_kerja) as cost_kerja, sum(a.cost_cu) as cost_cu
+                FROM `grading_partai` as a
+                        where a.box_pengiriman = ?
+                        group by a.box_pengiriman", [$d]);
+                    if (!$ambilBox) {
+                        throw new \RuntimeException("Box pengiriman {$d} tidak ditemukan.");
+                    }
+
+                    DB::table('grading_partai')->where('box_pengiriman', $d)->update(['cek_qc' => 'Y']);
+                    $dataToInsert[] = [
+                        'no_box' => $d,
+                        'pcs' => $ambilBox->pcs,
+                        'gr' => $ambilBox->gr,
+                        'admin' => $admin,
+                        'grade' => $ambilBox->grade,
+                        'tgl_input' => $tgl_input,
+                        'no_nota' => $no_nota,
+                        'rp_gram' => 1,
+                        'ttl_rp' => $ambilBox->ttl_rp,
+                        'cost_bk' => $ambilBox->cost_bk,
+                        'cost_kerja' => $ambilBox->cost_kerja,
+                        'cost_cu' => $ambilBox->cost_cu,
+                    ];
+                }
+                DB::table('pengiriman')->insert($dataToInsert);
+                DB::commit();
+                return redirect()->route('pengiriman.po', $no_nota)->with('sukses', 'data sudah masuk po');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $e->getMessage());
+            }
         }
     }
     public function qc(Request $r)
@@ -224,56 +243,77 @@ class BoxKirimController extends Controller
         if ($r->submit == 'print') {
             return redirect()->route('gradingbj.print', ['no_box' => $r->no_box]);
         } else {
-            $admin = auth()->user()->name;
-            $tgl_input = date('Y-m-d');
-            $lastInvoice = DB::table('formulir_sarang')
-                ->where('kategori', 'qc')
-                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
-                ->lockForUpdate()
-                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_inv')
-                ->value('max_inv');
-
-            $maxInv = (int) ($lastInvoice ?? 0);
-            $invoice = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
-
-
-            foreach (explode(',', $r->no_box) as $d) {
-                $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr
-                FROM grading_partai as a
-                where a.box_pengiriman = $d
-                group by a.box_pengiriman");
-
-                $data1 = [
-                    'cek_qc' => 'Y',
-                ];
-                DB::table('grading_partai')->where('box_pengiriman', $d)->update($data1);
-
-                $dataToInsert[] = [
-                    'no_invoice' => $invoice,
-                    'no_box' => $d,
-                    'id_pemberi' => 459,
-                    'id_penerima' => 459,
-                    'pcs_awal' => $ambilBox->pcs,
-                    'gr_awal' => $ambilBox->gr,
-                    'tanggal' => $tgl_input,
-                    'kategori' => 'qc',
-                    'selesai' => 'Y',
-                ];
-
-                $data = [
-                    'box_pengiriman' => $d,
-                    'pcs_awal' => $ambilBox->pcs,
-                    'gr_awal' => $ambilBox->gr,
-                    'gr_akhir' => 0,
-                    'bulan_dibayar' => date('m'),
-                    'tahun_dibayar' => date('Y'),
-                    'tgl' => date('Y-m-d'),
-                ];
-                DB::table('qc')->insert($data);
+            $r->validate(['no_box' => ['required', 'string']]);
+            $boxes = collect(explode(',', $r->no_box))
+                ->map(fn ($box) => trim($box))
+                ->filter(fn ($box) => $box !== '')
+                ->unique()
+                ->values();
+            if ($boxes->isEmpty()) {
+                return redirect()->back()->with('error', 'Pilih minimal satu box untuk QC.');
             }
-            DB::table('formulir_sarang')->insert($dataToInsert);
 
-            return redirect()->back()->with('sukses', 'data sudah masuk qc');
+            try {
+                DB::beginTransaction();
+                $admin = auth()->user()->name;
+                $tgl_input = date('Y-m-d');
+                $lastInvoice = DB::table('formulir_sarang')
+                    ->where('kategori', 'qc')
+                    ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+                    ->lockForUpdate()
+                    ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_inv')
+                    ->value('max_inv');
+
+                $maxInv = (int) ($lastInvoice ?? 0);
+                $invoice = ($maxInv < 1001) ? 1001 : ($maxInv + 1);
+
+
+                foreach ($boxes as $d) {
+                    $ambilBox = DB::selectOne("SELECT grade,sum(pcs) as pcs, sum(gr) as gr
+                    FROM grading_partai as a
+                    where a.box_pengiriman = ?
+                    group by a.box_pengiriman", [$d]);
+
+                    if (!$ambilBox) {
+                        throw new \RuntimeException("Box pengiriman {$d} tidak ditemukan.");
+                    }
+
+                    $data1 = [
+                        'cek_qc' => 'Y',
+                    ];
+                    DB::table('grading_partai')->where('box_pengiriman', $d)->update($data1);
+
+                    $dataToInsert[] = [
+                        'no_invoice' => $invoice,
+                        'no_box' => $d,
+                        'id_pemberi' => 459,
+                        'id_penerima' => 459,
+                        'pcs_awal' => $ambilBox->pcs,
+                        'gr_awal' => $ambilBox->gr,
+                        'tanggal' => $tgl_input,
+                        'kategori' => 'qc',
+                        'selesai' => 'Y',
+                    ];
+
+                    $data = [
+                        'box_pengiriman' => $d,
+                        'pcs_awal' => $ambilBox->pcs,
+                        'gr_awal' => $ambilBox->gr,
+                        'gr_akhir' => 0,
+                        'bulan_dibayar' => date('m'),
+                        'tahun_dibayar' => date('Y'),
+                        'tgl' => date('Y-m-d'),
+                    ];
+                    DB::table('qc')->insert($data);
+                }
+                DB::table('formulir_sarang')->insert($dataToInsert);
+                DB::commit();
+
+                return redirect()->back()->with('sukses', 'data sudah masuk qc');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $e->getMessage());
+            }
         }
     }
 

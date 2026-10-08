@@ -230,6 +230,84 @@ class GradingBjController extends Controller
         return view('home.gradingbj.grading', $data);
     }
 
+    public function serahSemuaPartai(Request $r)
+    {
+        abort_unless((int) $r->user()->posisi_id === 1, 403);
+
+        try {
+            $result = DB::transaction(function () {
+                $stocks = collect(Grading::dapatkanStokBoxGradingbj('formulir'));
+                if ($stocks->isEmpty()) {
+                    throw new \RuntimeException('Tidak ada box yang siap diserah ke PO Grading.');
+                }
+
+                $groups = $stocks->groupBy(fn ($row) => strtolower(trim($row->nm_partai)));
+                $summaries = [];
+                foreach ($groups as $rows) {
+                    $invoice = $this->serahkanBoxGrading($rows->pluck('no_box'));
+                    $summaries[] = $rows->first()->nm_partai . ': PO ' . $invoice;
+                }
+
+                return $stocks->count() . ' box diserah ke ' . $groups->count()
+                    . ' PO Grading. ' . implode('; ', $summaries) . '.';
+            }, 3);
+
+            return redirect()->back()->with('sukses', $result);
+        } catch (\RuntimeException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    private function serahkanBoxGrading(\Illuminate\Support\Collection $boxes)
+    {
+        $boxes = $boxes->map(fn ($box) => trim((string) $box))
+            ->filter(fn ($box) => $box !== '')->unique()->values();
+        if ($boxes->isEmpty()) {
+            throw new \RuntimeException('Pilih minimal satu box untuk diserah.');
+        }
+
+        $partai = DB::table('bk')->where('kategori', 'cabut')->whereIn('no_box', $boxes)
+            ->pluck('nm_partai')->map(fn ($name) => strtolower(trim($name)))->unique();
+        if ($partai->count() !== 1 || $partai->first() === '') {
+            throw new \RuntimeException('Partai harus sama dan tidak boleh kosong.');
+        }
+
+        $sources = DB::table('formulir_sarang')->where('kategori', 'grade')
+            ->whereIn('no_box', $boxes)->orderBy('no_box')->lockForUpdate()->get();
+        $alreadySent = DB::table('formulir_sarang')->where('kategori', 'grading')
+            ->whereIn('no_box', $boxes)->lockForUpdate()->pluck('no_box')->map(fn ($box) => (string) $box);
+        $ready = $sources->pluck('no_box')->map(fn ($box) => (string) $box)->diff($alreadySent);
+        $notReady = $boxes->diff($ready);
+        if ($notReady->isNotEmpty()) {
+            throw new \RuntimeException('Box belum siap grading: ' . $notReady->implode(', '));
+        }
+
+        // Kunci rentang PO agar Serah manual dan Serah Semua memakai nomor yang berbeda.
+        $invoices = DB::table('formulir_sarang')->where('kategori', 'grading')
+            ->orderBy('no_invoice')->lockForUpdate()->pluck('no_invoice');
+        $maxFormulir = $invoices->filter(fn ($invoice) => ctype_digit((string) $invoice))
+            ->map(fn ($invoice) => (int) $invoice)->max();
+        $maxHasil = DB::table('grading')->whereRaw("no_invoice REGEXP '^[0-9]+$'")
+            ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')->value('max_invoice');
+        $invoice = max((int) $maxFormulir, (int) $maxHasil, 11054) + 1;
+        $actor = auth()->id();
+        $data = $sources->map(fn ($source) => [
+            'no_box' => $source->no_box,
+            'pcs_awal' => $source->pcs_awal,
+            'gr_awal' => $source->gr_awal,
+            'tanggal' => date('Y-m-d'),
+            'kategori' => 'grading',
+            'id_pemberi' => $actor,
+            'id_penerima' => $actor,
+            'no_invoice' => $invoice,
+        ])->all();
+        foreach (array_chunk($data, 500) as $chunk) {
+            DB::table('formulir_sarang')->insert($chunk);
+        }
+
+        return $invoice;
+    }
+
     public function grading_partai(Request $r)
     {
         $no_box = $r->no_box;
@@ -263,67 +341,12 @@ class GradingBjController extends Controller
         }
 
         if ($r->submit == 'serah') {
-            $getFormulir = DB::table('formulir_sarang as fs')
-                ->where('fs.kategori', 'grade')
-                ->whereIn('fs.no_box', $no_boxPecah)
-                ->whereNotExists(function ($query) {
-                    $query->selectRaw('1')
-                        ->from('formulir_sarang as proses')
-                        ->whereColumn('proses.no_box', 'fs.no_box')
-                        ->where('proses.kategori', 'grading');
-                })
-                ->get();
-
-            $requestedBoxes = collect($no_boxPecah)
-                ->map(fn ($box) => trim((string) $box))
-                ->filter()
-                ->unique()
-                ->values();
-            $readyBoxes = $getFormulir->pluck('no_box')
-                ->map(fn ($box) => (string) $box)
-                ->unique();
-            $notReadyBoxes = $requestedBoxes->diff($readyBoxes)->values();
-
-            if ($notReadyBoxes->isNotEmpty()) {
-                return redirect()->back()->with(
-                    'error',
-                    'Box belum siap grading: ' . $notReadyBoxes->implode(', ')
-                );
+            try {
+                DB::transaction(fn () => $this->serahkanBoxGrading(collect($no_boxPecah)), 3);
+                return redirect()->back()->with('sukses', 'berhasil di po');
+            } catch (\RuntimeException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
             }
-
-            if ($getFormulir->isEmpty()) {
-                return redirect()->back()->with('error', 'Box yang dipilih sudah pernah diserah ke PO grading.');
-            }
-
-            $maxFormulir = DB::table('formulir_sarang')
-                ->where('kategori', 'grading')
-                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
-                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')
-                ->value('max_invoice');
-
-            $maxHasilGrading = DB::table('grading')
-                ->whereRaw("no_invoice REGEXP '^[0-9]+$'")
-                ->selectRaw('MAX(CAST(no_invoice AS UNSIGNED)) as max_invoice')
-                ->value('max_invoice');
-
-            // Nomor PO harus unik terhadap formulir dan hasil grading lama.
-            // Jika hanya melihat formulir, nomor dapat bentrok dan PO baru
-            // keliru dianggap sudah mempunyai hasil grading.
-            $no_invoice = max((int) $maxFormulir, (int) $maxHasilGrading, 11054) + 1;
-            foreach ($getFormulir as $d) {
-                $data[] = [
-                    'no_box' => $d->no_box,
-                    'pcs_awal' => $d->pcs_awal,
-                    'gr_awal' => $d->gr_awal,
-                    'tanggal' => date('Y-m-d'),
-                    'kategori' => 'grading',
-                    'id_pemberi' => auth()->user()->id,
-                    'id_penerima' => auth()->user()->id,
-                    'no_invoice' => $no_invoice
-                ];
-            }
-            DB::table('formulir_sarang')->insert($data);
-            return redirect()->back()->with('sukses', 'berhasil di po');
         }
         // Redirect ke rute yang akan ditampilkan sebagai GET
         return redirect()->route('gradingbj.grading_partai_result', [
@@ -333,12 +356,23 @@ class GradingBjController extends Controller
 
     public function gradingPartaiResult(Request $r)
     {
-        $noBoxes = collect(explode(',', (string) $r->no_box))
-            ->map(fn ($value) => trim($value))
-            ->filter(fn ($value) => $value !== '' && ctype_digit($value))
-            ->unique()
-            ->take(5000)
-            ->values();
+        if ($r->filled('no_invoice')) {
+            $r->validate(['no_invoice' => ['string', 'regex:/^[0-9]+$/', 'max:100']]);
+            $noBoxes = DB::table('formulir_sarang')
+                ->where('kategori', 'grading')
+                ->where('no_invoice', $r->no_invoice)
+                ->orderBy('no_box')
+                ->pluck('no_box')
+                ->map(fn ($value) => trim((string) $value))
+                ->unique()->values();
+        } else {
+            $noBoxes = collect(explode(',', (string) $r->no_box))
+                ->map(fn ($value) => trim($value))
+                ->filter(fn ($value) => $value !== '' && ctype_digit($value))
+                ->unique()
+                ->take(5000)
+                ->values();
+        }
 
         if ($noBoxes->isEmpty()) {
             return redirect()->route('gradingbj.index')->with('error', 'No Box tidak valid.');
@@ -631,7 +665,44 @@ class GradingBjController extends Controller
     public function create_partai(Request $r)
     {
         try {
+            if ($r->filled('grading_payload')) {
+                $payload = json_decode($r->grading_payload, true, 512, JSON_THROW_ON_ERROR);
+                if (!is_array($payload)) {
+                    throw new \RuntimeException('Data grading tidak valid. Silakan muat ulang halaman.');
+                }
+                $r->merge(array_intersect_key($payload, array_flip([
+                    'nm_partai', 'bulan', 'no_nota', 'grade', 'pcs', 'gr', 'box_sp', 'not_oke',
+                ])));
+            }
+            $r->validate([
+                'no_nota' => ['required', 'string', 'regex:/^[0-9]+$/'],
+                'bulan' => ['required', 'integer', 'between:1,12'],
+                'nm_partai' => ['required', 'string'],
+                'grade' => ['required', 'array', 'min:1'],
+                'grade.*' => ['required', 'string'],
+                'pcs' => ['required', 'array'],
+                'pcs.*' => ['required', 'numeric', 'min:0'],
+                'gr' => ['required', 'array'],
+                'gr.*' => ['required', 'numeric', 'min:0'],
+                'box_sp' => ['required', 'array'],
+                'box_sp.*' => ['required', 'string'],
+                'not_oke' => ['sometimes', 'array'],
+            ]);
+            if (count($r->grade) !== count($r->pcs) || count($r->grade) !== count($r->gr)
+                || count($r->grade) !== count($r->box_sp)) {
+                throw new \RuntimeException('Baris hasil grading tidak lengkap. Silakan muat ulang halaman.');
+            }
             DB::beginTransaction();
+
+            $invoiceBoxes = DB::table('formulir_sarang')->where('kategori', 'grading')
+                ->where('no_invoice', $r->no_nota)->lockForUpdate()->pluck('no_box')->unique()->values();
+            if ($invoiceBoxes->isEmpty()) {
+                throw new \RuntimeException('PO Grading tidak ditemukan.');
+            }
+            if (DB::table('grading')->where('no_invoice', $r->no_nota)->exists()) {
+                throw new \RuntimeException('PO Grading ini sudah mempunyai hasil grading.');
+            }
+            $r->merge(['no_box' => $invoiceBoxes->all()]);
 
             $nm_partai = $r->nm_partai;
             $bulan = $r->bulan;
@@ -682,6 +753,7 @@ class GradingBjController extends Controller
                     'Ada box sumber grading yang tidak ditemukan. Silakan muat ulang halaman.'
                 );
             }
+            $r->merge(['ttlGr' => $sourceCosts->sum('gr_awal')]);
             $costTotals = [
                 'cost_bk' => (float) $sourceCosts->sum('cost_bk'),
                 'cost_kerja' => (float) $sourceCosts->sum('cost_kerja'),

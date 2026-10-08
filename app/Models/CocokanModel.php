@@ -433,11 +433,11 @@ class CocokanModel extends Model
                     SUM(cn.pcs_awal_ctk) AS pcs,
                     SUM(cn.gr_awal_ctk) AS gr
                 FROM cetak_new AS cn
-                INNER JOIN kelas_cetak AS kc
+                LEFT JOIN kelas_cetak AS kc
                     ON kc.id_kelas_cetak = cn.id_kelas_cetak
-                   AND kc.kategori = 'CTK'
                 WHERE cn.selesai = 'T'
                   AND cn.id_anak != 0
+                  AND (kc.kategori = 'CTK' OR (cn.id_kelas_cetak = 0 AND cn.gr_awal_ctk > 0))
                 GROUP BY cn.no_box
             ) AS a
             INNER JOIN ($boxCost) AS cost ON cost.no_box = a.no_box
@@ -746,21 +746,23 @@ class CocokanModel extends Model
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp , sum(a.cost_bk) as modal
 FROM grading_partai as a 
-where a.formulir ='Y' and a.cek_qc = 'T' and a.sudah_kirim = 'T';");
+where a.formulir ='Y' and a.cek_qc = 'T' and a.sudah_kirim = 'T'
+and LOWER(TRIM(a.grade)) != 'susut';");
     }
     public static function wip1_akhir()
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
 FROM grading_partai as a 
-where a.formulir ='Y' and a.cek_qc = 'Y';");
+where a.formulir ='Y' and a.cek_qc = 'Y' and LOWER(TRIM(a.grade)) != 'susut';");
     }
     public static function sisa_belum_qc()
     {
         return DB::selectOne("SELECT a.box_pengiriman, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr, sum(b.ttl_rp) as ttl_rp, sum(b.cost_bk) as cost_bk
 FROM qc as a 
-left join (
+inner join (
 	SELECT b.box_pengiriman, sum(COALESCE(b.cost_bk,0) + COALESCE(b.cost_kerja,0) + COALESCE(b.cost_op,0)) as ttl_rp, sum(b.cost_bk) as cost_bk
     FROM grading_partai as b 
+    where LOWER(TRIM(b.grade)) != 'susut'
     group by b.box_pengiriman
 ) as b on b.box_pengiriman = a.box_pengiriman
 where a.wip2 ='T';");
@@ -769,31 +771,42 @@ where a.wip2 ='T';");
     {
         return DB::selectOne("SELECT a.box_pengiriman, sum(a.pcs_awal) as pcs, sum(a.gr_awal) as gr_awal, sum(a.gr_akhir) as gr, sum(b.ttl_rp) as ttl_rp
         FROM qc as a 
-        left join (
+        inner join (
             SELECT b.box_pengiriman, sum(COALESCE(b.cost_bk,0) + COALESCE(b.cost_kerja,0) + COALESCE(b.cost_op,0)) as ttl_rp
             FROM grading_partai as b 
+            where LOWER(TRIM(b.grade)) != 'susut'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.box_pengiriman
         where a.wip2 ='Y';");
     }
+    /** QC yang sudah selesai tetap tersedia ketika referensi PO hilang setelah box diganti. */
+    public static function wip2ReadySql(): string
+    {
+        return "(EXISTS (
+            SELECT 1 FROM formulir_sarang fs
+            WHERE fs.no_box = a.box_pengiriman AND fs.kategori = 'wip2' AND fs.selesai = 'Y'
+        ) OR (
+            NOT EXISTS (SELECT 1 FROM formulir_sarang fs WHERE fs.no_box = a.box_pengiriman AND fs.kategori = 'wip2')
+            AND NOT EXISTS (SELECT 1 FROM qc q WHERE q.box_pengiriman = a.box_pengiriman)
+        ))";
+    }
+
     public static function wip2proses()
     {
+        $ready = self::wip2ReadySql();
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp, sum(a.cost_bk) as modal
         FROM grading_partai as a 
-        
-        join (
-            SELECT c.no_box
-                FROM formulir_sarang as c 
-                where c.selesai = 'Y' and c.kategori = 'wip2'
-                group by c.no_box
-        ) as c on c.no_box = a.box_pengiriman
-        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T' and a.box_pengiriman not in (SELECT d.no_box FROM pengiriman as d group by d.no_box);");
+        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'T'
+        and $ready
+        and LOWER(TRIM(a.grade)) != 'susut'
+        and NOT EXISTS (SELECT 1 FROM pengiriman d WHERE d.no_box = a.box_pengiriman);");
     }
     public static function wip2akhir()
     {
         return DB::selectOne("SELECT sum(a.pcs) as pcs, sum(a.gr) as gr, sum(COALESCE(a.cost_bk,0) + COALESCE(a.cost_kerja,0) + COALESCE(a.cost_op,0)) as ttl_rp
         FROM grading_partai as a 
-        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'Y' ;");
+        where a.formulir ='Y' and a.cek_qc = 'Y' and a.sudah_kirim = 'Y'
+        and LOWER(TRIM(a.grade)) != 'susut';");
     }
     public static function pengiriman_proses()
     {
@@ -802,10 +815,10 @@ where a.wip2 ='T';");
         left join (
             SELECT b.box_pengiriman , sum(b.cost_bk) as cost_bk, sum(b.cost_op) as cost_op, sum(b.cost_kerja) as cost_kerja
             FROM grading_partai as b 
-            where b.sudah_kirim = 'T'
+            where b.sudah_kirim = 'T' and LOWER(TRIM(b.grade)) != 'susut'
             group by b.box_pengiriman
         ) as b on b.box_pengiriman = a.no_box
-        where a.selesai ='T';
+        where a.selesai ='T' and LOWER(TRIM(a.grade)) != 'susut';
         ");
     }
     public static function summarybk_sisa()
