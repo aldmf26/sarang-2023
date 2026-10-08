@@ -199,6 +199,8 @@ class OpnameNewModel extends Model
         WHERE b.baru = 'baru' AND b.kategori = 'cabut'  
         AND a.kategori = 'sortir' 
         AND a.no_box NOT IN (SELECT b.no_box FROM sortir as b WHERE b.id_anak != 0)
+        AND NOT EXISTS (SELECT 1 FROM formulir_sarang AS next_process WHERE next_process.no_box = a.no_box AND next_process.kategori = 'grade')
+        AND NOT EXISTS (SELECT 1 FROM grading AS sent_grading INNER JOIN grading_partai AS sent_result ON sent_result.no_invoice = sent_grading.no_invoice WHERE sent_grading.no_box_sortir = a.no_box AND sent_result.sudah_kirim = 'Y')
 
         group by a.id_formulir
         order by f.name ASC;

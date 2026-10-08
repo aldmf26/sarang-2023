@@ -79,6 +79,9 @@ class ImportLabelController extends Controller
                 'kelompok' => $columnMap['kelompok'] === null
                     ? ''
                     : trim((string) ($row[$columnMap['kelompok']] ?? '')),
+                'keterangan' => $columnMap['keterangan'] === null
+                    ? null
+                    : trim((string) ($row[$columnMap['keterangan']] ?? '')),
             ];
             $validator = Validator::make($record, [
                 'partai' => ['required', 'string', 'max:100'],
@@ -88,6 +91,7 @@ class ImportLabelController extends Controller
                 'gr' => ['required', 'numeric', 'min:0'],
                 'bagian' => ['required', 'string', 'max:100'],
                 'kelompok' => ['nullable', 'string', 'max:50'],
+                'keterangan' => ['nullable', 'string', 'max:255'],
             ]);
 
             if ($validator->fails()) {
@@ -97,6 +101,9 @@ class ImportLabelController extends Controller
 
             $record['pcs'] = (float) $record['pcs'];
             $record['gr'] = (float) $record['gr'];
+            if ($record['keterangan'] === '') {
+                $record['keterangan'] = null;
+            }
             $data[] = $record;
         }
 
@@ -161,6 +168,7 @@ class ImportLabelController extends Controller
             'gr' => ['gr', 'gram', 'berat_gr'],
             'bagian' => ['bagian', 'divisi', 'departemen'],
             'kelompok' => ['kelompok', 'group', 'grup'],
+            'keterangan' => ['keterangan', 'ket', 'catatan', 'keterangan_label', 'description'],
         ];
 
         return collect($aliases)->map(function (array $names) use ($headers) {

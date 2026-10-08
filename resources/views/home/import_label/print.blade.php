@@ -312,7 +312,7 @@
                         <tr>
                             <td>Keterangan</td>
                             <td>:</td>
-                            <td colspan="5">&nbsp;</td>
+                            <td colspan="5">{{ $label->keterangan ?? '' }}</td>
                         </tr>
                     </table>
 

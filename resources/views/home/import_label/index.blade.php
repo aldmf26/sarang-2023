@@ -28,7 +28,8 @@
                                 <input id="file" type="file" name="file" class="form-control"
                                     accept=".xlsx,.xls,.csv" required>
                                 <small class="text-muted">
-                                    Header: partai, box, grade, pcs, gr, bagian, kelompok (opsional)
+                                    Header: partai, box, grade, pcs, gr, bagian, kelompok (opsional),
+                                    keterangan (opsional)
                                 </small>
                             </div>
                             <div class="form-check mb-3">
@@ -111,6 +112,7 @@
                             <th>Grade</th>
                             <th>Bagian</th>
                             <th>Kelompok</th>
+                            <th>Keterangan</th>
                             <th class="text-end">Pcs</th>
                             <th class="text-end">Gr</th>
                         </tr>
@@ -124,12 +126,13 @@
                                 <td>{{ $label->grade }}</td>
                                 <td>{{ $label->bagian }}</td>
                                 <td>{{ $label->kelompok ?: '-' }}</td>
+                                <td>{{ $label->keterangan ?? '-' }}</td>
                                 <td class="text-end">{{ number_format($label->pcs, 0) }}</td>
                                 <td class="text-end">{{ number_format($label->gr, 0) }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Belum ada data import.</td>
+                                <td colspan="9" class="text-center text-muted">Belum ada data import.</td>
                             </tr>
                         @endforelse
                     </tbody>

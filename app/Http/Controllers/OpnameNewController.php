@@ -800,33 +800,33 @@ class OpnameNewController extends Controller
         $sheet = $spreadsheet->getActiveSheet(5);
         $sheet->setTitle('Rekap');
 
-        $headers = ['Sheet', 'Kategori', 'Total Baris / Box', 'Total PCS', 'Total GR',
+        $headers = ['Sheet', 'Kategori', 'Total Baris / Box', 'Total PCS', 'Total GR', 'Cost BK',
             'Cost kerja', 'Cost CU', 'Cost operasional', 'Total Rp'];
         foreach ($headers as $index => $header) {
             $sheet->setCellValueByColumnAndRow($index + 1, 1, $header);
         }
-        $sheet->getStyle('A1:I1')->applyFromArray($style_atas);
+        $sheet->getStyle('A1:J1')->applyFromArray($style_atas);
 
         $rows = [
-            ['Gudang Cabut', 'Cabut sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
-            ['Gudang Cabut', 'Cabut sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
-            ['Gudang Cabut', 'Cabut selesai siap cetak', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
-            ['Gudang Cetak', 'Cetak sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
-            ['Gudang Cetak', 'Cetak sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
-            ['Gudang Cetak', 'Cetak selesai siap sortir', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
-            ['Gudang Sortir', 'Sortir sedang proses', 'D', 'F', 'G', 'I', 'J', 'K', 'L'],
-            ['Gudang Sortir', 'Sortir sisa pengawas', 'Q', 'S', 'T', 'V', 'W', 'X', 'Y'],
-            ['Gudang Sortir', 'Sortir selesai siap grading', 'AD', 'AF', 'AG', 'AI', 'AJ', 'AK', 'AL'],
-            ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'I', null, 'J', 'K'],
-            ['Gudang grading', 'Grading sedang proses', 'P', 'R', 'S', 'U', null, 'V', 'W'],
-            ['Gudang grading', 'WIP1 sedang proses', 'AB', 'AD', 'AE', 'AG', null, 'AH', 'AI'],
-            ['Gudang grading', 'QC sedang proses', 'AN', 'AP', 'AQ', 'AS', null, 'AT', 'AU'],
-            ['Gudang grading', 'WIP2 sedang proses', 'AZ', 'BB', 'BC', 'BE', null, 'BF', 'BG'],
-            ['Pengiriman', 'Pengiriman', 'B', 'G', 'H', null, null, null, null],
-            ['Pengiriman', 'Pengiriman sedang proses', 'S', 'U', 'V', 'X', 'Y', 'Z', 'AA'],
+            ['Gudang Cabut', 'Cabut sedang proses', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+            ['Gudang Cabut', 'Cabut sisa pengawas', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'],
+            ['Gudang Cabut', 'Cabut selesai siap cetak', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang Cetak', 'Cetak sedang proses', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+            ['Gudang Cetak', 'Cetak sisa pengawas', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'],
+            ['Gudang Cetak', 'Cetak selesai siap sortir', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang Sortir', 'Sortir sedang proses', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+            ['Gudang Sortir', 'Sortir sisa pengawas', 'Q', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'],
+            ['Gudang Sortir', 'Sortir selesai siap grading', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL'],
+            ['Gudang grading', 'Sisa belum grading', 'C', 'F', 'G', 'H', 'I', null, 'J', 'K'],
+            ['Gudang grading', 'Grading sedang proses', 'P', 'R', 'S', 'T', 'U', null, 'V', 'W'],
+            ['Gudang grading', 'WIP1 sedang proses', 'AB', 'AD', 'AE', 'AF', 'AG', null, 'AH', 'AI'],
+            ['Gudang grading', 'QC sedang proses', 'AN', 'AP', 'AQ', 'AR', 'AS', null, 'AT', 'AU'],
+            ['Gudang grading', 'WIP2 sedang proses', 'AZ', 'BB', 'BC', 'BD', 'BE', null, 'BF', 'BG'],
+            ['Pengiriman', 'Pengiriman', 'B', 'G', 'H', 'J', 'K', 'L', 'M', 'N'],
+            ['Pengiriman', 'Pengiriman sedang proses', 'S', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'],
         ];
 
-        foreach ($rows as $offset => [$sourceSheet, $category, $box, $pcs, $gr, $work, $cu, $operational, $total]) {
+        foreach ($rows as $offset => [$sourceSheet, $category, $box, $pcs, $gr, $bk, $work, $cu, $operational, $total]) {
             $row = $offset + 2;
             $quotedSheet = "'" . str_replace("'", "''", $sourceSheet) . "'";
             $sheet->setCellValue('A' . $row, $sourceSheet);
@@ -836,37 +836,41 @@ class OpnameNewController extends Controller
             $sheet->setCellValue('E' . $row, "=SUM({$quotedSheet}!\${$gr}\$2:\${$gr}\$20000)");
 
             if ($category === 'Pengiriman' && $sourceSheet === 'Pengiriman') {
-                $sheet->setCellValue('F' . $row, "=SUM('Pengiriman'!\$K\$2:\$K\$20000)");
-                $sheet->setCellValue('G' . $row, "=SUM('Pengiriman'!\$L\$2:\$L\$20000)");
-                $sheet->setCellValue('H' . $row, "=SUM('Pengiriman'!\$M\$2:\$M\$20000)");
-                $sheet->setCellValue('I' . $row, "=SUM('Pengiriman'!\$N\$2:\$N\$20000)");
+                $sheet->setCellValue('F' . $row, "=SUM('Pengiriman'!\$J\$2:\$J\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM('Pengiriman'!\$K\$2:\$K\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM('Pengiriman'!\$L\$2:\$L\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM('Pengiriman'!\$M\$2:\$M\$20000)");
+                $sheet->setCellValue('J' . $row, "=SUM('Pengiriman'!\$N\$2:\$N\$20000)");
             } elseif ($category === 'Sisa belum grading') {
-                $sheet->setCellValue('F' . $row, "=SUM('Gudang grading'!\$I\$2:\$I\$20000)");
-                $sheet->setCellValue('G' . $row, 0);
-                $sheet->setCellValue('H' . $row, "=SUM('Gudang grading'!\$J\$2:\$J\$20000)");
-                $sheet->setCellValue('I' . $row, "=SUM('Gudang grading'!\$K\$2:\$K\$20000)");
+                $sheet->setCellValue('F' . $row, "=SUM('Gudang grading'!\$H\$2:\$H\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM('Gudang grading'!\$I\$2:\$I\$20000)");
+                $sheet->setCellValue('H' . $row, 0);
+                $sheet->setCellValue('I' . $row, "=SUM('Gudang grading'!\$J\$2:\$J\$20000)");
+                $sheet->setCellValue('J' . $row, "=SUM('Gudang grading'!\$K\$2:\$K\$20000)");
             } elseif ($sourceSheet === 'Gudang grading') {
-                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
-                $sheet->setCellValue('G' . $row, 0);
-                $sheet->setCellValue('H' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
-                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
+                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$bk}\$2:\${$bk}\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
+                $sheet->setCellValue('H' . $row, 0);
+                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
+                $sheet->setCellValue('J' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
             } else {
-                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
-                $sheet->setCellValue('G' . $row, "=SUM({$quotedSheet}!\${$cu}\$2:\${$cu}\$20000)");
-                $sheet->setCellValue('H' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
-                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
+                $sheet->setCellValue('F' . $row, "=SUM({$quotedSheet}!\${$bk}\$2:\${$bk}\$20000)");
+                $sheet->setCellValue('G' . $row, "=SUM({$quotedSheet}!\${$work}\$2:\${$work}\$20000)");
+                $sheet->setCellValue('H' . $row, "=SUM({$quotedSheet}!\${$cu}\$2:\${$cu}\$20000)");
+                $sheet->setCellValue('I' . $row, "=SUM({$quotedSheet}!\${$operational}\$2:\${$operational}\$20000)");
+                $sheet->setCellValue('J' . $row, "=SUM({$quotedSheet}!\${$total}\$2:\${$total}\$20000)");
             }
         }
 
         $totalRow = count($rows) + 2;
         $sheet->mergeCells('A' . $totalRow . ':B' . $totalRow);
         $sheet->setCellValue('A' . $totalRow, 'TOTAL');
-        foreach (range('C', 'I') as $column) {
+        foreach (range('C', 'J') as $column) {
             $sheet->setCellValue($column . $totalRow, "=SUM({$column}2:{$column}" . ($totalRow - 1) . ')');
         }
 
-        $sheet->getStyle('A2:I' . ($totalRow - 1))->applyFromArray($style);
-        $sheet->getStyle('A' . $totalRow . ':I' . $totalRow)->applyFromArray($style_atas);
+        $sheet->getStyle('A2:J' . ($totalRow - 1))->applyFromArray($style);
+        $sheet->getStyle('A' . $totalRow . ':J' . $totalRow)->applyFromArray($style_atas);
     }
 
     private function rekapComputed($spreadsheet, $style_atas, $style, $model)
