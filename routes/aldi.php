@@ -32,6 +32,7 @@ use App\Http\Controllers\Hrga8_CeklistSuhuRuanganController;
 use App\Http\Controllers\KasbonController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\OpnameController;
+use App\Http\Controllers\OpnameMenuController;
 use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
@@ -573,6 +574,12 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
+        });
+    Route::controller(OpnameMenuController::class)
+        ->prefix('home/opname-menu')
+        ->name('opname_menu.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     Route::controller(PenutupController::class)
         ->prefix('data_master/penutup')

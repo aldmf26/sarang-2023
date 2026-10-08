@@ -5,7 +5,7 @@
             <ul>
                 
                 @php
-                    $navbar = DB::table('navbar')->orderBy('urutan', 'ASC')->get();
+                    $navbar = DB::table('navbar')->where('route', '!=', 'hccp.index')->orderBy('urutan', 'ASC')->get();
                 @endphp
                 @foreach ($navbar as $d)
                     @php
