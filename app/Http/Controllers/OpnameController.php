@@ -11,6 +11,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OpnameController extends Controller
 {
+    public function menu()
+    {
+        return view('home.opname.menu', ['title' => 'Opname']);
+    }
+
     public $linkApi = "http://127.0.0.1:8000";
     // public $linkApi = "https://gudangsarang.ptagafood.com";
     public function index222(Request $r)

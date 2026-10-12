@@ -8,9 +8,12 @@ use App\Models\CocokanModel;
 use App\Models\Grading;
 use App\Models\OpnameNewModel;
 use App\Models\SummaryModel;
+use App\Services\PengirimanDetailExport;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CocokanController extends Controller
 {
@@ -264,8 +267,63 @@ class CocokanController extends Controller
             'list_pengiriman_belum' => $list_pengiriman_belum,
             'wip2akhir' => $model->wip2akhir(),
             'pengiriman_proses' => $model->pengiriman_proses(),
+            'packingLists' => app(PengirimanDetailExport::class)->packingLists(),
         ];
         return view('home.cocokan.pengiriman', $data);
+    }
+
+    public function exportDetailPengiriman(Request $request)
+    {
+        $validated = $request->validate([
+            'no_nota' => 'required|array|min:1|max:500',
+            'no_nota.*' => ['required', 'distinct', 'regex:/^[0-9]{1,10}$/'],
+            'no_box' => 'nullable|array|max:5000',
+            'no_box.*' => ['required', 'distinct', 'regex:/^[0-9]{1,20}$/'],
+        ]);
+        $rows = app(PengirimanDetailExport::class)->details($validated['no_nota'], $validated['no_box'] ?? []);
+        if ($rows->isEmpty()) {
+            return back()->withErrors(['no_nota' => 'Packing list yang dipilih belum memiliki data pengiriman.']);
+        }
+        $book = new Spreadsheet();
+        $sheet = $book->getActiveSheet()->setTitle('Detail Pengiriman');
+        $headers = ['No Packing List', 'Tujuan', 'Box Pengiriman', 'Nama Partai', 'No Invoice', 'Grade', 'Tipe', 'Pcs', 'Gram', 'Tanggal', 'Total Rp', 'Cost BK', 'Cost Kerja', 'Cost CU', 'Cost Operasional'];
+        $sheet->fromArray($headers, null, 'A1');
+        $sheet->getStyle('A1:O1')->getFont()->setBold(true);
+        foreach ($rows as $index => $row) {
+            $line = $index + 2;
+            // Samakan dengan List Pengiriman: Total Rp = cost_bk + cost_kerja + cost_cu + cost_op.
+            $totalRp = (float) $row->cost_bk + (float) $row->cost_kerja + (float) $row->cost_cu + (float) $row->cost_op;
+            $sheet->fromArray([[$row->no_nota, $row->tujuan, $row->box_pengiriman, $row->nm_partai, $row->no_invoice,
+                $row->grade, $row->tipe, $row->pcs, $row->gr, $row->tgl, $totalRp,
+                $row->cost_bk, $row->cost_kerja, $row->cost_cu, $row->cost_op]], null, 'A'.$line, true);
+            foreach (['A' => $row->no_nota, 'B' => $row->tujuan, 'C' => $row->box_pengiriman, 'D' => $row->nm_partai,
+                'E' => $row->no_invoice, 'F' => $row->grade, 'G' => $row->tipe, 'J' => $row->tgl] as $column => $value) {
+                $sheet->setCellValueExplicit($column.$line, (string) $value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            }
+        }
+        $totalLine = $rows->count() + 2;
+        $totalPcs = $rows->sum(fn ($row) => (float) $row->pcs);
+        $totalGr = $rows->sum(fn ($row) => (float) $row->gr);
+        $totalCostBk = $rows->sum(fn ($row) => (float) $row->cost_bk);
+        $totalCostKerja = $rows->sum(fn ($row) => (float) $row->cost_kerja);
+        $totalCostCu = $rows->sum(fn ($row) => (float) $row->cost_cu);
+        $totalCostOp = $rows->sum(fn ($row) => (float) $row->cost_op);
+        $sheet->fromArray([['TOTAL', '', '', '', '', '', '', $totalPcs, $totalGr, '',
+            $totalCostBk + $totalCostKerja + $totalCostCu + $totalCostOp,
+            $totalCostBk, $totalCostKerja, $totalCostCu, $totalCostOp]], null, 'A'.$totalLine, true);
+        $sheet->getStyle('A'.$totalLine.':O'.$totalLine)->getFont()->setBold(true);
+        $sheet->freezePane('C2');
+        $sheet->setAutoFilter('A1:O'.($rows->count() + 1));
+        $sheet->getStyle('H2:I'.$totalLine)->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle('K2:O'.$totalLine)->getNumberFormat()->setFormatCode('#,##0.00');
+        foreach (range('A', 'O') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        return response()->streamDownload(function () use ($book) {
+            (new Xlsx($book))->save('php://output');
+            $book->disconnectWorksheets();
+        }, 'Detail Pengiriman.xlsx', ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']);
     }
 
     public function getSuntikan($index)

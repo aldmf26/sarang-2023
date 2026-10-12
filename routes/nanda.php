@@ -374,6 +374,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/qc', 'qc')->name('qc');
             Route::get('/wip2', 'wip2')->name('wip2');
             Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
+            Route::get('/pengiriman/export-detail', 'exportDetailPengiriman')->name('pengiriman.export_detail');
             Route::get('/balancesheet', 'balancesheet')->name('balancesheet');
             Route::post('/tutup', 'tutup')->name('tutup');
             Route::get('/list_pengiriman', 'list_pengiriman')->name('list_pengiriman');

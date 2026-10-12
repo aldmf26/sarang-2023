@@ -1,9 +1,68 @@
 <x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <h6 class="float-start mt-1">{{ $title }}</h6>
+        <button type="button" class="btn btn-sm btn-success float-end" data-bs-toggle="modal" data-bs-target="#exportDetailPengirimanModal">
+            <i class="fas fa-file-excel me-1"></i> Export detail pengiriman
+        </button>
     </x-slot>
 
     <x-slot name="cardBody">
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                @foreach ($errors->all() as $error)
+                    <p class="mb-1">{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+        <div class="modal fade" id="exportDetailPengirimanModal" tabindex="-1" aria-labelledby="exportDetailPengirimanLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <form method="GET" action="{{ route('cocokan.pengiriman.export_detail') }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exportDetailPengirimanLabel">Pilih nomor packing list</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        </div>
+                        <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+                            <p class="text-muted">Pilih packing list untuk melihat detail setiap grade dan box pengiriman.</p>
+                            <input type="search" class="form-control mb-3" id="packingListSearch"
+                                placeholder="Cari nomor PI, misalnya 1012" autocomplete="off">
+                            <div id="packingListOptions">
+                            @forelse ($packingLists as $packingList)
+                                <div class="border rounded p-2 mb-2 packing-list-option"
+                                    data-search="{{ strtolower($packingList->no_nota . ' ' . ($packingList->nm_packing ?: '') . ' ' . ($packingList->tujuan ?: '')) }}">
+                                    <div class="form-check">
+                                    <input class="form-check-input ms-0 me-2" type="checkbox" name="no_nota[]" value="{{ $packingList->no_nota }}" id="packing_{{ $packingList->no_nota }}">
+                                    <label class="form-check-label" for="packing_{{ $packingList->no_nota }}">
+                                        <strong>PI {{ $packingList->no_nota }}</strong> — {{ $packingList->nm_packing ?: 'Tanpa nama' }}
+                                        <span class="text-muted">| Tujuan: {{ $packingList->tujuan ?: '-' }} | {{ $packingList->jumlah_box }} box</span>
+                                    </label>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="alert alert-info mb-0">Belum ada packing list.</div>
+                            @endforelse
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-download me-1"></i> Export detail</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const search = document.getElementById('packingListSearch');
+                if (!search) return;
+                search.addEventListener('input', function () {
+                    const query = this.value.toLowerCase().trim();
+                    document.querySelectorAll('#packingListOptions .packing-list-option').forEach(function (item) {
+                        item.classList.toggle('d-none', query !== '' && !item.dataset.search.includes(query));
+                    });
+                });
+            });
+        </script>
         <section class="row">
             @include('home.cocokan.nav')
             <div class="col-lg-3">

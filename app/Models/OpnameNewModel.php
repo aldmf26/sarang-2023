@@ -34,6 +34,7 @@ class OpnameNewModel extends Model
             FROM bk as a 
             left join users as b on b.id = a.penerima
             where a.kategori ='cabut' and a.baru ='baru' 
+            AND a.penerima != 0 AND a.formulir = 'Y'
             AND NOT EXISTS (SELECT 1 FROM cabut AS b WHERE b.no_box = a.no_box) 
             AND NOT EXISTS (SELECT 1 FROM eo AS c WHERE c.no_box = a.no_box)
             AND NOT EXISTS (

@@ -571,7 +571,7 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('home/opname')
         ->name('opname.')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
+            Route::get('/', 'menu')->name('index');
             Route::get('/detail', 'detail')->name('detail');
             Route::get('/export_ibu', 'export_ibu')->name('export_ibu');
         });
@@ -580,6 +580,15 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->name('opname_menu.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/template-bk', 'templateBk')->name('template_bk');
+            Route::get('/template-cabut', 'templateCabut')->name('template_cabut');
+            Route::get('/template-cetak', 'templateCetak')->name('template_cetak');
+            Route::get('/template-sortir', 'templateSortir')->name('template_sortir');
+            Route::get('/template-grading', 'templateGrading')->name('template_grading');
+            Route::post('/preview-cabut', 'previewCabut')->name('preview_cabut');
+            Route::post('/import-cabut', 'importCabut')->name('import_cabut');
+            Route::get('/history/{history}', 'history')->whereNumber('history')->name('history');
+            Route::delete('/history/{history}', 'destroy')->whereNumber('history')->name('destroy');
         });
     Route::controller(PenutupController::class)
         ->prefix('data_master/penutup')
