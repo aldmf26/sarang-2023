@@ -22,6 +22,7 @@ class PengirimanDetailExportTest extends TestCase
             $table->increments('id_packing');
             $table->string('no_nota');
             $table->string('nm_packing');
+            $table->string('tujuan')->default('');
             $table->integer('id_pengiriman');
         });
         Schema::create('pengiriman', function (Blueprint $table) {
@@ -92,13 +93,14 @@ class PengirimanDetailExportTest extends TestCase
             file_put_contents($path, $contents);
             $book = IOFactory::load($path);
             $sheet = $book->getSheet(0);
-            $this->assertEquals(4, $sheet->getHighestDataRow());
-            $this->assertSame('A1', $sheet->getCell('E2')->getValue());
-            $this->assertSame('BULAT', $sheet->getCell('F2')->getValue());
-            $this->assertSame('=PARTAI', $sheet->getCell('C2')->getValue());
-            $this->assertSame('s', $sheet->getCell('C2')->getDataType());
-            $this->assertEquals(0, $sheet->getCell('G4')->getValue());
-            $this->assertEquals(80, $sheet->getCell('H4')->getValue());
+            // Format saat ini menyertakan Tujuan dan satu baris Total.
+            $this->assertEquals(5, $sheet->getHighestDataRow());
+            $this->assertSame('A1', $sheet->getCell('F2')->getValue());
+            $this->assertSame('BULAT', $sheet->getCell('G2')->getValue());
+            $this->assertSame('=PARTAI', $sheet->getCell('D2')->getValue());
+            $this->assertSame('s', $sheet->getCell('D2')->getDataType());
+            $this->assertEquals(0, $sheet->getCell('H4')->getValue());
+            $this->assertEquals(80, $sheet->getCell('I4')->getValue());
             $book->disconnectWorksheets();
         } finally {
             unlink($path);

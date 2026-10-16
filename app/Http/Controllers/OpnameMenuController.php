@@ -18,6 +18,112 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OpnameMenuController extends Controller
 {
+    public function bulanan()
+    {
+        return app(OpnameBulananController::class)->index(request());
+    }
+
+    public function hitungBkBulanan()
+    {
+        $filters = request()->validate([
+            'q' => 'nullable|string|max:100',
+            'bulan' => 'nullable|date_format:Y-m',
+        ]);
+        $bulan = $filters['bulan'] ?? now()->format('Y-m');
+        $bulanTanggal = $bulan.'-01';
+        $query = DB::table('bk')
+            ->where('penerima', 0)
+            ->where('kategori', 'cabut')
+            ->where('formulir', 'T')
+            ->when($filters['q'] ?? null, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('bk.nm_partai', 'like', '%'.$search.'%')
+                        ->orWhere('bk.no_box', 'like', '%'.$search.'%')
+                        ->orWhere('bk.ket', 'like', '%'.$search.'%');
+                });
+            });
+        $canSeeBkValue = (int) auth()->user()->posisi_id === 1;
+        $totals = (clone $query)->selectRaw(
+            'COALESCE(SUM(pcs_awal), 0) AS pcs, COALESCE(SUM(gr_awal), 0) AS gr'.
+            ($canSeeBkValue ? ', COALESCE(SUM(gr_awal * hrga_satuan), 0) AS ttl_rp' : '')
+        )->first();
+        $bkSisa = $query
+            ->leftJoin('opname_bulanan_counts as opname_count', function ($join) use ($bulanTanggal) {
+                $join->on('opname_count.no_box', '=', 'bk.no_box')
+                    ->where('opname_count.bulan', '=', $bulanTanggal);
+            })
+            ->select([
+                'bk.nm_partai',
+                'bk.no_box',
+                'bk.ket as grade',
+                'bk.pcs_awal as pcs',
+                'bk.gr_awal as gr',
+                'opname_count.grade_real',
+                'opname_count.pcs_real',
+                'opname_count.gr_real',
+            ])
+            ->when($canSeeBkValue, fn ($query) => $query->selectRaw('(bk.gr_awal * bk.hrga_satuan) AS ttl_rp'))
+            ->orderBy('bk.nm_partai')
+            ->orderBy('bk.no_box')
+            ->paginate(25)
+            ->withQueryString();
+
+        return view('home.opname_menu.bulanan', [
+            'title' => 'Opname Bulanan',
+            'bkSisa' => $bkSisa,
+            'totals' => $totals,
+            'canSeeBkValue' => $canSeeBkValue,
+            'bulan' => $bulan,
+        ]);
+    }
+
+    public function simpanBulanan(Request $request)
+    {
+        $validated = $request->validate([
+            'bulan' => 'required|date_format:Y-m',
+            'counts' => 'nullable|array',
+            'counts.*.pcs_real' => 'nullable|integer|min:0',
+            'counts.*.gr_real' => 'nullable|numeric|min:0',
+            'counts.*.grade_real' => 'nullable|string|max:100',
+        ]);
+
+        $bulan = $validated['bulan'].'-01';
+        $allowedBoxes = DB::table('bk')
+            ->where('penerima', 0)
+            ->where('kategori', 'cabut')
+            ->where('formulir', 'T')
+            ->whereIn('no_box', array_keys($validated['counts'] ?? []))
+            ->pluck('no_box')->map(fn ($box) => (string) $box)->all();
+
+        foreach (($validated['counts'] ?? []) as $noBox => $count) {
+            if (!in_array((string) $noBox, $allowedBoxes, true)) {
+                continue;
+            }
+            if (($count['pcs_real'] ?? null) === null && ($count['gr_real'] ?? null) === null && ($count['grade_real'] ?? null) === null) {
+                DB::table('opname_bulanan_counts')
+                    ->where('bulan', $bulan)
+                    ->where('no_box', $noBox)
+                    ->delete();
+                continue;
+            }
+
+            DB::table('opname_bulanan_counts')->updateOrInsert(
+                ['bulan' => $bulan, 'no_box' => $noBox],
+                [
+                    'pcs_real' => $count['pcs_real'] ?? null,
+                    'gr_real' => $count['gr_real'] ?? null,
+                    'grade_real' => $count['grade_real'] ?? null,
+                    'user_id' => $request->user()->id,
+                    'updated_at' => now(),
+                    'created_at' => now(),
+                ]
+            );
+        }
+
+        return redirect()->route('opname_menu.bulanan.hitung_bk', ['bulan' => $validated['bulan'], 'q' => $request->input('q')])
+            ->with('sukses', 'Hasil hitung opname berhasil disimpan.');
+    }
+
     public function index()
     {
         $filters = request()->validate([

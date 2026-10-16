@@ -10,12 +10,15 @@
     gantiLewat: false,
     poCancelPerbox: false,
 }">
-    <a href="#" @click="openModal()" class="btn btn-sm btn-info">Cek Posisi No Box / Ganti Nama Anak / Edit Grading
-        Kode / Ganti Tanggal</a>
+    <a href="#" @click.prevent="openModal()" class="btn btn-sm btn-info header-box-tools" title="Cek posisi dan pengaturan box">
+        <i class="bi bi-search me-1" aria-hidden="true"></i>
+        <span class="d-none d-md-inline">Cek Posisi No Box / Ganti Nama Anak / Edit Grading Kode / Ganti Tanggal</span>
+        <span class="d-inline d-md-none">Cek Box</span>
+    </a>
 
     <x-theme.modal wire:ignore.self id="cariBox" btnSave="T" title="Cek Posisi No Box" size="modal-lg">
 
-        <div class="d-flex gap-1">
+        <div class="d-flex gap-1 flex-wrap position-box-tools">
             <button type="button" @click="posisi = !posisi; anak = false; grading = false; gantiTgl=false"
                 class="btn btn-sm btn-primary">Cek Posisi No
                 Box</button>

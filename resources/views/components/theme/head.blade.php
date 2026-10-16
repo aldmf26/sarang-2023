@@ -244,6 +244,72 @@
             height: 50px;
         }
 
+        @media (max-width: 767.98px) {
+            .layout-horizontal header.mb-5 {
+                margin-bottom: 1rem !important;
+            }
+
+            .layout-horizontal .header-top {
+                padding: .45rem .25rem;
+            }
+
+            .layout-horizontal .header-top .container {
+                gap: .5rem;
+            }
+
+            .layout-horizontal .header-top .logo {
+                display: flex;
+                flex: 0 0 auto;
+                align-items: center;
+                gap: .4rem;
+            }
+
+            .layout-horizontal .header-top .logo img {
+                height: 30px;
+            }
+
+            .layout-horizontal .header-top .logo h6 {
+                margin: 0;
+                font-size: .72rem;
+                white-space: nowrap;
+            }
+
+            .layout-horizontal .header-top-right {
+                min-width: 0;
+                gap: .35rem;
+            }
+
+            .layout-horizontal .header-box-tools {
+                padding: .35rem .5rem;
+                font-size: .75rem;
+                white-space: nowrap;
+            }
+
+            .layout-horizontal .header-top-right .user-dropdown .text {
+                display: none;
+            }
+
+            .layout-horizontal .header-top-right .avatar,
+            .layout-horizontal .header-top-right .avatar img {
+                width: 32px;
+                height: 32px;
+            }
+
+            .layout-horizontal #topbarUserDropdown::after {
+                margin-left: .2rem;
+            }
+
+            .layout-horizontal .burger-btn {
+                line-height: 1;
+            }
+
+            .position-box-tools > .btn {
+                flex: 1 1 calc(50% - .25rem);
+                min-height: 42px;
+                white-space: normal;
+            }
+        }
+
         .modal-dialog-centered {
             justify-content: center;
         }

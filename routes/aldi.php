@@ -579,6 +579,10 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
         ->prefix('home/opname-menu')
         ->name('opname_menu.')
         ->group(function () {
+            Route::get('/bulanan', 'bulanan')->name('bulanan');
+            Route::post('/bulanan', 'simpanBulanan')->name('bulanan.simpan');
+            Route::get('/bulanan/hitung-bk', 'hitungBkBulanan')->name('bulanan.hitung_bk');
+            Route::get('/bulanan/belum-opname', [\App\Http\Controllers\OpnameBulananController::class, 'uncounted'])->name('bulanan.belum_opname');
             Route::get('/', 'index')->name('index');
             Route::get('/template-bk', 'templateBk')->name('template_bk');
             Route::get('/template-cabut', 'templateCabut')->name('template_cabut');
@@ -589,6 +593,22 @@ Route::middleware(['auth', 'cekPosisi'])->group(function () {
             Route::post('/import-cabut', 'importCabut')->name('import_cabut');
             Route::get('/history/{history}', 'history')->whereNumber('history')->name('history');
             Route::delete('/history/{history}', 'destroy')->whereNumber('history')->name('destroy');
+        });
+    Route::controller(\App\Http\Controllers\OpnameBulananController::class)
+        ->prefix('home/opname-menu/bulanan/invoice')
+        ->name('opname_bulanan.')
+        ->group(function () {
+            Route::post('/', 'store')->name('store');
+            Route::get('/{invoice}', 'show')->whereNumber('invoice')->name('show');
+            Route::get('/{invoice}/cetak', 'print')->whereNumber('invoice')->name('print');
+            Route::patch('/{invoice}', 'update')->whereNumber('invoice')->name('update');
+            Route::delete('/{invoice}', 'destroy')->whereNumber('invoice')->name('destroy');
+            Route::get('/{invoice}/box', 'source')->whereNumber('invoice')->name('source');
+            Route::post('/{invoice}/baris', 'saveLine')->whereNumber('invoice')->name('line');
+            Route::delete('/{invoice}/baris/{line}', 'deleteLine')->whereNumber('invoice')->whereNumber('line')->name('line.delete');
+            Route::post('/{invoice}/ajukan', 'submit')->whereNumber('invoice')->name('submit');
+            Route::post('/{invoice}/kembalikan', 'returnDraft')->whereNumber('invoice')->name('return');
+            Route::post('/{invoice}/kunci', 'lock')->whereNumber('invoice')->name('lock');
         });
     Route::controller(PenutupController::class)
         ->prefix('data_master/penutup')

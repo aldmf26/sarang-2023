@@ -10,6 +10,7 @@ use App\Models\TotalannewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -1205,13 +1206,28 @@ class SummaryController extends Controller
                 $totalOperasional,
                 $biayaOperasionalMurni
             ) {
+            $hasOpnameLock = Schema::hasColumn('cabut', 'opname_cost_locked')
+                && Schema::hasColumn('eo', 'opname_cost_locked');
+            $frozenCost = 0.0;
+            if ($hasOpnameLock) {
+                foreach (['cabut', 'eo'] as $table) {
+                    $frozenCost += (float) DB::table($table)->where('bulan_dibayar', $bulan)
+                        ->where('tahun_dibayar', $tahun)->where('opname_cost_locked', true)->sum('cost_op');
+                }
+            }
+            $remainingCost = $biayaOperasionalMurni - $frozenCost;
+            if ($remainingCost < -0.01) {
+                throw new \RuntimeException('Cost OP tidak boleh lebih kecil dari biaya opname yang sudah dikunci.');
+            }
             $cabutQuery = DB::table('cabut')
+                ->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
                 ->where('bulan_dibayar', $bulan)
                 ->where('tahun_dibayar', $tahun)
                 ->where('no_box', '!=', 9999)
                 ->where('ttl_rp', '>', 0)
                 ->where('gr_akhir', '>', 0);
             $eoQuery = DB::table('eo')
+                ->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
                 ->where('bulan_dibayar', $bulan)
                 ->where('tahun_dibayar', $tahun)
                 ->where('no_box', '!=', 9999)
@@ -1223,12 +1239,18 @@ class SummaryController extends Controller
             $totalGr = $totalGrCabut + $totalGrEo;
 
             if ($totalGr <= 0) {
+                if ($hasOpnameLock && abs($remainingCost) < 0.01 && $frozenCost > 0) {
+                    DB::table('oprasional')->updateOrInsert(['bulan' => $bulan, 'tahun' => $tahun],
+                        ['rp_oprasional' => $biayaOperasionalMurni, 'total_operasional' => $totalOperasional]);
+                    $this->syncCostOperasionalToGradingPartai();
+                    return;
+                }
                 throw new \RuntimeException(
                     "Belum ada Cabut/EO dengan ttl_rp dan gram hasil untuk bulan {$bulan}/{$tahun}"
                 );
             }
 
-            $rpGr = $biayaOperasionalMurni / $totalGr;
+            $rpGr = max(0, $remainingCost) / $totalGr;
 
             DB::table('oprasional')->updateOrInsert(
                 ['bulan' => $bulan, 'tahun' => $tahun],
@@ -1244,10 +1266,12 @@ class SummaryController extends Controller
             DB::table('cabut')
                 ->where('bulan_dibayar', $bulan)
                 ->where('tahun_dibayar', $tahun)
+                ->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
                 ->update(['cost_op' => 0]);
             DB::table('eo')
                 ->where('bulan_dibayar', $bulan)
                 ->where('tahun_dibayar', $tahun)
+                ->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
                 ->update(['cost_op' => 0]);
 
             (clone $cabutQuery)->update([
@@ -1336,7 +1360,9 @@ class SummaryController extends Controller
             HAVING SUM(box_cost.cost_op) != 0
         ");
 
-        DB::table('grading_partai')->update(['cost_op' => 0]);
+        $hasOpnameLock = Schema::hasColumn('grading_partai', 'opname_cost_locked');
+        DB::table('grading_partai')->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
+            ->update(['cost_op' => 0]);
 
         if (!$costPerInvoice) {
             return;
@@ -1346,6 +1372,7 @@ class SummaryController extends Controller
             fn ($row) => (string) $row->no_invoice
         );
         $rows = DB::table('grading_partai')
+            ->when($hasOpnameLock, fn ($q) => $q->where('opname_cost_locked', false))
             ->whereIn('no_invoice', $invoiceCosts->keys()->all())
             ->whereRaw("LOWER(TRIM(COALESCE(grade, ''))) <> 'susut'")
             ->select('id_grading', 'no_invoice', 'gr')
@@ -1354,13 +1381,16 @@ class SummaryController extends Controller
             ->groupBy(fn ($row) => (string) $row->no_invoice);
 
         $updates = [];
+        $frozenInvoiceCosts = $hasOpnameLock ? DB::table('grading_partai')
+            ->where('opname_cost_locked', true)->whereIn('no_invoice', $invoiceCosts->keys()->all())
+            ->groupBy('no_invoice')->selectRaw('no_invoice, SUM(cost_op) AS cost_op')->pluck('cost_op', 'no_invoice') : collect();
         foreach ($rows as $invoice => $invoiceRows) {
             $totalGr = (float) $invoiceRows->sum(fn ($row) => (float) $row->gr);
             if ($totalGr <= 0 || !$invoiceCosts->has($invoice)) {
                 continue;
             }
 
-            $invoiceCost = (float) $invoiceCosts->get($invoice)->cost_op;
+            $invoiceCost = max(0, (float) $invoiceCosts->get($invoice)->cost_op - (float) ($frozenInvoiceCosts[$invoice] ?? 0));
             $allocated = 0.0;
             $lastIndex = $invoiceRows->count() - 1;
 
