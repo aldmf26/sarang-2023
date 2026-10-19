@@ -69,7 +69,8 @@ class HariandllCetakTest extends TestCase
             'tgl' => ['2026-10-16'], 'no_box' => ['5002'], 'id_anak' => [1],
             'ket' => ['cetak box'], 'pcs' => ['50'], 'gr' => ['240.5'],
             'lokasi' => ['AGA'], 'rupiah' => ['1,000'],
-        ])->assertSessionHasNoErrors()->assertRedirect();
+        ])->assertSessionHasNoErrors()
+            ->assertRedirect(route('hariandll.index', ['kategori' => 'cetak']));
 
         $this->assertDatabaseHas('tb_hariandll', [
             'kategori' => 'cetak', 'no_box' => '5002', 'pcs' => 50, 'gr' => 240.5, 'rupiah' => 1000,
@@ -86,5 +87,20 @@ class HariandllCetakTest extends TestCase
         ])->assertSessionHasNoErrors()->assertRedirect();
 
         $this->assertDatabaseHas('tb_hariandll', ['kategori' => 'biasa', 'pcs' => 0, 'gr' => 0]);
+    }
+
+    public function test_update_cetak_kembali_ke_tab_cetak(): void
+    {
+        $id = DB::table('tb_hariandll')->insertGetId([
+            'id_anak' => 1, 'id_pengawas' => 2, 'kategori' => 'cetak',
+            'tgl' => '2026-10-16', 'bulan_dibayar' => 10,
+        ]);
+
+        $this->post(route('hariandll.update'), [
+            'kategori' => 'cetak', 'id_hariandll' => [$id],
+            'tgl' => ['2026-10-17'], 'id_anak' => [1], 'ket' => ['revisi'],
+            'bulan_dibayar' => [10], 'rupiah' => ['1,500'], 'lokasi' => ['AGA'],
+        ])->assertSessionHasNoErrors()
+            ->assertRedirect(route('hariandll.index', ['kategori' => 'cetak']));
     }
 }

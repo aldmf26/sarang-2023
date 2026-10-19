@@ -11,6 +11,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class HariandllController extends Controller
 {
 
+    private function kategori(Request $request): string
+    {
+        return $request->kategori === 'cetak' ? 'cetak' : 'biasa';
+    }
+
     public function anak()
     {
         $id_user = auth()->user()->id;
@@ -65,7 +70,7 @@ class HariandllController extends Controller
 
     public function create(Request $r)
     {
-        $kategori = $r->kategori === 'cetak' ? 'cetak' : 'biasa';
+        $kategori = $this->kategori($r);
         for ($i = 0; $i < count($r->id_anak); $i++) {
             $rupiah = str()->remove(',', $r->rupiah[$i]);
             DB::table('tb_hariandll')->insert([
@@ -82,7 +87,7 @@ class HariandllController extends Controller
                 'kategori' => $kategori,
             ]);
         }
-        return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil ditambahkan');
+        return redirect()->route('hariandll.index', ['kategori' => $kategori])->with('sukses', 'Data Berhasil ditambahkan');
     }
 
     public function edit(Request $r)
@@ -96,6 +101,7 @@ class HariandllController extends Controller
 
     public function update(Request $r)
     {
+        $kategori = $this->kategori($r);
         for ($i = 0; $i < count($r->tgl); $i++) {
             $rupiah = str()->remove(',', $r->rupiah[$i]);
             DB::table('tb_hariandll')->where('id_hariandll', $r->id_hariandll[$i])->update([
@@ -108,7 +114,7 @@ class HariandllController extends Controller
                 'lokasi' => $r->lokasi[$i],
             ]);
         }
-        return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil diubah');
+        return redirect()->route('hariandll.index', ['kategori' => $kategori])->with('sukses', 'Data Berhasil diubah');
     }
 
     public function delete(Request $r)
@@ -118,10 +124,10 @@ class HariandllController extends Controller
         }
     }
 
-    public function hapus($id)
+    public function hapus(Request $r, $id)
     {
         DB::table('tb_hariandll')->where('id_hariandll', $id)->delete();
-        return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil dihapus');
+        return redirect()->route('hariandll.index', ['kategori' => $this->kategori($r)])->with('sukses', 'Data Berhasil dihapus');
     }
     public function getQuery($bulan, $tahun)
     {
@@ -262,13 +268,13 @@ class HariandllController extends Controller
                     }
                 }
                 DB::commit(); // Konfirmasi transaksi jika berhasil
-                return redirect()->route('hariandll.index')->with('sukses', 'Data berhasil import');
+                return redirect()->route('hariandll.index', ['kategori' => $this->kategori($r)])->with('sukses', 'Data berhasil import');
             } catch (\Exception $e) {
                 DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
-                return redirect()->route('hariandll.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+                return redirect()->route('hariandll.index', ['kategori' => $this->kategori($r)])->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
             }
         } else {
-            return redirect()->route('hariandll.index')->with('error', 'File yang diunggah bukan file Excel yang valid');
+            return redirect()->route('hariandll.index', ['kategori' => $this->kategori($r)])->with('error', 'File yang diunggah bukan file Excel yang valid');
         }
     }
 }

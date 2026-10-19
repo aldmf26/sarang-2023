@@ -105,7 +105,7 @@
                                         id_cabut="{{ $d->id_hariandll }}">
                                 @endif
                                 <a onclick="return confirm('Yakin dihapus ?')"
-                                    href="{{ route('hariandll.hapus', $d->id_hariandll) }}"
+                                    href="{{ route('hariandll.hapus', ['id' => $d->id_hariandll, 'kategori' => $kategori]) }}"
                                     class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
                                 {{-- <x-theme.button modal="Y" idModal="delete" data="no_nota={{ $d->id_hariandll }}"
                                     icon="fa-trash" addClass="float-end delete_nota" teks="" variant="danger" /> --}}
@@ -234,6 +234,7 @@
 
         <form action="{{ route('hariandll.update') }}" method="post">
             @csrf
+            <input type="hidden" name="kategori" value="{{ $kategori }}">
             <x-theme.modal idModal="edit" title="Edit Harian DLL" size="modal-lg" btnSave="Y">
                 <div id="editBody"></div>
             </x-theme.modal>
