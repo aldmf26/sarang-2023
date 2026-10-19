@@ -74,6 +74,15 @@
                     {{-- @include('home.bk.nav', ['name' => 'index']) --}}
                 </div>
 
+                <div class="col-lg-12 mt-3">
+                    <div class="alert alert-light border d-flex flex-wrap align-items-center gap-4 mb-0" role="status">
+                        <strong class="text-primary">Total Stok Sekarang</strong>
+                        <span><strong>{{ number_format($total_stok['box'], 0, ',', '.') }}</strong> Box</span>
+                        <span><strong>{{ number_format($total_stok['pcs'], 0, ',', '.') }}</strong> Pcs</span>
+                        <span><strong>{{ number_format($total_stok['gr'], 2, ',', '.') }}</strong> Gr</span>
+                    </div>
+                </div>
+
                 <div class="col-lg-12">
                     <br>
                     <br>

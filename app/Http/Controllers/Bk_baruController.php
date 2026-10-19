@@ -33,10 +33,16 @@ class Bk_baruController extends Controller
             WHERE $where ORDER BY a.id_bk DESC", $params);
         }
 
+        $stokSekarang = collect($bk)->unique('no_box');
 
         $data = [
             'title' => 'Box Terakhir',
             'bk' => $bk,
+            'total_stok' => [
+                'box' => $stokSekarang->count(),
+                'pcs' => $stokSekarang->sum(fn ($stok) => (float) $stok->pcs_awal),
+                'gr' => $stokSekarang->sum(fn ($stok) => (float) $stok->gr_awal),
+            ],
             'users' => DB::table('users')->whereNotIn('posisi_id', [1, 15, 16, 14])->get(),
             'bk_terakhir' => $this->getNoBoxTambah()['nobox2'],
             'tgl1' => $tgl1,
