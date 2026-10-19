@@ -79,7 +79,7 @@
                         <strong class="text-primary">Total Stok Sekarang</strong>
                         <span><strong>{{ number_format($total_stok['box'], 0, ',', '.') }}</strong> Box</span>
                         <span><strong>{{ number_format($total_stok['pcs'], 0, ',', '.') }}</strong> Pcs</span>
-                        <span><strong>{{ number_format($total_stok['gr'], 2, ',', '.') }}</strong> Gr</span>
+                        <span><strong>{{ number_format($total_stok['gr'], 0, ',', '.') }}</strong> Gr</span>
                     </div>
                 </div>
 
