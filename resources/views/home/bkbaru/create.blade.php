@@ -37,12 +37,12 @@
 
             </div>
         </form>
-        <form action="{{ route('bkbaru.create') }}" method="post">
+        <form action="{{ route('bkbaru.create') }}" method="post" id="bkbaru-create-form">
             @csrf
             <section class="row">
 
                 <div class="col-lg-12">
-                    <table class="table table-striped" width="100%">
+                    <table class="table table-striped" id="bkbaru-entry-table" width="100%">
                         <thead>
                             <tr>
                                 {{-- <th class="dhead" width="70">Tipe</th> --}}
@@ -183,34 +183,83 @@
         <script>
             $(".select3").select2()
             $('.selectPengawas').select2(); // Menginisialisasi semua elemen dengan kelas .selectPengawas sebagai Select2
-            function navigateInputs(className, e) {
-                if (e.keyCode === 40 || e.keyCode === 38) {
-                    e.preventDefault();
+            function focusGridInput($input) {
+                if (!$input.length) {
+                    return;
+                }
 
-                    var $input = $(e.target);
-                    var currentCount = parseInt($input.attr('count'));
+                $input.trigger('focus');
+                $input[0].scrollIntoView({
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
 
-                    var direction = (e.keyCode === 40) ? 1 : (e.keyCode === 38) ? -1 : 0; // 1 for down arrow, -1 for up arrow
-
-                    var $nextInput = $input.closest('tr').siblings('tr').find('.' + className + '[count="' + (currentCount +
-                        direction) + '"]');
-
-                    if ($nextInput.length) {
-                        $nextInput.focus();
-
-                        // Memeriksa jika kelas yang di-fokus adalah pcsAwal atau grAwal, lalu memilih seluruh teks di dalamnya.
-                        if ($nextInput.hasClass('pcsAwal') || $nextInput.hasClass('grAwal')) {
-                            $nextInput.select(); // Memilih seluruh teks dalam input.
-                        }
-                    }
+                if (['text', 'number'].includes($input.attr('type'))) {
+                    $input.select();
                 }
             }
 
-            // Menggunakan event delegation untuk menangani semua input dalam tabel
-            $('table').on('keydown', 'input', function(e) {
-                var className = $(this).attr('class').split(' ')[
-                    1]; // Mendapatkan kelas kedua (contoh: 'nolot' atau 'nobox')
-                navigateInputs(className, e);
+            // Navigasi input seperti spreadsheet: panah atas, bawah, kiri, dan kanan.
+            $('#bkbaru-entry-table tbody').on('keydown', 'input', function(e) {
+                if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    return;
+                }
+
+                var $currentInput = $(this);
+                var $currentCell = $currentInput.closest('td');
+                var $currentRow = $currentInput.closest('tr');
+                var $targetInput = $();
+
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    var $targetRow = e.key === 'ArrowUp' ? $currentRow.prev('tr') : $currentRow.next('tr');
+                    $targetInput = $targetRow.children('td').eq($currentCell.index())
+                        .find('input:not([type="hidden"])').first();
+                } else {
+                    var direction = e.key === 'ArrowLeft' ? -1 : 1;
+                    var cellIndex = $currentCell.index() + direction;
+                    var $cells = $currentRow.children('td');
+
+                    while (cellIndex >= 0 && cellIndex < $cells.length) {
+                        $targetInput = $cells.eq(cellIndex).find('input:not([type="hidden"])').first();
+                        if ($targetInput.length) {
+                            break;
+                        }
+                        cellIndex += direction;
+                    }
+                }
+
+                if ($targetInput.length) {
+                    e.preventDefault();
+                    focusGridInput($targetInput);
+                }
+            });
+
+            var bkbaruFormConfirmed = false;
+            $('#bkbaru-create-form').on('submit', function(e) {
+                if (bkbaruFormConfirmed) {
+                    return;
+                }
+
+                e.preventDefault();
+                var form = this;
+
+                Swal.fire({
+                    title: 'Simpan data?',
+                    text: 'Pastikan data yang diisi sudah benar.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#435EBE',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, simpan',
+                    cancelButtonText: 'Batal'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        bkbaruFormConfirmed = true;
+                        $('.button-save').hide();
+                        $('.btn_save_loading').removeAttr('hidden').show();
+                        form.submit();
+                    }
+                });
             });
 
 
