@@ -530,7 +530,7 @@ class GudangSarangController extends Controller
         left join users as c on c.id = a.id_penerima
         WHERE a.kategori = '$kategori' AND a.tanggal between '$tgl1' and '$tgl2'
         group by a.no_invoice
-        order by a.id_formulir DESC
+        order by a.no_invoice DESC
         ");
     }
 

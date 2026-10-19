@@ -105,8 +105,9 @@
     function plusRow(count, classPlus, url) {
         $(document).on("click", "." + classPlus, function() {
             count = count + 1;
+            var separator = url.indexOf('?') === -1 ? '?count=' : '&count=';
             $.ajax({
-                url: `${url}?count=` + count,
+                url: `${url}${separator}` + count,
                 type: "GET",
                 success: function(data) {
                     $("#" + classPlus).append(data);

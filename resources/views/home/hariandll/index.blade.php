@@ -121,6 +121,7 @@
 
         <form action="{{ route('hariandll.create') }}" method="post">
             @csrf
+            <input type="hidden" name="kategori" value="{{ $kategori }}">
             <x-theme.modal idModal="tambah" title="Tambah Harian DLL" size="modal-lg-max" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-4">
@@ -157,6 +158,10 @@
                             <th class="dhead">No Box</th>
                             <th class="dhead" width="20%">Nama Anak</th>
                             <th class="dhead">Keterangan</th>
+                            @if ($kategori == 'cetak')
+                                <th class="dhead">Pcs</th>
+                                <th class="dhead">Gr</th>
+                            @endif
                             <th class="dhead">Lokasi</th>
                             <th class="dhead text-end">Rupiah</th>
                             <th class="dhead"></th>
@@ -183,6 +188,16 @@
                             <td>
                                 <input type="text" class="form-control" name="ket[]">
                             </td>
+                            @if ($kategori == 'cetak')
+                                <td>
+                                    <input type="number" min="0" step="1" class="form-control text-end"
+                                        name="pcs[]">
+                                </td>
+                                <td>
+                                    <input type="number" min="0" step="any" class="form-control text-end"
+                                        name="gr[]">
+                                </td>
+                            @endif
                             <td>
                                 <select name="lokasi[]" id="" class="form-control" required>
                                     <option value="">- Pilih Lokasi -</option>
@@ -242,7 +257,7 @@
 
                     $('.btn_tutup').toggle(this.checked);
                 })
-                plusRow(1, 'tbh_baris', "hariandll/tbh_baris")
+                plusRow(1, 'tbh_baris', "hariandll/tbh_baris?kategori={{ $kategori }}")
                 $(document).on('click', '.btn_tutup', function() {
                     var tipe = $(this).attr('tipe')
                     var selectedRows = [];

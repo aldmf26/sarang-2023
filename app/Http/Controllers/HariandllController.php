@@ -58,12 +58,14 @@ class HariandllController extends Controller
         $data = [
             'anak' => $this->anak(),
             'count' => $r->count,
+            'kategori' => $r->kategori ?? 'biasa',
         ];
         return view('home.hariandll.tbh_baris', $data);
     }
 
     public function create(Request $r)
     {
+        $kategori = $r->kategori === 'cetak' ? 'cetak' : 'biasa';
         for ($i = 0; $i < count($r->id_anak); $i++) {
             $rupiah = str()->remove(',', $r->rupiah[$i]);
             DB::table('tb_hariandll')->insert([
@@ -72,9 +74,12 @@ class HariandllController extends Controller
                 'id_anak' => $r->id_anak[$i],
                 'id_pengawas' => auth()->user()->id,
                 'ket' => $r->ket[$i],
+                'pcs' => (float) ($r->pcs[$i] ?? 0),
+                'gr' => (float) ($r->gr[$i] ?? 0),
                 'rupiah' => $rupiah,
                 'bulan_dibayar' => $r->bulan_dibayar,
                 'lokasi' => $r->lokasi[$i],
+                'kategori' => $kategori,
             ]);
         }
         return redirect()->route('hariandll.index')->with('sukses', 'Data Berhasil ditambahkan');

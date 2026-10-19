@@ -16,6 +16,14 @@
     <td>
         <input type="text" class="form-control" name="ket[]">
     </td>
+    @if (($kategori ?? 'biasa') == 'cetak')
+        <td>
+            <input type="number" min="0" step="1" class="form-control text-end" name="pcs[]">
+        </td>
+        <td>
+            <input type="number" min="0" step="any" class="form-control text-end" name="gr[]">
+        </td>
+    @endif
     <td>
         <select name="lokasi[]" id="" class="form-control" required>
             <option value="">- Pilih Lokasi -</option>
